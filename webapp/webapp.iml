@@ -35,5 +35,9 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-web:4.2.5.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:jstl:1.2" level="project" />
+    <orderEntry type="module" module-name="services" scope="RUNTIME" />
+    <orderEntry type="module" module-name="persistence" scope="RUNTIME" />
+    <orderEntry type="module" module-name="models" />
+    <orderEntry type="module" module-name="interfaces" />
   </component>
 </module>
