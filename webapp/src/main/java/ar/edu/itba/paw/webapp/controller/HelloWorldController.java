@@ -9,7 +9,7 @@ public class HelloWorldController {
 
     @RequestMapping("/")
     public ModelAndView helloWorld(){
-        final ModelAndView mav = new ModelAndView("/WEB-INF/jsp/index.jsp");
+        final ModelAndView mav = new ModelAndView("helloworld/index");
         mav.addObject("name","Poolit");
         return mav;
     }
