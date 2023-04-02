@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(String originCity, String originAddress, String destinationCity, String destinationAddress, String date, String time, int seats, String email, String phone) {
+    public Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, int seats, String email, String phone) {
         return tripDao.create(originCity, originAddress, destinationCity, destinationAddress, date, time, seats, email, phone);
     }
 }
