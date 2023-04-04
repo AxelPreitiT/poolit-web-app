@@ -22,4 +22,20 @@ public class TripServiceImpl implements TripService {
     public Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, int seats, User driver) {
         return tripDao.create(originCity, originAddress, destinationCity, destinationAddress, date, time, seats, driver);
     }
+
+    public boolean addPassenger(Trip trip, User passenger){
+        if( trip == null || passenger == null){
+            return false;
+        }
+        return tripDao.addPassenger(trip,passenger);
+    }
+    @Override
+    public boolean addPassenger(long tripId, User passenger){
+        Trip trip = findById(tripId);
+        return addPassenger(trip,passenger);
+    }
+    @Override
+    public Trip findById(long id){
+        return tripDao.findById(id);
+    }
 }

@@ -37,11 +37,11 @@
                     </div>
                     <div class="driver-value">
                         <i class="bi bi-telephone-fill h5"></i>
-                        <h5 class="fw-light"><c:out value="${trip.driver.email}"/></h5>
+                        <h5 class="fw-light"><c:out value="${trip.driver.phone}"/></h5>
                     </div>
                 </div>
             </div>
-            <c:url value="/trips/${tripId}" var="bookTripUrl" />
+            <c:url value="/trips/${trip.id}" var="bookTripUrl" />
             <form class="passenger-info" action="${bookTripUrl}" method="post">
                 <h2>Datos del pasajero</h2>
                 <div class="passenger-data">

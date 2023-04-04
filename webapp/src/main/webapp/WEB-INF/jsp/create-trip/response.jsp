@@ -7,6 +7,7 @@
   <body>
     <h1>¡Viaje creado!</h1>
     <p>El viaje ha sido creado correctamente.</p>
+    <p>Id: <c:out value="${trip.id}" escapeXml="true"/> </p>
     <p>Origen: <c:out value="${trip.originCity.name}" escapeXml="true"/> en <c:out value="${trip.originAddress}" escapeXml="true"/></p>
     <p>Destino: <c:out value="${trip.destinationCity.name}" escapeXml="true"/> en <c:out value="${trip.destinationAddress}" escapeXml="true"/></p>
     <p>Fecha: <c:out value="${trip.date}" escapeXml="true"/></p>
