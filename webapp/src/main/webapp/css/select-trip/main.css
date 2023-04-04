@@ -6,22 +6,58 @@
 }
 .location-line{
     border-bottom: 3px dashed black;
+    padding-bottom: 12px;
+    padding-left: 12px;
     height: fit-content;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     margin-left: 2%;
     margin-right: 2%;
+    margin-top: 20px;
     width: 100vw;
 }
 .trip-details{
     width: 100%;
-    height: 80%;
+    height: 100%;
+    min-height: 100%;
+    overflow: scroll;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     padding: 4%;
 }
+#animated-car {
+    position: relative;
+    animation: myanimation 20s,bounce 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in;
+}
 
+@keyframes myanimation {
+    0% {
+        left: 0;
+        transform: translateX(-100%)
+    }
+    100% {
+        left: 100%;
+        transform: translateX(100%)
+    }
+}
+@keyframes bounce {
+    0%,
+    25%,
+    50%,
+    75%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-5px);
+    }
+    60% {
+        transform: translateY(-3px);
+    }
+}
 .location-title{
     display: flex;
     align-items: center;
@@ -33,8 +69,9 @@
     flex-direction: column;
     align-items: end;
 }
-.flex-row{
+.driver-value{
     display: flex;
+    gap: 4%;
     flex-direction: row;
     align-items: center;
 }
@@ -43,14 +80,21 @@
     align-items: center;
     flex-direction: column;
 }
+.passenger-input{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4%;
+}
 .driver-info{
     display: flex;
-    width: 60%;
-    justify-content: space-between;
+    width: 100%;
+    gap: 10%;
 }
 .passenger-info{
     padding: 4%;
     display: flex;
+    gap: 10px;
     flex-direction: column;
     border: #000000 1px solid;
     border-radius: 4px;
@@ -59,9 +103,17 @@
     display: flex;
     flex-direction: row;
     align-items: start;
-    width: 70%;
-    justify-content: space-between;
+    width: 100%;
+    gap: 10%;
 }
 .submit-style{
-    width: 20%;
+    margin-left: auto;
+    padding: 1%;
+}
+.submit-style:hover{
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.form-floating {
+    width: 100%;
 }
