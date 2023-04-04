@@ -3,10 +3,11 @@ package ar.edu.itba.paw.models;
 public class Trip {
 
     private final City originCity, destinationCity;
-    private final String originAddress, destinationAddress, date, time, email, phone;
+    private final User driver;
+    private final String originAddress, destinationAddress, date, time;
     private final int seats;
 
-    public Trip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final String date, final String time, final int seats, final String email, final String phone) {
+    public Trip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final String date, final String time, final int seats, User driver) {
         this.originCity = originCity;
         this.originAddress = originAddress;
         this.destinationCity = destinationCity;
@@ -14,8 +15,7 @@ public class Trip {
         this.date = date;
         this.time = time;
         this.seats = seats;
-        this.email = email;
-        this.phone = phone;
+        this.driver = driver;
     }
 
     public City getOriginCity() {
@@ -42,12 +42,8 @@ public class Trip {
         return time;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhone() {
-        return phone;
+    public User getDriver() {
+        return driver;
     }
 
     public int getSeats() {

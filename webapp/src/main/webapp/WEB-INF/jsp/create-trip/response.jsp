@@ -12,7 +12,7 @@
     <p>Fecha: <c:out value="${trip.date}" escapeXml="true"/></p>
     <p>Hora: <c:out value="${trip.time}" escapeXml="true"/></p>
     <p>Plazas: <c:out value="${trip.seats}" escapeXml="true"/></p>
-    <p>Email: <c:out value="${trip.email}" escapeXml="true"/></p>
-    <p>Teléfono: <c:out value="${trip.phone}" escapeXml="true"/></p>
+    <p>Email: <c:out value="${trip.driver.email}" escapeXml="true"/></p>
+    <p>Teléfono: <c:out value="${trip.driver.phone}" escapeXml="true"/></p>
   </body>
 </html>

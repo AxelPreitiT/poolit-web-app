@@ -33,11 +33,11 @@
                 <div class="driver-info">
                     <div class="driver-value">
                         <i class="bi bi-envelope text h5"></i>
-                        <h5 class="fw-light"><c:out value="${trip.email}"/></h5>
+                        <h5 class="fw-light"><c:out value="${trip.driver.email}"/></h5>
                     </div>
                     <div class="driver-value">
                         <i class="bi bi-telephone-fill h5"></i>
-                        <h5 class="fw-light"><c:out value="${trip.phone}"/></h5>
+                        <h5 class="fw-light"><c:out value="${trip.driver.email}"/></h5>
                     </div>
                 </div>
             </div>
