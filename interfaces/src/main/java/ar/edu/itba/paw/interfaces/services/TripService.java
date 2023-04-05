@@ -5,5 +5,5 @@ import ar.edu.itba.paw.models.Trip;
 
 public interface TripService {
 
-    Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, int seats, String email, String phone);
+    Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, String carInfo, int seats, String email, String phone);
 }

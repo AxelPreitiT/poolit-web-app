@@ -18,7 +18,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, int seats, String email, String phone) {
-        return tripDao.create(originCity, originAddress, destinationCity, destinationAddress, date, time, seats, email, phone);
+    public Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, String carInfo, int seats, String email, String phone) {
+        return tripDao.create(originCity, originAddress, destinationCity, destinationAddress, date, time, carInfo, seats, email, phone);
     }
 }

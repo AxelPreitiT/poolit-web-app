@@ -41,11 +41,12 @@ public class CreateTripController {
             @RequestParam(value = "destinationAddress", required = true) final String destinationAddress,
             @RequestParam(value = "date", required = true) final String date,
             @RequestParam(value = "time", required = true) final String time,
+            @RequestParam(value = "carInfo", required = true) final String carInfo,
             @RequestParam(value = "seats", required = true) final int seats,
             @RequestParam(value = "email", required = true) final String email,
             @RequestParam(value = "phone", required = true) final String phone
     ){
-        Trip trip = ts.createTrip(cs.findById(originCityId), originAddress, cs.findById(destinationCityId), destinationAddress, date, time, seats, email, phone);
+        Trip trip = ts.createTrip(cs.findById(originCityId), originAddress, cs.findById(destinationCityId), destinationAddress, date, time, carInfo, seats, email, phone);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);
 
