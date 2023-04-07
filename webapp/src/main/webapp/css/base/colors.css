@@ -1,6 +1,41 @@
-.body {
-    background-color: #ffffff;
-    color: #000000;
+.primary-color {
+    color: #33475B;
+}
+
+.primary-bg-color {
+    background-color: #33475B;
+}
+
+.button-color {
+    color: #0C6FC0;
+}
+
+.button-color:hover {
+    color: #33475B;
+}
+
+.button-bg-color {
+    background-color: #0C6FC0;
+}
+
+.button-bg-color:hover {
+    background-color: #33475B;
+}
+
+.container-color {
+    color: #F4FFF8;
+}
+
+.container-bg-color {
+    background-color: #F4FFF8;
+}
+
+.background-color {
+    color: #D6F5FF;
+}
+
+.background-bg-color {
+    background-color: #D6F5FF;
 }
 
 .text {
@@ -13,78 +48,38 @@
     color: #6c757d;
 }
 
-.primary {
-    background-color: #0072c6;
-    color: #ffffff;
-}
-
-.secondary {
-    background-color: #006837;
-    color: #ffffff;
-}
-
-.tertiary {
-    background-color: #cfe09d;
-    color: #000000;
-}
-
-.emphasis {
-    background-color: transparent;
-    color: #ff9900;
-}
-
 .border {
-    background-color: transparent;
     color: #000000;
 }
 
-.success {
-    background-color: transparent;
-    color: #28a745;
+.success-color {
+    color: #4BAA84;
+}
+
+.success-bg-color {
+    background-color: #4BAA84;
 }
 
 .danger {
-    background-color: transparent;
     color: #dc3545;
 }
 
+.danger-bg-color {
+    background-color: #dc3545;
+}
+
 .warning {
-    background-color: transparent;
     color: #ffc107;
 }
 
+.warning-bg-color {
+    background-color: #ffc107;
+}
+
 .info {
-    background-color: transparent;
     color: #17a2b8;
 }
 
-.light-background {
-    background-color: #f8f9fa;
-    color: #000000;
+.info-bg-color {
+    background-color: #17a2b8;
 }
-
-.light-text {
-    background-color: transparent;
-    color: #f8f9fa;
-}
-
-.light-accent {
-    background-color: transparent;
-    color: #007bff;
-}
-
-.dark-background {
-    background-color: #343a40;
-    color: #f8f9fa;
-}
-
-.dark-text {
-    background-color: transparent;
-    color: #343a40;
-}
-
-.dark-accent {
-    background-color: transparent;
-    color: #28a745;
-}
-
