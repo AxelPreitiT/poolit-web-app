@@ -2,12 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <html>
 <head>
-    <title>Reservar</title>
+    <title>Reserva</title>
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
-    <link href="<c:url value="/css/base/font-sizes.css"/>" rel="stylesheet">
+    <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <script src="https://kit.fontawesome.com/b5e2fa9f6d.js" crossorigin="anonymous"></script>
-    <link href="<c:url value="/css/base/colors.css"/>" rel="stylesheet">
     <link href="<c:url value="/css/select-trip/main.css"/>" rel="stylesheet">
 </head>
     <body class="background-bg-color">
@@ -15,7 +14,7 @@
             <div class="trip-route">
                 <div class="location-container">
                     <jsp:include page="components/origin.jsp"/>
-                    <i class="bi bi-geo-alt text h5-size"></i>
+                    <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
                 <div class="location-line">
                     <div class="location-line-content">
@@ -24,7 +23,7 @@
                     </div>
                 </div>
                 <div class="location-container">
-                    <i class="bi bi-geo-alt-fill text h5-size"></i>
+                    <i class="bi bi-geo-alt-fill text icon-style"></i>
                     <jsp:include page="components/destination.jsp"/>
                 </div>
             </div>

@@ -22,20 +22,14 @@
     background-color: #33475B;
 }
 
-.container-color {
-    color: #F4FFF8;
+
+.container-bg-color, .container-color {
+    background-color: #FFFFFF;
 }
 
-.container-bg-color {
-    background-color: #F4FFF8;
-}
-
-.background-color {
-    color: #D6F5FF;
-}
-
-.background-bg-color {
-    background-color: #D6F5FF;
+.background-bg-color,.background-color {
+    background-color: #EBF6FF;
+    /*#EBFBFE*/
 }
 
 .text {
@@ -51,6 +45,7 @@
 .placeholder-text {
     background-color: transparent;
     color: #6c757d;
+    text-align: end;
 }
 
 .border {
