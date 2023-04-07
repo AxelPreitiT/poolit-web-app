@@ -30,53 +30,53 @@
             </div>
             <div class="data-container">
                 <div class="driver-data">
-                    <h2 class="h5-size">Datos del conductor</h2>
+                    <h3>Datos del conductor</h3>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-envelope text h6-size"></i>
-                            <h6 class="h6-size">Email</h6>
+                            <h5>Email</h5>
                         </div>
                         <p class="fw-light p-size"><c:out value="${trip.driver.email}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-telephone-fill h6-size"></i>
-                            <h6 class="h6-size">Teléfono</h6>
+                            <h5>Teléfono</h5>
                         </div>
                         <p class="fw-light p-size"><c:out value="${trip.driver.phone}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-car-front-fill h6-size"></i>
-                            <h6 class="h6-size">Info. del auto</h6>
+                            <h5>Info. del auto</h5>
                         </div>
 <%--                        <p class="fw-light p-size"><c:out value="${trip.carInfo}"/></p>--%>
                         <p class="fw-light p-size">TODO</p>
                     </div>
                 </div>
                 <div class="passenger-data">
-                    <h2 class="h5-size">Tus datos</h2>
+                    <h3>Tus datos</h3>
                     <c:url value="/trips/${trip.id}" var="bookTripUrl" />
                     <form class="passenger-form" action="${bookTripUrl}" method="post">
                         <div class="passenger-data-item">
                             <i class="bi bi-envelope text h6-size"></i>
                             <div class="form-floating">
-                                <input type="email" class="form-control text input-style p-size" id="email" name="email" placeholder="paw@itba.edu.ar">
+                                <input type="email" class="form-control text input-style" id="email" name="email">
                                 <label for="email" class="placeholder-text">Email</label>
                             </div>
                         </div>
                         <div class="passenger-data-item">
                             <i class="bi bi-telephone-fill text h6-size"></i>
                             <div class="form-floating">
-                                <input type="tel" class="form-control text input-style p-size" id="phone" name="phone" placeholder="11 1234 5678">
+                                <input type="tel" class="form-control text input-style" id="phone" name="phone">
                                 <label for="phone" class="placeholder-text">Teléfono</label>
                             </div>
                         </div>
                         <div class="confirm-btn">
                             <button type="submit" class="btn button-bg-color">
-                                <span class="p-size light-text">Confirmar</span>
+                                <span class="light-text">Confirmar</span>
                             </button>
-                            <label class="placeholder-text">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</label>
+                            <p class="placeholder-text">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</p>
                         </div>
                     </form>
                 </div>

@@ -36,9 +36,9 @@ public class SelectTripController {
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId){
-//        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
-//        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","12/2/22","12:00",2,driver);
-        Trip trip = tripService.findById(tripId);
+        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
+        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","12/2/22","12:00",2,driver);
+//        Trip trip = tripService.findById(tripId);
         if(trip==null){//Usar Optional?
             return new ModelAndView("/select-trip/not-found");
         }
