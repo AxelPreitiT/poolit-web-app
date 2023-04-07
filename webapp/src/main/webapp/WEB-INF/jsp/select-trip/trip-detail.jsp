@@ -2,68 +2,85 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <html>
 <head>
+    <title>Reservar</title>
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
-    <link href="/css/base/font-sizes.css" rel="stylesheet">
+    <link href="<c:url value="/css/base/font-sizes.css"/>" rel="stylesheet">
     <script src="https://kit.fontawesome.com/b5e2fa9f6d.js" crossorigin="anonymous"></script>
-    <link href="/css/base/colors.css" rel="stylesheet">
-    <link href="/css/select-trip/main.css" rel="stylesheet">
+    <link href="<c:url value="/css/base/colors.css"/>" rel="stylesheet">
+    <link href="<c:url value="/css/select-trip/main.css"/>" rel="stylesheet">
 </head>
-    <body>
-        <div class="trip-details">
-            <div class="trip-places">
-                <jsp:include page="components/location.jsp">
-                    <jsp:param name="originCity" value="${trip.originCity.name}"/>
-                    <jsp:param name="originAddress" value="${trip.originAddress}"/>
-                    <jsp:param name="originDate" value="${trip.date}"/>
-                    <jsp:param name="originTime" value="${trip.time}"/>
-                </jsp:include>
+    <body class="background-bg-color">
+        <div class="trip-details-style container-bg-color">
+            <div class="trip-route">
+                <div class="location-container">
+                    <jsp:include page="components/origin.jsp"/>
+                    <i class="bi bi-geo-alt text h5-size"></i>
+                </div>
                 <div class="location-line">
-<%--                    <i class="bi bi-car-front h3"></i>--%>
-                 <i class="fa-solid fa-car-side fa-bounce fa-2xl" id="animated-car"></i>
-                </div>
-                <jsp:include page="components/location.jsp">
-                    <jsp:param name="originCity" value="${trip.destinationCity.name}"/>
-                    <jsp:param name="originAddress" value="${trip.destinationAddress}"/>
-                </jsp:include>
-            </div>
-            <div>
-                <h2>Conductor</h2>
-<%--                <div class="d-flex flex-column flex-lg-row justify-content-around">--%>
-                <div class="driver-info">
-                    <div class="driver-value">
-                        <i class="bi bi-envelope text h5"></i>
-                        <h5 class="fw-light"><c:out value="${trip.driver.email}"/></h5>
-                    </div>
-                    <div class="driver-value">
-                        <i class="bi bi-telephone-fill h5"></i>
-                        <h5 class="fw-light"><c:out value="${trip.driver.phone}"/></h5>
+                    <div class="location-line-content">
+                        <i class="fa-solid fa-car-side fa-bounce h5-size" id="animated-car"></i>
+                        <div class="dotted-line"></div>
                     </div>
                 </div>
+                <div class="location-container">
+                    <i class="bi bi-geo-alt-fill text h5-size"></i>
+                    <jsp:include page="components/destination.jsp"/>
+                </div>
             </div>
-            <c:url value="/trips/${trip.id}" var="bookTripUrl" />
-            <form class="passenger-info" action="${bookTripUrl}" method="post">
-                <h2>Datos del pasajero</h2>
+            <div class="data-container">
+                <div class="driver-data">
+                    <h2 class="h5-size">Datos del conductor</h2>
+                    <div class="driver-data-item">
+                        <div class="driver-data-item-title">
+                            <i class="bi bi-envelope text h6-size"></i>
+                            <h6 class="h6-size">Email</h6>
+                        </div>
+                        <p class="fw-light p-size"><c:out value="${trip.driver.email}"/></p>
+                    </div>
+                    <div class="driver-data-item">
+                        <div class="driver-data-item-title">
+                            <i class="bi bi-telephone-fill h6-size"></i>
+                            <h6 class="h6-size">Teléfono</h6>
+                        </div>
+                        <p class="fw-light p-size"><c:out value="${trip.driver.phone}"/></p>
+                    </div>
+                    <div class="driver-data-item">
+                        <div class="driver-data-item-title">
+                            <i class="bi bi-car-front-fill h6-size"></i>
+                            <h6 class="h6-size">Info. del auto</h6>
+                        </div>
+<%--                        <p class="fw-light p-size"><c:out value="${trip.carInfo}"/></p>--%>
+                        <p class="fw-light p-size">TODO</p>
+                    </div>
+                </div>
                 <div class="passenger-data">
-                    <div class="passenger-input">
-                        <i class="bi bi-envelope text h3"></i>
-                        <div class="form-floating">
-                            <input type="email" class="form-control h5 text" id="email" name="email" placeholder="paw@itba.edu.ar">
-                            <label for="email" class="placeholder-text h5">Email</label>
+                    <h2 class="h5-size">Tus datos</h2>
+                    <c:url value="/trips/${trip.id}" var="bookTripUrl" />
+                    <form class="passenger-form" action="${bookTripUrl}" method="post">
+                        <div class="passenger-data-item">
+                            <i class="bi bi-envelope text h6-size"></i>
+                            <div class="form-floating">
+                                <input type="email" class="form-control text input-style p-size" id="email" name="email" placeholder="paw@itba.edu.ar">
+                                <label for="email" class="placeholder-text">Email</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="passenger-input">
-                        <i class="bi bi-telephone text h3"></i>
-                        <div class="form-floating">
-                            <input type="tel" class="form-control h5 text" id="phone" name="phone" placeholder="11 1234 5678">
-                            <label for="phone" class="placeholder-text h5">Teléfono</label>
+                        <div class="passenger-data-item">
+                            <i class="bi bi-telephone-fill text h6-size"></i>
+                            <div class="form-floating">
+                                <input type="tel" class="form-control text input-style p-size" id="phone" name="phone" placeholder="11 1234 5678">
+                                <label for="phone" class="placeholder-text">Teléfono</label>
+                            </div>
                         </div>
-                    </div>
+                        <div class="confirm-btn">
+                            <button type="submit" class="btn button-bg-color">
+                                <span class="p-size light-text">Confirmar</span>
+                            </button>
+                            <label class="placeholder-text">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</label>
+                        </div>
+                    </form>
                 </div>
-                <button type="submit" class="btn primary submit-style">
-<%--                    <i class="bi bi-plus h2 light-text"></i>--%>
-                    <span class="h4 light-text">Inscribirse al viaje</span>
-                </button>
-            </form>
+            </div>
+        </div>
     </body>
 </html>

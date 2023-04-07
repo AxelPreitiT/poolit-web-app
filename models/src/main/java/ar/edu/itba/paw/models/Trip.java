@@ -72,6 +72,10 @@ public class Trip {
         return seats;
     }
 
+    public int getFreeSeats() {
+        return seats - seatsOccupied;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
