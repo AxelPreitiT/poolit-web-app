@@ -1,12 +1,12 @@
 
 
 .form-style {
-    border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
     margin-block-end: 0;
-    padding: 2% 3% 0 3%;
-    margin: 0 20% 0 20%;
+    padding: 4% 3% 0 3%;
+    margin: 8% 20% 0 20%;
     background-color: white;
+    height: 100%;
 }
 
 .vertical-dotted-line {
@@ -102,4 +102,9 @@
 
 label.placeholder-text {
     opacity: .65;
+}
+
+.create-trip-btn{
+    text-align: right;
+    margin-top: 5%;
 }

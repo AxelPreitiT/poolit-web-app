@@ -113,10 +113,12 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn primary submit-style">
-                        <i class="bi bi-plus h2 light-text"></i>
-                        <span class="h2 light-text">Crear viaje</span>
-                    </button>
+                    <div class="create-trip-btn">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus h3 light-text"></i>
+                            <span class="h3 light-text">Crear viaje</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
