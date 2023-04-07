@@ -91,15 +91,6 @@
     margin-bottom: 0;
 }
 
-.submit-style {
-    width: 100%;
-}
-
-.submit-style:hover {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
 label.placeholder-text {
     opacity: .65;
 }

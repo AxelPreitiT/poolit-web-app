@@ -43,6 +43,11 @@
     color: #000000;
 }
 
+.light-text {
+    background-color: transparent;
+    color: #F4FFF8;
+}
+
 .placeholder-text {
     background-color: transparent;
     color: #6c757d;
