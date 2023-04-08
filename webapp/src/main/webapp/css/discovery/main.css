@@ -1,12 +1,17 @@
 
 .body-style {
-    margin: 5% 7% 0 7%;
+    margin: 4% 0 0 0;
+    padding: 2% 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
 .search-container{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .dotten-line{
@@ -34,16 +39,18 @@ hr{
 }
 
 .full-width{
-    padding: 3% 3% 3% 3%;
+    text-align: center;
+    padding: 2%;
+    margin: 0 4%;
     border: solid black 1px;
     border-radius: 20px;
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .result-container{
     margin-top: 2%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-content: space-between;
     flex-wrap: wrap;
     gap: 1%;
@@ -52,7 +59,9 @@ hr{
 .location-input *{
     width: 15vw;
 }
-
+.location-container{
+    padding-right: 20px;
+}
 .time-selector{
     width: 10vw;
 }

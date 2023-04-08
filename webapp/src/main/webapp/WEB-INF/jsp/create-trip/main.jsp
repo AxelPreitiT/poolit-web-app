@@ -5,11 +5,11 @@
         <title>Crear un viaje</title>
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
-        <link href="<c:url value="/css/base/font-sizes.css"/>" rel="stylesheet">
-        <link href="<c:url value="/css/base/colors.css"/>" rel="stylesheet">
+        <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
         <link href="<c:url value="/css/create-trip/main.css"/>" rel="stylesheet">
     </head>
     <body class="background-bg-color">
+    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
         <div>
             <div class="form-style container-bg-color">
                 <c:url value="/create-trip" var="createTripUrl" />

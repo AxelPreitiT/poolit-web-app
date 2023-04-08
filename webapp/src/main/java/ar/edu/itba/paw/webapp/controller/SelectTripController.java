@@ -31,7 +31,7 @@ public class SelectTripController {
 
     @RequestMapping(value = "/trips/",method = RequestMethod.GET)
     public ModelAndView getAllTrips(){
-        return new ModelAndView("/select-trip/discovery");
+        return new ModelAndView("/");
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)

@@ -7,12 +7,12 @@
         <title>Poolit</title>
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
-        <link href="<c:url value="/css/base/font-sizes.css"/>" rel="stylesheet">
-        <link href="<c:url value="/css/base/colors.css"/>" rel="stylesheet">
+        <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
         <link href="<c:url value="/css/discovery/main.css"/>" rel="stylesheet">
     </head>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     <div class="body-style">
         <div class="full-width">
             <div class="search-container inline-container">
