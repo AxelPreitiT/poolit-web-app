@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public class TripDaoImpl implements TripDao {
 
     @Override
-    public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final String date, final String time, final int seats, final String email, final String phone) {
-        return new Trip(originCity, originAddress, destinationCity, destinationAddress, date, time, seats, email, phone);
+    public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final String date, final String time, final String carInfo, final int seats, final String email, final String phone) {
+        return new Trip(originCity, originAddress, destinationCity, destinationAddress, date, time, carInfo, seats, email, phone);
     }
 }
