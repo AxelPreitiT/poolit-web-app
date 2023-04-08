@@ -3,21 +3,18 @@
 <header class="navbar-style">
     <div class="flex-row">
         <div class="navbar-logo-style">
-            <h1>Poolit</h1>
+            <h1 class="navbar-logo-style">Poolit</h1>
         </div>
-        <ul class="navbar-list-style">
-            <li class="navbar-list-item-style">
-                <c:url value="/trips/" var="searchTripsUrl" />
-                <a class="navbar-link-style" href="${searchTripsUrl}">Buscar viajes</a>
-            </li>
-            <li class="navbar-list-item-style">
-                <c:url value="/create-trip" var="createTripUrl" />
-                <a class="navbar-link-style" href="${createTripUrl}">Crear viaje</a>
-            </li>
-        </ul>
+        <div class="navbar-list-style">
+            <c:url value="/trips/" var="searchTripsUrl" />
+            <a class="navbar-link-style h4" href="${searchTripsUrl}">Buscar viajes</a>
+
+            <c:url value="/create-trip" var="createTripUrl" />
+            <a class="navbar-link-style h4" href="${createTripUrl}">Crear viaje</a>
+        </div>
     </div>
     <div class="navbar-profile-container">
-        <h2>Profile</h2>
+<%--        <h2>Profile</h2>--%>
     </div>
 </header>
 

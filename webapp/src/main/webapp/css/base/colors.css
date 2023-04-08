@@ -6,16 +6,13 @@
     background-color: #33475B;
 }
 
-.button-color {
-    color: #0C6FC0;
-}
 
 .button-color:hover {
     color: #33475B;
 }
 
-.button-bg-color {
-    background-color: #0C6FC0;
+.button-bg-color, .button-color {
+    background-color: #0D7AD3;
 }
 
 .button-bg-color:hover {
