@@ -1,0 +1,117 @@
+
+
+.form-style {
+    border-radius: 10px 10px 0 0;
+    margin-block-end: 0;
+    padding: 4% 3% 0 3%;
+    margin: 8% 15% 0 15%;
+    background-color: white;
+    height: 100%;
+}
+
+.container-line{
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.vertical-dotted-line {
+    border-left: 3px dotted black;
+    margin-left: 18px;
+    position: relative;
+    left: 5px;
+    height: 80px;
+}
+
+.icon-container{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.location-container {
+    display: flex;
+    width: 100%;
+}
+
+.time-trip-container {
+    display: flex;
+    width: 100%;
+}
+
+.row-time{
+    margin-top: 1%;
+    margin-bottom: 5%;
+}
+
+.location-container + .location-container {
+    margin-top: 2%;
+}
+
+.row-title {
+    display: flex;
+    align-items: end;
+    max-width: fit-content;
+    width: 100%;
+}
+
+.row-input {
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+    gap: 5%;
+    width: 70%;
+}
+
+.form-floating {
+    width: 100%;
+}
+
+.form-floating * {
+    margin-bottom: 0;
+}
+
+.subtitles {
+    margin: 1% 0;
+}
+
+.trip-settings, .driver-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 5%;
+    margin: 4% 0 2% 0;
+}
+
+.setting, .info {
+    display: flex;
+    gap: 3%;
+    align-items: center;
+    width: 100%;
+}
+
+.setting i, .info i {
+    font-size: 40px;
+    margin-bottom: 0;
+}
+
+label.placeholder-text {
+    opacity: .65;
+}
+
+.create-trip-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 5%;
+}
+
+.inline-btn{
+    font
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
