@@ -15,76 +15,76 @@
             <div class="trip-route">
                 <div class="location-container">
                     <div class="location-data">
-                        <h4><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
-                        <h6 class="fw-light"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-                        <h6 class="fw-light"><c:out value="${trip.date}" escapeXml="true"/></h6>
-                        <h6 class="fw-light"><c:out value="${trip.time}" escapeXml="true"/></h6>
+                        <h4 class="text h4 title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
+                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
+                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.date}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>
                     </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
                 <div class="location-line">
                     <div class="location-line-content">
-                        <i class="fa-solid fa-car-side fa-bounce h5-size" id="animated-car"></i>
+                        <i class="fa-solid fa-car-side fa-bounce text" id="animated-car"></i>
                         <div class="dotted-line"></div>
                     </div>
                 </div>
                 <div class="location-container">
                     <i class="bi bi-geo-alt-fill text icon-style"></i>
                     <div class="location-data">
-                        <h4><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h4>
-                        <h6 class="fw-light"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h6>
+                        <h4 class="text h4 title-style"><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h4>
+                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h6>
                     </div>
                 </div>
             </div>
             <div class="data-container">
                 <div class="driver-data">
-                    <h3>Datos del conductor</h3>
+                    <h3 class="text h3">Datos del conductor</h3>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
-                            <i class="bi bi-envelope text h6-size"></i>
-                            <h5>Email</h5>
+                            <i class="bi bi-envelope text h5"></i>
+                            <h5 class="text h5">Email</h5>
                         </div>
-                        <p class="fw-light p-size"><c:out value="${trip.driver.email}"/></p>
+                        <p class="fw-light text fs-5"><c:out value="${trip.driver.email}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
-                            <i class="bi bi-telephone-fill h6-size"></i>
-                            <h5>Teléfono</h5>
+                            <i class="bi bi-telephone-fill text h5"></i>
+                            <h5 class="text h5">Teléfono</h5>
                         </div>
-                        <p class="fw-light p-size"><c:out value="${trip.driver.phone}"/></p>
+                        <p class="fw-light text fs-5"><c:out value="${trip.driver.phone}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
-                            <i class="bi bi-car-front-fill h6-size"></i>
-                            <h5>Info. del auto</h5>
+                            <i class="bi bi-car-front-fill text h5"></i>
+                            <h5 class="text h5">Info. del auto</h5>
                         </div>
-<%--                        <p class="fw-light p-size"><c:out value="${trip.carInfo}"/></p>--%>
-                        <p class="fw-light p-size">TODO</p>
+<%--                        <p class="fw-light text fs-5"><c:out value="${trip.carInfo}"/></p>--%>
+                        <p class="fw-light text fs-5">TODO</p>
                     </div>
                 </div>
                 <div class="passenger-data">
-                    <h3>Tus datos</h3>
+                    <h3 class="text h3">Tus datos</h3>
                     <c:url value="/trips/${trip.id}" var="bookTripUrl" />
                     <form class="passenger-form" action="${bookTripUrl}" method="post">
                         <div class="passenger-data-item">
-                            <i class="bi bi-envelope text h6-size"></i>
+                            <i class="bi bi-envelope text h3"></i>
                             <div class="form-floating">
-                                <input type="email" class="form-control text input-style" id="email" name="email" placeholder="paw@itba.edu.ar">
+                                <input type="email" class="form-control text h5 input-style" id="email" name="email" placeholder="paw@itba.edu.ar">
                                 <label for="email" class="placeholder-text">Email</label>
                             </div>
                         </div>
                         <div class="passenger-data-item">
-                            <i class="bi bi-telephone-fill text h6-size"></i>
+                            <i class="bi bi-telephone-fill text h3"></i>
                             <div class="form-floating">
-                                <input type="tel" class="form-control text input-style" id="phone" name="phone" placeholder="123456789">
+                                <input type="tel" class="form-control text h5 input-style" id="phone" name="phone" placeholder="123456789">
                                 <label for="phone" class="placeholder-text">Teléfono</label>
                             </div>
                         </div>
                         <div class="confirm-btn">
                             <button type="submit" class="btn button-bg-color">
-                                <span class="light-text">Confirmar</span>
+                                <span class="light-text h4">Confirmar</span>
                             </button>
-                            <p class="placeholder-text">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</p>
+                            <p class="placeholder-text fs-6">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</p>
                         </div>
                     </form>
                 </div>
