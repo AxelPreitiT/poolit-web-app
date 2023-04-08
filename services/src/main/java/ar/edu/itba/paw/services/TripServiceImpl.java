@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,23 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, String carInfo, int seats, String email, String phone) {
-        return tripDao.create(originCity, originAddress, destinationCity, destinationAddress, date, time, carInfo, seats, email, phone);
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String carInfo, final String date, final String time, final int seats, User driver) {
+        return tripDao.create(originCity,originAddress,destinationCity,destinationAddress,carInfo,date,time,seats,driver);
+    }
+
+    public boolean addPassenger(Trip trip, User passenger){
+        if( trip == null || passenger == null){
+            return false;
+        }
+        return tripDao.addPassenger(trip,passenger);
+    }
+    @Override
+    public boolean addPassenger(long tripId, User passenger){
+        Trip trip = findById(tripId);
+        return addPassenger(trip,passenger);
+    }
+    @Override
+    public Trip findById(long id) {
+        return tripDao.findById(id);
     }
 }

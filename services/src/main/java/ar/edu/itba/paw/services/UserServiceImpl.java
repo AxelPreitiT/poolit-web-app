@@ -16,11 +16,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(String email, String password) {
+    public User createUser(String email, String phone) {
         //Esto esta mal, solo se deberian crear usuarios en la capa de peristencia
         //pero es para un ejemplo
 //        return new User(email,password);
         //Con esto si lo crea la capa de persistencia
-        return userDao.create(email,password);
+        return userDao.create(email,phone);
     }
 }
