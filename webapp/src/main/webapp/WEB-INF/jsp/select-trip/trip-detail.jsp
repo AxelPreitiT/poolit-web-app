@@ -14,7 +14,12 @@
         <div class="trip-details-style container-bg-color">
             <div class="trip-route">
                 <div class="location-container">
-                    <jsp:include page="components/origin.jsp"/>
+                    <div class="location-data">
+                        <h4><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
+                        <h6 class="fw-light"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
+                        <h6 class="fw-light"><c:out value="${trip.date}" escapeXml="true"/></h6>
+                        <h6 class="fw-light"><c:out value="${trip.time}" escapeXml="true"/></h6>
+                    </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
                 <div class="location-line">
@@ -25,7 +30,10 @@
                 </div>
                 <div class="location-container">
                     <i class="bi bi-geo-alt-fill text icon-style"></i>
-                    <jsp:include page="components/destination.jsp"/>
+                    <div class="location-data">
+                        <h4><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h4>
+                        <h6 class="fw-light"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h6>
+                    </div>
                 </div>
             </div>
             <div class="data-container">
@@ -61,14 +69,14 @@
                         <div class="passenger-data-item">
                             <i class="bi bi-envelope text h6-size"></i>
                             <div class="form-floating">
-                                <input type="email" class="form-control text input-style" id="email" name="email">
+                                <input type="email" class="form-control text input-style" id="email" name="email" placeholder="paw@itba.edu.ar">
                                 <label for="email" class="placeholder-text">Email</label>
                             </div>
                         </div>
                         <div class="passenger-data-item">
                             <i class="bi bi-telephone-fill text h6-size"></i>
                             <div class="form-floating">
-                                <input type="tel" class="form-control text input-style" id="phone" name="phone">
+                                <input type="tel" class="form-control text input-style" id="phone" name="phone" placeholder="123456789">
                                 <label for="phone" class="placeholder-text">Teléfono</label>
                             </div>
                         </div>
