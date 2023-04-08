@@ -23,7 +23,7 @@
                                 <h3 class="h3 text">Origen</h3>
                             </div>
                             <div class="row-input">
-                                <jsp:include page="city-selector.jsp">
+                                <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                     <jsp:param name="id" value="originCity" />
                                 </jsp:include>
                                 <div class="form-floating">
@@ -59,7 +59,7 @@
                                 <h3 class="h3 text">Destino</h3>
                             </div>
                             <div class="row-input">
-                                <jsp:include page="city-selector.jsp">
+                                <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                     <jsp:param name="id" value="destinationCity" />
                                 </jsp:include>
                                 <div class="form-floating">

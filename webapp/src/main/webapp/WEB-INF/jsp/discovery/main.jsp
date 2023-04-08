@@ -18,7 +18,7 @@
             <div class="search-container inline-container">
                 <div class="location-container">
                     <div class="location-input">
-                        <jsp:include page="city-selector.jsp">
+                        <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                             <jsp:param name="id" value="originCity" />
                         </jsp:include>
                     </div>
@@ -26,7 +26,7 @@
                         <hr>
                     </div>
                     <div class="location-input">
-                        <jsp:include page="city-selector.jsp">
+                        <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                             <jsp:param name="id" value="originCity" />
                         </jsp:include>
                     </div>
