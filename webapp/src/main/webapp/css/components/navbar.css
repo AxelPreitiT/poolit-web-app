@@ -39,7 +39,11 @@
 .navbar-link-style:hover{
     /*color: #4EFFEF;*/
     scale: 1.1;
-    transition: ease-in-out 0.2s !important;
+    transition: ease-in-out 0.2s;
+}
+.navbar-link-style:active{
+    transform: scale(0.95);
+    transition: ease-in-out 0.1s;
 }
 
 .navbar-logo-style{

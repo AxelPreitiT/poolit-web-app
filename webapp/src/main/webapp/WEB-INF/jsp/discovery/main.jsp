@@ -19,7 +19,7 @@
                 <div class="location-container">
                     <div class="location-input">
                         <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                            <jsp:param name="id" value="originCity" />
+                            <jsp:param name="id" value="orginCity" />
                         </jsp:include>
                     </div>
                     <div class="dotten-line">
@@ -48,9 +48,10 @@
             </div>
         </div>
         <div class="result-container">
-            <c:forEach begin="0" end="8" var="val">
+            <c:forEach items="${trips}" var="trip">
+                <c:set var="trip" value="${trip}" scope="request"/>
                 <jsp:include page="travel-card.jsp">
-                    <jsp:param name="id" value="card" />
+                    <jsp:param name="id" value="card"/>
                 </jsp:include>
             </c:forEach>
         </div>
