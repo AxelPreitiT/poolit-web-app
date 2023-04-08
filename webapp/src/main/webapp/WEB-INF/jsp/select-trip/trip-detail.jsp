@@ -15,10 +15,10 @@
             <div class="trip-route">
                 <div class="location-container">
                     <div class="location-data">
-                        <h4 class="text h4 title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
-                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.date}" escapeXml="true"/></h6>
-                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>
+                        <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.date}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>
                     </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
@@ -31,39 +31,39 @@
                 <div class="location-container">
                     <i class="bi bi-geo-alt-fill text icon-style"></i>
                     <div class="location-data">
-                        <h4 class="text h4 title-style"><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h4>
-                        <h6 class="fw-light text h6 description-style"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h6>
+                        <h4 class="text title-style"><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h4>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h6>
                     </div>
                 </div>
             </div>
             <div class="data-container">
                 <div class="driver-data">
-                    <h3 class="text h3">Datos del conductor</h3>
+                    <h3 class="text">Datos del conductor</h3>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-envelope text h5"></i>
-                            <h5 class="text h5">Email</h5>
+                            <h5 class="text">Email</h5>
                         </div>
                         <p class="fw-light text fs-5"><c:out value="${trip.driver.email}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-telephone-fill text h5"></i>
-                            <h5 class="text h5">Teléfono</h5>
+                            <h5 class="text">Teléfono</h5>
                         </div>
                         <p class="fw-light text fs-5"><c:out value="${trip.driver.phone}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-car-front-fill text h5"></i>
-                            <h5 class="text h5">Info. del auto</h5>
+                            <h5 class="text">Info. del auto</h5>
                         </div>
 <%--                        <p class="fw-light text fs-5"><c:out value="${trip.carInfo}"/></p>--%>
                         <p class="fw-light text fs-5">TODO</p>
                     </div>
                 </div>
                 <div class="passenger-data">
-                    <h3 class="text h3">Tus datos</h3>
+                    <h3 class="text">Tus datos</h3>
                     <c:url value="/trips/${trip.id}" var="bookTripUrl" />
                     <form class="passenger-form" action="${bookTripUrl}" method="post">
                         <div class="passenger-data-item">

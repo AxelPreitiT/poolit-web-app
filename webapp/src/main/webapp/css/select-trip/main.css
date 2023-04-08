@@ -163,6 +163,10 @@
     margin-left: auto;
 }
 
+.confirm-btn p {
+    margin-bottom: 0;
+}
+
 label {
     font-size: 1.25vw;
 }
