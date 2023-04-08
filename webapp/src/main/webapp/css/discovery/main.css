@@ -1,0 +1,68 @@
+
+.body-style {
+    margin: 5% 7% 0 7%;
+}
+
+
+.search-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.dotten-line{
+    width: 10vw;
+}
+
+.btn-search{
+    padding: 1% 2% 1% 2%;
+    background-color: #0C6FC0;
+}
+
+hr{
+    border-top: 3px dotted rgb(0, 0, 0);
+    width: 100%;
+}
+
+.inline-container * {
+    display: inline-block;
+}
+
+
+.button-container{
+    text-align: right;
+    margin: 2% 5% 0 0;
+}
+
+.full-width{
+    padding: 3% 3% 3% 3%;
+    border: solid black 1px;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.result-container{
+    margin-top: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
+    flex-wrap: wrap;
+    gap: 1%;
+}
+
+.location-input *{
+    width: 15vw;
+}
+
+.time-selector{
+    width: 10vw;
+}
+
+.date-selector{
+    width: 15vw;
+}
+
+.time-container{
+    display: flex;
+    align-content: center;
+    gap: 2%;
+}

@@ -6,7 +6,7 @@ import ar.edu.itba.paw.models.User;
 
 public interface TripService {
 
-    Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, int seats, User driver);
+    Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String carInfo, final String date, final String time, final int seats, User driver);
 
     Trip findById(long id);
     public boolean addPassenger(Trip trip, User passenger);

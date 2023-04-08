@@ -19,8 +19,8 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(City originCity, String originAddress, City destinationCity, String destinationAddress, String date, String time, int seats, User driver) {
-        return tripDao.create(originCity, originAddress, destinationCity, destinationAddress, date, time, seats, driver);
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String carInfo, final String date, final String time, final int seats, User driver) {
+        return tripDao.create(originCity,originAddress,destinationCity,destinationAddress,carInfo,date,time,seats,driver);
     }
 
     public boolean addPassenger(Trip trip, User passenger){
@@ -35,7 +35,7 @@ public class TripServiceImpl implements TripService {
         return addPassenger(trip,passenger);
     }
     @Override
-    public Trip findById(long id){
+    public Trip findById(long id) {
         return tripDao.findById(id);
     }
 }
