@@ -10,6 +10,7 @@
     <link href="<c:url value="/css/select-trip/main.css"/>" rel="stylesheet">
 </head>
     <body class="background-bg-color">
+    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
         <div class="trip-details-style container-bg-color">
             <div class="trip-route">
                 <div class="location-container">
