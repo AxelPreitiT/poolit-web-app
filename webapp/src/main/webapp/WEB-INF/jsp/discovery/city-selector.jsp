@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <div class="form-floating">
   <select class="form-select h5 text" id="<c:out value="${param.id}"/>" name="<c:out value="${param.id}"/>">
     <jsp:useBean id="cities" scope="request" type="java.util.List"/>

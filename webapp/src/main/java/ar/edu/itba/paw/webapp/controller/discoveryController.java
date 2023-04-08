@@ -11,6 +11,9 @@ import org.springframework.web.servlet.ViewResolver;
 import ar.edu.itba.paw.interfaces.services.CityService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class discoveryController {
@@ -24,7 +27,20 @@ public class discoveryController {
     @RequestMapping(value = "/discovery", method = RequestMethod.GET)
     public ModelAndView createTripForm(){
         ArrayList<City> cities = cs.getCities();
+
+        //TODO: remplazar cuando tengamos el back de trip
+        Map<String, String> trip = new HashMap<String, String>();
+        trip.put("begin", "palermooooooooooo");
+        trip.put("end", "Nuñez");
+        trip.put("date", "02/05");
+        trip.put("time", "17:34");
+        trip.put("places", "4");
+        trip.put("places_ocuppied", "2");
+        trip.put("price", "$3000");
+
+
         final ModelAndView mav = new ModelAndView("/discovery/main");
+        mav.addObject("trip", trip);
         mav.addObject("cities", cities);
 
         return mav;

@@ -13,20 +13,46 @@
     </head>
 </head>
 <body>
-    <div class="center-container">
-        <div class="search-container">
-            <h1>Hola</h1>
-        </div>
-        <div>
-            <div class="location-input">
-                <jsp:include page="city-selector.jsp">
-                    <jsp:param name="id" value="originCity" />
-                </jsp:include>
-                <div class="form-floating">
-                    <input type="text" class="form-control h5 text" id="originAddress" name="originAddress" placeholder="Av. del Libertador 1234">
-                    <label for="originAddress" class="placeholder-text h5">Dirección</label>
+    <div class="body-style">
+        <div class="full-width">
+            <div class="search-container inline-container">
+                <div class="location-container">
+                    <div class="location-input">
+                        <jsp:include page="city-selector.jsp">
+                            <jsp:param name="id" value="originCity" />
+                        </jsp:include>
+                    </div>
+                    <div class="dotten-line">
+                        <hr>
+                    </div>
+                    <div class="location-input">
+                        <jsp:include page="city-selector.jsp">
+                            <jsp:param name="id" value="originCity" />
+                        </jsp:include>
+                    </div>
+                </div>
+                <div class="time-container">
+                    <!-- <i class="bi bi-calendar h2"></i> -->
+                    <div class="form-floating date-selector">
+                        <input type="date" class="form-control h5 text" id="date" name="date" placeholder="02/04/23">
+                        <label for="date" class="placeholder-text h5">Fecha</label>
+                    </div>
+                    <div class="form-floating time-selector">
+                        <input type="time" class="form-control h5 text" id="time" name="time" placeholder="11:25">
+                        <label for="time" class="placeholder-text h5">Hora</label>
+                    </div>
                 </div>
             </div>
+            <div class="button-container">
+                <button type="button" class="btn btn-primary btn-lg btn-search">Buscar</button>
+            </div>
+        </div>
+        <div class="result-container">
+            <c:forEach begin="0" end="8" var="val">
+                <jsp:include page="travel-card.jsp">
+                    <jsp:param name="id" value="card" />
+                </jsp:include>
+            </c:forEach>
         </div>
     </div>
 </body>
