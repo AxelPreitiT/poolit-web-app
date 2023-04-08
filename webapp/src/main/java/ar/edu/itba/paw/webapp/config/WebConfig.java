@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -18,12 +21,16 @@ import org.springframework.web.servlet.view.JstlView;
 import javax.sql.DataSource;
 
 @EnableWebMvc
+@PropertySource("classpath:application.properties")
 @ComponentScan({"ar.edu.itba.paw.webapp.controller","ar.edu.itba.paw.services","ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+    @Autowired
+    private Environment environment;
     @Value("classpath:schema.sql")
     private Resource schema;
+
 
     @Bean
     public ViewResolver viewResolver(){
@@ -38,9 +45,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost:5433/paw-2023a-07");
-        ds.setUsername("root");
-        ds.setPassword("test");
+        ds.setUrl(String.format("jdbc:postgresql://localhost:5433/%s",environment.getProperty("DB_NAME")));
+        ds.setUsername(environment.getProperty("DB_USER"));
+        ds.setPassword(environment.getProperty("DB_PASSWORD"));
         return ds;
     }
 
