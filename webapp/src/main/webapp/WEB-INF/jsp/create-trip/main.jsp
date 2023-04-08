@@ -12,7 +12,7 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
         <div>
             <div class="form-style container-bg-color">
-                <c:url value="/create-trip" var="createTripUrl" />
+                <c:url value="/trips/create" var="createTripUrl" />
                 <form action="${createTripUrl}" method="post">
                     <div class="route-container">
                         <div class="location-container">

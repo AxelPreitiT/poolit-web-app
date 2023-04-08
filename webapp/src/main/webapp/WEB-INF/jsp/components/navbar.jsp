@@ -9,7 +9,7 @@
             <c:url value="/trips/" var="searchTripsUrl" />
             <a class="navbar-link-style h4" href="${searchTripsUrl}">Buscar viajes</a>
 
-            <c:url value="/create-trip" var="createTripUrl" />
+            <c:url value="/trips/create" var="createTripUrl" />
             <a class="navbar-link-style h4" href="${createTripUrl}">Crear viaje</a>
         </div>
     </div>
