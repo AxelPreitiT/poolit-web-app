@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
@@ -17,10 +19,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(String email, String phone) {
-        //Esto esta mal, solo se deberian crear usuarios en la capa de peristencia
-        //pero es para un ejemplo
-//        return new User(email,password);
-        //Con esto si lo crea la capa de persistencia
         return userDao.create(email,phone);
+    }
+
+    @Override
+    public User createUserIfNotExists(String email, String phone){
+        Optional<User> current = userDao.findByEmail(email);
+        return current.orElseGet(() -> userDao.create(email, phone));
+    }
+
+    @Override
+    public Optional<User> findById(long userId){
+        return userDao.findById(userId);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email){
+        return userDao.findByEmail(email);
     }
 }

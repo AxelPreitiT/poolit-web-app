@@ -2,11 +2,12 @@ package ar.edu.itba.paw.models;
 
 public class User {
     private final String email;
-
+    private final long userId;
     private String phone;
 
     //En el metodo, final es para que no pueda cambiar a las variables
-    public User(final String email, final String phone) {
+    public User(long userId ,final String email, final String phone) {
+        this.userId = userId;
         this.email = email;
         this.phone = phone;
     }
