@@ -47,7 +47,7 @@ public class TripController {
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @RequestParam(value = "email",required = true) final String email,
                                            @RequestParam(value = "phone",required = true) final String phone){
-        User passenger = userService.createUser(email,phone);
+        User passenger = userService.createUserIfNotExists(email,phone);
         boolean ans = tripService.addPassenger(tripId,passenger);
         ModelAndView mv = new ModelAndView("/select-trip/response");
         mv.addObject("response",ans);
@@ -60,14 +60,13 @@ public class TripController {
     public ModelAndView getTrips(){
         ArrayList<City> cities = cityService.getCities();
 
-        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1350",cityService.findById(2),"Av Cabildo 1200","AE063TP","12/2/2022","12:20",2,new User("jose@menta.com","1139150600"));
+        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1350",cityService.findById(2),"Av Cabildo 1200","AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
         List<Trip> trips = new ArrayList<>();
         trips.add(trip);
         trips.add(trip);
         trips.add(trip);
         trips.add(trip);
         trips.add(trip);
-
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -96,7 +95,7 @@ public class TripController {
             @RequestParam(value = "email", required = true) final String email,
             @RequestParam(value = "phone", required = true) final String phone
     ){
-        User user = userService.createUser(email,phone);
+        User user = userService.createUserIfNotExists(email,phone);
         Trip trip = tripService.createTrip(cityService.findById(originCityId), originAddress, cityService.findById(destinationCityId), destinationAddress,carInfo, date, time, seats,user);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);
