@@ -16,13 +16,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TripController {
     private final TripService tripService;
     private final CityService cityService;
-
     private final UserService userService;
+
+    private final static long DEFAULT_PROVINCE_ID = 1;
+
     @Autowired
     public TripController(TripService tripService, CityService cityService, UserService userService){
         this.tripService = tripService;
@@ -58,9 +61,17 @@ public class TripController {
     }
     @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
     public ModelAndView getTrips(){
-        ArrayList<City> cities = cityService.getCities();
+        long originCityId = 1, destinationCityId = 2;
+        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
-        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1350",cityService.findById(2),"Av Cabildo 1200","AE063TP","12/2/2022","12:20",2,new User("jose@menta.com","1139150600"));
+        Optional<City> originCity = cityService.findCityById(originCityId);
+        Optional<City> destinationCity = cityService.findCityById(destinationCityId);
+        if(!originCity.isPresent() || !destinationCity.isPresent()){
+            // TODO: 404 page
+            return new ModelAndView("/discovery/main");
+        }
+
+        Trip trip = tripService.createTrip(originCity.get(),"Av Callao 1350",destinationCity.get(),"Av Cabildo 1200","AE063TP","12/2/2022","12:20",2,new User("jose@menta.com","1139150600"));
         List<Trip> trips = new ArrayList<>();
         trips.add(trip);
         trips.add(trip);
@@ -76,7 +87,7 @@ public class TripController {
     }
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
     public ModelAndView createTripForm(){
-        ArrayList<City> cities = cityService.getCities();
+        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
 
@@ -96,8 +107,16 @@ public class TripController {
             @RequestParam(value = "email", required = true) final String email,
             @RequestParam(value = "phone", required = true) final String phone
     ){
+        Optional<City> originCity = cityService.findCityById(originCityId);
+        Optional<City> destinationCity = cityService.findCityById(destinationCityId);
+        if(!originCity.isPresent() || !destinationCity.isPresent()){
+            // TODO: 404 page
+            return new ModelAndView("/create-trip/response");
+        }
+
+
         User user = userService.createUser(email,phone);
-        Trip trip = tripService.createTrip(cityService.findById(originCityId), originAddress, cityService.findById(destinationCityId), destinationAddress,carInfo, date, time, seats,user);
+        Trip trip = tripService.createTrip(originCity.get(), originAddress, destinationCity.get(), destinationAddress,carInfo, date, time, seats,user);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);
 
