@@ -29,3 +29,41 @@ CREATE TABLE IF NOT EXISTS cars(
     UNIQUE(car_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
+CREATE TABLE IF NOT EXISTS trips(
+    trip_id SERIAL PRIMARY KEY,
+    max_passengers INT,
+    current_passengers INT DEFAULT 0,
+    origin_address TEXT NOT NULL ,
+    destination_address text NOT NULL,
+    price DOUBLE PRECISION,
+    origin_time TIME,
+    origin_date DATE,
+    origin_city_id INT NOT NULL,
+    destination_city_id INT NOT NULL,
+    CONSTRAINT trips_to_origin FOREIGN KEY(origin_city_id) REFERENCES cities(city_id),
+    CONSTRAINT trips_to_destination FOREIGN KEY(destination_city_id) REFERENCES cities(city_id)
+    --     driver_id INT NOT NULL ,
+--     car_id INT NOT NULL,
+--     CONSTRAINT trip_to_driver FOREIGN KEY(driver_id) REFERENCES users(user_id),
+--     CONSTRAINT trip_to_car FOREIGN KEY(car_id) REFERENCES cars(car_id)
+);
+--  Represents the relationship between users and trips
+--     users --N--[Reserves]--M-- trips
+create TABLE IF NOT EXISTS passengers(
+    trip_id INT NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY (trip_id,user_id),
+    CONSTRAINT passengers_to_trip FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
+    CONSTRAINT passengers_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
+);
+-- Represents the relationship between cars, users and trips
+CREATE TABLE IF NOT EXISTS trips_cars_drivers(
+    trip_id INT NOT NULL,
+    user_id INT NOT NULL,
+--     TODO: ver que pasa si se elimina un auto (CASCADE/SET NULL/...)
+    car_id INT,
+    PRIMARY KEY(trip_id,user_id),
+    UNIQUE(trip_id,car_id),
+    CONSTRAINT trips_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
+    CONSTRAINT trips_to_cars FOREIGN KEY(car_id) references cars(car_id)
+);
