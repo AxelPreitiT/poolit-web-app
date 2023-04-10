@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -23,11 +25,15 @@ public class TripController {
     private final CityService cityService;
 
     private final UserService userService;
+
+    private final CarService carService;
+
     @Autowired
-    public TripController(TripService tripService, CityService cityService, UserService userService){
+    public TripController(TripService tripService, CityService cityService, UserService userService, CarService carService){
         this.tripService = tripService;
         this.cityService = cityService;
         this.userService = userService;
+        this.carService = carService;
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
@@ -60,7 +66,7 @@ public class TripController {
     public ModelAndView getTrips(){
         ArrayList<City> cities = cityService.getCities();
 
-        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1350",cityService.findById(2),"Av Cabildo 1200","AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
+        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1350",cityService.findById(2),"Av Cabildo 1200","corsita rojo", "AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
         List<Trip> trips = new ArrayList<>();
         trips.add(trip);
         trips.add(trip);
@@ -90,13 +96,15 @@ public class TripController {
             @RequestParam(value = "destinationAddress", required = true) final String destinationAddress,
             @RequestParam(value = "date", required = true) final String date,
             @RequestParam(value = "time", required = true) final String time,
-            @RequestParam(value = "carInfo", required = true) final String carInfo,
+            @RequestParam(value = "infoCar", required = true) final String infoCar,
+            @RequestParam(value = "plate", required = true) final String plate,
             @RequestParam(value = "seats", required = true) final int seats,
             @RequestParam(value = "email", required = true) final String email,
             @RequestParam(value = "phone", required = true) final String phone
     ){
         User user = userService.createUserIfNotExists(email,phone);
-        Trip trip = tripService.createTrip(cityService.findById(originCityId), originAddress, cityService.findById(destinationCityId), destinationAddress,carInfo, date, time, seats,user);
+        Car car = carService.createCarIfNotExists(plate, user.getUserId());
+        Trip trip = tripService.createTrip(cityService.findById(originCityId), originAddress, cityService.findById(destinationCityId), destinationAddress, infoCar, plate, date, time, seats,user);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);
 

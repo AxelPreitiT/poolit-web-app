@@ -7,20 +7,21 @@ import java.util.Objects;
 public class Trip {
     private static int nextId = 0;
     private final City originCity, destinationCity;
-    private final String originAddress, destinationAddress, date, time, carInfo;
+    private final String originAddress, destinationAddress, date, time, infoCar, plate;
     private final User driver;
     private final int seats;
     private final long id;
     private int seatsOccupied=0;
     private final List<User> passengers = new ArrayList<>();
-    public Trip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String carInfo, final String date, final String time, final int seats, User driver) {
+    public Trip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String infoCar, final String plate, final String date, final String time, final int seats, User driver) {
         this.originCity = originCity;
         this.originAddress = originAddress;
         this.destinationCity = destinationCity;
         this.destinationAddress = destinationAddress;
         this.date = date;
         this.time = time;
-        this.carInfo = carInfo;
+        this.infoCar = infoCar;
+        this.plate=plate;
         this.seats = seats;
         this.driver = driver;
         this.id = nextId++;
@@ -57,6 +58,10 @@ public class Trip {
         return driver;
     }
 
+    public String getPlate() {
+        return plate;
+    }
+
     public List<User> getPassengers() {
         return passengers;
     }
@@ -87,7 +92,7 @@ public class Trip {
         return Objects.hash(id);
     }
 
-    public String getCarInfo() {
-        return carInfo;
+    public String getInfoCar() {
+        return infoCar;
     }
 }

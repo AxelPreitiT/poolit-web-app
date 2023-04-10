@@ -20,6 +20,10 @@ public class User {
         return phone;
     }
 
+    public long getUserId() {
+        return userId;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }

@@ -79,9 +79,17 @@
                             </div>
                             <div class="row-input">
                                 <div class="setting">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control text" id="carInfo" name="carInfo" placeholder="Info del auto">
-                                        <label for="carInfo" class="placeholder-text">Info. del auto</label>
+                                    <div class="infoCar">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control text" id="infoCar" name="infoCar" placeholder="Descripcion">
+                                            <label for="infoCar" class="placeholder-text">Descripcion</label>
+                                        </div>
+                                    </div>
+                                    <div class="plate">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control text" id="plate" name="plate" placeholder="Patente">
+                                            <label for="plate" class="placeholder-text">Patente</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="setting">

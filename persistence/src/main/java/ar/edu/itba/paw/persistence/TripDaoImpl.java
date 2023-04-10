@@ -15,8 +15,8 @@ import java.util.Set;
 public class TripDaoImpl implements TripDao {
     private final Map<Long,Trip> trips = new HashMap<>();
     @Override
-    public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String carInfo, final String date, final String time, final int seats, User driver) {
-        Trip ans = new Trip(originCity,originAddress,destinationCity,destinationAddress,carInfo,date,time,seats,driver);
+    public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String infoCar, final String plate, final String date, final String time, final int seats, User driver) {
+        Trip ans = new Trip(originCity,originAddress,destinationCity,destinationAddress,infoCar, plate ,date,time,seats,driver);
         trips.put(ans.getId(),ans);
         return ans;
     }
