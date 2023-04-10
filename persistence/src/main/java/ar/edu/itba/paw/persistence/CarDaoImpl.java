@@ -15,7 +15,7 @@ import java.util.*;
 @Repository
 public class CarDaoImpl implements CarDao {
 
-    private static final RowMapper<Car> ROW_MAPPER = (resultSet, rowNum) -> new Car(resultSet.getLong("car_id"),resultSet.getString("plate"),resultSet.getLong("user_id"));
+    private static final RowMapper<Car> ROW_MAPPER = (resultSet, rowNum) -> new Car(resultSet.getLong("car_id"),resultSet.getString("plate"),resultSet.getString("info_car"),resultSet.getLong("user_id"));
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -30,12 +30,13 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public Car create(final String plate, final long userId) {
+    public Car create(final String plate, String infoCar, final long userId) {
         Map<String,Object> data = new HashMap<>();
         data.put("plate",plate);
         data.put("user_id", userId);
+        data.put("info_car", infoCar);
         Number key = jdbcInsert.executeAndReturnKey(data);
-        return new Car(key.longValue(),plate,userId);
+        return new Car(key.longValue(),plate,infoCar,userId);
     }
 
     @Override

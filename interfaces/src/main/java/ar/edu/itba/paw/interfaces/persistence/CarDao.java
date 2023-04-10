@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CarDao {
 
-    Car create(String plate, long user_id);
+    Car create(String plate, String infoCar, long user_id);
 
     Optional<Car> findById(long carId);
 

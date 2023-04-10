@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface CarService {
 
-    Car createCar(String plate, long userId);
+    Car createCar(String plate, String infoCar, long userId);
 
-    Car createCarIfNotExists(String plate, long userId);
+    Car createCarIfNotExists(String plate, String infoCar, long userId);
 
     Optional<Car> findById(long carId);
 

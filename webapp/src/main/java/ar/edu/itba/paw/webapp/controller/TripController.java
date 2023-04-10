@@ -103,7 +103,7 @@ public class TripController {
             @RequestParam(value = "phone", required = true) final String phone
     ){
         User user = userService.createUserIfNotExists(email,phone);
-        Car car = carService.createCarIfNotExists(plate, user.getUserId());
+        Car car = carService.createCarIfNotExists(plate, infoCar, user.getUserId());
         Trip trip = tripService.createTrip(cityService.findById(originCityId), originAddress, cityService.findById(destinationCityId), destinationAddress, infoCar, plate, date, time, seats,user);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);

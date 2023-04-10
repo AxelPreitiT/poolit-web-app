@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS cars(
     car_id SERIAL PRIMARY KEY,
     plate TEXT NOT NULL,
+    info_car TEXT NOT NULL,
     user_id INT NOT NULL,
     UNIQUE(car_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id)
