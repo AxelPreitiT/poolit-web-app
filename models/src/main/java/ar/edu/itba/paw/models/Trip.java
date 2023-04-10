@@ -1,30 +1,35 @@
 package ar.edu.itba.paw.models;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Trip {
-    private static int nextId = 0;
     private final City originCity, destinationCity;
-    private final String originAddress, destinationAddress, date, time, infoCar, plate;
+    private final String originAddress, destinationAddress;
+    private final Date date;
+    private final Time time;
+    private final Car car;
     private final User driver;
-    private final int seats;
-    private final long id;
-    private int seatsOccupied=0;
-    private final List<User> passengers = new ArrayList<>();
-    public Trip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String infoCar, final String plate, final String date, final String time, final int seats, User driver) {
+    private final int maxSeats;
+    private final long tripId;
+    private int occupiedSeats;
+    private final List<User> passengers;
+    public Trip(final long tripId,final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Date date, final Time time, final int maxSeats, User driver, Car car, List<User> passengers) {
         this.originCity = originCity;
         this.originAddress = originAddress;
         this.destinationCity = destinationCity;
         this.destinationAddress = destinationAddress;
         this.date = date;
         this.time = time;
-        this.infoCar = infoCar;
-        this.plate=plate;
-        this.seats = seats;
+        this.maxSeats = maxSeats;
+        this.tripId = tripId;
         this.driver = driver;
-        this.id = nextId++;
+        this.car = car;
+        this.passengers = passengers;
+        this.occupiedSeats = passengers.size();
     }
     public City getOriginCity() {
         return originCity;
@@ -41,58 +46,35 @@ public class Trip {
     public String getDestinationAddress() {
         return destinationAddress;
     }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public long getId() {
-        return id;
-    }
-
     public User getDriver() {
         return driver;
     }
 
-    public String getPlate() {
-        return plate;
+    public Car getCar(){
+        return car;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public int getMaxSeats() {
+        return maxSeats;
+    }
+
+    public long getTripId() {
+        return tripId;
+    }
+
+    public int getOccupiedSeats() {
+        return occupiedSeats;
     }
 
     public List<User> getPassengers() {
         return passengers;
-    }
-
-    public boolean addPassenger(User passenger){
-        if(seatsOccupied>=seats){return false;}
-        seatsOccupied++;
-        return passengers.add(passenger);
-    }
-    public int getSeats() {
-        return seats;
-    }
-
-    public int getFreeSeats() {
-        return seats - seatsOccupied;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Trip trip = (Trip) o;
-        return id == trip.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    public String getInfoCar() {
-        return infoCar;
     }
 }
