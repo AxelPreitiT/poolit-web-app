@@ -19,8 +19,8 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String carInfo, final String date, final String time, final int seats, User driver) {
-        return tripDao.create(originCity,originAddress,destinationCity,destinationAddress,carInfo,date,time,seats,driver);
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress,final String infoCar, final String plate, final String date, final String time, final int seats, User driver) {
+        return tripDao.create(originCity,originAddress,destinationCity,destinationAddress,infoCar, plate,date,time,seats,driver);
     }
 
     public boolean addPassenger(Trip trip, User passenger){
