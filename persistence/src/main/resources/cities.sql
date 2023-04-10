@@ -1,4 +1,4 @@
-INSERT INTO provinces (id, name) VALUES (1, 'CABA');
+INSERT INTO provinces (province_id, name) VALUES (1, 'CABA');
 
 INSERT INTO cities (name, province_id) VALUES ('Agronomía', 1);
 INSERT INTO cities (name, province_id) VALUES ('Almagro', 1);

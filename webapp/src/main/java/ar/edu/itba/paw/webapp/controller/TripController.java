@@ -68,8 +68,9 @@ public class TripController {
         long originCityId = 1, destinationCityId = 2;
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
-        Optional<City> originCity = cityService.findCityById(originCityId);
-        Optional<City> destinationCity = cityService.findCityById(destinationCityId);
+        //Fix: avoid using a hardcoded id, database can use others if serial is used after
+        Optional<City> originCity = cityService.findCityById(cities.get(0).getId());
+        Optional<City> destinationCity = cityService.findCityById(cities.get(0).getId());
         if(!originCity.isPresent() || !destinationCity.isPresent()){
             // TODO: 404 page
             return new ModelAndView("/discovery/main");

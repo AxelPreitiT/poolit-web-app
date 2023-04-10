@@ -16,7 +16,7 @@ public class CityDaoImpl implements CityDao {
     private final JdbcTemplate jdbcTemplate;
 
     private final static RowMapper<City> CITY_ROW_MAPPER = (rs, rowNum) -> new City(
-            rs.getLong("id"),
+            rs.getLong("city_id"),
             rs.getString("name"),
             rs.getLong("province_id")
     );
@@ -28,7 +28,7 @@ public class CityDaoImpl implements CityDao {
 
     @Override
     public Optional<City> findCityById(long id) {
-        return jdbcTemplate.query("SELECT * FROM cities WHERE id = ?", CITY_ROW_MAPPER, id).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM cities WHERE city_id = ?", CITY_ROW_MAPPER, id).stream().findFirst();
     }
 
     @Override
