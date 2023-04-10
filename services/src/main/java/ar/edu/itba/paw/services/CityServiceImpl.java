@@ -5,7 +5,8 @@ import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.models.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -18,12 +19,12 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City findById(final int id){
-        return cityDao.findById(id);
+    public Optional<City> findCityById(final long id){
+        return cityDao.findCityById(id);
     }
 
     @Override
-    public ArrayList<City> getCities(){
-        return cityDao.getCities();
+    public List<City> getCitiesByProvinceId(final long provinceId){
+        return cityDao.getCitiesByProvinceId(provinceId);
     }
 }

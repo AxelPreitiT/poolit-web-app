@@ -2,16 +2,14 @@ package ar.edu.itba.paw.models;
 
 import java.util.Objects;
 
-public class City {
+public class Province {
 
     private final String name;
     private final long id;
-    private final long provinceId;
 
-    public City(final long id, final String name, final long provinceId){
+    public Province(final long id, final String name){
         this.name = name;
         this.id = id;
-        this.provinceId = provinceId;
     }
 
     public String getName() {
@@ -22,10 +20,6 @@ public class City {
         return id;
     }
 
-    public long getProvinceId() {
-        return provinceId;
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -33,11 +27,11 @@ public class City {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj)
+        if (this == obj)
             return true;
-        if(!(obj instanceof City))
+        if (!(obj instanceof Province))
             return false;
-        City other = (City) obj;
+        Province other = (Province) obj;
         return this.id == other.id;
     }
 }
