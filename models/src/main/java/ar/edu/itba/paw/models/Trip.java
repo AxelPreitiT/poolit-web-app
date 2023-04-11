@@ -10,18 +10,18 @@ import java.util.Objects;
 public class Trip {
     private final City originCity, destinationCity;
     private final String originAddress, destinationAddress;
-    private final LocalDateTime dateTime;
+    private final LocalDateTime originDateTime;
     private final Car car;
     private final User driver;
     private final int maxSeats;
     private final long tripId;
     private final int occupiedSeats;
-    public Trip(final long tripId,final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final LocalDateTime dateTime, final int maxSeats, final User driver, final Car car, final int occupiedSeats) {
+    public Trip(final long tripId,final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final LocalDateTime originDateTime, final int maxSeats, final User driver, final Car car, final int occupiedSeats) {
         this.originCity = originCity;
         this.originAddress = originAddress;
         this.destinationCity = destinationCity;
         this.destinationAddress = destinationAddress;
-        this.dateTime = dateTime;
+        this.originDateTime = originDateTime;
         this.maxSeats = maxSeats;
         this.tripId = tripId;
         this.driver = driver;
@@ -51,8 +51,8 @@ public class Trip {
         return car;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getOriginDateTime() {
+        return originDateTime;
     }
     public int getMaxSeats() {
         return maxSeats;

@@ -15,38 +15,33 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.*;
+
+//Timestamp en SQL
+//LocalDateTime para Java
+//En Java no usar los SQL
 
 @Repository
 public class TripDaoImpl implements TripDao {
-    @Autowired
-    private CityDao cityDao;
-    @Autowired
-    private UserDao userDao;
-    @Autowired
-    private CarDao carDao;
+
+    //NO anidar DAO's, son muchos llamados a la BD
+    //Hacer los NATURAL JOIN
 
     //TODO: preguntar si usamos metodos de otros DAO's o hacemos Natural Join
     private RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
-        long tripId = resultSet.getLong("trip_id");
-        City originCity = cityDao.findCityById(resultSet.getLong("origin_city_id")).get();
-        City destinationCity = cityDao.findCityById(resultSet.getLong("destination_city_id")).get();
-        User driver = userDao.findById(resultSet.getLong("user_id")).get();
-        Car car = getCar(tripId).get();
-        List<User> passengers = getPassengers(tripId);
-        return new Trip(tripId,
-                originCity,
+        return new Trip(
+                resultSet.getLong("trip_id"),
+                new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
                 resultSet.getString("origin_address"),
-                destinationCity,
+                new City(resultSet.getLong("destination_city_id"),resultSet.getString("destination_city_name"),resultSet.getLong("destination_province_id")),
                 resultSet.getString("destination_address"),
-                resultSet.getDate("origin_date"),
-                resultSet.getTime("origin_time"),
+                resultSet.getTimestamp("origin_date_time").toLocalDateTime(),
                 resultSet.getInt("max_passengers"),
-                driver,
-                car,
-                passengers);
+                new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone")),
+                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),resultSet.getLong("user_id")),
+                resultSet.getInt("occupied_seats")
+        );
     };
 //
     private final JdbcTemplate jdbcTemplate;
@@ -55,7 +50,7 @@ public class TripDaoImpl implements TripDao {
     private final SimpleJdbcInsert driverCarInsert;
     private final SimpleJdbcInsert passengerInsert;
     @Autowired
-    public TripDaoImpl(final DataSource tripDataSource){
+    public TripDaoImpl(final DataSource tripDataSource, CityDao cityDao, UserDao userDao, CarDao carDao){
         this.jdbcTemplate = new JdbcTemplate(tripDataSource);
         this.tripsInsert = new SimpleJdbcInsert(tripDataSource)
                 .usingGeneratedKeyColumns("trip_id")
@@ -67,15 +62,14 @@ public class TripDaoImpl implements TripDao {
     }
 
     @Override
-    public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String plate, final Date date, final Time time,final double price, final int max_passengers, User driver) {
+    public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDateTime originDateTime, final double price, final int max_passengers, final User driver) {
         //Insertamos los datos en la tabla trip
         Map<String, Object> tripData = new HashMap<>();
         tripData.put("max_passengers",max_passengers);
         tripData.put("origin_address",originAddress);
         tripData.put("destination_address",destinationAddress);
         tripData.put("price",price);
-        tripData.put("origin_time", time);
-        tripData.put("origin_date",date);
+        tripData.put("origin_date_time",originDateTime);
         tripData.put("destination_city_id",destinationCity.getId());
         tripData.put("origin_city_id",originCity.getId());
         Number tripKey = tripsInsert.executeAndReturnKey(tripData);
@@ -85,13 +79,7 @@ public class TripDaoImpl implements TripDao {
         driverCarData.put("user_id",driver.getUserId());
         driverCarData.put("car_id",car.getCarId());
         driverCarInsert.execute(driverCarData);
-        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,date,time,max_passengers,driver,car,new ArrayList<>());
-    }
-    private Optional<User> getDriver(long tripId){
-        return jdbcTemplate.query("SELECT user_id FROM trips_cars_drivers WHERE trip_id=?",(resultSet,rowNum)->userDao.findById(resultSet.getLong("user_id")).get(),tripId).stream().findFirst();
-    }
-    private Optional<Car> getCar(long tripId){
-        return jdbcTemplate.query("SELECT user_id FROM trips_cars_drivers WHERE trip_id=?",(resultSet,rowNum)->carDao.findById(resultSet.getLong("car_id")).get(),tripId).stream().findFirst();
+        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,originDateTime,max_passengers,driver,car, 0);
     }
 
     @Override
@@ -102,15 +90,23 @@ public class TripDaoImpl implements TripDao {
         Map<String,Object> passengerData = new HashMap<>();
         passengerData.put("user_id",passenger.getUserId());
         passengerData.put("trip_id",trip.getTripId());
+        //TODO: ver si es 1
         return passengerInsert.execute(passengerData)>0;
     }
 
-    //TODO: preguntar si lo hacemos con Natural Join o usamos los otros DAO's
+    //TODO
+    //Usamos el ROW MAPPER de UserDao?
     private List<User> getPassengers(final long tripId){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users WHERE trip_id=?",(resultSet, rowNumber)-> new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone")),tripId);
     }
+//    private List<Trip> getFirstNTrips(long n){
+//        return jdbcTemplate.query()
+//    }
     @Override
     public Optional<Trip> findById(long tripId) {
-        return jdbcTemplate.query("SELECT * FROM trips WHERE trip_id = ?",ROW_MAPPER,tripId).stream().findFirst();
+        return jdbcTemplate.query("SELECT trips.trip_id, trips.max_passengers, trips.origin_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, count(passengers.user_id) as occupied_seats\n" +
+                "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN passengers ON passengers.trip_id = trips.trip_id\n" +
+                "WHERE trips.trip_id = ?"+
+                "GROUP BY trips.trip_id, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car;",ROW_MAPPER,tripId).stream().findFirst();
     }
 }
