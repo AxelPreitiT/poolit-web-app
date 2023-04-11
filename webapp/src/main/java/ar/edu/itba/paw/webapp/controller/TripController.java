@@ -46,7 +46,7 @@ public class TripController {
             return new ModelAndView("/select-trip/not-found");
         }
         ModelAndView mv = new ModelAndView("/select-trip/trip-detail");
-        mv.addObject("trip",trip);
+        mv.addObject("trip",trip.get());
         return mv;
     }
 
@@ -58,8 +58,9 @@ public class TripController {
         boolean ans = tripService.addPassenger(tripId,passenger);
         ModelAndView mv = new ModelAndView("/select-trip/response");
         mv.addObject("response",ans);
-        if(ans){
-            mv.addObject("trip",tripService.findById(tripId));
+        Optional<Trip> trip = tripService.findById(tripId);
+        if(ans && trip.isPresent()){
+            mv.addObject("trip",trip.get());
         }
         return mv;
     }
@@ -120,7 +121,7 @@ public class TripController {
             //TODO: 404 page
             return new ModelAndView("/create-trip/response");
         }
-        User user = userService.createUser(email,phone);
+        User user = userService.createUserIfNotExists(email,phone);
         Car car = carService.createCarIfNotExists(plate, infoCar, user.getUserId());
         //TODO: add price
         Trip trip = tripService.createTrip(originCity.get(), originAddress, destinationCity.get(), destinationAddress, car, date, time,0.0, seats,user);

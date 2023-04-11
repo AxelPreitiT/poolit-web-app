@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS cars(
 CREATE TABLE IF NOT EXISTS trips(
     trip_id SERIAL PRIMARY KEY,
     max_passengers INT,
-    current_passengers INT DEFAULT 0,
     origin_address TEXT NOT NULL ,
     destination_address text NOT NULL,
     price DOUBLE PRECISION,
