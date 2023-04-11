@@ -94,11 +94,9 @@ public class TripDaoImpl implements TripDao {
         return passengerInsert.execute(passengerData)>0;
     }
 
-    //TODO
-    //Usamos el ROW MAPPER de UserDao?
     @Override
     public List<User> getPassengers(final long tripId){
-        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users WHERE trip_id=?",(resultSet, rowNumber)-> new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone")),tripId);
+        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users WHERE trip_id=?",UserDaoImpl.ROW_MAPPER,tripId);
     }
 
     @Override
@@ -110,10 +108,10 @@ public class TripDaoImpl implements TripDao {
                 "LIMIT ?;",ROW_MAPPER,n);
     }
     //Preguntar:
-    //reutilizar query
-    //pasar timestamp
-    //application properties condicional
-    //ROWMAPPER globales
+    //reutilizar query -> concatenar string
+    //pasar timestamp -> Probar
+    //application properties condicional -> comentar el que no usamos (o crear perfiles)
+    //ROWMAPPER globales -> hacer package protected
     //Backup BD (si no la semana que viene)
     @Override
     public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, LocalDateTime dateTime){
