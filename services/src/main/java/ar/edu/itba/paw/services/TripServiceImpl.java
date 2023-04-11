@@ -14,6 +14,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
@@ -27,11 +28,13 @@ public class TripServiceImpl implements TripService {
         this.tripDao = tripDao;
     }
 
+    //TODO: revisar si conviene que pase todos los campos de usuario aca y que esto se encargue de crearlos
+    //Lo bueno que tendria hacerlo asi es que aisla al controller de toda la logica
+    //Pero acopla demasiada funcionalidad entre servicios
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String date, final String time,final double price, final int maxSeats, User driver) {
         //Usamos que el front debe pasar el date en ISO-8601
-        String[] timeTokens = time.split(":");
-        LocalDateTime dateTime= LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+        LocalDateTime dateTime = getLocalDateTime(date,time);
         return tripDao.create(
                 originCity,
                 originAddress,
@@ -44,6 +47,11 @@ public class TripServiceImpl implements TripService {
                 driver
         );
     }
+    private LocalDateTime getLocalDateTime(final String date, final String time){
+        String[] timeTokens = time.split(":");
+        return LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+    }
+    @Override
     public boolean addPassenger(Trip trip, User passenger){
         if( trip == null || passenger == null || trip.getOccupiedSeats()==trip.getMaxSeats()){
             return false;
@@ -62,5 +70,18 @@ public class TripServiceImpl implements TripService {
     @Override
     public Optional<Trip> findById(long id) {
         return tripDao.findById(id);
+    }
+    @Override
+    public List<User> getPassengers(final long tripId){
+        return tripDao.getPassengers(tripId);
+    }
+    @Override
+    public List<Trip> getFirstNTrips(long n){
+        return tripDao.getFirstNTrips(n);
+    }
+    @Override
+    public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String date, final String time){
+        LocalDateTime dateTime = getLocalDateTime(date,time);
+        return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,dateTime);
     }
 }

@@ -16,6 +16,6 @@ public interface TripDao {
     List<User> getPassengers(final long tripId);
     Optional<Trip> findById(long id);
     List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, LocalDateTime dateTime);
-    public List<Trip> getFirstNTrips(long n);
+    List<Trip> getFirstNTrips(long n);
 
 }

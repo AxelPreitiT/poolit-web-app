@@ -41,8 +41,8 @@ public class TripController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId){
 //        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
 //        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
-        Trip trip = tripService.findById(tripId);
-        if(trip==null){//Usar Optional?
+        Optional<Trip> trip = tripService.findById(tripId);
+        if(!trip.isPresent()){//Usar Optional?
             return new ModelAndView("/select-trip/not-found");
         }
         ModelAndView mv = new ModelAndView("/select-trip/trip-detail");
@@ -76,13 +76,15 @@ public class TripController {
             return new ModelAndView("/discovery/main");
         }
 
-        Trip trip = tripService.createTrip(originCity.get(),"Av Callao 1350",destinationCity.get(),"Av Cabildo 1200","corsita rojo", "AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
-        List<Trip> trips = new ArrayList<>();
-        trips.add(trip);
-        trips.add(trip);
-        trips.add(trip);
-        trips.add(trip);
-        trips.add(trip);
+//        Trip trip = tripService.createTrip(originCity.get(),"Av Callao 1350",destinationCity.get(),"Av Cabildo 1200","corsita rojo", "AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
+//        List<Trip> trips = new ArrayList<>();
+//        trips.add(trip);
+//        trips.add(trip);
+//        trips.add(trip);
+//        trips.add(trip);
+//        trips.add(trip);
+        //TODO: agregar logica para elegir lugares y momento
+        List<Trip> trips = tripService.getFirstNTrips(10);
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -115,14 +117,13 @@ public class TripController {
         Optional<City> originCity = cityService.findCityById(originCityId);
         Optional<City> destinationCity = cityService.findCityById(destinationCityId);
         if(!originCity.isPresent() || !destinationCity.isPresent()){
-            // TODO: 404 page
+            //TODO: 404 page
             return new ModelAndView("/create-trip/response");
         }
-
-
         User user = userService.createUser(email,phone);
         Car car = carService.createCarIfNotExists(plate, infoCar, user.getUserId());
-        Trip trip = tripService.createTrip(originCity.get(), originAddress, destinationCity.get(), destinationAddress, infoCar, plate, date, time, seats,user);
+        //TODO: add price
+        Trip trip = tripService.createTrip(originCity.get(), originAddress, destinationCity.get(), destinationAddress, car, date, time,0.0, seats,user);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);
 
