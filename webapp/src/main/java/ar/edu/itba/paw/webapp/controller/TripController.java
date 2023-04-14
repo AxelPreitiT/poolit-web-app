@@ -85,7 +85,8 @@ public class TripController {
 //        trips.add(trip);
 //        trips.add(trip);
         //TODO: agregar logica para elegir lugares y momento
-        List<Trip> trips = tripService.getFirstNTrips(10);
+//        List<Trip> trips = tripService.getFirstNTrips(10);
+        List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(originCity.get().getId(),destinationCity.get().getId(),"2023-04-15","12:22");
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -115,6 +116,8 @@ public class TripController {
             @RequestParam(value = "email", required = true) final String email,
             @RequestParam(value = "phone", required = true) final String phone
     ){
+        System.out.println(date);
+        System.out.println(time);
         Optional<City> originCity = cityService.findCityById(originCityId);
         Optional<City> destinationCity = cityService.findCityById(destinationCityId);
         if(!originCity.isPresent() || !destinationCity.isPresent()){
