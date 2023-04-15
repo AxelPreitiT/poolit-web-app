@@ -12,14 +12,16 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     <div class="container-bg-color main-container-style">
         <jsp:include page="/WEB-INF/jsp/components/success-message.jsp">
-            <jsp:param name="title" value="Su viaje se ha creado con éxito"/>
+            <jsp:param name="title" value="Su viaje se creó con éxito"/>
         </jsp:include>
         <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
         <hr>
         <div class="info-container">
             <jsp:include page="/WEB-INF/jsp/components/car-info-detail.jsp"/>
             <c:set value="${trip.driver}" var="user" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/user-info-detail.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/user-info-detail.jsp">
+                <jsp:param name="title" value="Contacto"/>
+            </jsp:include>
         </div>
         <div class="button-container">
             <a href="<c:url value="/"/>">
