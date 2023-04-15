@@ -81,11 +81,20 @@
                             </div>
                         </div>
                         <div class="confirm-btn">
-                            <button type="submit" class="btn button-bg-color">
+                            <button type="submit" class="btn btn-primary btn-lg btn-search" <c:if test="${trip.occupiedSeats>=trip.maxSeats}"><c:out value="disabled='disabled'"/></c:if>>
                                 <span class="light-text h4">Confirmar</span>
                             </button>
-<%--                            TODO: deshabilitar boton si no hay asientos--%>
-                            <p class="placeholder-text fs-6">Quedan <c:out value="${trip.maxSeats-trip.occupiedSeats}"/> asientos disponibles</p>
+                            <p class="placeholder-text fs-6">
+                                <c:if test="${trip.maxSeats-trip.occupiedSeats==0}">
+                                    Ya no quedan asientos disponibles
+                                </c:if>
+                                <c:if test="${trip.maxSeats-trip.occupiedSeats==1}">
+                                    Queda <c:out value="${trip.maxSeats-trip.occupiedSeats}"/> asiento disponible
+                                </c:if>
+                                <c:if test="${trip.maxSeats-trip.occupiedSeats>1}">
+                                    Quedan <c:out value="${trip.maxSeats-trip.occupiedSeats}"/> asientos disponibles
+                                </c:if>
+                            </p>
                         </div>
                     </form>
                 </div>
