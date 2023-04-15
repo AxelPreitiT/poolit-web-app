@@ -7,8 +7,7 @@
     <div class="location-data items-to-end">
       <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
       <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-      <h6 class="fw-light text description-style"><c:out value="${trip.date}" escapeXml="true"/></h6>
-      <h6 class="fw-light text description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>
+      <h6 class="fw-light text description-style"><c:out value="${trip.date}" escapeXml="true"/> - <c:out value="${trip.time}" escapeXml="true"/></h6>
     </div>
     <i class="bi bi-geo-alt text icon-style"></i>
   </div>

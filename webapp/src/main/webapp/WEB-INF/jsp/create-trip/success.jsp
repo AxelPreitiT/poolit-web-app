@@ -12,46 +12,49 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     <div class="container-bg-color main-container-style">
         <div class="success-container">
-            <i class="fa-solid fa-circle-check success h2"></i>
-            <h2 class="success">Su viaje se ha creado con éxito</h2>
+            <i class="fa-solid fa-circle-check success h1"></i>
+            <h1 class="success">Su viaje se ha creado con éxito</h1>
         </div>
-        <hr>
         <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
+        <hr>
         <div class="info-container">
             <div class="car-container">
-                <div class="car-title-container">
-                    <i class="bi bi-car-front-fill text h4"></i>
-                    <h3 class="text">Datos del auto</h3>
-                </div>
-                <div class="car-info-container">
-                    <div class="car-info-item">
-                        <h5>Descripción</h5>
-                        <p><c:out value="${trip.infoCar}"/></p>
-
+                <i class="bi bi-car-front-fill text h5"></i>
+                <div class="car-text-container">
+                    <div class="car-title-container">
+                        <h4 class="text">Datos del auto</h4>
                     </div>
-                    <div class="car-info-item">
-                        <h5>Patente</h5>
-                        <p><c:out value="${trip.plate}"/></p>
-                    </div>
-                    <div class="car-info-item item-end">
-                        <h5>Disponibilidad</h5>
-                        <p>Quedan <c:out value="${trip.freeSeats}"/> asientos libres</p>
+                    <div class="car-info-container">
+                        <div class="car-info-item">
+                            <h6>Descripción</h6>
+                            <p><c:out value="${trip.infoCar}"/></p>
+                        </div>
+                        <div class="car-info-item">
+                            <h6>Patente</h6>
+                            <p><c:out value="${trip.plate}"/></p>
+                        </div>
+                        <div class="car-info-item">
+                            <h6>Disponibilidad</h6>
+                            <p>Quedan <c:out value="${trip.freeSeats}"/> asientos libres</p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="contact-container">
-                <div class="contact-title-container">
-                    <i class="bi bi-telephone-fill text h4"></i>
-                    <h3 class="text">Contacto</h3>
-                </div>
-                <div class="contact-info-container">
-                    <div class="contact-info-item">
-                        <h5>Email</h5>
-                        <p><c:out value="${trip.driver.email}"/></p>
+                <i class="bi bi-telephone-fill text h5"></i>
+                <div class="contact-text-container">
+                    <div class="contact-title-container">
+                        <h4 class="text">Contacto</h4>
                     </div>
-                    <div class="contact-info-item item-end">
-                        <h5>Teléfono</h5>
-                        <p><c:out value="${trip.driver.phone}"/></p>
+                    <div class="contact-info-container">
+                        <div class="contact-info-item">
+                            <h6>Email</h6>
+                            <p><c:out value="${trip.driver.email}"/></p>
+                        </div>
+                        <div class="contact-info-item">
+                            <h6>Teléfono</h6>
+                            <p><c:out value="${trip.driver.phone}"/></p>
+                        </div>
                     </div>
                 </div>
             </div>
