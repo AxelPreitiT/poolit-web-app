@@ -39,8 +39,8 @@ public class TripController {
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId){
-//        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
-//        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
+//        User driver = new User(2, "jmentasti@itba.edu.ar","1129150686");
+//        Trip trip = new Trip(cityService.findCityById(1).get(),"Av Callao 1348",cityService.findCityById(3).get(),"Av Cabildo 1200","Gol","AE062TP","12/2/22","12:00", 4, driver);
         Trip trip = tripService.findById(tripId);
         if(trip==null){//Usar Optional?
             return new ModelAndView("/static/not-found-404");
@@ -56,11 +56,14 @@ public class TripController {
                                            @RequestParam(value = "phone",required = true) final String phone){
         User passenger = userService.createUserIfNotExists(email,phone);
         boolean ans = tripService.addPassenger(tripId,passenger);
+        if(ans){
+            ModelAndView successMV = new ModelAndView("/select-trip/success");
+            successMV.addObject("trip",tripService.findById(tripId));
+            successMV.addObject("passenger",passenger);
+            return successMV;
+        }
         ModelAndView mv = new ModelAndView("/select-trip/response");
         mv.addObject("response",ans);
-        if(ans){
-            mv.addObject("trip",tripService.findById(tripId));
-        }
         return mv;
     }
     @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
@@ -122,7 +125,7 @@ public class TripController {
         User user = userService.createUser(email,phone);
         Car car = carService.createCarIfNotExists(plate, infoCar, user.getUserId());
         Trip trip = tripService.createTrip(originCity.get(), originAddress, destinationCity.get(), destinationAddress, infoCar, plate, date, time, seats,user);
-        final ModelAndView mav = new ModelAndView("/create-trip/response");
+        final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
 
         return mav;
@@ -132,5 +135,4 @@ public class TripController {
     public ModelAndView pageNotFound() {
         return new ModelAndView("/static/not-found-404");
     }
-
 }
