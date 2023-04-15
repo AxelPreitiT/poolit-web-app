@@ -67,25 +67,12 @@ public class TripController {
 
     @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
     public ModelAndView getSelectedTrips(@Valid @ModelAttribute("registerForm") final DiscoveryForm form, final BindingResult errors){
-        System.out.println("Origin City Id" + form.getOriginCityId());
-        System.out.println("Destination City Id" + form.getDestinationCityId());
-        System.out.println("Date:" + form.getDate());
-        System.out.println("Time:" + form.getTime());
-        System.out.println("Errors:" + errors.hasErrors());
         if(errors.hasErrors()){
             return getTrips(form);
         }
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
-        //Fix: avoid using a hardcoded id, database can use others if serial is used after
-        Optional<City> originCity = cityService.findCityById(cities.get(0).getId());
-        Optional<City> destinationCity = cityService.findCityById(cities.get(0).getId());
-        if(!originCity.isPresent() || !destinationCity.isPresent()){
-            // TODO: 404 page
-            return new ModelAndView("/discovery/main");
-        }
-
-        List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(originCity.get().getId(),destinationCity.get().getId(),"2023-04-15","12:22");
+        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -94,27 +81,8 @@ public class TripController {
     }
     @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
     public ModelAndView getTrips(@ModelAttribute("registerForm") final DiscoveryForm form){
-        long originCityId = 1, destinationCityId = 2;
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-
-        //Fix: avoid using a hardcoded id, database can use others if serial is used after
-        Optional<City> originCity = cityService.findCityById(cities.get(0).getId());
-        Optional<City> destinationCity = cityService.findCityById(cities.get(0).getId());
-        if(!originCity.isPresent() || !destinationCity.isPresent()){
-            // TODO: 404 page
-            return new ModelAndView("/discovery/main");
-        }
-
-//        Trip trip = tripService.createTrip(originCity.get(),"Av Callao 1350",destinationCity.get(),"Av Cabildo 1200","corsita rojo", "AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
-//        List<Trip> trips = new ArrayList<>();
-//        trips.add(trip);
-//        trips.add(trip);
-//        trips.add(trip);
-//        trips.add(trip);
-//        trips.add(trip);
-        //TODO: agregar logica para elegir lugares y momento
-//        List<Trip> trips = tripService.getFirstNTrips(10);
-        List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(originCity.get().getId(),destinationCity.get().getId(),"2023-04-15","12:22");
+        List<Trip> trips = tripService.getFirstNTrips(10);
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);

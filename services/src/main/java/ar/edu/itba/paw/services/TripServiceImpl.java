@@ -34,7 +34,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String date, final String time,final double price, final int maxSeats, User driver) {
         //Usamos que el front debe pasar el date en ISO-8601
-        LocalDateTime dateTime = getLocalDateTime(date,time);
+        LocalDateTime dateTime = getLocalDateTime(date,time).get();
         return tripDao.create(
                 originCity,
                 originAddress,
@@ -47,9 +47,18 @@ public class TripServiceImpl implements TripService {
                 driver
         );
     }
-    private LocalDateTime getLocalDateTime(final String date, final String time){
-        String[] timeTokens = time.split(":");
-        return LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
+        if(date.length()==0 || time.length()==0){
+            return Optional.empty();
+        }
+        LocalDateTime ans;
+        try{
+            String[] timeTokens = time.split(":");
+            ans = LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+        }catch (Exception e){
+            return Optional.empty();
+        }
+        return Optional.of(ans);
     }
     @Override
     public boolean addPassenger(Trip trip, User passenger){
@@ -81,7 +90,7 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String date, final String time){
-        LocalDateTime dateTime = getLocalDateTime(date,time);
+        Optional<LocalDateTime> dateTime = getLocalDateTime(date,time);
         return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,dateTime);
     }
 }
