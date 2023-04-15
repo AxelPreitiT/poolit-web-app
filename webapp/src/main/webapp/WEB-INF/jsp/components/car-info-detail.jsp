@@ -19,7 +19,7 @@
             </div>
             <div class="car-info-item">
                 <h6>Disponibilidad</h6>
-                <p>Quedan <c:out value="${trip.freeSeats}"/> asientos libres</p>
+                <p><c:out value="${trip.freeSeats}"/> asientos libres</p>
             </div>
         </div>
     </div>
