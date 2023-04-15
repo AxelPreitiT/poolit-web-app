@@ -77,6 +77,14 @@
     background-color: #ffc107;
 }
 
+.error-code {
+    color: #8b8b8b;
+}
+
+.error-code-bg-color {
+    background-color: #8b8b8b;
+}
+
 .info {
     color: #17a2b8;
 }
