@@ -3,13 +3,11 @@
 
 <html>
 <head>
-    <head>
         <title>Poolit</title>
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
         <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
         <link href="<c:url value="/css/discovery/main.css"/>" rel="stylesheet">
-    </head>
 </head>
 <body>
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
@@ -19,7 +17,7 @@
                 <div class="location-container">
                     <div class="location-input">
                         <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                            <jsp:param name="id" value="orginCity" />
+                            <jsp:param name="id" value="originCity" />
                         </jsp:include>
                     </div>
                     <div class="dotten-line">
@@ -27,7 +25,7 @@
                     </div>
                     <div class="location-input">
                         <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                            <jsp:param name="id" value="originCity" />
+                            <jsp:param name="id" value="destinationCity" />
                         </jsp:include>
                     </div>
                 </div>
@@ -39,7 +37,7 @@
                     </div>
                     <div class="form-floating time-selector">
                         <input type="time" class="form-control h5 text" id="time" name="time" placeholder="11:25">
-                        <label for="time" class="placeholder-text h5">Hora</label>
+                        <label for="time" class="placeholder-text h5">Horario</label>
                     </div>
                 </div>
             </div>

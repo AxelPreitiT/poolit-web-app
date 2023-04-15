@@ -1,10 +1,9 @@
 
 .body-style {
     margin: 4% 0 0 0;
-    padding: 2% 2%;
+    padding: 2% 5%;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 
@@ -41,7 +40,7 @@ hr{
 .full-width{
     text-align: center;
     padding: 2%;
-    margin: 0 4%;
+    margin-top: 0;
     border: solid black 1px;
     border-radius: 20px;
     /*width: 100%;*/
@@ -50,10 +49,19 @@ hr{
 .result-container{
     margin-top: 2%;
     display: flex;
-    justify-content: center;
     align-content: space-between;
     flex-wrap: wrap;
     gap: 1%;
+}
+
+.result-container, .full-width {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.search-container, .button-container {
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .location-input *{
@@ -72,6 +80,6 @@ hr{
 
 .time-container{
     display: flex;
-    align-content: center;
     gap: 2%;
+    justify-content: flex-end;
 }
