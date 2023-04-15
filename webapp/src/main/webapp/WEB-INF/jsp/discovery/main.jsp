@@ -17,37 +17,41 @@
             <div class="search-container inline-container">
                 <div class="location-container">
                     <div class="location-input">
-                        <form:select path="originCityId" id="orignCity" class="form-select h6 text" name="Origen">
-                            <c:forEach items="${cities}" var="city">
-                                <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
-                            </c:forEach>
-                        </form:select>
-<%--                        <form:label path="originCityId" for="orignCity" class="placeholder-text h5">Origen</form:label>--%>
-                        <form:errors path="originCityId" cssClass="formError" element="p"/>
+                        <div class="form-floating">
+                            <form:select path="originCityId" id="originCity" class="form-select h6 text" name="Origen">
+                                <c:forEach items="${cities}" var="city">
+                                    <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
+                                </c:forEach>
+                            </form:select>
+                            <form:label path="originCityId" for="originCity" cssClass="placeholder-text h5">Origen</form:label>
+                            <form:errors path="originCityId" cssClass="formError" element="p"/>
+                        </div>
                     </div>
                     <div class="dotten-line">
                         <hr>
                     </div>
-                    <div class="location-input">
-                        <form:select path="destinationCityId" id="orignCity" class="form-select h6 text" name="Origen">
-                            <c:forEach items="${cities}" var="city">
-                                <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
-                            </c:forEach>
-                        </form:select>
-                            <%--                        <form:label path="originCityId" for="orignCity" class="placeholder-text h5">Origen</form:label>--%>
-                        <form:errors path="destinationCityId" cssClass="formError" element="p"/>
+                    <div class="location-input ">
+                        <div class="form-floating">
+                            <form:select path="destinationCityId" id="destinationCity" class="form-select h6 text" name="Origen">
+                                <c:forEach items="${cities}" var="city">
+                                    <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
+                                </c:forEach>
+                            </form:select>
+                            <form:label path="destinationCityId" for="destinationCity" class="placeholder-text h5">Destino</form:label>
+                            <form:errors path="destinationCityId" cssClass="formError" element="p"/>
+                        </div>
                     </div>
                 </div>
                 <div class="time-container">
                     <!-- <i class="bi bi-calendar h2"></i> -->
                     <div class="form-floating date-selector">
-                        <form:label path="date" class="placeholder-text h5">Fecha</form:label>
-                        <form:input path="date" type="date" class="form-control h5 text"/>
+                        <form:input path="date" type="date" id="date" cssClass="form-control h5 text"/>
+                        <form:label path="date" for="date" cssClass="placeholder-text h5">Fecha</form:label>
                         <form:errors path="date" cssClass="formError" element="p"/>
                     </div>
                     <div class="form-floating time-selector">
-                        <form:label path="time" class="placeholder-text h5">Horario</form:label>
-                        <form:input path="time" type="time" class="form-control h5 text"/>
+                        <form:input path="time" type="time" id="time" cssClass="form-control h5 text"/>
+                        <form:label path="time" for="time" cssClass="placeholder-text h5">Horario</form:label>
                         <form:errors path="time" cssClass="formError" element="p"/>
                     </div>
                 </div>
