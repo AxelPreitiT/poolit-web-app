@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <html>
 <head>
-        <title>Poolit</title>
+        <title><spring:message code="discovery.title"/></title>
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
         <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
@@ -32,17 +33,17 @@
                 <div class="time-container">
                     <!-- <i class="bi bi-calendar h2"></i> -->
                     <div class="form-floating date-selector">
-                        <input type="date" class="form-control h5 text" id="date" name="date" placeholder="02/04/23">
-                        <label for="date" class="placeholder-text h5">Fecha</label>
+                        <input type="date" class="form-control h5 text" id="date" name="date">
+                        <label for="date" class="placeholder-text h5"><spring:message code="trip.date"/></label>
                     </div>
                     <div class="form-floating time-selector">
-                        <input type="time" class="form-control h5 text" id="time" name="time" placeholder="11:25">
-                        <label for="time" class="placeholder-text h5">Horario</label>
+                        <input type="time" class="form-control h5 text" id="time" name="time">
+                        <label for="time" class="placeholder-text h5"><spring:message code="trip.time"/></label>
                     </div>
                 </div>
             </div>
             <div class="button-container">
-                <button type="button" class="btn btn-primary btn-lg btn-search">Buscar</button>
+                <button type="button" class="btn btn-primary btn-lg btn-search"><spring:message code="discovery.btnSearch"/></button>
             </div>
         </div>
         <div class="result-container">

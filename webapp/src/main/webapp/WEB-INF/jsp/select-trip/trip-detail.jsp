@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
 <head>
-    <title>Reserva</title>
+    <title><spring:message code="selectTrip.title"/></title>
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
@@ -38,53 +40,52 @@
             </div>
             <div class="data-container">
                 <div class="driver-data">
-                    <h3 class="text">Datos del conductor</h3>
+                    <h3 class="text"><spring:message code="selectTrip.driverData"/></h3>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-envelope text h5"></i>
-                            <h5 class="text">Email</h5>
+                            <h5 class="text"><spring:message code="trip.email"/></h5>
                         </div>
                         <p class="fw-light text fs-5"><c:out value="${trip.driver.email}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-telephone-fill text h5"></i>
-                            <h5 class="text">Teléfono</h5>
+                            <h5 class="text"><spring:message code="trip.phone"/></h5>
                         </div>
                         <p class="fw-light text fs-5"><c:out value="${trip.driver.phone}"/></p>
                     </div>
                     <div class="driver-data-item">
                         <div class="driver-data-item-title">
                             <i class="bi bi-car-front-fill text h5"></i>
-                            <h5 class="text">Info. del auto</h5>
+                            <h5 class="text"><spring:message code="trip.carInfo"/></h5>
                         </div>
-<%--                        <p class="fw-light text fs-5"><c:out value="${trip.carInfo}"/></p>--%>
-                        <p class="fw-light text fs-5">TODO</p>
+                        <p class="fw-light text fs-5"><spring:message code="format.carInfo" arguments="${trip.infoCar},${trip.plate}"/></p>
                     </div>
                 </div>
                 <div class="passenger-data">
-                    <h3 class="text">Tus datos</h3>
+                    <h3 class="text"><spring:message code="selectTrip.userData"/></h3>
                     <c:url value="/trips/${trip.id}" var="bookTripUrl" />
                     <form class="passenger-form" action="${bookTripUrl}" method="post">
                         <div class="passenger-data-item">
                             <i class="bi bi-envelope text h3"></i>
                             <div class="form-floating">
-                                <input type="email" class="form-control text h5 input-style" id="email" name="email" placeholder="paw@itba.edu.ar">
-                                <label for="email" class="placeholder-text">Email</label>
+                                <input type="email" class="form-control text h5 input-style" id="email" name="email" placeholder='<spring:message code="trip.email"/>'>
+                                <label for="email" class="placeholder-text"><spring:message code="trip.email"/></label>
                             </div>
                         </div>
                         <div class="passenger-data-item">
                             <i class="bi bi-telephone-fill text h3"></i>
                             <div class="form-floating">
-                                <input type="tel" class="form-control text h5 input-style" id="phone" name="phone" placeholder="123456789">
-                                <label for="phone" class="placeholder-text">Teléfono</label>
+                                <input type="tel" class="form-control text h5 input-style" id="phone" name="phone" placeholder='<spring:message code="trip.phone"/>'>
+                                <label for="phone" class="placeholder-text"><spring:message code="trip.phone"/></label>
                             </div>
                         </div>
                         <div class="confirm-btn">
                             <button type="submit" class="btn button-bg-color">
-                                <span class="light-text h4">Confirmar</span>
+                                <span class="light-text h4"><spring:message code="selectTrip.btnConfirm"/></span>
                             </button>
-                            <p class="placeholder-text fs-6">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</p>
+                            <p class="placeholder-text fs-6"><spring:message code="selectTrip.seats" arguments="${trip.freeSeats}"/></p>
                         </div>
                     </form>
                 </div>
