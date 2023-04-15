@@ -12,7 +12,11 @@
     justify-content: space-between;
     align-items: center;
 }
-
+.form-floating {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
 .dotten-line{
     width: 10vw;
 }
