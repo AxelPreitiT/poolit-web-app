@@ -1,19 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.models.City;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.beans.factory.annotation.Autowired;
+import ar.edu.itba.paw.webapp.form.annotations.DateAndTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
+import javax.validation.constraints.Past;
 
+@DateAndTime
 public class DiscoveryForm {
     private int originCityId;
 

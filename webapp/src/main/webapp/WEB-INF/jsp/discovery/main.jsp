@@ -42,18 +42,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="time-container">
-                    <!-- <i class="bi bi-calendar h2"></i> -->
-                    <div class="form-floating date-selector">
-                        <form:input path="date" type="date" id="date" cssClass="form-control h5 text"/>
-                        <form:label path="date" for="date" cssClass="placeholder-text h5">Fecha</form:label>
-                        <form:errors path="date" cssClass="formError" element="p"/>
+                <div>
+                    <div class="time-container">
+                        <!-- <i class="bi bi-calendar h2"></i> -->
+                        <div class="form-floating date-selector">
+                            <form:input path="date" type="date" id="date" cssClass="form-control h5 text"/>
+                            <form:label path="date" for="date" cssClass="placeholder-text h5">Fecha</form:label>
+                            <form:errors path="date" cssClass="formError" element="p"/>
+
+                        </div>
+                        <div class="form-floating time-selector">
+                            <form:input path="time" type="time" id="time" cssClass="form-control h5 text"/>
+                            <form:label path="time" for="time" cssClass="placeholder-text h5">Horario</form:label>
+                            <form:errors path="time" cssClass="formError" element="p"/>
+                        </div>
                     </div>
-                    <div class="form-floating time-selector">
-                        <form:input path="time" type="time" id="time" cssClass="form-control h5 text"/>
-                        <form:label path="time" for="time" cssClass="placeholder-text h5">Horario</form:label>
-                        <form:errors path="time" cssClass="formError" element="p"/>
-                    </div>
+                        <%--                        Error for dateAndTime--%>
+                    <form:errors cssClass="formError" element="p"/>
                 </div>
             </div>
             <div class="button-container">
