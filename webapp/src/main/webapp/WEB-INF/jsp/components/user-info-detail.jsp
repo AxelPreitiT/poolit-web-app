@@ -6,7 +6,7 @@
     <i class="bi bi-telephone-fill text h5"></i>
     <div class="contact-text-container">
         <div class="contact-title-container">
-            <h4 class="text">Contacto</h4>
+            <h4 class="text"><c:out value="${param.title}"/></h4>
         </div>
         <div class="contact-info-container">
             <div class="contact-info-item">
