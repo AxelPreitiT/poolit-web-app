@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-floating time-selector">
                         <input type="time" class="form-control h5 text" id="time" name="time" placeholder="11:25">
-                        <label for="time" class="placeholder-text h5">Hora</label>
+                        <label for="time" class="placeholder-text h5">Horario</label>
                     </div>
                 </div>
             </div>

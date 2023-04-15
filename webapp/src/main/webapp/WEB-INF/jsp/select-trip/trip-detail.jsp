@@ -16,8 +16,8 @@
                     <div class="location-data">
                         <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
                         <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.date}" escapeXml="true"/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.originDateTime}" escapeXml="true"/></h6>
+<%--                        <h6 class="fw-light text description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>--%>
                     </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
@@ -58,12 +58,12 @@
                             <h5 class="text">Info. del auto</h5>
                         </div>
 <%--                        <p class="fw-light text fs-5"><c:out value="${trip.carInfo}"/></p>--%>
-                        <p class="fw-light text fs-5">TODO</p>
+                        <p class="fw-light text fs-5"><c:out value="${trip.car.plate}" escapeXml="true" /> (<c:out value="${trip.car.infoCar}" escapeXml="true"/>)</p>
                     </div>
                 </div>
                 <div class="passenger-data">
                     <h3 class="text">Tus datos</h3>
-                    <c:url value="/trips/${trip.id}" var="bookTripUrl" />
+                    <c:url value="/trips/${trip.tripId}" var="bookTripUrl" />
                     <form class="passenger-form" action="${bookTripUrl}" method="post">
                         <div class="passenger-data-item">
                             <i class="bi bi-envelope text h3"></i>
@@ -83,7 +83,8 @@
                             <button type="submit" class="btn button-bg-color">
                                 <span class="light-text h4">Confirmar</span>
                             </button>
-                            <p class="placeholder-text fs-6">Quedan <c:out value="${trip.freeSeats}"/> asientos disponibles</p>
+<%--                            TODO: deshabilitar boton si no hay asientos--%>
+                            <p class="placeholder-text fs-6">Quedan <c:out value="${trip.maxSeats-trip.occupiedSeats}"/> asientos disponibles</p>
                         </div>
                     </form>
                 </div>

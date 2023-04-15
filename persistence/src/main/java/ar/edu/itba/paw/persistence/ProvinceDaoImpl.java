@@ -16,7 +16,7 @@ public class ProvinceDaoImpl implements ProvinceDao {
     private final JdbcTemplate jdbcTemplate;
 
     private final static RowMapper<Province> PROVINCE_ROW_MAPPER = (rs, rowNum) -> new Province(
-            rs.getLong("id"),
+            rs.getLong("province_id"),
             rs.getString("name")
     );
 
@@ -27,7 +27,7 @@ public class ProvinceDaoImpl implements ProvinceDao {
 
     @Override
     public Optional<Province> findProvinceById(long id) {
-        return jdbcTemplate.query("SELECT * FROM provinces WHERE id = ?", PROVINCE_ROW_MAPPER, id).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM provinces WHERE province_id = ?", PROVINCE_ROW_MAPPER, id).stream().findFirst();
     }
 
     @Override
