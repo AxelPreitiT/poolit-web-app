@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    private static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) -> new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone"));
+    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) -> new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone"));
 
     private final JdbcTemplate jdbcTemplate;
 

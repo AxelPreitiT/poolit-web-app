@@ -4,23 +4,23 @@ public class Car {
 
     private final long carId;
 
-    private String plate, infoCar;
+    private final String plate, infoCar;
 
-    private final long user_id;
+    private final User user;
 
-    public Car(final long carId, String plate, String infoCar, final long user_id){
+    public Car(final long carId, String plate, String infoCar, final User user){
         this.carId=carId;
         this.plate=plate;
         this.infoCar=infoCar;
-        this.user_id=user_id;
+        this.user=user;
     }
 
     public long getCarId() {
         return carId;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public User getUser() {
+        return user;
     }
 
     public String getPlate() {
@@ -29,9 +29,5 @@ public class Car {
 
     public String getInfoCar() {
         return infoCar;
-    }
-
-    public void setPlate(String plate){
-        this.plate=plate;
     }
 }
