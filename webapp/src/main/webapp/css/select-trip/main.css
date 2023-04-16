@@ -109,12 +109,12 @@
 }
 
 .driver-data {
-    border-right: 1px solid black;
+    border-right: 1px solid lightgray;
     gap: 2em;
 }
 
 .passenger-data {
-    border-left: 1px solid black;
+    border-left: 1px solid lightgray;
     padding-left: 3%;
 }
 

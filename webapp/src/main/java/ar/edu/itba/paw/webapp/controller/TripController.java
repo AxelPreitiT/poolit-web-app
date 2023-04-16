@@ -62,12 +62,15 @@ public class TripController {
         }
         User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         boolean ans = tripService.addPassenger(tripId,passenger);
-        ModelAndView mv = new ModelAndView("/select-trip/response");
-        mv.addObject("response",ans);
         Optional<Trip> trip = tripService.findById(tripId);
         if(ans && trip.isPresent()){
-            mv.addObject("trip",trip.get());
+            ModelAndView successMV = new ModelAndView("/select-trip/success");
+            successMV.addObject("trip",trip.get());
+            successMV.addObject("passenger",passenger);
+            return successMV;
         }
+        ModelAndView mv = new ModelAndView("/select-trip/response");
+        mv.addObject("response",ans);
         return mv;
     }
 
@@ -122,7 +125,7 @@ public class TripController {
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
         //TODO: get price for trip
         Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user);
-        final ModelAndView mav = new ModelAndView("/create-trip/response");
+        final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
 
         return mav;
@@ -132,5 +135,4 @@ public class TripController {
     public ModelAndView pageNotFound() {
         return new ModelAndView("/static/not-found-404");
     }
-
 }
