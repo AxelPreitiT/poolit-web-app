@@ -46,8 +46,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-    /*
-    Pampero Deploy DataSource
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -57,8 +55,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setPassword(environment.getProperty("DB_PASSWORD"));
         return ds;
     }
-    */
 
+    /*
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -68,6 +66,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setPassword(environment.getProperty("DB_PASSWORD"));
         return ds;
     }
+    */
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
