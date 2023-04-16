@@ -20,7 +20,7 @@
             </div>
             <div class="car-info-item">
                 <h6><spring:message code="success.carInfo.availability"/></h6>
-                <p><spring:message code="success.carInfo.availability.info" arguments="${trip.maxSeats - trip.occupiedSeats -1}"/></p>
+                <p><spring:message code="success.carInfo.availability.info" arguments="${trip.maxSeats - trip.occupiedSeats}"/></p>
             </div>
         </div>
     </div>
