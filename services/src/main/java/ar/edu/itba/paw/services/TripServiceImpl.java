@@ -76,6 +76,13 @@ public class TripServiceImpl implements TripService {
         if( trip == null || passenger == null || trip.getOccupiedSeats()==trip.getMaxSeats()){
             return false;
         }
+        try{
+            emailService.sendMailNewPassenger(trip, passenger);
+            emailService.sendMailTripConfirmation(trip, passenger);
+        }
+        catch( Exception e){
+            e.printStackTrace();
+        }
         return tripDao.addPassenger(trip,passenger);
     }
     @Override
@@ -84,13 +91,6 @@ public class TripServiceImpl implements TripService {
         //Ignorar suggestion, usar filter no tiene mucho sentido aca (funciona porque devuelve boolean)
         //Trip trip = findById(tripId);
         if(trip.isPresent()){
-        try{
-            emailService.sendMailNewPassenger(trip.get(), passenger);
-            emailService.sendMailTripConfirmation(trip.get(), passenger);
-        }
-        catch( Exception e){
-            e.printStackTrace();
-        }
             return addPassenger(trip.get(),passenger);
         }
         return false;
