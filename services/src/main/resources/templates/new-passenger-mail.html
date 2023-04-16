@@ -59,8 +59,8 @@
     <ul>
         <li>Origen:  <span th:text="${trip.originCity.name}"></span> en <span th:text="${trip.originAddress}"></span></li>
         <li>Destino:   <span th:text="${trip.destinationCity.name}"></span> en <span th:text="${trip.destinationAddress}"></span></li>
-        <li>Horario de salida:  <span th:text="${trip.originDateString}"></span></li>
-        <!--    <li>Teléfono del pasajero: <span th:text="${trip}"></span></li>-->
+        <li>Horario de salida:<span th:text="${trip.originTimeString}"></span></li>
+        <li>Teléfono del pasajero: <span th:text="${passenger.getPhone()}"></span></li>
     </ul>
 <!--    <div class="btn-container">-->
 <!--        <a href="#" class="btn">Confirmar pasajero</a>-->

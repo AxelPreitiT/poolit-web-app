@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
-@Configuration
+//@Configuration
 public class EmailConfig {
 
 //    @Value("${spring.mail.host}")
@@ -27,20 +27,20 @@ public class EmailConfig {
 //    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
 //    private String starttlsEnable;
 
-    @Bean
-    public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("poolit.noreply@gmail.com");
-        mailSender.setPassword("dpwfwbmwyuqguljk");
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.smtp.auth", true);
-        props.put("mail.smtp.starttls.enable", true);
-
-        return mailSender;
-    }
+//    @Bean
+//    public JavaMailSender javaMailSender() {
+//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//        mailSender.setHost("smtp.gmail.com");
+//        mailSender.setPort(587);
+//        mailSender.setUsername("poolit.noreply@gmail.com");
+//        mailSender.setPassword("dpwfwbmwyuqguljk");
+//
+//        Properties props = mailSender.getJavaMailProperties();
+//        props.put("mail.smtp.auth", true);
+//        props.put("mail.smtp.starttls.enable", true);
+//
+//        return mailSender;
+//    }
 }
 
 
