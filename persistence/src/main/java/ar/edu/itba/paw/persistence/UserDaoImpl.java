@@ -32,8 +32,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User create(final String email, final String phone) {
         Map<String,Object> data = new HashMap<>();
-        data.put("email",email);
-        data.put("phone",phone);
+        String savedEmail = email.toLowerCase().replaceAll("\\s","");
+        String savedPhone = phone.replaceAll("\\s","");
+        data.put("email",savedEmail);
+        data.put("phone",savedPhone);
         Number key = jdbcInsert.executeAndReturnKey(data);
         return new User(key.longValue(),email,phone);
     }
@@ -45,6 +47,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email){
-        return jdbcTemplate.query("SELECT * FROM users WHERE email = ?",ROW_MAPPER,email).stream().findFirst();
+        String searchEmail = email.toLowerCase().replaceAll("\\s","");
+        return jdbcTemplate.query("SELECT * FROM users WHERE email = ?",ROW_MAPPER,searchEmail).stream().findFirst();
     }
 }
