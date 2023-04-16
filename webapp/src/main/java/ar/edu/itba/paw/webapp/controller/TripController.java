@@ -50,7 +50,7 @@ public class TripController {
 //        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
         Optional<Trip> trip = tripService.findById(tripId);
         if(!trip.isPresent()){//Usar Optional?
-            return new ModelAndView("/select-trip/not-found");
+            return new ModelAndView("/static/not-found-404");
         }
         ModelAndView mv = new ModelAndView("/select-trip/trip-detail");
         mv.addObject("trip",trip.get());
@@ -138,6 +138,11 @@ public class TripController {
         mav.addObject("trip", trip);
 
         return mav;
+    }
+
+    @RequestMapping(value = "*", method = RequestMethod.GET)
+    public ModelAndView pageNotFound() {
+        return new ModelAndView("/static/not-found-404");
     }
 
 }
