@@ -1,7 +1,7 @@
 
 .body-style {
     margin: 4% 0 0 0;
-    padding: 2% 5%;
+    padding: 2% 2%;
     display: flex;
     flex-direction: column;
 }
@@ -10,7 +10,7 @@
 .search-container{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 }
 .form-floating {
     display: flex;
@@ -55,7 +55,13 @@ hr{
     display: flex;
     align-content: space-between;
     flex-wrap: wrap;
-    gap: 1%;
+    justify-content: center;
+    gap: 2%;
+}
+
+.form-container{
+    margin-right: 5%;
+    margin-left: 5%;
 }
 
 .result-container, .full-width {
@@ -83,10 +89,17 @@ hr{
 }
 
 .time-container{
-    display: flex;
+    display: block;
     gap: 2%;
     justify-content: flex-end;
 }
+
+.error-container{
+    display: block;
+    justify-content: center;
+    height: 20px;
+}
+
 .formError{
     color: red;
 }
