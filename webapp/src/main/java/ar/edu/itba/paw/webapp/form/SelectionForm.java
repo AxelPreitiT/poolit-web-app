@@ -7,10 +7,10 @@ import javax.validation.constraints.Pattern;
 
 public class SelectionForm {
     @Email
-    private  String email;
+    private String email;
 
     @Pattern(regexp = "^\\d{2,3}\\s?\\d{4}\\s?\\d{4}")
-    private  String phone;
+    private String phone;
 
     public String getEmail() {
         return email;
