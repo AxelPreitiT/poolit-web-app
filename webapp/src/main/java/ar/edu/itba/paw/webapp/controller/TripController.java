@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.DiscoveryForm;
+import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,7 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +43,9 @@ public class TripController {
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
-    public ModelAndView getTripDetails(@PathVariable("id") final long tripId){
+    public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
+                                       @ModelAttribute("selectForm") final SelectionForm form
+                                       ){
 //        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
 //        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
         Optional<Trip> trip = tripService.findById(tripId);
@@ -52,9 +59,12 @@ public class TripController {
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.POST)
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
-                                           @RequestParam(value = "email",required = true) final String email,
-                                           @RequestParam(value = "phone",required = true) final String phone){
-        User passenger = userService.createUserIfNotExists(email,phone);
+                                           @Valid @ModelAttribute("selectForm") final SelectionForm form,
+                                           final BindingResult errors){
+        if(errors.hasErrors()){
+            return getTripDetails(tripId,form);
+        }
+        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         boolean ans = tripService.addPassenger(tripId,passenger);
         ModelAndView mv = new ModelAndView("/select-trip/response");
         mv.addObject("response",ans);
