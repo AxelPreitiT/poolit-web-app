@@ -1,0 +1,12 @@
+.info-container {
+    display: flex;
+    flex-direction: row;
+    column-gap: 5%;
+    width: 100%;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}

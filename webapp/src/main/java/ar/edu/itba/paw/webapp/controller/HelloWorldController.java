@@ -18,31 +18,31 @@ public class HelloWorldController {
     public HelloWorldController(UserService us){
         this.us = us;
     }
-    @RequestMapping("/")
-    public ModelAndView helloWorld(){
-        final ModelAndView mav = new ModelAndView("helloworld/index");
-        mav.addObject("user",us.createUser("paw@itba.edu.ar","myPassword"));
-        return mav;
-    }
-    @RequestMapping("/{id:\\d+}")
-    public ModelAndView profile(@PathVariable("id") final long userId){
-        final ModelAndView mav = new ModelAndView("/helloworld/profile");
-        mav.addObject("userId",userId);
-        return mav;
-    }
-    @RequestMapping(value="/register", method = RequestMethod.GET)
-    public ModelAndView registerForm(){
-        return new ModelAndView("/helloworld/register");
-    }
-
-    @RequestMapping(value="/register", method = RequestMethod.POST)
-    public ModelAndView register(@RequestParam(value = "email", required = true) final String email,
-                                 @RequestParam(value = "password", required = true) final String password){
-        final User user = us.createUser(email,password);
-
-        //Volvemos a index pero con esa informacion
-        final ModelAndView mav = new ModelAndView("helloworld/index");
-        mav.addObject("user",user);
-        return mav;
-    }
+//    @RequestMapping("/")
+//    public ModelAndView helloWorld(){
+//        final ModelAndView mav = new ModelAndView("helloworld/index");
+//        mav.addObject("user",us.createUser("paw@itba.edu.ar","myPassword"));
+//        return mav;
+//    }
+//    @RequestMapping("/{id:\\d+}")
+//    public ModelAndView profile(@PathVariable("id") final long userId){
+//        final ModelAndView mav = new ModelAndView("/helloworld/profile");
+//        mav.addObject("userId",userId);
+//        return mav;
+//    }
+//    @RequestMapping(value="/register", method = RequestMethod.GET)
+//    public ModelAndView registerForm(){
+//        return new ModelAndView("/helloworld/register");
+//    }
+//
+//    @RequestMapping(value="/register", method = RequestMethod.POST)
+//    public ModelAndView register(@RequestParam(value = "email", required = true) final String email,
+//                                 @RequestParam(value = "password", required = true) final String password){
+//        final User user = us.createUser(email,password);
+//
+//        //Volvemos a index pero con esa informacion
+//        final ModelAndView mav = new ModelAndView("helloworld/index");
+//        mav.addObject("user",user);
+//        return mav;
+//    }
 }

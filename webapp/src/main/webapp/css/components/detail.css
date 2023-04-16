@@ -1,0 +1,50 @@
+.car-container, .contact-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: flex-start;
+    width: 100%;
+    column-gap: 2%;
+}
+
+.car-container i, .contact-container i {
+    padding-top: 0.65em;
+}
+
+.car-text-container, .contact-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    row-gap: 1vh;
+}
+
+.car-title-container, .contact-title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1%;
+    width: 100%;
+    margin: 2% 0 1% 0;
+}
+
+.car-title-container *, .contact-title-container * {
+    margin-bottom: 0;
+}
+
+.car-info-container, .contact-info-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vh;
+    width: 100%;
+}
+
+.car-info-container *, .contact-info-container * {
+    margin-bottom: 0;
+}
+
+.car-info-item.item-end *, .contact-info-item.item-end * {
+    display: flex;
+    justify-content: flex-end;
+}

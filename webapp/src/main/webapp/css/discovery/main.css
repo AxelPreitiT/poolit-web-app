@@ -1,0 +1,105 @@
+
+.body-style {
+    margin: 4% 0 0 0;
+    padding: 2% 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.search-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+.form-floating {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.dotten-line{
+    width: 10vw;
+}
+
+.btn-search{
+    padding: 1% 2% 1% 2%;
+    background-color: #0C6FC0;
+}
+
+hr{
+    border-top: 3px dotted rgb(0, 0, 0);
+    width: 100%;
+}
+
+.inline-container * {
+    display: inline-block;
+}
+
+
+.button-container{
+    text-align: right;
+    margin: 2% 5% 0 0;
+}
+
+.full-width{
+    text-align: center;
+    padding: 2%;
+    margin-top: 0;
+    border: solid black 1px;
+    border-radius: 20px;
+    /*width: 100%;*/
+}
+
+.result-container{
+    margin-top: 2%;
+    display: flex;
+    align-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2%;
+}
+
+.form-container{
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+.result-container, .full-width {
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.search-container, .button-container {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.location-input *{
+    width: 15vw;
+}
+.location-container{
+    padding-right: 20px;
+}
+.time-selector{
+    width: 10vw;
+}
+
+.date-selector{
+    width: 15vw;
+}
+
+.time-container{
+    display: block;
+    gap: 2%;
+    justify-content: flex-end;
+}
+
+.error-container{
+    display: block;
+    justify-content: center;
+    height: 20px;
+}
+
+.formError{
+    color: red;
+}
