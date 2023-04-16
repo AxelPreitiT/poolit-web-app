@@ -102,6 +102,8 @@ public class TripDaoImpl implements TripDao {
     @Override
     public List<Trip> getFirstNTrips(long n){
         QueryBuilder queryBuilder = new QueryBuilder()
+                .withWhere(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS, LocalDateTime.now())
+                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbOrder.ASC)
                 .withLimit(n);
         return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
@@ -115,8 +117,10 @@ public class TripDaoImpl implements TripDao {
     @Override
     public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, Optional<LocalDateTime> dateTime){
         QueryBuilder queryBuilder = new QueryBuilder()
+                .withWhere(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS, LocalDateTime.now())
                 .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
+                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbOrder.ASC)
                 .withLimit(10);
         dateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbComparator.EQUALS, localDateTime));
@@ -135,18 +139,30 @@ public class TripDaoImpl implements TripDao {
         private final String from = "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id";
         private final StringBuilder where = new StringBuilder();
         private final String groupBy = "GROUP BY trips.trip_id,trips.origin_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car";
+
+        private final StringBuilder having = new StringBuilder();
         private final StringBuilder orderBy = new StringBuilder();
         private final StringBuilder limit = new StringBuilder();
         List<Object> whereArguments = new ArrayList<>();
+        List<Object> havingArguments = new ArrayList<>();
         List<Object> limitArguments = new ArrayList<>();
+
 
         public String getString(){
             StringBuilder ans = new StringBuilder();
-            return ans.append(select).append('\n').append(from).append('\n').append(where).append('\n').append(groupBy).append('\n').append(orderBy).append('\n').append(limit).append(';').toString();
+            return ans.append(select).append('\n')
+                        .append(from).append('\n')
+                        .append(where).append('\n')
+                        .append(groupBy).append('\n')
+                        .append(having).append('\n')
+                        .append(orderBy).append('\n')
+                        .append(limit).append(';')
+                        .toString();
         }
         public List<Object> getArguments(){
             List<Object> ans = new ArrayList<>();
             ans.addAll(whereArguments);
+            ans.addAll(havingArguments);
             ans.addAll(limitArguments);
             return ans;
         }
@@ -158,6 +174,34 @@ public class TripDaoImpl implements TripDao {
             }
             this.where.append(field.dbName).append(' ').append(comparator.dbName).append(" ?");
             this.whereArguments.add(value);
+            return this;
+        }
+        public QueryBuilder withWhere(DbField field, DbComparator comparator, DbField field2){
+            if(this.where.length()>0){
+                this.where.append(" AND ");
+            }else{
+                this.where.append("WHERE ");
+            }
+            this.where.append(field.dbName).append(' ').append(comparator.dbName).append(' ').append(field2.dbName);
+            return this;
+        }
+        public QueryBuilder withHaving(DbField field, DbComparator comparator, DbField field2){
+            if(this.having.length()>0){
+                this.having.append(" AND ");
+            }else{
+                this.having.append("HAVING ");
+            }
+            this.having.append(field.dbName).append(' ').append(comparator.dbName).append(' ').append(field2.dbName);
+            return this;
+        }
+        public QueryBuilder withHaving(DbField field, DbComparator comparator, Object value){
+            if(this.having.length()>0){
+                this.having.append(" AND ");
+            }else{
+                this.having.append("HAVING ");
+            }
+            this.having.append(field.dbName).append(' ').append(comparator.dbName).append(" ?");
+            this.havingArguments.add(value);
             return this;
         }
         public QueryBuilder withOrderBy(DbField field, DbOrder order){
@@ -196,7 +240,7 @@ public class TripDaoImpl implements TripDao {
             CAR_ID("cars.car_id"),
             CAR_PLATE("cars.plate"),
             CAR_INFO_CAR("cars.info_car"),
-            OCCUPIED_SEATS(" count(passengers.user_id)");
+            OCCUPIED_SEATS("count(passengers.user_id)");
 
             private final String dbName;
             private DbField(String dbName){
