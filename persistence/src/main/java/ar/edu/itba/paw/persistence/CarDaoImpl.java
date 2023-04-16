@@ -42,16 +42,16 @@ public class CarDaoImpl implements CarDao {
 
     @Override
     public Optional<Car> findById(long carId) {
-        return jdbcTemplate.query("SELECT * FROM cars WHERE car_id = ?",ROW_MAPPER,carId).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM cars NATURAL JOIN users WHERE car_id = ?",ROW_MAPPER,carId).stream().findFirst();
     }
 
     @Override
     public Optional<Car> findByPlateAndUser(String plate, User user) {
-        return jdbcTemplate.query("SELECT * FROM cars WHERE plate = ? and user_id = ?",ROW_MAPPER,plate, user.getUserId()).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM cars NATURAL JOIN users WHERE plate = ? and user_id = ?",ROW_MAPPER,plate, user.getUserId()).stream().findFirst();
     }
 
     @Override
     public Optional<List<Car>> findByUser(User user) {
-        return Optional.of(new ArrayList<>(jdbcTemplate.query("SELECT * FROM users WHERE user_id = ?", ROW_MAPPER, user.getUserId())));
+        return Optional.of(new ArrayList<>(jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cars WHERE user_id = ?", ROW_MAPPER, user.getUserId())));
     }
 }

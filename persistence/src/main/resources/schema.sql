@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS cars(
     plate TEXT NOT NULL,
     info_car TEXT NOT NULL,
     user_id INT NOT NULL,
-    UNIQUE(car_id),
+    UNIQUE(user_id,plate),
     FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 CREATE TABLE IF NOT EXISTS trips(
