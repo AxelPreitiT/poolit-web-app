@@ -11,15 +11,15 @@
         <div class="car-info-container">
             <div class="car-info-item">
                 <h6>Descripción</h6>
-                <p><c:out value="${trip.infoCar}"/></p>
+                <p><c:out value="${trip.car.infoCar}"/></p>
             </div>
             <div class="car-info-item">
                 <h6>Patente</h6>
-                <p><c:out value="${trip.plate}"/></p>
+                <p><c:out value="${trip.car.plate}"/></p>
             </div>
             <div class="car-info-item">
                 <h6>Disponibilidad</h6>
-                <p><c:out value="${trip.freeSeats}"/> asientos libres</p>
+                <p><c:out value="${trip.maxSeats - trip.occupiedSeats -1 }"/> asientos libres</p>
             </div>
         </div>
     </div>
