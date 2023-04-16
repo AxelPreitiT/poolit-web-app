@@ -11,6 +11,7 @@ public class DiscoveryForm {
 
     private int destinationCityId;
 
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String date;
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
