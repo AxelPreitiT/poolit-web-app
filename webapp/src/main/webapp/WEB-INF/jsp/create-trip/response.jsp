@@ -10,13 +10,14 @@
     <h1><spring:message code="createTrip.success"/></h1>
     <p><spring:message code="createTrip.success.description"/></p>
     <p>Id: <c:out value="${trip.id}" escapeXml="true"/> </p>
+    <h1>¡Viaje creado!</h1>
+    <p>El viaje ha sido creado correctamente.</p>
+    <p>Id: <c:out value="${trip.tripId}" escapeXml="true"/> </p>
     <p>Origen: <c:out value="${trip.originCity.name}" escapeXml="true"/> en <c:out value="${trip.originAddress}" escapeXml="true"/></p>
     <p>Destino: <c:out value="${trip.destinationCity.name}" escapeXml="true"/> en <c:out value="${trip.destinationAddress}" escapeXml="true"/></p>
-    <p>Fecha: <c:out value="${trip.date}" escapeXml="true"/></p>
-    <p>Hora: <c:out value="${trip.time}" escapeXml="true"/></p>
-    <p>Coche: <c:out value="${trip.infoCar}" escapeXml="true"/></p>
-    <p>Patente: <c:out value="${trip.plate}" escapeXml="true"/></p>
-    <p>Plazas: <c:out value="${trip.seats}" escapeXml="true"/></p>
+    <p>Fecha: <c:out value="${trip.originDateTime}" escapeXml="true"/></p>
+    <p>Coche: <c:out value="${trip.car}" escapeXml="true"/></p>
+    <p>Plazas: <c:out value="${trip.maxSeats}" escapeXml="true"/></p>
     <p>Email: <c:out value="${trip.driver.email}" escapeXml="true"/></p>
     <p>Teléfono: <c:out value="${trip.driver.phone}" escapeXml="true"/></p>
   </body>

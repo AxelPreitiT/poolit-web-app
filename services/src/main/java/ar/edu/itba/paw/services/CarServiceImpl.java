@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +17,19 @@ public class CarServiceImpl implements CarService {
     private final CarDao carDao;
 
     @Autowired
-    public CarServiceImpl(final CarDao carDao, final UserDao userDao){
+    public CarServiceImpl(final CarDao carDao){
         this.carDao=carDao;
     }
 
     @Override
-    public Car createCar(String plate, String infoCar, long userId) {
-        return carDao.create(plate, infoCar, userId);
+    public Car createCar(String plate, String infoCar, User user) {
+        return carDao.create(plate, infoCar, user);
     }
 
     @Override
-    public Car createCarIfNotExists(String plate,String infoCar,  long userId) {
-        Optional<Car> current = carDao.findByPlateAndUserId(plate, userId);
-        return current.orElseGet(() -> carDao.create(plate, infoCar, userId));
+    public Car createCarIfNotExists(String plate,String infoCar,  User user) {
+        Optional<Car> current = carDao.findByPlateAndUser(plate, user);
+        return current.orElseGet(() -> carDao.create(plate, infoCar, user));
     }
 
     @Override
@@ -37,12 +38,12 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Optional<Car> findByPlateAndUserId(String plate, long userId) {
-        return carDao.findByPlateAndUserId(plate, userId);
+    public Optional<Car> findByPlateAndUser(String plate, User user) {
+        return carDao.findByPlateAndUser(plate, user);
     }
 
     @Override
-    public Optional<List<Car>> findByUserId(long userId) {
-        return carDao.findByUserId(userId);
+    public Optional<List<Car>> findByUser(User user) {
+        return carDao.findByUser(user);
     }
 }

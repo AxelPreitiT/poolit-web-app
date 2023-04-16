@@ -16,7 +16,11 @@
 }
 
 .button-bg-color:hover {
-    background-color: #33475B;
+    background-color: #33475B !important;
+}
+
+.button-bg-color:active {
+    background-color: #33475B !important;
 }
 
 
@@ -71,6 +75,14 @@
 
 .warning-bg-color {
     background-color: #ffc107;
+}
+
+.error-code {
+    color: #8b8b8b;
+}
+
+.error-code-bg-color {
+    background-color: #8b8b8b;
 }
 
 .info {

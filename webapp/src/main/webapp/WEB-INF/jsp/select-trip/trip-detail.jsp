@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <html>
 <head>
     <title><spring:message code="selectTrip.title"/></title>
@@ -19,8 +21,8 @@
                     <div class="location-data">
                         <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
                         <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.date}" escapeXml="true"/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.time}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.originDateString}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.originTimeString}" escapeXml="true"/></h6>
                     </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
@@ -64,30 +66,42 @@
                     </div>
                 </div>
                 <div class="passenger-data">
-                    <h3 class="text"><spring:message code="selectTrip.userData"/></h3>
-                    <c:url value="/trips/${trip.id}" var="bookTripUrl" />
-                    <form class="passenger-form" action="${bookTripUrl}" method="post">
+                    <h3 class="text">Tus datos</h3>
+                    <c:url value="/trips/${trip.tripId}" var="bookTripUrl" />
+                    <form:form modelAttribute="selectForm" cssClass="passenger-form" action="${bookTripUrl}" method="post">
                         <div class="passenger-data-item">
                             <i class="bi bi-envelope text h3"></i>
                             <div class="form-floating">
-                                <input type="email" class="form-control text h5 input-style" id="email" name="email" placeholder='<spring:message code="trip.email"/>'>
-                                <label for="email" class="placeholder-text"><spring:message code="trip.email"/></label>
+                                <form:input path="email" class="form-control text h5 input-style" id="email"/>
+                                <form:label path="email" for="email" class="placeholder-text">Email</form:label>
+                                <form:errors path="email" cssClass="formError" element="p"/>
                             </div>
                         </div>
                         <div class="passenger-data-item">
                             <i class="bi bi-telephone-fill text h3"></i>
                             <div class="form-floating">
-                                <input type="tel" class="form-control text h5 input-style" id="phone" name="phone" placeholder='<spring:message code="trip.phone"/>'>
-                                <label for="phone" class="placeholder-text"><spring:message code="trip.phone"/></label>
+                                <form:input path="phone" type="tel" class="form-control text h5 input-style" id="phone"/>
+                                <form:label path="phone" for="phone" class="placeholder-text">Teléfono</form:label>
+                                <form:errors path="phone" cssClass="formError" element="p"/>
                             </div>
                         </div>
                         <div class="confirm-btn">
-                            <button type="submit" class="btn button-bg-color">
-                                <span class="light-text h4"><spring:message code="selectTrip.btnConfirm"/></span>
+                            <button type="submit" class="btn btn-primary btn-lg btn-search" <c:if test="${trip.occupiedSeats>=trip.maxSeats}"><c:out value="disabled='disabled'"/></c:if>>
+                                <span class="light-text h4">Confirmar</span>
                             </button>
-                            <p class="placeholder-text fs-6"><spring:message code="selectTrip.seats" arguments="${trip.freeSeats}"/></p>
+                            <p class="placeholder-text fs-6">
+                                <c:if test="${trip.maxSeats-trip.occupiedSeats==0}">
+                                    Ya no quedan asientos disponibles
+                                </c:if>
+                                <c:if test="${trip.maxSeats-trip.occupiedSeats==1}">
+                                    Queda <c:out value="${trip.maxSeats-trip.occupiedSeats}"/> asiento disponible
+                                </c:if>
+                                <c:if test="${trip.maxSeats-trip.occupiedSeats>1}">
+                                    Quedan <c:out value="${trip.maxSeats-trip.occupiedSeats}"/> asientos disponibles
+                                </c:if>
+                            </p>
                         </div>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>
