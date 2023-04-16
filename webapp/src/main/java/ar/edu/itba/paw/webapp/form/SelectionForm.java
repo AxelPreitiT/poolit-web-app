@@ -3,9 +3,12 @@ package ar.edu.itba.paw.webapp.form;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 public class SelectionForm {
+    @NotBlank
     @Email
     private String email;
 

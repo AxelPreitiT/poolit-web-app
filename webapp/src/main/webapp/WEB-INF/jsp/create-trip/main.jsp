@@ -32,13 +32,13 @@
                                             <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
                                         </c:forEach>
                                     </form:select>
-                                    <form:label path="originCityId" for="originCity" cssClass="placeholder-text h5">Origen</form:label>
+                                    <form:label path="originCityId" for="originCity" cssClass="placeholder-text h5"><spring:message code="city-selector.district"/></form:label>
                                     <form:errors path="originCityId" cssClass="formError" element="p"/>
                                 </div>
                                 <div class="error-container">
                                     <div class="form-floating">
                                         <form:input path="originAddress" type="text" class="form-control text" id="originAddress" name="originAddress" placeholder="Av. del Libertador 1234"/>
-                                        <form:label path="originAddress" for="originAddress" class="placeholder-text">Dirección</form:label>
+                                        <form:label path="originAddress" for="originAddress" class="placeholder-text"><spring:message code="trip.address"/></form:label>
                                     </div>
                                     <form:errors path="originAddress" cssClass="formError" element="p"/>
                                 </div>
@@ -53,7 +53,7 @@
                                     <div class="error-container">
                                         <div class="form-floating">
                                             <form:input path="originDate" type="date" class="form-control text" id="date" name="date" placeholder="02/04/23"/>
-                                            <form:label path="originDate" for="date" class="placeholder-text">Fecha</form:label>
+                                            <form:label path="originDate" for="date" class="placeholder-text"><spring:message code="trip.date"/></form:label>
                                         </div>
                                         <form:errors path="originDate" cssClass="formError" element="p"/>
                                     </div>
@@ -63,7 +63,7 @@
                                     <div class="error-container">
                                         <div class="form-floating">
                                             <form:input path="originTime" type="time" class="form-control text" id="time" name="time" placeholder="11:25"/>
-                                            <form:label path="originTime" for="time" class="placeholder-text">Hora</form:label>
+                                            <form:label path="originTime" for="time" class="placeholder-text"><spring:message code="trip.time"/></form:label>
                                         </div>
                                         <form:errors path="originTime" cssClass="formError" element="p"/>
                                     </div>
@@ -84,13 +84,13 @@
                                             <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
                                         </c:forEach>
                                     </form:select>
-                                    <form:label path="destinationCityId" for="destinationCity" cssClass="placeholder-text h5">Origen</form:label>
+                                    <form:label path="destinationCityId" for="destinationCity" cssClass="placeholder-text h5"><spring:message code="city-selector.district"/></form:label>
                                     <form:errors path="destinationCityId" cssClass="formError" element="p"/>
                                 </div>
                                 <div class="error-container">
                                     <div class="form-floating">
                                         <form:input path="destinationAddress" type="text" class="form-control text" id="destinationAddress" name="destinationAddress" placeholder="Av. del Libertador 1234"/>
-                                        <form:label path="destinationAddress" for="destinationAddress" class="placeholder-text">Dirección</form:label>
+                                        <form:label path="destinationAddress" for="destinationAddress" class="placeholder-text"><spring:message code="trip.address"/></form:label>
                                     </div>
                                     <form:errors path="destinationAddress" cssClass="formError" element="p"/>
                                 </div>
@@ -112,7 +112,7 @@
                                         <div>
                                             <div class="form-floating">
                                                 <form:input path="carInfo" type="text" class="form-control text" id="infoCar" name="infoCar" placeholder="Descripcion"/>
-                                                <form:label path="carInfo" for="infoCar" class="placeholder-text">Descripcion</form:label>
+                                                <form:label path="carInfo" for="infoCar" class="placeholder-text"><spring:message code="trip.carInfo"/></form:label>
                                             </div>
                                             <form:errors path="carInfo" cssClass="formError" element="p"/>
                                         </div>
@@ -122,7 +122,7 @@
                                         <div class="error-container">
                                             <div class="form-floating">
                                                 <form:input path="carPlate" type="text" class="form-control text" id="plate" name="plate" placeholder="Patente"/>
-                                                <form:label path="carPlate" for="plate" class="placeholder-text">Patente</form:label>
+                                                <form:label path="carPlate" for="plate" class="placeholder-text"><spring:message code="trip.plate"/></form:label>
                                             </div>
                                             <form:errors path="carPlate" cssClass="formError" element="p"/>
                                         </div>
@@ -132,7 +132,7 @@
                                     <div class="error-container">
                                         <div class="form-floating">
                                             <form:input path="maxSeats" class="form-control text" id="seats" name="seats" placeholder="4"/>
-                                            <form:label path="maxSeats" for="seats" class="placeholder-text">Cantidad de asientos</form:label>
+                                            <form:label path="maxSeats" for="seats" class="placeholder-text"><spring:message code="trip.seatsNumbers"/></form:label>
                                         </div>
                                         <form:errors path="maxSeats" cssClass="formError" element="p"/>
                                     </div>
@@ -150,8 +150,8 @@
                                 <div class="info">
                                     <div class="error-container">
                                         <div class="form-floating">
-                                            <form:input path="email" type="email" class="form-control text" id="email" name="email" placeholder="paw@itba.edu.ar"/>
-                                            <form:label path="email" for="email" class="placeholder-text">Email</form:label>
+                                            <form:input path="email" type="email" class="form-control text" id="email" name="email" placeholder='<spring:message code="trip.email"/>'/>
+                                            <form:label path="email" for="email" class="placeholder-text"><spring:message code="trip.email"/></form:label>
                                         </div>
                                         <form:errors path="email" cssClass="formError" element="p"/>
                                     </div>
@@ -160,8 +160,8 @@
                                 <div class="info">
                                     <div class="error-container">
                                         <div class="form-floating">
-                                            <form:input path="phone" type="tel" class="form-control text" id="phone" name="phone" placeholder="11 1234 5678"/>
-                                            <form:label path="phone" for="phone" class="placeholder-text">Teléfono</form:label>
+                                            <form:input path="phone" type="tel" class="form-control text" id="phone" name="phone" placeholder='<spring:message code="trip.phone"/>'/>
+                                            <form:label path="phone" for="phone" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
                                         </div>
                                         <form:errors path="phone" cssClass="formError" element="p"/>
                                     </div>

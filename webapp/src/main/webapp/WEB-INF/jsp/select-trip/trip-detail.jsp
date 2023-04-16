@@ -71,7 +71,7 @@
                         <div class="passenger-data-item">
                             <i class="bi bi-envelope text h3"></i>
                             <div class="form-floating">
-                                <form:input path="email" class="form-control text h5 input-style" id="email"/>
+                                <form:input path="email" class="form-control text h5 input-style" id="email" placeholder='<spring:message code="trip.email"/>'/>
                                 <form:label path="email" for="email" class="placeholder-text"><spring:message code="trip.email"/></form:label>
                                 <form:errors path="email" cssClass="formError" element="p"/>
                             </div>
@@ -79,7 +79,7 @@
                         <div class="passenger-data-item">
                             <i class="bi bi-telephone-fill text h3"></i>
                             <div class="form-floating">
-                                <form:input path="phone" type="tel" class="form-control text h5 input-style" id="phone"/>
+                                <form:input path="phone" type="tel" class="form-control text h5 input-style" id="phone" placeholder='<spring:message code="trip.phone"/>'/>
                                 <form:label path="phone" for="phone" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
                                 <form:errors path="phone" cssClass="formError" element="p"/>
                             </div>
