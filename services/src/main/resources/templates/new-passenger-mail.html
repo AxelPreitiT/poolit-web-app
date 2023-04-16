@@ -55,12 +55,12 @@
 <!--    </div>-->
     <h1 class="text-center mb-4">¡Tienes un nuevo pasajero!</h1>
     <p>Hola <span th:text="${trip.driver.email}"></span>,</p>
-    <p>Te escribimos para avisarte que <span th:text="${passenger.email}"></span> se unio a tu viaje del <span th:text="${trip.date}"></span>. Aquí está la información del viaje y del usuario:</p>
+    <p>Te escribimos para avisarte que <span th:text="${passenger.email}"></span> se unio a tu viaje del <span th:text="${trip.originDateString}"></span>. Aquí está la información del viaje y del usuario:</p>
     <ul>
         <li>Origen:  <span th:text="${trip.originCity.name}"></span> en <span th:text="${trip.originAddress}"></span></li>
         <li>Destino:   <span th:text="${trip.destinationCity.name}"></span> en <span th:text="${trip.destinationAddress}"></span></li>
-        <li>Horario de salida:  <span th:text="${trip.time}"></span></li>
-        <li>Teléfono del pasajero: <span th:text="${passenger.phone}"></span></li>
+        <li>Horario de salida:  <span th:text="${trip.originDateString}"></span></li>
+        <!--    <li>Teléfono del pasajero: <span th:text="${trip}"></span></li>-->
     </ul>
 <!--    <div class="btn-container">-->
 <!--        <a href="#" class="btn">Confirmar pasajero</a>-->

@@ -2,10 +2,12 @@ package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -19,6 +21,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.concurrent.TimeUnit;
 
 @EnableWebMvc
 @PropertySource("classpath:application.properties")
@@ -41,11 +46,24 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
+    /*
+    Pampero Deploy DataSource
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl(String.format("jdbc:postgresql://localhost:5433/%s",environment.getProperty("DB_NAME")));
+        ds.setUrl(String.format("jdbc:postgresql://localhost/%s",environment.getProperty("DB_NAME")));
+        ds.setUsername(environment.getProperty("DB_USER"));
+        ds.setPassword(environment.getProperty("DB_PASSWORD"));
+        return ds;
+    }
+    */
+
+    @Bean
+    public DataSource dataSource() {
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl(String.format("jdbc:postgresql://localhost:%s/%s",environment.getProperty("DB_PORT"),environment.getProperty("DB_NAME")));
         ds.setUsername(environment.getProperty("DB_USER"));
         ds.setPassword(environment.getProperty("DB_PASSWORD"));
         return ds;
@@ -71,4 +89,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
     }
+
+    @Bean
+    public MessageSource messageSource(){
+        final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+
+        ms.setCacheSeconds((int) TimeUnit.SECONDS.toSeconds(5));
+        ms.setBasename("classpath:i18n/messages");
+        ms.setDefaultEncoding(StandardCharsets.UTF_8.name());
+
+        return ms;
+    }
+
 }

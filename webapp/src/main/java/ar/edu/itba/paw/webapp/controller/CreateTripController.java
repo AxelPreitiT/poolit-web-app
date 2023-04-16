@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
@@ -22,11 +23,14 @@ public class CreateTripController {
 
     private final UserService userService;
 
+    private final CarService carService;
+
     @Autowired
-    public CreateTripController(TripService tripService, CityService cityService, UserService userService){
+    public CreateTripController(TripService tripService, CityService cityService, UserService userService, CarService carService){
         this.tripService = tripService;
         this.cityService = cityService;
         this.userService = userService;
+        this.carService = carService;
     }
 
 //    @RequestMapping(value = "/create-trip", method = RequestMethod.GET)

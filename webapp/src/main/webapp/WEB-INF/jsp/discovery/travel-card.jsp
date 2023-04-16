@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <link href="<c:url value="/css/discovery/travel-card.css"/>" rel="stylesheet">
 <jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.Trip"/>
-<c:url value="/trips/${trip.id}" var="tripDetailUrl" />
+<c:url value="/trips/${trip.tripId}" var="tripDetailUrl" />
 <a href="${tripDetailUrl}" class="card-link">
     <div class="travel-card inline-container2">
         <div class="location-column">
@@ -11,7 +13,7 @@
                     <i class="bi bi-geo-alt h3"></i>
                 </div>
 
-                <h3 class="not-wrapp">${trip.originCity.name}</h3>
+                <h3 class="not-wrapp"><c:out value="${trip.originCity.name}" escapeXml="true"/></h3>
             </div>
             <div class="icon-container ">
                 <div class="vertical-dotted-line"></div>
@@ -25,11 +27,11 @@
         </div>
         <div class="data-column">
             <div class="data-row">
-                <h5><c:out value="${trip.freeSeats}" escapeXml="true"/>/<c:out value="${trip.seats}" escapeXml="true"/> </h5>
+                <h5><spring:message code="format.seats" arguments="${trip.occupiedSeats},${trip.maxSeats}"/></h5>
                 <i class="bi bi-person-fill text h5"></i>
             </div>
             <div class="data-row">
-                <h6><c:out value="${trip.date}" escapeXml="true"/>-<c:out value="${trip.time}" escapeXml="true"/> </h6>
+                <h6><c:out value="${trip.originDateTime}" escapeXml="true"/></h6>
                 <i class="bi bi-calendar text h5"></i>
             </div>
             <%--        TODO: agregar cuando tengamos el precio--%>

@@ -1,20 +1,43 @@
 package ar.edu.itba.paw.models;
 
+import java.util.Objects;
+
 public class City {
 
     private final String name;
-    private final int id;
+    private final long id;
+    private final long provinceId;
 
-    public City(final String name, final int id){
+    public City(final long id, final String name, final long provinceId){
         this.name = name;
         this.id = id;
+        this.provinceId = provinceId;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
+    }
+
+    public long getProvinceId() {
+        return provinceId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        if(!(obj instanceof City))
+            return false;
+        City other = (City) obj;
+        return this.id == other.id;
     }
 }
