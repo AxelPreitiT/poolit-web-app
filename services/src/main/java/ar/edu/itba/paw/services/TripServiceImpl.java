@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
@@ -21,6 +22,9 @@ import java.util.StringTokenizer;
 @Service
 public class TripServiceImpl implements TripService {
 
+    @Autowired
+    private EmailService emailService;
+
     private final TripDao tripDao;
 
     @Autowired
@@ -34,8 +38,8 @@ public class TripServiceImpl implements TripService {
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String date, final String time,final double price, final int maxSeats, User driver) {
         //Usamos que el front debe pasar el date en ISO-8601
-        LocalDateTime dateTime = getLocalDateTime(date,time);
-        return tripDao.create(
+        LocalDateTime dateTime = getLocalDateTime(date,time).get();
+        Trip newTrip = tripDao.create(
                 originCity,
                 originAddress,
                 destinationCity,
@@ -46,12 +50,28 @@ public class TripServiceImpl implements TripService {
                 maxSeats,
                 driver
         );
+        try {
+            emailService.sendMailNewTrip(newTrip);
+        }
+        catch( Exception e){
+            e.printStackTrace();
+        }
+        return newTrip;
     }
-    private LocalDateTime getLocalDateTime(final String date, final String time){
-        String[] timeTokens = time.split(":");
-        return LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
+        if(date.length()==0 || time.length()==0){
+            return Optional.empty();
+        }
+        LocalDateTime ans;
+        try{
+            String[] timeTokens = time.split(":");
+            ans = LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+        }catch (Exception e){
+            return Optional.empty();
+        }
+        return Optional.of(ans);
     }
-    @Override
+
     public boolean addPassenger(Trip trip, User passenger){
         if( trip == null || passenger == null || trip.getOccupiedSeats()==trip.getMaxSeats()){
             return false;
@@ -62,7 +82,15 @@ public class TripServiceImpl implements TripService {
     public boolean addPassenger(long tripId, User passenger){
         Optional<Trip> trip = findById(tripId);
         //Ignorar suggestion, usar filter no tiene mucho sentido aca (funciona porque devuelve boolean)
+        //Trip trip = findById(tripId);
         if(trip.isPresent()){
+        try{
+            emailService.sendMailNewPassenger(trip.get(), passenger);
+            emailService.sendMailTripConfirmation(trip.get(), passenger);
+        }
+        catch( Exception e){
+            e.printStackTrace();
+        }
             return addPassenger(trip.get(),passenger);
         }
         return false;
@@ -81,7 +109,7 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String date, final String time){
-        LocalDateTime dateTime = getLocalDateTime(date,time);
+        Optional<LocalDateTime> dateTime = getLocalDateTime(date,time);
         return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,dateTime);
     }
 }

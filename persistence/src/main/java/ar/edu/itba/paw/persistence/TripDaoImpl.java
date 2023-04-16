@@ -113,13 +113,13 @@ public class TripDaoImpl implements TripDao {
     //ROWMAPPER globales -> hacer package protected
     //Backup BD (si no la semana que viene)
     @Override
-    public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, LocalDateTime dateTime){
+    public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, Optional<LocalDateTime> dateTime){
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
-                .withWhere(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbComparator.EQUALS,dateTime)
                 .withOrderBy(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbOrder.ASC)
                 .withLimit(10);
+        dateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.ORIGIN_DATE_TIME, QueryBuilder.DbComparator.EQUALS, localDateTime));
         return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
     }
     @Override
