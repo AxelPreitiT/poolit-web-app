@@ -8,14 +8,20 @@ import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.form.DiscoveryForm;
+import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
+import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +43,9 @@ public class TripController {
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
-    public ModelAndView getTripDetails(@PathVariable("id") final long tripId){
+    public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
+                                       @ModelAttribute("selectForm") final SelectionForm form
+                                       ){
 //        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
 //        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
         Optional<Trip> trip = tripService.findById(tripId);
@@ -51,9 +59,12 @@ public class TripController {
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.POST)
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
-                                           @RequestParam(value = "email",required = true) final String email,
-                                           @RequestParam(value = "phone",required = true) final String phone){
-        User passenger = userService.createUserIfNotExists(email,phone);
+                                           @Valid @ModelAttribute("selectForm") final SelectionForm form,
+                                           final BindingResult errors){
+        if(errors.hasErrors()){
+            return getTripDetails(tripId,form);
+        }
+        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         boolean ans = tripService.addPassenger(tripId,passenger);
         ModelAndView mv = new ModelAndView("/select-trip/response");
         mv.addObject("response",ans);
@@ -63,29 +74,25 @@ public class TripController {
         }
         return mv;
     }
-    @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
-    public ModelAndView getTrips(){
-        long originCityId = 1, destinationCityId = 2;
+
+    @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
+    public ModelAndView getSelectedTrips(@Valid @ModelAttribute("registerForm") final DiscoveryForm form, final BindingResult errors){
+        if(errors.hasErrors()){
+            return getTrips(form);
+        }
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
-        //Fix: avoid using a hardcoded id, database can use others if serial is used after
-        Optional<City> originCity = cityService.findCityById(cities.get(0).getId());
-        Optional<City> destinationCity = cityService.findCityById(cities.get(0).getId());
-        if(!originCity.isPresent() || !destinationCity.isPresent()){
-            // TODO: 404 page
-            return new ModelAndView("/discovery/main");
-        }
+        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
+        final ModelAndView mav = new ModelAndView("/discovery/main");
+        mav.addObject("trips", trips);
+        mav.addObject("cities", cities);
 
-//        Trip trip = tripService.createTrip(originCity.get(),"Av Callao 1350",destinationCity.get(),"Av Cabildo 1200","corsita rojo", "AE063TP","12/2/2022","12:20",2,userService.createUserIfNotExists("jose@menta.com","1139150600"));
-//        List<Trip> trips = new ArrayList<>();
-//        trips.add(trip);
-//        trips.add(trip);
-//        trips.add(trip);
-//        trips.add(trip);
-//        trips.add(trip);
-        //TODO: agregar logica para elegir lugares y momento
-//        List<Trip> trips = tripService.getFirstNTrips(10);
-        List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(originCity.get().getId(),destinationCity.get().getId(),"2023-04-15","12:22");
+        return mav;
+    }
+    @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
+    public ModelAndView getTrips(@ModelAttribute("registerForm") final DiscoveryForm form){
+        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        List<Trip> trips = tripService.getFirstNTrips(10);
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);

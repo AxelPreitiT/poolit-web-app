@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,6 +65,13 @@ public class Trip {
 
     public int getOccupiedSeats() {
         return occupiedSeats;
+    }
+
+    public String getOriginDateString(){
+        return originDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+    public String getOriginTimeString(){
+        return String.format("%d:%d",originDateTime.getHour(),originDateTime.getMinute());
     }
 
 }
