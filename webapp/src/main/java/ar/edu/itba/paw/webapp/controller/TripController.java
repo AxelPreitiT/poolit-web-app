@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.DiscoveryForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +101,7 @@ public class TripController {
         return mav;
     }
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
-    public ModelAndView createTripForm(){
+    public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
@@ -110,30 +111,22 @@ public class TripController {
 
     @RequestMapping(value = "/trips/create", method = RequestMethod.POST)
     public ModelAndView createTrip(
-            @RequestParam(value = "originCity", required = true) final int originCityId,
-            @RequestParam(value = "originAddress", required = true) final String originAddress,
-            @RequestParam(value = "destinationCity", required = true) final int destinationCityId,
-            @RequestParam(value = "destinationAddress", required = true) final String destinationAddress,
-            @RequestParam(value = "date", required = true) final String date,
-            @RequestParam(value = "time", required = true) final String time,
-            @RequestParam(value = "infoCar", required = true) final String infoCar,
-            @RequestParam(value = "plate", required = true) final String plate,
-            @RequestParam(value = "seats", required = true) final int seats,
-            @RequestParam(value = "email", required = true) final String email,
-            @RequestParam(value = "phone", required = true) final String phone
+            @Valid @ModelAttribute("createTripForm") final CreateTripForm form,
+            final BindingResult errors
     ){
-        System.out.println(date);
-        System.out.println(time);
-        Optional<City> originCity = cityService.findCityById(originCityId);
-        Optional<City> destinationCity = cityService.findCityById(destinationCityId);
+        if(errors.hasErrors()){
+            return createTripForm(form);
+        }
+        Optional<City> originCity = cityService.findCityById(form.getOriginCityId());
+        Optional<City> destinationCity = cityService.findCityById(form.getDestinationCityId());
         if(!originCity.isPresent() || !destinationCity.isPresent()){
             //TODO: 404 page
             return new ModelAndView("/create-trip/response");
         }
-        User user = userService.createUserIfNotExists(email,phone);
-        Car car = carService.createCarIfNotExists(plate, infoCar, user);
-        //TODO: add price
-        Trip trip = tripService.createTrip(originCity.get(), originAddress, destinationCity.get(), destinationAddress, car, date, time,0.0, seats,user);
+        User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
+        Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
+        //TODO: get price for trip
+        Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user);
         final ModelAndView mav = new ModelAndView("/create-trip/response");
         mav.addObject("trip", trip);
 
