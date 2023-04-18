@@ -18,6 +18,7 @@ public class UserController {
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static String BASE_RELATED_PATH = "/users/";
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
+    private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
 
     @Autowired
     public UserController(final CityService cityService){
@@ -35,6 +36,18 @@ public class UserController {
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.POST)
     public ModelAndView createUserPost() {
+        return new ModelAndView("/helloworld/index");
+    }
+
+    @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
+    public ModelAndView loginUserGet() {
+        final ModelAndView mav = new ModelAndView("users/login");
+        mav.addObject("postUrl", LOGIN_USER_PATH);
+        return mav;
+    }
+
+    @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.POST)
+    public ModelAndView loginUserPost() {
         return new ModelAndView("/helloworld/index");
     }
 }

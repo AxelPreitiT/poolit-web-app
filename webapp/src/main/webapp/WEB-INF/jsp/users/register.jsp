@@ -12,8 +12,7 @@
     <div class="container-bg-color main-container-style">
         <h1 class="text">Crear cuenta</h1>
         <hr>
-        <c:url value="/users/create" var="createTripUrl" />
-        <form action="${createTripUrl}" method="post" enctype="multipart/form-data">
+        <form action="${postUrl}" method="post" enctype="multipart/form-data">
             <div class="user-info-row">
                 <div class="user-info-item">
                     <label for="name" class="form-label">Nombre</label>
@@ -63,7 +62,7 @@
             <div class="user-info-row">
                 <div class="user-info-item">
                     <label for="profilePicture" class="form-label">Foto de perfil</label>
-                    <input type="file" id="profilePicture" name="profilePicture" class="form-control" size="50" accept="image/*">
+                    <input type="file" id="profilePicture" name="profilePicture" class="form-control" accept="image/jpeg, image/png, image/gif">
                 </div>
             </div>
             <div class="submit-row">
