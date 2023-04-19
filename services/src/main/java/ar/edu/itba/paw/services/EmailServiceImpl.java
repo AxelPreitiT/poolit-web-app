@@ -4,15 +4,13 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
-//import org.springframework.mail.javamail.JavaMailSender;
-//import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.StreamUtils;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -26,25 +24,6 @@ import java.util.Properties;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    private final Session session;
-
-    public EmailServiceImpl(){
-        Properties properties = System.getProperties();
-        properties.setProperty("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.debug", "true");
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.socketFactory.fallback", "false");
-        this.session = Session.getDefaultInstance(properties,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("poolit.noreply@gmail.com","dpwfwbmwyuqguljk");
-                    }
-                });
-    }
-
     private Map<String, Object> getVariablesMap(Context context) {
         Map<String, Object> variablesMap = new HashMap<>();
         for (String variableName : context.getVariableNames()) {
@@ -53,17 +32,16 @@ public class EmailServiceImpl implements EmailService {
         return variablesMap;
     }
 
-
-//    @Autowired
-//    private JavaMailSender mailSender;
-
     @Autowired
     private SpringTemplateEngine templateEngine;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Override
     public void sendMailNewPassenger(Trip trip, User passenger) throws MessagingException, IOException {
 
-        MimeMessage message = new MimeMessage(session);
+        MimeMessage message = mailSender.createMimeMessage();
         message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
         message.addRecipient(Message.RecipientType.TO,new InternetAddress(trip.getDriver().getEmail()));
         message.setSubject("Nuevo pasajero en tu viaje!");
@@ -77,12 +55,12 @@ public class EmailServiceImpl implements EmailService {
 
         message.setContent(htmlContent,"text/html; charset=UTF-8");
 
-        Transport.send(message);
+        mailSender.send(message);
     }
 
     @Override
     public void sendMailNewTrip(Trip trip) throws MessagingException, IOException {
-        MimeMessage message = new MimeMessage(session);
+        MimeMessage message = mailSender.createMimeMessage();
         message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
         message.addRecipient(Message.RecipientType.TO,new InternetAddress(trip.getDriver().getEmail()));
         message.setSubject("Nuevo viaje en Poolit creado!");
@@ -94,12 +72,12 @@ public class EmailServiceImpl implements EmailService {
 
         message.setContent(htmlContent, "text/html; charset=UTF-8");
 
-        Transport.send(message);
+        mailSender.send(message);
     }
 
     @Override
     public void sendMailTripConfirmation(Trip trip, User passenger) throws MessagingException, IOException {
-        MimeMessage message = new MimeMessage(session);
+        MimeMessage message = mailSender.createMimeMessage();
         message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
 
         message.addRecipient(Message.RecipientType.TO,new InternetAddress(passenger.getEmail()));
@@ -113,7 +91,7 @@ public class EmailServiceImpl implements EmailService {
 
         message.setContent(htmlContent, "text/html; charset=UTF-8");
 
-        Transport.send(message);
+        mailSender.send(message);
     }
 
     private String loadTemplate(String name, Map<String, Object> model) throws IOException {
