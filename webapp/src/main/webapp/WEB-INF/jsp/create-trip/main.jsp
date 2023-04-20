@@ -164,7 +164,7 @@
                                 <div class="info">
                                     <div class="input-container">
                                         <div class="form-floating">
-                                            <form:input path="email" type="email" class="form-control text" id="email" name="email" placeholder='<spring:message code="trip.email"/>'/>
+                                            <form:input path="email" class="form-control text" id="email" name="email" placeholder='<spring:message code="trip.email"/>'/>
                                             <form:label path="email" for="email" class="placeholder-text"><spring:message code="trip.email"/></form:label>
                                         </div>
                                         <div class="error-container">
@@ -176,7 +176,7 @@
                                 <div class="info">
                                     <div class="input-container">
                                         <div class="form-floating">
-                                            <form:input path="phone" type="tel" class="form-control text" id="phone" name="phone" placeholder='<spring:message code="trip.phone"/>'/>
+                                            <form:input path="phone" class="form-control text" id="phone" name="phone" placeholder='<spring:message code="trip.phone"/>'/>
                                             <form:label path="phone" for="phone" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
                                         </div>
                                         <div class="error-container">
