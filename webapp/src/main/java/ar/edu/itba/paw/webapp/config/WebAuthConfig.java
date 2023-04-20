@@ -12,11 +12,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        super.configure(http);
+        http.sessionManagement()
+                    .invalidSessionUrl("/login")
+                .and().authorizeRequests()
+                    .antMatchers("/login", "/create").anonymous()
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers()
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "favicon.ico")
     }
 }
