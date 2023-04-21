@@ -16,7 +16,7 @@
     <div class="body-style">
         <c:url value="/trips" var="postPath"/>
         <div class="form-container">
-            <form:form modelAttribute="registerForm" action="${postPath}" method="post" class="full-width">
+            <form:form modelAttribute="registerForm" action="${postPath}" method="get" class="full-width">
                 <div class="search-container inline-container">
                     <div class="location-container">
                         <div class="location-input">

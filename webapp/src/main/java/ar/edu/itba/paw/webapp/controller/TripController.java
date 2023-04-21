@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,28 +75,35 @@ public class TripController {
         return mv;
     }
 
-    @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
-    public ModelAndView getSelectedTrips(@Valid @ModelAttribute("registerForm") final DiscoveryForm form, final BindingResult errors){
-        if(errors.hasErrors()){
-            return getTrips(form);
-        }
-        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-
-        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
-        final ModelAndView mav = new ModelAndView("/discovery/main");
-        mav.addObject("trips", trips);
-        mav.addObject("cities", cities);
-
-        return mav;
-    }
+//    @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
+//    public ModelAndView getSelectedTrips(@Valid @ModelAttribute("registerForm") final DiscoveryForm form, final BindingResult errors){
+//        if(errors.hasErrors()){
+//            return getTrips(form);
+//        }
+//        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+//
+//        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
+//        final ModelAndView mav = new ModelAndView("/discovery/main");
+//        mav.addObject("trips", trips);
+//        mav.addObject("cities", cities);
+//
+//        return mav;
+//    }
     @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
-    public ModelAndView getTrips(@ModelAttribute("registerForm") final DiscoveryForm form){
+    public ModelAndView getTrips(
+            @Valid @ModelAttribute("registerForm") final DiscoveryForm form,
+            final BindingResult errors
+            ){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        List<Trip> trips = tripService.getFirstNTrips(10);
         final ModelAndView mav = new ModelAndView("/discovery/main");
-        mav.addObject("trips", trips);
         mav.addObject("cities", cities);
-
+        if(errors.hasErrors()){
+            List<Trip> trips = tripService.getFirstNTrips(10);
+            mav.addObject("trips",trips);
+            return mav;
+        }
+        List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
+        mav.addObject("trips", trips);
         return mav;
     }
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
