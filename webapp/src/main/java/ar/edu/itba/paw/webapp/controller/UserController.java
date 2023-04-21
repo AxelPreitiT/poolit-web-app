@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.CityService;
+import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
@@ -8,10 +9,12 @@ import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.models.Trip;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -47,10 +50,13 @@ public class UserController {
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.POST)
     public ModelAndView createUserPost(
-            @Valid @ModelAttribute("createUserForm") final CreateUserForm form
+            @Valid @ModelAttribute("createUserForm") final CreateUserForm form, final BindingResult errors
     ){
-        User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPassword());
-        return new ModelAndView("users/login");
+        if(errors.hasErrors()){
+            return createUserGet(form);
+        }
+        userService.createUser(form.getEmail(), form.getPhone(), form.getPassword());
+        return new ModelAndView("redirect:/" );
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)

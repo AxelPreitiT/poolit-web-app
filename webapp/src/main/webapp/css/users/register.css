@@ -4,3 +4,6 @@ div.main-container-style {
     margin-left: 15%;
     margin-right: 15%;
 }
+.formError{
+    color: red;
+}

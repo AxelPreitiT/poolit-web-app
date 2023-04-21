@@ -31,16 +31,19 @@
                 <div class="user-info-item">
                     <form:input path="email" class="form-control text h5 input-style" id="email" placeholder='<spring:message code="trip.email"/>'/>
                     <form:label path="email" for="email" class="placeholder-text"><spring:message code="trip.email"/></form:label>
+                    <form:errors path="email" cssClass="formError" element="p"/>
                 </div>
                 <div class="user-info-item">
                     <form:input path="phone" type="tel" class="form-control text h5 input-style" id="phone" placeholder='<spring:message code="trip.phone"/>'/>
                     <form:label path="phone" for="phone" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
+                    <form:errors path="phone" cssClass="formError" element="p"/>
                 </div>
             </div>
             <div class="user-info-row">
                 <div class="user-info-item">
                     <form:input path="password" type="password" class="form-control text h5 input-style" id="password" placeholder='<spring:message code="trip.phone"/>'/>
                     <form:label path="password" for="password" class="placeholder-text">Contraseña</form:label>
+                    <form:errors path="password" cssClass="formError" element="p"/>
                 </div>
                 <div class="user-info-item">
                     <label for="repeatPassword" class="form-label">Repetir contraseña</label>
