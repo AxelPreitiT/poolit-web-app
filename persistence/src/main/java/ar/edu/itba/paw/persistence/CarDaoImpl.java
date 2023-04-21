@@ -16,7 +16,7 @@ import java.util.*;
 @Repository
 public class CarDaoImpl implements CarDao {
 
-    private static final RowMapper<Car> ROW_MAPPER = (resultSet, rowNum) -> new Car(resultSet.getLong("car_id"),resultSet.getString("plate"),resultSet.getString("info_car"),new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone")));
+    private static final RowMapper<Car> ROW_MAPPER = (resultSet, rowNum) -> new Car(resultSet.getLong("car_id"),resultSet.getString("plate"),resultSet.getString("info_car"),new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone"),resultSet.getString("password")));
 
     private final JdbcTemplate jdbcTemplate;
 

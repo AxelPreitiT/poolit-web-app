@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) -> new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone"));
+    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) -> new User(resultSet.getLong("user_id"),resultSet.getString("email"),resultSet.getString("phone"), resultSet.getString("password"));
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -30,14 +30,16 @@ public class UserDaoImpl implements UserDao {
                 .withTableName("users");
     }
     @Override
-    public User create(final String email, final String phone) {
+    public User create(final String email, final String phone, final String password) {
         Map<String,Object> data = new HashMap<>();
         String savedEmail = email.toLowerCase().replaceAll("\\s","");
         String savedPhone = phone.replaceAll("\\s","");
+        String savedPassword = password.replaceAll("\\s","");
         data.put("email",savedEmail);
         data.put("phone",savedPhone);
+        data.put("password",savedPassword);
         Number key = jdbcInsert.executeAndReturnKey(data);
-        return new User(key.longValue(),email,phone);
+        return new User(key.longValue(),email,phone, password);
     }
 
     @Override

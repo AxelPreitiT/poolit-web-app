@@ -38,8 +38,8 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getString("destination_address"),
                 resultSet.getTimestamp("origin_date_time").toLocalDateTime(),
                 resultSet.getInt("max_passengers"),
-                new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone")),
-                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone"))),
+                new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone"), resultSet.getString("user_password")),
+                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone"),resultSet.getString("user_phone"))),
                 resultSet.getInt("occupied_seats")
         );
     };

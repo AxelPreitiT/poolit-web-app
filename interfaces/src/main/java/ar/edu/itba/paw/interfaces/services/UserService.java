@@ -5,9 +5,9 @@ import ar.edu.itba.paw.models.User;
 import java.util.Optional;
 
 public interface UserService {
-    User createUser(String email, String phone);
+    User createUser(String email, String phone, String password);
 
-    User createUserIfNotExists(String email, String phone);
+    User createUserIfNotExists(String email, String phone, String password);
 
     Optional<User> findById(long userId);
 

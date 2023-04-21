@@ -5,7 +5,7 @@ import ar.edu.itba.paw.models.User;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(String email, String password);
+    User create(final String email, final String phone, final String password);
 
     Optional<User> findById(long userId);
 

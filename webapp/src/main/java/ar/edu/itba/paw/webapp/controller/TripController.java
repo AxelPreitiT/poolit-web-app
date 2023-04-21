@@ -8,10 +8,13 @@ import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.DiscoveryForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +63,8 @@ public class TripController {
         if(errors.hasErrors()){
             return getTripDetails(tripId,form);
         }
-        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
+        User passenger = userService.createUserIfNotExists(form.getEmail(), form.getPhone(), form.getPhone());
+        //sacar el form.getPhone(), esta solo para que no falle
         boolean ans = tripService.addPassenger(tripId,passenger);
         Optional<Trip> trip = tripService.findById(tripId);
         if(ans && trip.isPresent()){
@@ -98,6 +102,15 @@ public class TripController {
 
         return mav;
     }
+
+    @RequestMapping("/")
+    public ModelAndView index(){
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
+        final Long userId = userService.findByEmail(authUser.getUsername()).get().getUserId();
+        return new ModelAndView("redirect:/" + userId);
+    }
+
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
@@ -121,7 +134,7 @@ public class TripController {
             //TODO: 404 page
             return new ModelAndView("/create-trip/response");
         }
-        User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
+        User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPhone());
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
         //TODO: get price for trip
         Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user);

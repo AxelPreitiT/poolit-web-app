@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <html>
 <head>
     <title>Crear cuenta</title>
@@ -12,7 +15,8 @@
     <div class="container-bg-color main-container-style">
         <h1 class="text">Crear cuenta</h1>
         <hr>
-        <form action="${postUrl}" method="post" enctype="multipart/form-data">
+        <c:url value="${postUrl}" var="bookTripUrl" />
+        <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${bookTripUrl}" method="post">
             <div class="user-info-row">
                 <div class="user-info-item">
                     <label for="name" class="form-label">Nombre</label>
@@ -25,18 +29,18 @@
             </div>
             <div class="user-info-row">
                 <div class="user-info-item">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" id="email" name="email" class="form-control text">
+                    <form:input path="email" class="form-control text h5 input-style" id="email" placeholder='<spring:message code="trip.email"/>'/>
+                    <form:label path="email" for="email" class="placeholder-text"><spring:message code="trip.email"/></form:label>
                 </div>
                 <div class="user-info-item">
-                    <label for="phone" class="form-label">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" class="form-control text">
+                    <form:input path="phone" type="tel" class="form-control text h5 input-style" id="phone" placeholder='<spring:message code="trip.phone"/>'/>
+                    <form:label path="phone" for="phone" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
                 </div>
             </div>
             <div class="user-info-row">
                 <div class="user-info-item">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" id="password" name="password" class="form-control text">
+                    <form:input path="password" type="password" class="form-control text h5 input-style" id="password" placeholder='<spring:message code="trip.phone"/>'/>
+                    <form:label path="password" for="password" class="placeholder-text">Contraseña</form:label>
                 </div>
                 <div class="user-info-item">
                     <label for="repeatPassword" class="form-label">Repetir contraseña</label>
@@ -70,7 +74,7 @@
                     <span class="light-text">Registrarse</span>
                 </button>
             </div>
-        </form>
+        </form:form>
     </div>
 </body>
 </html>
