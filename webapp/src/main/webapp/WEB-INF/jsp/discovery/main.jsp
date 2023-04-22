@@ -14,9 +14,9 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     <div class="body-style">
-        <c:url value="/trips" var="postPath"/>
+        <c:url value="/search" var="postPath"/>
         <div class="form-container">
-            <form:form modelAttribute="registerForm" action="${postPath}" method="get" class="full-width">
+            <form:form modelAttribute="searchForm" action="${postPath}" method="get" class="full-width">
                 <div class="search-container inline-container">
                     <div class="location-container">
                         <div class="location-input">
@@ -49,16 +49,16 @@
                         <div class="time-container">
                             <!-- <i class="bi bi-calendar h2"></i> -->
                             <div class="form-floating date-selector">
-                                <form:input path="date" type="date" id="date" cssClass="form-control h5 text"/>
-                                <form:label path="date" for="date" cssClass="placeholder-text h5"><spring:message code="trip.date"/></form:label>
+                                <form:input path="dateTime" type="datetime-local" id="date" cssClass="form-control h5 text"/>
+                                <form:label path="dateTime" for="date" cssClass="placeholder-text h5"><spring:message code="trip.date"/></form:label>
                             </div>
-                            <div class="form-floating time-selector">
-                                <form:input path="time" type="time" id="time" cssClass="form-control h5 text"/>
-                                <form:label path="time" for="time" cssClass="placeholder-text h5"><spring:message code="trip.time"/></form:label>
-                            </div>
+<%--                            <div class="form-floating time-selector">--%>
+<%--                                <form:input path="time" type="time" step="300" id="time" cssClass="form-control h5 text"/>--%>
+<%--                                <form:label path="time" for="time" cssClass="placeholder-text h5"><spring:message code="trip.time"/></form:label>--%>
+<%--                            </div>--%>
                             <div class="error-container">
-                                <form:errors path="time" cssClass="formError" element="p"/>
-                                <form:errors path="date" cssClass="formError" element="p"/>
+                                <form:errors path="dateTime" cssClass="formError" element="p"/>
+<%--                                <form:errors path="date" cssClass="formError" element="p"/>--%>
                                 <form:errors cssClass="formError" element="p"/>
                             </div>
                         </div>
@@ -70,6 +70,7 @@
                 </div>
                 </form:form>
         </div>
+        <h2>Viajes populares:</h2>
         <div class="result-container">
             <c:forEach items="${trips}" var="trip">
                 <c:set var="trip" value="${trip}" scope="request"/>

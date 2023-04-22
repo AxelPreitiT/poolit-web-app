@@ -1,26 +1,21 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.webapp.form.annotations.CityId;
 import ar.edu.itba.paw.webapp.form.annotations.DateAndTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
-
-@DateAndTime
-public class DiscoveryForm {
+//@DateAndTime
+public class SearchForm {
     @CityId
     private int originCityId;
     @CityId
     private int destinationCityId;
 
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private String date = "";
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private String time = "";
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private String dateTime = "";
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+//    private String time = "";
 
     public int getOriginCityId() {
         return originCityId;
@@ -38,19 +33,11 @@ public class DiscoveryForm {
         this.destinationCityId = destinationCityId;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 }

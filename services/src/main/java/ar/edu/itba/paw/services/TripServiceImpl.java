@@ -108,8 +108,8 @@ public class TripServiceImpl implements TripService {
         return tripDao.getFirstNTrips(n);
     }
     @Override
-    public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String date, final String time){
-        Optional<LocalDateTime> dateTime = getLocalDateTime(date,time);
-        return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,dateTime);
+    public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String dateTime){
+        Optional<LocalDateTime> aux = dateTime.length()==0?Optional.empty(): Optional.of(LocalDateTime.parse(dateTime,DateTimeFormatter.ISO_DATE_TIME));
+        return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,aux);
     }
 }

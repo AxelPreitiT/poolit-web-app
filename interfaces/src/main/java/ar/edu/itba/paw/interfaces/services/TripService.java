@@ -17,5 +17,5 @@ public interface TripService {
     public boolean addPassenger(long tripId, User passenger);
     List<User> getPassengers(final long tripId);
     List<Trip> getFirstNTrips(long n);
-    List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String date, final String time);
+    List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id,final String dateTime);
 }

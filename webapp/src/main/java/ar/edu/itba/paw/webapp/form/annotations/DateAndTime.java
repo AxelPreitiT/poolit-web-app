@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.DiscoveryForm;
+import ar.edu.itba.paw.webapp.form.SearchForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -20,9 +20,10 @@ public @interface DateAndTime{
     Class<? extends Payload>[] payload() default { };
 }
 
-class DateAndTimeValidator implements ConstraintValidator<DateAndTime,DiscoveryForm>{
+class DateAndTimeValidator implements ConstraintValidator<DateAndTime, SearchForm>{
     @Override
-    public boolean isValid(DiscoveryForm form, ConstraintValidatorContext constraintValidatorContext) {
-        return !((form.getDate().length()==0 && form.getTime().length()!=0) || (form.getDate().length()!=0 && form.getTime().length()==0));
+    public boolean isValid(SearchForm form, ConstraintValidatorContext constraintValidatorContext) {
+//        return !((form.getDate().length()==0 && form.getTime().length()!=0) || (form.getDate().length()!=0 && form.getTime().length()==0));
+        return false;
     }
 }

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
 import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.TripService;
-import ar.edu.itba.paw.webapp.form.DiscoveryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Constraint;
