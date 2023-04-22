@@ -1,32 +1,25 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
-import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.models.Trip;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +63,7 @@ public class UserController {
         }
         Optional<City> originCity = cityService.findCityById(form.getBornCityId());
         userService.createUserIfNotExists(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                form.getPassword(), form.getBirthdate(), originCity.get());
+                form.getPassword(), form.getBirthdate(), originCity.get(), null);
         return new ModelAndView("redirect:/" );
     }
 
@@ -86,33 +79,50 @@ public class UserController {
         return new ModelAndView("/helloworld/index");
     }
 
+    /*
+    @RequestMapping(value = LOGIN_USER_PATH + "/error", method = RequestMethod.POST)
+    public ModelAndView loginUserPostError() {
+        final ModelAndView mav = new ModelAndView("users/login");
+        mav.addObject("postUrl", LOGIN_USER_PATH);
+        return mav;
+    }
+    */
+
+    /*
+    @RequestMapping("/loginFailed")
+    public void loginFailed(HttpServletRequest request) {
+        AuthenticationException authenticationException = (AuthenticationException) request.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+
+        if (authenticationException != null) {
+            if(authenticationException.getCause() != null) {
+                throw (AuthenticationException) authenticationException.getCause();
+            } else {
+                throw authenticationException;
+            }
+        }
+    }
+    */
+
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
 
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        //final Collection<GrantedAuthority> authorities = new HashSet<>();
-        //authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
-        //authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
-        //Authentication reAuth = new UsernamePasswordAuthenticationToken(authUser.getUsername(),authUser.getPassword(),authorities);
-        //SecurityContextHolder.getContext().setAuthentication(reAuth);
-
         final User user = userService.findByEmail(authUser.getUsername()).get();
         final ModelAndView mav = new ModelAndView("/users/profile");
         mav.addObject("user", user);
-        mav.addObject("city", user.getBornCityId());
         return mav;
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public ModelAndView profilePost(){
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        pawUserDetailsService.chengePepe();
-
         final User user = userService.findByEmail(authUser.getUsername()).get();
+
+        pawUserDetailsService.update(user);
+        userService.changeRole(user.getUserId(), user.getRole());
+
         final ModelAndView mav = new ModelAndView("/users/profile");
         mav.addObject("user", user);
-        mav.addObject("city", user.getBornCityId());
         return mav;
     }
 }

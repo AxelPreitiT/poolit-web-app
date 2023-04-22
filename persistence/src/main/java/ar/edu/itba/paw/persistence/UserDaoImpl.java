@@ -24,7 +24,8 @@ public class UserDaoImpl implements UserDao {
                     resultSet.getString("surname"),resultSet.getString("email"),
                     resultSet.getString("phone"),resultSet.getString("password"),
                     resultSet.getTimestamp("birthdate").toLocalDateTime(),
-                    new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")));
+                    new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")),
+                    resultSet.getString("user_role"));
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -39,7 +40,7 @@ public class UserDaoImpl implements UserDao {
     }
     @Override
     public User create(final String username, final String surname, final String email,
-                       final String phone, final String password, final LocalDateTime birthdate, final City bornCityId) {
+                       final String phone, final String password, final LocalDateTime birthdate, final City bornCity, String role) {
         Map<String,Object> data = new HashMap<>();
         String savedEmail = email.toLowerCase().replaceAll("\\s","");
         String savedPhone = phone.replaceAll("\\s","");
@@ -50,9 +51,10 @@ public class UserDaoImpl implements UserDao {
         data.put("phone",savedPhone);
         data.put("password",savedPassword);
         data.put("birthdate",birthdate);
-        data.put("city_id",bornCityId.getId());
+        data.put("city_id",bornCity.getId());
+        data.put("user_role",role);
         Number key = jdbcInsert.executeAndReturnKey(data);
-        return new User(key.longValue(),username,surname, savedEmail, savedPhone, savedPassword, birthdate, bornCityId);
+        return new User(key.longValue(),username,surname, savedEmail, savedPhone, savedPassword, birthdate, bornCity, role);
     }
 
     @Override
@@ -64,5 +66,10 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findByEmail(String email){
         String searchEmail = email.toLowerCase().replaceAll("\\s","");
         return jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cities WHERE email = ?",ROW_MAPPER,searchEmail).stream().findFirst();
+    }
+
+    @Override
+    public void changeRole(long userId, String role) {
+        jdbcTemplate.update("UPDATE users SET user_role = ? WHERE user_id = ?", role ,userId);
     }
 }

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users(
     password TEXT NOT NULL,
     birthdate TIMESTAMP NOT NULL,
     city_id INT NOT NULL,
+    user_role TEXT NOT NULL,
     UNIQUE(email)
 );
 

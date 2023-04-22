@@ -10,11 +10,12 @@ public class User {
     private String phone;
     private final String password;
     private final LocalDateTime birthdate;
-    private final City bornCityId;
+    private final City bornCity;
+    private String role;
 
     //En el metodo, final es para que no pueda cambiar a las variables
     public User(long userId, final String username, final String surname, final String email,
-                final String phone, final String password, final LocalDateTime birthdate, final City bornCityId) {
+                final String phone, final String password, final LocalDateTime birthdate, final City bornCity, final String role) {
         this.userId = userId;
         this.username = username;
         this.surname = surname;
@@ -22,7 +23,16 @@ public class User {
         this.phone = phone;
         this.password = password;
         this.birthdate = birthdate;
-        this.bornCityId = bornCityId;
+        this.bornCity = bornCity;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {
@@ -45,8 +55,8 @@ public class User {
         this.phone = phone;
     }
 
-    public City getBornCityId() {
-        return bornCityId;
+    public City getBornCity() {
+        return bornCity;
     }
 
     public String getSurname() {

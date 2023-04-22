@@ -23,7 +23,8 @@ public class CarDaoImpl implements CarDao {
                             resultSet.getString("surname"),resultSet.getString("email"),
                             resultSet.getString("phone"),resultSet.getString("password"),
                             resultSet.getTimestamp("birthdate").toLocalDateTime(),
-                            new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"), resultSet.getLong("origin_province_id"))));
+                            new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")),
+                            resultSet.getString("user_role")));
 
     private final JdbcTemplate jdbcTemplate;
 

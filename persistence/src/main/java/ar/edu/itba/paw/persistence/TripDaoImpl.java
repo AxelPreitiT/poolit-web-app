@@ -28,8 +28,16 @@ public class TripDaoImpl implements TripDao {
     //NO anidar DAO's, son muchos llamados a la BD
     //Hacer los NATURAL JOIN
 
+    // name | phone | startDate | ... resultSet
+    // Vas agarrando cosas de ahi, lo que necesites para instanciar los modelos
     //TODO: preguntar si usamos metodos de otros DAO's o hacemos Natural Join
     private RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
+        User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
+                resultSet.getString("user_surname"),resultSet.getString("user_email"),
+                resultSet.getString("user_phone"),resultSet.getString("user_password"),
+                resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
+                new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
+                resultSet.getString("user_role"));
         return new Trip(
                 resultSet.getLong("trip_id"),
                 new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
@@ -38,17 +46,8 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getString("destination_address"),
                 resultSet.getTimestamp("origin_date_time").toLocalDateTime(),
                 resultSet.getInt("max_passengers"),
-                new User(resultSet.getLong("user_id"),resultSet.getString("username"),
-                        resultSet.getString("surname"),resultSet.getString("email"),
-                        resultSet.getString("phone"),resultSet.getString("password"),
-                        resultSet.getTimestamp("birthdate").toLocalDateTime(),
-                        new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"), resultSet.getLong("origin_province_id"))),
-                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),
-                        new User(resultSet.getLong("user_id"),resultSet.getString("username"),
-                                resultSet.getString("surname"),resultSet.getString("email"),
-                                resultSet.getString("phone"),resultSet.getString("password"),
-                                resultSet.getTimestamp("birthdate").toLocalDateTime(),
-                                new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"), resultSet.getLong("origin_province_id")))),
+                user,
+                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),user),
                 resultSet.getInt("occupied_seats")
         );
     };
@@ -144,10 +143,10 @@ public class TripDaoImpl implements TripDao {
 
 
     private static class QueryBuilder{
-        private final String select = "SELECT trips.trip_id, trips.max_passengers, trips.origin_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, count(passengers.user_id) as occupied_seats";
-        private final String from = "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id";
+        private final String select = "SELECT trips.trip_id, trips.max_passengers, trips.origin_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, count(passengers.user_id) as occupied_seats";
+        private final String from = "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id";
         private final StringBuilder where = new StringBuilder();
-        private final String groupBy = "GROUP BY trips.trip_id,trips.origin_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car";
+        private final String groupBy = "GROUP BY trips.trip_id,trips.origin_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone,  users.birthdate, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car";
 
         private final StringBuilder having = new StringBuilder();
         private final StringBuilder orderBy = new StringBuilder();

@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,14 +28,26 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
+
+
+    /*
+    //TODO: OJO CON ESTO
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        SimpleUrlAuthenticationFailureHandler simpleUrlAuthenticationFailureHandler = new SimpleUrlAuthenticationFailureHandler("/loginFailed");
+        simpleUrlAuthenticationFailureHandler.setUseForward(true);
+        return simpleUrlAuthenticationFailureHandler;
+    }
+    */
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -42,11 +56,15 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     .antMatchers("/users/login", "/users/create").anonymous()
                     .antMatchers("/trips/create").hasRole("DRIVER")
-                    .antMatchers("/**").authenticated()
+                    .antMatchers("/trips", "/trips/").permitAll()
+                    .antMatchers("/profile", "/trips/**").authenticated()
+                    .antMatchers("/**").permitAll()
                 .and().formLogin()
                     .loginPage("/users/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
+                    //.failureUrl("/users/login/error")
+                    //.failureHandler(authenticationFailureHandler())
                     .defaultSuccessUrl("/", false)
                 .and().rememberMe()
                     .rememberMeParameter("rememberme")

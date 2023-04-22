@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,9 +35,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final String birthdate, final City bornCityId) {
+                           final String phone, final String password, final String birthdate, final City bornCity, String role) {
+        if(role == null){
+            role = "USER";
+        }
+        String finalRole = role;
         LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime, bornCityId);
+        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime, bornCity, finalRole);
     }
 
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
@@ -55,10 +60,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUserIfNotExists(final String username, final String surname, final String email,
-                                      final String phone, final String password, final String birthdate, final City bornCityId){
+                                      final String phone, final String password, final String birthdate, final City bornCity, String role){
+        if(role == null){
+            role = "USER";
+        }
+        String finalRole = role;
         Optional<User> current = userDao.findByEmail(email);
         LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCityId));
+        return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCity, finalRole));
     }
 
     @Override
@@ -71,5 +80,13 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email);
     }
 
-
+    @Override
+    public void changeRole(long userId, String role) {
+        if(Objects.equals(role, "USER")){
+            role = "DRIVER";
+        }else{
+            role ="USER";
+        }
+        userDao.changeRole(userId, role);
+    }
 }

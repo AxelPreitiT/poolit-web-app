@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 @Component
 public class PawUserDetailsService implements UserDetailsService {
@@ -31,22 +32,29 @@ public class PawUserDetailsService implements UserDetailsService {
         final User user = us.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user for email " + email));
 
-        //TODO: implementar logica de roles
+
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        //authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
+        if(Objects.equals(user.getRole(), "USER")){
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
+        }else {
+            authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+        }
 
         return new AuthUser(email, user.getPassword(), authorities);
     }
 
-    public void chengePepe(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        //serviceAuth
+    public void update(User user) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
-        Authentication reAuth = new UsernamePasswordAuthenticationToken(authUser.getUsername(),authUser.getPassword(),authorities);
-        SecurityContextHolder.getContext().setAuthentication(reAuth);
+        if(Objects.equals(user.getRole(), "USER")){
+            authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+        }else {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
+        }
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), authorities);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 }
