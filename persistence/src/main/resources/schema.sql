@@ -1,8 +1,12 @@
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    surname TEXT NOT NULL,
     email TEXT NOT NULL,
     phone VARCHAR(20) NOT NULL,
     password TEXT NOT NULL,
+    birthdate TIMESTAMP NOT NULL,
+    city_id INT NOT NULL,
     UNIQUE(email)
 );
 

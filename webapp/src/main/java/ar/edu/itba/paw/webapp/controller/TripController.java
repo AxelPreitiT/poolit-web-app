@@ -63,7 +63,10 @@ public class TripController {
         if(errors.hasErrors()){
             return getTripDetails(tripId,form);
         }
-        User passenger = userService.createUserIfNotExists(form.getEmail(), form.getPhone(), form.getPhone());
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
+        final User passenger = userService.findByEmail(authUser.getUsername()).get();
+        //User passenger = userService.createUserIfNotExists(form.getEmail(), form.getPhone(), form.getPhone());
         //sacar el form.getPhone(), esta solo para que no falle
         boolean ans = tripService.addPassenger(tripId,passenger);
         Optional<Trip> trip = tripService.findById(tripId);
@@ -103,14 +106,6 @@ public class TripController {
         return mav;
     }
 
-    @RequestMapping("/")
-    public ModelAndView index(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
-        final Long userId = userService.findByEmail(authUser.getUsername()).get().getUserId();
-        return new ModelAndView("redirect:/" + userId);
-    }
-
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
@@ -134,7 +129,10 @@ public class TripController {
             //TODO: 404 page
             return new ModelAndView("/create-trip/response");
         }
-        User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPhone());
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
+        final User user = userService.findByEmail(authUser.getUsername()).get();
+        //User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPhone());
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
         //TODO: get price for trip
         Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user);

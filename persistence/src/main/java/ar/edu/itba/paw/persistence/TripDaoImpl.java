@@ -38,8 +38,17 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getString("destination_address"),
                 resultSet.getTimestamp("origin_date_time").toLocalDateTime(),
                 resultSet.getInt("max_passengers"),
-                new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone"), resultSet.getString("user_password")),
-                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone"),resultSet.getString("user_phone"))),
+                new User(resultSet.getLong("user_id"),resultSet.getString("username"),
+                        resultSet.getString("surname"),resultSet.getString("email"),
+                        resultSet.getString("phone"),resultSet.getString("password"),
+                        resultSet.getTimestamp("birthdate").toLocalDateTime(),
+                        new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"), resultSet.getLong("origin_province_id"))),
+                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),
+                        new User(resultSet.getLong("user_id"),resultSet.getString("username"),
+                                resultSet.getString("surname"),resultSet.getString("email"),
+                                resultSet.getString("phone"),resultSet.getString("password"),
+                                resultSet.getTimestamp("birthdate").toLocalDateTime(),
+                                new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"), resultSet.getLong("origin_province_id")))),
                 resultSet.getInt("occupied_seats")
         );
     };
@@ -96,7 +105,7 @@ public class TripDaoImpl implements TripDao {
 
     @Override
     public List<User> getPassengers(final long tripId){
-        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users WHERE trip_id=?",UserDaoImpl.ROW_MAPPER,tripId);
+        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities WHERE trip_id=?",UserDaoImpl.ROW_MAPPER,tripId);
     }
 
     @Override

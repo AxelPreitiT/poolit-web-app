@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.interfaces.persistence;
 
+import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(final String email, final String phone, final String password);
+    User create(final String username, final String surname, final String email,
+                final String phone, final String password, final LocalDateTime birthdate, final City born_city_id);
 
     Optional<User> findById(long userId);
 

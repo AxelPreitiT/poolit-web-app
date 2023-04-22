@@ -19,12 +19,14 @@
         <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${bookTripUrl}" method="post">
             <div class="user-info-row">
                 <div class="user-info-item">
-                    <label for="name" class="form-label">Nombre</label>
-                    <input type="text" id="name" name="name" class="form-control text">
+                    <form:input path="username" type="tel" class="form-control text h5 input-style" id="username" placeholder='<spring:message code="trip.phone"/>'/>
+                    <form:label path="username" for="username" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
+                    <form:errors path="username" cssClass="formError" element="p"/>
                 </div>
                 <div class="user-info-item">
-                    <label for="surname" class="form-label">Apellido</label>
-                    <input type="text" id="surname" name="surname" class="form-control text">
+                    <form:input path="surname" type="tel" class="form-control text h5 input-style" id="surname" placeholder='<spring:message code="trip.phone"/>'/>
+                    <form:label path="surname" for="surname" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
+                    <form:errors path="surname" cssClass="formError" element="p"/>
                 </div>
             </div>
             <div class="user-info-row">
@@ -51,19 +53,8 @@
                 </div>
             </div>
             <div class="user-info-row">
-                <div class="user-info-item">
-                    <label for="birthDate" class="form-label">Fecha de nacimiento</label>
-                    <input type="date" id="birthDate" name="birthDate"  class="form-control text">
-                </div>
-                <div class="user-info-item">
-                    <label for="city" class="form-label">Ciudad</label>
-                    <select class="form-select text" id="city" name="city">
-                        <option value="" selected>Seleccionar</option>
-                        <jsp:useBean id="cities" scope="request" type="java.util.List"/>
-                        <c:forEach items="${cities}" var="city">
-                            <option value="<c:out value="${city.id}"/>"><c:out value="${city.name}"/></option>
-                        </c:forEach>
-                    </select>
+                <div class="submit-row">
+                    <form:button type="submit" class="btn btn-primary">SUBIR</form:button>
                 </div>
             </div>
             <div class="user-info-row">
@@ -72,10 +63,25 @@
                     <input type="file" id="profilePicture" name="profilePicture" class="form-control" accept="image/jpeg, image/png, image/gif">
                 </div>
             </div>
-            <div class="submit-row">
-                <button type="submit" class="btn button-bg-color button-style">
-                    <span class="light-text">Registrarse</span>
-                </button>
+            <div class="user-info-row">
+                <div class="user-info-item">
+                    <form:input path="birthdate" type="date" id="birthdate" cssClass="form-control h5 text"/>
+                    <form:label path="birthdate" for="birthdate" cssClass="placeholder-text h5">cumple</form:label>
+                    <form:errors path="birthdate" cssClass="formError" element="p"/>
+                </div>
+                <div class="user-info-item">
+                    <div class="location-input ">
+                        <div class="form-floating">
+                            <form:select path="bornCityId" id="bornCityId" class="form-select h6 text" name="Origen">
+                                <c:forEach items="${cities}" var="city">
+                                    <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
+                                </c:forEach>
+                            </form:select>
+                            <form:label path="bornCityId" for="bornCityId" class="placeholder-text h5">JOSE</form:label>
+                            <form:errors path="bornCityId" cssClass="formError" element="p"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form:form>
     </div>
