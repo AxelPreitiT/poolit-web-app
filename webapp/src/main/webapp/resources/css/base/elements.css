@@ -1,0 +1,14 @@
+.main-container-style {
+    margin: 2% 10% 0 10%;
+    padding: 2% 2% 1% 2%;
+    height: fit-content;
+    border-radius: 12px;
+}
+
+.button-style {
+    border-radius: 8px;
+}
+
+.form-floating:not(.form-floating:disabled)::before {
+    width: 0;
+}
