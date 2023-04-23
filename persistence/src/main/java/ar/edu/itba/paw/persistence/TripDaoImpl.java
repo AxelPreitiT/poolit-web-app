@@ -7,11 +7,13 @@ import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
+import com.sun.rowset.internal.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import sun.jvm.hotspot.debugger.Page;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
@@ -24,7 +26,8 @@ import java.util.*;
 
 @Repository
 public class TripDaoImpl implements TripDao {
-    private final RowMapper<Trip> ROW_MAPPER = (resultSet, rowNum)-> {
+    private static final RowMapper<Integer> COUNT_ROW_MAPPER = (resultSet,rowNum)-> resultSet.getInt("count");
+    private static final RowMapper<Trip> ROW_MAPPER = (resultSet, rowNum)-> {
         return new Trip(
                 resultSet.getLong("trip_id"),
                 new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
@@ -115,11 +118,14 @@ public class TripDaoImpl implements TripDao {
         passengerData.put("end_date",endDateTime);
         return passengerInsert.execute(passengerData)>0;
     }
+    private static void validatePageAndSize(int page, int pageSize){
+        if(page<0 || pageSize<0) throw new IllegalArgumentException();
+    }
     @Override
-
     public List<User> getPassengers(final TripInstance tripInstance){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users " +
-                "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=?",UserDaoImpl.ROW_MAPPER,tripInstance.getTrip().getTripId(),tripInstance.getDateTime());
+                "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
+                ,UserDaoImpl.ROW_MAPPER,tripInstance.getTrip().getTripId(),tripInstance.getDateTime());
     }
     @Override
     public List<User> getPassengers(final Trip trip, final LocalDateTime dateTime){
@@ -135,35 +141,54 @@ public class TripDaoImpl implements TripDao {
     //TODO: preguntar si es mejor tener un ROW_MAPPER y despues hacer un foreach para asignarle trip
     //O si conviene hacer esto
     @Override
-    public List<TripInstance> getTripInstances(final Trip trip){
-        return jdbcTemplate.query("SELECT days as trip_date_time, count(passengers.user_id) as  trip_passenger_count " +
-                "FROM generate_series(?,?, '7 day'::interval) days, passengers " +
+    public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        String query = "FROM generate_series(?,?, '7 day'::interval) days, passengers " +
                 "WHERE passengers.trip_id = ?  AND passengers.start_date<=days.days AND passengers.end_date>=days.days " +
-                "GROUP BY days.days",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId());
+                "GROUP BY days.days ";
+        List<TripInstance> ans =  jdbcTemplate.query("SELECT days as trip_date_time, count(passengers.user_id) as  trip_passenger_count " +
+                query +
+                "OFFSET ? " +
+                "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),page*pageSize,pageSize);
+        int total = jdbcTemplate.query("SELECT count(*) as count" + query,COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId()).stream().findFirst().orElse(0);
+        return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override
-    public List<Trip> getTripsCreatedByUser(final User user){
+    public PagedContent<Trip> getTripsCreatedByUser(final User user,int page, int pageSize){
+        validatePageAndSize(page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.USER_ID, QueryBuilder.DbComparator.EQUALS,user.getUserId());
-        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments()).stream().findFirst().orElse(0);
+        queryBuilder.withOffset(page*pageSize)
+                    .withLimit(pageSize);
+        List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override
-    public List<Trip> getTripsWhereUserIsPassenger(final User user){
+    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize){
         List<Object> args = new ArrayList<>();
         args.add(user.getUserId());
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhereIn(QueryBuilder.DbField.TRIP_ID,"SELECT trip_id FROM passengers WHERE user_id = ?",args);
-        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments());
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments()).stream().findFirst().orElse(0);
+        queryBuilder.withOffset(page*pageSize)
+                .withLimit(pageSize);
+        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments());
+        return new PagedContent<>(ans,page,pageSize,total);
     }
 
     @Override
-    public List<Trip> getFirstNTrips(long n){
+    public PagedContent<Trip> getIncomingTrips(int page, int pageSize){
+        validatePageAndSize(page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
                 .withWhere(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
-                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC)
-                .withLimit(n);
-        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments()).stream().findFirst().orElse(0);
+        queryBuilder.withOffset(page*pageSize)
+                .withLimit(pageSize);
+        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        return new PagedContent<>(ans,page,pageSize,total);
     }
     //Preguntar:
     //reutilizar query -> concatenar string
@@ -172,17 +197,21 @@ public class TripDaoImpl implements TripDao {
     //ROWMAPPER globales -> hacer package protected
     //Backup BD (si no la semana que viene)
     @Override
-    public List<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, Optional<LocalDateTime> dateTime){
+    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, Optional<LocalDateTime> dateTime, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
                 .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
-                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC)
-                .withLimit(10);
-        //TODO: fix for recurrent trips
+                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
         dateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.EQUALS, localDateTime));
-        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments()).stream().findFirst().orElse(0);
+        //TODO: fix for recurrent trips
+        queryBuilder.withOffset(page*pageSize)
+                .withLimit(pageSize);
+        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override
     public Optional<Trip> findById(long tripId) {
@@ -193,18 +222,21 @@ public class TripDaoImpl implements TripDao {
 
 
     private static class QueryBuilder{
-        private final String select = "SELECT trips.trip_id, trips.max_passengers, trips.origin_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, count(passengers.user_id) as occupied_seats";
-        private final String from = "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id";
+        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.origin_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, count(passengers.user_id) as occupied_seats";
+        private static final String selectCount = "SELECT COUNT(*) as count";
+        private static final String from = "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id";
         private final StringBuilder where = new StringBuilder();
-        private final String groupBy = "GROUP BY trips.trip_id,trips.origin_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car";
+        private static final String groupBy = "GROUP BY trips.trip_id,trips.origin_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car";
 
         private final StringBuilder having = new StringBuilder();
         private final StringBuilder orderBy = new StringBuilder();
         private final StringBuilder limit = new StringBuilder();
+        private final StringBuilder offset = new StringBuilder();
         List<Object> whereArguments = new ArrayList<>();
         List<Object> havingArguments = new ArrayList<>();
         List<Object> limitArguments = new ArrayList<>();
 
+        List<Object> offsetArguments = new ArrayList<>();
 
         public String getString(){
             StringBuilder ans = new StringBuilder();
@@ -214,14 +246,28 @@ public class TripDaoImpl implements TripDao {
                         .append(groupBy).append('\n')
                         .append(having).append('\n')
                         .append(orderBy).append('\n')
+                        .append(offset).append('\n')
                         .append(limit).append(';')
                         .toString();
+        }
+        public String getCountString(){
+            StringBuilder ans = new StringBuilder();
+            return ans.append(selectCount).append('\n')
+                    .append(from).append('\n')
+                    .append(where).append('\n')
+                    .append(groupBy).append('\n')
+                    .append(having).append('\n')
+                    .append(orderBy).append('\n')
+                    .append(offset).append('\n')
+                    .append(limit).append(';')
+                    .toString();
         }
         public List<Object> getArguments(){
             List<Object> ans = new ArrayList<>();
             ans.addAll(whereArguments);
             ans.addAll(havingArguments);
             ans.addAll(limitArguments);
+            ans.addAll(offsetArguments);
             return ans;
         }
         public QueryBuilder withWhere(DbField field, DbComparator comparator, Object value){
@@ -288,6 +334,15 @@ public class TripDaoImpl implements TripDao {
             }
             this.limit.append("LIMIT ?");
             this.limitArguments.add(limit);
+            return this;
+        }
+
+        public QueryBuilder withOffset(Object offset){
+            if(this.offset.length()>0){
+                return this;
+            }
+            this.offset.append("OFFSET ?");
+            this.offsetArguments.add(offset);
             return this;
         }
 
