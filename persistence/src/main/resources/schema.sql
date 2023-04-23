@@ -37,8 +37,9 @@ CREATE TABLE IF NOT EXISTS trips(
     price DOUBLE PRECISION DEFAULT 0.0,
     start_date_time TIMESTAMP NOT NULL,
     end_date_time TIMESTAMP NOT NULL,
-    is_recurrent BOOLEAN DEFAULT false,
-    day CHAR(10) NOT NULL,
+--     is_recurrent BOOLEAN DEFAULT false,
+-- day_of_week es 1->Lunes, 7->Domingo
+    day_of_week INT NOT NULL,
     origin_city_id INT NOT NULL,
     destination_city_id INT NOT NULL,
     CONSTRAINT trips_to_origin FOREIGN KEY(origin_city_id) REFERENCES cities(city_id),
