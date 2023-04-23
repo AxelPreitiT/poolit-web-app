@@ -39,7 +39,8 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getInt("max_passengers"),
                 new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone")),
                 new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),new User(resultSet.getLong("user_id"),resultSet.getString("user_email"),resultSet.getString("user_phone"))),
-                resultSet.getInt("occupied_seats")
+                resultSet.getInt("occupied_seats"),
+                resultSet.getDouble("trip_price")
         );
     };
     private final JdbcTemplate jdbcTemplate;
@@ -95,7 +96,7 @@ public class TripDaoImpl implements TripDao {
         driverCarData.put("user_id",driver.getUserId());
         driverCarData.put("car_id",car.getCarId());
         driverCarInsert.execute(driverCarData);
-        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,startDateTime,endDateTime,max_passengers,driver,car,0);
+        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,startDateTime,endDateTime,max_passengers,driver,car,0,price);
     }
 
     @Override
@@ -140,6 +141,7 @@ public class TripDaoImpl implements TripDao {
 
     //TODO: preguntar si es mejor tener un ROW_MAPPER y despues hacer un foreach para asignarle trip
     //O si conviene hacer esto
+    //TODO: agregar un where para filtrar las instancias a partir de cierto momento
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
         validatePageAndSize(page,pageSize);
@@ -151,6 +153,20 @@ public class TripDaoImpl implements TripDao {
                 "OFFSET ? " +
                 "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),page*pageSize,pageSize);
         int total = jdbcTemplate.query("SELECT count(*) as count" + query,COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId()).stream().findFirst().orElse(0);
+        return new PagedContent<>(ans,page,pageSize,total);
+    }
+    @Override
+    public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
+        validatePageAndSize(page,pageSize);
+        String query = "FROM generate_series(?,?, '7 day'::interval) days, passengers " +
+                "WHERE passengers.trip_id = ?  AND passengers.start_date<=days.days AND passengers.end_date>=days.days " +
+                "AND days.days>=? AND days.days<=? " +
+                "GROUP BY days.days ";
+        List<TripInstance> ans =  jdbcTemplate.query("SELECT days as trip_date_time, count(passengers.user_id) as  trip_passenger_count " +
+                query +
+                "OFFSET ? " +
+                "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end,page*pageSize,pageSize);
+        int total = jdbcTemplate.query("SELECT count(*) as count" + query,COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end).stream().findFirst().orElse(0);
         return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override
@@ -197,15 +213,19 @@ public class TripDaoImpl implements TripDao {
     //ROWMAPPER globales -> hacer package protected
     //Backup BD (si no la semana que viene)
     @Override
-    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, Optional<LocalDateTime> dateTime, int page, int pageSize){
+    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(long origin_city_id, long destination_city_id, Optional<LocalDateTime> startDateTime, Optional<LocalDateTime> endDateTime, Optional<Double> minPrice, Optional<Double> maxPrice, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
+                //Busco a las ocurrencias de ese viaje que sean desde ahora
+                .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
                 .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
-        dateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.EQUALS, localDateTime));
+        startDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime));
+        endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime));
+        minPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.GREATER_OR_EQUALS,price));
+        maxPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.LESS_OR_EQUAL,price));
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments()).stream().findFirst().orElse(0);
         //TODO: fix for recurrent trips
         queryBuilder.withOffset(page*pageSize)
@@ -222,11 +242,15 @@ public class TripDaoImpl implements TripDao {
 
 
     private static class QueryBuilder{
-        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.origin_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, count(passengers.user_id) as occupied_seats";
+        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, max(aux.count) as occupied_seats, trips.price as trip_price";
         private static final String selectCount = "SELECT COUNT(*) as count";
-        private static final String from = "FROM trips NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id";
+        private static final String from = "FROM trips trips NATURAL JOIN LATERAL(\n" +
+                "    SELECT passengers.trip_id,days.days, count(passengers.user_id) as count\n" +
+                "    FROM generate_series(trips.start_date_time,trips.end_date_time,'7 day'::interval) days JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days\n" +
+                "    GROUP BY days.days,passengers.trip_id\n" +
+                ") aux NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id";
         private final StringBuilder where = new StringBuilder();
-        private static final String groupBy = "GROUP BY trips.trip_id,trips.origin_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car";
+        private static final String groupBy ="GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, cars.car_id, cars.plate, cars.info_car";
 
         private final StringBuilder having = new StringBuilder();
         private final StringBuilder orderBy = new StringBuilder();
@@ -366,9 +390,12 @@ public class TripDaoImpl implements TripDao {
             CAR_ID("cars.car_id"),
             CAR_PLATE("cars.plate"),
             CAR_INFO_CAR("cars.info_car"),
-            OCCUPIED_SEATS("count(passengers.user_id)"),
-            PASSENGER_ID("passengers.user_id");
-
+            OCCUPIED_SEATS("max(aux.count)"),
+            PASSENGER_ID("passengers.user_id"),
+            PASSENGER_START_DATE("passengers.start_date"),
+            PASSENGER_END_DATE("passengers.end_date"),
+            TRIPS_DAYS("aux.days"),
+            TRIP_PRICE("trips.price");
             private final String dbName;
             private DbField(String dbName){
                 this.dbName = dbName;

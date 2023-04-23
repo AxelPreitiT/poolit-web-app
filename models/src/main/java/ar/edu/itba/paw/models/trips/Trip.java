@@ -15,11 +15,12 @@ public class Trip {
     private final Car car;
     private final User driver;
     private final int maxSeats;
+    private final double price;
     private final DayOfWeek dayOfWeek;
     private final boolean isRecurrent;
     private final long tripId;
     private final int occupiedSeats;
-    public Trip(final long tripId, final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final int maxSeats, final User driver, final Car car, final int occupiedSeats) {
+    public Trip(final long tripId, final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final int maxSeats, final User driver, final Car car, final int occupiedSeats,final double price) {
         this.originCity = originCity;
         this.originAddress = originAddress;
         this.destinationCity = destinationCity;
@@ -33,6 +34,7 @@ public class Trip {
         this.car = car;
         this.isRecurrent = !startDateTime.isEqual(endDateTime);
         this.occupiedSeats = occupiedSeats;
+        this.price = price;
     }
     public City getOriginCity() {
         return originCity;
@@ -63,6 +65,10 @@ public class Trip {
     public LocalDateTime getEndDateTime(){return endDateTime;}
     public int getMaxSeats() {
         return maxSeats;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public long getTripId() {
