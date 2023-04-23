@@ -2,7 +2,7 @@ package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 
 import java.util.List;

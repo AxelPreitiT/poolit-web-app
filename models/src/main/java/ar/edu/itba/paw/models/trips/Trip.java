@@ -1,4 +1,8 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.trips;
+
+import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.models.User;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

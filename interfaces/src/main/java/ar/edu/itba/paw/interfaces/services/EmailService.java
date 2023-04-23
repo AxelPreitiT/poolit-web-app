@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
-import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 public interface EmailService {
 

@@ -6,7 +6,7 @@ import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.DiscoveryForm;

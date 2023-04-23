@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="trip" type="ar.edu.itba.paw.models.Trip" scope="request"/>
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
 <link href="<c:url value="/css/components/trip-route.css"/>" rel="stylesheet">
 <div class="trip-route">
   <div class="location-container">

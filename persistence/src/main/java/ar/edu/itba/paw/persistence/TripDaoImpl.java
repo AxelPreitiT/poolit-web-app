@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.persistence.CityDao;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.trips.Trip;
+import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,7 +24,7 @@ import java.util.*;
 
 @Repository
 public class TripDaoImpl implements TripDao {
-    private final RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
+    private final RowMapper<Trip> ROW_MAPPER = (resultSet, rowNum)-> {
         return new Trip(
                 resultSet.getLong("trip_id"),
                 new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
