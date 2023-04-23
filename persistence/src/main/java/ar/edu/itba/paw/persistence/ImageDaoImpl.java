@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public class ImageDaoImpl implements ImageDao {
 
-    private static final RowMapper<Image> ROW_MAPPER = (resultSet, rowNum) -> new Image(resultSet.getLong("image_id"),resultSet.getBytes("data"));
+    private static final RowMapper<Image> ROW_MAPPER = (resultSet, rowNum) -> new Image(resultSet.getLong("image_id"),resultSet.getBytes("bytea"));
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -27,14 +27,17 @@ public class ImageDaoImpl implements ImageDao {
     public ImageDaoImpl(final DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)
-                .usingGeneratedKeyColumns("id")
+                .usingGeneratedKeyColumns("image_id")
                 .withTableName("images");
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS images(" +
+                "image_id SERIAL PRIMARY KEY," +
+                "bytea BYTEA)" );
     }
 
     @Override
     public Image create(byte[] data) {
         Map<String,Object> parameters = new HashMap<>();
-        parameters.put("data", data);
+        parameters.put("bytea", data);
         Number key = jdbcInsert.executeAndReturnKey(parameters);
         return new Image(key.longValue(), data);
     }
