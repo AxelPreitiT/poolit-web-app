@@ -1,0 +1,110 @@
+@import "/resources/css/base/elements.css";
+
+.card {
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.25);
+    opacity: 1;
+    transition: opacity 0.3s, box-shadow 0.3s;
+    margin-bottom: 1em;
+}
+
+.card-body {
+    padding-bottom: 0.3em;
+    margin-right: 10px;
+}
+
+.card:hover {
+    opacity: 0.8;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.placeholder-image-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+i.placeholder-image-icon-color {
+    font-size: 4rem;
+}
+
+.route-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 1em;
+}
+
+.vertical-dotted-line {
+    border-left: 3px dashed #FFA216;
+    height: 2em;
+    margin: -20px 0 5px 12.5px;
+}
+
+.route-info-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    column-gap: 1em;
+}
+
+.route-info-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.route-info-text span {
+    margin-bottom: 0;
+}
+
+.route-info-text .text {
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+.footer-info {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 9px;
+    margin-right: 5px;
+    column-gap: 0.2em;
+}
+
+.footer-date-container, .footer-time-container, .footer-price-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    column-gap: 0.5em;
+}
+
+.footer-date-container i, .footer-time-container i, .footer-price-container i {
+    margin-top: 2px;
+    margin-bottom: 0;
+    font-size: 0.7rem;
+}
+
+.footer-date-container span, .footer-time-container span, .footer-price-container span {
+    font-size: 0.7rem;
+}
+
+span.italic-text {
+    font-size: 0.6rem;
+}
+
+.date-info-column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}

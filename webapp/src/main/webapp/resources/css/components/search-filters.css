@@ -116,6 +116,18 @@ label.form-check-label {
     border-color: transparent !important;
 }
 
+.calendar-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.time-container {
+    margin-bottom: 0;
+}
+
 /* Remove arrows from number input */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

@@ -2,6 +2,14 @@
     font-family: "Roboto", sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: 0;
+}
+
 .main-container-style {
     margin: 2% 10% 0 10%;
     padding: 2% 2% 1% 2%;
