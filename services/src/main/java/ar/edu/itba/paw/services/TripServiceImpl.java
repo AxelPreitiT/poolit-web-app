@@ -11,8 +11,8 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.jvm.hotspot.debugger.Page;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -96,7 +96,8 @@ public class TripServiceImpl implements TripService {
             || startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
-            || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)){
+            || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
+            || startDateTime.isBefore(LocalDateTime.now())){
             throw new IllegalArgumentException();
         }
         if(trip.getOccupiedSeats()==trip.getMaxSeats()){
@@ -180,10 +181,18 @@ public class TripServiceImpl implements TripService {
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
             final int page, final int pageSize){
-        Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
+        LocalDateTime startDateTime;
+        Optional<DayOfWeek> dayOfWeek = Optional.empty();
+        Optional<LocalDateTime> aux = getLocalDateTime(startDate,startTime);
+        if(aux.isPresent()){
+            startDateTime = aux.get();
+            dayOfWeek = Optional.of(startDateTime.getDayOfWeek());
+        }else{
+            startDateTime = LocalDateTime.now();
+        }
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
 
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
     }
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
@@ -193,6 +202,6 @@ public class TripServiceImpl implements TripService {
             final int page, final int pageSize){
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
     }
 }

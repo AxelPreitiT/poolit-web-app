@@ -31,11 +31,11 @@
                 <i class="bi bi-person-fill text h5"></i>
             </div>
             <div class="data-row">
-                <h6><c:out value="${trip.originDateString}" escapeXml="true"/></h6>
+                <h6><c:out value="${trip.startDateString}" escapeXml="true"/></h6>
                 <i class="bi bi-calendar text h5"></i>
             </div>
             <div class="data-row">
-                <h6><c:out value="${trip.originTimeString}" escapeXml="true"/> hs</h6>
+                <h6><c:out value="${trip.startTimeString}" escapeXml="true"/> hs</h6>
                 <i class="bi bi-clock text h5"></i>
             </div>
             <%--        TODO: agregar cuando tengamos el precio--%>

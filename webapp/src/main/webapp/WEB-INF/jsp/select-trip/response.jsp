@@ -12,7 +12,7 @@
     <h1><spring:message code="selectTrip.success"/></h1>
     <p>Origen: <c:out value="${trip.originCity.name}" escapeXml="true"/> en <c:out value="${trip.originAddress}" escapeXml="true"/></p>
     <p>Destino: <c:out value="${trip.destinationCity.name}" escapeXml="true"/> en <c:out value="${trip.destinationAddress}" escapeXml="true"/></p>
-    <p>Fecha: <c:out value="${trip.originDateTime}" escapeXml="true"/></p>
+    <p>Fecha: <c:out value="${trip.startDateString}" escapeXml="true"/></p>
 <%--    <p>Hora: <c:out value="${trip.time}" escapeXml="true"/></p>--%>
     <p>Plazas: <c:out value="${trip.occupiedSeats}" escapeXml="true"/></p>
     <p>Email: <c:out value="${trip.driver.email}" escapeXml="true"/></p>

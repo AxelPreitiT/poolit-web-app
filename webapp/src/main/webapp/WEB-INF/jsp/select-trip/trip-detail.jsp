@@ -20,8 +20,8 @@
                     <div class="location-data">
                         <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
                         <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.originDateString}" escapeXml="true"/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.originTimeString}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.startDateString}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.startTimeString}" escapeXml="true"/></h6>
                     </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>
