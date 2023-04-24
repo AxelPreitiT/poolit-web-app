@@ -1,0 +1,12 @@
+@import "/resources/css/base/elements.css";
+
+.titulo{
+    color: red;
+    background-color: #0C6FC0;
+}
+
+.main-container {
+    padding: 3% 2% 0 2%;
+    width: 100%;
+    max-width: none;
+}

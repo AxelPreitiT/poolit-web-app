@@ -50,4 +50,12 @@ public class UserController {
     public ModelAndView loginUserPost() {
         return new ModelAndView("/helloworld/index");
     }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public ModelAndView viewProfile() {
+        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        final ModelAndView mav = new ModelAndView("users/profile");
+        mav.addObject("cities", cities);
+        return mav;
+    }
 }
