@@ -40,18 +40,14 @@
 }
 
 .text {
-    background-color: transparent;
     color: #000000;
 }
 
 .italic-text {
-    background-color: transparent;
     color: #5F5E5E;
-    font-style: italic;
 }
 
 .light-text {
-    background-color: transparent;
     color: #FFFFFF;
 }
 

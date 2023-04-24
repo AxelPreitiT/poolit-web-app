@@ -1,7 +1,7 @@
 @import "/resources/css/base/elements.css";
 
 .main-container {
-    padding: 0 2%;
+    padding: 3% 2% 0 2%;
     width: 100%;
     max-width: none;
 }

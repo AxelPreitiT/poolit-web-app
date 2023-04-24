@@ -49,9 +49,10 @@
                 <div id="multitrip-container" class="collapse">
                     <div class="multitrip-container">
                         <div class="input-row">
-                            <div>
+                            <div class="input-group input-group-sm">
+                                <label for="day" class="input-group-text italic-text">Dia de la semana:</label>
                                 <select class="form-select form-select-sm" id="day" name="day">
-                                    <option value="none" selected>Dia de la semana</option>
+                                    <option value="none" selected>Seleccionar</option>
                                     <option value="monday">Lunes</option>
                                     <option value="tuesday">Martes</option>
                                     <option value="wednesday">Miércoles</option>
