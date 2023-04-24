@@ -183,7 +183,7 @@ public class TripServiceImpl implements TripService {
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
 
-        return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,startDateTime,endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
     }
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
@@ -193,6 +193,6 @@ public class TripServiceImpl implements TripService {
             final int page, final int pageSize){
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
-        return tripDao.getTripsByDateTimeAndOriginAndDestination(origin_city_id,destination_city_id,startDateTime,endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
     }
 }
