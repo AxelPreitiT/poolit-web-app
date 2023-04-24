@@ -13,7 +13,6 @@ public class User {
     private final City bornCity;
     private String role;
 
-    //En el metodo, final es para que no pueda cambiar a las variables
     public User(long userId, final String username, final String surname, final String email,
                 final String phone, final String password, final LocalDateTime birthdate, final City bornCity, final String role) {
         this.userId = userId;

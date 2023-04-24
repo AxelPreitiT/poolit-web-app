@@ -27,6 +27,19 @@ public class PawUserDetailsService implements UserDetailsService {
         this.us=us;
     }
 
+    private enum AuthRoles{
+        USER_ADMIN("ROLE_USER_ADMIN"),
+        DRIVER("DRIVER");
+        private final String role;
+        private AuthRoles(String role){
+            this.role = role;
+        }
+
+        public String getRole() {
+            return role;
+        }
+    }
+
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final User user = us.findByEmail(email)
@@ -35,9 +48,9 @@ public class PawUserDetailsService implements UserDetailsService {
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         if(Objects.equals(user.getRole(), "USER")){
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER_ADMIN.role));
         }else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
         }
 
         return new AuthUser(email, user.getPassword(), authorities);
@@ -49,9 +62,9 @@ public class PawUserDetailsService implements UserDetailsService {
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         if(Objects.equals(user.getRole(), "USER")){
-            authorities.add(new SimpleGrantedAuthority("ROLE_DRIVER"));
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
         }else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER_ADMIN.role));
         }
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), authorities);

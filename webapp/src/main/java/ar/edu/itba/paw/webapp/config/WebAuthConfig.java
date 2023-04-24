@@ -40,7 +40,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
 
     /*
-    //TODO: OJO CON ESTO
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         SimpleUrlAuthenticationFailureHandler simpleUrlAuthenticationFailureHandler = new SimpleUrlAuthenticationFailureHandler("/loginFailed");

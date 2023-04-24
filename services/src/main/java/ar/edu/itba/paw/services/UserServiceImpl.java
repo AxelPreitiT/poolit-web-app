@@ -27,6 +27,19 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private enum Roles{
+        USER("USER"),
+        DRIVER("DRIVER");
+        private final String role;
+        private Roles(String role){
+            this.role = role;
+        }
+
+        public String getRole() {
+            return role;
+        }
+    }
+
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder){
         this.userDao = userDao;
@@ -37,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public User createUser(final String username, final String surname, final String email,
                            final String phone, final String password, final String birthdate, final City bornCity, String role) {
         if(role == null){
-            role = "USER";
+            role = Roles.USER.role;
         }
         String finalRole = role;
         LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
@@ -62,7 +75,7 @@ public class UserServiceImpl implements UserService {
     public User createUserIfNotExists(final String username, final String surname, final String email,
                                       final String phone, final String password, final String birthdate, final City bornCity, String role){
         if(role == null){
-            role = "USER";
+            role = Roles.USER.role;
         }
         String finalRole = role;
         Optional<User> current = userDao.findByEmail(email);
@@ -82,10 +95,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeRole(long userId, String role) {
-        if(Objects.equals(role, "USER")){
-            role = "DRIVER";
+        if(Objects.equals(role, Roles.USER.role)){
+            role = Roles.DRIVER.role;
         }else{
-            role ="USER";
+            role = Roles.USER.role;
         }
         userDao.changeRole(userId, role);
     }
