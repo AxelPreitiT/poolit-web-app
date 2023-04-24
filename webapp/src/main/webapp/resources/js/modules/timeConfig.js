@@ -7,6 +7,12 @@ export const timeConfig = {
             month: false,
             year: false,
             decades: false,
+        },
+        buttons: {
+            close: true,
+        },
+        icons: {
+            close: 'bi bi-check'
         }
     },
     localization: {

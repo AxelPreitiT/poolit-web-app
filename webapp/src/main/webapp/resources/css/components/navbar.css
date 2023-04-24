@@ -1,11 +1,11 @@
 @import "/resources/css/base/colors.css";
 @import "/resources/css/base/elements.css";
 
-nav {
+.navbar {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
 }
 
-nav * {
+.navbar * {
     margin-bottom: 0;
 }
 

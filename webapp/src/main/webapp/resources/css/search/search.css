@@ -5,3 +5,16 @@
     width: 100%;
     max-width: none;
 }
+
+#total-results-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    margin-top: 1%;
+}
+
+#total-results-row span {
+    font-size: 0.8rem;
+}
