@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse navbar-link-items">
             <ul class="navbar-nav nav-items">
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/test"/>">
+                    <a class="nav-link" href="<c:url value="/"/>">
                         <h4 class="light-text">Inicio</h4>
                     </a>
                 </li>
