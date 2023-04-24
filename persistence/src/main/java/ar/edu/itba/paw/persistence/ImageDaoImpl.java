@@ -29,9 +29,6 @@ public class ImageDaoImpl implements ImageDao {
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)
                 .usingGeneratedKeyColumns("image_id")
                 .withTableName("images");
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS images(" +
-                "image_id SERIAL PRIMARY KEY," +
-                "bytea BYTEA)" );
     }
 
     @Override
