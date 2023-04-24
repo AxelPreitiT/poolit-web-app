@@ -21,7 +21,9 @@
                         <jsp:param name="id" value="originCity"/>
                         <jsp:param name="defaultText" value="Origen"/>
                     </jsp:include>
-                    <div class="route-arrow"></div>
+                    <div class="route-arrow">
+                        <i class="bi bi-arrow-right light-text"></i>
+                    </div>
                     <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                         <jsp:param name="id" value="destinationCity"/>
                         <jsp:param name="defaultText" value="Destino"/>
