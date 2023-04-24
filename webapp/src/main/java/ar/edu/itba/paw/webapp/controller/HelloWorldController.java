@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,19 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HelloWorldController {
     private final UserService us;
+    private final CityService cs;
 
     @Autowired
-    public HelloWorldController(UserService us){
+    public HelloWorldController(UserService us, CityService cs){
         this.us = us;
+        this.cs = cs;
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public ModelAndView test() {
+        final ModelAndView mav = new ModelAndView("search/search-page");
+        mav.addObject("cities", cs.getCitiesByProvinceId(1));
+        return mav;
     }
 //    @RequestMapping("/")
 //    public ModelAndView helloWorld(){
