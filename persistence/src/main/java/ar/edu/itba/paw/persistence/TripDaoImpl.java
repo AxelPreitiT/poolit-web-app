@@ -124,7 +124,7 @@ public class TripDaoImpl implements TripDao {
     public List<User> getPassengers(final TripInstance tripInstance){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users " +
                 "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
-                ,UserDaoImpl.ROW_MAPPER,tripInstance.getTrip().getTripId(),tripInstance.getDateTime());
+                ,UserDaoImpl.ROW_MAPPER,tripInstance.getTrip().getTripId(),tripInstance.getDateTime(),tripInstance.getDateTime());
     }
     @Override
     public List<User> getPassengers(final Trip trip, final LocalDateTime dateTime){
@@ -143,15 +143,16 @@ public class TripDaoImpl implements TripDao {
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
 //        validatePageAndSize(page,pageSize);
-        String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
-                "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? "+
-                "GROUP BY days.days ";
-        List<TripInstance> ans =  jdbcTemplate.query("SELECT days as trip_date_time, count(passengers.user_id) as  trip_passenger_count " +
-                query +
-                "OFFSET ? " +
-                "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),page*pageSize,pageSize);
-        int total = jdbcTemplate.query("SELECT count(*) as count" + query,COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId()).stream().findFirst().orElse(0);
-        return new PagedContent<>(ans,page,pageSize,total);
+//        String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
+//                "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? "+
+//                "GROUP BY days.days ";
+//        List<TripInstance> ans =  jdbcTemplate.query("SELECT days as trip_date_time, count(passengers.user_id) as  trip_passenger_count " +
+//                query +
+//                "OFFSET ? " +
+//                "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),page*pageSize,pageSize);
+//        int total = jdbcTemplate.query("SELECT sum(aux) as count FROM ( SELECT count(*) as aux " + query + ") t",COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId()).stream().findFirst().orElse(0);
+//        return new PagedContent<>(ans,page,pageSize,total);
+        return getTripInstances(trip,page,pageSize,trip.getStartDateTime(),trip.getEndDateTime());
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
@@ -164,7 +165,7 @@ public class TripDaoImpl implements TripDao {
                 query +
                 "OFFSET ? " +
                 "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end,page*pageSize,pageSize);
-        int total = jdbcTemplate.query("SELECT count(*) as count" + query,COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end).stream().findFirst().orElse(0);
+        int total = jdbcTemplate.query("SELECT sum(aux) as count FROM ( SELECT count(*) as aux " + query +") t",COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end).stream().findFirst().orElse(0);
         return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override

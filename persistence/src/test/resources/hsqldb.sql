@@ -1,13 +1,4 @@
--- CREATE FUNCTION recent_customers(IN since_date DATE)
---     RETURNS TABLE(id INT, first VARCHAR(50), last VARCHAR(50))
---     READS SQL DATA
--- BEGIN ATOMIC
---    RETURN TABLE (select * as days
--- from unnest(sequence_array(1, 100, 1)))
--- END;
-
-SET DATABASE SQL SYNTAX PGS TRUE;
-
+-- TODO: change to use original schema if we continue with postgres
 CREATE TABLE IF NOT EXISTS users(
                                     user_id SERIAL PRIMARY KEY,
                                     email TEXT NOT NULL,
@@ -18,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS provinces (
                                          province_id SERIAL NOT NULL,
                                          name TEXT NOT NULL,
-                                         UNIQUE (province_id),
+                                         PRIMARY KEY (province_id),
                                          UNIQUE (name)
 );
 
@@ -26,7 +17,7 @@ CREATE TABLE IF NOT EXISTS cities (
                                       city_id SERIAL NOT NULL,
                                       name TEXT NOT NULL,
                                       province_id INT NOT NULL,
-                                      UNIQUE (province_id, name),
+                                      PRIMARY KEY (province_id, name),
                                       UNIQUE (city_id),
                                       CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
 );
@@ -77,23 +68,3 @@ CREATE TABLE IF NOT EXISTS trips_cars_drivers(
                                                  CONSTRAINT trips_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
                                                  CONSTRAINT trips_to_cars FOREIGN KEY(car_id) references cars(car_id)
 );
-CREATE FUNCTION generate_series(
-    IN st timestamp, IN stop timestamp, IN step interval
-)
-RETURNS TABLE (days timestamp)
-language plpgsql
-as $$
-    BEGIN
-        return query (
-            WITH RECURSIVE
-            days(day) AS(
-                SELECT st FROM now()
-                UNION
-                SELECT day + step
-                FROM days
-                WHERE days.day<=stop
-            )
-            select day from days
-        );
-    end;
-$$
