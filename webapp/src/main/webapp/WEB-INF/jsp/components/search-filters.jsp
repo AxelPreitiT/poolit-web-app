@@ -38,57 +38,35 @@
             </div>
             <div class="input-container">
                 <div class="input-row">
-                    <div class="input-group input-group-sm">
+                    <div class="input-group input-group-sm" id="first-date-picker">
+                        <button type="button" class="btn button-color">
+                            <i class="bi bi-calendar-fill light-text"></i>
+                        </button>
+                        <input type="text" class="form-control form-control-sm" id="first-date" name="first-date" placeholder="Primera fecha">
+                    </div>
+                    <div class="input-group input-group-sm" id="time-picker">
+                        <button type="button" class="btn button-color">
+                            <i class="bi bi-clock-fill light-text"></i>
+                        </button>
                         <input type="text" class="form-control form-control-sm" id="time" name="time" placeholder="Hora">
+                    </div>
+                </div>
+                <div class="input-row collapse" id="day-repeat-container">
+                    <i class="bi bi-arrow-repeat light-text"></i>
+                    <span class="italic-text light-text" id="day-repeat-text"></span>
+                </div>
+                <div class="input-row">
+                    <div class="input-group input-group-sm" id="last-date-picker">
+                        <button type="button" class="btn button-color" id="last-date-button" disabled>
+                            <i class="bi bi-calendar-fill light-text"></i>
+                        </button>
+                        <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
+
+                    </div>
+                    <div class="input-group input-group-sm">
                         <div class="input-group-text" id="is-multitrip-container">
                             <input class="form-check-input mt-0" type="checkbox" id="is-multitrip">
                             <span class="mb-0 ml-1 placeholder-text">Viaje recurrente</span>
-                        </div>
-                    </div>
-                </div>
-                <div id="multitrip-container" class="collapse">
-                    <div class="multitrip-container">
-                        <div class="input-row">
-                            <div>
-                                <select class="form-select form-select-sm" id="day" name="day">
-                                    <option value="none" selected>Dia de la semana</option>
-                                    <option value="monday">Lunes</option>
-                                    <option value="tuesday">Martes</option>
-                                    <option value="wednesday">Miércoles</option>
-                                    <option value="thursday">Jueves</option>
-                                    <option value="friday">Viernes</option>
-                                    <option value="saturday">Sábado</option>
-                                    <option value="sunday">Domingo</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="input-row">
-                            <div>
-                                <div class="input-group input-group-sm" id="first-date-picker">
-                                    <button type="button" class="btn button-color">
-                                        <i class="bi bi-calendar-fill light-text"></i>
-                                    </button>
-                                    <input type="text" class="form-control form-control-sm" id="first-date" name="first-date" placeholder="Primera fecha" disabled>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="input-group input-group-sm" id="last-date-picker">
-                                    <button type="button" class="btn button-color">
-                                        <i class="bi bi-calendar-fill light-text"></i>
-                                    </button>
-                                    <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="unique-trip-container" class="collapse show">
-                    <div class="input-row">
-                        <div class="input-group input-group-sm" id="unique-date-picker">
-                            <button type="button" class="btn button-color">
-                                <i class="bi bi-calendar-fill light-text"></i>
-                            </button>
-                            <input type="text" class="form-control form-control-sm" id="unique-date" name="unique-date" placeholder="Fecha">
                         </div>
                     </div>
                 </div>

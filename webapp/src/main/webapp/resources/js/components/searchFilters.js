@@ -1,21 +1,19 @@
-import {calendarConfig, getDaysOfWeekDisabled} from "../modules/calendarConfig.js";
+import {calendarConfig, getDaysOfWeekDisabled, today} from "../modules/calendarConfig.js";
 import {timeConfig} from "../modules/timeConfig.js";
 
-const tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
+const day = 60 * 60 * 24 * 1000;
+const tomorrow = new Date(today.getTime() + day);
 
-const timeElement = document.getElementById('time');
+const timeElement = document.getElementById('time-picker');
 const firstDateElement = document.getElementById('first-date-picker');
 const lastDateElement = document.getElementById('last-date-picker');
-const uniqueDateElement = document.getElementById('unique-date-picker');
-
-const daySelectorElement = document.getElementById('day');
-const firstDateInputElement = document.getElementById('first-date');
 const lastDateInputElement = document.getElementById('last-date');
-
+const lastDateButtonElement = document.getElementById('last-date-button');
 const isMultitripCheckbox = document.getElementById('is-multitrip');
-const multitripContainer = document.getElementById('multitrip-container');
-const uniqueTripContainer = document.getElementById('unique-trip-container');
+const dayRepeatContainer = document.getElementById('day-repeat-container');
+const dayRepeatText = document.getElementById('day-repeat-text');
+
+dayRepeatText.innerHTML = "";
 
 const timePicker = new tempusDominus.TempusDominus(timeElement, {
     ...timeConfig
@@ -32,72 +30,51 @@ const lastDatePicker = new tempusDominus.TempusDominus(lastDateElement, {
     }
 });
 
-const uniqueDatePicker = new tempusDominus.TempusDominus(uniqueDateElement, {
-    ...calendarConfig,
-});
-
 firstDateElement.addEventListener(tempusDominus.Namespace.events.change, (e) => {
-    lastDatePicker.updateOptions({
-        restrictions: {
-            minDate: e.detail.date
-        },
-    });
-});
-
-lastDateElement.addEventListener(tempusDominus.Namespace.events.change, (e) => {
-    firstDatePicker.updateOptions({
-        restrictions: {
-            maxDate: e.detail.date
-        },
-    });
-});
-
-daySelectorElement.addEventListener('change', (e) => {
-    firstDatePicker.dates.clear();
+    const selectedDate = new Date(e.detail.date);
+    const minDate = new Date(selectedDate.getTime() + day);
+    const daysOfWeekDisabled = getDaysOfWeekDisabled(new Date(e.detail.date).getDay());
     lastDatePicker.dates.clear();
-    const day = e.target.value;
-    if (day === "none") {
-        firstDateInputElement.setAttribute('disabled', 'disabled');
-        lastDateInputElement.setAttribute('disabled', 'disabled');
-        return;
-    }
-    firstDateInputElement.removeAttribute('disabled');
-    lastDateInputElement.removeAttribute('disabled');
-    const daysOfWeekDisabled = getDaysOfWeekDisabled(day);
-    firstDatePicker.updateOptions({
-        restrictions: {
-            daysOfWeekDisabled: daysOfWeekDisabled,
-        }
-    });
     lastDatePicker.updateOptions({
         restrictions: {
+            minDate: minDate,
             daysOfWeekDisabled: daysOfWeekDisabled,
-        }
+        },
     });
+    const previousValue = dayRepeatText.innerHTML;
+    let dayOfWeek = selectedDate.toLocaleString(window.navigator.language, {weekday: 'long'});
+    if(dayOfWeek === "Invalid Date"){
+        dayOfWeek = "";
+        new bootstrap.Collapse(dayRepeatContainer, {
+            show: false
+        });
+    }
+    dayRepeatText.innerHTML = dayOfWeek;
+    if(previousValue === "" && isMultitripCheckbox.checked) {
+        new bootstrap.Collapse(dayRepeatContainer, {
+            show: true
+        });
+    }
 });
 
 isMultitripCheckbox.addEventListener('change', (e) => {
     if(e.target.checked) {
-        new bootstrap.Collapse(uniqueTripContainer, {
-            show: false
-        });
+        lastDateInputElement.removeAttribute('disabled');
+        lastDateButtonElement.removeAttribute('disabled');
+        if(dayRepeatText.innerHTML !== ""){
+            new bootstrap.Collapse(dayRepeatContainer, {
+                show: true
+            });
+        }
     } else {
-        new bootstrap.Collapse(multitripContainer, {
-            show: false
-        });
+        lastDatePicker.dates.clear();
+        lastDateInputElement.setAttribute('disabled', 'disabled');
+        lastDateButtonElement.setAttribute('disabled', 'disabled');
+        if(dayRepeatText.innerHTML !== ""){
+            new bootstrap.Collapse(dayRepeatContainer, {
+                show: false
+            });
+        }
     }
 });
-
-multitripContainer.addEventListener('hidden.bs.collapse', (e) => {
-    new bootstrap.Collapse(uniqueTripContainer, {
-        show: true
-    });
-});
-
-uniqueTripContainer.addEventListener('hidden.bs.collapse', (e) => {
-    new bootstrap.Collapse(multitripContainer, {
-        show: true
-    });
-});
-
 

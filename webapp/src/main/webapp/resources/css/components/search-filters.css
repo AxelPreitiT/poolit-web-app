@@ -48,27 +48,21 @@
     justify-content: flex-start;
 }
 
+#day-repeat-container * {
+    font-size: 0.8rem;
+}
+
+#day-repeat-text {
+    text-transform: capitalize;
+}
+
+#last-date-button:disabled {
+    border-color: transparent;
+}
+
 #is-multitrip-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    column-gap: 0.5em;
-}
-
-#multitrip-container {
     width: 100%;
-}
-
-.multitrip-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    row-gap: 0.5em;
-}
-
-#unique-trip-container {
-    width: 50%;
+    column-gap: 5%;
 }
 
 .title-row * {

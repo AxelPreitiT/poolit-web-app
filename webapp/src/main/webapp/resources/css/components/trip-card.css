@@ -36,7 +36,6 @@ i.placeholder-image-icon-color {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    margin-bottom: 1em;
 }
 
 .vertical-dotted-line {
@@ -72,7 +71,7 @@ i.placeholder-image-icon-color {
 .footer-info {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
     width: 100%;
     margin-left: 9px;

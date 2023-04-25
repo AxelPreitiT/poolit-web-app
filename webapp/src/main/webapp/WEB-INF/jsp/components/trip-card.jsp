@@ -34,7 +34,6 @@
                             <i class="bi bi-calendar text"></i>
                             <div class="date-info-column">
                                 <span class="text">Todos los lunes</span>
-                                <span class="italic-text">Hasta el 15/05</span>
                             </div>
                         </div>
                         <div class="footer-time-container">

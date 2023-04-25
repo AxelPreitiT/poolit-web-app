@@ -1,14 +1,4 @@
 
-const dayIntValue = {
-    'sunday': 0,
-    'monday': 1,
-    'tuesday': 2,
-    'wednesday': 3,
-    'thursday': 4,
-    'friday': 5,
-    'saturday': 6,
-}
-
 export const today = new Date(Date.now());
 export const calendarConfig = {
     display: {
@@ -33,10 +23,10 @@ export const calendarConfig = {
     },
 }
 
-export const getDaysOfWeekDisabled = (day) => {
+export const getDaysOfWeekDisabled = (dayNumber) => {
     const daysOfWeekDisabled = [];
     for (let i = 0; i < 7; i++) {
-        if (i !== dayIntValue[day]) {
+        if (i !== dayNumber) {
             daysOfWeekDisabled.push(i);
         }
     }

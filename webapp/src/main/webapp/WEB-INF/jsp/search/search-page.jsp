@@ -12,7 +12,7 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     <div class="main-container">
         <div class="row">
-            <div class="col-md-4 col-lg-3 d-none d-md-block">
+            <div class="col-md-4 col-lg-3">
                 <c:url value="/search" var="searchUrl"/>
                 <jsp:include page="/WEB-INF/jsp/components/search-filters.jsp">
                     <jsp:param name="url" value="${searchUrl}"/>
