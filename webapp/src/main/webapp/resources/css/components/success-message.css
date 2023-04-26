@@ -1,0 +1,12 @@
+.success-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2%;
+    margin-bottom: 5%;
+}
+
+.success-container * {
+    margin-bottom: 0;
+}

@@ -48,7 +48,7 @@ public class TripController {
         if(!trip.isPresent()){//Usar Optional?
             return new ModelAndView("/static/not-found-404");
         }
-        ModelAndView mv = new ModelAndView("/select-trip/trip-detail");
+        ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip.get());
         return mv;
     }
@@ -66,7 +66,7 @@ public class TripController {
         if(ans && trip.isPresent()){
             ModelAndView successMV = new ModelAndView("/select-trip/success");
             successMV.addObject("trip",trip.get());
-            successMV.addObject("passenger",passenger);
+            //successMV.addObject("passenger",passenger);
             return successMV;
         }
         ModelAndView mv = new ModelAndView("/select-trip/response");
