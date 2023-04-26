@@ -95,6 +95,7 @@
 
 .dropdown-item {
     transition: opacity 0.3s;
+    margin-top: 5px;
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
@@ -131,5 +132,4 @@
 .dropdown-row-text > span {
     margin-bottom: 0;
     overflow: hidden;
-    padding-bottom: 5px;
 }

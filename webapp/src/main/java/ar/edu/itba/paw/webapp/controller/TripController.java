@@ -101,7 +101,7 @@ public class TripController {
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        final ModelAndView mav = new ModelAndView("/create-trip/main");
+        final ModelAndView mav = new ModelAndView("create-trip/main");
         mav.addObject("cities", cities);
 
         return mav;
@@ -118,8 +118,7 @@ public class TripController {
         Optional<City> originCity = cityService.findCityById(form.getOriginCityId());
         Optional<City> destinationCity = cityService.findCityById(form.getDestinationCityId());
         if(!originCity.isPresent() || !destinationCity.isPresent()){
-            //TODO: 404 page
-            return new ModelAndView("/create-trip/response");
+            return new ModelAndView("/static/not-found-404");
         }
         User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
