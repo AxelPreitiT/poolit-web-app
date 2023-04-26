@@ -122,9 +122,7 @@ public class TripDaoImpl implements TripDao {
     }
     @Override
     public List<User> getPassengers(final TripInstance tripInstance){
-        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users " +
-                "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
-                ,UserDaoImpl.ROW_MAPPER,tripInstance.getTrip().getTripId(),tripInstance.getDateTime(),tripInstance.getDateTime());
+        return getPassengers(tripInstance.getTrip(),tripInstance.getDateTime());
     }
     @Override
     public List<User> getPassengers(final Trip trip, final LocalDateTime dateTime){
@@ -134,7 +132,13 @@ public class TripDaoImpl implements TripDao {
 //        ){
 //            throw new IllegalArgumentException();
 //        }
-        return getPassengers(new TripInstance(dateTime,trip,0));
+        return getPassengers(trip,dateTime,dateTime);
+    }
+    @Override
+    public List<User> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users " +
+                        "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
+                ,UserDaoImpl.ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
 
     //TODO: preguntar si es mejor tener un ROW_MAPPER y despues hacer un foreach para asignarle trip
@@ -188,10 +192,10 @@ public class TripDaoImpl implements TripDao {
         args.add(user.getUserId());
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhereIn(QueryBuilder.DbField.TRIP_ID,"SELECT trip_id FROM passengers WHERE user_id = ?",args);
-        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments()).stream().findFirst().orElse(0);
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments());
+        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
@@ -235,7 +239,7 @@ public class TripDaoImpl implements TripDao {
 //                                .withWhere(QueryBuilder.DbField.START_DATE_TIME, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime));
         endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime)
                                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime));
-        dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1));
+        dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1.getValue()));
         minPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.GREATER_OR_EQUALS,price));
         maxPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.LESS_OR_EQUAL,price));
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
@@ -253,11 +257,18 @@ public class TripDaoImpl implements TripDao {
                 .withWhere(QueryBuilder.DbField.TRIP_ID, QueryBuilder.DbComparator.EQUALS, tripId);
         return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst();
     }
-
+    @Override
+    public Optional<Trip> findById(long tripId, LocalDateTime start, LocalDateTime end){
+        QueryBuilder queryBuilder = new QueryBuilder()
+                .withWhere(QueryBuilder.DbField.TRIP_ID, QueryBuilder.DbComparator.EQUALS,tripId)
+                .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.GREATER_OR_EQUALS,start)
+                .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,end);
+        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst();
+    }
 
     private static class QueryBuilder{
         private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price";
-        private static final String selectCount = " SELECT sum(count) as count FROM (SELECT COUNT(*) as count";
+        private static final String selectCount = "select sum(count) as count FROM (select count(distinct trip_id) as count ";
         private static final String from = "FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(\n" +
                 "    SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count\n" +
                 "    FROM generate_series(trips.start_date_time,trips.end_date_time,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days\n" +

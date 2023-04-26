@@ -15,11 +15,13 @@ public interface TripDao {
     boolean addPassenger(final Trip trip, final User passenger, final LocalDateTime startDateTime, final LocalDateTime endDateTime);
     List<User> getPassengers(final TripInstance tripInstance);
     List<User> getPassengers(final Trip trip, final LocalDateTime dateTime);
+    List<User> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime);
     PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize);
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
     PagedContent<Trip> getTripsCreatedByUser(final User user,int page, int pageSize);
     PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize);
     Optional<Trip> findById(long id);
+    Optional<Trip> findById(long tripId, LocalDateTime start, LocalDateTime end);
     PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime,

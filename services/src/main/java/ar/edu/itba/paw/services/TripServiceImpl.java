@@ -33,9 +33,6 @@ public class TripServiceImpl implements TripService {
         this.tripDao = tripDao;
     }
 
-    //TODO: revisar si conviene que pase todos los campos de usuario aca y que esto se encargue de crearlos
-    //Lo bueno que tendria hacerlo asi es que aisla al controller de toda la logica
-    //Pero acopla demasiada funcionalidad entre servicios
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String startDate, final String startTime,final double price, final int maxSeats, User driver, final String endDate, final String endTime) {
         //Usamos que el front debe pasar el date en ISO-8601
@@ -70,6 +67,10 @@ public class TripServiceImpl implements TripService {
         }
         return newTrip;
     }
+    @Override
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String date, final String time,final double price, final int maxSeats, User driver){
+        return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
+    }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
         if(date.length()==0 || time.length()==0){
             return Optional.empty();
@@ -92,16 +93,24 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public boolean addPassenger(Trip trip, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        List<User> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        if(passengers.contains(passenger)){
+            throw new IllegalStateException();
+        }
+        //TODO: se puede obviar si se pide al trip en el mismo intervalo en el que se va a inscribir a la persona
+        //Y en ese caso se puede comparar de manera segura a getOccupiedSeats con maxSeats
+        passengers = tripDao.getPassengers(trip,startDateTime,endDateTime);
+        if(passengers.size()>=trip.getMaxSeats()){
+            throw new IllegalStateException();
+        }
         if( trip == null || passenger == null
             || startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
             || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
-            || startDateTime.isBefore(LocalDateTime.now())){
+            || startDateTime.isBefore(LocalDateTime.now()) || trip.getDriver().equals(passenger)
+            || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
             throw new IllegalArgumentException();
-        }
-        if(trip.getOccupiedSeats()==trip.getMaxSeats()){
-            throw  new IllegalStateException();
         }
         try{
             emailService.sendMailNewPassenger(trip, passenger);
@@ -132,6 +141,14 @@ public class TripServiceImpl implements TripService {
     public Optional<Trip> findById(long id) {
         return tripDao.findById(id);
     }
+    @Override
+    public Optional<Trip> findById(long id,LocalDateTime start, LocalDateTime end){
+        return tripDao.findById(id,start,end);
+    }
+    @Override
+    public Optional<Trip> findById(long id, LocalDateTime dateTime){
+        return tripDao.findById(id,dateTime,dateTime);
+    }
 
     //TODO: preguntar si validamos aca tambien o con peristence alcanza
     @Override
@@ -156,7 +173,8 @@ public class TripServiceImpl implements TripService {
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
         validatePageAndSize(page,pageSize);
-        if(start.isBefore(trip.getStartDateTime()) || end.isAfter(trip.getEndDateTime())){
+        if(start.isBefore(trip.getStartDateTime()) || end.isAfter(trip.getEndDateTime())
+         || !start.getDayOfWeek().equals(end.getDayOfWeek()) || !start.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek())){
             throw new IllegalArgumentException();
         }
         return tripDao.getTripInstances(trip,page,pageSize,start,end);
