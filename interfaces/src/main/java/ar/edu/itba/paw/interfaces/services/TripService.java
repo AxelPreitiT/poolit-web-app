@@ -44,6 +44,8 @@ public interface TripService {
     PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize);
     //
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
+    boolean deleteTrip(final Trip trip);
+    boolean deleteTrip(int tripId);
     //
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(
             long origin_city_id, long destination_city_id, final String startDate,

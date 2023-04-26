@@ -87,6 +87,30 @@ public class TripServiceImpl implements TripService {
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
+    public boolean deleteTrip(final Trip trip){
+        List<User> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        //Notify passengers that trip was deleted
+        for(User passenger : tripPassengers){
+            try{
+                emailService.sendMailTripDeletedToPassenger(trip,passenger);
+            }catch (Exception e){
+                e.printStackTrace();
+                throw new IllegalStateException();
+            }
+        }
+        try{
+            emailService.sendMailTripDeletedToDriver(trip);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new IllegalStateException();
+        }
+        return tripDao.deleteTrip(trip);
+    }
+    public boolean deleteTrip(int tripId){
+        //TODO: change for TripNotFoundException
+        Trip tripToDelete = tripDao.findById(tripId).orElseThrow(IllegalArgumentException::new);
+        return deleteTrip(tripToDelete);
+    }
     @Override
     public boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime){
         return addPassenger(trip,passenger,dateTime,dateTime);

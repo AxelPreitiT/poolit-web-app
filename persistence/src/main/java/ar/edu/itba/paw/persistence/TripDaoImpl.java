@@ -117,6 +117,13 @@ public class TripDaoImpl implements TripDao {
         passengerData.put("end_date",endDateTime);
         return passengerInsert.execute(passengerData)>0;
     }
+    @Override
+    public boolean deleteTrip(final Trip trip){
+        int tripCarsDriversRows = jdbcTemplate.update("DELETE FROM trips_cars_drivers WHERE trip_id = ?",trip.getTripId());
+        jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ?",trip.getTripId());
+        int tripRows = jdbcTemplate.update("DELETE FROM trips WHERE trip_id = ?",trip.getTripId());
+        return tripRows>0 && tripCarsDriversRows>0;
+    }
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
@@ -140,10 +147,6 @@ public class TripDaoImpl implements TripDao {
                         "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
                 ,UserDaoImpl.ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
-
-    //TODO: preguntar si es mejor tener un ROW_MAPPER y despues hacer un foreach para asignarle trip
-    //O si conviene hacer esto
-    //TODO: agregar un where para filtrar las instancias a partir de cierto momento
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
 //        validatePageAndSize(page,pageSize);

@@ -22,6 +22,7 @@ public interface TripDao {
     PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize);
     Optional<Trip> findById(long id);
     Optional<Trip> findById(long tripId, LocalDateTime start, LocalDateTime end);
+    boolean deleteTrip(final Trip trip);
     PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime,
