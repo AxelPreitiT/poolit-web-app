@@ -1,3 +1,18 @@
+@import "/resources/css/base/elements.css";
+
+.succ-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5%;
+    flex-direction: column;
+}
+
+.message {
+    text-align: center;
+    margin-top: 5%;
+}
+
 .trip-route{
     display: flex;
     flex-direction: row;
@@ -29,13 +44,13 @@
 }
 
 .dotted-line {
-    border-bottom: 2px dashed black;
+    border-bottom: 2px dashed #FFA216;
     width: 100%;
 }
 
 .trip-details-style{
-    margin: 4% 10% 0 10%;
-    padding: 2% 5%;
+    margin: 2% 5% 0 5%;
+    padding: 2% 15%;
     border-radius: 4px 4px 0 0;
     height: fit-content;
     min-height: 100%;
@@ -94,22 +109,17 @@
 
 .data-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     margin-top: 5%;
     width: 100%;
     flex-direction: row;
-}
-
-.image-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .placeholder-image-color {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: auto;
 }
 
 i.placeholder-image-icon-color {
@@ -178,6 +188,10 @@ i.placeholder-image-icon-color {
     margin-top: auto;
 }
 
+.back-btn {
+ margin-top: 5%;
+}
+
 .confirm-btn button {
     display: block;
     margin-left: auto;
@@ -185,6 +199,16 @@ i.placeholder-image-icon-color {
 
 .confirm-btn p {
     margin-bottom: 0;
+}
+
+.shadow-btn {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-color: transparent !important;
+}
+
+.shadow-btn:active {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
+    border-color: transparent !important;
 }
 
 label {
@@ -207,13 +231,5 @@ label {
 
 .formError{
     color: red;
-}
-
-.my-container {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    margin-top: 5%;
-    width: 100%;
 }
 
