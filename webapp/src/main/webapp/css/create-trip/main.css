@@ -33,7 +33,12 @@
 
 .location-container {
     display: flex;
+    align-items: flex-start;
     width: 100%;
+}
+
+.error-container{
+    height: 20px;
 }
 
 .time-trip-container {
@@ -70,7 +75,7 @@
     flex-direction: row;
     width: 100%;
 }
-.error-container{
+.input-container{
     display: flex;
     width: 100%;
     flex-direction: column;

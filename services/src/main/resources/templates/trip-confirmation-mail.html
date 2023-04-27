@@ -53,12 +53,12 @@
 <!--            <img src="https://picsum.photos/100/100" alt="Logo de Mi Proyecto">-->
 <!--        </div>-->
         <h1 class="text-center mb-4">¡Gracias por reservar con Poolit!</h1>
-        <p>Hola <span th:text="${trip.driver.email}"></span>,</p>
+        <p>Hola <span th:text="${passenger.email}"></span>,</p>
         <p>Te escribimos para confirmar tu reserva de viaje del <span th:text="${trip.originDateString}"></span>. Aquí está la información de tu reserva:</p>
         <ul>
             <li>Origen:  <span th:text="${trip.originCity.name}"></span> en <span th:text="${trip.originAddress}"></span></li>
             <li>Destino:   <span th:text="${trip.destinationCity.name}"></span> en <span th:text="${trip.destinationAddress}"></span></li>
-            <li>Horario de salida:  <span th:text="${trip.originDateString}"></span></li>
+            <li>Horario de salida:  <span th:text="${trip.originTimeString}"></span></li>
             <li>Telefono del conductor: <span th:text="${trip.driver.phone}"></span></li>
         </ul>
 <!--        <div class="btn-container">-->

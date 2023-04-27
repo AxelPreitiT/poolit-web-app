@@ -71,7 +71,7 @@ public class Trip {
         return originDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
     public String getOriginTimeString(){
-        return String.format("%d:%d",originDateTime.getHour(),originDateTime.getMinute());
+        return String.format("%02d:%02d",originDateTime.getHour(),originDateTime.getMinute());
     }
 
 }

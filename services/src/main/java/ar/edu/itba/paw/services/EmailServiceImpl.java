@@ -6,19 +6,20 @@ import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StreamUtils;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
-import javax.mail.MessagingException;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -31,27 +32,19 @@ public class EmailServiceImpl implements EmailService {
         return variablesMap;
     }
 
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired
-    private SpringTemplateEngine templateEngine;
-
     @Override
     public void sendMailNewPassenger(Trip trip, User passenger) throws MessagingException, IOException {
+
         MimeMessage message = mailSender.createMimeMessage();
-
-        MimeMessageHelper helper = new MimeMessageHelper(message,
-                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
-
-        helper.setFrom("poolit.noreply@gmail.com");
-
-        helper.setTo(trip.getDriver().getEmail());
-
-        helper.setSubject("Nuevo pasajero en tu viaje!");
-
+        message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(trip.getDriver().getEmail()));
+        message.setSubject("Nuevo pasajero en tu viaje!");
         // Variables para el html
         final Context ctx = new Context();
         ctx.setVariable("trip", trip);
@@ -60,7 +53,7 @@ public class EmailServiceImpl implements EmailService {
         // Cargo el template
         final String htmlContent = loadTemplate("new-passenger-mail", getVariablesMap(ctx));
 
-        helper.setText(htmlContent, true);
+        message.setContent(htmlContent,"text/html; charset=UTF-8");
 
         mailSender.send(message);
     }
@@ -68,23 +61,16 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendMailNewTrip(Trip trip) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
-
-        MimeMessageHelper helper = new MimeMessageHelper(message,
-                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
-
-        helper.setFrom("poolit-noreply@gmail.com");
-
-        helper.setTo(trip.getDriver().getEmail());
-
-        helper.setSubject("Nuevo viaje en Poolit creado!");
+        message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(trip.getDriver().getEmail()));
+        message.setSubject("Nuevo viaje en Poolit creado!");
 
         final Context ctx = new Context();
         ctx.setVariable("trip", trip);
 
         final String htmlContent = loadTemplate("create-trip-mail", getVariablesMap(ctx));
 
-        helper.setText(htmlContent, true);
+        message.setContent(htmlContent, "text/html; charset=UTF-8");
 
         mailSender.send(message);
     }
@@ -92,16 +78,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendMailTripConfirmation(Trip trip, User passenger) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
+        message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
 
-        MimeMessageHelper helper = new MimeMessageHelper(message,
-                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                StandardCharsets.UTF_8.name());
-
-        helper.setFrom("poolit.noreply@gmail.com");
-
-        helper.setTo(passenger.getEmail());
-
-        helper.setSubject("Nuevo viaje confirmado!");
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(passenger.getEmail()));
+        message.setSubject("Nuevo viaje confirmado!");
 
         final Context ctx = new Context();
         ctx.setVariable("trip", trip);
@@ -109,7 +89,7 @@ public class EmailServiceImpl implements EmailService {
 
         final String htmlContent = loadTemplate("trip-confirmation-mail", getVariablesMap(ctx));
 
-        helper.setText(htmlContent, true);
+        message.setContent(htmlContent, "text/html; charset=UTF-8");
 
         mailSender.send(message);
     }

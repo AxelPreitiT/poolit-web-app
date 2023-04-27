@@ -2,32 +2,29 @@ package ar.edu.itba.paw.webapp.form;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 public class CreateTripForm {
     private int originCityId;
-    @NotBlank
+
+    @Pattern(regexp = ".+")
     private String originAddress;
-    @NotBlank
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private String originDate;
-    @NotBlank
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private String originTime;
     private int destinationCityId;
-    @NotBlank
+    @Pattern(regexp = ".+")
     private String destinationAddress;
     @Pattern(regexp = "([a-zA-Z]{2}\\s?\\d{3}\\s?[a-zA-Z]{2})|([a-zA-Z]{3}\\s?\\d{3})")
     private String carPlate;
-    @NotBlank
+
+    @Pattern(regexp = ".+")
     private String carInfo;
     @Min(value = 1)
     private int maxSeats;
-    @NotBlank
-    @Email
+    @Pattern(regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
     private String email;
     @Pattern(regexp = "^\\d{2,3}\\s?\\d{4}\\s?\\d{4}")
     private String phone;

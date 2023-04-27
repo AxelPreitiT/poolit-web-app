@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link href="<c:url value="/css/components/detail.css"/>" rel="stylesheet"/>
 <jsp:useBean id="user" type="ar.edu.itba.paw.models.User" scope="request"/>
 <div class="contact-container">
@@ -10,11 +11,11 @@
         </div>
         <div class="contact-info-container">
             <div class="contact-info-item">
-                <h6>Email</h6>
+                <h6><spring:message code="success.userInfo.email"/></h6>
                 <p><c:out value="${user.email}"/></p>
             </div>
             <div class="contact-info-item">
-                <h6>Teléfono</h6>
+                <h6><spring:message code="success.userInfo.phone"/></h6>
                 <p><c:out value="${user.phone}"/></p>
             </div>
         </div>
