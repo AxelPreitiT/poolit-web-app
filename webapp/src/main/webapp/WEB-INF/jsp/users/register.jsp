@@ -70,7 +70,7 @@
                                     <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
                                 </c:forEach>
                             </form:select>
-                            <form:label path="bornCityId" for="bornCityId" class="placeholder-text h5">JOSE</form:label>
+                            <form:label path="bornCityId" for="bornCityId" class="placeholder-text h5">Vivo en</form:label>
                             <form:errors path="bornCityId" cssClass="formError" element="p"/>
                         </div>
                     </div>
