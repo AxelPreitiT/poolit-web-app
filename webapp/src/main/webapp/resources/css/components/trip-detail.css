@@ -1,0 +1,53 @@
+@import "/resources/css/base/elements.css";
+
+#main-header-row > hr {
+    margin: 0;
+}
+
+#trip-route-container {
+    margin: 1.5em 0;
+}
+
+#trip-info-container {
+    padding: 0 1em;
+    margin-bottom: 1em;
+}
+
+#trip-price-container {
+    margin: 1em 0;
+    max-width: fit-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+    flex-wrap: wrap;
+}
+
+#trip-price-container > div:has(span.text) > span.text {
+    font-weight: normal;
+}
+
+#trip-info-container > .container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#trip-info-container .row {
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.placeholder-image-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 16px;
+    aspect-ratio: 1/1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.placeholder-image-icon-color {
+    font-size: 5rem;
+}

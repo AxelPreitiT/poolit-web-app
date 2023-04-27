@@ -1,0 +1,26 @@
+
+#toast {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.toast {
+    width: max-content;
+}
+
+.toast-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.toast-header > button.btn-close {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.toast-body > span {
+    font-weight: normal;
+}

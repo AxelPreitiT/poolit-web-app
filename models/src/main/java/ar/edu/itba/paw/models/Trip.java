@@ -74,4 +74,8 @@ public class Trip {
         return String.format("%02d:%02d",originDateTime.getHour(),originDateTime.getMinute());
     }
 
+    public int getFreeSeats(){
+        return maxSeats - occupiedSeats;
+    }
+
 }

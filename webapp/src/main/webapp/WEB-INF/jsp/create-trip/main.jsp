@@ -122,7 +122,7 @@
                         </div>
                         <div>
                             <div id="car-info-image" class="collapse collapse-horizontal">
-                                <div class="col-4 placeholder-image-color">
+                                <div class="placeholder-image-color">
                                     <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
                                 </div>
                             </div>

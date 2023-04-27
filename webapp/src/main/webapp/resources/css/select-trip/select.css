@@ -201,16 +201,6 @@ i.placeholder-image-icon-color {
     margin-bottom: 0;
 }
 
-.shadow-btn {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    border-color: transparent !important;
-}
-
-.shadow-btn:active {
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
-    border-color: transparent !important;
-}
-
 label {
     font-size: 1.25vw;
 }
