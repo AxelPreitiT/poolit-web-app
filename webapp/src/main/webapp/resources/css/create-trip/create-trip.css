@@ -57,7 +57,7 @@
     column-gap: 0.5em;
 }
 
-#day-repeat-container > i {
+#day-repeat-row > i {
     padding-left: 0.5em;
 }
 
@@ -176,6 +176,14 @@ i.placeholder-image-icon-color {
 .shadow-btn:active {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
     border-color: transparent !important;
+}
+
+.calendar-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
 }
 
 /* Remove arrows from number input */
