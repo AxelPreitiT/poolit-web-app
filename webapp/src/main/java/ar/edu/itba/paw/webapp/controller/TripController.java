@@ -4,11 +4,13 @@ import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
+import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.DiscoveryForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -30,15 +33,17 @@ public class TripController {
     private final CityService cityService;
     private final UserService userService;
     private final CarService carService;
+    private final ImageService imageService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
 
     @Autowired
-    public TripController(TripService tripService, CityService cityService, UserService userService, CarService carService){
+    public TripController(TripService tripService, CityService cityService, UserService userService, CarService carService, ImageService imageService){
         this.tripService = tripService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
+        this.imageService = imageService;
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
@@ -140,6 +145,28 @@ public class TripController {
         mav.addObject("trip", trip);
 
         return mav;
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.GET)
+    public ModelAndView showUploadForm() {
+        ModelAndView mav = new ModelAndView("/image-tester/uploadForm");
+        return mav;
+    }
+
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file) throws Exception {
+        byte[] data = file.getBytes();
+        Image image=imageService.createImage(data);
+        ModelAndView modelAndView = new ModelAndView("/image-tester/imageDetails");
+        modelAndView.addObject("image", image);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
+    public @ResponseBody
+    byte[] getImage(@PathVariable("imageId") final int imageId) {
+        return imageService.findById(imageId).orElseThrow(RuntimeException::new).getData();
     }
 
     @RequestMapping(value = "*", method = RequestMethod.GET)
