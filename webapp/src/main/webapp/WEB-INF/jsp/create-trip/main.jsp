@@ -25,26 +25,42 @@
                 </div>
                 <div class="input-container">
                     <div class="input-row">
-                        <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                            <jsp:param name="id" value="originCity"/>
-                            <jsp:param name="defaultText" value="Ciudad"/>
-                        </jsp:include>
-                        <div>
-                            <input type="text" min="0" class="form-control form-control-sm" id="originAddress" name="originAddress" placeholder="Dirección">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                                        <jsp:param name="id" value="originCity"/>
+                                        <jsp:param name="defaultText" value="Ciudad"/>
+                                    </jsp:include>
+                                </div>
+                                <div class="col-6">
+                                    <div>
+                                        <input type="text" min="0" class="form-control form-control-sm" id="originAddress" name="originAddress" placeholder="Dirección">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="input-row">
-                        <div class="input-group input-group-sm" id="first-date-picker">
-                            <button type="button" class="btn button-color">
-                                <i class="bi bi-calendar-fill light-text"></i>
-                            </button>
-                            <input type="text" class="form-control form-control-sm" id="first-date" name="first-date" placeholder="Fecha">
-                        </div>
-                        <div class="input-group input-group-sm" id="time-picker">
-                            <button type="button" class="btn button-color">
-                                <i class="bi bi-clock-fill light-text"></i>
-                            </button>
-                            <input type="text" class="form-control form-control-sm" id="time" name="time" placeholder="Hora">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm" id="first-date-picker">
+                                        <button type="button" class="btn button-color">
+                                            <i class="bi bi-calendar-fill light-text"></i>
+                                        </button>
+                                        <input type="text" class="form-control form-control-sm" id="first-date" name="first-date" placeholder="Fecha">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm" id="time-picker">
+                                        <button type="button" class="btn button-color">
+                                            <i class="bi bi-clock-fill light-text"></i>
+                                        </button>
+                                        <input type="text" class="form-control form-control-sm" id="time" name="time" placeholder="Hora">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="collapse" id="day-repeat-container">
@@ -54,16 +70,24 @@
                         </div>
                     </div>
                     <div class="input-row">
-                        <div class="input-group input-group-sm" id="last-date-picker">
-                            <button type="button" class="btn button-color" id="last-date-button" disabled>
-                                <i class="bi bi-calendar-fill light-text"></i>
-                            </button>
-                            <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
-                        </div>
-                        <div class="input-group input-group-sm">
-                            <div class="input-group-text" id="is-multitrip-container">
-                                <input class="form-check-input mt-0" type="checkbox" id="is-multitrip">
-                                <span class="mb-0 ml-1 placeholder-text">Viaje recurrente</span>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm" id="last-date-picker">
+                                        <button type="button" class="btn button-color" id="last-date-button" disabled>
+                                            <i class="bi bi-calendar-fill light-text"></i>
+                                        </button>
+                                        <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-text" id="is-multitrip-container">
+                                            <input class="form-check-input mt-0" type="checkbox" id="is-multitrip">
+                                            <span class="mb-0 ml-1 placeholder-text">Viaje recurrente</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -77,12 +101,20 @@
                 </div>
                 <div class="input-container">
                     <div class="input-row">
-                        <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                            <jsp:param name="id" value="destinationCity"/>
-                            <jsp:param name="defaultText" value="Ciudad"/>
-                        </jsp:include>
-                        <div>
-                            <input type="text" min="0" class="form-control form-control-sm" id="destinationAddress" name="destinationAddress" placeholder="Dirección">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                                        <jsp:param name="id" value="destinationCity"/>
+                                        <jsp:param name="defaultText" value="Ciudad"/>
+                                    </jsp:include>
+                                </div>
+                                <div class="col-6">
+                                    <div>
+                                        <input type="text" min="0" class="form-control form-control-sm" id="destinationAddress" name="destinationAddress" placeholder="Dirección">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,48 +126,58 @@
                 </div>
                 <div class="input-container">
                     <div class="input-row">
-                        <div>
-                            <div id="car-info-text">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text">
-                                        <i class="bi bi-car-front-fill text"></i>
-                                    </div>
-                                    <select id="car-select" name="order-by-select" class="form-select form-select-sm">
-                                        <option value="">Seleccionar auto</option>
-                                        <option value="date">Ford Ka azul</option>
-                                    </select>
-                                </div>
-                                <div class="collapse" id="car-info-details">
-                                    <div class="primary-bg-color" id="car-info-details-container">
-                                        <div class="car-info-details-row">
-                                            <i class="bi bi-caret-right-fill light-text"></i>
-                                            <span class="light-text">Patente: TIA039</span>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div id="car-info-text">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-text">
+                                                <i class="bi bi-car-front-fill text"></i>
+                                            </div>
+                                            <select id="car-select" name="order-by-select" class="form-select form-select-sm">
+                                                <option value="">Seleccionar auto</option>
+                                                <option value="date">Ford Ka azul</option>
+                                            </select>
                                         </div>
-                                        <hr class="text"/>
-                                        <div class="car-info-details-row">
-                                            <i class="bi bi-caret-right-fill light-text"></i>
-                                            <span class="light-text">3 asientos disponibles</span>
+                                        <div class="collapse" id="car-info-details">
+                                            <div class="primary-bg-color" id="car-info-details-container">
+                                                <div class="car-info-details-row">
+                                                    <i class="bi bi-caret-right-fill light-text"></i>
+                                                    <span class="light-text">Patente: TIA039</span>
+                                                </div>
+                                                <hr class="text"/>
+                                                <div class="car-info-details-row">
+                                                    <i class="bi bi-caret-right-fill light-text"></i>
+                                                    <span class="light-text">3 asientos disponibles</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div id="car-info-image" class="collapse collapse-horizontal">
-                                <div class="placeholder-image-color">
-                                    <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
+                                <div class="col-6">
+                                    <div id="car-info-image" class="collapse collapse-horizontal">
+                                        <div class="placeholder-image-color">
+                                            <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="input-row" id="price-container">
-                        <div class="input-group input-group-sm">
-                            <div class="input-group-text">
-                                <i class="bi bi-currency-dollar text"></i>
-                            </div>
-                            <input type="number" min="0" class="form-control form-control-sm" id="price" name="price" placeholder="Precio por viaje">
-                            <div class="input-group-text">
-                                <span class="text">ARS</span>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-text">
+                                            <i class="bi bi-currency-dollar text"></i>
+                                        </div>
+                                        <input type="number" min="0" class="form-control form-control-sm" id="price" name="price" placeholder="Precio por viaje">
+                                        <div class="input-group-text">
+                                            <span class="text">ARS</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
