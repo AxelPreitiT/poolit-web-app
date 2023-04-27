@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<link href="<c:url value="/css/discovery/travel-card.css"/>" rel="stylesheet">
+<link href="<c:url value="/resources/css/discovery/travel-card.css"/>" rel="stylesheet">
 <jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.trips.Trip"/>
 <c:url value="/trips/${trip.tripId}" var="tripDetailUrl" />
 

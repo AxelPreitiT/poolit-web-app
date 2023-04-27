@@ -1,0 +1,15 @@
+@import "users.css";
+
+div.main-container-style {
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+
+.error-container{
+    height: 50px;
+}
+
+.error{
+    color: red;
+}
