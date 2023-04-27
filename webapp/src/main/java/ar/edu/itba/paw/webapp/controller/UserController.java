@@ -2,12 +2,15 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.webapp.form.CreateCarForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -55,6 +58,15 @@ public class UserController {
     public ModelAndView viewProfile() {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("users/profile");
+        mav.addObject("cities", cities);
+        return mav;
+    }
+
+    @RequestMapping(value = "/profile/createCar", method = RequestMethod.GET)
+    public ModelAndView createCarProfile(
+            @Valid @ModelAttribute("createCarForm") final CreateCarForm form) {
+        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        final ModelAndView mav = new ModelAndView("users/profile-new-car");
         mav.addObject("cities", cities);
         return mav;
     }
