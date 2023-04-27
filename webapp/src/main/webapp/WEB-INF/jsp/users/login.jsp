@@ -26,6 +26,11 @@
                 </div>
             </div>
             <div class="user-info-row">
+                <div class="error-container">
+                    <c:if test="${param.error != null}"><span class="error">Usuario y contraseña invalidos</span></c:if>
+                </div>
+            </div>
+            <div class="user-info-row">
                 <div class="user-info-item form-check">
                     <input class="form-check-input" type="checkbox" id="keepLoggedIn">
                     <label class="form-check-label" for="keepLoggedIn">
