@@ -10,7 +10,7 @@
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <script src="https://kit.fontawesome.com/b5e2fa9f6d.js" crossorigin="anonymous"></script>
-    <link href="<c:url value="/css/select-trip/main.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/select-trip/main.css"/>" rel="stylesheet">
 </head>
     <body class="background-bg-color">
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
