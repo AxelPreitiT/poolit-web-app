@@ -8,3 +8,16 @@ div.main-container-style {
 .formError{
     color: red;
 }
+
+.login-container{
+    display: flex;
+    height: 20%;
+    gap: 2%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.error-container{
+    height: 10px;
+}
