@@ -1,0 +1,30 @@
+* {
+    font-family: "Roboto", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: 0;
+}
+
+.main-container-style {
+    margin: 2% 10% 0 10%;
+    padding: 2% 2% 1% 2%;
+    height: fit-content;
+    border-radius: 12px;
+}
+
+.italic-text {
+    font-style: italic;
+}
+
+.button-style {
+    border-radius: 8px;
+}
+
+.form-floating:not(.form-floating:disabled)::before {
+    width: 0;
+}

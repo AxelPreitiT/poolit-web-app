@@ -5,6 +5,7 @@
 <link href="<c:url value="/css/discovery/travel-card.css"/>" rel="stylesheet">
 <jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.trips.Trip"/>
 <c:url value="/trips/${trip.tripId}" var="tripDetailUrl" />
+
 <a href="${tripDetailUrl}" class="card-link">
     <div class="travel-card inline-container2">
         <div class="location-column">
