@@ -112,7 +112,6 @@ public class TripController {
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
-
         return mav;
     }
 
@@ -174,8 +173,8 @@ public class TripController {
         return imageService.findById(imageId).orElseThrow(RuntimeException::new).getData();
     }
 
-    @RequestMapping(value = "*", method = RequestMethod.GET)
-    public ModelAndView pageNotFound() {
-        return new ModelAndView("/static/not-found-404");
-    }
+//    @RequestMapping(value = "*", method = RequestMethod.GET)
+//    public ModelAndView pageNotFound() {
+//        return new ModelAndView("/static/not-found-404");
+//    }
 }

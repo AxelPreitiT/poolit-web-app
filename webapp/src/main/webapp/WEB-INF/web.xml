@@ -45,7 +45,19 @@
     <servlet-name>default</servlet-name>
     <url-pattern>/resources/*</url-pattern>
   </servlet-mapping>
-
+<!--  Add a mapping to avoid the default tomcat error pages-->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/errors</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/errors</location>
+  </error-page>
+  <error-page>
+    <error-code>403</error-code>
+    <location>/errors</location>
+  </error-page>
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
