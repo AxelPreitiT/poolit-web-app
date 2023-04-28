@@ -9,7 +9,7 @@
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-    <link href="<c:url value="/css/users/register.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/users/register.css"/>" rel="stylesheet">
 </head>
 <body class="background-bg-color">
     <div class="container-bg-color main-container-style">
@@ -96,7 +96,7 @@
             </div>
             <div class="user-info-row">
                 <div class="submit-row">
-                    <form:button type="submit" class="btn btn-primary btn-lg">SUBIR</form:button>
+                    <form:button type="submit" class="btn button-color btn-lg"><span class="light-text">Crear</span></form:button>
                 </div>
             </div>
         </form:form>

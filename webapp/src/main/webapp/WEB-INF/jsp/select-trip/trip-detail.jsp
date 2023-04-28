@@ -10,7 +10,7 @@
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <script src="https://kit.fontawesome.com/b5e2fa9f6d.js" crossorigin="anonymous"></script>
-    <link href="<c:url value="/css/select-trip/main.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/select-trip/main.css"/>" rel="stylesheet">
 </head>
     <body class="background-bg-color">
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
@@ -20,8 +20,8 @@
                     <div class="location-data">
                         <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
                         <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.originDateString}" escapeXml="true"/></h6>
-                        <h6 class="fw-light text description-style"><c:out value="${trip.originTimeString}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.startDateString}" escapeXml="true"/></h6>
+                        <h6 class="fw-light text description-style"><c:out value="${trip.startTimeString}" escapeXml="true"/></h6>
                     </div>
                     <i class="bi bi-geo-alt text icon-style"></i>
                 </div>

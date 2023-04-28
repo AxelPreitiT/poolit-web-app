@@ -1,0 +1,139 @@
+
+
+.form-style {
+    border-radius: 4px 4px 0 0;
+    margin-block-end: 0;
+    margin: 4% 10% 0 10%;
+    padding: 2% 5%;
+    background-color: white;
+    min-height: 100%;
+}
+
+.container-line{
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.vertical-dotted-line {
+    border-left: 3px dotted black;
+    margin-left: 18px;
+    position: relative;
+    left: 5px;
+    height: 80px;
+}
+
+.icon-container{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.location-container {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.error-container{
+    height: 20px;
+}
+
+.time-trip-container {
+    display: flex;
+    width: 100%;
+}
+
+.row-time{
+    margin-top: 1%;
+    margin-bottom: 5%;
+}
+
+.location-container + .location-container {
+    margin-top: 2%;
+}
+
+.row-title {
+    display: flex;
+    align-items: end;
+    max-width: fit-content;
+    width: 100%;
+}
+
+.row-input {
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+    gap: 5%;
+    width: 70%;
+}
+
+.form-floating {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.input-container{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+.formError{
+    color: red;
+}
+.infoCar{
+    width: 70%;
+}
+
+.plate{
+    width: 30%;
+}
+
+.form-floating * {
+    margin-bottom: 0;
+}
+
+.subtitles {
+    margin: 1% 0;
+}
+
+.trip-settings, .driver-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 5%;
+    margin: 4% 0 2% 0;
+}
+
+.setting, .info {
+    display: flex;
+    gap: 3%;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.setting i, .info i {
+    font-size: 40px;
+    margin-bottom: 0;
+}
+
+label.placeholder-text {
+    opacity: .65;
+}
+
+.create-trip-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 5%;
+}
+
+.inline-btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

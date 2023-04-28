@@ -6,7 +6,7 @@
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
     <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-    <link href="<c:url value="/css/users/login.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/users/login.css"/>" rel="stylesheet">
 </head>
 <body class="background-bg-color">
     <div class="main-container-style container-bg-color">
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="d-grid gap-2 submit-row">
-                <button type="submit" class="btn btn-primary button-style login-btn">
+                <button type="submit" class="btn button-color btn-lg">
                     <span class="light-text">Iniciar sesión</span>
                 </button>
             </div>

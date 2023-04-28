@@ -9,7 +9,8 @@
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
         <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
         <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-        <link href="<c:url value="/css/discovery/main.css"/>" rel="stylesheet">
+        <link href="<c:url value="/resources/css/discovery/main.css"/>" rel="stylesheet">
+
 </head>
 <body>
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>

@@ -2,9 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<link href="<c:url value="/css/discovery/travel-card.css"/>" rel="stylesheet">
-<jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.Trip"/>
+<link href="<c:url value="/resources/css/discovery/travel-card.css"/>" rel="stylesheet">
+<jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.trips.Trip"/>
 <c:url value="/trips/${trip.tripId}" var="tripDetailUrl" />
+
 <a href="${tripDetailUrl}" class="card-link">
     <div class="travel-card inline-container2">
         <div class="location-column">
@@ -31,11 +32,11 @@
                 <i class="bi bi-person-fill text h5"></i>
             </div>
             <div class="data-row">
-                <h6><c:out value="${trip.originDateString}" escapeXml="true"/></h6>
+                <h6><c:out value="${trip.startDateString}" escapeXml="true"/></h6>
                 <i class="bi bi-calendar text h5"></i>
             </div>
             <div class="data-row">
-                <h6><c:out value="${trip.originTimeString}" escapeXml="true"/> hs</h6>
+                <h6><c:out value="${trip.startTimeString}" escapeXml="true"/> hs</h6>
                 <i class="bi bi-clock text h5"></i>
             </div>
             <%--        TODO: agregar cuando tengamos el precio--%>

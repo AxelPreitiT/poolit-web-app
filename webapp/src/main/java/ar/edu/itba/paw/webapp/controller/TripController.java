@@ -7,7 +7,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.models.Image;
@@ -73,11 +73,16 @@ public class TripController {
         final User passenger = userService.findByEmail(authUser.getUsername()).get();
         //User passenger = userService.createUserIfNotExists(form.getEmail(), form.getPhone(), form.getPhone());
         //sacar el form.getPhone(), esta solo para que no falle
-        boolean ans = tripService.addPassenger(tripId,passenger);
-        Optional<Trip> trip = tripService.findById(tripId);
-        if(ans && trip.isPresent()){
+//        boolean ans = tripService.addPassenger(tripId,passenger);
+//        Optional<Trip> trip = tripService.findById(tripId);
+//        if(ans && trip.isPresent()){
+//        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
+        //TODO: agregar excepciones nuestras y nuestro manejo
+        Trip trip = tripService.findById(tripId).orElseThrow(IllegalStateException::new);
+        boolean ans = tripService.addPassenger(trip,passenger,trip.getStartDateTime());
+        if(ans){
             ModelAndView successMV = new ModelAndView("/select-trip/success");
-            successMV.addObject("trip",trip.get());
+            successMV.addObject("trip",trip);
             successMV.addObject("passenger",passenger);
             return successMV;
         }
@@ -92,8 +97,7 @@ public class TripController {
             return getTrips(form);
         }
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-
-        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
+        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10).getElements();
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -103,7 +107,8 @@ public class TripController {
     @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
     public ModelAndView getTrips(@ModelAttribute("registerForm") final DiscoveryForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        List<Trip> trips = tripService.getFirstNTrips(10);
+        List<Trip> trips = tripService.getIncomingTrips(0,10).getElements();
+//        System.out.println(trips.get(0));
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -140,7 +145,7 @@ public class TripController {
         //User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPhone());
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
         //TODO: get price for trip
-        Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user);
+        Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user,form.getOriginDate(), form.getOriginTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
 

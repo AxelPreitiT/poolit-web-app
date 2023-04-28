@@ -1,0 +1,34 @@
+.user-info-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 3%;
+    width: 100%;
+    margin-bottom: 3%;
+}
+
+.user-info-item:not(.form-check) {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    row-gap: 2%;
+}
+
+.user-info-item.form-check {
+    margin-top: 2%;
+}
+
+.submit-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+
+.formError{
+    color: red;
+}
