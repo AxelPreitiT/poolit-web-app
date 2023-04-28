@@ -6,14 +6,53 @@
 <html>
 <head>
     <title><spring:message code="selectTrip.title"/></title>
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
+    <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-    <script src="https://kit.fontawesome.com/b5e2fa9f6d.js" crossorigin="anonymous"></script>
-    <link href="<c:url value="/resources/css/select-trip/select.css"/>" rel="stylesheet" type="text/css"/>
+    <link href="<c:url value="/resources/css/select-trip/select-trip.css"/>" rel="stylesheet" type="text/css"/>
 </head>
     <body class="background-color">
-    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+        <div id="navbar-container">
+            <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+        </div>
+        <div class="main-container-style container-color">
+            <div id="trip-detail-container">
+                <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp"/>
+            </div>
+            <div id="footer-container">
+                <div id="trip-price-container">
+                    <div class="trip-price-row">
+                        <div>
+                            <span class="h3 text">Total:</span>
+                        </div>
+                        <div>
+                            <span class="h2 secondary-color">$10.000</span>
+                        </div>
+                    </div>
+                    <div class="trip-price-row items-to-end">
+                        <span class="h6 italic-text">4 viajes</span>
+                    </div>
+                </div>
+                <div id="button-container">
+                    <c:url value="/trips/${trip.tripId}" var="joinUrl"/>
+                    <form action="${joinUrl}" method="post">
+                        <button id="join-button" type="submit" class="btn button-style button-color shadow-btn"
+                                <c:if test="${trip.freeSeats == 0}">
+                                    <c:out value="disabled"/>
+                                </c:if>
+                        >
+                            <i class="bi bi-check2 light-text h3"></i>
+                            <span class="button-text-style light-text h3">Unirse</span>
+                        </button>
+                    </form>
+                    <c:if test="${trip.freeSeats == 0}">
+                        <div class="no-seats-left-container">
+                            <span class="h6 italic-text"><spring:message code="selectTrip.seats.cero"/></span>
+                        </div>
+                    </c:if>
+                </div>
+            </div>
+        </div>
+    <%--<jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
         <div class="trip-details-style container-color">
             <div class="trip-route secondary-color">
                 <div class="location-container">
@@ -64,6 +103,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--%>
     </body>
 </html>

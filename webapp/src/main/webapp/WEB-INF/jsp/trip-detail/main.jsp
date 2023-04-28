@@ -20,14 +20,26 @@
         <div id="trip-detail-container">
             <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp"/>
         </div>
-        <div id="home-button-container">
-            <c:url value="/" var="homeUrl"/>
-            <a href="${homeUrl}">
-                <button id="home-button" type="submit" class="btn button-style button-color shadow-btn">
-                    <i class="bi bi-house-fill light-text h4"></i>
-                    <span class="button-text-style light-text h3">Inicio</span>
-                </button>
-            </a>
+        <div id="footer-container">
+            <div id="trip-price-container">
+                <div class="trip-price-row">
+                    <div>
+                        <span class="h3 text no-bold">Precio por viaje:</span>
+                    </div>
+                    <div>
+                        <span class="h2 secondary-color">$10000</span>
+                    </div>
+                </div>
+            </div>
+            <div id="button-container">
+                <c:url value="/" var="homeUrl"/>
+                <a href="${homeUrl}">
+                    <button id="home-button" type="submit" class="btn button-style button-color shadow-btn">
+                        <i class="bi bi-house-fill light-text h4"></i>
+                        <span class="button-text-style light-text h3">Inicio</span>
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 </body>

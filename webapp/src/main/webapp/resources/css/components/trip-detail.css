@@ -13,21 +13,6 @@
     margin-bottom: 1em;
 }
 
-#trip-price-container {
-    margin: 1em 0;
-    max-width: fit-content;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    column-gap: 1em;
-    flex-wrap: wrap;
-}
-
-#trip-price-container > div:has(span.text) > span.text {
-    font-weight: normal;
-}
-
 #trip-info-container > .container {
     padding-left: 0;
     padding-right: 0;

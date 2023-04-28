@@ -1,7 +1,41 @@
 
-#home-button-container {
+#footer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 1em;
+    column-gap: 2em;
+}
+
+#trip-price-container {
+    max-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.no-bold {
+    font-weight: normal;
+}
+
+.trip-price-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+    flex-wrap: wrap;
+}
+
+.items-to-end {
+    justify-content: flex-end;
+    padding-right: 0.3em;
+    margin-top: -0.2em;
+}
+
+#button-container {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    padding: 0 1em;
 }

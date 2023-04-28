@@ -23,14 +23,6 @@
         <div id="trip-info-text-container">
           <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp"/>
         </div>
-        <div id="trip-price-container">
-          <div>
-            <span class="h3 text">Precio por viaje:</span>
-          </div>
-          <div>
-            <span class="h2 secondary-color">$1000</span>
-          </div>
-        </div>
       </div>
       <div class="col-sm-6 col-md-5 col-lg-4">
         <div id="car-info-image">
