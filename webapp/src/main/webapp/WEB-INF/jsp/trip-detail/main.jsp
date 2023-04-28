@@ -1,17 +1,16 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- Bean:
-        - trip: The information of the trip to show - Trip class
+        - Trip: The info of the trip to show - Trip class
 -->
 
 <html>
 <head>
-    <title><spring:message code="createTrip.success.pageTitle"/></title>
+    <title>Detalles del viaje</title>
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-    <link href="<c:url value="/resources/css/create-trip/success.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/trip-detail/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
     <div id="navbar-container">
@@ -28,7 +27,7 @@
                         <span class="h3 text no-bold">Precio por viaje:</span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color">$1.000</span>
+                        <span class="h2 secondary-color">$10.000</span>
                     </div>
                 </div>
             </div>
@@ -42,12 +41,6 @@
                 </a>
             </div>
         </div>
-    </div>
-    <div id="toast-container">
-        <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-            <jsp:param name="title" value="¡Viaje creado!"/>
-            <jsp:param name="message" value="Tu viaje ha sido creado exitosamente"/>
-        </jsp:include>
     </div>
 </body>
 </html>

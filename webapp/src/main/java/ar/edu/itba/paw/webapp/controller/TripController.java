@@ -42,8 +42,6 @@ public class TripController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
-//        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
-//        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
         Optional<Trip> trip = tripService.findById(tripId);
         if(!trip.isPresent()){//Usar Optional?
             return new ModelAndView("/static/not-found-404");
@@ -69,9 +67,8 @@ public class TripController {
             //successMV.addObject("passenger",passenger);
             return successMV;
         }
-        ModelAndView mv = new ModelAndView("/select-trip/response");
-        mv.addObject("response",ans);
-        return mv;
+        // TODO: Throw error 500 internal server error
+        return new ModelAndView("/static/not-found-404");
     }
 
     @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
@@ -101,7 +98,7 @@ public class TripController {
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        final ModelAndView mav = new ModelAndView("/create-trip/main");
+        final ModelAndView mav = new ModelAndView("create-trip/main");
         mav.addObject("cities", cities);
 
         return mav;
@@ -118,8 +115,7 @@ public class TripController {
         Optional<City> originCity = cityService.findCityById(form.getOriginCityId());
         Optional<City> destinationCity = cityService.findCityById(form.getDestinationCityId());
         if(!originCity.isPresent() || !destinationCity.isPresent()){
-            //TODO: 404 page
-            return new ModelAndView("/create-trip/response");
+            return new ModelAndView("/static/not-found-404");
         }
         User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);

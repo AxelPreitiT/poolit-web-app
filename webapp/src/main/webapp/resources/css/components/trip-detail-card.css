@@ -1,5 +1,9 @@
 @import "/resources/css/base/elements.css";
 
+.main-container {
+    margin-bottom: 1rem;
+}
+
 .sub-detail{
     font-weight: lighter;
     font-style: italic;
@@ -13,7 +17,7 @@
     font-weight: bold;
 }
 
-hr {
+.details-container hr {
   margin-top: 0;
   margin-bottom: 0;
   border: 0;
@@ -48,8 +52,24 @@ hr {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   column-gap: 1em;
+}
+
+.show-row-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.show-row-content > .detail, .show-row > i {
+    font-size: 0.9rem;
+}
+
+.show-row-content > span:not(.detail) {
+    margin-top: -0.2em;
+    font-size: 0.7rem;
 }
 
 

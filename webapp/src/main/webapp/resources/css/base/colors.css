@@ -1,3 +1,20 @@
+.text {
+    color: #000000 !important;
+}
+
+.italic-text {
+    color: #5F5E5E !important;
+}
+
+.light-text {
+    color: #FFFFFF !important;
+}
+
+.placeholder-text {
+    background-color: transparent;
+    color: #707070 !important;
+}
+
 .primary-color {
     color: #4B72E7 !important;
 }
@@ -33,23 +50,6 @@
 
 .background-color {
     background-color: #C9E6F8 !important;
-}
-
-.text {
-    color: #000000 !important;
-}
-
-.italic-text {
-    color: #5F5E5E !important;
-}
-
-.light-text {
-    color: #FFFFFF !important;
-}
-
-.placeholder-text {
-    background-color: transparent;
-    color: #707070 !important;
 }
 
 .placeholder-image-color {
