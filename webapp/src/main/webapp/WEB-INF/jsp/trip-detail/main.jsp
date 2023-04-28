@@ -27,7 +27,7 @@
                         <span class="h3 text no-bold">Precio por viaje:</span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color">$10000</span>
+                        <span class="h2 secondary-color">$10.000</span>
                     </div>
                 </div>
             </div>
