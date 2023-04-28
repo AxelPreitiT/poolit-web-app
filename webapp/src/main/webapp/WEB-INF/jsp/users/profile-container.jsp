@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
+<jsp:useBean id="user" type="ar.edu.itba.paw.models.User"  scope="request"/>
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
@@ -12,21 +14,23 @@
     </div>
   </div>
   <div class="row-info">
-    <h6>Nombre</h6>
-    <h4>Taxi Driver</h4>
+    <h6>Nombre y apellido</h6>
+    <h4>${user.username} ${user.surname}</h4>
   </div>
   <div class="row-info">
     <h6>Email</h6>
-    <h4>gastoncito@itba.edu.ar</h4>
+    <h4>${user.email}</h4>
   </div>
   <div class="row-info">
     <h6>Telefono</h6>
-    <h4>0342154394741</h4>
+    <h4>${user.phone}</h4>
   </div>
   <div class="row-info">
     <h6>Localidad origen</h6>
-    <h4>Santa Fe</h4>
+    <h4>${user.bornCity.name}</h4>
   </div>
-  <button type="button" class="btn btn-primary btn-lg">Cambiar a DRIVER</button>
+  <form:form method = "POST" action = "${param.path}">
+    <button type="submit" class="btn btn-primary btn-lg">Cambiar a ${param.role}</button>
+  </form:form>
 </div>
 

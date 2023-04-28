@@ -10,10 +10,12 @@
     <link href="<c:url value="/resources/css/users/profile.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
-  <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
-  <div class="main-container">
+<jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+<div class="main-container">
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
-        <jsp:param name="user" value="${userLogged}"/>
+        <jsp:param name="user" value="${user}"/>
+        <jsp:param name="role" value="USER"/>
+        <jsp:param name="path" value="/profile/user"/>
     </jsp:include>
     <div class="List-properties-container">
         <div class="list-container">
@@ -37,6 +39,7 @@
             <jsp:param name="btndesc" value="Ver todos los viajes realizados"/>
         </jsp:include>
     </div>
-  </div>
+</div>
 </body>
 </html>
+
