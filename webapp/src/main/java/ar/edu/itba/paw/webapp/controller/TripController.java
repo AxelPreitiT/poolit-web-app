@@ -77,7 +77,9 @@ public class TripController {
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
     public ModelAndView getSelectedTrips(
             @Valid @ModelAttribute("searchForm") final SearchForm form,
-            final BindingResult errors){
+            final BindingResult errors,
+            @RequestParam(value = "page",required = false,defaultValue = "1") final int page){
+        System.out.println("page: "+page);
         final ModelAndView mav = new ModelAndView("/search/main");
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         mav.addObject("cities", cities);

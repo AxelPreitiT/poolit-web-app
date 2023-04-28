@@ -85,6 +85,18 @@
         </jsp:include>
       </c:forEach>
     </div>
+      <c:url value="" var="baseUrl">
+        <c:forEach var="p" items="${param}">
+          <c:if test="${!(param.key eq 'page')}">
+            <c:param name="${p.key}" value="${p.value}"/>
+          </c:if>
+        </c:forEach>
+      </c:url>
+      <jsp:include page="/WEB-INF/jsp/components/page-selector.jsp">
+        <jsp:param name="totalPages" value="10"/>
+        <jsp:param name="currentPage" value="1"/>
+        <jsp:param name="baseUrl" value="${baseUrl}"/>
+      </jsp:include>
   </c:if>
 </div>
 </body>
