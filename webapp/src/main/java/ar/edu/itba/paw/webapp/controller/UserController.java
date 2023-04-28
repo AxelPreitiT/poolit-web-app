@@ -192,6 +192,7 @@ public class UserController {
         return mav;
     }
 
+
     /*
     @ModelAttribute("userLogged")
     public User loggedUser(){

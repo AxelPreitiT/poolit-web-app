@@ -28,7 +28,7 @@ public class PawUserDetailsService implements UserDetailsService {
     }
 
     private enum AuthRoles{
-        USER_ADMIN("ROLE_USER_ADMIN"),
+        USER_ADMIN("ROLE_USER"),
         DRIVER("ROLE_DRIVER");
         private final String role;
         private AuthRoles(String role){
