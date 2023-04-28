@@ -73,6 +73,6 @@ CREATE TABLE IF NOT EXISTS trips_cars_drivers(
 );
 CREATE TABLE IF NOT EXISTS images(
     image_id SERIAL PRIMARY KEY,
-    bytea BYTEA,
+    bytea BYTEA
 );
 
