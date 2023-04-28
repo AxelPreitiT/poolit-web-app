@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +14,11 @@ import java.util.*;
 
 @Controller
 public class ErrorsController {
+    private final MessageSource messageSource;
     private final Map<Integer,ErrorMessage> errorMessages;
-    public ErrorsController(){
+    @Autowired
+    public ErrorsController(final MessageSource messageSource){
+        this.messageSource = messageSource;
         this.errorMessages = new HashMap<>();
         errorMessages.put(404, new ErrorMessage("errors.404","errors.404.description"));
         errorMessages.put(500, new ErrorMessage("errors.500","errors.500.description"));
@@ -32,8 +37,8 @@ public class ErrorsController {
         Integer httpErrorCode = (Integer) servletRequest.getAttribute("javax.servlet.error.status_code");
         mav.addObject("errorCode",httpErrorCode);
         ErrorMessage message = errorMessages.getOrDefault(httpErrorCode,new ErrorMessage("errors.default","errors.default.description"));
-        mav.addObject("errorMessage",message.getError());
-        mav.addObject("errorDescription",message.getDescription());
+        mav.addObject("errorMessage",messageSource.getMessage(message.getError(),null,Locale.getDefault()));
+        mav.addObject("errorDescription",messageSource.getMessage(message.getDescription(),null,Locale.getDefault()));
         return mav;
     }
 

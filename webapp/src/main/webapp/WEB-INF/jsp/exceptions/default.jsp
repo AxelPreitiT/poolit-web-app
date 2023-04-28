@@ -22,7 +22,6 @@
     <div class="footer-container">
         <div class="error-code-container error-code">
             <p class="error-code-style"><c:out value="${errorMessage}"/></p>
-            <em>(<c:out value="${errorCode}"/>)</em>
         </div>
         <a class="anchor-style" href="<c:url value="/"/>">
             <button class="btn button-bg-color button-style">

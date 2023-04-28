@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.CreateCarForm;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
@@ -64,9 +66,9 @@ public class UserController {
         if(errors.hasErrors()){
             return createUserGet(form);
         }
-        Optional<City> originCity = cityService.findCityById(form.getBornCityId());
+        City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
         userService.createUserIfNotExists(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                form.getPassword(), form.getBirthdate(), originCity.get(), null);
+                form.getPassword(), form.getBirthdate(), originCity, null);
         return new ModelAndView("redirect:/" );
     }
 
@@ -108,9 +110,8 @@ public class UserController {
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
-
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final ModelAndView mav = new ModelAndView("/users/profile");
         mav.addObject("user", user);
         return mav;
@@ -119,8 +120,7 @@ public class UserController {
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public ModelAndView profilePost(){
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         pawUserDetailsService.update(user);
         userService.changeRole(user.getUserId(), user.getRole());
 
