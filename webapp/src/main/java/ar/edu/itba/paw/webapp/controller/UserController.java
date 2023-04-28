@@ -73,7 +73,7 @@ public class UserController {
         Optional<City> originCity = cityService.findCityById(form.getBornCityId());
         userService.createUserIfNotExists(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                 form.getPassword(), form.getBirthdate(), originCity.get(), null);
-        return new ModelAndView("redirect:/" );
+        return new ModelAndView("redirect:/users/login" );
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
@@ -141,7 +141,7 @@ public class UserController {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).get();
 
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 1, 3).getElements();
+        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
 
         final ModelAndView mav = new ModelAndView("/users/user-profile");
         mav.addObject("user", user);
@@ -153,12 +153,14 @@ public class UserController {
     public ModelAndView PostUserprofile(){
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).get();
+        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
 
         pawUserDetailsService.update(user);
         userService.changeRole(user.getUserId(), user.getRole());
 
         final ModelAndView mav = new ModelAndView("/users/user-profile");
         mav.addObject("user", user);
+        mav.addObject("trips", trips);
         return mav;
     }
 
@@ -167,8 +169,11 @@ public class UserController {
 
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).get();
+        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
+        mav.addObject("trips", trips);
         return mav;
     }
 
@@ -176,12 +181,14 @@ public class UserController {
     public ModelAndView Driverprofile(){
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).get();
+        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
 
         pawUserDetailsService.update(user);
         userService.changeRole(user.getUserId(), user.getRole());
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
+        mav.addObject("trips", trips);
         return mav;
     }
 

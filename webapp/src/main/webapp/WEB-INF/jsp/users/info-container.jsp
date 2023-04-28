@@ -11,11 +11,11 @@
   </div>
   <div>
     <c:forEach items="${trips}" var="trip">
-      <h1>${trip.driver}</h1>
+      <c:set var="trip" value="${trip}" scope="request"/>
+      <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp">
+        <jsp:param name="trip" value="${trip}"/>
+      </jsp:include>
     </c:forEach>
-    <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp"/>
-    <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp"/>
-    <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp"/>
   </div>
   <a href="/test">
     <div class="plus-btn">

@@ -26,6 +26,7 @@
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
       <jsp:param name="title" value="Viajes realizados"/>
       <jsp:param name="btndesc" value="Ver todos los viajes realizados"/>
+      <jsp:param name="trips" value="${trips}"/>
     </jsp:include>
   </div>
 </div>
