@@ -61,12 +61,14 @@
                             <i class="bi bi-calendar-fill light-text"></i>
                         </button>
                         <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
-
                     </div>
                     <div class="input-group input-group-sm">
                         <div class="input-group-text" id="is-multitrip-container">
                             <input class="form-check-input mt-0" type="checkbox" id="is-multitrip">
-                            <span class="mb-0 ml-1 placeholder-text">Viaje recurrente</span>
+                            <div id="is-multitrip-text">
+                                <span class="placeholder-text">Viaje</span>
+                                <span class="placeholder-text">recurrente</span>
+                            </div>
                         </div>
                     </div>
                 </div>
