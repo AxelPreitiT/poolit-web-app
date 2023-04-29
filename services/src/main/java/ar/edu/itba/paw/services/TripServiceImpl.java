@@ -62,10 +62,11 @@ public class TripServiceImpl implements TripService {
         if(date.length()==0 || time.length()==0){
             return Optional.empty();
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime ans;
         try{
             String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date,DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+            ans = LocalDate.parse(date, formatter).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
         }catch (Exception e){
             return Optional.empty();
         }

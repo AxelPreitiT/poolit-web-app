@@ -7,5 +7,5 @@ const timePicker = new tempusDominus.TempusDominus(timeElement, {
     ...timeConfig
 });
 
-setRecurrentTripCalendar('first-date-picker', 'last-date-picker', 'last-date', 'last-date-button', 'is-multitrip', 'day-repeat-container', 'day-repeat-text');
+setRecurrentTripCalendar('first-date-picker', 'date','last-date-picker', 'last-date', 'last-date-button', 'is-multitrip', 'day-repeat-container', 'day-repeat-text');
 

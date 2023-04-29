@@ -3,8 +3,9 @@ import {calendarConfig, getDaysOfWeekDisabled, today} from "./calendarConfig.js"
 const day = 24 * 60 * 60 * 1000;
 const tomorrow = new Date(today.getTime() + day);
 
-export const setRecurrentTripCalendar = (firstDateElementId, lastDateElementId, lastDateInputElementId, lastDateButtonElementId, isMultitripCheckboxId, dayRepeatContainerId, dayRepeatTextId, setDayRepeatContainerCallback = null) => {
+export const setRecurrentTripCalendar = (firstDateElementId, firstDateInputElementId, lastDateElementId, lastDateInputElementId, lastDateButtonElementId, isMultitripCheckboxId, dayRepeatContainerId, dayRepeatTextId, setDayRepeatContainerCallback = null) => {
     const firstDateElement = document.getElementById(firstDateElementId);
+    const firstDateInputElement = document.getElementById(firstDateInputElementId);
     const lastDateElement = document.getElementById(lastDateElementId);
     const lastDateInputElement = document.getElementById(lastDateInputElementId);
     const lastDateButtonElement = document.getElementById(lastDateButtonElementId);
@@ -26,8 +27,24 @@ export const setRecurrentTripCalendar = (firstDateElementId, lastDateElementId, 
         }
     });
 
+    const firstDateUpdate = (date) => {
+        const minDate = new Date(date.getTime() + day);
+        const daysOfWeekDisabled = getDaysOfWeekDisabled(date.getDay());
+        lastDatePicker.update({
+            restrictions: {
+                minDate: minDate,
+                daysOfWeekDisabled: daysOfWeekDisabled
+            }
+        });
+        let dayOfWeek = date.toLocaleString(window.navigator.language, {weekday: 'long'});
+        if(dayOfWeek === "Invalid Date") {
+            dayOfWeek = "";
+        }
+        dayRepeatText.innerHTML = dayOfWeek;
+    }
+
     const toggleDisabledElements = () => {
-        if(isMultitripCheckbox.checked && dayRepeatText.innerHTML !== "") {
+        if(isMultitripCheckbox.checked && firstDateInputElement.value !== "") {
             lastDateInputElement.removeAttribute('disabled');
             lastDateButtonElement.removeAttribute('disabled');
             if(isDisabled) {
@@ -35,7 +52,7 @@ export const setRecurrentTripCalendar = (firstDateElementId, lastDateElementId, 
                     show: true
                 });
             }
-        } else if(!isMultitripCheckbox.checked || dayRepeatText.innerHTML === "") {
+        } else if(!isMultitripCheckbox.checked || firstDateInputElement.value === "") {
             lastDatePicker.dates.clear();
             lastDateInputElement.setAttribute('disabled', 'disabled');
             lastDateButtonElement.setAttribute('disabled', 'disabled');
@@ -48,21 +65,9 @@ export const setRecurrentTripCalendar = (firstDateElementId, lastDateElementId, 
     }
 
     firstDateElement.addEventListener(tempusDominus.Namespace.events.change, (e) => {
-        const selectedDate = new Date(e.detail.date);
-        const minDate = new Date(selectedDate.getTime() + day);
-        const daysOfWeekDisabled = getDaysOfWeekDisabled(selectedDate.getDay());
         lastDatePicker.dates.clear();
-        lastDatePicker.updateOptions({
-            restrictions: {
-                minDate: minDate,
-                daysOfWeekDisabled: daysOfWeekDisabled,
-            },
-        });
-        let dayOfWeek = selectedDate.toLocaleString(window.navigator.language, {weekday: 'long'});
-        if(dayOfWeek === "Invalid Date") {
-            dayOfWeek = "";
-        }
-        dayRepeatText.innerHTML = dayOfWeek;
+        const selectedDate = new Date(e.detail.date);
+        firstDateUpdate(selectedDate);
         toggleDisabledElements();
     });
 
@@ -85,4 +90,10 @@ export const setRecurrentTripCalendar = (firstDateElementId, lastDateElementId, 
         }
     });
 
+    if(firstDateInputElement.value !== "") {
+        const [day, month, year] = firstDateInputElement.value.split("/");
+        const selectedDate = new Date(year, month - 1, day);
+        firstDateUpdate(selectedDate);
+    }
+    toggleDisabledElements();
 }

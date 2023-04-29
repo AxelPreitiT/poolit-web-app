@@ -24,7 +24,7 @@ const timePicker = new tempusDominus.TempusDominus(timeElement, {
 });
 
 // Recurrent trip management
-setRecurrentTripCalendar('first-date-picker', 'last-date-picker', 'last-date', 'last-date-button', 'is-multitrip', 'day-repeat-container', 'day-repeat-text', shouldExpandVerticalDottedLine);
+setRecurrentTripCalendar('first-date-picker', 'first-date', 'last-date-picker', 'last-date', 'last-date-button', 'is-multitrip', 'day-repeat-container', 'day-repeat-text', shouldExpandVerticalDottedLine);
 
 
 // Select car management
