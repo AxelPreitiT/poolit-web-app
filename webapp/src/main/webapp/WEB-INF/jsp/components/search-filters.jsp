@@ -1,15 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <link href="<c:url value="/resources/css/components/search-filters.css"/>" rel="stylesheet" type="text/css"/>
 <script src="<c:url value="/resources/js/components/searchFilters.js"/>" type="module"></script>
 
-<!-- Params:
-        - url: url to submit the form
+<!-- Beans:
+        - searchTripForm: form backing object
 -->
 
+<!-- Params:
+        - url: url to send the form
+-->
+
+<jsp:useBean id="searchTripForm" type="ar.edu.itba.paw.webapp.form.SearchTripForm" scope="request"/>
+
 <div class="filter-container primary-bg-color">
-    <form action="${param.url}" method="post" class="form-style">
+    <form:form modelAttribute="searchTripForm" method="post" action="${param.url}" cssClass="form-style">
         <div class="route-filter">
             <div class="title-row">
                 <i class="bi bi-geo-alt-fill light-text h5"></i>
@@ -17,17 +24,21 @@
             </div>
             <div class="input-container">
                 <div class="input-row">
-                    <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                        <jsp:param name="id" value="originCity"/>
-                        <jsp:param name="defaultText" value="Origen"/>
-                    </jsp:include>
+                    <div id="origin-city-selector">
+                        <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                            <jsp:param name="id" value="originCityId"/>
+                            <jsp:param name="defaultText" value="Origen"/>
+                        </jsp:include>
+                    </div>
                     <div class="route-arrow">
                         <i class="bi bi-arrow-right light-text"></i>
                     </div>
-                    <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                        <jsp:param name="id" value="destinationCity"/>
-                        <jsp:param name="defaultText" value="Destino"/>
-                    </jsp:include>
+                    <div id="destination-city-selector">
+                        <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                            <jsp:param name="id" value="destinationCityId"/>
+                            <jsp:param name="defaultText" value="Destino"/>
+                        </jsp:include>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,13 +53,13 @@
                         <button type="button" class="btn button-color">
                             <i class="bi bi-calendar-fill light-text"></i>
                         </button>
-                        <input type="text" class="form-control form-control-sm" id="first-date" name="first-date" placeholder="Primera fecha">
+                        <form:input path="date" cssClass="form-control form-control-sm" id="date" name="date" placeholder="Fecha"/>
                     </div>
                     <div class="input-group input-group-sm" id="time-picker">
                         <button type="button" class="btn button-color">
                             <i class="bi bi-clock-fill light-text"></i>
                         </button>
-                        <input type="text" class="form-control form-control-sm" id="time" name="time" placeholder="Hora">
+                        <form:input path="time" cssClass="form-control form-control-sm" id="time" name="time" placeholder="Hora"/>
                     </div>
                 </div>
                 <div class="input-row collapse" id="day-repeat-container">
@@ -60,11 +71,11 @@
                         <button type="button" class="btn button-color" id="last-date-button" disabled>
                             <i class="bi bi-calendar-fill light-text"></i>
                         </button>
-                        <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
+                        <form:input path="lastDate" cssClass="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled="true"/>
                     </div>
                     <div class="input-group input-group-sm">
                         <div class="input-group-text" id="is-multitrip-container">
-                            <input class="form-check-input mt-0" type="checkbox" id="is-multitrip">
+                            <form:checkbox path="multitrip" id="is-multitrip" name="is-multitrip" cssClass="form-check-input mt-0"/>
                             <div id="is-multitrip-text">
                                 <span class="placeholder-text">Viaje</span>
                                 <span class="placeholder-text">recurrente</span>
@@ -82,11 +93,11 @@
             <div class="input-container">
                 <div class="input-row">
                     <div>
-                        <input type="number" min="0" class="form-control form-control-sm" id="min-price" name="min-price" placeholder="Mínimo">
+                        <form:input path="minPrice" cssClass="form-control form-control-sm" id="min-price" name="min-price" placeholder="Mínimo"/>
                     </div>
                     <span class="light-text h6">-</span>
                     <div>
-                        <input type="number" min="0" class="form-control form-control-sm" id="max-price" name="max-price" placeholder="Máximo">
+                        <form:input path="maxPrice" cssClass="form-control form-control-sm" id="max-price" name="max-price" placeholder="Máximo"/>
                     </div>
                     <span class="light-text h6">ARS</span>
                 </div>
@@ -98,5 +109,5 @@
                 <span class="button-text-style light-text h4">Buscar</span>
             </button>
         </div>
-    </form>
+    </form:form>
 </div>

@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- Beans:
-- isLoggedIn: boolean that indicates if the user is logged in or not
+        - isLoggedIn: boolean that indicates if the user is logged in or not
+        - searchUrl: url to search trips
 -->
 
 <html>
@@ -25,9 +26,8 @@
                     <span class="light-text subtitle">¡Unite a la comunidad y comenzá a viajar de manera inteligente!</span>
                 </div>
                 <div class="col-lg-5 col-xl-4" id="banner-search-column">
-                    <c:url value="/search" var="searchUrl"/>
                     <jsp:include page="/WEB-INF/jsp/components/search-filters.jsp">
-                        <jsp:param name="url" value="searchUrl"/>
+                        <jsp:param name="url" value="${searchUrl}"/>
                     </jsp:include>
                 </div>
             </div>
