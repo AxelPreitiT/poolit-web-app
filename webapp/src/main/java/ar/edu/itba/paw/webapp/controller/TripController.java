@@ -9,7 +9,7 @@ import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
-import ar.edu.itba.paw.webapp.form.DiscoveryForm;
+import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +29,10 @@ public class TripController {
     private final CarService carService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
+    private final static String BASE_RELATED_PATH = "/";
+    private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
+    private final static String SEARCH_TRIP_PATH = BASE_RELATED_PATH + "search";
+
 
     @Autowired
     public TripController(TripService tripService, CityService cityService, UserService userService, CarService carService){
@@ -71,30 +75,35 @@ public class TripController {
         return new ModelAndView("/static/not-found-404");
     }
 
-    @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
-    public ModelAndView getSelectedTrips(@Valid @ModelAttribute("registerForm") final DiscoveryForm form, final BindingResult errors){
+    @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.POST)
+    public ModelAndView getSearchedTrips(@Valid @ModelAttribute("searchTripForm") final SearchTripForm form, final BindingResult errors){
         if(errors.hasErrors()){
-            return getTrips(form);
+            return landingPage(form);
         }
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
         final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime());
-        final ModelAndView mav = new ModelAndView("/discovery/main");
+        final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
+        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
 
         return mav;
     }
-    @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
-    public ModelAndView getTrips(@ModelAttribute("registerForm") final DiscoveryForm form){
+
+    @RequestMapping(value = LANDING_PAGE_PATH, method = RequestMethod.GET)
+    public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         List<Trip> trips = tripService.getFirstNTrips(10);
-        final ModelAndView mav = new ModelAndView("/discovery/main");
+        final ModelAndView mav = new ModelAndView("/landing/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
+        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
+        mav.addObject("isLoggedIn", false);
 
         return mav;
     }
+
     @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
