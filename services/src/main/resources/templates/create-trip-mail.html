@@ -55,11 +55,11 @@
 <!--    </div>-->
     <h1 class="text-center mb-4">¡Creaste un viaje en Poolit!</h1>
     <p>Hola  <span th:text="${trip.driver.email}"></span>,</p>
-    <p>Te escribimos para avisarte que creaste un nuevo viaje. Aquí está la información del viaje del <span th:text="${trip.originDateString}"></span>:</p>
+    <p>Te escribimos para avisarte que creaste un nuevo viaje. Aquí está la información del viaje del <span th:text="${trip.startDateString}"></span>:</p>
     <ul>
         <li>Origen:  <span th:text="${trip.originCity.name}"></span> en <span th:text="${trip.originAddress}"></span></li>
         <li>Destino:   <span th:text="${trip.destinationCity.name}"></span> en <span th:text="${trip.destinationAddress}"></span></li>
-        <li>Horario de salida:<span th:text="${trip.originTimeString}"></span></li>
+        <li>Horario de salida:<span th:text="${trip.startTimeString}"></span></li>
         <li>Asientos maximos:  <span th:text="${trip.maxSeats}"></span></li>
     </ul>
 <!--    <div class="btn-container">-->

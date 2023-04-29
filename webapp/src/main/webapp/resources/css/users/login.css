@@ -1,0 +1,32 @@
+@import "users.css";
+
+div.main-container-style {
+    margin-left: 35%;
+    margin-right: 35%;
+}
+
+
+.error-container{
+    height: 20px;
+}
+
+.error{
+    color: red;
+}
+
+.form-floating{
+    width: 100%;
+}
+
+.create-container{
+    display: flex;
+    height: 20%;
+    gap: 2%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.login-btn{
+    width: 100%;
+}

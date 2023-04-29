@@ -103,4 +103,98 @@
 .info-bg-color {
     background-color: #17a2b8 !important;
 }
+.primary-color {
+    color: #33475B;
+}
+
+.primary-bg-color {
+    background-color: #33475B;
+}
+
+
+.button-color:hover {
+    color: #33475B;
+}
+
+.button-bg-color, .button-color {
+    background-color: #0D7AD3;
+}
+
+.button-bg-color:hover {
+    background-color: #33475B !important;
+}
+
+.button-bg-color:active {
+    background-color: #33475B !important;
+}
+
+
+.container-bg-color, .container-color {
+    background-color: #FFFFFF;
+}
+
+.background-bg-color,.background-color {
+    background-color: #EBF6FF;
+    /*#EBFBFE*/
+}
+
+.text {
+    background-color: transparent;
+    color: #000000;
+}
+
+.light-text {
+    background-color: transparent;
+    color: #F4FFF8;
+}
+
+.placeholder-text {
+    background-color: transparent;
+    color: #6c757d;
+    text-align: end;
+}
+
+.border {
+    color: #000000;
+}
+
+.success {
+    color: #4BAA84;
+}
+
+.success-bg-color {
+    background-color: #4BAA84;
+}
+
+.danger {
+    color: #dc3545;
+}
+
+.danger-bg-color {
+    background-color: #dc3545;
+}
+
+.warning {
+    color: #ffc107;
+}
+
+.warning-bg-color {
+    background-color: #ffc107;
+}
+
+.error-code {
+    color: #8b8b8b;
+}
+
+.error-code-bg-color {
+    background-color: #8b8b8b;
+}
+
+.info {
+    color: #17a2b8;
+}
+
+.info-bg-color {
+    background-color: #17a2b8;
+}
 
