@@ -11,6 +11,10 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.models.Image;
+import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.DiscoveryForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
@@ -54,7 +58,7 @@ public class TripController {
 //        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
         Optional<Trip> trip = tripService.findById(tripId);
         if(!trip.isPresent()){//Usar Optional?
-            return new ModelAndView("/static/not-found-404");
+            throw new TripNotFoundException();
         }
         ModelAndView mv = new ModelAndView("/select-trip/trip-detail");
         mv.addObject("trip",trip.get());
@@ -70,7 +74,7 @@ public class TripController {
         }
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
-        final User passenger = userService.findByEmail(authUser.getUsername()).get();
+        final User passenger = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         //User passenger = userService.createUserIfNotExists(form.getEmail(), form.getPhone(), form.getPhone());
         //sacar el form.getPhone(), esta solo para que no falle
 //        boolean ans = tripService.addPassenger(tripId,passenger);
@@ -78,7 +82,7 @@ public class TripController {
 //        if(ans && trip.isPresent()){
 //        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         //TODO: agregar excepciones nuestras y nuestro manejo
-        Trip trip = tripService.findById(tripId).orElseThrow(IllegalStateException::new);
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         boolean ans = tripService.addPassenger(trip,passenger,trip.getStartDateTime());
         if(ans){
             ModelAndView successMV = new ModelAndView("/select-trip/success");
@@ -112,7 +116,6 @@ public class TripController {
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
-
         return mav;
     }
 
@@ -133,19 +136,16 @@ public class TripController {
         if(errors.hasErrors()){
             return createTripForm(form);
         }
-        Optional<City> originCity = cityService.findCityById(form.getOriginCityId());
-        Optional<City> destinationCity = cityService.findCityById(form.getDestinationCityId());
-        if(!originCity.isPresent() || !destinationCity.isPresent()){
-            //TODO: 404 page
-            return new ModelAndView("/create-trip/response");
-        }
+        City originCity = cityService.findCityById(form.getOriginCityId()).orElseThrow(CityNotFoundException::new);
+        City destinationCity = cityService.findCityById(form.getDestinationCityId()).orElseThrow(CityNotFoundException::new);
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         //User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPhone());
+        //TODO: get car from user list (in CreateTripForm)
         Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
         //TODO: get price for trip
-        Trip trip = tripService.createTrip(originCity.get(), form.getOriginAddress(), destinationCity.get(), form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user,form.getOriginDate(), form.getOriginTime());
+        Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user,form.getOriginDate(), form.getOriginTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
 
@@ -171,11 +171,11 @@ public class TripController {
     @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
     public @ResponseBody
     byte[] getImage(@PathVariable("imageId") final int imageId) {
-        return imageService.findById(imageId).orElseThrow(RuntimeException::new).getData();
+        return imageService.findById(imageId).orElseThrow(ImageNotFoundException::new).getData();
     }
 
-    @RequestMapping(value = "*", method = RequestMethod.GET)
-    public ModelAndView pageNotFound() {
-        return new ModelAndView("/static/not-found-404");
-    }
+//    @RequestMapping(value = "*", method = RequestMethod.GET)
+//    public ModelAndView pageNotFound() {
+//        return new ModelAndView("/static/not-found-404");
+//    }
 }
