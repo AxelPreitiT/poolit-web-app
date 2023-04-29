@@ -71,15 +71,18 @@ export const setRecurrentTripCalendar = (firstDateElementId, lastDateElementId, 
     });
 
 
-    if(setDayRepeatContainerCallback !== null){
-        dayRepeatContainer.addEventListener('hide.bs.collapse', () => {
-            isDisabled = true;
+    dayRepeatContainer.addEventListener('hide.bs.collapse', () => {
+        isDisabled = true;
+        if(setDayRepeatContainerCallback !== null){
             setDayRepeatContainerCallback(false);
-        });
+        }
+    });
 
-        dayRepeatContainer.addEventListener('show.bs.collapse', () => {
-            isDisabled = false;
+    dayRepeatContainer.addEventListener('show.bs.collapse', () => {
+        isDisabled = false;
+        if(setDayRepeatContainerCallback !== null){
             setDayRepeatContainerCallback(true);
-        });
-    }
+        }
+    });
+
 }

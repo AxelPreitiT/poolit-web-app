@@ -14,17 +14,17 @@
                 <div class="card-body">
                     <div class="route-info">
                         <div class="route-info-row">
-                            <i class="bi bi-geo-alt secondary-color route-info-icon h3"></i>
+                            <i class="bi bi-geo-alt secondary-color route-info-icon h4"></i>
                             <div class="route-info-text">
-                                <span class="secondary-color h3">Nuñez</span>
+                                <span class="secondary-color h4">Nuñez</span>
                                 <span class="text">Estadio Monumental</span>
                             </div>
                         </div>
                         <div class="vertical-dotted-line"></div>
                         <div class="route-info-row">
-                            <i class="bi bi-geo-alt-fill secondary-color route-info-icon h3"></i>
+                            <i class="bi bi-geo-alt-fill secondary-color route-info-icon h4"></i>
                             <div class="route-info-text">
-                                <span class="secondary-color h3">Parque Patricios</span>
+                                <span class="secondary-color h4">Parque Patricios</span>
                                 <span class="text">Iguazú 341</span>
                             </div>
                         </div>
