@@ -16,7 +16,7 @@ import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
-import ar.edu.itba.paw.webapp.form.DiscoveryForm;
+import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,6 +40,10 @@ public class TripController {
     private final ImageService imageService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
+    private final static String BASE_RELATED_PATH = "/";
+    private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
+    private final static String SEARCH_TRIP_PATH = BASE_RELATED_PATH + "search";
+
 
     @Autowired
     public TripController(TripService tripService, CityService cityService, UserService userService, CarService carService, ImageService imageService){
@@ -54,13 +58,11 @@ public class TripController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
-//        User driver = userService.createUser("jmentasti@itba.edu.ar","1129150686");
-//        Trip trip = tripService.createTrip(cityService.findById(1),"Av Callao 1348",cityService.findById(3),"Av Cabildo 1200","AE062TP","12/2/22","12:00",2,driver);
         Optional<Trip> trip = tripService.findById(tripId);
         if(!trip.isPresent()){//Usar Optional?
             throw new TripNotFoundException();
         }
-        ModelAndView mv = new ModelAndView("/select-trip/trip-detail");
+        ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip.get());
         return mv;
     }
@@ -90,32 +92,36 @@ public class TripController {
             successMV.addObject("passenger",passenger);
             return successMV;
         }
-        ModelAndView mv = new ModelAndView("/select-trip/response");
-        mv.addObject("response",ans);
-        return mv;
+        // TODO: Throw error 500 internal server error
+        return new ModelAndView("/static/not-found-404");
     }
 
-    @RequestMapping(value = {"/trips"}, method = RequestMethod.POST)
-    public ModelAndView getSelectedTrips(@Valid @ModelAttribute("registerForm") final DiscoveryForm form, final BindingResult errors){
+    @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.POST)
+    public ModelAndView getSearchedTrips(@Valid @ModelAttribute("searchTripForm") final SearchTripForm form, final BindingResult errors){
         if(errors.hasErrors()){
-            return getTrips(form);
+            return landingPage(form);
         }
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10).getElements();
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
+        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
 
         return mav;
     }
-    @RequestMapping(value = {"/","/trips"}, method = RequestMethod.GET)
-    public ModelAndView getTrips(@ModelAttribute("registerForm") final DiscoveryForm form){
+
+    @RequestMapping(value = LANDING_PAGE_PATH, method = RequestMethod.GET)
+    public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         List<Trip> trips = tripService.getIncomingTrips(0,10).getElements();
 //        System.out.println(trips.get(0));
         final ModelAndView mav = new ModelAndView("/discovery/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
+        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
+        mav.addObject("isLoggedIn", false);
+
         return mav;
     }
 

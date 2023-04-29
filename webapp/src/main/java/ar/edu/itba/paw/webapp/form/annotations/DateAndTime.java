@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.DiscoveryForm;
+import ar.edu.itba.paw.webapp.form.SearchTripForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -10,6 +10,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Constraint(validatedBy = DateAndTimeValidator.class)
 @Target(ElementType.TYPE)
@@ -20,9 +22,15 @@ public @interface DateAndTime{
     Class<? extends Payload>[] payload() default { };
 }
 
-class DateAndTimeValidator implements ConstraintValidator<DateAndTime,DiscoveryForm>{
+class DateAndTimeValidator implements ConstraintValidator<DateAndTime, SearchTripForm>{
     @Override
-    public boolean isValid(DiscoveryForm form, ConstraintValidatorContext constraintValidatorContext) {
-        return !((form.getDate().length()==0 && form.getTime().length()!=0) || (form.getDate().length()!=0 && form.getTime().length()==0));
+    public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
+        if (form.getDate().length() == 0 || form.getTime().length() == 0) {
+            return false;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate today = LocalDate.now();
+        LocalDate firstDate = LocalDate.parse(form.getDate(), formatter);
+        return !firstDate.isBefore(today);
     }
 }

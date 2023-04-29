@@ -1,10 +1,12 @@
 @import "/resources/css/base/elements.css";
 
 .card {
-    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0);
     opacity: 1;
     transition: opacity 0.3s, box-shadow 0.3s;
     margin-bottom: 1em;
+    margin-right: 2px;
+    border: 2px solid #FFA216;
 }
 
 .card-body {
@@ -25,6 +27,7 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 0 0.2rem 0.2rem 0;
 }
 
 i.placeholder-image-icon-color {
@@ -36,13 +39,12 @@ i.placeholder-image-icon-color {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    margin-bottom: 1em;
 }
 
 .vertical-dotted-line {
     border-left: 3px dashed #FFA216;
     height: 2em;
-    margin: -20px 0 5px 12.5px;
+    margin: -15px 0 5px 10px;
 }
 
 .route-info-row {
@@ -67,12 +69,13 @@ i.placeholder-image-icon-color {
 .route-info-text .text {
     font-weight: 500;
     font-size: 0.8rem;
+    margin-top: -5px;
 }
 
 .footer-info {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
     width: 100%;
     margin-left: 9px;

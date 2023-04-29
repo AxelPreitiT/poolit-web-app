@@ -1,0 +1,189 @@
+@import "/resources/css/base/elements.css";
+
+.header-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 3%;
+    width: 100%;
+}
+
+.form-style {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 1em;
+    margin-bottom: 0;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    row-gap: 0.5em;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-left: 4em;
+    row-gap: 0.5em;
+    width: 100%;
+}
+
+.input-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10em;
+    width: 100%;
+    z-index: 1;
+}
+
+.input-row > .container > .row > div > div {
+    width: 100%;
+    max-width: 15rem;
+}
+
+#day-repeat-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 0.5em;
+}
+
+#day-repeat-row > i {
+    padding-left: 0.5em;
+}
+
+#day-repeat-row > span {
+    text-transform: capitalize;
+}
+
+#is-multitrip-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 1em;
+    width: 100%;
+}
+
+#vertical-dotted-line {
+    border-left: 3px dashed #FFA216;
+    height: 10em;
+    margin: -130px 0 -10px 14px;
+    transition: margin-top 0.5s ease;
+}
+
+#vertical-dotted-line.expanded {
+    margin-top: -160px;
+}
+
+#detail-info-container {
+    margin-top: 1em;
+}
+
+.container {
+    min-width: fit-content;
+    margin: 0;
+    padding: 0;
+}
+
+#car-info-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    row-gap: 0.5em;
+    width: 100%;
+}
+
+#car-info-details {
+    width: 100%;
+}
+
+#car-info-details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-radius: 4px;
+    border-color: black;
+    width: 100%;
+}
+
+#car-info-details-container > hr {
+    margin: 0;
+}
+
+.car-info-details-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 0.5em;
+    padding: 0.5em;
+}
+
+.car-info-details-row > * {
+    font-size: 0.8rem;
+}
+
+.placeholder-image-color {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    max-height: 7em;
+    aspect-ratio: 1/1;
+}
+
+#car-info-image, .placeholder-image-color {
+    border-radius: 6px;
+}
+
+i.placeholder-image-icon-color {
+    font-size: 3rem;
+}
+
+.confirm-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.confirm-button-container > button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 0.5em;
+}
+
+.confirm-button-container *, .h6 {
+    margin-bottom: 0;
+}
+
+.calendar-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+/* Remove arrows from number input */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
