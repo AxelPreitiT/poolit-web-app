@@ -31,14 +31,14 @@
                         <c:choose>
                             <c:when test="${trip.recurrent}">
                                 <div class="format_date">
-                                    <div><span class="text">${trip.dayOfWeekString} ${trip.startDateString}</span></div>
-                                    <div><span class="text">hasta ${trip.dayOfWeekString} ${trip.endDateString}</span></div>
+                                    <div><span class="text">${trip.dayOfWeekString}</span></div>
+                                    <div><span class="text">${trip.startDateString} - ${trip.endDateString}</span></div>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="format_date">
-                                    <div><span class="text">${trip.dayOfWeekString} ${trip.startDateString}</span></div>
-                                    <div><span class="text">Viaje único</span></div>
+                                    <div><span class="text">${trip.dayOfWeekString}</span></div>
+                                    <div><span class="text"> ${trip.startDateString}</span></div>
                                 </div>
                             </c:otherwise>
                         </c:choose>
