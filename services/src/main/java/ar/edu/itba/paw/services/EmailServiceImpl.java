@@ -4,8 +4,12 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -24,7 +28,7 @@ import java.util.Map;
 
 @Service
 public class EmailServiceImpl implements EmailService {
-
+    private final String baseUrl;
     private static final String FROM = "poolit.noreply@gmail.com";
 
     private final SpringTemplateEngine templateEngine;
@@ -33,11 +37,12 @@ public class EmailServiceImpl implements EmailService {
 
     private final MessageSource messageSource;
     @Autowired
-    public EmailServiceImpl(SpringTemplateEngine templateEngine, JavaMailSender mailSender, MessageSource messageSource){
+    public EmailServiceImpl(SpringTemplateEngine templateEngine, JavaMailSender mailSender, MessageSource messageSource,@Qualifier("baseUrl") String baseUrl){
         this.templateEngine = templateEngine;
         templateEngine.setTemplateEngineMessageSource(messageSource);
         this.mailSender = mailSender;
         this.messageSource = messageSource;
+        this.baseUrl = baseUrl;
     }
 
     private Map<String, Object> getVariablesMap(Context context) {
@@ -68,6 +73,9 @@ public class EmailServiceImpl implements EmailService {
 
         message.setSubject(subject,"UTF-8");
 
+        //add base_url to contect
+
+        context.setVariable("baseUrl",baseUrl);
         final String htmlContent = loadTemplate(emailTemplate, getVariablesMap(context));
 
         message.setContent(htmlContent,"text/html; charset=UTF-8");
