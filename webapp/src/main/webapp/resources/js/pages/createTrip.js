@@ -3,10 +3,13 @@ import {setRecurrentTripCalendar} from "../modules/setRecurrentTripCalendar.js";
 
 const timeElement = document.getElementById('time-picker');
 const carSelectElement = document.getElementById('car-select');
-const carInfoDetailsElement = document.getElementById('car-info-details');
-const carInfoImageElement = document.getElementById('car-info-image');
 const createTripButtonElement = document.getElementById('create-trip-button');
 const verticalDottedLineElement = document.getElementById('vertical-dotted-line');
+
+const carInfoDetailsElementPrefix = 'car-info-details-';
+const carInfoImageElementPrefix = 'car-info-image-';
+
+let currentSelectedCarId = carSelectElement.value;
 
 // Vertical dotted line management
 const shouldExpandVerticalDottedLine = (value) => {
@@ -28,29 +31,51 @@ setRecurrentTripCalendar('first-date-picker', 'first-date', 'last-date-picker', 
 
 
 // Select car management
+
 carSelectElement.addEventListener('change', (e) => {
     const carId = e.target.value;
-    if(carId === "") {
-        new bootstrap.Collapse(carInfoImageElement, {
+    if(carId === "-1") {
+        const currentSelectedCarInfoDetailsElement = document.getElementById(carInfoDetailsElementPrefix + currentSelectedCarId);
+        const currentSelectedCarInfoImageElement = document.getElementById(carInfoImageElementPrefix + currentSelectedCarId);
+        new bootstrap.Collapse(currentSelectedCarInfoImageElement, {
+            show: false
+        });
+        new bootstrap.Collapse(currentSelectedCarInfoDetailsElement, {
             show: false
         });
         createTripButtonElement.disabled = true;
     } else {
+        if (currentSelectedCarId !== "-1") {
+            const currentSelectedCarInfoDetailsElement = document.getElementById(carInfoDetailsElementPrefix + currentSelectedCarId);
+            const currentSelectedCarInfoImageElement = document.getElementById(carInfoImageElementPrefix + currentSelectedCarId);
+            new bootstrap.Collapse(currentSelectedCarInfoImageElement, {
+                show: false
+            });
+            new bootstrap.Collapse(currentSelectedCarInfoDetailsElement, {
+                show: false
+            });
+        }
+        const carInfoDetailsElement = document.getElementById(carInfoDetailsElementPrefix + carId);
+        const carInfoImageElement = document.getElementById(carInfoImageElementPrefix + carId);
         new bootstrap.Collapse(carInfoDetailsElement, {
+            show: true
+        });
+        new bootstrap.Collapse(carInfoImageElement, {
             show: true
         });
         createTripButtonElement.disabled = false;
     }
+    currentSelectedCarId = carId;
 });
 
-carInfoDetailsElement.addEventListener('shown.bs.collapse', () => {
-    new bootstrap.Collapse(carInfoImageElement, {
-        show: true
-    });
-});
-
-carInfoImageElement.addEventListener('hidden.bs.collapse', () => {
-    new bootstrap.Collapse(carInfoDetailsElement, {
-        show: false
-    });
-});
+// carInfoDetailsElement.addEventListener('shown.bs.collapse', () => {
+//     new bootstrap.Collapse(carInfoImageElement, {
+//         show: true
+//     });
+// });
+//
+// carInfoImageElement.addEventListener('hidden.bs.collapse', () => {
+//     new bootstrap.Collapse(carInfoDetailsElement, {
+//         show: false
+//     });
+// });

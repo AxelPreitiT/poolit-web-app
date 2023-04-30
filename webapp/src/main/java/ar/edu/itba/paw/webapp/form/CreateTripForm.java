@@ -29,6 +29,9 @@ public class CreateTripForm {
     @Min(value = 0)
     private long carId;
 
+    @Min(value = 1)
+    private int maxSeats;
+
     @Min(value = 0)
     private double price;
 
@@ -110,5 +113,13 @@ public class CreateTripForm {
 
     public void setCarId(long carId) {
         this.carId = carId;
+    }
+
+    public int getMaxSeats() {
+        return maxSeats;
+    }
+
+    public void setMaxSeats(int maxSeats) {
+        this.maxSeats = maxSeats;
     }
 }
