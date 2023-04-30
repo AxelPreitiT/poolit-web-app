@@ -25,6 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +60,8 @@ public class TripController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
+        System.out.println("Start date"+form.getStartDate());
+        System.out.println("End date" + form.getEndDate());
         Optional<Trip> trip = tripService.findById(tripId);
         if(!trip.isPresent()){//Usar Optional?
             throw new TripNotFoundException();
@@ -70,9 +75,13 @@ public class TripController {
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
                                            final BindingResult errors){
+        System.out.println("POST Start date"+form.getStartDate());
+        System.out.println("POST Start time" + form.getStartTime());
+        System.out.println("POST End date" + form.getEndDate());
         if(errors.hasErrors()){
             return getTripDetails(tripId,form);
         }
+        System.out.println("No hay errores");
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
         final User passenger = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
@@ -82,9 +91,17 @@ public class TripController {
 //        Optional<Trip> trip = tripService.findById(tripId);
 //        if(ans && trip.isPresent()){
 //        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
+        System.out.println("Encuentra al usuario");
         //TODO: agregar excepciones nuestras y nuestro manejo
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        boolean ans = tripService.addPassenger(trip,passenger,trip.getStartDateTime());
+        System.out.println("Encontre el viaje");
+        boolean ans = false;
+        try{
+            ans = tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("Intenta agregar al usuario");
         if(ans){
             ModelAndView successMV = new ModelAndView("/select-trip/success");
             successMV.addObject("trip",trip);
@@ -95,18 +112,18 @@ public class TripController {
         return new ModelAndView("/static/not-found-404");
     }
 
-    @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.POST)
+    @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
     public ModelAndView getSearchedTrips(@Valid @ModelAttribute("searchTripForm") final SearchTripForm form, final BindingResult errors){
-        if(errors.hasErrors()){
-            return landingPage(form);
-        }
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10).getElements();
-        final ModelAndView mav = new ModelAndView("/discovery/main");
-        mav.addObject("trips", trips);
+        final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
         mav.addObject("searchUrl", SEARCH_TRIP_PATH);
-
+        if(errors.hasErrors()){
+            mav.addObject("trips", new ArrayList<>());
+            return mav;
+        }
+        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10).getElements();
+        mav.addObject("trips", trips);
         return mav;
     }
 

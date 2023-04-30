@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!-- Bean:
-- trip: The information of the trip to show - Trip class
+        - trip: The information of the trip to show - Trip class
 -->
 
 <html>
@@ -28,11 +28,11 @@
                         <span class="h3 text">Total:</span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color">$10.000</span>
+                        <span class="h2 secondary-color">$<c:out value="${trip.totalPrice}"/></span>
                     </div>
                 </div>
                 <div class="trip-price-row items-to-end">
-                    <span class="h6 italic-text">4 viajes</span>
+                    <span class="h6 italic-text"><c:out value="${trip.totalTrips}"/> viajes</span>
                 </div>
             </div>
             <div id="button-container">

@@ -3,19 +3,26 @@
 
 <link href="<c:url value="/resources/css/components/trip-card-list.css"/>" rel="stylesheet" type="text/css"/>
 
+<!-- Beans:
+    - trips: The list of trips to display
+-->
+
+<jsp:useBean id="trips" type="java.util.List" scope="request"/>
+
 <div id="results-list" class="container">
     <div class="row">
-        <div class="col-xl-6 col-sm-12">
-            <c:url value="/trips/1" var="tripUrl"/>
-            <jsp:include page="/WEB-INF/jsp/components/trip-card.jsp">
-                <jsp:param name="url" value="${tripUrl}"/>
-            </jsp:include>
-        </div>
-        <div class="col-xl-6 col-sm-12">
-            <c:url value="/trips/2" var="tripUrl"/>
-            <jsp:include page="/WEB-INF/jsp/components/trip-card.jsp">
-                <jsp:param name="url" value="${tripUrl}"/>
-            </jsp:include>
-        </div>
+        <c:forEach items="${trips}" var="trip">
+            <c:url value="/trips/${trip.tripId}" var="tripUrl">
+                <c:param name="startDate" value="${param.startDate}"/>
+                <c:param name="startTime" value="${param.startTime}"/>
+                <c:param name="endDate" value="${param.endDate}"/>
+            </c:url>
+            <div class="col-xl-6 col-sm-12">
+                <c:set var="trip" value="${trip}" scope="request"/>
+                <jsp:include page="/WEB-INF/jsp/components/trip-card.jsp">
+                    <jsp:param name="tripUrl" value="${tripUrl}"/>
+                </jsp:include>
+            </div>
+        </c:forEach>
     </div>
 </div>

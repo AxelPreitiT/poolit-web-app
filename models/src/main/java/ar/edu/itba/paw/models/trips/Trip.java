@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.User;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -108,5 +109,13 @@ public class Trip {
 
     public String getDayOfWeekString(){
         return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault());
+    }
+
+    public int getTotalTrips(){
+        return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
+    }
+
+    public double getTotalPrice(){
+        return price*getTotalTrips();
     }
 }

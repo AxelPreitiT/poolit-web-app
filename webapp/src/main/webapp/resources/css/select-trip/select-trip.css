@@ -14,3 +14,7 @@
 .no-seats-left-container {
     margin-top: 0.3em;
 }
+
+.hidden-input {
+    display: none;
+}

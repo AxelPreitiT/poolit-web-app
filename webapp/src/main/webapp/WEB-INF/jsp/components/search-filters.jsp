@@ -16,7 +16,7 @@
 <jsp:useBean id="searchTripForm" type="ar.edu.itba.paw.webapp.form.SearchTripForm" scope="request"/>
 
 <div class="filter-container primary-bg-color">
-    <form:form modelAttribute="searchTripForm" method="post" action="${param.url}" cssClass="form-style">
+    <form:form modelAttribute="searchTripForm" method="get" action="${param.url}" cssClass="form-style">
         <div class="route-filter">
             <div class="title-row">
                 <i class="bi bi-geo-alt-fill light-text h5"></i>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="input-group input-group-sm">
                         <div class="input-group-text" id="is-multitrip-container">
-                            <form:checkbox path="multitrip" id="is-multitrip" name="is-multitrip" cssClass="form-check-input mt-0"/>
+                            <form:checkbox path="multitrip" id="is-multitrip" cssClass="form-check-input mt-0"/>
                             <div id="is-multitrip-text">
                                 <span class="placeholder-text">Viaje</span>
                                 <span class="placeholder-text">recurrente</span>

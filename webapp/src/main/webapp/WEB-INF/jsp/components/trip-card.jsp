@@ -4,11 +4,18 @@
 <link href="<c:url value="/resources/css/components/trip-card.css"/>" rel="stylesheet" type="text/css"/>
 
 <!-- Params:
-        - url: url to redirect
+        - tripUrl: url to join the trip
 -->
 
+<!-- Beans:
+        - trip: Info of the trip
+-->
+
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
+
 <div class="card">
-    <a href="${param.url}">
+
+    <a href="${param.tripUrl}">
         <div class="row g-0">
             <div class="col-8">
                 <div class="card-body">
@@ -16,16 +23,16 @@
                         <div class="route-info-row">
                             <i class="bi bi-geo-alt secondary-color route-info-icon h4"></i>
                             <div class="route-info-text">
-                                <span class="secondary-color h4">Nuñez</span>
-                                <span class="text">Estadio Monumental</span>
+                                <span class="secondary-color h4"><c:out value="${trip.originCity.name}"/></span>
+                                <span class="text"><c:out value="${trip.originAddress}"/></span>
                             </div>
                         </div>
                         <div class="vertical-dotted-line"></div>
                         <div class="route-info-row">
                             <i class="bi bi-geo-alt-fill secondary-color route-info-icon h4"></i>
                             <div class="route-info-text">
-                                <span class="secondary-color h4">Parque Patricios</span>
-                                <span class="text">Iguazú 341</span>
+                                <span class="secondary-color h4"><c:out value="${trip.destinationCity.name}"/></span>
+                                <span class="text"><c:out value="${trip.destinationAddress}"/></span>
                             </div>
                         </div>
                     </div>
@@ -33,15 +40,22 @@
                         <div class="footer-date-container">
                             <i class="bi bi-calendar text"></i>
                             <div class="date-info-column">
-                                <span class="text">Todos los lunes</span>
+                                <c:choose>
+                                    <c:when test="${trip.recurrent}">
+                                        <span class="text text-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="text"><c:out value="${trip.startDateString}"/></span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="footer-time-container">
                             <i class="bi bi-clock text"></i>
-                            <span class="text">10:00</span>
+                            <span class="text"><c:out value="${trip.startTimeString}"/></span>
                         </div>
                         <div class="footer-price-container">
-                            <h2 class="secondary-color">$2.500</h2>
+                            <h2 class="secondary-color">$<c:out value="${trip.price}"/></h2>
                         </div>
                     </div>
                 </div>

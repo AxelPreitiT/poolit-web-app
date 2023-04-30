@@ -117,6 +117,12 @@ public class TripServiceImpl implements TripService {
         return addPassenger(trip,passenger,dateTime,dateTime);
     }
     @Override
+    public boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate){
+        LocalDateTime startDateTime = getLocalDateTime(startDate,startTime).get();
+        LocalDateTime endDateTime = getLocalDateTime(endDate,startTime).orElse(startDateTime);
+        return addPassenger(trip,passenger,startDateTime,endDateTime);
+    }
+    @Override
     public boolean addPassenger(Trip trip, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
         List<User> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         if(passengers.contains(passenger)){
@@ -155,7 +161,7 @@ public class TripServiceImpl implements TripService {
         }
         //Ignorar suggestion, usar filter no tiene mucho sentido aca (funciona porque devuelve boolean)
         //Trip trip = findById(tripId);
-        return addPassenger(trip.get(),passenger,startDateTime,endDateTime);
+        return addPassenger(trip.get()  ,passenger,startDateTime,endDateTime);
     }
     @Override
     public boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime){
