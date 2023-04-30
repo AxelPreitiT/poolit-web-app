@@ -20,13 +20,15 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) ->
-            new User(resultSet.getLong("user_id"), resultSet.getString("username"),
+
+    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) ->{
+            LocalDateTime localDateTime = resultSet.getTimestamp("birthdate")==null?LocalDateTime.now():resultSet.getTimestamp("birthdate").toLocalDateTime();
+            return new User(resultSet.getLong("user_id"), resultSet.getString("username"),
                     resultSet.getString("surname"), resultSet.getString("email"),
                     resultSet.getString("phone"), resultSet.getString("password"),
-                    resultSet.getTimestamp("birthdate").toLocalDateTime(),
+                    localDateTime,
                     new City(resultSet.getLong("city_id"), resultSet.getString("name"), resultSet.getLong("province_id")),
-                    resultSet.getString("user_role"));
+                    resultSet.getString("user_role"));};
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -63,7 +65,7 @@ public class UserDaoImpl implements UserDao {
                 if (findByEmail(email).get().getPassword() != null) {
                     throw new EmailAlreadyExistsException();
                 } else {
-                    updateProfile(email, password);
+                    updateProfile(username, surname, email, password, birthdate, bornCity, role);
                 }
             }
         }
@@ -72,13 +74,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findById(long userId) {
-        return jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cities WHERE user_id = ?", ROW_MAPPER, userId).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM users LEFT OUTER JOIN cities ON cities.city_id = users.city_id WHERE user_id = ?", ROW_MAPPER, userId).stream().findFirst();
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         String searchEmail = email.toLowerCase().replaceAll("\\s", "");
-        return jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cities WHERE email = ?", ROW_MAPPER, searchEmail).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM users LEFT OUTER JOIN cities ON cities.city_id = users.city_id WHERE email = ?", ROW_MAPPER, searchEmail).stream().findFirst();
     }
 
     @Override
@@ -86,7 +88,9 @@ public class UserDaoImpl implements UserDao {
         jdbcTemplate.update("UPDATE users SET user_role = ? WHERE user_id = ?", role, userId);
     }
 
-    public void updateProfile(final String email, final String password){
-        jdbcTemplate.update("UPDATE users SET password = ?  WHERE email = ?", password, email);
+    public void updateProfile(final String username, final String surname, final String email,
+                              final String password, final LocalDateTime birthdate, final City bornCity, String role){
+        jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, birthdate = ?, city_id = ?, user_role = ?  WHERE email = ?",
+                username, surname, password, birthdate, bornCity.getId(), role, email);
     }
 }
