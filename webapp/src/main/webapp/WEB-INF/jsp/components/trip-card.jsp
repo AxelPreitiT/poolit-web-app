@@ -43,6 +43,7 @@
                                 <c:choose>
                                     <c:when test="${trip.recurrent}">
                                         <span class="text text-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
+                                        <span class="placeholder-text"><c:out value="${trip.startDateString}"/> - <c:out value="${trip.endDateString}"/></span>
                                     </c:when>
                                     <c:otherwise>
                                         <span class="text"><c:out value="${trip.startDateString}"/></span>
