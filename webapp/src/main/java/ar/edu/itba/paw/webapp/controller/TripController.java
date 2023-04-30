@@ -116,7 +116,7 @@ public class TripController {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         List<Trip> trips = tripService.getIncomingTrips(0,10).getElements();
 //        System.out.println(trips.get(0));
-        final ModelAndView mav = new ModelAndView("/discovery/main");
+        final ModelAndView mav = new ModelAndView("/landing/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
         mav.addObject("searchUrl", SEARCH_TRIP_PATH);

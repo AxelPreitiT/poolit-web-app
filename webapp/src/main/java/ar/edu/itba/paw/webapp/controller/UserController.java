@@ -29,6 +29,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -114,27 +115,59 @@ public class UserController {
     }
     */
 
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        final ModelAndView mav = new ModelAndView("/users/profile");
+
+        if(Objects.equals(user.getRole(), "USER")){
+            List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+
+            final ModelAndView mav = new ModelAndView("/users/user-profile");
+            mav.addObject("user", user);
+            mav.addObject("trips", trips);
+            return mav;
+        }
+
+        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+
+        final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
+        mav.addObject("trips", trips);
         return mav;
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
     public ModelAndView profilePost(){
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+
+
+        if(Objects.equals(user.getRole(), "DRIVER")){
+            List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+
+            pawUserDetailsService.update(user);
+            userService.changeRole(user.getUserId(), user.getRole());
+
+            final ModelAndView mav = new ModelAndView("/users/user-profile");
+            mav.addObject("user", user);
+            mav.addObject("trips", trips);
+            return mav;
+        }
+
+        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+
         pawUserDetailsService.update(user);
         userService.changeRole(user.getUserId(), user.getRole());
 
-        final ModelAndView mav = new ModelAndView("/users/profile");
+        final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
+        mav.addObject("trips", trips);
         return mav;
+
     }
 
+    /*
     @RequestMapping(value = "/profile/user", method = RequestMethod.GET)
     public ModelAndView GetUserprofile(){
 
@@ -191,7 +224,7 @@ public class UserController {
         mav.addObject("trips", trips);
         return mav;
     }
-
+*/
 
     /*
     @ModelAttribute("userLogged")

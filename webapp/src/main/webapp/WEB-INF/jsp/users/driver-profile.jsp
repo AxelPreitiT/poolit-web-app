@@ -15,7 +15,7 @@
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
         <jsp:param name="user" value="${user}"/>
         <jsp:param name="role" value="USER"/>
-        <jsp:param name="path" value="/profile/user"/>
+        <jsp:param name="path" value="/users/profile"/>
     </jsp:include>
     <div class="List-properties-container">
         <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
