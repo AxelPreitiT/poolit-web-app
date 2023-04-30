@@ -30,20 +30,20 @@
                         </jsp:include>
                         <div id="total-results-row">
                             <span class="italic-text">
-                                <c:out value="${tripsContent.startNumber+1}"/>-<c:out value="${tripsContent.endNumber}"/>
+                                <c:out value="${tripsContent.startNumber+1}"/>-<c:out value="${tripsContent.endNumber+1}"/>
                                 resultados de <c:out value="${tripsContent.totalCount}"/> encontrados
                             </span>
                         </div>
                         <c:url value="" var="baseUrl">
                             <c:forEach var="p" items="${param}">
-                                <c:if test="${!p.key eq 'page'}">
+                                <c:if test="${!(p.key eq 'page')}">
                                     <c:param name="${p.key}" value="${p.value}"/>
                                 </c:if>
                             </c:forEach>
                         </c:url>
                         <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
                             <jsp:param name="totalPages" value="${tripsContent.totalPages}"/>
-                            <jsp:param name="currentPage" value="${tripsContent.currentPage}"/>
+                            <jsp:param name="currentPage" value="${tripsContent.currentPage+1}"/>
                             <jsp:param name="baseUrl" value="${baseUrl}"/>
                         </jsp:include>
                     </c:when>

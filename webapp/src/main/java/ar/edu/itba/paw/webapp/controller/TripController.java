@@ -37,6 +37,7 @@ public class TripController {
     private final ImageService imageService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
+    private final static int PAGE_SIZE = 10;
     private final static String BASE_RELATED_PATH = "/";
     private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
     private final static String TRIP_PATH = BASE_RELATED_PATH + "trips/";
@@ -106,9 +107,12 @@ public class TripController {
         // TODO: Throw error 500 internal server error
         return new ModelAndView("/static/not-found-404");
     }
-
+    //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
-    public ModelAndView getSearchedTrips(@Valid @ModelAttribute("searchTripForm") final SearchTripForm form, final BindingResult errors){
+    public ModelAndView getSearchedTrips(
+            @Valid @ModelAttribute("searchTripForm") final SearchTripForm form,
+            final BindingResult errors,
+            @RequestParam(value = "page",required = false,defaultValue = "1")  final int page){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
@@ -116,11 +120,10 @@ public class TripController {
         if(errors.hasErrors()){
             System.out.println("Errors");
             errors.getAllErrors().forEach(System.out::println);
-            PagedContent<Trip> tripsContent= PagedContent.emptyPagedContent();
-            mav.addObject("tripsContent",tripsContent);
+            mav.addObject("tripsContent",PagedContent.<Trip>emptyPagedContent());
             return mav;
         }
-        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10);
+        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),page-1,PAGE_SIZE);
         mav.addObject("tripsContent", tripsContent);
         return mav;
     }
