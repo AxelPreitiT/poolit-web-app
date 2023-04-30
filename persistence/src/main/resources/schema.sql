@@ -1,7 +1,13 @@
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    surname TEXT NOT NULL,
     email TEXT NOT NULL,
     phone VARCHAR(20) NOT NULL,
+    password TEXT NOT NULL,
+    birthdate TIMESTAMP NOT NULL,
+    city_id INT NOT NULL,
+    user_role TEXT NOT NULL,
     UNIQUE(email)
 );
 
@@ -34,22 +40,24 @@ CREATE TABLE IF NOT EXISTS trips(
     max_passengers INT,
     origin_address TEXT NOT NULL ,
     destination_address text NOT NULL,
-    price DOUBLE PRECISION,
-    origin_date_time TIMESTAMP NOT NULL,
+    price DOUBLE PRECISION DEFAULT 0.0,
+    start_date_time TIMESTAMP NOT NULL,
+    end_date_time TIMESTAMP NOT NULL,
+--     is_recurrent BOOLEAN DEFAULT false,
+-- day_of_week es 1->Lunes, 7->Domingo
+    day_of_week INT NOT NULL,
     origin_city_id INT NOT NULL,
     destination_city_id INT NOT NULL,
     CONSTRAINT trips_to_origin FOREIGN KEY(origin_city_id) REFERENCES cities(city_id),
     CONSTRAINT trips_to_destination FOREIGN KEY(destination_city_id) REFERENCES cities(city_id)
-    --     driver_id INT NOT NULL ,
---     car_id INT NOT NULL,
---     CONSTRAINT trip_to_driver FOREIGN KEY(driver_id) REFERENCES users(user_id),
---     CONSTRAINT trip_to_car FOREIGN KEY(car_id) REFERENCES cars(car_id)
 );
 --  Represents the relationship between users and trips
 --     users --N--[Reserves]--M-- trips
 create TABLE IF NOT EXISTS passengers(
     trip_id INT NOT NULL,
     user_id INT NOT NULL,
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL,
     PRIMARY KEY (trip_id,user_id),
     CONSTRAINT passengers_to_trip FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
     CONSTRAINT passengers_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
@@ -65,3 +73,8 @@ CREATE TABLE IF NOT EXISTS trips_cars_drivers(
     CONSTRAINT trips_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
     CONSTRAINT trips_to_cars FOREIGN KEY(car_id) references cars(car_id)
 );
+CREATE TABLE IF NOT EXISTS images(
+    image_id SERIAL PRIMARY KEY,
+    bytea BYTEA
+);
+

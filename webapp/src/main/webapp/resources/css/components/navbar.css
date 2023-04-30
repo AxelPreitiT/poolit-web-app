@@ -1,0 +1,141 @@
+@import "/resources/css/base/colors.css";
+@import "/resources/css/base/elements.css";
+
+.navbar {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar * {
+    margin-bottom: 0;
+}
+
+.navbar-style {
+    margin: 0 2%;
+    padding: 0;
+}
+
+.navbar-brand {
+    transition: opacity 0.3s;
+    width: 10em;
+}
+
+.navbar-brand:hover, .navbar-brand:focus {
+    opacity: 0.7;
+}
+
+.navbar-brand > img {
+    width: 100%;
+    height: 100%;
+}
+
+.navbar-link-items {
+    margin-left: 20px;
+    width: 100%;
+}
+
+.nav-items {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 2em;
+    width: 100%;
+    margin-left: 20px;
+}
+
+.nav-item > a {
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.nav-item > a:hover, .nav-item > a:focus, .nav-item > a.active {
+    opacity: 1;
+}
+
+.create-trip-btn {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.create-trip-btn * {
+    margin-bottom: 0;
+}
+
+.create-trip-btn > button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 0.25em;
+}
+
+.profile-container {
+    margin: 0 0 0 3%;
+}
+
+.profile-container > button {
+    color: transparent;
+    padding: 0;
+    transition: opacity 0.3s;
+}
+
+.profile-container > button:hover {
+    opacity: 0.7;
+}
+
+.shadow-btn {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-color: transparent !important;
+}
+
+.shadow-btn:active {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
+    border-color: transparent !important;
+}
+
+.dropdown-menu {
+    top: 150% !important;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    max-width: 20em;
+}
+
+.dropdown-item {
+    transition: opacity 0.3s;
+    margin-top: 5px;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    color: transparent;
+    background-color: transparent;
+    opacity: 0.7;
+}
+
+.dropdown-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.dropdown-row * {
+    margin-bottom: 0;
+}
+
+.dropdown-row > div {
+    padding-left: 0;
+}
+
+.dropdown-row > div:not(.dropdown-row-text) {
+    margin-right: 1em;
+}
+
+.dropdown-row-text {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.dropdown-row-text > span {
+    margin-bottom: 0;
+    overflow: hidden;
+}

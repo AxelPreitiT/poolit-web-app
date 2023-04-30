@@ -1,0 +1,81 @@
+@import "/resources/css/base/elements.css";
+
+.main-container {
+    margin-bottom: 1rem;
+}
+
+.sub-detail{
+    font-weight: lighter;
+    font-style: italic;
+}
+
+.detail{
+    font-weight: bold;
+}
+
+.title{
+    font-weight: bold;
+}
+
+.details-container hr {
+  margin-top: 0;
+  margin-bottom: 0;
+  border: 0;
+  border-top: 2px solid #FFFFFF
+}
+
+.main-container {
+    padding: 1em;
+    border-radius: 16px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+}
+
+.title-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+}
+
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 1em;
+    width: 100%;
+}
+
+.show-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 1em;
+}
+
+.show-row-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.show-row-content > .detail, .show-row > i {
+    font-size: 0.9rem;
+}
+
+.show-row-content > span:not(.detail) {
+    margin-top: -0.2em;
+    font-size: 0.7rem;
+}
+
+.detail {
+    text-transform: capitalize;
+}
+
+.title-row * {
+    margin-bottom: 0;
+}

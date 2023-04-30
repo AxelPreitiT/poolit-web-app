@@ -1,0 +1,22 @@
+@import "/resources/css/base/elements.css";
+
+#result-pagination {
+    padding-right: 12px;
+    margin-top: 1%;
+}
+
+#result-pagination ul {
+    margin-bottom: 0;
+}
+
+#result-pagination a {
+    height: 100%;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+#result-pagination .disabled a {
+    background-color: #B9B9B9 !important;
+    opacity: 0.8;
+}

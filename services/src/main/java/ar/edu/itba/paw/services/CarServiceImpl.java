@@ -43,7 +43,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Optional<List<Car>> findByUser(User user) {
+    public List<Car> findByUser(User user) {
         return carDao.findByUser(user);
     }
 }

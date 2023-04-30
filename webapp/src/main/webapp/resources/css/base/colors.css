@@ -1,0 +1,200 @@
+.text {
+    color: #000000 !important;
+}
+
+.italic-text {
+    color: #5F5E5E !important;
+}
+
+.light-text {
+    color: #FFFFFF !important;
+}
+
+.placeholder-text {
+    background-color: transparent;
+    color: #707070 !important;
+}
+
+.primary-color {
+    color: #1C4C96 !important;
+}
+
+.primary-bg-color {
+    background-color: #1C4C96 !important;
+}
+
+.secondary-color {
+    color: #FFA216 !important;
+}
+
+.secondary-bg-color {
+    background-color: #FFA216 !important;
+}
+
+.button-color {
+    background-color: #FFA216 !important;
+}
+
+.button-color:hover, .button-color:active, .button-color:focus {
+    background-color: #E7931A !important;
+}
+
+.form-check-input:checked {
+    background-color: #FFA216 !important;
+    border-color: #FFA216 !important;
+}
+
+.container-color {
+    background-color: #FFFFFF !important;
+}
+
+.background-color {
+    background-color: #D5E3F7 !important;
+}
+
+.placeholder-image-color {
+    background-color: #B9B9B9 !important;
+}
+
+.placeholder-image-icon-color {
+    color: #707070 !important;
+}
+
+.border {
+    color: #000000 !important;
+}
+
+.success {
+    color: #4BAA84 !important;
+}
+
+.success-bg-color {
+    background-color: #4BAA84 !important;
+}
+
+.danger {
+    color: #dc3545 !important;
+}
+
+.danger-bg-color {
+    background-color: #dc3545 !important;
+}
+
+.warning {
+    color: #ffc107 !important;
+}
+
+.warning-bg-color {
+    background-color: #ffc107 !important;
+}
+
+.error-code {
+    color: #8b8b8b !important;
+}
+
+.error-code-bg-color {
+    background-color: #8b8b8b !important;
+}
+
+.info {
+    color: #17a2b8 !important;
+}
+
+.info-bg-color {
+    background-color: #17a2b8 !important;
+}
+.primary-color {
+    color: #33475B;
+}
+
+.primary-bg-color {
+    background-color: #33475B;
+}
+
+
+.button-color:hover {
+    color: #33475B;
+}
+
+.button-bg-color, .button-color {
+    background-color: #0D7AD3;
+}
+
+.button-bg-color:hover {
+    background-color: #33475B !important;
+}
+
+.button-bg-color:active {
+    background-color: #33475B !important;
+}
+
+
+.container-bg-color, .container-color {
+    background-color: #FFFFFF;
+}
+
+.background-bg-color,.background-color {
+    background-color: #EBF6FF;
+    /*#EBFBFE*/
+}
+
+.text {
+    background-color: transparent;
+    color: #000000;
+}
+
+.light-text {
+    background-color: transparent;
+    color: #F4FFF8;
+}
+
+.placeholder-text {
+    background-color: transparent;
+    color: #6c757d;
+    text-align: end;
+}
+
+.border {
+    color: #000000;
+}
+
+.success {
+    color: #4BAA84;
+}
+
+.success-bg-color {
+    background-color: #4BAA84;
+}
+
+.danger {
+    color: #dc3545;
+}
+
+.danger-bg-color {
+    background-color: #dc3545;
+}
+
+.warning {
+    color: #ffc107;
+}
+
+.warning-bg-color {
+    background-color: #ffc107;
+}
+
+.error-code {
+    color: #8b8b8b;
+}
+
+.error-code-bg-color {
+    background-color: #8b8b8b;
+}
+
+.info {
+    color: #17a2b8;
+}
+
+.info-bg-color {
+    background-color: #17a2b8;
+}
+

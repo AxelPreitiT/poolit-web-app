@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -40,7 +39,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendMailNewPassenger(Trip trip, User passenger) throws MessagingException, IOException {
-
         MimeMessage message = mailSender.createMimeMessage();
         message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
         message.addRecipient(Message.RecipientType.TO,new InternetAddress(trip.getDriver().getEmail()));
@@ -57,6 +55,44 @@ public class EmailServiceImpl implements EmailService {
 
         mailSender.send(message);
     }
+    //TODO: catch exceptions here and send others
+    @Override
+    public void sendMailTripDeletedToPassenger(Trip trip, User passenger) throws MessagingException,IOException{
+        MimeMessage message = mailSender.createMimeMessage();
+        message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(passenger.getEmail()));
+        message.setSubject("Tu viaje fue cancelado");
+        // Variables para el html
+        final Context ctx = new Context();
+        ctx.setVariable("trip", trip);
+        ctx.setVariable("passenger", passenger);
+
+        // Cargo el template
+        final String htmlContent = loadTemplate("delete-trip-passenger-mail", getVariablesMap(ctx));
+
+        message.setContent(htmlContent,"text/html; charset=UTF-8");
+
+        mailSender.send(message);
+    }
+    @Override
+    public void sendMailTripDeletedToDriver(Trip trip) throws MessagingException,IOException{
+        MimeMessage message = mailSender.createMimeMessage();
+        message.setFrom(new InternetAddress("poolit.noreply@gmail.com"));
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(trip.getDriver().getEmail()));
+        message.setSubject("Nuevo pasajero en tu viaje!");
+        // Variables para el html
+        final Context ctx = new Context();
+        ctx.setVariable("trip", trip);
+
+        // Cargo el template
+        final String htmlContent = loadTemplate("delete-trip-driver-mail", getVariablesMap(ctx));
+
+        message.setContent(htmlContent,"text/html; charset=UTF-8");
+
+        mailSender.send(message);
+    }
+
+
 
     @Override
     public void sendMailNewTrip(Trip trip) throws MessagingException, IOException {

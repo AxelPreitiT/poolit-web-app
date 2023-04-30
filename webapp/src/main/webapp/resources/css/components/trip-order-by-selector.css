@@ -1,0 +1,12 @@
+@import "/resources/css/base/elements.css";
+
+#order-by-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    column-gap: 1em;
+    padding-right: 12px;
+    width: 15em;
+    margin-bottom: 3%;
+}
