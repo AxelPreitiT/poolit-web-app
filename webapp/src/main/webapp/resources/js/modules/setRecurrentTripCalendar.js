@@ -30,7 +30,7 @@ export const setRecurrentTripCalendar = (firstDateElementId, firstDateInputEleme
     const firstDateUpdate = (date) => {
         const minDate = new Date(date.getTime() + day);
         const daysOfWeekDisabled = getDaysOfWeekDisabled(date.getDay());
-        lastDatePicker.update({
+        lastDatePicker.updateOptions({
             restrictions: {
                 minDate: minDate,
                 daysOfWeekDisabled: daysOfWeekDisabled
@@ -65,8 +65,8 @@ export const setRecurrentTripCalendar = (firstDateElementId, firstDateInputEleme
     }
 
     firstDateElement.addEventListener(tempusDominus.Namespace.events.change, (e) => {
-        lastDatePicker.dates.clear();
         const selectedDate = new Date(e.detail.date);
+        lastDatePicker.dates.clear();
         firstDateUpdate(selectedDate);
         toggleDisabledElements();
     });

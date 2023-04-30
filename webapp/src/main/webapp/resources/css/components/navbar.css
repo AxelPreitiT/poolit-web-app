@@ -97,12 +97,18 @@
     top: 150% !important;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     max-width: 20em;
+    border: 1px solid white;
+}
+
+.dropdown-menu .dropdown-divider {
+    border-color: white;
 }
 
 .dropdown-item {
     transition: opacity 0.3s;
     margin-top: 5px;
 }
+
 
 .dropdown-item:hover, .dropdown-item:focus {
     color: transparent;
