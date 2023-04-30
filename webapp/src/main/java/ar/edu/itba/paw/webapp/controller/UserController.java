@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -37,6 +39,8 @@ public class UserController {
 
     private final CityService cityService;
 
+    private final CarService carService;
+
     private final TripService tripService;
 
     private final PawUserDetailsService pawUserDetailsService;
@@ -48,11 +52,14 @@ public class UserController {
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
 
     @Autowired
-    public UserController(final CityService cityService, final  UserService userService, final PawUserDetailsService pawUserDetailsService, final TripService tripService){
+    public UserController(final CityService cityService, final  UserService userService,
+                          final PawUserDetailsService pawUserDetailsService, final TripService tripService,
+                        final CarService carService){
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
+        this.carService = carService;
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -130,10 +137,12 @@ public class UserController {
         }
 
         List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        List<Car> cars = carService.findByUser(user);
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
         mav.addObject("trips", trips);
+        mav.addObject("cars", cars);
         return mav;
     }
 
@@ -156,6 +165,7 @@ public class UserController {
         }
 
         List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        List<Car> cars = carService.findByUser(user);
 
         pawUserDetailsService.update(user);
         userService.changeRole(user.getUserId(), user.getRole());
@@ -163,6 +173,7 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
         mav.addObject("trips", trips);
+        mav.addObject("cars", cars);
         return mav;
 
     }

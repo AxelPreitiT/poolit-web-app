@@ -39,7 +39,7 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end primary-bg-color">
                 <li>
-                    <a class="dropdown-item" href="<c:url value="/profile/${}"/>">
+                    <a class="dropdown-item" href="<c:url value="/users/profile"/>">
                         <div class="container text-center">
                             <div class="row dropdown-row">
                                 <div class="col-sm-2">

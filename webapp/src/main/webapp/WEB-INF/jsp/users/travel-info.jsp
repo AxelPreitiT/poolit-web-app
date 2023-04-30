@@ -28,14 +28,27 @@
                 <div class="extra-info-container">
                     <div class="line-container">
                         <i class="bi bi-calendar text"></i>
-                        <h6 class="text">${trip.startDateString}</h6>
+                        <c:choose>
+                            <c:when test="${trip.recurrent}">
+                                <div class="format_date">
+                                    <div><span class="text">${trip.dayOfWeekString} ${trip.startDateString}</span></div>
+                                    <div><span class="text">hasta ${trip.dayOfWeekString} ${trip.endDateString}</span></div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="format_date">
+                                    <div><span class="text">${trip.dayOfWeekString} ${trip.startDateString}</span></div>
+                                    <div><span class="text">Viaje único</span></div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                     <div>
                         <i class="bi bi-clock text"></i>
                         <span class="text">${trip.startTimeString}</span>
                     </div>
                     <div>
-                        <h5 class="text">$2.500</h5>
+                        <h5 class="text">$ ${trip.price}</h5>
                     </div>
                 </div>
             </div>
