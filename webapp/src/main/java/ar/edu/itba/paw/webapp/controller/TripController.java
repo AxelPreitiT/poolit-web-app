@@ -42,7 +42,9 @@ public class TripController {
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static String BASE_RELATED_PATH = "/";
     private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
+    private final static String TRIP_PATH = BASE_RELATED_PATH + "trips/";
     private final static String SEARCH_TRIP_PATH = BASE_RELATED_PATH + "search";
+    private final static String CREATE_TRIP_PATH = TRIP_PATH + "create";
 
 
     @Autowired
@@ -130,6 +132,8 @@ public class TripController {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
+        mav.addObject("createTripUrl", CREATE_TRIP_PATH);
+        mav.addObject("cars", null);
 
         return mav;
     }

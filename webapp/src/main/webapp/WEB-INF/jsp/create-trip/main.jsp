@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <html>
 <head>
@@ -16,8 +17,7 @@
             <h1 class="secondary-color">Crear viaje</h1>
             <hr class="secondary-color">
         </div>
-        <c:url value="/trips/create" var="createTripUrl"/>
-        <form action="${createTripUrl}" method="post" class="form-style">
+        <form:form modelAttribute="createTripForm" action="${createTripUrl}" method="post" cssClass="form-style">
             <div class="info-container" id="origin-info-container">
                 <div class="header-row">
                     <i class="bi bi-geo-alt h2 secondary-color"></i>
@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <input type="text" min="0" class="form-control form-control-sm" id="originAddress" name="originAddress" placeholder="Dirección">
+                                        <form:input path="originAddress" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                         <button type="button" class="btn button-color">
                                             <i class="bi bi-calendar-fill light-text"></i>
                                         </button>
-                                        <input type="text" class="form-control form-control-sm" id="first-date" name="first-date" placeholder="Fecha">
+                                        <form:input path="date" cssClass="form-control form-control-sm" id="first-date" placeholder="Fecha"/>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -57,7 +57,7 @@
                                         <button type="button" class="btn button-color">
                                             <i class="bi bi-clock-fill light-text"></i>
                                         </button>
-                                        <input type="text" class="form-control form-control-sm" id="time" name="time" placeholder="Hora">
+                                        <form:input path="time" cssClass="form-control form-control-sm" id="time" placeholder="Hora"/>
                                     </div>
                                 </div>
                             </div>
@@ -77,13 +77,13 @@
                                         <button type="button" class="btn button-color" id="last-date-button" disabled>
                                             <i class="bi bi-calendar-fill light-text"></i>
                                         </button>
-                                        <input type="text" class="form-control form-control-sm" id="last-date" name="last-date" placeholder="Última fecha" disabled>
+                                        <form:input path="lastDate" cssClass="form-control form-control-sm" id="last-date" placeholder="Última fecha" disabled="true"/>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-text" id="is-multitrip-container">
-                                            <input class="form-check-input mt-0" type="checkbox" id="is-multitrip">
+                                            <form:checkbox path="multitrip" cssClass="form-check-input mt-0" id="is-multitrip"/>
                                             <span class="mb-0 ml-1 placeholder-text">Viaje recurrente</span>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <input type="text" min="0" class="form-control form-control-sm" id="destinationAddress" name="destinationAddress" placeholder="Dirección">
+                                        <form:input path="destinationAddress" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
                                     </div>
                                 </div>
                             </div>
@@ -134,10 +134,10 @@
                                             <div class="input-group-text">
                                                 <i class="bi bi-car-front-fill text"></i>
                                             </div>
-                                            <select id="car-select" name="order-by-select" class="form-select form-select-sm">
-                                                <option value="">Seleccionar auto</option>
-                                                <option value="date">Ford Ka azul</option>
-                                            </select>
+                                            <form:select path="carId" cssClass="form-select form-select-sm" id="car-select">
+                                                <form:option value="-1" label="Seleccionar auto"/>
+                                                <form:options items="${cars}" itemValue="id" itemLabel="name"/>
+                                            </form:select>
                                         </div>
                                         <div class="collapse" id="car-info-details">
                                             <div class="primary-bg-color" id="car-info-details-container">
@@ -172,7 +172,7 @@
                                         <div class="input-group-text">
                                             <i class="bi bi-currency-dollar text"></i>
                                         </div>
-                                        <input type="number" min="0" class="form-control form-control-sm" id="price" name="price" placeholder="Precio por viaje">
+                                        <form:input path="price" cssClass="form-control form-control-sm" id="price" placeholder="Precio por viaje"/>
                                         <div class="input-group-text">
                                             <span class="text">ARS</span>
                                         </div>
@@ -189,7 +189,8 @@
                     <span class="button-text-style light-text h3">Confirmar</span>
                 </button>
             </div>
-        </form>
+<%--        </form>--%>
+        </form:form>
     </div>
 </body>
 </html>

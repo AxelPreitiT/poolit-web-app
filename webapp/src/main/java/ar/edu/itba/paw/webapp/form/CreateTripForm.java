@@ -8,26 +8,29 @@ public class CreateTripForm {
     private int originCityId;
 
     @Pattern(regexp = ".+")
+    @Size(max = 30)
     private String originAddress;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private String originDate;
+    private String date;
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private String originTime;
+    private String time;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private String lastDate;
+
+    private boolean multitrip;
+
     private int destinationCityId;
     @Pattern(regexp = ".+")
+    @Size(max = 30)
     private String destinationAddress;
-    @Pattern(regexp = "([a-zA-Z]{2}\\s?\\d{3}\\s?[a-zA-Z]{2})|([a-zA-Z]{3}\\s?\\d{3})")
-    private String carPlate;
 
-    @Pattern(regexp = ".+")
-    private String carInfo;
-    @Min(value = 1)
-    private int maxSeats;
-    @Pattern(regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
-    private String email;
-    @Pattern(regexp = "^\\d{2,3}\\s?\\d{4}\\s?\\d{4}")
-    private String phone;
+    @Min(value = 0)
+    private long carId;
+
+    @Min(value = 0)
+    private double price;
 
     public int getOriginCityId() {
         return originCityId;
@@ -45,20 +48,20 @@ public class CreateTripForm {
         this.originAddress = originAddress;
     }
 
-    public String getOriginDate() {
-        return originDate;
+    public String getDate() {
+        return date;
     }
 
-    public void setOriginDate(String originDate) {
-        this.originDate = originDate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getOriginTime() {
-        return originTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setOriginTime(String originTime) {
-        this.originTime = originTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getDestinationCityId() {
@@ -77,43 +80,35 @@ public class CreateTripForm {
         this.destinationAddress = destinationAddress;
     }
 
-    public String getCarPlate() {
-        return carPlate;
+    public String getLastDate() {
+        return lastDate;
     }
 
-    public void setCarPlate(String carPlate) {
-        this.carPlate = carPlate;
+    public void setLastDate(String lastDate) {
+        this.lastDate = lastDate;
     }
 
-    public String getCarInfo() {
-        return carInfo;
+    public boolean isMultitrip() {
+        return multitrip;
     }
 
-    public void setCarInfo(String carInfo) {
-        this.carInfo = carInfo;
+    public void setMultitrip(boolean multitrip) {
+        this.multitrip = multitrip;
     }
 
-    public int getMaxSeats() {
-        return maxSeats;
+    public double getPrice() {
+        return price;
     }
 
-    public void setMaxSeats(int maxSeats) {
-        this.maxSeats = maxSeats;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public String getEmail() {
-        return email;
+    public long getCarId() {
+        return carId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCarId(long carId) {
+        this.carId = carId;
     }
 }
