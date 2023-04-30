@@ -94,10 +94,26 @@
 
 .data-container {
     display: flex;
-    align-items: stretch;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-top: 5%;
     width: 100%;
+    flex-direction: row;
+}
+
+.image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.placeholder-image-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+i.placeholder-image-icon-color {
+    font-size: 4rem;
 }
 
 .driver-data, .passenger-data, .passenger-form {
@@ -192,3 +208,12 @@ label {
 .formError{
     color: red;
 }
+
+.my-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    margin-top: 5%;
+    width: 100%;
+}
+

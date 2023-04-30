@@ -1,27 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
-<link href="<c:url value="/css/components/trip-route.css"/>" rel="stylesheet">
+
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.Trip" scope="request"/>
+<link href="<c:url value="/resources/css/components/trip-route.css"/>" rel="stylesheet">
+
+<!-- Bean:
+        - Trip: Information about the trip - Trip class
+-->
+
 <div class="trip-route">
   <div class="location-container">
     <div class="location-data items-to-end">
-      <h4 class="text title-style"><c:out value="${trip.originCity.name}" escapeXml="true"/></h4>
-      <h6 class="fw-light text description-style"><c:out value="${trip.originAddress}" escapeXml="true "/></h6>
-      <h6 class="fw-light text description-style"><c:out value="${trip.startDateString}" escapeXml="true"/> - <c:out value="${trip.startTimeString}" escapeXml="true"/> hs</h6>
+      <h3 class="secondary-color title-style"><c:out value="${trip.originCity.name}"/></h3>
+      <h5 class="text description-style"><c:out value="${trip.originAddress}"/></h5>
     </div>
-    <i class="bi bi-geo-alt text icon-style"></i>
+    <i class="bi bi-geo-alt secondary-color icon-style"></i>
   </div>
   <div class="location-line">
     <div class="location-line-content">
-      <i class="fa-solid fa-car-side fa-bounce text" id="animated-car"></i>
+      <i class="fa-solid fa-car-side fa-bounce secondary-color" id="animated-car"></i>
       <div class="dotted-line"></div>
     </div>
   </div>
   <div class="location-container">
-    <i class="bi bi-geo-alt-fill text icon-style"></i>
+    <i class="bi bi-geo-alt-fill secondary-color icon-style"></i>
     <div class="location-data">
-      <h4 class="text title-style"><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h4>
-      <h6 class="fw-light text description-style"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h6>
+      <h3 class="secondary-color title-style"><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h3>
+      <h5 class="text description-style"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h5>
     </div>
   </div>
 </div>

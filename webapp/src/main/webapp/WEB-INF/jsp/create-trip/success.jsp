@@ -1,38 +1,53 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<!-- Bean:
+        - trip: The information of the trip to show - Trip class
+-->
+
 <html>
 <head>
     <title><spring:message code="createTrip.success.pageTitle"/></title>
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
+    <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/create-trip/success.css"/>" rel="stylesheet">
 </head>
-<body class="background-bg-color">
-    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
-    <div class="container-bg-color main-container-style">
-        <spring:message code="createTrip.success.title" var="title"/>
-        <jsp:include page="/WEB-INF/jsp/components/success-message.jsp">
-            <jsp:param name="title" value="${title}"/>
+<body class="background-color">
+    <div id="navbar-container">
+        <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+    </div>
+    <div class="main-container-style container-color">
+        <div id="trip-detail-container">
+            <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp"/>
+        </div>
+        <div id="footer-container">
+            <div id="trip-price-container">
+                <div class="trip-price-row">
+                    <div>
+                        <span class="h3 text no-bold">Precio por viaje:</span>
+                    </div>
+                    <div>
+                        <span class="h2 secondary-color">$1.000</span>
+                    </div>
+                </div>
+            </div>
+            <div id="button-container">
+                <c:url value="/" var="homeUrl"/>
+                <a href="${homeUrl}">
+                    <button id="home-button" type="submit" class="btn button-style button-color shadow-btn">
+                        <i class="bi bi-house-fill light-text h4"></i>
+                        <span class="button-text-style light-text h3">Inicio</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="toast-container">
+        <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+            <jsp:param name="title" value="¡Viaje creado!"/>
+            <jsp:param name="message" value="Tu viaje ha sido creado exitosamente"/>
         </jsp:include>
-        <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
-        <hr>
-        <div class="info-container">
-            <jsp:include page="/WEB-INF/jsp/components/car-info-detail.jsp"/>
-            <c:set value="${trip.driver}" var="user" scope="request"/>
-            <spring:message code="createTrip.success.contact" var="contact"/>
-            <jsp:include page="/WEB-INF/jsp/components/user-info-detail.jsp">
-                <jsp:param name="title" value="${contact}"/>
-            </jsp:include>
-        </div>
-        <div class="button-container">
-            <a href="<c:url value="/"/>">
-                <button class="btn button-style button-bg-color">
-                    <span class="light-text h5"><spring:message code="success.btnBack"/></span>
-                </button>
-            </a>
-        </div>
     </div>
 </body>
 </html>

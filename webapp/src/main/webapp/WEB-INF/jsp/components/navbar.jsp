@@ -4,7 +4,7 @@
 <nav class="navbar navbar-expand-md primary-bg-color">
     <div class="container-fluid navbar-style">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <h1 class="secondary-color brand-style">POOLIT</h1>
+            <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="POOLIT" class="brand-logo">
         </a>
         <div class="collapse navbar-collapse navbar-link-items">
             <ul class="navbar-nav nav-items">

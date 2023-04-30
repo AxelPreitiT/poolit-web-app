@@ -48,27 +48,35 @@
     justify-content: flex-start;
 }
 
+#day-repeat-container * {
+    font-size: 0.8rem;
+}
+
+#day-repeat-text {
+    text-transform: capitalize;
+}
+
+#last-date-button:disabled {
+    border-color: transparent;
+}
+
 #is-multitrip-container {
+    width: 100%;
+    column-gap: 5%;
+}
+
+#is-multitrip-container > input {
+    border: 1px solid #FFA216;
+}
+
+#is-multitrip-text {
+    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    column-gap: 0.5em;
-}
-
-#multitrip-container {
-    width: 100%;
-}
-
-.multitrip-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    row-gap: 0.5em;
-}
-
-#unique-trip-container {
-    width: 50%;
+    column-gap: 0.2em;
+    flex-wrap: wrap;
 }
 
 .title-row * {
@@ -104,16 +112,6 @@ label.form-check-label {
 
 .search-button-container *, .h6 {
     margin-bottom: 0;
-}
-
-.shadow-btn {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    border-color: transparent !important;
-}
-
-.shadow-btn:active {
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
-    border-color: transparent !important;
 }
 
 .calendar-header {
