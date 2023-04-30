@@ -7,7 +7,7 @@
     <title>Error 403</title>
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-    <link href="<c:url value="/css/static/not-found.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/static/not-found.css"/>" rel="stylesheet">
 </head>
 <body>
     <h1>Error 403</h1>

@@ -30,7 +30,7 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView test() {
-        final ModelAndView mav = new ModelAndView("static/test");
+        final ModelAndView mav = new ModelAndView("static/not-found-404");
         mav.addObject("cities", cs.getCitiesByProvinceId(1));
         Trip trip = new Trip(1, new City(1, "Agronomia", 1), "San martin 500", new City(2, "Balvanera", 1), "Corrientes 500", LocalDateTime.now(), LocalDateTime.now().plusDays(2), 3, new User(1, "Pablo", "Perez", "pperez@gmail.com", "123456789", "hola", LocalDateTime.now(), new City(1, "Agronomia", 1), "DRIVER"), new Car(1, "ABC123", "Ford ka azul", new User(1, "Pablo", "Perez", "pperez@gmail.com", "123456789", "hola", LocalDateTime.now(), new City(1, "Agronomia", 1), "DRIVER")), 2, 2500);
         ArrayList<Trip> trips = new ArrayList<>();
