@@ -4,6 +4,7 @@
 <!-- Beans:
         - isLoggedIn: boolean that indicates if the user is logged in or not
         - searchUrl: url to search trips
+        - trips: list of trips to show
 -->
 
 <html>
@@ -39,7 +40,23 @@
                 <c:when test="${isLoggedIn}">
                     <div id="trips-container">
                         <h2 class="title secondary-color">Viajes disponibles</h2>
-                        <jsp:include page="/WEB-INF/jsp/components/trip-card-search-list.jsp"/>
+                        <div id="trip-cards-container" class="container">
+                            <div class="row">
+                                <c:forEach items="${trips}" var="trip">
+                                    <c:url value="/trips/${trip.tripId}" var="tripUrl">
+                                        <c:param name="startDate" value="${trip.startDateString}"/>
+                                        <c:param name="startTime" value="${trip.startTimeString}"/>
+                                        <c:param name="endDate" value="${trip.endDateString}"/>
+                                    </c:url>
+                                    <div class="col-sm-12 col-xl-6">
+                                        <c:set var="trip" value="${trip}" scope="request"/>
+                                        <jsp:include page="/WEB-INF/jsp/components/trip-card.jsp">
+                                            <jsp:param name="tripUrl" value="${tripUrl}"/>
+                                        </jsp:include>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
                     </div>
                 </c:when>
                 <c:otherwise>
