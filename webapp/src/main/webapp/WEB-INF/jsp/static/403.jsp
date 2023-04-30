@@ -4,7 +4,9 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Error 403</title>
+    <jsp:include page="/resources/external-resources.jsp"/>
+    <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/css/static/not-found.css"/>" rel="stylesheet">
 </head>
 <body>
