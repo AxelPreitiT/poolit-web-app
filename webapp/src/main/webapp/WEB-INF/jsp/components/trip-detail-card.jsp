@@ -8,20 +8,24 @@
         - trip: The information of the trip to show - Trip class
 -->
 
-<jsp:useBean id="trip" type="ar.edu.itba.paw.models.Trip" scope="request"/>
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
 <div class="main-container primary-bg-color">
     <div class="details-container">
         <div class="show-row">
             <i class="bi bi-clock light-text"></i>
             <div class="show-row-content">
-                <span class="light-text detail"><c:out value="${trip.originTimeString}"/></span>
+                <span class="light-text detail"><c:out value="${trip.startTimeString}"/></span>
             </div>
         </div>
         <div class="show-row" >
             <i class="bi bi-calendar light-text h5"></i>
             <div class="show-row-content">
-                <span class="light-text detail">Todos los miércoles</span>
-                <span class="light-text">Desde el <c:out value="${trip.originDateString}"/> hasta el 2023-05-03</span>
+                <span class="light-text detail"><c:out value="${trip.dayOfWeekString}"/></span>
+                <span class="light-text">Desde el <c:out value="${trip.startDateString}"/>
+                <c:if test="${trip.recurrent}">
+                    hasta el <c:out value="${trip.endDateString}" />
+                </c:if>
+                </span>
             </div>
         </div>
         <div class="show-row" >
@@ -47,7 +51,7 @@
         <div class="show-row">
             <i class="bi bi-person-circle light-text h5"></i>
             <div class="show-row-content">
-                <span class="light-text detail">Juan Perez</span>
+                <span class="light-text detail"><c:out value="${trip.driver.username} ${trip.driver.surname}"/></span>
             </div>
         </div>
         <div class="show-row">

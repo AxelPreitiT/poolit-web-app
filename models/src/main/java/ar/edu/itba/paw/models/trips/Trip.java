@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.User;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class Trip {
     private final City originCity, destinationCity;
@@ -98,5 +100,13 @@ public class Trip {
 
     public boolean isRecurrent() {
         return isRecurrent;
+    }
+
+    public int getFreeSeats() {
+        return maxSeats - occupiedSeats;
+    }
+
+    public String getDayOfWeekString(){
+        return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault());
     }
 }

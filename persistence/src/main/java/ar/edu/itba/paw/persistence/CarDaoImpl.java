@@ -59,7 +59,7 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public Optional<List<Car>> findByUser(User user) {
-        return Optional.of(new ArrayList<>(jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cars NATURAL JOIN cities WHERE user_id = ?", ROW_MAPPER, user.getUserId())));
+    public List<Car> findByUser(User user) {
+        return jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cars NATURAL JOIN cities WHERE user_id = ?", ROW_MAPPER, user.getUserId());
     }
 }

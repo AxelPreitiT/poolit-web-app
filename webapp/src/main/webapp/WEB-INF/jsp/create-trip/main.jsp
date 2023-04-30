@@ -29,7 +29,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                                        <jsp:param name="id" value="originCity"/>
+                                        <jsp:param name="id" value="originCityId"/>
                                         <jsp:param name="defaultText" value="Ciudad"/>
                                     </jsp:include>
                                 </div>
@@ -105,7 +105,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                                        <jsp:param name="id" value="destinationCity"/>
+                                        <jsp:param name="id" value="destinationCityId"/>
                                         <jsp:param name="defaultText" value="Ciudad"/>
                                     </jsp:include>
                                 </div>
@@ -136,7 +136,7 @@
                                             </div>
                                             <form:select path="carId" cssClass="form-select form-select-sm" id="car-select">
                                                 <form:option value="-1" label="Seleccionar auto"/>
-                                                <form:options items="${cars}" itemValue="id" itemLabel="name"/>
+                                                <form:options items="${cars}" itemValue="carId" itemLabel="infoCar"/>
                                             </form:select>
                                         </div>
                                         <div class="collapse" id="car-info-details">
@@ -189,7 +189,6 @@
                     <span class="button-text-style light-text h3">Confirmar</span>
                 </button>
             </div>
-<%--        </form>--%>
         </form:form>
     </div>
 </body>

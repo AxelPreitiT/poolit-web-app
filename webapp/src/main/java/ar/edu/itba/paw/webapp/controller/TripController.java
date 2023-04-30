@@ -11,10 +11,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.models.Image;
-import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
@@ -127,18 +124,21 @@ public class TripController {
         return mav;
     }
 
-    @RequestMapping(value = "/trips/create", method = RequestMethod.GET)
+    @RequestMapping(value = CREATE_TRIP_PATH, method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        //TODO: throw custom Exception
+        List<Car> userCars = carService.findByUser(user);
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
         mav.addObject("createTripUrl", CREATE_TRIP_PATH);
-        mav.addObject("cars", null);
-
+        mav.addObject("cars", userCars);
         return mav;
     }
 
-    @RequestMapping(value = "/trips/create", method = RequestMethod.POST)
+    @RequestMapping(value = CREATE_TRIP_PATH, method = RequestMethod.POST)
     public ModelAndView createTrip(
             @Valid @ModelAttribute("createTripForm") final CreateTripForm form,
             final BindingResult errors
@@ -151,11 +151,10 @@ public class TripController {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        //User user = userService.createUserIfNotExists(form.getEmail(),form.getPhone(), form.getPhone());
-        //TODO: get car from user list (in CreateTripForm)
-        Car car = carService.createCarIfNotExists(form.getCarPlate(), form.getCarInfo(), user);
-        //TODO: get price for trip
-        Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getOriginDate(), form.getOriginTime(),0.0, form.getMaxSeats(),user,form.getOriginDate(), form.getOriginTime());
+//        Car car = carService.createCarIfNotExists("AE062TP", "Honda Fit azul", user);
+        Car car = carService.findById(form.getCarId()).orElseThrow(CarNotFoundException::new);
+        //TODO: get maxSeats from car
+        Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), 1,user,form.getLastDate(), form.getTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
 

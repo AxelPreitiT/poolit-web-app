@@ -72,6 +72,9 @@
     font-size: 0.7rem;
 }
 
+.detail {
+    text-transform: capitalize;
+}
 
 .title-row * {
     margin-bottom: 0;

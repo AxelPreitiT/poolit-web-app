@@ -3,12 +3,6 @@
 
 <link href="<c:url value="/resources/css/components/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
 
-<!-- Bean:
-      - trip: The information of the trip to show - Trip class
--->
-
-<jsp:useBean id="trip" type="ar.edu.itba.paw.models.Trip" scope="request"/>
-
 <div id="main-header-row">
   <h1 class="secondary-color">Detalles del viaje</h1>
   <hr class="secondary-color">

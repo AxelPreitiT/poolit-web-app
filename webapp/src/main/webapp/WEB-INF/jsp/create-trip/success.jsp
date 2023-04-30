@@ -6,6 +6,8 @@
         - trip: The information of the trip to show - Trip class
 -->
 
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
+
 <html>
 <head>
     <title><spring:message code="createTrip.success.pageTitle"/></title>
@@ -28,7 +30,7 @@
                         <span class="h3 text no-bold">Precio por viaje:</span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color">$1.000</span>
+                        <span class="h2 secondary-color"><c:out value="${trip.price}"/></span>
                     </div>
                 </div>
             </div>

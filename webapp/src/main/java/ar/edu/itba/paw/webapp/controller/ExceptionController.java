@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,6 +44,13 @@ public class ExceptionController {
         ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.userNotFound",null, Locale.getDefault()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.userNotFound.description",null,Locale.getDefault()));
+        return mav;
+    }
+    @ExceptionHandler(CarNotFoundException.class)
+    public ModelAndView carNotFound(){
+        ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage",messageSource.getMessage("exceptions.carNotFound",null, Locale.getDefault()));
+        mav.addObject("errorDescription",messageSource.getMessage("exceptions.carNotFound.description",null,Locale.getDefault()));
         return mav;
     }
 }

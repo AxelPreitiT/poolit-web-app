@@ -14,5 +14,5 @@ public interface CarDao {
 
     Optional<Car> findByPlateAndUser(String plate, final User user);
 
-    Optional<List<Car>> findByUser(final User user);
+    List<Car> findByUser(User user);
 }
