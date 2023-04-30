@@ -31,7 +31,7 @@
             </div>
             <div class="user-info-row">
                 <div class="user-info-item form-check">
-                    <input class="form-check-input" type="checkbox" id="keepLoggedIn">
+                    <input class="form-check-input" type="checkbox" id="keepLoggedIn" name="rememberme">
                     <label class="form-check-label" for="keepLoggedIn">
                         Mantener la sesión iniciada
                     </label>
