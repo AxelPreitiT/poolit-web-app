@@ -5,12 +5,9 @@ import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
-import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
@@ -62,12 +59,10 @@ public class TripController {
                                        ){
         System.out.println("Start date"+form.getStartDate());
         System.out.println("End date" + form.getEndDate());
-        Optional<Trip> trip = tripService.findById(tripId);
-        if(!trip.isPresent()){//Usar Optional?
-            throw new TripNotFoundException();
-        }
+        //TODO: buscar al trip en el rango especificado
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
-        mv.addObject("trip",trip.get());
+        mv.addObject("trip",trip);
         return mv;
     }
 
@@ -92,7 +87,7 @@ public class TripController {
 //        if(ans && trip.isPresent()){
 //        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         System.out.println("Encuentra al usuario");
-        //TODO: agregar excepciones nuestras y nuestro manejo
+        //TODO: buscar al trip en el rango especificado
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         System.out.println("Encontre el viaje");
         boolean ans = false;
@@ -119,11 +114,14 @@ public class TripController {
         mav.addObject("cities", cities);
         mav.addObject("searchUrl", SEARCH_TRIP_PATH);
         if(errors.hasErrors()){
-            mav.addObject("trips", new ArrayList<>());
+            System.out.println("Errors");
+            errors.getAllErrors().forEach(System.out::println);
+            PagedContent<Trip> tripsContent= PagedContent.emptyPagedContent();
+            mav.addObject("tripsContent",tripsContent);
             return mav;
         }
-        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10).getElements();
-        mav.addObject("trips", trips);
+        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10);
+        mav.addObject("tripsContent", tripsContent);
         return mav;
     }
 
