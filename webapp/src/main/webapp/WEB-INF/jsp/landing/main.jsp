@@ -39,7 +39,7 @@
                 <c:when test="${isLoggedIn}">
                     <div id="trips-container">
                         <h2 class="title secondary-color">Viajes disponibles</h2>
-                        <jsp:include page="/WEB-INF/jsp/components/trip-card-list.jsp"/>
+                        <jsp:include page="/WEB-INF/jsp/components/trip-card-search-list.jsp"/>
                     </div>
                 </c:when>
                 <c:otherwise>

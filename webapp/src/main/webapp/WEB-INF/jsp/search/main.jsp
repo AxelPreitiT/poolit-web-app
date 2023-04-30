@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-8 col-lg-9">
                 <jsp:include page="/WEB-INF/jsp/components/trip-order-by-selector.jsp"/>
-                <jsp:include page="/WEB-INF/jsp/components/trip-card-list.jsp">
+                <jsp:include page="/WEB-INF/jsp/components/trip-card-search-list.jsp">
                     <jsp:param name="startDate" value="${searchTripForm.date}"/>
                     <jsp:param name="startTime" value="${searchTripForm.time}"/>
                     <jsp:param name="endDate" value="${searchTripForm.lastDate}"/>
