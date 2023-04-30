@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
 <link href="<c:url value="/resources/css/users/travel-info.css"/>" rel="stylesheet" type="text/css"/>
 
 <div>
@@ -17,22 +17,22 @@
                 </div>
                 <div class="adress-container">
                     <div class="route-info-text">
-                        <span class="secondary-color h3">Nuñez</span>
-                        <span class="text">Estadio Monumental</span>
+                        <span class="secondary-color h3">${trip.originCity.name}</span>
+                        <span class="text">${trip.originAddress}</span>
                     </div>
                     <div class="route-info-text">
-                        <span class="secondary-color h3 aling-right">Nuñez</span>
-                        <span class="text aling-right">Estadio Monumental</span>
+                        <span class="secondary-color h3 aling-right">${trip.destinationCity.name}</span>
+                        <span class="text aling-right">${trip.destinationAddress}</span>
                     </div>
                 </div>
                 <div class="extra-info-container">
                     <div class="line-container">
                         <i class="bi bi-calendar text"></i>
-                        <h6 class="text">23/05/2000</h6>
+                        <h6 class="text">${trip.startDateString}</h6>
                     </div>
                     <div>
                         <i class="bi bi-clock text"></i>
-                        <span class="text">10:00</span>
+                        <span class="text">${trip.startTimeString}</span>
                     </div>
                     <div>
                         <h5 class="text">$2.500</h5>
