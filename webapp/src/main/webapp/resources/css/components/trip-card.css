@@ -1,5 +1,9 @@
 @import "/resources/css/base/elements.css";
 
+.card-container {
+    position: relative;
+}
+
 .card {
     box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0);
     opacity: 1;
@@ -7,11 +11,11 @@
     margin-bottom: 1em;
     margin-right: 2px;
     border: 2px solid #FFA216;
+    z-index: 1;
 }
 
 .card-body {
     padding-bottom: 0.3em;
-    margin-right: 10px;
 }
 
 .card:hover {
@@ -75,7 +79,7 @@ i.placeholder-image-icon-color {
 .footer-info {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: baseline;
     justify-content: space-between;
     width: 100%;
     margin-left: 9px;
@@ -114,4 +118,19 @@ i.placeholder-image-icon-color {
 
 .date-info-column .text-capitalize {
     text-transform: capitalize;
+}
+
+.delete-trip-container {
+    position: absolute;
+    z-index: 2;
+    right: -20px;
+    top: -20px;
+}
+
+.delete-trip-container form {
+    margin: 0;
+}
+
+.delete-trip-container button {
+    aspect-ratio: 1/1;
 }

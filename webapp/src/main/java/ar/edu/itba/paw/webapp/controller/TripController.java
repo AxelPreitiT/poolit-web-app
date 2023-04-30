@@ -178,6 +178,15 @@ public class TripController {
         return mav;
     }
 
+    @RequestMapping(value = "/trips/{id:\\d+$}", method = RequestMethod.DELETE)
+    public ModelAndView deleteTrip() {
+        // Todo: delete trip
+        final ModelAndView mav = new ModelAndView("/created-trips/next");
+        mav.addObject("tripDeleted", true);
+
+        return mav;
+    }
+
     @RequestMapping(value = "/upload", method = RequestMethod.GET)
     public ModelAndView showUploadForm() {
         ModelAndView mav = new ModelAndView("/image-tester/uploadForm");

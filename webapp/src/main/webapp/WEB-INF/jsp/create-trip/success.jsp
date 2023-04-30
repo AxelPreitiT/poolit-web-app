@@ -30,7 +30,7 @@
                         <span class="h3 text no-bold">Precio por viaje:</span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color"><c:out value="${trip.price}"/></span>
+                        <span class="h2 secondary-color">$<c:out value="${trip.price}"/></span>
                     </div>
                 </div>
             </div>
