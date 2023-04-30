@@ -1,6 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<!-- Beans:
+        - tripDeleted: boolean that indicates if a trip was deleted before rendering this page
+-->
+
 <html>
 <head>
   <title>Creados - Próximos</title>
@@ -21,5 +25,13 @@
       <jsp:include page="/WEB-INF/jsp/components/trip-card-date-list.jsp"/>
     </div>
   </div>
+  <c:if test="${!(empty tripDeleted) && tripDeleted}">
+    <div id="toast-container">
+      <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+        <jsp:param name="title" value="¡Viaje eliminado!"/>
+        <jsp:param name="message" value="Tu viaje ha sido eliminado exitosamente"/>
+      </jsp:include>
+    </div>
+  </c:if>
 </body>
 </html>

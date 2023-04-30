@@ -14,12 +14,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/reserved"/>">
+                    <a class="nav-link" href="<c:url value="/users/reserved"/>">
                         <h4 class="light-text">Reservados</h4>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/created"/>">
+                    <a class="nav-link" href="<c:url value="/users/created"/>">
                         <h4 class="light-text">Creados</h4>
                     </a>
                 </li>
