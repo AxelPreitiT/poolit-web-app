@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.webapp.form.annotations.MPFile;
 import ar.edu.itba.paw.webapp.form.annotations.PasswordMatches;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,6 +30,9 @@ public class CreateUserForm {
     private String repeatPassword = "";
     private String birthdate;
     private int bornCityId;
+
+    //TODO Fix MPFile, doesnt work here
+    private MultipartFile imageFile;
 
     public String getRepeatPassword() {
         return repeatPassword;
@@ -91,4 +96,8 @@ public class CreateUserForm {
     public int getBornCityId() {
         return bornCityId;
     }
+
+    public MultipartFile getImageFile() { return imageFile; }
+
+    public void setImageFile(MultipartFile imageFile) { this.imageFile = imageFile; }
 }

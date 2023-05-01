@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao {
                     resultSet.getString("phone"), resultSet.getString("password"),
                     localDateTime,
                     new City(resultSet.getLong("city_id"), resultSet.getString("name"), resultSet.getLong("province_id")),
-                    resultSet.getString("user_role"));};
+                    resultSet.getString("user_role"), resultSet.getLong("user_image_id"));};
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -44,7 +44,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User create(final String username, final String surname, final String email,
-                       final String phone, final String password, final LocalDateTime birthdate, final City bornCity, String role) {
+                       final String phone, final String password, final LocalDateTime birthdate, final City bornCity, String role, long user_image_id) {
         Map<String, Object> data = new HashMap<>();
         String savedEmail = email.toLowerCase().replaceAll("\\s", "");
         String savedPhone = phone.replaceAll("\\s", "");
@@ -57,6 +57,7 @@ public class UserDaoImpl implements UserDao {
         data.put("birthdate", birthdate);
         data.put("city_id", bornCity.getId());
         data.put("user_role", role);
+        data.put("user_image_id", user_image_id);
         Number key = 0;
         try {
             key = jdbcInsert.executeAndReturnKey(data);
@@ -65,11 +66,11 @@ public class UserDaoImpl implements UserDao {
                 if (findByEmail(email).get().getPassword() != null) {
                     throw new EmailAlreadyExistsException();
                 } else {
-                    updateProfile(username, surname, email, password, birthdate, bornCity, role);
+                    updateProfile(username, surname, email, password, birthdate, bornCity, role, user_image_id);
                 }
             }
         }
-        return new User(key.longValue(), username, surname, savedEmail, savedPhone, savedPassword, birthdate, bornCity, role);
+        return new User(key.longValue(), username, surname, savedEmail, savedPhone, savedPassword, birthdate, bornCity, role, user_image_id);
     }
 
     @Override
@@ -89,8 +90,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void updateProfile(final String username, final String surname, final String email,
-                              final String password, final LocalDateTime birthdate, final City bornCity, String role){
-        jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, birthdate = ?, city_id = ?, user_role = ?  WHERE email = ?",
-                username, surname, password, birthdate, bornCity.getId(), role, email);
+                              final String password, final LocalDateTime birthdate, final City bornCity, String role, long user_image_id){
+        jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, birthdate = ?, city_id = ?, user_role = ?, user_image_id = ?  WHERE email = ?",
+                username, surname, password, birthdate, bornCity.getId(), role, user_image_id, email);
     }
 }

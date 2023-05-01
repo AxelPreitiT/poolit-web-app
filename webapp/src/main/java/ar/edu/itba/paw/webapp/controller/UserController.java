@@ -1,17 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.CarService;
-import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.TripService;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.interfaces.services.*;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
-import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.form.CreateCarForm;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
@@ -30,6 +25,7 @@ import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,6 +38,8 @@ public class UserController {
     private final CarService carService;
 
     private final TripService tripService;
+
+    private final ImageService imageService;
 
     private final PawUserDetailsService pawUserDetailsService;
 
@@ -60,12 +58,13 @@ public class UserController {
     @Autowired
     public UserController(final CityService cityService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                        final CarService carService){
+                        final CarService carService, final ImageService imageService){
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
         this.carService = carService;
+        this.imageService = imageService;
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -82,14 +81,16 @@ public class UserController {
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.POST)
     public ModelAndView createUserPost(
             @Valid @ModelAttribute("createUserForm") final CreateUserForm form, final BindingResult errors
-    ){
+    ) throws IOException {
         if(errors.hasErrors()){
             return createUserGet(form);
         }
+        byte[] data = form.getImageFile().getBytes();
+        Image image=imageService.createImage(data);
         City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                    form.getPassword(), form.getBirthdate(), originCity, null);
+                    form.getPassword(), form.getBirthdate(), originCity, null, image.getImageId());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             return createUserGet(form);

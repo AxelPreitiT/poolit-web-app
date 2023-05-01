@@ -38,7 +38,7 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getString("user_phone"),resultSet.getString("user_password"),
                 resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
                 new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
-                resultSet.getString("user_role"));
+                resultSet.getString("user_role"),resultSet.getLong("user_image_id")); //TODO fix rowMapper
         return new Trip(
                 resultSet.getLong("trip_id"),
                 new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
