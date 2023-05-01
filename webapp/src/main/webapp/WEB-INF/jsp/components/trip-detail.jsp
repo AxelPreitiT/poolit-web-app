@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
 <link href="<c:url value="/resources/css/components/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
 
 <div id="main-header-row">
@@ -20,8 +20,9 @@
       </div>
       <div class="col-sm-6 col-md-5 col-lg-4">
         <div id="car-info-image">
-          <div class="placeholder-image-color">
-            <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
+          <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+          <div class="placeholder-image">
+            <img src="${carImageUrl}" alt="car image"/>
           </div>
         </div>
       </div>

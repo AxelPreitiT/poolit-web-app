@@ -54,21 +54,6 @@
                 </li>
                 <li><hr class="dropdown-divider light-text"></li>
                 <li>
-                    <a class="dropdown-item" href="<c:url value="/cars"/>">
-                        <div class="container text-center">
-                            <div class="row dropdown-row">
-                                <div class="col-sm-2">
-                                    <i class="bi bi-car-front-fill light-text h5"></i>
-                                </div>
-                                <div class="col-sm-10 dropdown-row-text">
-                                    <span class="button-text-style light-text h5">Mis autos</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-                <li><hr class="dropdown-divider light-text"></li>
-                <li>
                     <a class="dropdown-item" href="<c:url value="/logout"/>">
                         <div class="container text-center">
                             <div class="row dropdown-row">

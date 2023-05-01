@@ -104,7 +104,7 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("trip", trip);
         ctx.setVariable("passenger", passenger);
 
-        sendEmail(passenger.getEmail(),subject,"delete-trip-passenger-email",ctx);
+        sendEmail(passenger.getEmail(),subject,"delete-trip-passenger-mail",ctx);
     }
 
     @Async

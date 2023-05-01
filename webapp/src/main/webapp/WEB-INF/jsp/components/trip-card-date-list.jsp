@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<jsp:useBean id="trips" type="java.util.List" scope="request"/>
+<jsp:useBean id="trips" type="ar.edu.itba.paw.models.PagedContent" scope="request"/>
 
 <!-- Beans:
         - trips: List of trips to be displayed
@@ -11,7 +11,7 @@
 
 <div id="trip-card-date-list">
   <div id="trip-card-list-container">
-    <c:forEach items="${trips}" var="trip">
+    <c:forEach items="${trips.elements}" var="trip">
       <c:url value="/trips/${trip.tripId}" var="tripUrl">
         <c:param name="startDate" value="${trip.startDateString}"/>
         <c:param name="startTime" value="${trip.startTimeString}"/>
@@ -38,7 +38,18 @@
       </div>
     </c:forEach>
   </div>
+  <c:url value="" var="baseUrl">
+    <c:forEach var="p" items="${param}">
+      <c:if test="${!(p.key eq 'page')}">
+        <c:param name="${p.key}" value="${p.value}"/>
+      </c:if>
+    </c:forEach>
+  </c:url>
   <div id="list-pagination">
-    <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp"/>
+    <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+      <jsp:param name="currentPage" value="${trips.currentPage+1}"/>
+      <jsp:param name="totalPages" value="${trips.totalPages}"/>
+      <jsp:param name="baseUrl" value="${baseUrl}"/>
+    </jsp:include>
   </div>
 </div>

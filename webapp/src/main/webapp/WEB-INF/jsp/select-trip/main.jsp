@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="trip-price-row items-to-end">
-                        <span class="h6 italic-text">Por viaje</span>--%>
+                        <span class="h6 italic-text">Por viaje</span>
 <%--                    <c:choose>--%>
 <%--                        <c:when test="${trip.recurrent}">--%>
 <%--                            <span class="h6 italic-text"><c:out value="${trip.totalTrips}"/> viajes</span>--%>

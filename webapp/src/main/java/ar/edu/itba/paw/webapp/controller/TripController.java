@@ -133,13 +133,14 @@ public class TripController {
     @RequestMapping(value = LANDING_PAGE_PATH, method = RequestMethod.GET)
     public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        List<Trip> trips = tripService.getIncomingTrips(0,10).getElements();
+        List<Trip> trips = tripService.getIncomingTrips(0,PAGE_SIZE).getElements();
 
         final ModelAndView mav = new ModelAndView("/landing/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
         mav.addObject("searchUrl", SEARCH_TRIP_PATH);
-        mav.addObject("isLoggedIn", false);
+        //TODO: fix (isAuthenticated hace cualquier cosa)
+        mav.addObject("isLoggedIn", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 
         return mav;
     }
@@ -176,65 +177,35 @@ public class TripController {
 //        Car car = carService.createCarIfNotExists("AE062TP", "Honda Fit azul", user);
         Car car = carService.findById(form.getCarId()).orElseThrow(CarNotFoundException::new);
         //TODO: get maxSeats from car
-        Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), 1,user,form.getLastDate(), form.getTime());
+        Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),user,form.getLastDate(), form.getTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
 
         return mav;
     }
 
-    @RequestMapping(value = "/trips/{id:\\d+$}", method = RequestMethod.DELETE)
-    public ModelAndView deleteTrip() {
-        // Todo: delete trip
+    @RequestMapping(value = "/trips/{id:\\d+$}/delete", method = RequestMethod.POST)
+    public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
+        //TODO: cambiar y que lo haga el service
+        //Validar que es el creador
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        if(!trip.getDriver().equals(user)){
+            //TODO: manejar de otra manera
+            throw new IllegalStateException();
+        }
+        tripService.deleteTrip(trip);
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, 0, PAGE_SIZE);
         final ModelAndView mav = new ModelAndView("/created-trips/next");
+        mav.addObject("trips", trips);
         mav.addObject("tripDeleted", true);
 
         return mav;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.GET)
-    public ModelAndView showUploadForm() {
-        ModelAndView mav = new ModelAndView("/image-tester/uploadForm");
-        return mav;
-    }
 
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file) throws Exception {
-        byte[] data = file.getBytes();
-        Image image=imageService.createImage(data);
-        ModelAndView modelAndView = new ModelAndView("/image-tester/imageDetails");
-        modelAndView.addObject("image", image);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
-    public @ResponseBody
-    byte[] getImage(@PathVariable("imageId") final int imageId) {
-        return imageService.findById(imageId).orElseThrow(ImageNotFoundException::new).getData();
-    }
-
-    @RequestMapping(value = "/cars/create", method = RequestMethod.GET)
-    public ModelAndView createCarForm(@ModelAttribute("createCarForm") final CreateCarForm form) {
-        final ModelAndView mav = new ModelAndView("create-auto/main");
-        mav.addObject("createCarUrl", "/webapp/cars/create");
-        return mav;
-    }
-
-    @RequestMapping(value = "/cars/create", method = RequestMethod.POST)
-    public ModelAndView postCar(@Valid @ModelAttribute("createCarForm") final CreateCarForm form,
-                                final BindingResult errors) throws IOException {
-        if(errors.hasErrors()){
-            return createCarForm(form);
-        }
-        byte[] data = form.getImageFile().getBytes();
-        Image image=imageService.createImage(data);
-        carService.createCar(form.getPlate(),form.getCarInfo(),null , image.getImageId() );
-        //Hacer un redirect si se hace desde el perfil la creacion de autos
-        ModelAndView modelAndView = new ModelAndView("create-auto/success");
-        return modelAndView;
-
-    }
 
 //    @RequestMapping(value = "*", method = RequestMethod.GET)
 //    public ModelAndView pageNotFound() {

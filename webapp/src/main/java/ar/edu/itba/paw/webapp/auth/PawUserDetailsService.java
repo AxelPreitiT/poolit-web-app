@@ -47,6 +47,7 @@ public class PawUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("No user for email " + email));
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
+        //TODO: hacer al reves el chequeo, que el default sean los permisos mas bajos posibles
         if(Objects.equals(user.getRole(), "USER")){
             authorities.add(new SimpleGrantedAuthority(AuthRoles.USER_ADMIN.role));
         }else {

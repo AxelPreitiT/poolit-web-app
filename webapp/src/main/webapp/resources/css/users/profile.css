@@ -39,7 +39,14 @@ h6{
 }
 
 
-
+.plus-btn{
+    border-top: 2px solid #8b8b8b ;
+    display: flex;
+    align-items: center;
+    padding: 1% 2% 1% 2%;
+    justify-content: center;
+    gap: 2%;
+}
 
 .data-content{
     border-top: 2px solid #8b8b8b ;

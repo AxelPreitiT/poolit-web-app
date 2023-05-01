@@ -134,7 +134,7 @@
     font-size: 0.8rem;
 }
 
-.placeholder-image-color {
+.placeholder-image-color, .image-container {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
@@ -142,6 +142,7 @@
     height: 100%;
     max-height: 7em;
     aspect-ratio: 1/1;
+    border-radius: 6px;
 }
 
 #no-cars-container {
@@ -165,10 +166,6 @@
 #car-image-container > div.show {
     display: inline-block;
     white-space: nowrap;
-}
-
-.placeholder-image-color {
-    border-radius: 6px;
 }
 
 i.placeholder-image-icon-color {

@@ -61,8 +61,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4 placeholder-image-color">
-                    <i class="bi bi-car-front-fill placeholder-image-icon-color h1"></i>
+                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                <div class="col-4 placeholder-image">
+                    <img src="${carImageUrl}" alt="car image"/>
                 </div>
             </div>
         </a>
@@ -88,7 +89,8 @@
                         <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
                             <span class="light-text">Cancelar</span>
                         </button>
-                        <form:form method="DELETE" action="${param.tripUrl}">
+                        <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
+                        <form:form method="DELETE" action="${deleteTripUrl}">
                             <button type="submit" class="btn danger-bg-color">
                                 <span class="light-text">Eliminar</span>
                             </button>

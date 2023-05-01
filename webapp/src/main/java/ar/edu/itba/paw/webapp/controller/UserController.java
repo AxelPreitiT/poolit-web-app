@@ -21,11 +21,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 
@@ -56,6 +54,8 @@ public class UserController {
     private final static String RESERVED_TRIPS_HISTORIC_PATH = RESERVED_TRIPS_PATH + "/history";
     private final static String CREATED_TRIPS_PATH = BASE_RELATED_PATH + "created";
     private final static String CREATED_TRIPS_HISTORIC_PATH = CREATED_TRIPS_PATH + "/history";
+
+    private final static int PAGE_SIZE = 3;
 
     @Autowired
     public UserController(final CityService cityService, final  UserService userService,
@@ -136,6 +136,7 @@ public class UserController {
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
         SecurityContext pepe = SecurityContextHolder.getContext();
+        //TODO: ver por que explota si no esta autenticado
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
@@ -165,6 +166,7 @@ public class UserController {
 
 
         if(Objects.equals(user.getRole(), "DRIVER")){
+            //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
             List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
 
             pawUserDetailsService.update(user);
@@ -175,7 +177,7 @@ public class UserController {
             mav.addObject("trips", trips);
             return mav;
         }
-
+        //TODO: traer las que ya pasaron y las que van a hacerse
         List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
         List<Car> cars = carService.findByUser(user);
 
@@ -191,11 +193,12 @@ public class UserController {
     }
 
     @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextReservedTrips() {
+    public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+        //TODO: hacer que sean los que son a partir de ahora
+        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/next");
         mav.addObject("trips", trips);
@@ -203,11 +206,12 @@ public class UserController {
     }
 
     @RequestMapping(value = RESERVED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
-    public ModelAndView getHistoricReservedTrips() {
+    public ModelAndView getHistoricReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+        //TODO: hacer los que son antes de ahora
+        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/history");
         mav.addObject("trips", trips);
@@ -215,11 +219,11 @@ public class UserController {
     }
 
     @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextCreatedTrips() {
+    public ModelAndView getNextCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        //TODO: traer las que son a futuro (o actual)
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/next");
         mav.addObject("trips", trips);
@@ -228,11 +232,11 @@ public class UserController {
     }
 
     @RequestMapping(value = CREATED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
-    public ModelAndView getHistoricCreatedTrips() {
+    public ModelAndView getHistoricCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        //TODO: traer las que pasaron
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/history");
         mav.addObject("trips", trips);

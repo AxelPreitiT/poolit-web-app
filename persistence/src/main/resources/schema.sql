@@ -27,6 +27,11 @@ CREATE TABLE IF NOT EXISTS cities (
     CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS images(
+                                     image_id SERIAL PRIMARY KEY,
+                                     bytea BYTEA
+);
+
 CREATE TABLE IF NOT EXISTS cars(
     car_id SERIAL PRIMARY KEY,
     plate TEXT NOT NULL,
@@ -75,8 +80,5 @@ CREATE TABLE IF NOT EXISTS trips_cars_drivers(
     CONSTRAINT trips_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
     CONSTRAINT trips_to_cars FOREIGN KEY(car_id) references cars(car_id)
 );
-CREATE TABLE IF NOT EXISTS images(
-    image_id SERIAL PRIMARY KEY,
-    bytea BYTEA
-);
+
 

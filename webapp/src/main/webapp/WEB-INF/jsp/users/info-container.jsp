@@ -15,7 +15,7 @@
       <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp"/>
     </c:forEach>
   </div>
-  <a href="/test">
+  <a href="${param.url}">
     <div class="plus-btn">
       <h3 class="text">${param.btndesc}</h3>
       <i class="h3 bi text bi-box-arrow-in-up-right"></i>

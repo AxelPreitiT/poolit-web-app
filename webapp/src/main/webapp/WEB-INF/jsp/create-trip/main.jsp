@@ -167,8 +167,9 @@
                                 <div class="col-6" id="car-image-container">
                                     <c:forEach items="${cars}" var="car">
                                         <div class="collapse collapse-horizontal" id="car-info-image-<c:out value="${car.carId}"/>">
-                                            <div class="placeholder-image-color">
-                                                <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
+                                            <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+                                            <div class="image-container">
+                                                <img src="${carImageUrl}" alt="car image"/>
                                             </div>
                                         </div>
                                     </c:forEach>
