@@ -52,6 +52,10 @@ public class UserController {
     private final static String BASE_RELATED_PATH = "/users/";
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
+    private final static String RESERVED_TRIPS_PATH = BASE_RELATED_PATH + "reserved";
+    private final static String RESERVED_TRIPS_HISTORIC_PATH = RESERVED_TRIPS_PATH + "/history";
+    private final static String CREATED_TRIPS_PATH = BASE_RELATED_PATH + "created";
+    private final static String CREATED_TRIPS_HISTORIC_PATH = CREATED_TRIPS_PATH + "/history";
 
     @Autowired
     public UserController(final CityService cityService, final  UserService userService,
@@ -184,6 +188,55 @@ public class UserController {
         mav.addObject("cars", cars);
         return mav;
 
+    }
+
+    @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
+    public ModelAndView getNextReservedTrips() {
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+
+        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+
+        final ModelAndView mav = new ModelAndView("/reserved-trips/next");
+        mav.addObject("trips", trips);
+        return mav;
+    }
+
+    @RequestMapping(value = RESERVED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
+    public ModelAndView getHistoricReservedTrips() {
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+
+        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+
+        final ModelAndView mav = new ModelAndView("/reserved-trips/history");
+        mav.addObject("trips", trips);
+        return mav;
+    }
+
+    @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
+    public ModelAndView getNextCreatedTrips() {
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+
+        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+
+        final ModelAndView mav = new ModelAndView("/created-trips/next");
+        mav.addObject("trips", trips);
+        mav.addObject("tripDeleted", false);
+        return mav;
+    }
+
+    @RequestMapping(value = CREATED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
+    public ModelAndView getHistoricCreatedTrips() {
+        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+
+        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+
+        final ModelAndView mav = new ModelAndView("/created-trips/history");
+        mav.addObject("trips", trips);
+        return mav;
     }
 
     /*

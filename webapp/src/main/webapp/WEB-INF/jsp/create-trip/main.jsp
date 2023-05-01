@@ -134,31 +134,57 @@
                                             <div class="input-group-text">
                                                 <i class="bi bi-car-front-fill text"></i>
                                             </div>
-                                            <form:select path="carId" cssClass="form-select form-select-sm" id="car-select">
+                                            <form:select path="carId" cssClass="form-select form-select-sm" id="car-select" disabled="${empty cars}">
                                                 <form:option value="-1" label="Seleccionar auto"/>
                                                 <form:options items="${cars}" itemValue="carId" itemLabel="infoCar"/>
                                             </form:select>
                                         </div>
-                                        <div class="collapse" id="car-info-details">
-                                            <div class="primary-bg-color" id="car-info-details-container">
-                                                <div class="car-info-details-row">
-                                                    <i class="bi bi-caret-right-fill light-text"></i>
-                                                    <span class="light-text">Patente: TIA039</span>
-                                                </div>
-                                                <hr class="text"/>
-                                                <div class="car-info-details-row">
-                                                    <i class="bi bi-caret-right-fill light-text"></i>
-                                                    <span class="light-text">3 asientos disponibles</span>
+                                        <c:forEach items="${cars}" var="car">
+                                            <div class="collapse" id="car-info-details-<c:out value="${car.carId}"/>">
+                                                <div class="primary-bg-color" id="car-info-details-container">
+                                                    <div class="car-info-details-row">
+                                                        <i class="bi bi-caret-right-fill light-text"></i>
+                                                        <span class="light-text">Patente: <c:out value="${car.plate}"/></span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </c:forEach>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div id="car-info-image" class="collapse collapse-horizontal">
-                                        <div class="placeholder-image-color">
-                                            <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
+                                <c:if test="${empty cars}">
+                                    <div class="col-6">
+                                        <div id="no-cars-container">
+                                            <h5 class="danger">No tenés autos registrados</h5>
+                                            <a href="<c:url value="${createCarUrl}"/>">
+                                                <button type="button" class="button-style button-color shadow-btn">
+                                                    <i class="bi bi-plus light-text h5"></i>
+                                                    <span class="button-text-style light-text h5">Agregar auto</span>
+                                                </button>
+                                            </a>
                                         </div>
+                                    </div>
+                                </c:if>
+                                <div class="col-6" id="car-image-container">
+                                    <c:forEach items="${cars}" var="car">
+                                        <div class="collapse collapse-horizontal" id="car-info-image-<c:out value="${car.carId}"/>">
+                                            <div class="placeholder-image-color">
+                                                <i class="bi bi-car-front-fill placeholder-image-icon-color"></i>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-row" id="seats-container">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-text">
+                                            <i class="bi bi-people-fill text"></i>
+                                        </div>
+                                        <form:input path="maxSeats" cssClass="form-control form-control-sm" id="seats" placeholder="Cantidad de asientos"/>
                                     </div>
                                 </div>
                             </div>

@@ -132,7 +132,7 @@ public class TripController {
     public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         List<Trip> trips = tripService.getIncomingTrips(0,10).getElements();
-//        System.out.println(trips.get(0));
+
         final ModelAndView mav = new ModelAndView("/landing/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -149,9 +149,11 @@ public class TripController {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         //TODO: throw custom Exception
         List<Car> userCars = carService.findByUser(user);
+
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
         mav.addObject("createTripUrl", CREATE_TRIP_PATH);
+        mav.addObject("createCarUrl", "/cars/create");
         mav.addObject("cars", userCars);
         return mav;
     }
@@ -175,6 +177,15 @@ public class TripController {
         Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), 1,user,form.getLastDate(), form.getTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/trips/{id:\\d+$}", method = RequestMethod.DELETE)
+    public ModelAndView deleteTrip() {
+        // Todo: delete trip
+        final ModelAndView mav = new ModelAndView("/created-trips/next");
+        mav.addObject("tripDeleted", true);
 
         return mav;
     }

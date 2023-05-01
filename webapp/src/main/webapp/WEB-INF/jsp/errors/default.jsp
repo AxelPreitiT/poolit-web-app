@@ -4,8 +4,7 @@
 <html>
 <head>
     <title><spring:message code="errors.heading"/></title>
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
+    <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/static/not-found.css"/>" rel="stylesheet">
 </head>

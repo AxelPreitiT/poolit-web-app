@@ -9,7 +9,7 @@
 -->
 
 <div id="toast">
-    <div class="toast fade show success-bg-color" role="alert" aria-live="assertive" aria-atomic="true">
+    <div id="success-toast" class="toast fade success-bg-color" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header success-bg-color">
             <strong class="light-text h3"><c:out value="${param.title}"/></strong>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -19,3 +19,5 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/resources/js/components/successToast.js"/>" type="text/javascript"></script>```
