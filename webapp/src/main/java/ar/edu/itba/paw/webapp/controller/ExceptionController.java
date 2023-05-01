@@ -56,4 +56,20 @@ public class ExceptionController extends LoggedUserController {
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.carNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ModelAndView illegalArgument(){
+        ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalArgument",null, LocaleContextHolder.getLocale()));
+        mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalArgument.description",null,LocaleContextHolder.getLocale()));
+        return mav;
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ModelAndView illegalState(){
+        ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalState",null, LocaleContextHolder.getLocale()));
+        mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalState.description",null,LocaleContextHolder.getLocale()));
+        return mav;
+    }
+
 }

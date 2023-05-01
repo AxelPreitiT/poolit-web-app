@@ -7,7 +7,12 @@
 <link href="<c:url value="/resources/css/users/travel-info.css"/>" rel="stylesheet" type="text/css"/>
 
 <div>
-    <a href="/test">
+    <c:url value="/trips/${trip.tripId}" var="tripUrl">
+        <c:param name="startDate" value="${trip.queryStartDateString}"/>
+        <c:param name="startTime" value="${trip.startTimeString}"/>
+        <c:param name="endDate" value="${trip.queryEndDateString}"/>
+    </c:url>
+    <a href="${tripUrl}">
         <div class="card-info">
             <div class="data-container">
                 <div class="route-container">

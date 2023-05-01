@@ -110,30 +110,6 @@ public class UserController extends LoggedUserController {
         return new ModelAndView("/helloworld/index");
     }
 
-    /*
-    @RequestMapping(value = LOGIN_USER_PATH + "/error", method = RequestMethod.POST)
-    public ModelAndView loginUserPostError() {
-        final ModelAndView mav = new ModelAndView("users/login");
-        mav.addObject("postUrl", LOGIN_USER_PATH);
-        return mav;
-    }
-    */
-
-    /*
-    @RequestMapping("/loginFailed")
-    public void loginFailed(HttpServletRequest request) {
-        AuthenticationException authenticationException = (AuthenticationException) request.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-
-        if (authenticationException != null) {
-            if(authenticationException.getCause() != null) {
-                throw (AuthenticationException) authenticationException.getCause();
-            } else {
-                throw authenticationException;
-            }
-        }
-    }
-    */
-
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
         SecurityContext pepe = SecurityContextHolder.getContext();
