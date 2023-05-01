@@ -34,8 +34,11 @@
                                     </jsp:include>
                                 </div>
                                 <div class="col-6">
-                                    <div>
-                                        <form:input path="originAddress" maxlength="50" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
+                                    <div class="inline_container">
+                                        <form:input path="originAddress" maxlength="50" cssClass="form-control form-control-sm col-3" id="originAddress" placeholder="Dirección"/>
+                                        <div class="error_container">
+                                            <form:errors path="originAddress" cssClass="formError" element="p"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

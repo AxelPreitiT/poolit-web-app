@@ -15,6 +15,16 @@
     margin-bottom: auto;
 }
 
+.inline_container{
+    display: flex;
+    flex-direction: row;
+}
+
+.error_container{
+    min-width: 100%;
+    display: flex;
+}
+
 .vertical-dotted-line {
     border-left: 3px dotted black;
     margin-left: 18px;
