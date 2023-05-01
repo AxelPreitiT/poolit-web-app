@@ -83,6 +83,7 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
     }
 
+    @Async
     @Override
     public void sendMailNewPassenger(Trip trip, User passenger) throws MessagingException, IOException {
         String subject = messageSource.getMessage("emails.subject.newPassengerDriver",null,LocaleContextHolder.getLocale());
@@ -94,6 +95,7 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(trip.getDriver().getEmail(),subject,"new-passenger-mail",ctx);
     }
 
+    @Async
     @Override
     public void sendMailTripDeletedToPassenger(Trip trip, User passenger) throws MessagingException,IOException{
         String subject = messageSource.getMessage("emails.subject.tripCancelledPassenger",null,LocaleContextHolder.getLocale());
@@ -105,6 +107,7 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(passenger.getEmail(),subject,"delete-trip-passenger-email",ctx);
     }
 
+    @Async
     @Override
     public void sendMailTripDeletedToDriver(Trip trip) throws MessagingException,IOException{
         String subject = messageSource.getMessage("emails.subject.tripCancelledDriver",null,LocaleContextHolder.getLocale());
@@ -115,6 +118,7 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(trip.getDriver().getEmail(),subject,"delete-trip-driver-mail",ctx);
     }
 
+    @Async
     @Override
     public void sendMailNewTrip(Trip trip) throws MessagingException, IOException {
         String subject = messageSource.getMessage("emails.subject.newTripCreated",null,LocaleContextHolder.getLocale());
@@ -125,6 +129,7 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(trip.getDriver().getEmail(),subject,"create-trip-mail",ctx);
     }
 
+    @Async
     @Override
     public void sendMailTripConfirmation(Trip trip, User passenger) throws MessagingException, IOException {
         String subject = messageSource.getMessage("emails.subject.newTripPassenger",null,LocaleContextHolder.getLocale());
