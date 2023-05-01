@@ -15,7 +15,7 @@
   </div>
   <div class="row-info">
     <h6>Nombre y apellido</h6>
-    <h4>${user.username} ${user.surname}</h4>
+    <h4>${user.name} ${user.surname}</h4>
   </div>
   <div class="row-info">
     <h6>Email</h6>

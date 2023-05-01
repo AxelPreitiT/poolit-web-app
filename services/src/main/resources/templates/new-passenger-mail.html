@@ -72,8 +72,8 @@
         </a>
     </div>
     <h1 class="text-center mb-4">¡Tienes un nuevo pasajero!</h1>
-    <p>Hola <span th:text="${trip.driver.username}"></span>,</p>
-    <p>Te escribimos para avisarte que <span th:text="${passenger.username}"/> <span th:text="${passenger.surname}"/> se unio a tu viaje. Aquí está la información del viaje y del usuario:</p>
+    <p>Hola <span th:text="${trip.driver.name}"></span>,</p>
+    <p>Te escribimos para avisarte que <span th:text="${passenger.name}"/> <span th:text="${passenger.surname}"/> se unio a tu viaje. Aquí está la información del viaje y del usuario:</p>
     <div>
         <div class="info-container">
             <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
@@ -100,7 +100,7 @@
         <div class="info-container">
             <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102393206974447627/person-fill.png" alt="user"/>
             <span>
-               <span th:text="${passenger.username}"/> <span th:text="${passenger.surname}"/> (<span th:text="${passenger.email}"/>)
+               <span th:text="${passenger.name}"/> <span th:text="${passenger.surname}"/> (<span th:text="${passenger.email}"/>)
            </span>
         </div>
     </div>
