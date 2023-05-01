@@ -230,6 +230,7 @@ public class TripServiceImpl implements TripService {
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
             final int page, final int pageSize){
+        validatePageAndSize(page,pageSize);
         LocalDateTime startDateTime;
         Optional<DayOfWeek> dayOfWeek = Optional.empty();
         Optional<LocalDateTime> aux = getLocalDateTime(startDate,startTime);
@@ -249,6 +250,7 @@ public class TripServiceImpl implements TripService {
             final String startTime, final String endDate, final String endTime,
             double minPrice, double maxPrice,
             final int page, final int pageSize){
+        validatePageAndSize(page,pageSize);
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
         return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);

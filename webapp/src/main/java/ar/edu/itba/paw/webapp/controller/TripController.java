@@ -5,12 +5,9 @@ import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
-import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
@@ -40,6 +37,7 @@ public class TripController {
     private final ImageService imageService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
+    private final static int PAGE_SIZE = 10;
     private final static String BASE_RELATED_PATH = "/";
     private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
     private final static String TRIP_PATH = BASE_RELATED_PATH + "trips/";
@@ -62,12 +60,10 @@ public class TripController {
                                        ){
         System.out.println("Start date"+form.getStartDate());
         System.out.println("End date" + form.getEndDate());
-        Optional<Trip> trip = tripService.findById(tripId);
-        if(!trip.isPresent()){//Usar Optional?
-            throw new TripNotFoundException();
-        }
+        //TODO: buscar al trip en el rango especificado
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
-        mv.addObject("trip",trip.get());
+        mv.addObject("trip",trip);
         return mv;
     }
 
@@ -92,7 +88,7 @@ public class TripController {
 //        if(ans && trip.isPresent()){
 //        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
         System.out.println("Encuentra al usuario");
-        //TODO: agregar excepciones nuestras y nuestro manejo
+        //TODO: buscar al trip en el rango especificado
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         System.out.println("Encontre el viaje");
         boolean ans = false;
@@ -111,19 +107,24 @@ public class TripController {
         // TODO: Throw error 500 internal server error
         return new ModelAndView("/static/not-found-404");
     }
-
+    //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
-    public ModelAndView getSearchedTrips(@Valid @ModelAttribute("searchTripForm") final SearchTripForm form, final BindingResult errors){
+    public ModelAndView getSearchedTrips(
+            @Valid @ModelAttribute("searchTripForm") final SearchTripForm form,
+            final BindingResult errors,
+            @RequestParam(value = "page",required = false,defaultValue = "1")  final int page){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
         mav.addObject("searchUrl", SEARCH_TRIP_PATH);
         if(errors.hasErrors()){
-            mav.addObject("trips", new ArrayList<>());
+            System.out.println("Errors");
+            errors.getAllErrors().forEach(System.out::println);
+            mav.addObject("tripsContent",PagedContent.<Trip>emptyPagedContent());
             return mav;
         }
-        final List<Trip> trips = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),0,10).getElements();
-        mav.addObject("trips", trips);
+        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),page-1,PAGE_SIZE);
+        mav.addObject("tripsContent", tripsContent);
         return mav;
     }
 

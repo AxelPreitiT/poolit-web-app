@@ -17,6 +17,7 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
@@ -81,8 +83,13 @@ public class UserController {
             return createUserGet(form);
         }
         City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
-        userService.createUserIfNotExists(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                form.getPassword(), form.getBirthdate(), originCity, null);
+        try {
+            userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
+                    form.getPassword(), form.getBirthdate(), originCity, null);
+        }catch (EmailAlreadyExistsException e){
+            errors.rejectValue("email", "validation.email.alreadyExists");
+            return createUserGet(form);
+        }
         return new ModelAndView("redirect:/users/login" );
     }
 
@@ -124,6 +131,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
+        SecurityContext pepe = SecurityContextHolder.getContext();
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
