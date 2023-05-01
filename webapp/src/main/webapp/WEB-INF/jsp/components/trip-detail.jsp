@@ -1,10 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="trip" type="ar.edu.itba.paw.models.trips.Trip" scope="request"/>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+
 <link href="<c:url value="/resources/css/components/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
 
 <div id="main-header-row">
-  <h1 class="secondary-color">Detalles del viaje</h1>
+  <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
   <hr class="secondary-color">
 </div>
 <div id="trip-route-container">

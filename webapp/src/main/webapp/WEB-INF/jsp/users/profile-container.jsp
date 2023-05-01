@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <jsp:useBean id="user" type="ar.edu.itba.paw.models.User"  scope="request"/>
 
@@ -14,23 +15,23 @@
     </div>
   </div>
   <div class="row-info">
-    <h6>Nombre y apellido</h6>
-    <h4>${user.username} ${user.surname}</h4>
+    <h6><spring:message code="user.fullname"/></h6>
+    <h4><spring:message code="user.nameFormat" arguments="${user.username}, ${user.surname}"/></h4>
   </div>
   <div class="row-info">
-    <h6>Email</h6>
-    <h4>${user.email}</h4>
+    <h6><spring:message code="user.email"/></h6>
+    <h4><c:out value="${user.email}"/></h4>
   </div>
   <div class="row-info">
-    <h6>Telefono</h6>
-    <h4>${user.phone}</h4>
+    <h6><spring:message code="user.phone"/></h6>
+    <h4><c:out value="${user.phone}"/></h4>
   </div>
   <div class="row-info">
-    <h6>Localidad origen</h6>
-    <h4>${user.bornCity.name}</h4>
+    <h6><spring:message code="user.district"/></h6>
+    <h4><c:out value="${user.bornCity.name}"/></h4>
   </div>
   <form:form method = "POST" action = "${param.path}">
-    <button type="submit" class="btn btn-primary btn-lg">Cambiar a ${param.role}</button>
+    <button type="submit" class="btn btn-primary btn-lg"><spring:message code="user.btnAction" arguments="${param.role}"/></button>
   </form:form>
 </div>
 

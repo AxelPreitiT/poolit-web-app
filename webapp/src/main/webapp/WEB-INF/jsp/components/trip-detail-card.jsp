@@ -21,9 +21,9 @@
             <i class="bi bi-calendar light-text h5"></i>
             <div class="show-row-content">
                 <span class="light-text detail"><c:out value="${trip.dayOfWeekString}"/></span>
-                <span class="light-text">Desde el <c:out value="${trip.startDateString}"/>
+                <span class="light-text"><spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.startDateString}"/>
                 <c:if test="${trip.recurrent}">
-                    hasta el <c:out value="${trip.endDateString}" />
+                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.endDateString}"/>
                 </c:if>
                 </span>
             </div>
@@ -32,7 +32,7 @@
             <i class="bi bi-car-front-fill light-text h5"></i>
             <div class="show-row-content">
                 <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
-                <span class="light-text">Patente: <c:out value="${trip.car.plate}"/></span>
+                <span class="light-text"><spring:message code="profile.plate" arguments="${trip.car.plate}"/></span>
             </div>
         </div>
         <div class="show-row" >
@@ -51,7 +51,7 @@
         <div class="show-row">
             <i class="bi bi-person-circle light-text h5"></i>
             <div class="show-row-content">
-                <span class="light-text detail"><c:out value="${trip.driver.username} ${trip.driver.surname}"/></span>
+                <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.username}, ${trip.driver.surname}"/></span>
             </div>
         </div>
         <div class="show-row">

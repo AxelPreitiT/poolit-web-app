@@ -11,14 +11,14 @@
                         <c:param name="page" value="${param.currentPage-1}"/>
                         </c:url>"
                        aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
+                        <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                     </a>
                 </li>
             </c:when>
             <c:otherwise>
                 <li class="page-item disabled">
                     <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
+                        <span aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
                     </a>
                 </li>
             </c:otherwise>
@@ -53,14 +53,14 @@
                     <a class="page-link" href="<c:url value="${param.baseUrl}">
                         <c:param name="page" value="${param.currentPage+1}"/>
                         </c:url>" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
+                        <span aria-hidden="true"><i class="bi bi-arrow-right-short"></i></span>
                     </a>
                 </li>
             </c:when>
             <c:otherwise>
                 <li class="page-item disabled">
                     <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
+                        <span aria-hidden="true"><i class="bi bi-arrow-right-short"></i></span>
                     </a>
                 </li>
             </c:otherwise>
