@@ -31,7 +31,7 @@ public class CreateUserForm {
     private String birthdate;
     private int bornCityId;
 
-    //TODO Fix MPFile, doesnt work here
+    @MPFile
     private MultipartFile imageFile;
 
     public String getRepeatPassword() {

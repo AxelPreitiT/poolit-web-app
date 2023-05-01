@@ -69,7 +69,7 @@ public class UserController {
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
     public ModelAndView createUserGet(
-            @Valid @ModelAttribute("createUserForm") final CreateUserForm form
+             @ModelAttribute("createUserForm") final CreateUserForm form
     ) {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("users/register");

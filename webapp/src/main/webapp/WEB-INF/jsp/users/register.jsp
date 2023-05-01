@@ -91,7 +91,7 @@
                 <div class="user-info-item">
                     <label for="imageFile" class="form-label">Foto de perfil</label>
                     <form:input path="imageFile" type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*"/>
-                    <form:errors path="imageFile" cssClass="error" element="p"/>
+                    <form:errors path="imageFile" cssClass="formError" element="p"/>
                 </div>
             </div>
             <div class="user-info-row">
