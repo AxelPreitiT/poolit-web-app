@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Confirmación de reserva de viaje</title>
-<!--    <link rel="stylesheet" href="/css/mail.css">-->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +28,6 @@
         .btn-container {
             text-align: center;
             display: flex;
-            justify-content: center;
             margin-top: 30px;
         }
 
@@ -46,25 +44,61 @@
         .btn:hover {
             background-color: #0d65ad;
         }
+        .logo-svg{
+            width: 50%;
+            height: 50%;
+        }
+        .info-container {
+            display: flex;
+            gap: 0.25em;
+        }
+        .dotted-line{
+            margin-bottom: 5px;
+            margin-top: 5px;
+            min-height: 20px;
+            margin-left: 7px;
+            display: block;
+            border-left: 3px dotted black;
+        }
     </style>
 </head>
 <body>
 <div class="email-container">
-<!--    <div class="logo">-->
-<!--        <img src="https://picsum.photos/100/100" alt="Logo de Mi Proyecto">-->
-<!--    </div>-->
+    <div class="logo">
+        <a th:href="@{{baseUrl}(baseUrl=${baseUrl})}">
+            <img src="https://cdn.discordapp.com/attachments/1090791209095659590/1102380392222298142/poolit.png" alt="Poolit logo"/>
+        </a>
+    </div>
     <h1 class="text-center mb-4">¡Creaste un viaje en Poolit!</h1>
-    <p>Hola  <span th:text="${trip.driver.email}"></span>,</p>
-    <p>Te escribimos para avisarte que creaste un nuevo viaje. Aquí está la información del viaje del <span th:text="${trip.startDateString}"></span>:</p>
-    <ul>
-        <li>Origen:  <span th:text="${trip.originCity.name}"></span> en <span th:text="${trip.originAddress}"></span></li>
-        <li>Destino:   <span th:text="${trip.destinationCity.name}"></span> en <span th:text="${trip.destinationAddress}"></span></li>
-        <li>Horario de salida:<span th:text="${trip.startTimeString}"></span></li>
-        <li>Asientos maximos:  <span th:text="${trip.maxSeats}"></span></li>
-    </ul>
-<!--    <div class="btn-container">-->
-<!--        <a href="#" class="btn">Cancelar viaje</a>-->
-<!--    </div>-->
+    <p>Hola  <span th:text="${trip.driver.username}"></span>,</p>
+    <p>Te escribimos para avisarte que creaste un nuevo viaje. Aquí te dejamos la información:</p>
+    <div>
+        <div class="info-container">
+            <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
+           <span>
+               <span th:text="${trip.originAddress}"/> en <span th:text="${trip.originCity.name}"/>
+           </span>
+        </div>
+        <div>
+            <div class="dotted-line"></div>
+        </div>
+        <div class="info-container">
+            <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102389955977818182/geo-alt-fill.png" alt="endLocation"/>
+            <span>
+               <span th:text="${trip.originAddress}"/> en <span th:text="${trip.originCity.name}"/>
+           </span>
+        </div>
+        <div class="info-container">
+            <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
+            <span>
+               <span th:text="${trip.dayOfWeekString}"/> <span th:if="${trip.recurrent}">desde el </span> <span th:text="${trip.startDateString}"/>
+                <span th:if="${trip.recurrent}" >hasta el </span><span th:if="${trip.recurrent}" th:text="${trip.endDateTime}"/> a las <span th:text="${trip.startTimeString}"/>
+           </span>
+        </div>
+    </div>
+    <div class="btn-container">
+        <a th:href="@{{baseUrl}/user/created(baseUrl=${baseUrl})}" class="btn">Ir a mis viajes</a>
+    </div>
 </div>
 </body>
 </html>

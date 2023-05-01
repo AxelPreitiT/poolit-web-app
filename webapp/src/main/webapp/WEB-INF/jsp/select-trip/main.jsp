@@ -22,21 +22,22 @@
                 <div id="trip-price-container">
                     <div class="trip-price-row">
                         <div>
-                            <span class="h3 text">Total:</span>
+                            <span class="h3 text">Precio:</span>
                         </div>
                         <div>
-                            <span class="h2 secondary-color">$<c:out value="${trip.totalPrice}"/></span>
+                            <span class="h2 secondary-color">$<c:out value="${trip.price}"/> por viaje</span>
                         </div>
                     </div>
                     <div class="trip-price-row items-to-end">
-                    <c:choose>
-                        <c:when test="${trip.recurrent}">
-                            <span class="h6 italic-text"><c:out value="${trip.totalTrips}"/> viajes</span>
-                        </c:when>
-                        <c:otherwise>
-                            <span class="h6 italic-text">Viaje único</span>
-                        </c:otherwise>
-                    </c:choose>
+                        <span class="h6 italic-text">Por viaje</span>--%>
+<%--                    <c:choose>--%>
+<%--                        <c:when test="${trip.recurrent}">--%>
+<%--                            <span class="h6 italic-text"><c:out value="${trip.totalTrips}"/> viajes</span>--%>
+<%--                        </c:when>--%>
+<%--                        <c:otherwise>--%>
+<%--                            <span class="h6 italic-text">Viaje único</span>--%>
+<%--                        </c:otherwise>--%>
+<%--                    </c:choose>--%>
                     </div>
                 </div>
                 <div id="button-container">
