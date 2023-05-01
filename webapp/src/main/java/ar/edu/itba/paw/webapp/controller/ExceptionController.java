@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -11,12 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Locale;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController extends LoggedUserController {
 
     private final MessageSource messageSource;
 
     @Autowired
-    public ExceptionController(MessageSource messageSource){
+    public ExceptionController(final UserService userService, final MessageSource messageSource){
+        super(userService);
         this.messageSource = messageSource;
     }
     @ExceptionHandler(TripNotFoundException.class)

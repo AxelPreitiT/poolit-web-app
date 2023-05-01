@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!-- Beans:
@@ -37,8 +38,7 @@
     </div>
     <div id="content-container">
         <div class="main-container-style container-color">
-            <c:choose>
-                <c:when test="${isLoggedIn}">
+            <sec:authorize access="isAuthenticated()">
                     <div id="trips-container">
                         <h2 class="title secondary-color"><spring:message code="landing.availablesTrips"/></h2>
                         <div id="trip-cards-container" class="container">
@@ -59,8 +59,8 @@
                             </div>
                         </div>
                     </div>
-                </c:when>
-                <c:otherwise>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
                     <div id="intro-container">
                         <div class="intro-row">
                             <div class="text-container">
@@ -96,8 +96,7 @@
                             </div>
                         </div>
                     </div>
-                </c:otherwise>
-            </c:choose>
+                </sec:authorize>
         </div>
     </div>
 </body>

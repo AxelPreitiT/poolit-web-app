@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.io.Console;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -29,7 +28,7 @@ public class PawUserDetailsService implements UserDetailsService {
     }
 
     private enum AuthRoles{
-        USER_ADMIN("ROLE_USER"),
+        USER("ROLE_USER"),
         DRIVER("ROLE_DRIVER");
         private final String role;
         private AuthRoles(String role){
@@ -47,11 +46,10 @@ public class PawUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("No user for email " + email));
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        //TODO: hacer al reves el chequeo, que el default sean los permisos mas bajos posibles
-        if(Objects.equals(user.getRole(), "USER")){
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER_ADMIN.role));
-        }else {
+        if(Objects.equals(user.getRole(), "DRIVER")){
             authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+        } else {
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
         }
 
         return new AuthUser(email, user.getPassword(), authorities);
@@ -65,7 +63,7 @@ public class PawUserDetailsService implements UserDetailsService {
         if(Objects.equals(user.getRole(), "USER")){
             authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
         }else {
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER_ADMIN.role));
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
         }
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), authorities);
