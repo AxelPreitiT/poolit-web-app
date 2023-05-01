@@ -19,22 +19,6 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-//    @RequestMapping(value = "/upload", method = RequestMethod.GET)
-//    public ModelAndView showUploadForm() {
-//        ModelAndView mav = new ModelAndView("/image-tester/uploadForm");
-//        return mav;
-//    }
-//
-//    //TODO: cambiar a image/upload si se usa
-//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-//    public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file) throws Exception {
-//        byte[] data = file.getBytes();
-//        Image image=imageService.createImage(data);
-//        ModelAndView modelAndView = new ModelAndView("/image-tester/imageDetails");
-//        modelAndView.addObject("image", image);
-//        return modelAndView;
-//    }
-
     @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
     public @ResponseBody
     byte[] getImage(@PathVariable("imageId") final int imageId) {
