@@ -21,9 +21,9 @@
             <i class="bi bi-calendar light-text h5"></i>
             <div class="show-row-content">
                 <span class="light-text detail"><c:out value="${trip.dayOfWeekString}"/></span>
-                <span class="light-text">Desde el <c:out value="${trip.startDateString}"/>
+                <span class="light-text">Desde el <c:out value="${trip.queryStartDateString}"/>
                 <c:if test="${trip.recurrent}">
-                    hasta el <c:out value="${trip.endDateString}" />
+                    hasta el <c:out value="${trip.queryEndDateString}" />
                 </c:if>
                 </span>
             </div>

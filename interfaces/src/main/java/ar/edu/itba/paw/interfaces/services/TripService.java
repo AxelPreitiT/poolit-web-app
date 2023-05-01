@@ -27,6 +27,8 @@ public interface TripService {
     Optional<Trip> findById(long id, LocalDateTime start, LocalDateTime end);
     //
     Optional<Trip> findById(long id, LocalDateTime dateTime);
+
+    Optional<Trip> findById(long id, String startDate, String startTime, String endDate);
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //

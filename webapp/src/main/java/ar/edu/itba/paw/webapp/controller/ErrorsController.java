@@ -32,6 +32,7 @@ public class ErrorsController {
         return new ModelAndView("static/403");
     }
 
+    //TODO: ver por que se llama todo el tiempo y preguntarlo
     @RequestMapping(value = "/errors", method = RequestMethod.GET)
     public ModelAndView runtimeError(HttpServletRequest servletRequest){
         ModelAndView mav = new ModelAndView("/errors/default");

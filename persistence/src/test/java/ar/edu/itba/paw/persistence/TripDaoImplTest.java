@@ -66,7 +66,7 @@ public class TripDaoImplTest {
         Number key = tripInsert.executeAndReturnKey(data);
         return new Trip(key.longValue(),trip.getOriginCity(),trip.getOriginAddress(),
                 trip.getDestinationCity(),trip.getDestinationAddress(),trip.getStartDateTime(),
-                trip.getEndDateTime(),trip.getMaxSeats(),trip.getDriver(),trip.getCar(),trip.getOccupiedSeats(),trip.getPrice());
+                trip.getEndDateTime(),trip.getMaxSeats(),trip.getDriver(),trip.getCar(),trip.getOccupiedSeats(),trip.getPrice(),trip.getStartDateTime(),trip.getEndDateTime());
     }
 
     @Before

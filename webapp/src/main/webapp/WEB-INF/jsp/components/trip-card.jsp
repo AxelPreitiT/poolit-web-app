@@ -16,7 +16,12 @@
 
 <div class="card-container">
     <div class="card">
-        <a href="${param.tripUrl}">
+        <c:url value="/trips/${trip.tripId}" var="tripUrl2">
+            <c:param name="startDate" value="${trip.queryStartDateString}"/>
+            <c:param name="startTime" value="${trip.startTimeString}"/>
+            <c:param name="endDate" value="${trip.queryEndDateString}"/>
+        </c:url>
+        <a href="${tripUrl2}">
             <div class="row g-0">
                 <div class="col-8">
                     <div class="card-body">
@@ -46,7 +51,7 @@
                                             <span class="text text-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="text"><c:out value="${trip.startDateString}"/></span>
+                                            <span class="text"><c:out value="${trip.queryStartDateString}"/></span>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>

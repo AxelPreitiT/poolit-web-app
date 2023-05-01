@@ -103,7 +103,7 @@
   </div>
   <p>No te preocupes, seguramente hay otros viajes que puedes tomar. ¡En nuestro buscador vas a poder encontrar el viaje que más te sirva!</p>
   <div class="btn-container">
-    <a th:href="@{{baseUrl}/search(baseUrl=${baseUrl},originCityId=${trip.originCity.id},destinationCityId=${trip.destinationCity.id})}" class="btn">
+    <a th:href="@{{baseUrl}/(baseUrl=${baseUrl})}" class="btn">
       Buscar otro viaje</a>
   </div>
 </div>

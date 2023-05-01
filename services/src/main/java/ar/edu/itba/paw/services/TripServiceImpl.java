@@ -69,7 +69,7 @@ public class TripServiceImpl implements TripService {
         return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
     }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
-        if(date.length()==0 || time.length()==0){
+        if(date == null || time == null || date.length()==0 || time.length()==0){
             return Optional.empty();
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -77,6 +77,22 @@ public class TripServiceImpl implements TripService {
         try{
             String[] timeTokens = time.split(":");
             ans = LocalDate.parse(date, formatter).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+        }catch (Exception e){
+            return Optional.empty();
+        }
+        return Optional.of(ans);
+    }
+    private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
+        if(date == null || time == null || date.length()==0 || time.length()==0){
+            return Optional.empty();
+        }
+        System.out.println("Intenta con" + date);
+        LocalDateTime ans;
+        try{
+            String[] timeTokens = time.split(":");
+            System.out.println("Logra separar los tokens");
+            ans = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+            System.out.println("Parsea la fecha");
         }catch (Exception e){
             return Optional.empty();
         }
@@ -115,8 +131,8 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate){
-        LocalDateTime startDateTime = getLocalDateTime(startDate,startTime).get();
-        LocalDateTime endDateTime = getLocalDateTime(endDate,startTime).orElse(startDateTime);
+        LocalDateTime startDateTime = getIsoLocalDateTime(startDate,startTime).get();
+        LocalDateTime endDateTime = getIsoLocalDateTime(endDate,startTime).orElse(startDateTime);
         return addPassenger(trip,passenger,startDateTime,endDateTime);
     }
     @Override
@@ -139,7 +155,7 @@ public class TripServiceImpl implements TripService {
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
             || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
-            || startDateTime.isBefore(LocalDateTime.now()) || trip.getDriver().equals(passenger)
+            || startDateTime.isBefore(LocalDateTime.now()) || trip.getDriver().equals(user)
             || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
             throw new IllegalArgumentException();
         }
@@ -171,6 +187,12 @@ public class TripServiceImpl implements TripService {
     @Override
     public Optional<Trip> findById(long id) {
         return tripDao.findById(id);
+    }
+    @Override
+    public Optional<Trip> findById(long id, String startDate, String startTime, String endDate){
+        LocalDateTime start = getIsoLocalDateTime(startDate,startTime).orElseThrow(IllegalArgumentException::new);
+        LocalDateTime end = getIsoLocalDateTime(endDate,startTime).orElseThrow(IllegalArgumentException::new);
+        return findById(id,start,end);
     }
     @Override
     public Optional<Trip> findById(long id,LocalDateTime start, LocalDateTime end){
