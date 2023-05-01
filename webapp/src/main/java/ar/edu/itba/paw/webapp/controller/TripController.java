@@ -131,7 +131,7 @@ public class TripController {
     public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         List<Trip> trips = tripService.getIncomingTrips(0,10).getElements();
-//        System.out.println(trips.get(0));
+
         final ModelAndView mav = new ModelAndView("/landing/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
@@ -148,9 +148,11 @@ public class TripController {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         //TODO: throw custom Exception
         List<Car> userCars = carService.findByUser(user);
+
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
         mav.addObject("createTripUrl", CREATE_TRIP_PATH);
+        mav.addObject("createCarUrl", "/cars/create");
         mav.addObject("cars", userCars);
         return mav;
     }

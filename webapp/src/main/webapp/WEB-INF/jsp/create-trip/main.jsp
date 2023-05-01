@@ -134,7 +134,7 @@
                                             <div class="input-group-text">
                                                 <i class="bi bi-car-front-fill text"></i>
                                             </div>
-                                            <form:select path="carId" cssClass="form-select form-select-sm" id="car-select">
+                                            <form:select path="carId" cssClass="form-select form-select-sm" id="car-select" disabled="${empty cars}">
                                                 <form:option value="-1" label="Seleccionar auto"/>
                                                 <form:options items="${cars}" itemValue="carId" itemLabel="infoCar"/>
                                             </form:select>
@@ -151,7 +151,20 @@
                                         </c:forEach>
                                     </div>
                                 </div>
-                                <div class="col-6">
+                                <c:if test="${empty cars}">
+                                    <div class="col-6">
+                                        <div id="no-cars-container">
+                                            <h5 class="danger">No tenés autos registrados</h5>
+                                            <a href="<c:url value="${createCarUrl}"/>">
+                                                <button type="button" class="button-style button-color shadow-btn">
+                                                    <i class="bi bi-plus light-text h5"></i>
+                                                    <span class="button-text-style light-text h5">Agregar auto</span>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <div class="col-6" id="car-image-container">
                                     <c:forEach items="${cars}" var="car">
                                         <div class="collapse collapse-horizontal" id="car-info-image-<c:out value="${car.carId}"/>">
                                             <div class="placeholder-image-color">
@@ -171,7 +184,7 @@
                                         <div class="input-group-text">
                                             <i class="bi bi-people-fill text"></i>
                                         </div>
-                                        <form:input path="maxSeats" cssClass="form-control form-control-sm" id="seats" placeholder="Asientos"/>
+                                        <form:input path="maxSeats" cssClass="form-control form-control-sm" id="seats" placeholder="Cantidad de asientos"/>
                                     </div>
                                 </div>
                             </div>
