@@ -76,7 +76,6 @@
                                     </div>
                                     <div class="error_container">
                                         <form:errors path="time" cssClass="formError" element="p"/>
-                                        <form:errors cssClass="formError" element="p"/>
                                     </div>
                                 </div>
                             </div>
@@ -97,6 +96,9 @@
                                             <i class="bi bi-calendar-fill light-text"></i>
                                         </button>
                                         <form:input path="lastDate" cssClass="form-control form-control-sm" id="last-date" placeholder="Última fecha" disabled="true"/>
+                                    </div>
+                                    <div class="error_container">
+                                        <form:errors cssClass="formError" element="p"/>
                                     </div>
                                 </div>
                                 <div class="col-6">
