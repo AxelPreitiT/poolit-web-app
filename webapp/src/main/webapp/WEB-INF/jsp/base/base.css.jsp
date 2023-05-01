@@ -4,4 +4,5 @@
 <link href="<c:url value="/resources/css/base/font-sizes.css"/>" rel="stylesheet">
 <link href="<c:url value="/resources/css/base/colors.css"/>" rel="stylesheet">
 <link href="<c:url value="/resources/css/base/elements.css"/>" rel="stylesheet">
+<link href="<c:url value="/resources/css/components/page-selector.css"/>" rel="stylesheet">
 

@@ -12,9 +12,7 @@
   <div>
     <c:forEach items="${trips}" var="trip">
       <c:set var="trip" value="${trip}" scope="request"/>
-      <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp">
-        <jsp:param name="trip" value="${trip}"/>
-      </jsp:include>
+      <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp"/>
     </c:forEach>
   </div>
   <a href="/test">

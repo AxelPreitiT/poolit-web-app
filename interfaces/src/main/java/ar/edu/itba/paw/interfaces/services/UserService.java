@@ -18,4 +18,5 @@ public interface UserService {
     Optional<User> findByEmail(String email);
 
     public void changeRole(long userId, String role);
+
 }

@@ -1,5 +1,11 @@
 @import "users.css";
 
+.full-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5%;
+}
+
 div.main-container-style {
     margin-left: 35%;
     margin-right: 35%;
@@ -29,4 +35,17 @@ div.main-container-style {
 
 .login-btn{
     width: 100%;
+}
+
+.favicon_container{
+    display: flex;
+    justify-content: center;
+    max-height: 10%;
+    width: 100%;
+}
+
+.img-container{
+    display: flex;
+    justify-content: center;
+    width: 20%;
 }

@@ -1,0 +1,13 @@
+.pagination-container{
+    padding-top: 5%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.disabled{
+    color: gray;
+    opacity: 50%;
+}
+.active{
+    font-weight: bold;
+}
