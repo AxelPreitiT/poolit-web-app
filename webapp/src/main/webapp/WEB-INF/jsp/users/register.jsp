@@ -9,6 +9,7 @@
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/users/register.css"/>" rel="stylesheet">
+    <script src="<c:url value="/resources/js/users/image-preview.js"/>" type="module"></script>
 </head>
 <body class="background-bg-color">
     <div class="container-bg-color main-container-style">
@@ -90,7 +91,10 @@
             <div class="user-info-row">
                 <div class="user-info-item">
                     <label for="imageFile" class="form-label">Foto de perfil</label>
-                    <form:input path="imageFile" type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*"/>
+                    <form:input path="imageFile" type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" onChange="updateImageDisplay"/>
+                    <div class="preview">
+                        <p></p>
+                    </div>
                     <form:errors path="imageFile" cssClass="formError" element="p"/>
                 </div>
             </div>
