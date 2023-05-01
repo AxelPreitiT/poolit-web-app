@@ -13,7 +13,7 @@ public class Passenger extends User{
         this.endDateTime = endDateTime;
     }
     public Passenger(User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
-        super(user.getUserId(),user.getUsername(),user.getSurname(),user.getEmail(),user.getPhone(),user.getPassword(),user.getBirthdate(),user.getBornCity(),user.getRole());
+        super(user.getUserId(),user.getName(),user.getSurname(),user.getEmail(),user.getPhone(),user.getPassword(),user.getBirthdate(),user.getBornCity(),user.getRole());
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

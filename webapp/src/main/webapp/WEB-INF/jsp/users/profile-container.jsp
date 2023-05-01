@@ -16,7 +16,7 @@
   </div>
   <div class="row-info">
     <h6><spring:message code="user.fullname"/></h6>
-    <h4><spring:message code="user.nameFormat" arguments="${user.username}, ${user.surname}"/></h4>
+    <h4><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h4>
   </div>
   <div class="row-info">
     <h6><spring:message code="user.email"/></h6>
