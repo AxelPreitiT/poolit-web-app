@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 
 <link href="<c:url value="/resources/css/components/trip-card.css"/>" rel="stylesheet" type="text/css"/>
 
@@ -78,21 +80,22 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title danger">Eliminar viaje</h3>
+                        <h3 class="modal-title danger"><spring:message code="tripCard.delete"/></h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <span class="text">¿Está seguro que desea eliminar el viaje <strong class="secondary-color"><c:out value="${trip.originCity.name}"/> - <c:out value="${trip.destinationCity.name}"/></strong>?</span>
-                        <span class="text">Se enviará una notificación a todos los pasajeros anotados.</span>
+                        <!-- Avisar a axel que toque un poco el formato con el de hasta -->
+                        <span class="text"><spring:message code="tripCard.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                        <span class="text"><spring:message code="tripCard.warning.messege"/></span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
-                            <span class="light-text">Cancelar</span>
+                            <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                         </button>
                         <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
                         <form:form method="DELETE" action="${deleteTripUrl}">
                             <button type="submit" class="btn danger-bg-color">
-                                <span class="light-text">Eliminar</span>
+                                <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
                             </button>
                         </form:form>
                     </div>

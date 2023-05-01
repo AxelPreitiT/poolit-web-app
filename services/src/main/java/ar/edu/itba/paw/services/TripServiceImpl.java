@@ -72,7 +72,7 @@ public class TripServiceImpl implements TripService {
         return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
     }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
-        if(date.length()==0 || time.length()==0){
+        if(date ==null || time == null || date.length()==0 || time.length()==0){
             return Optional.empty();
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
