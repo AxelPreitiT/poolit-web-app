@@ -145,3 +145,12 @@
     margin-bottom: 0;
     overflow: hidden;
 }
+
+#not-authenticated-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 1em;
+    min-width: fit-content;
+}

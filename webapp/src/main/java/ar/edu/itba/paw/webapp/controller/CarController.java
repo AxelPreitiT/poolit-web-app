@@ -21,13 +21,14 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
-public class CarController {
+public class CarController extends LoggedUserController {
     private final UserService userService;
     private final ImageService imageService;
     private final CarService carService;
 
     @Autowired
     public CarController(UserService userService, ImageService imageService,CarService carService) {
+            super(userService);
             this.carService = carService;
             this.userService = userService;
             this.imageService = imageService;

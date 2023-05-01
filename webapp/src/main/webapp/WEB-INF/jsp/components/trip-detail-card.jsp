@@ -51,7 +51,7 @@
         <div class="show-row">
             <i class="bi bi-person-circle light-text h5"></i>
             <div class="show-row-content">
-                <span class="light-text detail"><c:out value="${trip.driver.username} ${trip.driver.surname}"/></span>
+                <span class="light-text detail"><c:out value="${trip.driver.name} ${trip.driver.surname}"/></span>
             </div>
         </div>
         <div class="show-row">
