@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class User {
     private final long userId;
-    private final String username;
+    private final String name;
     private final String surname;
     private final String email;
     private String phone;
@@ -14,12 +14,12 @@ public class User {
     private final LocalDateTime birthdate;
     private final City bornCity;
     private String role;
-    private long user_image_id;
+    private long userImageId;
 
-    public User(long userId, final String username, final String surname, final String email,
-                final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role, long user_image_id) {
+    public User(long userId, final String name, final String surname, final String email,
+                final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role,long userImageId) {
         this.userId = userId;
-        this.username = username;
+        this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
@@ -27,7 +27,7 @@ public class User {
         this.birthdate = birthdate;
         this.bornCity = bornCity;
         this.role = role;
-        this.user_image_id=user_image_id;
+        this.userImageId = userImageId;
     }
 
     public String getRole() {
@@ -83,11 +83,11 @@ public class User {
         return birthdate;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public long getUser_image_id() { return user_image_id; }
+    public long getUserImageId() { return userImageId; }
 
-    public void setUser_image_id(long user_image_id) { this.user_image_id = user_image_id; }
+    public void setUserImageId(long userImageId) { this.userImageId = userImageId; }
 }

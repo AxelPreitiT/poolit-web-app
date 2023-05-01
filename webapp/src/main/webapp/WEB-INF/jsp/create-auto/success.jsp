@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Success!</title>
+    <title><spring:message code="createCar.success.title"/></title>
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/select-trip/success.css"/>" rel="stylesheet">
@@ -21,7 +21,7 @@
                 <a href="${homeUrl}">
                     <button id="home-button" type="submit" class="btn button-style button-color shadow-btn">
                         <i class="bi bi-house-fill light-text h4"></i>
-                        <span class="button-text-style light-text h3">Inicio</span>
+                        <span class="button-text-style light-text h3"><spring:message code="createCar.success.btn"/></span>
                     </button>
                 </a>
             </div>
@@ -30,7 +30,7 @@
     <div id="toast-container">
         <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
             <jsp:param name="title" value="¡POOLIT!"/>
-            <jsp:param name="message" value="Creaste un auto exitosamente!"/>
+            <jsp:param name="message" value="createTrip.sucessToast"/>
         </jsp:include>
     </div>
 </body>

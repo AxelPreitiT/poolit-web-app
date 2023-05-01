@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!-- Beans:
         - isLoggedIn: boolean that indicates if the user is logged in or not
@@ -9,7 +11,7 @@
 
 <html>
 <head>
-    <title>POOLIT</title>
+    <title><spring:message code="titlePage"/></title>
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/landing/landing.css"/>" rel="stylesheet" type="text/css"/>
@@ -22,9 +24,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-5" id="banner-text-column">
-                    <span class="light-text title">¡Viaja con<span class="secondary-color">POOLIT</span>!</span>
-                    <span class="light-text subtitle">Con <span class="secondary-color">POOLIT</span> podrás compartir tus viajes con otros usuarios que tengan el mismo destino, reduciendo los costos de transporte, el tráfico y la emisión de gases contaminantes. Además, podrás conocer a nuevas personas y hacer conexiones mientras viajas.</span>
-                    <span class="light-text subtitle">¡Unite a la comunidad y comenzá a viajar de manera inteligente!</span>
+                    <span class="light-text title"><spring:message code="landing.travelWith"/><span class="secondary-color"><spring:message code="landing.title"/></span>!</span>
+                    <span class="light-text subtitle"><spring:message code="landing.with"/><span class="secondary-color"><spring:message code="landing.title"/></span><spring:message code="landing.principalText"/></span>
+                    <span class="light-text subtitle"><spring:message code="landing.segundText"/></span>
                 </div>
                 <div class="col-lg-5 col-xl-4" id="banner-search-column">
                     <jsp:include page="/WEB-INF/jsp/components/search-filters.jsp">
@@ -36,10 +38,9 @@
     </div>
     <div id="content-container">
         <div class="main-container-style container-color">
-            <c:choose>
-                <c:when test="${isLoggedIn}">
+            <sec:authorize access="isAuthenticated()">
                     <div id="trips-container">
-                        <h2 class="title secondary-color">Viajes disponibles</h2>
+                        <h2 class="title secondary-color"><spring:message code="landing.availablesTrips"/></h2>
                         <div id="trip-cards-container" class="container">
                             <div class="row">
                                 <c:forEach items="${trips}" var="trip">
@@ -58,14 +59,14 @@
                             </div>
                         </div>
                     </div>
-                </c:when>
-                <c:otherwise>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
                     <div id="intro-container">
                         <div class="intro-row">
                             <div class="text-container">
-                                <h3 class="secondary-color">Encontrá tu viaje en CABA</h3>
-                                <span class="text">Podrás buscar viajes que se ajusten a tus necesidades. Simplemente, ingresá tus puntos de partida y llegada, la fecha y la hora, y te mostraremos los viajes disponibles que se ajusten a tu horario. Además, podrás filtrar por precio e incluso, si lo necesitás realizar todas las semanas, podrás buscar <strong
-                                        class="secondary-color">viajes recurrentes</strong>.</span>
+                                <h3 class="secondary-color"><spring:message code="landing.secondFrame.principalTitle"/></h3>
+                                <span class="text"><spring:message code="landing.secondFrame.principalText"/><strong
+                                        class="secondary-color"><spring:message code="trip.recurrent"/></strong></span>
                             </div>
                             <div class="image-container">
                                 <img src="<c:url value="/resources/images/landing/landing-tutorial-one.jpg"/>"
@@ -75,8 +76,8 @@
                         <hr class="secondary-color"/>
                         <div class="intro-row">
                             <div class="text-container">
-                                <h3 class="secondary-color">Reservá tu viaje</h3>
-                                <span class="text">Cuando tengas decidido la mejor opción, hacé click en el botón "Reservar". Una vez que se confirme tu reserva, enviaremos un correo electrónico tanto a ti como al conductor con la información de contacto del otro. Esto hace que sea fácil coordinar los detalles de tu viaje y garantiza una experiencia fluida tanto para ti como para el conductor.</span>
+                                <h3 class="secondary-color"><spring:message code="landing.secondFrame.secondTitle"/></h3>
+                                <span class="text"><spring:message code="landing.secondFrame.secondText"/></span>
                             </div>
                             <div class="image-container">
                                 <img src="<c:url value="/resources/images/landing/landing-tutorial-two.jpg"/>"
@@ -86,8 +87,8 @@
                         <hr class="secondary-color"/>
                         <div class="intro-row">
                             <div class="text-container">
-                                <h3 class="secondary-color">Manejá y compartí</h3>
-                                <span class="text">No solo podrás encontrar viajes, sino que también podrás convertirte en conductor y compartir tus propios viajes. Solo necesitarás agregar la información de tu auto y ya podrás ofrecer viajes a otros. Establecé tu propio horario y ruta, y los usuarios podrán unirse a tu viaje si se ajusta a sus necesidades de viaje. De esta manera, estarás ayudando a reducir el tráfico y las emisiones, al mismo tiempo que ahorrarás dinero en gasolina y peajes.</span>
+                                <h3 class="secondary-color"><spring:message code="landing.secondFrame.thirdTitle"/></h3>
+                                <span class="text"><spring:message code="landing.secondFrame.thirdText"/></span>
                             </div>
                             <div class="image-container">
                                 <img src="<c:url value="/resources/images/landing/landing-tutorial-three.jpg"/>"
@@ -95,8 +96,7 @@
                             </div>
                         </div>
                     </div>
-                </c:otherwise>
-            </c:choose>
+                </sec:authorize>
         </div>
     </div>
 </body>

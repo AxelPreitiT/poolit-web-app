@@ -31,7 +31,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
-public class UserController {
+public class UserController extends LoggedUserController {
 
     private final CityService cityService;
 
@@ -59,6 +59,7 @@ public class UserController {
     public UserController(final CityService cityService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
                         final CarService carService, final ImageService imageService){
+        super(userService);
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
@@ -109,30 +110,6 @@ public class UserController {
     public ModelAndView loginUserPost() {
         return new ModelAndView("/helloworld/index");
     }
-
-    /*
-    @RequestMapping(value = LOGIN_USER_PATH + "/error", method = RequestMethod.POST)
-    public ModelAndView loginUserPostError() {
-        final ModelAndView mav = new ModelAndView("users/login");
-        mav.addObject("postUrl", LOGIN_USER_PATH);
-        return mav;
-    }
-    */
-
-    /*
-    @RequestMapping("/loginFailed")
-    public void loginFailed(HttpServletRequest request) {
-        AuthenticationException authenticationException = (AuthenticationException) request.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-
-        if (authenticationException != null) {
-            if(authenticationException.getCause() != null) {
-                throw (AuthenticationException) authenticationException.getCause();
-            } else {
-                throw authenticationException;
-            }
-        }
-    }
-    */
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){

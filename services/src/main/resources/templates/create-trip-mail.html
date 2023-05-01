@@ -70,7 +70,7 @@
         </a>
     </div>
     <h1 class="text-center mb-4">¡Creaste un viaje en Poolit!</h1>
-    <p>Hola  <span th:text="${trip.driver.username}"></span>,</p>
+    <p>Hola  <span th:text="${trip.driver.name}"></span>,</p>
     <p>Te escribimos para avisarte que creaste un nuevo viaje. Aquí te dejamos la información:</p>
     <div>
         <div class="info-container">
@@ -92,7 +92,7 @@
             <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
             <span>
                <span th:text="${trip.dayOfWeekString}"/> <span th:if="${trip.recurrent}">desde el </span> <span th:text="${trip.startDateString}"/>
-                <span th:if="${trip.recurrent}" >hasta el </span><span th:if="${trip.recurrent}" th:text="${trip.endDateTime}"/> a las <span th:text="${trip.startTimeString}"/>
+                <span th:if="${trip.recurrent}" >hasta el </span><span th:if="${trip.recurrent}" th:text="${trip.endDateString}"/> a las <span th:text="${trip.startTimeString}"/>
            </span>
         </div>
     </div>

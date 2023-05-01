@@ -7,7 +7,12 @@
 <link href="<c:url value="/resources/css/users/travel-info.css"/>" rel="stylesheet" type="text/css"/>
 
 <div>
-    <a href="/test">
+    <c:url value="/trips/${trip.tripId}" var="tripUrl">
+        <c:param name="startDate" value="${trip.queryStartDateString}"/>
+        <c:param name="startTime" value="${trip.startTimeString}"/>
+        <c:param name="endDate" value="${trip.queryEndDateString}"/>
+    </c:url>
+    <a href="${tripUrl}">
         <div class="card-info">
             <div class="data-container">
                 <div class="route-container">
@@ -17,12 +22,12 @@
                 </div>
                 <div class="adress-container">
                     <div class="route-info-text">
-                        <span class="secondary-color h3">${trip.originCity.name}</span>
-                        <span class="text">${trip.originAddress}</span>
+                        <span class="secondary-color h3"><c:out value="${trip.originCity.name}"/></span>
+                        <span class="text"><c:out value="${trip.originAddress}"/></span>
                     </div>
                     <div class="route-info-text">
-                        <span class="secondary-color h3 aling-right">${trip.destinationCity.name}</span>
-                        <span class="text aling-right">${trip.destinationAddress}</span>
+                        <span class="secondary-color h3 aling-right"><c:out value="${trip.destinationCity.name}"/></span>
+                        <span class="text aling-right"><c:out value="${trip.destinationAddress}"/></span>
                     </div>
                 </div>
                 <div class="extra-info-container">
@@ -31,24 +36,24 @@
                         <c:choose>
                             <c:when test="${trip.recurrent}">
                                 <div class="format_date">
-                                    <div><span class="text">${trip.dayOfWeekString}</span></div>
-                                    <div><span class="text">${trip.startDateString} - ${trip.endDateString}</span></div>
+                                    <div><span class="text"><c:out value="${trip.dayOfWeekString}"/></span></div>
+                                    <div><span class="text"><spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}"/></span></div>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="format_date">
-                                    <div><span class="text">${trip.dayOfWeekString}</span></div>
-                                    <div><span class="text"> ${trip.startDateString}</span></div>
+                                    <div><span class="text"><c:out value="${trip.dayOfWeekString}"/></span></div>
+                                    <div><span class="text"><c:out value="${trip.startDateString}"/></span></div>
                                 </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div>
                         <i class="bi bi-clock text"></i>
-                        <span class="text">${trip.startTimeString}</span>
+                        <span class="text"><c:out value="${trip.startTimeString}"/></span>
                     </div>
                     <div>
-                        <h5 class="text">$ ${trip.price}</h5>
+                        <h5 class="text"><spring:message code="format.price" arguments="${trip.price}"/></h5>
                     </div>
                 </div>
             </div>

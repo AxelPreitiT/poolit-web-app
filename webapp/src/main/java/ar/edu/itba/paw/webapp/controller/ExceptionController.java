@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -11,12 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Locale;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController extends LoggedUserController {
 
     private final MessageSource messageSource;
 
     @Autowired
-    public ExceptionController(MessageSource messageSource){
+    public ExceptionController(final UserService userService, final MessageSource messageSource){
+        super(userService);
         this.messageSource = messageSource;
     }
     @ExceptionHandler(TripNotFoundException.class)
@@ -54,4 +56,20 @@ public class ExceptionController {
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.carNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ModelAndView illegalArgument(){
+        ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalArgument",null, LocaleContextHolder.getLocale()));
+        mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalArgument.description",null,LocaleContextHolder.getLocale()));
+        return mav;
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ModelAndView illegalState(){
+        ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalState",null, LocaleContextHolder.getLocale()));
+        mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalState.description",null,LocaleContextHolder.getLocale()));
+        return mav;
+    }
+
 }

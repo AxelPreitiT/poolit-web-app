@@ -23,11 +23,12 @@ public class CreateUserForm {
     @Pattern(regexp = "^\\d{2,3}\\s?\\d{4}\\s?\\d{4}")
     private String phone;
 
-    @Size(min = 0, max = 10)
-    private String password = "";
+    @Size(min = 3, max = 10)
+    private String password;
 
-    @Size(min = 0, max = 10)
-    private String repeatPassword = "";
+    @Size(min = 3, max = 10)
+    private String repeatPassword;
+    @Pattern(regexp = ".+")
     private String birthdate;
     private int bornCityId;
 

@@ -25,7 +25,7 @@
             <div id="trip-price-container">
                 <div class="trip-price-row">
                     <div>
-                        <span class="h3 text">Precio:</span>
+                        <span class="h3 text"><spring:message code="selectTrip.price"/></span>
                     </div>
                     <div>
                         <span class="h2 secondary-color">$<c:out value="${trip.price}"/></span>

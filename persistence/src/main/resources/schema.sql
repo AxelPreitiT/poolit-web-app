@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS users(
     birthdate TIMESTAMP,
     city_id INT,
     user_role TEXT,
-    user_image_id INT NOT NULL,
+    user_image_id INT,
     UNIQUE(email),
-    FOREIGN KEY (user_image_id) REFERENCES images (image_id)
+    FOREIGN KEY (user_image_id) REFERENCES images (image_id),
+    CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS provinces (
