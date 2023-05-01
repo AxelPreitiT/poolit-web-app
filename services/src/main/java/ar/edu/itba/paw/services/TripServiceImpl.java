@@ -3,11 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.PagedContent;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,9 +86,9 @@ public class TripServiceImpl implements TripService {
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
     public boolean deleteTrip(final Trip trip){
-        List<User> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         //Notify passengers that trip was deleted
-        for(User passenger : tripPassengers){
+        for(Passenger passenger : tripPassengers){
             try{
                 emailService.sendMailTripDeletedToPassenger(trip,passenger);
             }catch (Exception e){
@@ -123,8 +120,12 @@ public class TripServiceImpl implements TripService {
         return addPassenger(trip,passenger,startDateTime,endDateTime);
     }
     @Override
-    public boolean addPassenger(Trip trip, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
-        List<User> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+    public boolean addPassenger(Trip trip, User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        if(trip==null || user==null){
+            throw new IllegalArgumentException();
+        }
+        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
+        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         if(passengers.contains(passenger)){
             throw new IllegalStateException();
         }
@@ -134,8 +135,7 @@ public class TripServiceImpl implements TripService {
         if(passengers.size()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
-        if( trip == null || passenger == null
-            || startDateTime == null || endDateTime == null
+        if(    startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
             || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
@@ -151,7 +151,7 @@ public class TripServiceImpl implements TripService {
             //TODO: change for logging
             e.printStackTrace();
         }
-        return tripDao.addPassenger(trip,passenger,startDateTime,endDateTime);
+        return tripDao.addPassenger(trip,passenger);
     }
     @Override
     public boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
@@ -183,7 +183,7 @@ public class TripServiceImpl implements TripService {
 
     //TODO: preguntar si validamos aca tambien o con peristence alcanza
     @Override
-    public List<User> getPassengers(Trip trip, LocalDateTime dateTime){
+    public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
         if( trip.getStartDateTime().isAfter(dateTime)
                 || trip.getEndDateTime().isBefore(dateTime)
                 || Period.between(trip.getStartDateTime().toLocalDate(),dateTime.toLocalDate()).getDays()%7!=0
@@ -193,7 +193,7 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassengers(trip,dateTime);
     }
     @Override
-    public List<User> getPassengers(TripInstance tripInstance){
+    public List<Passenger> getPassengers(TripInstance tripInstance){
         return tripDao.getPassengers(tripInstance);
     }
     @Override

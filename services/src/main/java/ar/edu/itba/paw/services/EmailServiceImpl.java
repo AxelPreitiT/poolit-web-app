@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendMailTripDeletedToPassenger(Trip trip, User passenger) throws MessagingException,IOException{
+    public void sendMailTripDeletedToPassenger(Trip trip, Passenger passenger) throws MessagingException,IOException{
         String subject = messageSource.getMessage("emails.subject.tripCancelledPassenger",null,LocaleContextHolder.getLocale());
 
         final Context ctx = new Context();
@@ -131,7 +132,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendMailTripConfirmation(Trip trip, User passenger) throws MessagingException, IOException {
+    public void sendMailTripConfirmation(Trip trip, Passenger passenger) throws MessagingException, IOException {
         String subject = messageSource.getMessage("emails.subject.newTripPassenger",null,LocaleContextHolder.getLocale());
 
         final Context ctx = new Context();

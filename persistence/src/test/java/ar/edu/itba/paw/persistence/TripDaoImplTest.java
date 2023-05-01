@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.PagedContent;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
 import ar.edu.itba.paw.persistence.config.TestConfig;
@@ -214,7 +211,7 @@ public class TripDaoImplTest {
                 4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         aux = createTrip(aux);
-        List<User> ans = tripDao.getPassengers(aux,dateTime);
+        List<Passenger> ans = tripDao.getPassengers(aux,dateTime);
         assertEquals(0,ans.size());
         ans = tripDao.getPassengers(aux,dateTime.minusDays(1));
         assertEquals(0,ans.size());

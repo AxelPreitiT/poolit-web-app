@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.PagedContent;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.TripInstance;
 
 import java.time.LocalDateTime;
@@ -31,9 +28,9 @@ public interface TripService {
     //
     Optional<Trip> findById(long id, LocalDateTime dateTime);
     //
-    List<User> getPassengers(Trip trip, LocalDateTime dateTime);
+    List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //
-    List<User> getPassengers(TripInstance tripInstance);
+    List<Passenger> getPassengers(TripInstance tripInstance);
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
     //

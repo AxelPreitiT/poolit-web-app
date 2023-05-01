@@ -32,7 +32,7 @@ public class TripDaoImpl implements TripDao {
     // name | phone | startDate | ... resultSet
     // Vas agarrando cosas de ahi, lo que necesites para instanciar los modelos
     //TODO: preguntar si usamos metodos de otros DAO's o hacemos Natural Join
-    private RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
+    private final RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
         User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
                 resultSet.getString("user_surname"),resultSet.getString("user_email"),
                 resultSet.getString("user_phone"),resultSet.getString("user_password"),
@@ -54,6 +54,12 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getDouble("trip_price")
         );
     };
+    private final RowMapper<Passenger> PASSENGER_ROW_MAPPER = (resultSet, rowNum) ->{
+      User user = UserDaoImpl.ROW_MAPPER.mapRow(resultSet,rowNum);
+      return new Passenger(user,
+              resultSet.getTimestamp("start_date").toLocalDateTime(),
+              resultSet.getTimestamp("end_date").toLocalDateTime());
+    };
     private final JdbcTemplate jdbcTemplate;
 
     private final SimpleJdbcInsert tripsInsert;
@@ -71,13 +77,12 @@ public class TripDaoImpl implements TripDao {
                 .withTableName("passengers");
     }
     private RowMapper<TripInstance> getTripInstanceRowMapper(Trip trip) {
-        return (resultSet, rowNum) -> {
-            return new TripInstance(
+        return (resultSet, rowNum) ->
+            new TripInstance(
                     resultSet.getTimestamp("trip_date_time").toLocalDateTime(),
                     trip,
                     resultSet.getInt("trip_passenger_count")
             );
-        };
     }
 
     @Override
@@ -111,7 +116,7 @@ public class TripDaoImpl implements TripDao {
     }
 
     @Override
-    public boolean addPassenger(final Trip trip, final User passenger, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+    public boolean addPassenger(final Trip trip, final Passenger passenger){
         //StartDateTime of passenger must be in a day that the trip happens
         //EndDateTime of passenger must be in a day that the trip happens
 //        if(trip == null || passenger == null
@@ -126,8 +131,8 @@ public class TripDaoImpl implements TripDao {
         Map<String,Object> passengerData = new HashMap<>();
         passengerData.put("user_id",passenger.getUserId());
         passengerData.put("trip_id",trip.getTripId());
-        passengerData.put("start_date",startDateTime);
-        passengerData.put("end_date",endDateTime);
+        passengerData.put("start_date",passenger.getStartDateTime());
+        passengerData.put("end_date",passenger.getEndDateTime());
         return passengerInsert.execute(passengerData)>0;
     }
     @Override
@@ -141,11 +146,11 @@ public class TripDaoImpl implements TripDao {
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
     @Override
-    public List<User> getPassengers(final TripInstance tripInstance){
+    public List<Passenger> getPassengers(final TripInstance tripInstance){
         return getPassengers(tripInstance.getTrip(),tripInstance.getDateTime());
     }
     @Override
-    public List<User> getPassengers(final Trip trip, final LocalDateTime dateTime){
+    public List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime){
 //        if( trip.getStartDateTime().isAfter(dateTime)
 //                || trip.getEndDateTime().isBefore(dateTime)
 //                || Period.between(trip.getStartDateTime().toLocalDate(),dateTime.toLocalDate()).getDays()%7!=0
@@ -155,10 +160,10 @@ public class TripDaoImpl implements TripDao {
         return getPassengers(trip,dateTime,dateTime);
     }
     @Override
-    public List<User> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+    public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
-                ,UserDaoImpl.ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
+                ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
