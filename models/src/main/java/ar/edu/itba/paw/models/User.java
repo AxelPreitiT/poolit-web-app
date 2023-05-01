@@ -16,7 +16,7 @@ public class User {
     private String role;
 
     public User(long userId, final String username, final String surname, final String email,
-                final String phone, final String password, final LocalDateTime birthdate, final City bornCity, final String role) {
+                final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role) {
         this.userId = userId;
         this.username = username;
         this.surname = surname;

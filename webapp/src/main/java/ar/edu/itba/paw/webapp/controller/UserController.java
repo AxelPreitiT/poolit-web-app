@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -15,6 +17,7 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +40,8 @@ import java.util.Optional;
 public class UserController {
 
     private final CityService cityService;
+
+    private final CarService carService;
 
     private final TripService tripService;
 
@@ -52,11 +58,14 @@ public class UserController {
     private final static String CREATED_TRIPS_HISTORIC_PATH = CREATED_TRIPS_PATH + "/history";
 
     @Autowired
-    public UserController(final CityService cityService, final  UserService userService, final PawUserDetailsService pawUserDetailsService, final TripService tripService){
+    public UserController(final CityService cityService, final  UserService userService,
+                          final PawUserDetailsService pawUserDetailsService, final TripService tripService,
+                        final CarService carService){
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
+        this.carService = carService;
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -78,8 +87,13 @@ public class UserController {
             return createUserGet(form);
         }
         City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
-        userService.createUserIfNotExists(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                form.getPassword(), form.getBirthdate(), originCity, null);
+        try {
+            userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
+                    form.getPassword(), form.getBirthdate(), originCity, null);
+        }catch (EmailAlreadyExistsException e){
+            errors.rejectValue("email", "validation.email.alreadyExists");
+            return createUserGet(form);
+        }
         return new ModelAndView("redirect:/users/login" );
     }
 
@@ -121,6 +135,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
+        SecurityContext pepe = SecurityContextHolder.getContext();
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
@@ -134,10 +149,12 @@ public class UserController {
         }
 
         List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        List<Car> cars = carService.findByUser(user);
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
         mav.addObject("trips", trips);
+        mav.addObject("cars", cars);
         return mav;
     }
 
@@ -160,6 +177,7 @@ public class UserController {
         }
 
         List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        List<Car> cars = carService.findByUser(user);
 
         pawUserDetailsService.update(user);
         userService.changeRole(user.getUserId(), user.getRole());
@@ -167,6 +185,7 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
         mav.addObject("trips", trips);
+        mav.addObject("cars", cars);
         return mav;
 
     }

@@ -33,11 +33,10 @@
                 <h2>Mis Autos</h2>
             </div>
             <div class="data-content">
-                <jsp:include page="/WEB-INF/jsp/users/car-container.jsp"/>
-                <jsp:include page="/WEB-INF/jsp/users/car-container.jsp"/>
-                <jsp:include page="/WEB-INF/jsp/users/car-container.jsp"/>
-                <jsp:include page="/WEB-INF/jsp/users/car-container.jsp"/>
-                <jsp:include page="/WEB-INF/jsp/users/car-container.jsp"/>
+                <c:forEach items="${cars}" var="car">
+                    <c:set var="car" value="${car}" scope="request"/>
+                    <jsp:include page="/WEB-INF/jsp/users/car-container.jsp"/>
+                </c:forEach>
             </div>
         </div>
     </div>
