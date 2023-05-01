@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <form:input path="originAddress" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
+                                        <form:input path="originAddress" maxlength="50" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
                                     </div>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <form:input path="destinationAddress" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
+                                        <form:input path="destinationAddress" maxlength="50" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
                                     </div>
                                 </div>
                             </div>
