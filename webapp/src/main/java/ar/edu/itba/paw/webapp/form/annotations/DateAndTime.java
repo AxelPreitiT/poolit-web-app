@@ -25,6 +25,9 @@ public @interface DateAndTime{
 class DateAndTimeValidator implements ConstraintValidator<DateAndTime, SearchTripForm>{
     @Override
     public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
+        if((form.getDate()==null || form.getDate().length()==0) && (form.getTime()==null || form.getTime().length()==0)){
+            return true;
+        }
         if (form.getDate().length() == 0 || form.getTime().length() == 0) {
             return false;
         }
