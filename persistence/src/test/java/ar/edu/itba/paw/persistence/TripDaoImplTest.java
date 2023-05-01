@@ -106,7 +106,7 @@ public class TripDaoImplTest {
         Trip aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 LocalDateTime.of(2023,4,25,0,0),
                 LocalDateTime.of(2023,4,25,0,0).plusDays(13),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         PagedContent<TripInstance> ans = tripDao.getTripInstances(aux,0,10);
         ans.getElements().forEach(instance ->{
@@ -117,7 +117,7 @@ public class TripDaoImplTest {
         aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 LocalDateTime.of(2023,4,25,0,0),
                 LocalDateTime.of(2023,4,25,0,0).plusDays(14),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         ans = tripDao.getTripInstances(aux,0,10);
         ans.getElements().forEach(instance ->{
@@ -128,7 +128,7 @@ public class TripDaoImplTest {
         aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 LocalDateTime.of(2023,4,25,0,0),
                 LocalDateTime.of(2023,4,25,0,0).plusDays(7),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         ans = tripDao.getTripInstances(aux,0,10);
         ans.getElements().forEach(instance ->{
@@ -139,7 +139,7 @@ public class TripDaoImplTest {
         aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 LocalDateTime.of(2023,4,25,0,0),
                 LocalDateTime.of(2023,4,25,0,0).plusDays(6),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         ans = tripDao.getTripInstances(aux,0,10);
         ans.getElements().forEach(instance ->{
@@ -150,7 +150,7 @@ public class TripDaoImplTest {
         aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 LocalDateTime.of(2023,4,25,0,0),
                 LocalDateTime.of(2023,4,25,0,0),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         ans = tripDao.getTripInstances(aux,0,10);
         ans.getElements().forEach(instance ->{
@@ -165,7 +165,7 @@ public class TripDaoImplTest {
         Trip aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 dateTime,
                 dateTime.plusDays(14),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         PagedContent<TripInstance> ans = tripDao.getTripInstances(aux,0,10,dateTime,dateTime.plusDays(13));
         ans.getElements().forEach(instance ->{
@@ -211,7 +211,7 @@ public class TripDaoImplTest {
         Trip aux = new Trip(0, city, "Av Callao", city, "Av Callao",
                 dateTime,
                 dateTime.plusDays(14),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
         aux = createTrip(aux);
         List<User> ans = tripDao.getPassengers(aux,dateTime);
@@ -229,7 +229,7 @@ public class TripDaoImplTest {
         Trip aux = new Trip(1, city, "Av Callao", city, "Av Callao",
                 dateTime,
                 dateTime.plusDays(14),
-                4, user1, new Car(1,"AE062TP","Honda Fit",user1), 0, 10.0
+                4, user1, new Car(1,"AE062TP","Honda Fit",user1,1), 0, 10.0
         );
     }
 }

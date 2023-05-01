@@ -32,8 +32,10 @@ CREATE TABLE IF NOT EXISTS cars(
     plate TEXT NOT NULL,
     info_car TEXT NOT NULL,
     user_id INT NOT NULL,
+    image_id INT NOT NULL,
     UNIQUE(user_id,plate),
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (image_id) REFERENCES images (image_id)
 );
 CREATE TABLE IF NOT EXISTS trips(
     trip_id SERIAL PRIMARY KEY,

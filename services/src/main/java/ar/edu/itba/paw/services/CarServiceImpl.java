@@ -22,14 +22,14 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car createCar(String plate, String infoCar, User user) {
-        return carDao.create(plate, infoCar, user);
+    public Car createCar(String plate, String infoCar, User user, long image_id) {
+        return carDao.create(plate, infoCar, user, image_id);
     }
 
     @Override
-    public Car createCarIfNotExists(String plate,String infoCar,  User user) {
+    public Car createCarIfNotExists(String plate,String infoCar,  User user, long image_id) {
         Optional<Car> current = carDao.findByPlateAndUser(plate, user);
-        return current.orElseGet(() -> carDao.create(plate, infoCar, user));
+        return current.orElseGet(() -> carDao.create(plate, infoCar, user, image_id));
     }
 
     @Override
