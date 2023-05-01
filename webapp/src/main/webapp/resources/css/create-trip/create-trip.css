@@ -9,6 +9,11 @@
     width: 100%;
 }
 
+
+img {
+    max-width: 150px;
+}
+
 .form-style {
     display: flex;
     flex-direction: column;

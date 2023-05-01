@@ -7,13 +7,13 @@ public class Passenger extends User{
 
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
-    public Passenger(long userId, String username, String surname, String email, String phone, String password, LocalDateTime birthdate, City bornCity, String role, LocalDateTime startDateTime,LocalDateTime endDateTime){
-        super(userId, username, surname, email, phone, password, birthdate, bornCity, role);
+    public Passenger(long userId, String username, String surname, String email, String phone, String password, LocalDateTime birthdate, City bornCity, String role,long imageId, LocalDateTime startDateTime,LocalDateTime endDateTime){
+        super(userId, username, surname, email, phone, password, birthdate, bornCity, role,imageId);
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
     public Passenger(User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
-        super(user.getUserId(),user.getName(),user.getSurname(),user.getEmail(),user.getPhone(),user.getPassword(),user.getBirthdate(),user.getBornCity(),user.getRole());
+        super(user.getUserId(),user.getName(),user.getSurname(),user.getEmail(),user.getPhone(),user.getPassword(),user.getBirthdate(),user.getBornCity(),user.getRole(),user.getUserImageId());
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

@@ -9,13 +9,14 @@
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/users/register.css"/>" rel="stylesheet">
+    <script src="<c:url value="/resources/js/users/image-preview.js"/>" type="module"></script>
 </head>
 <body class="background-bg-color">
     <div class="container-bg-color main-container-style">
         <h1 class="text"><spring:message code="register.viewTitle"/></h1>
         <hr>
         <c:url value="${postUrl}" var="createUser" />
-        <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post">
+        <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
             <div class="user-info-row">
                 <div class="user-info-item form-floating">
                     <form:input path="username" type="text" class="form-control text" id="username" name="username" placeholder="Av. del Libertador 1234"/>
@@ -89,8 +90,12 @@
             </div>
             <div class="user-info-row">
                 <div class="user-info-item">
-                    <label for="profilePicture" class="form-label"><spring:message code="user.photo"/></label>
-                    <input type="file" id="profilePicture" name="profilePicture" class="form-control" accept="image/jpeg, image/png, image/gif">
+                    <label for="imageFile" class="form-label"><spring:message code="user.photo"/></label>
+                    <form:input path="imageFile" type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" onChange="updateImageDisplay"/>
+                    <div class="preview">
+                        <p></p>
+                    </div>
+                    <form:errors path="imageFile" cssClass="formError" element="p"/>
                 </div>
             </div>
             <div class="user-info-row">

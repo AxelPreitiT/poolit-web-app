@@ -14,9 +14,10 @@ public class User {
     private final LocalDateTime birthdate;
     private final City bornCity;
     private String role;
+    private long userImageId;
 
     public User(long userId, final String name, final String surname, final String email,
-                final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role) {
+                final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role,long userImageId) {
         this.userId = userId;
         this.name = name;
         this.surname = surname;
@@ -26,6 +27,7 @@ public class User {
         this.birthdate = birthdate;
         this.bornCity = bornCity;
         this.role = role;
+        this.userImageId = userImageId;
     }
 
     public String getRole() {
@@ -84,4 +86,8 @@ public class User {
     public String getName() {
         return name;
     }
+
+    public long getUserImageId() { return userImageId; }
+
+    public void setUserImageId(long userImageId) { this.userImageId = userImageId; }
 }

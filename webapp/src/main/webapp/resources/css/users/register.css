@@ -9,6 +9,18 @@ div.main-container-style {
     color: red;
 }
 
+.preview {
+    width: 100%;
+    display: flex;
+    justify-content:center;
+}
+
+img {
+    max-width:300;
+    max-height:150;
+    padding-top: 1rem;
+}
+
 .login-container{
     display: flex;
     height: 20%;

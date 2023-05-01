@@ -1,7 +1,5 @@
-const input = document.querySelector('input');
+const input = document.getElementById('imageFile');
 const preview = document.querySelector('.preview');
-
-document.getElementById('imageFile').style.opacity=0;
 
 
 document.getElementById('imageFile').addEventListener('change', updateImageDisplay);
