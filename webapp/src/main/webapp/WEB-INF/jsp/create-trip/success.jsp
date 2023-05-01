@@ -27,10 +27,10 @@
             <div id="trip-price-container">
                 <div class="trip-price-row">
                     <div>
-                        <span class="h3 text no-bold">Precio por viaje:</span>
+                        <span class="h3 text no-bold"><spring:message code="createTrip.success.price"/></span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color">$<c:out value="${trip.price}"/></span>
+                        <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.price}"/></span>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <a href="${homeUrl}">
                     <button id="home-button" type="submit" class="btn button-style button-color shadow-btn">
                         <i class="bi bi-house-fill light-text h4"></i>
-                        <span class="button-text-style light-text h3">Inicio</span>
+                        <span class="button-text-style light-text h3"><spring:message code="createTrip.success.btn"/></span>
                     </button>
                 </a>
             </div>

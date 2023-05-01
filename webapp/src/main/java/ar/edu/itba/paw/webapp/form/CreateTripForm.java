@@ -5,10 +5,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.*;
 
 public class CreateTripForm {
+
+    @Min(value = 1)
     private int originCityId;
 
     @Pattern(regexp = ".+")
-    @Size(max = 30)
+    @Size(max = 50)
     private String originAddress;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -21,12 +23,13 @@ public class CreateTripForm {
 
     private boolean multitrip;
 
+    @Min(value = 1)
     private int destinationCityId;
     @Pattern(regexp = ".+")
-    @Size(max = 30)
+    @Size(max = 50)
     private String destinationAddress;
 
-    @Min(value = 0)
+    @Min(value = 1)
     private long carId;
 
     @Min(value = 1)

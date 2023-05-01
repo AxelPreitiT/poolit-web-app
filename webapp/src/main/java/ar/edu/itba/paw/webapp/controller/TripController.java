@@ -13,6 +13,8 @@ import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,7 +25,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-public class TripController {
+public class TripController extends LoggedUserController {
     private final TripService tripService;
     private final CityService cityService;
     private final UserService userService;
@@ -40,7 +42,8 @@ public class TripController {
 
 
     @Autowired
-    public TripController(TripService tripService, CityService cityService, UserService userService, CarService carService, ImageService imageService){
+    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
+        super(userService);
         this.tripService = tripService;
         this.cityService = cityService;
         this.userService = userService;
@@ -108,8 +111,6 @@ public class TripController {
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
         mav.addObject("searchUrl", SEARCH_TRIP_PATH);
-        //TODO: fix (isAuthenticated hace cualquier cosa)
-        mav.addObject("isLoggedIn", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 
         return mav;
     }

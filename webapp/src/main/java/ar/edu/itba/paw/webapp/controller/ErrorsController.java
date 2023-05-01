@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,11 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
-public class ErrorsController {
+public class ErrorsController extends LoggedUserController {
+
     private final MessageSource messageSource;
     private final Map<Integer,ErrorMessage> errorMessages;
     @Autowired
-    public ErrorsController(final MessageSource messageSource){
+    public ErrorsController(final UserService userService, final MessageSource messageSource){
+        super(userService);
         this.messageSource = messageSource;
         this.errorMessages = new HashMap<>();
         errorMessages.put(404, new ErrorMessage("errors.404","errors.404.description"));

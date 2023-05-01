@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
-public class UserController {
+public class UserController extends LoggedUserController {
 
     private final CityService cityService;
 
@@ -61,6 +61,7 @@ public class UserController {
     public UserController(final CityService cityService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
                         final CarService carService){
+        super(userService);
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
@@ -70,7 +71,7 @@ public class UserController {
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
     public ModelAndView createUserGet(
-            @Valid @ModelAttribute("createUserForm") final CreateUserForm form
+            @ModelAttribute("createUserForm") final CreateUserForm form
     ) {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("users/register");

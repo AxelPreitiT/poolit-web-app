@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <jsp:useBean id="trips" type="ar.edu.itba.paw.models.PagedContent" scope="request"/>
 
@@ -22,7 +23,7 @@
           <i class="bi bi-calendar secondary-color h3"></i>
           <c:choose>
             <c:when test="${trip.recurrent}">
-              <span class="secondary-color h3"><c:out value="${trip.startDateString}"/> al <c:out value="${trip.endDateString}"/></span>
+              <span class="secondary-color h3"><spring:message code="tripDetails.card.formateDateRecurrent" arguments="${trip.startDateString}, ${trip.endDateString}"/></span>
             </c:when>
             <c:otherwise>
               <span class="secondary-color h3"><c:out value="${trip.startDateString}"/></span>

@@ -7,10 +7,23 @@ const createTripButtonElement = document.getElementById('create-trip-button');
 const verticalDottedLineElement = document.getElementById('vertical-dotted-line');
 const carImageContainerElement = document.getElementById('car-image-container');
 
+const seatsInputElement = document.getElementById('seats');
+const priceInputElement = document.getElementById('price');
+
+
 const carInfoDetailsElementPrefix = 'car-info-details-';
 const carInfoImageElementPrefix = 'car-info-image-';
 
 let currentSelectedCarId = carSelectElement.value;
+
+// Delete auto-filled inputs
+if(seatsInputElement.value === "0") {
+    seatsInputElement.value = "";
+}
+
+if(priceInputElement.value === "0.0") {
+    priceInputElement.value = "";
+}
 
 // Vertical dotted line management
 const shouldExpandVerticalDottedLine = (value) => {

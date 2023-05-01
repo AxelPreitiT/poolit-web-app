@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class User {
     private final long userId;
-    private final String username;
+    private final String name;
     private final String surname;
     private final String email;
     private String phone;
@@ -15,10 +15,10 @@ public class User {
     private final City bornCity;
     private String role;
 
-    public User(long userId, final String username, final String surname, final String email,
+    public User(long userId, final String name, final String surname, final String email,
                 final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role) {
         this.userId = userId;
-        this.username = username;
+        this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
@@ -81,7 +81,7 @@ public class User {
         return birthdate;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 }

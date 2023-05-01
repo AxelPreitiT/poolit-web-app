@@ -75,8 +75,8 @@
     </a>
   </div>
   <h1 class="text-center mb-4">¡Tu viaje fue cancelado!</h1>
-  <p>Hola <span th:text="${passenger.username}"></span>,</p>
-  <p>Te escribimos para avisarte que tu viaje desde <span th:text="${trip.originCity.name}"></span> hasta <span th:text="${trip.destinationCity.name}"></span> a cargo de <span th:text="${trip.driver.username}"></span> <span th:text="${trip.driver.surname}"/> fue cancelado.</p>
+  <p>Hola <span th:text="${passenger.name}"></span>,</p>
+  <p>Te escribimos para avisarte que tu viaje desde <span th:text="${trip.originCity.name}"></span> hasta <span th:text="${trip.destinationCity.name}"></span> a cargo de <span th:text="${trip.driver.name}"></span> <span th:text="${trip.driver.surname}"/> fue cancelado.</p>
   <div>
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
