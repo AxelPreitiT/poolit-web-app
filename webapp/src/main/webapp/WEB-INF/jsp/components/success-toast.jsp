@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <link href="<c:url value="/resources/css/components/success-toast.css"/>" rel="stylesheet" type="text/css"/>
 
@@ -15,7 +16,7 @@
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            <span class="light-text h5"><c:out value="${param.message}"/></span>
+            <span class="light-text h5"><spring:message code="${param.message}"/></span>
         </div>
     </div>
 </div>

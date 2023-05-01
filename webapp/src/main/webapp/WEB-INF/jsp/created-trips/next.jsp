@@ -1,13 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- Beans:
         - tripDeleted: boolean that indicates if a trip was deleted before rendering this page
 -->
 
 <html>
 <head>
-  <title>Creados - Próximos</title>
+  <title><spring:message code="nextTrips.created.title"/></title>
   <jsp:include page="/resources/external-resources.jsp"/>
   <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
 </head>
@@ -17,7 +17,7 @@
   </div>
   <div class="main-container-style container-color">
     <div id="main-header-row">
-      <h1 class="secondary-color">Viajes creados - Próximos</h1>
+      <h1 class="secondary-color"><spring:message code="nextTrips.created.titleView"/></h1>
       <hr class="secondary-color">
     </div>
     <div id="trip-card-date-list-container">

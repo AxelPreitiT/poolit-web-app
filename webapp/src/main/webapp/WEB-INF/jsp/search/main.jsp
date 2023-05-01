@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
 <head>
-    <title>Búsqueda</title>
+    <title><spring:message code="searchTrip.title"/></title>
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/search/search.css"/>" rel="stylesheet" type="text/css"/>
@@ -30,8 +31,7 @@
                         </jsp:include>
                         <div id="total-results-row">
                             <span class="italic-text">
-                                <c:out value="${tripsContent.startNumber+1}"/>-<c:out value="${tripsContent.endNumber+1}"/>
-                                resultados de <c:out value="${tripsContent.totalCount}"/> encontrados
+                                <spring:message code="searchTrip.foundFormat" arguments="${tripsContent.startNumber+1}, ${tripsContent.endNumber+1}, ${tripsContent.totalCount}"/>
                             </span>
                         </div>
                         <c:url value="" var="baseUrl">
@@ -50,13 +50,11 @@
                     <c:otherwise>
                         <div class="no-results-container">
                             <i class="fa-solid fa-car-side secondary-color fa-2xl"></i>
-                            <h3>Parece que no hay viajes disponibles para tu búsqueda</h3>
-                            <h5>No te preocupes, seguro encuentres algo pronto</h5>
+                            <h3><spring:message code="searchTrip.dontFound"/></h3>
+                            <h5><spring:message code="searchTrip.tryAgain"/></h5>
                         </div>
                     </c:otherwise>
                 </c:choose>
-
-
             </div>
         </div>
     </div>
