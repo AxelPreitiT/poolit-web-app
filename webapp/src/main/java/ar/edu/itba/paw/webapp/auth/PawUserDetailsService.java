@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.io.Console;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,7 +45,6 @@ public class PawUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final User user = us.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No user for email " + email));
-
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         if(Objects.equals(user.getRole(), "USER")){

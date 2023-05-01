@@ -15,4 +15,5 @@ public interface UserDao {
     Optional<User> findByEmail(String email);
 
     void changeRole(long userId, String role);
+
 }
