@@ -49,7 +49,7 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getTimestamp("end_date_time").toLocalDateTime(),
                 resultSet.getInt("max_passengers"),
                 user,
-                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),user),
+                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),user,1), //TODO implement image_id
                 resultSet.getInt("occupied_seats"),
                 resultSet.getDouble("trip_price")
         );

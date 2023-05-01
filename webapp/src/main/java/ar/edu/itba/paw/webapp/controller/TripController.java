@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.exceptions.*;
+import ar.edu.itba.paw.webapp.form.CreateCarForm;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -210,6 +212,28 @@ public class TripController {
     public @ResponseBody
     byte[] getImage(@PathVariable("imageId") final int imageId) {
         return imageService.findById(imageId).orElseThrow(ImageNotFoundException::new).getData();
+    }
+
+    @RequestMapping(value = "/cars/create", method = RequestMethod.GET)
+    public ModelAndView createCarForm(@ModelAttribute("createCarForm") final CreateCarForm form) {
+        final ModelAndView mav = new ModelAndView("create-auto/main");
+        mav.addObject("createCarUrl", "/webapp/cars/create");
+        return mav;
+    }
+
+    @RequestMapping(value = "/cars/create", method = RequestMethod.POST)
+    public ModelAndView postCar(@Valid @ModelAttribute("createCarForm") final CreateCarForm form,
+                                final BindingResult errors) throws IOException {
+        if(errors.hasErrors()){
+            return createCarForm(form);
+        }
+        byte[] data = form.getImageFile().getBytes();
+        Image image=imageService.createImage(data);
+        carService.createCar(form.getPlate(),form.getCarInfo(),null , image.getImageId() );
+        //Hacer un redirect si se hace desde el perfil la creacion de autos
+        ModelAndView modelAndView = new ModelAndView("create-auto/success");
+        return modelAndView;
+
     }
 
 //    @RequestMapping(value = "*", method = RequestMethod.GET)

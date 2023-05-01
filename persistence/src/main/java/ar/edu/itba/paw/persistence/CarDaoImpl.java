@@ -24,7 +24,8 @@ public class CarDaoImpl implements CarDao {
                             resultSet.getString("phone"),resultSet.getString("password"),
                             resultSet.getTimestamp("birthdate").toLocalDateTime(),
                             new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")),
-                            resultSet.getString("user_role")));
+                            resultSet.getString("user_role")),
+                            resultSet.getLong("image_id"));
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -39,13 +40,14 @@ public class CarDaoImpl implements CarDao {
     }
 
     @Override
-    public Car create(final String plate, String infoCar, final User user) {
+    public Car create(final String plate, String infoCar, final User user, long image_id) {
         Map<String,Object> data = new HashMap<>();
         data.put("plate",plate);
         data.put("user_id", user.getUserId());
         data.put("info_car", infoCar);
+        data.put("image_id", image_id);
         Number key = jdbcInsert.executeAndReturnKey(data);
-        return new Car(key.longValue(),plate,infoCar,user);
+        return new Car(key.longValue(),plate,infoCar,user, image_id);
     }
 
     @Override
