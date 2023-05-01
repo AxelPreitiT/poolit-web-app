@@ -28,14 +28,23 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-6">
-                                    <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                                        <jsp:param name="id" value="originCityId"/>
-                                        <jsp:param name="defaultText" value="Ciudad"/>
-                                    </jsp:include>
+                                    <div class="inline_container">
+                                        <div class="col-3 form_container">
+                                            <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                                                <jsp:param name="id" value="originCityId"/>
+                                                <jsp:param name="defaultText" value="Ciudad"/>
+                                            </jsp:include>
+                                        </div>
+                                        <div class="error_container">
+                                            <form:errors path="originCityId" cssClass="formError" element="p"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="inline_container">
-                                        <form:input path="originAddress" maxlength="50" cssClass="form-control form-control-sm col-3" id="originAddress" placeholder="Dirección"/>
+                                        <div class="col-3 form_container">
+                                            <form:input path="originAddress" minlength="50" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
+                                        </div>
                                         <div class="error_container">
                                             <form:errors path="originAddress" cssClass="formError" element="p"/>
                                         </div>
@@ -54,6 +63,9 @@
                                         </button>
                                         <form:input path="date" cssClass="form-control form-control-sm" id="first-date" placeholder="Fecha"/>
                                     </div>
+                                    <div class="error_container">
+                                        <form:errors path="date" cssClass="formError" element="p"/>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="input-group input-group-sm" id="time-picker">
@@ -61,6 +73,10 @@
                                             <i class="bi bi-clock-fill light-text"></i>
                                         </button>
                                         <form:input path="time" cssClass="form-control form-control-sm" id="time" placeholder="Hora"/>
+                                    </div>
+                                    <div class="error_container">
+                                        <form:errors path="time" cssClass="formError" element="p"/>
+                                        <form:errors cssClass="formError" element="p"/>
                                     </div>
                                 </div>
                             </div>
@@ -107,14 +123,27 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-6">
-                                    <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
-                                        <jsp:param name="id" value="destinationCityId"/>
-                                        <jsp:param name="defaultText" value="Ciudad"/>
-                                    </jsp:include>
+                                    <div class="inline_container">
+                                        <div class="col-3 form_container">
+                                            <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                                                <jsp:param name="id" value="destinationCityId"/>
+                                                <jsp:param name="defaultText" value="Ciudad"/>
+                                            </jsp:include>                                        </div>
+                                        <div class="error_container">
+                                            <form:errors path="originAddress" cssClass="formError" element="p"/>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <div>
-                                        <form:input path="destinationAddress" maxlength="50" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
+                                    </div>
+                                    <div class="inline_container">
+                                        <div class="col-3 form_container">
+                                            <form:input path="destinationAddress" maxlength="50" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
+                                        </div>
+                                        <div class="error_container">
+                                            <form:errors path="destinationAddress" cssClass="formError" element="p"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -189,6 +218,9 @@
                                             <i class="bi bi-people-fill text"></i>
                                         </div>
                                         <form:input path="maxSeats" cssClass="form-control form-control-sm" id="seats" placeholder="Cantidad de asientos"/>
+                                        <div class="error_container">
+                                            <form:errors path="maxSeats" cssClass="formError" element="p"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -205,6 +237,9 @@
                                         <form:input path="price" cssClass="form-control form-control-sm" id="price" placeholder="Precio por viaje"/>
                                         <div class="input-group-text">
                                             <span class="text">ARS</span>
+                                        </div>
+                                        <div class="error_container">
+                                            <form:errors path="maxSeats" cssClass="formError" element="p"/>
                                         </div>
                                     </div>
                                 </div>

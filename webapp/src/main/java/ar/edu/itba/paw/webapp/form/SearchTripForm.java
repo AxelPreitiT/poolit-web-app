@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.form.annotations.DateAndTime;
-import ar.edu.itba.paw.webapp.form.annotations.Multitrip;
+import ar.edu.itba.paw.webapp.form.annotations.DateAndTimeSearch;
+import ar.edu.itba.paw.webapp.form.annotations.MultitripSearch;
 import ar.edu.itba.paw.webapp.form.annotations.Price;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
 
-@DateAndTime
-@Multitrip
+@DateAndTimeSearch
+@MultitripSearch
 @Price
 public class SearchTripForm {
 

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.form.annotations.CityId;
-import ar.edu.itba.paw.webapp.form.annotations.DateAndTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 //@DateAndTime

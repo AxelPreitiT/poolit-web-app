@@ -9,6 +9,9 @@
     width: 100%;
 }
 
+.formError{
+    color: red;
+}
 
 .inline_container{
     display: flex;
@@ -18,7 +21,11 @@
 .error_container{
     min-width: 100%;
     display: flex;
-    margin: auto;
+    margin-left: 3%;
+}
+
+.form_container{
+    min-width: 100%;
 }
 
 .form-style {
