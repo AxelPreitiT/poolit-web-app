@@ -10,7 +10,8 @@
 <div class="user-info-container">
   <div class="avatar-img">
     <div class="circular--landscape">
-      <img class="circular--square" src="https://media.newyorker.com/photos/5b203f425ee2c7040773fedc/master/w_2560%2Cc_limit/760209_ra523.jpg">
+      <c:url value="/image/${user.user_image_id}" var="profileImageUrl"/>
+      <img class="circular--square" src="${profileImageUrl}">
     </div>
   </div>
   <div class="row-info">

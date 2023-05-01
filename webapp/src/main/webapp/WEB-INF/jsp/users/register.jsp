@@ -15,7 +15,7 @@
         <h1 class="text">Crear cuenta</h1>
         <hr>
         <c:url value="${postUrl}" var="createUser" />
-        <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post">
+        <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
             <div class="user-info-row">
                 <div class="user-info-item form-floating">
                     <form:input path="username" type="text" class="form-control text" id="username" name="username" placeholder="Av. del Libertador 1234"/>
@@ -89,8 +89,9 @@
             </div>
             <div class="user-info-row">
                 <div class="user-info-item">
-                    <label for="profilePicture" class="form-label">Foto de perfil</label>
-                    <input type="file" id="profilePicture" name="profilePicture" class="form-control" accept="image/jpeg, image/png, image/gif">
+                    <label for="imageFile" class="form-label">Foto de perfil</label>
+                    <form:input path="imageFile" type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*"/>
+                    <form:errors path="imageFile" cssClass="error" element="p"/>
                 </div>
             </div>
             <div class="user-info-row">
