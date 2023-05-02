@@ -18,7 +18,7 @@
   </div>
   <a href="<c:url value="${param.url}"/>">
     <div class="plus-btn">
-      <h3 class="text"><c:out value="${param.btndesc}"/></h3>
+      <h3 class="text"><spring:message code="${param.btndesc}"/></h3>
       <i class="h3 bi text bi-box-arrow-in-up-right"></i>
     </div>
   </a>
