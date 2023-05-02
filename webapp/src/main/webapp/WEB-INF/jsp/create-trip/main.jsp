@@ -45,7 +45,7 @@
                                 <div class="col-6">
                                     <div class="inline_container">
                                         <div class="col-3 form_container">
-                                            <form:input path="originAddress" minlength="50" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
+                                            <form:input path="originAddress" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
                                         </div>
                                         <div class="error_container">
                                             <form:errors path="originAddress" cssClass="formError" element="p"/>
@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="inline_container">
                                         <div class="col-3 form_container">
-                                            <form:input path="destinationAddress" maxlength="50" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
+                                            <form:input path="destinationAddress" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
                                         </div>
                                         <div class="error_container">
                                             <form:errors path="destinationAddress" cssClass="formError" element="p"/>
