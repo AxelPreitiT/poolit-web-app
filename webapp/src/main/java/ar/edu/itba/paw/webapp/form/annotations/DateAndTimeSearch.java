@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-@Constraint(validatedBy = DateAndTimeCreateValidator.class)
+@Constraint(validatedBy = DateAndTimeSearchValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateAndTimeSearch {
@@ -24,7 +24,7 @@ public @interface DateAndTimeSearch {
     Class<? extends Payload>[] payload() default { };
 }
 
-class DateAndTimeSearchValidator implements ConstraintValidator<DateAndTimeCreate, SearchTripForm>{
+class DateAndTimeSearchValidator implements ConstraintValidator<DateAndTimeSearch, SearchTripForm>{
     @Override
     public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
         if((form.getDate()==null || form.getDate().length()==0) && (form.getTime()==null || form.getTime().length()==0)){

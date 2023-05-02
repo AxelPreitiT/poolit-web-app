@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.Console;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -118,6 +119,7 @@ public class TripController extends LoggedUserController {
             @Valid @ModelAttribute("searchTripForm") final SearchTripForm form,
             final BindingResult errors,
             @RequestParam(value = "page",required = false,defaultValue = "1")  final int page){
+
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
@@ -125,7 +127,7 @@ public class TripController extends LoggedUserController {
         if(errors.hasErrors()){
             System.out.println("Errors");
             errors.getAllErrors().forEach(System.out::println);
-            mav.addObject("tripsContent",PagedContent.<Trip>emptyPagedContent());
+            mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
         final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),page-1,PAGE_SIZE);
