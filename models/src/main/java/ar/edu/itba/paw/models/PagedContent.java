@@ -12,7 +12,7 @@ public class PagedContent<T>{
         return new PagedContent<>(new ArrayList<>(),0,0,0);
     }
     public PagedContent(List<T> elements, int currentPage, int pageSize, int totalCount) {
-        if(pageSize<=0 || currentPage<0 || totalCount<0 || elements==null){
+        if(pageSize<0 || currentPage<0 || totalCount<0 || elements==null){
             throw new IllegalArgumentException();
         }
         this.elements = elements;

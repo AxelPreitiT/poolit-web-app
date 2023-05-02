@@ -16,6 +16,8 @@ const carInfoImageElementPrefix = 'car-info-image-';
 
 let currentSelectedCarId = carSelectElement.value;
 
+console.log("carSelectElement.value", carSelectElement.value);
+
 // Delete auto-filled inputs
 if(seatsInputElement.value === "0") {
     seatsInputElement.value = "";
@@ -45,6 +47,18 @@ setRecurrentTripCalendar('first-date-picker', 'first-date', 'last-date-picker', 
 
 
 // Select car management
+if(currentSelectedCarId !== "-1") {
+    const carInfoDetailsElement = document.getElementById(carInfoDetailsElementPrefix + currentSelectedCarId);
+    const carInfoImageElement = document.getElementById(carInfoImageElementPrefix + currentSelectedCarId);
+    carInfoImageElement.classList.add("collapse-horizontal");
+    carImageContainerElement.classList.add('active');
+    new bootstrap.Collapse(carInfoDetailsElement, {
+        show: true
+    });
+    new bootstrap.Collapse(carInfoImageElement, {
+        show: true
+    });
+}
 
 carSelectElement.addEventListener('change', (e) => {
     const carId = e.target.value;

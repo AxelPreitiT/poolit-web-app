@@ -1,9 +1,13 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.form.annotations.DateAndTimeCreate;
+import ar.edu.itba.paw.webapp.form.annotations.MultitripCreate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 
+@DateAndTimeCreate
+@MultitripCreate
 public class CreateTripForm {
 
     @Min(value = 1)
@@ -13,12 +17,14 @@ public class CreateTripForm {
     @Size(max = 50)
     private String originAddress;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Pattern(regexp = "^(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[012])\\/\\d{4}$")
     private String date;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$")
     private String time;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Pattern(regexp = "^(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[012])\\/\\d{4}$")
     private String lastDate;
 
     private boolean multitrip;
@@ -33,7 +39,7 @@ public class CreateTripForm {
     private long carId;
 
     @Min(value = 1)
-    private int maxSeats;
+    private int maxSeats = 0;
 
     @Min(value = 0)
     private double price;

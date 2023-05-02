@@ -11,29 +11,34 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
-@Constraint(validatedBy = DateAndTimeValidator.class)
+@Constraint(validatedBy = DateAndTimeSearchValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DateAndTime{
-    String message() default "{DateAndTime.error}";
+public @interface DateAndTimeSearch {
+    String message() default "{DateAndTimeSearch.error}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }
 
-class DateAndTimeValidator implements ConstraintValidator<DateAndTime, SearchTripForm>{
+class DateAndTimeSearchValidator implements ConstraintValidator<DateAndTimeSearch, SearchTripForm>{
     @Override
     public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
         if((form.getDate()==null || form.getDate().length()==0) && (form.getTime()==null || form.getTime().length()==0)){
-            return true;
-        }
-        if (form.getDate().length() == 0 || form.getTime().length() == 0) {
             return false;
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalDate today = LocalDate.now();
-        LocalDate firstDate = LocalDate.parse(form.getDate(), formatter);
-        return !firstDate.isBefore(today);
+        try {
+            LocalTime time = LocalTime.parse(form.getTime(), timeFormatter);
+            LocalDate firstDate = LocalDate.parse(form.getDate(), dateFormatter);
+            return !firstDate.isBefore(today);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }

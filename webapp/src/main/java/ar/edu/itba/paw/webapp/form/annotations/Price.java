@@ -4,6 +4,7 @@ import ar.edu.itba.paw.webapp.form.SearchTripForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,7 +23,10 @@ public @interface Price {
 class PriceValidator implements ConstraintValidator<Price, SearchTripForm> {
 
     @Override
-    public boolean isValid(SearchTripForm form, javax.validation.ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
+        if(form.getMinPrice() == null || form.getMaxPrice() == null) {
+            return false;
+        }
         return form.getMinPrice() >= 0 && form.getMaxPrice() >= 0 && form.getMinPrice() <= form.getMaxPrice();
     }
 }

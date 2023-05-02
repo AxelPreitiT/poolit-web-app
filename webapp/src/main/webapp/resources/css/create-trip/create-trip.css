@@ -9,6 +9,25 @@
     width: 100%;
 }
 
+.formError{
+    color: red;
+}
+
+.inline_container{
+    display: flex;
+    flex-direction: row;
+}
+
+.error_container{
+    min-width: 100%;
+    display: flex;
+    margin-left: 3%;
+}
+
+.form_container{
+    min-width: 100%;
+}
+
 
 img {
     max-width: 150px;
