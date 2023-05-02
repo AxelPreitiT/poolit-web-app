@@ -1,0 +1,153 @@
+@import "/resources/css/base/elements.css";
+
+.formError{
+    color: red;
+}
+
+.form-style {
+    padding: 1em;
+    border-radius: 16px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 2em;
+    margin-bottom: 0;
+}
+
+.route-filter, .date-filter, .price-filter {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 0.5em;
+}
+
+.title-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 0.5em;
+}
+
+.input-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 0.5em;
+}
+
+.input-row:has(span) {
+    justify-content: flex-start;
+}
+
+.input-plus-error-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 0.2em;
+}
+
+.input-plus-error-row p {
+    margin-bottom: 0;
+}
+
+#day-repeat-container * {
+    font-size: 0.8rem;
+}
+
+#day-repeat-text {
+    text-transform: capitalize;
+}
+
+#last-date-button:disabled {
+    border-color: transparent;
+}
+
+#is-multitrip-container {
+    width: 100%;
+    column-gap: 5%;
+}
+
+#is-multitrip-container > input {
+    border: 1px solid #FFA216;
+}
+
+#is-multitrip-text {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.2em;
+    flex-wrap: wrap;
+}
+
+.title-row * {
+    margin-bottom: 0;
+}
+
+.form-check {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 0.2em;
+    margin-bottom: 0;
+}
+
+label.form-check-label {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.search-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.search-button-container > button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 0.25em;
+}
+
+.search-button-container *, .h6 {
+    margin-bottom: 0;
+}
+
+.calendar-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.time-container {
+    margin-bottom: 0;
+}
+
+/* Remove arrows from number input */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}

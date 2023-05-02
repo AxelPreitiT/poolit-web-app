@@ -4,10 +4,9 @@
 <html>
   <head>
     <title><spring:message code="notFound.pageTitle"/></title>
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.css.jsp" />
-    <jsp:include page="/WEB-INF/jsp/bootstrap-cdn/bootstrap.icons.jsp" />
+    <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
-    <link href="<c:url value="/css/static/not-found.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/static/not-found.css"/>" rel="stylesheet">
   </head>
   <body class="background-bg-color">
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>

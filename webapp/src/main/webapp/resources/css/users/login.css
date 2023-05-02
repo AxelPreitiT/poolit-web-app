@@ -1,0 +1,51 @@
+@import "users.css";
+
+.full-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5%;
+}
+
+div.main-container-style {
+    margin-left: 35%;
+    margin-right: 35%;
+}
+
+
+.error-container{
+    height: 20px;
+}
+
+.error{
+    color: red;
+}
+
+.form-floating{
+    width: 100%;
+}
+
+.create-container{
+    display: flex;
+    height: 20%;
+    gap: 2%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.login-btn{
+    width: 100%;
+}
+
+.favicon_container{
+    display: flex;
+    justify-content: center;
+    max-height: 10%;
+    width: 100%;
+}
+
+.img-container{
+    display: flex;
+    justify-content: center;
+    width: 20%;
+}

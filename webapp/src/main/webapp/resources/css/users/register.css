@@ -1,0 +1,35 @@
+@import "users.css";
+
+div.main-container-style {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.formError{
+    color: red;
+}
+
+.preview {
+    width: 100%;
+    display: flex;
+    justify-content:center;
+}
+
+img {
+    max-width:300;
+    max-height:150;
+    padding-top: 1rem;
+}
+
+.login-container{
+    display: flex;
+    height: 20%;
+    gap: 2%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.error-container{
+    height: 10px;
+}

@@ -1,0 +1,96 @@
+@import "/resources/css/base/elements.css";
+
+a {
+    text-decoration: none !important;
+}
+
+.card-info{
+    border-top: 2px solid #8b8b8b ;
+    display: flex;
+    height: 170px;
+    padding: 1.5% 1% 1% 1%;
+    flex-direction: row;
+}
+
+.card-info:hover{
+    opacity: 0.5;
+}
+
+.data-container{
+    flex-grow: 4;
+}
+
+.img-container{
+    flex-grow: 1;
+    padding: 1% 0 1% 0;
+    max-height: inherit;
+    align-content: center;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.icon-style, .title-style{
+    font-size: 30px;
+}
+
+.route-container{
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+}
+
+
+.location-line{
+    height: 2.5vw;
+    align-items: end;
+    position: relative;
+}
+
+.location-line-content {
+    position: absolute;
+    bottom: 0;
+}
+
+.horizontal_dotted_line {
+    border: 1px dashed;
+    width: 100%;
+    margin: auto;
+}
+
+.adress-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1%;
+}
+
+.route-info-text{
+    display: flex;
+    flex-direction: column;
+}
+
+.aling-right{
+    text-align: right;
+}
+
+.extra-info-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.line-container{
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+}
+
+.car-container{
+    border-radius: 20px;
+}
+
+.format_date{
+    flex-direction: column;
+    width: 200px;
+}

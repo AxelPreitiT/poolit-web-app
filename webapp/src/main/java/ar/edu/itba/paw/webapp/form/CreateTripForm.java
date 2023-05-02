@@ -1,33 +1,48 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.form.annotations.DateAndTimeCreate;
+import ar.edu.itba.paw.webapp.form.annotations.MultitripCreate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 
+@DateAndTimeCreate
+@MultitripCreate
 public class CreateTripForm {
+
+    @Min(value = 1)
     private int originCityId;
 
     @Pattern(regexp = ".+")
+    @Size(max = 50)
     private String originAddress;
 
+    @Pattern(regexp = "^(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[012])\\/\\d{4}$")
+    private String date;
+
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$")
+    private String time;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private String originDate;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    private String originTime;
+    @Pattern(regexp = "^(0?[1-9]|[12][0-9]|3[01])\\/(0?[1-9]|1[012])\\/\\d{4}$")
+    private String lastDate;
+
+    private boolean multitrip;
+
+    @Min(value = 1)
     private int destinationCityId;
     @Pattern(regexp = ".+")
+    @Size(max = 50)
     private String destinationAddress;
-    @Pattern(regexp = "([a-zA-Z]{2}\\s?\\d{3}\\s?[a-zA-Z]{2})|([a-zA-Z]{3}\\s?\\d{3})")
-    private String carPlate;
 
-    @Pattern(regexp = ".+")
-    private String carInfo;
     @Min(value = 1)
-    private int maxSeats;
-    @Pattern(regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
-    private String email;
-    @Pattern(regexp = "^\\d{2,3}\\s?\\d{4}\\s?\\d{4}")
-    private String phone;
+    private long carId;
+
+    @Min(value = 1)
+    private int maxSeats = 0;
+
+    @Min(value = 0)
+    private double price;
 
     public int getOriginCityId() {
         return originCityId;
@@ -45,20 +60,20 @@ public class CreateTripForm {
         this.originAddress = originAddress;
     }
 
-    public String getOriginDate() {
-        return originDate;
+    public String getDate() {
+        return date;
     }
 
-    public void setOriginDate(String originDate) {
-        this.originDate = originDate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getOriginTime() {
-        return originTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setOriginTime(String originTime) {
-        this.originTime = originTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getDestinationCityId() {
@@ -77,20 +92,36 @@ public class CreateTripForm {
         this.destinationAddress = destinationAddress;
     }
 
-    public String getCarPlate() {
-        return carPlate;
+    public String getLastDate() {
+        return lastDate;
     }
 
-    public void setCarPlate(String carPlate) {
-        this.carPlate = carPlate;
+    public void setLastDate(String lastDate) {
+        this.lastDate = lastDate;
     }
 
-    public String getCarInfo() {
-        return carInfo;
+    public boolean isMultitrip() {
+        return multitrip;
     }
 
-    public void setCarInfo(String carInfo) {
-        this.carInfo = carInfo;
+    public void setMultitrip(boolean multitrip) {
+        this.multitrip = multitrip;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(long carId) {
+        this.carId = carId;
     }
 
     public int getMaxSeats() {
@@ -99,21 +130,5 @@ public class CreateTripForm {
 
     public void setMaxSeats(int maxSeats) {
         this.maxSeats = maxSeats;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 }
