@@ -58,7 +58,9 @@
                 </div>
             </div>
             <div class="img-container">
-                <img class="car-container"  src="https://lumiere-a.akamaihd.net/v1/images/og_cars_lightningmcqueenday_18244_4435f27a.jpeg?region=40,0,1120,630">
+<%--                <img class="car-container"  src="https://lumiere-a.akamaihd.net/v1/images/og_cars_lightningmcqueenday_18244_4435f27a.jpeg?region=40,0,1120,630">--%>
+                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                <img  class="car-container" src="${carImageUrl}"/>
             </div>
         </div>
     </a>

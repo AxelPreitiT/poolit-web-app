@@ -38,9 +38,11 @@ public interface TripService {
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
     //
-    PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsWhereUserIsPassengerPast(final User user, int page, int pageSize);
     //
-    PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize);
     //
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
     boolean deleteTrip(final Trip trip);

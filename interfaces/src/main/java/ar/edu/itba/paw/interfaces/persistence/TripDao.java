@@ -18,8 +18,8 @@ public interface TripDao {
     List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime);
     PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize);
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
-    PagedContent<Trip> getTripsCreatedByUser(final User user,int page, int pageSize);
-    PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUser(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime,int page, int pageSize);
+    PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize);
     Optional<Trip> findById(long id);
     Optional<Trip> findById(long tripId, LocalDateTime start, LocalDateTime end);
     boolean deleteTrip(final Trip trip);

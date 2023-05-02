@@ -161,7 +161,7 @@ public class TripController extends LoggedUserController {
             throw new IllegalStateException();
         }
         tripService.deleteTrip(trip);
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, 0, PAGE_SIZE);
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE);
         final ModelAndView mav = new ModelAndView("/created-trips/next");
         mav.addObject("trips", trips);
         mav.addObject("tripDeleted", true);

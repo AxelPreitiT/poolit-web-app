@@ -119,20 +119,23 @@ public class UserController extends LoggedUserController {
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
         if(Objects.equals(user.getRole(), "USER")){
-            List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+            List<Trip> futureTrips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
+            List<Trip> pastTrips = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
             mav.addObject("user", user);
-            mav.addObject("trips", trips);
+            mav.addObject("futureTrips", futureTrips);
+            mav.addObject("pastTrips", pastTrips);
             return mav;
         }
-
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
+        List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
         List<Car> cars = carService.findByUser(user);
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
-        mav.addObject("trips", trips);
+        mav.addObject("futureTrips", futureTrips);
+        mav.addObject("pastTrips",pastTrips);
         mav.addObject("cars", cars);
         return mav;
     }
@@ -145,18 +148,21 @@ public class UserController extends LoggedUserController {
 
         if(Objects.equals(user.getRole(), "DRIVER")){
             //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
-            List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
+            List<Trip> futureTrips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
+            List<Trip> pastTrips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
 
             pawUserDetailsService.update(user);
             userService.changeRole(user.getUserId(), user.getRole());
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
             mav.addObject("user", user);
-            mav.addObject("trips", trips);
+            mav.addObject("futureTrips", futureTrips);
+            mav.addObject("pastTrips", pastTrips);
             return mav;
         }
         //TODO: traer las que ya pasaron y las que van a hacerse
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
+        List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
+        List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
         List<Car> cars = carService.findByUser(user);
 
         pawUserDetailsService.update(user);
@@ -164,7 +170,8 @@ public class UserController extends LoggedUserController {
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
-        mav.addObject("trips", trips);
+        mav.addObject("futureTrips", futureTrips);
+        mav.addObject("pastTrips",pastTrips);
         mav.addObject("cars", cars);
         return mav;
 
@@ -176,7 +183,7 @@ public class UserController extends LoggedUserController {
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
         //TODO: hacer que sean los que son a partir de ahora
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, page-1, PAGE_SIZE);
+        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/next");
         mav.addObject("trips", trips);
@@ -189,7 +196,7 @@ public class UserController extends LoggedUserController {
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
 
         //TODO: hacer los que son antes de ahora
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, page-1, PAGE_SIZE);
+        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/history");
         mav.addObject("trips", trips);
@@ -201,7 +208,7 @@ public class UserController extends LoggedUserController {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         //TODO: traer las que son a futuro (o actual)
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, page-1, PAGE_SIZE);
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/next");
         mav.addObject("trips", trips);
@@ -214,7 +221,7 @@ public class UserController extends LoggedUserController {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         //TODO: traer las que pasaron
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, page-1, PAGE_SIZE);
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/history");
         mav.addObject("trips", trips);

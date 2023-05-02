@@ -21,17 +21,19 @@
   </jsp:include>
   <div class="List-properties-container">
     <c:url value="/users/reserved" var="reservedTripsUrl"/>
+    <c:set var="trips" value="${futureTrips}" scope="request"/>
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
-      <jsp:param name="title" value="Proximos viajes"/>
-      <jsp:param name="btndesc" value="Ver todos los proximos viajes"/>
-      <jsp:param name="trips" value="${trips}"/>
+      <jsp:param name="title" value="nextTrips.reserved.title"/>
+      <jsp:param name="btndesc" value="nextTrips.reserved.titleView"/>
+      <jsp:param name="trips" value="${futureTrips}"/>
       <jsp:param name="url" value="${reservedTripsUrl}"/>
     </jsp:include>
     <c:url value="/users/reserved/history" var="reservedTripsHistoryUrl"/>
+    <c:set var="trips" value="${pastTrips}" scope="request"/>
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
-      <jsp:param name="title" value="Viajes realizados"/>
-      <jsp:param name="btndesc" value="Ver todos los viajes realizados"/>
-      <jsp:param name="trips" value="${trips}"/>
+      <jsp:param name="title" value="historyTrips.reserved.title"/>
+      <jsp:param name="btndesc" value="historyTrips.reserved.titleView"/>
+      <jsp:param name="trips" value="${pastTrips}"/>
       <jsp:param name="url" value="${reservedTripsHistoryUrl}"/>
     </jsp:include>
   </div>

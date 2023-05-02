@@ -205,9 +205,15 @@ public class TripDaoImpl implements TripDao {
         return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override
-    public PagedContent<Trip> getTripsCreatedByUser(final User user,int page, int pageSize){
+    public PagedContent<Trip> getTripsCreatedByUser(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime,int page, int pageSize){
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.USER_ID, QueryBuilder.DbComparator.EQUALS,user.getUserId());
+        minDateTime.ifPresent(dateTime->
+                queryBuilder.withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,dateTime)
+        );
+        maxDateTime.ifPresent(dateTime->
+                queryBuilder.withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.LESS_OR_EQUAL,dateTime)
+        );
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
         queryBuilder.withOffset(page*pageSize)
                     .withLimit(pageSize);
@@ -215,9 +221,8 @@ public class TripDaoImpl implements TripDao {
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
-    //TODO: chequear
     @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize) {
+    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize) {
         List<Object> args = new ArrayList<>();
         args.add(user.getUserId());
         QueryBuilder queryBuilder = new QueryBuilder()
@@ -227,11 +232,21 @@ public class TripDaoImpl implements TripDao {
                 .withLimit(pageSize);
         //Quiero traer para cada trip, la fecha donde esta el usuario que estoy buscando
         //No lo puedo traer en la anterior, porque tengo que agrupar por fecha, no por pasajero, para tener la cantidad de asientos en esa fecha (que no solo sean del pasajero)
+        //TODO: esto no soluciona que los datos sean los del intervalo donde es pasajero
+        //Arreglar despues (ver si puedo hacer un findById para cada Id, es ineficiente pero si no es muy dificil)
         String query = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin_city_name, origin_city_id, origin_province_id, destination_address, destination_city_name, destination_city_id, destination_province_id, user_email, trips.user_id as user_id, user_phone,  user_birthdate, user_role, user_password,  user_username, user_surname,  user_city_id,  user_city_name,  user_city_province_id , car_id, car_plate, car_info_car,  car_image_id, occupied_seats, trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "
                 + "FROM passengers p JOIN ( " + queryBuilder.getString() + " ) trips ON trips.trip_id = p.trip_id "
                 + "WHERE p.user_id = ?";
         List<Object> arguments = queryBuilder.getArguments();
         arguments.add(user.getUserId());
+        if(minDateTime.isPresent()){
+            query += " AND p.end_date >= ? ";
+            arguments.add(minDateTime.get());
+        }
+        if(maxDateTime.isPresent()){
+            query += " AND p.end_date <= ? ";
+            arguments.add(maxDateTime.get());
+        }
         List<Trip> ans =  jdbcTemplate.query(query,PASSENGER_TRIPS_ROW_MAPPER,arguments.toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }

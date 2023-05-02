@@ -233,14 +233,25 @@ public class TripServiceImpl implements TripService {
         return tripDao.getTripInstances(trip,page,pageSize,start,end);
     }
     @Override
-    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize){
+    public PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
     }
     @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize){
+    public PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+    }
+    @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassengerPast(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
     }
     @Override
     public PagedContent<Trip> getIncomingTrips(int page, int pageSize){

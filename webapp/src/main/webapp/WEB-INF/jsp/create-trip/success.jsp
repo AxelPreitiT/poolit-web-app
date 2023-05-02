@@ -48,7 +48,7 @@
     <div id="toast-container">
         <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
             <jsp:param name="title" value="¡Viaje creado!"/>
-            <jsp:param name="message" value="Tu viaje ha sido creado exitosamente"/>
+            <jsp:param name="message" value="createTrip.success.toast"/>
         </jsp:include>
     </div>
 </body>

@@ -21,17 +21,19 @@
     </jsp:include>
     <div class="List-properties-container">
         <c:url value="/users/created" var="createdTripsUrl"/>
+        <c:set var="trips" value="${futureTrips}" scope="request"/>
         <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
             <jsp:param name="title" value="profile.nextTrips"/>
             <jsp:param name="btndesc" value="profile.nextTrips.btn"/>
-            <jsp:param name="trips" value="${trips}"/>
+            <jsp:param name="trips" value="${futureTrips}"/>
             <jsp:param name="url" value="${createdTripsUrl}"/>
         </jsp:include>
         <c:url value="/users/created/history" var="createdHistoryTripsUrl"/>
+        <c:set var="trips" value="${pastTrips}" scope="request"/>
         <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
             <jsp:param name="title" value="profile.historyTrips"/>
             <jsp:param name="btndesc" value="profile.historyTrips.btn"/>
-            <jsp:param name="trips" value="${trips}"/>
+            <jsp:param name="trips" value="${pastTrips}"/>
             <jsp:param name="url" value="${createdHistoryTripsUrl}"/>
         </jsp:include>
         <div class="list-container">

@@ -49,7 +49,9 @@
         <sec:authorize access="isAuthenticated()">
             <div class="profile-container dropdown">
                 <button class="btn rounded-circle shadow-btn" data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle light-text h1 profile-btn"></i>
+                    <c:url value="/image/${loggedUser.userImageId}" var="imageUrl"/>
+                    <img class="image-photo" src="${imageUrl}" alt="userImage">
+<%--                    <i class="bi bi-person-circle light-text h1 profile-btn"></i>--%>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end primary-bg-color">
                     <li>
@@ -57,7 +59,7 @@
                             <div class="container text-center">
                                 <div class="row dropdown-row">
                                     <div class="col-sm-2">
-                                        <i class="bi bi-person-circle light-text h1"></i>
+                                        <img class="image-photo" src="${imageUrl}" alt="userImage">
                                     </div>
                                     <div class="col-sm-10 dropdown-row-text">
                                         <span class="button-text-style light-text h1">
