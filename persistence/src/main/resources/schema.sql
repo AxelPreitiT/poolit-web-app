@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS images(
 
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
-    name TEXT,
+    username TEXT,
     surname TEXT,
     email TEXT NOT NULL,
     phone VARCHAR(20) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS cars(
     plate TEXT NOT NULL,
     info_car TEXT NOT NULL,
     user_id INT NOT NULL,
-    image_id INT,
+    image_id INT DEFAULT 1,
     UNIQUE(user_id,plate),
     CONSTRAINT cars_to_users FOREIGN KEY (user_id) REFERENCES users (user_id),
     CONSTRAINT cars_to_images FOREIGN KEY (image_id) REFERENCES images (image_id)
