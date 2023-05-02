@@ -96,7 +96,7 @@ public class TripController extends LoggedUserController {
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
-        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
+//        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
         if(errors.hasErrors()){
             System.out.println("Errors");
             errors.getAllErrors().forEach(System.out::println);
@@ -116,7 +116,7 @@ public class TripController extends LoggedUserController {
         final ModelAndView mav = new ModelAndView("/landing/main");
         mav.addObject("trips", trips);
         mav.addObject("cities", cities);
-        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
+//        mav.addObject("searchUrl", SEARCH_TRIP_PATH);
 
         return mav;
     }
@@ -130,7 +130,7 @@ public class TripController extends LoggedUserController {
 
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
-        mav.addObject("createTripUrl", CREATE_TRIP_PATH);
+//        mav.addObject("createTripUrl", CREATE_TRIP_PATH);
         mav.addObject("createCarUrl", "/cars/create");
         mav.addObject("cars", userCars);
         return mav;

@@ -18,6 +18,7 @@
             <h1 class="secondary-color"><spring:message code="createTrip.title"/></h1>
             <hr class="secondary-color">
         </div>
+        <c:url value="/trips/create" var="createTripUrl"/>
         <form:form modelAttribute="createTripForm" action="${createTripUrl}" method="post" cssClass="form-style">
             <div class="info-container" id="origin-info-container">
                 <div class="header-row">

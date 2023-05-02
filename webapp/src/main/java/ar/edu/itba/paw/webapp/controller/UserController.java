@@ -102,13 +102,13 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
     public ModelAndView loginUserGet() {
         final ModelAndView mav = new ModelAndView("users/login");
-        mav.addObject("postUrl", LOGIN_USER_PATH);
+//        mav.addObject("postUrl", LOGIN_USER_PATH);
         return mav;
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.POST)
     public ModelAndView loginUserPost() {
-        return new ModelAndView("/helloworld/index");
+        return new ModelAndView("users/login");
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)

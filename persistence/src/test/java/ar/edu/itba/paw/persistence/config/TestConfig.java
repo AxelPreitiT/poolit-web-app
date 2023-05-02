@@ -13,38 +13,38 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
-
-@ComponentScan({"ar.edu.itba.paw.persistence"})
-@Configuration
-public class TestConfig {
-    @Value("classpath:hsqldb.sql")
-    private Resource hsqldb;
-    @Value("classpath:cities.sql")
-    private Resource cities;
-
-//    @Value("classpath:schema.sql")
-//    private Resource schema;
-    @Bean
-    public DataSource dataSource() {
-        final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-        dataSource.setDriverClass(org.postgresql.Driver.class);
-        dataSource.setUrl("jdbc:postgresql://localhost:5434/paw_2023a_07");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("test");
-        return dataSource;
-    }
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
-        final DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
-        dataSourceInitializer.setDataSource(ds);
-        dataSourceInitializer.setDatabasePopulator(databasePopulator());
-        return dataSourceInitializer;
-    }
-    private DatabasePopulator databasePopulator(){
-        final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-        databasePopulator.addScript(hsqldb);
-//        databasePopulator.addScript(cities);
-//        databasePopulator.addScript(schema);
-        return databasePopulator;
-    }
-}
+//
+//@ComponentScan({"ar.edu.itba.paw.persistence"})
+//@Configuration
+//public class TestConfig {
+//    @Value("classpath:hsqldb.sql")
+//    private Resource hsqldb;
+//    @Value("classpath:cities.sql")
+//    private Resource cities;
+//
+////    @Value("classpath:schema.sql")
+////    private Resource schema;
+//    @Bean
+//    public DataSource dataSource() {
+//        final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+//        dataSource.setDriverClass(org.postgresql.Driver.class);
+//        dataSource.setUrl("jdbc:postgresql://localhost:5434/paw_2023a_07");
+//        dataSource.setUsername("postgres");
+//        dataSource.setPassword("test");
+//        return dataSource;
+//    }
+//    @Bean
+//    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
+//        final DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+//        dataSourceInitializer.setDataSource(ds);
+//        dataSourceInitializer.setDatabasePopulator(databasePopulator());
+//        return dataSourceInitializer;
+//    }
+//    private DatabasePopulator databasePopulator(){
+//        final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+//        databasePopulator.addScript(hsqldb);
+////        databasePopulator.addScript(cities);
+////        databasePopulator.addScript(schema);
+//        return databasePopulator;
+//    }
+//}
