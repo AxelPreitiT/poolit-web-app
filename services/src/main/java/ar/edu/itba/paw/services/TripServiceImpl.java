@@ -3,11 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.PagedContent;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,7 +69,7 @@ public class TripServiceImpl implements TripService {
         return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
     }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
-        if(date == null || time==null || date.length()==0 || time.length()==0){
+        if(date == null || time == null || date.length()==0 || time.length()==0){
             return Optional.empty();
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -85,13 +82,29 @@ public class TripServiceImpl implements TripService {
         }
         return Optional.of(ans);
     }
+    private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
+        if(date == null || time == null || date.length()==0 || time.length()==0){
+            return Optional.empty();
+        }
+        System.out.println("Intenta con" + date);
+        LocalDateTime ans;
+        try{
+            String[] timeTokens = time.split(":");
+            System.out.println("Logra separar los tokens");
+            ans = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+            System.out.println("Parsea la fecha");
+        }catch (Exception e){
+            return Optional.empty();
+        }
+        return Optional.of(ans);
+    }
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
     public boolean deleteTrip(final Trip trip){
-        List<User> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         //Notify passengers that trip was deleted
-        for(User passenger : tripPassengers){
+        for(Passenger passenger : tripPassengers){
             try{
                 emailService.sendMailTripDeletedToPassenger(trip,passenger);
             }catch (Exception e){
@@ -118,13 +131,17 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate){
-        LocalDateTime startDateTime = getLocalDateTime(startDate,startTime).get();
-        LocalDateTime endDateTime = getLocalDateTime(endDate,startTime).orElse(startDateTime);
+        LocalDateTime startDateTime = getIsoLocalDateTime(startDate,startTime).get();
+        LocalDateTime endDateTime = getIsoLocalDateTime(endDate,startTime).orElse(startDateTime);
         return addPassenger(trip,passenger,startDateTime,endDateTime);
     }
     @Override
-    public boolean addPassenger(Trip trip, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
-        List<User> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+    public boolean addPassenger(Trip trip, User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        if(trip==null || user==null){
+            throw new IllegalArgumentException();
+        }
+        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
+        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         if(passengers.contains(passenger)){
             throw new IllegalStateException();
         }
@@ -134,12 +151,11 @@ public class TripServiceImpl implements TripService {
         if(passengers.size()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
-        if( trip == null || passenger == null
-            || startDateTime == null || endDateTime == null
+        if(    startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
             || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
-            || startDateTime.isBefore(LocalDateTime.now()) || trip.getDriver().equals(passenger)
+            || startDateTime.isBefore(LocalDateTime.now()) || trip.getDriver().equals(user)
             || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
             throw new IllegalArgumentException();
         }
@@ -151,7 +167,7 @@ public class TripServiceImpl implements TripService {
             //TODO: change for logging
             e.printStackTrace();
         }
-        return tripDao.addPassenger(trip,passenger,startDateTime,endDateTime);
+        return tripDao.addPassenger(trip,passenger);
     }
     @Override
     public boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
@@ -173,6 +189,12 @@ public class TripServiceImpl implements TripService {
         return tripDao.findById(id);
     }
     @Override
+    public Optional<Trip> findById(long id, String startDate, String startTime, String endDate){
+        LocalDateTime start = getIsoLocalDateTime(startDate,startTime).orElseThrow(IllegalArgumentException::new);
+        LocalDateTime end = getIsoLocalDateTime(endDate,startTime).orElseThrow(IllegalArgumentException::new);
+        return findById(id,start,end);
+    }
+    @Override
     public Optional<Trip> findById(long id,LocalDateTime start, LocalDateTime end){
         return tripDao.findById(id,start,end);
     }
@@ -183,7 +205,7 @@ public class TripServiceImpl implements TripService {
 
     //TODO: preguntar si validamos aca tambien o con peristence alcanza
     @Override
-    public List<User> getPassengers(Trip trip, LocalDateTime dateTime){
+    public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
         if( trip.getStartDateTime().isAfter(dateTime)
                 || trip.getEndDateTime().isBefore(dateTime)
                 || Period.between(trip.getStartDateTime().toLocalDate(),dateTime.toLocalDate()).getDays()%7!=0
@@ -193,7 +215,7 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassengers(trip,dateTime);
     }
     @Override
-    public List<User> getPassengers(TripInstance tripInstance){
+    public List<Passenger> getPassengers(TripInstance tripInstance){
         return tripDao.getPassengers(tripInstance);
     }
     @Override
@@ -211,14 +233,25 @@ public class TripServiceImpl implements TripService {
         return tripDao.getTripInstances(trip,page,pageSize,start,end);
     }
     @Override
-    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize){
+    public PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
     }
     @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize){
+    public PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+    }
+    @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassengerPast(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
     }
     @Override
     public PagedContent<Trip> getIncomingTrips(int page, int pageSize){

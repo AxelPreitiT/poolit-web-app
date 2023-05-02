@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.PagedContent;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.TripInstance;
 
 import java.time.LocalDateTime;
@@ -30,18 +27,22 @@ public interface TripService {
     Optional<Trip> findById(long id, LocalDateTime start, LocalDateTime end);
     //
     Optional<Trip> findById(long id, LocalDateTime dateTime);
+
+    Optional<Trip> findById(long id, String startDate, String startTime, String endDate);
     //
-    List<User> getPassengers(Trip trip, LocalDateTime dateTime);
+    List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //
-    List<User> getPassengers(TripInstance tripInstance);
+    List<Passenger> getPassengers(TripInstance tripInstance);
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
     //
-    PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsWhereUserIsPassengerPast(final User user, int page, int pageSize);
     //
-    PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize);
     //
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
     boolean deleteTrip(final Trip trip);

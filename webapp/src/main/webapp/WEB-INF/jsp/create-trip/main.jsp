@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
 <head>
-    <title>Crear viaje</title>
+    <title><spring:message code="createTrip.title"/></title>
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/create-trip/create-trip.css"/>" rel="stylesheet" type="text/css"/>
@@ -14,14 +15,14 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     <div class="main-container-style container-color">
         <div id="main-header-row">
-            <h1 class="secondary-color">Crear viaje</h1>
+            <h1 class="secondary-color"><spring:message code="createTrip.title"/></h1>
             <hr class="secondary-color">
         </div>
         <form:form modelAttribute="createTripForm" action="${createTripUrl}" method="post" cssClass="form-style">
             <div class="info-container" id="origin-info-container">
                 <div class="header-row">
                     <i class="bi bi-geo-alt h2 secondary-color"></i>
-                    <h2 class="secondary-color">Origen</h2>
+                    <h2 class="secondary-color"><spring:message code="trip.origin"/></h2>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
@@ -105,7 +106,7 @@
                                     <div class="input-group input-group-sm">
                                         <div class="input-group-text" id="is-multitrip-container">
                                             <form:checkbox path="multitrip" cssClass="form-check-input mt-0" id="is-multitrip"/>
-                                            <span class="mb-0 ml-1 placeholder-text">Viaje recurrente</span>
+                                            <span class="mb-0 ml-1 placeholder-text"><spring:message code="trip.recurrent"/></span>
                                         </div>
                                     </div>
                                 </div>
@@ -118,7 +119,7 @@
             <div class="info-container" id="destination-info-container">
                 <div class="header-row">
                     <i class="bi bi-geo-alt-fill h2 secondary-color"></i>
-                    <h2 class="secondary-color">Destino</h2>
+                    <h2 class="secondary-color"><spring:message code="trip.destination"/></h2>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
@@ -156,7 +157,7 @@
             <div class="info-container" id="detail-info-container">
                 <div class="header-row">
                     <i class="bi bi-info-circle-fill h2 secondary-color"></i>
-                    <h2 class="secondary-color">Detalles</h2>
+                    <h2 class="secondary-color"><spring:message code="trip.details"/></h2>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
@@ -178,7 +179,7 @@
                                                 <div class="primary-bg-color" id="car-info-details-container">
                                                     <div class="car-info-details-row">
                                                         <i class="bi bi-caret-right-fill light-text"></i>
-                                                        <span class="light-text">Patente: <c:out value="${car.plate}"/></span>
+                                                        <span class="light-text"><spring:message code="profile.plate" arguments="${car.plate}"/></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,11 +189,11 @@
                                 <c:if test="${empty cars}">
                                     <div class="col-6">
                                         <div id="no-cars-container">
-                                            <h5 class="danger">No tenés autos registrados</h5>
+                                            <h5 class="danger"><spring:message code="createTrip.carsError"/></h5>
                                             <a href="<c:url value="${createCarUrl}"/>">
                                                 <button type="button" class="button-style button-color shadow-btn">
                                                     <i class="bi bi-plus light-text h5"></i>
-                                                    <span class="button-text-style light-text h5">Agregar auto</span>
+                                                    <span class="button-text-style light-text h5"><spring:message code="createTrip.addCar"/></span>
                                                 </button>
                                             </a>
                                         </div>
@@ -238,7 +239,7 @@
                                         </div>
                                         <form:input path="price" cssClass="form-control form-control-sm" id="price" placeholder="Precio por viaje"/>
                                         <div class="input-group-text">
-                                            <span class="text">ARS</span>
+                                            <span class="text"><spring:message code="createTrip.money"/></span>
                                         </div>
                                         <div class="error_container">
                                             <form:errors path="maxSeats" cssClass="formError" element="p"/>
@@ -253,7 +254,7 @@
             <div class="confirm-button-container">
                 <button id="create-trip-button" type="submit" class="btn button-style button-color shadow-btn" disabled>
                     <i class="bi bi-check2 light-text h3"></i>
-                    <span class="button-text-style light-text h3">Confirmar</span>
+                    <span class="button-text-style light-text h3"><spring:message code="createTrip.btn"/></span>
                 </button>
             </div>
         </form:form>

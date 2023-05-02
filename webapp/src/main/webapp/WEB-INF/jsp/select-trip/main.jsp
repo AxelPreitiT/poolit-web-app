@@ -22,22 +22,21 @@
                 <div id="trip-price-container">
                     <div class="trip-price-row">
                         <div>
-                            <span class="h3 text">Precio:</span>
+                            <span class="h3 text"><spring:message code="selectTrip.price"/></span>
                         </div>
                         <div>
-                            <span class="h2 secondary-color">$<c:out value="${trip.price}"/> por viaje</span>
+                            <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.price}"/></span>
                         </div>
                     </div>
                     <div class="trip-price-row items-to-end">
-                        <span class="h6 italic-text">Por viaje</span>
-<%--                    <c:choose>--%>
-<%--                        <c:when test="${trip.recurrent}">--%>
-<%--                            <span class="h6 italic-text"><c:out value="${trip.totalTrips}"/> viajes</span>--%>
-<%--                        </c:when>--%>
-<%--                        <c:otherwise>--%>
-<%--                            <span class="h6 italic-text">Viaje único</span>--%>
-<%--                        </c:otherwise>--%>
-<%--                    </c:choose>--%>
+                    <c:choose>
+                        <c:when test="${trip.recurrent}">
+                            <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="h6 italic-text">Viaje único</span>
+                        </c:otherwise>
+                    </c:choose>
                     </div>
                 </div>
                 <div id="button-container">
@@ -51,7 +50,7 @@
                                     <c:out value="disabled"/>
                                 </c:if>>
                             <i class="bi bi-check2 light-text h3"></i>
-                            <span class="button-text-style light-text h3">Reservar</span>
+                            <span class="button-text-style light-text h3"><spring:message code="selectTrip.btnConfirm"/></span>
                         </button>
                     </form:form>
                     <c:if test="${trip.freeSeats == 0}">

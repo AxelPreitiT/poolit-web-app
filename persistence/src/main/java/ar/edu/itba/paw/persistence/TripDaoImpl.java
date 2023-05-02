@@ -26,19 +26,13 @@ import java.util.*;
 public class TripDaoImpl implements TripDao {
     private static final RowMapper<Integer> COUNT_ROW_MAPPER = (resultSet,rowNum)-> resultSet.getInt("count");
 
-    //NO anidar DAO's, son muchos llamados a la BD
-    //Hacer los NATURAL JOIN
-
-    // name | phone | startDate | ... resultSet
-    // Vas agarrando cosas de ahi, lo que necesites para instanciar los modelos
-    //TODO: preguntar si usamos metodos de otros DAO's o hacemos Natural Join
-    private RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
+    private final RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
         User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
                 resultSet.getString("user_surname"),resultSet.getString("user_email"),
                 resultSet.getString("user_phone"),resultSet.getString("user_password"),
                 resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
                 new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
-                resultSet.getString("user_role"));
+                resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
         return new Trip(
                 resultSet.getLong("trip_id"),
                 new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
@@ -53,6 +47,37 @@ public class TripDaoImpl implements TripDao {
                 resultSet.getInt("occupied_seats"),
                 resultSet.getDouble("trip_price")
         );
+    };
+    private final RowMapper<Trip> PASSENGER_TRIPS_ROW_MAPPER = (resultSet,rowNum)-> {
+        User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
+                resultSet.getString("user_surname"),resultSet.getString("user_email"),
+                resultSet.getString("user_phone"),resultSet.getString("user_password"),
+                resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
+                new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
+                resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
+        return new Trip(
+                resultSet.getLong("trip_id"),
+                new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
+                resultSet.getString("origin_address"),
+                new City(resultSet.getLong("destination_city_id"),resultSet.getString("destination_city_name"),resultSet.getLong("destination_province_id")),
+                resultSet.getString("destination_address"),
+                resultSet.getTimestamp("start_date_time").toLocalDateTime(),
+                resultSet.getTimestamp("end_date_time").toLocalDateTime(),
+                resultSet.getInt("max_passengers"),
+                user,
+                new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),user,resultSet.getLong("car_image_id")),
+                resultSet.getInt("occupied_seats"),
+                resultSet.getDouble("trip_price"),
+                resultSet.getTimestamp("passenger_start_date").toLocalDateTime(),
+                resultSet.getTimestamp("passenger_end_date").toLocalDateTime()
+        );
+    };
+
+    private final RowMapper<Passenger> PASSENGER_ROW_MAPPER = (resultSet, rowNum) ->{
+      User user = UserDaoImpl.ROW_MAPPER.mapRow(resultSet,rowNum);
+      return new Passenger(user,
+              resultSet.getTimestamp("start_date").toLocalDateTime(),
+              resultSet.getTimestamp("end_date").toLocalDateTime());
     };
     private final JdbcTemplate jdbcTemplate;
 
@@ -70,25 +95,43 @@ public class TripDaoImpl implements TripDao {
         this.passengerInsert = new SimpleJdbcInsert(tripDataSource)
                 .withTableName("passengers");
     }
-    private RowMapper<TripInstance> getTripInstanceRowMapper(Trip trip) {
-        return (resultSet, rowNum) -> {
-            return new TripInstance(
+    private RowMapper<TripInstance> getTripInstanceRowMapper(final Trip trip) {
+        return (resultSet, rowNum) ->
+            new TripInstance(
                     resultSet.getTimestamp("trip_date_time").toLocalDateTime(),
                     trip,
                     resultSet.getInt("trip_passenger_count")
+            );
+    }
+    private RowMapper<Trip> getTripRowMapper(final Optional<LocalDateTime> queryStartDateTime, final Optional<LocalDateTime> queryEndDateTime){
+        return (resultSet, rowNum)->{
+            User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
+                    resultSet.getString("user_surname"),resultSet.getString("user_email"),
+                    resultSet.getString("user_phone"),resultSet.getString("user_password"),
+                    resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
+                    new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
+                    resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
+            return new Trip(
+                    resultSet.getLong("trip_id"),
+                    new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
+                    resultSet.getString("origin_address"),
+                    new City(resultSet.getLong("destination_city_id"),resultSet.getString("destination_city_name"),resultSet.getLong("destination_province_id")),
+                    resultSet.getString("destination_address"),
+                    resultSet.getTimestamp("start_date_time").toLocalDateTime(),
+                    resultSet.getTimestamp("end_date_time").toLocalDateTime(),
+                    resultSet.getInt("max_passengers"),
+                    user,
+                    new Car(resultSet.getLong("car_id"),resultSet.getString("car_plate"),resultSet.getString("car_info_car"),user,resultSet.getLong("car_image_id")),
+                    resultSet.getInt("occupied_seats"),
+                    resultSet.getDouble("trip_price"),
+                    queryStartDateTime.orElse(resultSet.getTimestamp("start_date_time").toLocalDateTime()),
+                    queryEndDateTime.orElse(resultSet.getTimestamp("end_date_time").toLocalDateTime())
             );
         };
     }
 
     @Override
     public Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final boolean isRecurrent,final double price, final int max_passengers, final User driver) {
-//        if( startDateTime==null || endDateTime==null
-//            || (isRecurrent && ( !startDateTime.isBefore(endDateTime) || !startDateTime.getDayOfWeek().equals(endDateTime.getDayOfWeek())))
-//            || (!isRecurrent && !startDateTime.equals(endDateTime))
-//            || originCity==null || destinationCity==null || car == null || driver == null
-//            || max_passengers<=0 || price<0){
-//            throw  new IllegalArgumentException();
-//        }
         //Insertamos los datos en la tabla trip
         Map<String, Object> tripData = new HashMap<>();
         tripData.put("max_passengers",max_passengers);
@@ -107,27 +150,16 @@ public class TripDaoImpl implements TripDao {
         driverCarData.put("user_id",driver.getUserId());
         driverCarData.put("car_id",car.getCarId());
         driverCarInsert.execute(driverCarData);
-        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,startDateTime,endDateTime,max_passengers,driver,car,0,price);
+        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,startDateTime,endDateTime,max_passengers,driver,car,0,price,startDateTime,endDateTime);
     }
 
     @Override
-    public boolean addPassenger(final Trip trip, final User passenger, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
-        //StartDateTime of passenger must be in a day that the trip happens
-        //EndDateTime of passenger must be in a day that the trip happens
-//        if(trip == null || passenger == null
-//            || startDateTime==null || endDateTime == null
-//            || startDateTime.isAfter(endDateTime)
-//            || trip.getStartDateTime().isAfter(startDateTime)
-//            || trip.getEndDateTime().isBefore(endDateTime)
-//            || Period.between(trip.getStartDateTime().toLocalDate(),startDateTime.toLocalDate()).getDays()%7!=0
-//            || Period.between(trip.getEndDateTime().toLocalDate(),endDateTime.toLocalDate()).getDays()%7!=0){
-//            throw new IllegalArgumentException();
-//        }
+    public boolean addPassenger(final Trip trip, final Passenger passenger){
         Map<String,Object> passengerData = new HashMap<>();
         passengerData.put("user_id",passenger.getUserId());
         passengerData.put("trip_id",trip.getTripId());
-        passengerData.put("start_date",startDateTime);
-        passengerData.put("end_date",endDateTime);
+        passengerData.put("start_date",passenger.getStartDateTime());
+        passengerData.put("end_date",passenger.getEndDateTime());
         return passengerInsert.execute(passengerData)>0;
     }
     @Override
@@ -141,37 +173,21 @@ public class TripDaoImpl implements TripDao {
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
     @Override
-    public List<User> getPassengers(final TripInstance tripInstance){
+    public List<Passenger> getPassengers(final TripInstance tripInstance){
         return getPassengers(tripInstance.getTrip(),tripInstance.getDateTime());
     }
     @Override
-    public List<User> getPassengers(final Trip trip, final LocalDateTime dateTime){
-//        if( trip.getStartDateTime().isAfter(dateTime)
-//                || trip.getEndDateTime().isBefore(dateTime)
-//                || Period.between(trip.getStartDateTime().toLocalDate(),dateTime.toLocalDate()).getDays()%7!=0
-//        ){
-//            throw new IllegalArgumentException();
-//        }
+    public List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime){
         return getPassengers(trip,dateTime,dateTime);
     }
     @Override
-    public List<User> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+    public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
-                ,UserDaoImpl.ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
+                ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
-//        validatePageAndSize(page,pageSize);
-//        String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
-//                "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? "+
-//                "GROUP BY days.days ";
-//        List<TripInstance> ans =  jdbcTemplate.query("SELECT days as trip_date_time, count(passengers.user_id) as  trip_passenger_count " +
-//                query +
-//                "OFFSET ? " +
-//                "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),page*pageSize,pageSize);
-//        int total = jdbcTemplate.query("SELECT sum(aux) as count FROM ( SELECT count(*) as aux " + query + ") t",COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId()).stream().findFirst().orElse(0);
-//        return new PagedContent<>(ans,page,pageSize,total);
         return getTripInstances(trip,page,pageSize,trip.getStartDateTime(),trip.getEndDateTime());
     }
     @Override
@@ -189,29 +205,49 @@ public class TripDaoImpl implements TripDao {
         return new PagedContent<>(ans,page,pageSize,total);
     }
     @Override
-    public PagedContent<Trip> getTripsCreatedByUser(final User user,int page, int pageSize){
-//        validatePageAndSize(page,pageSize);
+    public PagedContent<Trip> getTripsCreatedByUser(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime,int page, int pageSize){
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.USER_ID, QueryBuilder.DbComparator.EQUALS,user.getUserId());
+        minDateTime.ifPresent(dateTime->
+                queryBuilder.withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,dateTime)
+        );
+        maxDateTime.ifPresent(dateTime->
+                queryBuilder.withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.LESS_OR_EQUAL,dateTime)
+        );
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
         queryBuilder.withOffset(page*pageSize)
                     .withLimit(pageSize);
         List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
-    //TODO: ver de que pueda buscar las instancias de cada una donde participo (o las fechas donde participa en ese trip por lo menos)
-    //Para hacerlo, buscar las fechas donde participa y traer las instancias de ese trip para esas fechas
-    //O traer la informacion del Trip para esas fechas (hacer con el query builder de abajo para los filtros)
+
     @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, int page, int pageSize){
+    public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize) {
         List<Object> args = new ArrayList<>();
         args.add(user.getUserId());
         QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhereIn(QueryBuilder.DbField.TRIP_ID,"SELECT trip_id FROM passengers WHERE user_id = ?",args);
-        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        queryBuilder.withOffset(page*pageSize)
+                .withWhereIn(QueryBuilder.DbField.TRIP_ID, "SELECT trip_id FROM passengers WHERE user_id = ?", args);
+        int total = jdbcTemplate.query(queryBuilder.getCountString(), COUNT_ROW_MAPPER, queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
+        queryBuilder.withOffset(page * pageSize)
                 .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        //Quiero traer para cada trip, la fecha donde esta el usuario que estoy buscando
+        //No lo puedo traer en la anterior, porque tengo que agrupar por fecha, no por pasajero, para tener la cantidad de asientos en esa fecha (que no solo sean del pasajero)
+        //TODO: esto no soluciona que los datos sean los del intervalo donde es pasajero
+        //Arreglar despues (ver si puedo hacer un findById para cada Id, es ineficiente pero si no es muy dificil)
+        String query = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin_city_name, origin_city_id, origin_province_id, destination_address, destination_city_name, destination_city_id, destination_province_id, user_email, trips.user_id as user_id, user_phone,  user_birthdate, user_role, user_password,  user_username, user_surname,  user_city_id,  user_city_name,  user_city_province_id , car_id, car_plate, car_info_car,  car_image_id, occupied_seats, trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "
+                + "FROM passengers p JOIN ( " + queryBuilder.getString() + " ) trips ON trips.trip_id = p.trip_id "
+                + "WHERE p.user_id = ?";
+        List<Object> arguments = queryBuilder.getArguments();
+        arguments.add(user.getUserId());
+        if(minDateTime.isPresent()){
+            query += " AND p.end_date >= ? ";
+            arguments.add(minDateTime.get());
+        }
+        if(maxDateTime.isPresent()){
+            query += " AND p.end_date <= ? ";
+            arguments.add(maxDateTime.get());
+        }
+        List<Trip> ans =  jdbcTemplate.query(query,PASSENGER_TRIPS_ROW_MAPPER,arguments.toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
@@ -229,13 +265,6 @@ public class TripDaoImpl implements TripDao {
         List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
-    //Preguntar:
-    //reutilizar query -> concatenar string
-    //pasar timestamp -> Probar
-    //application properties condicional -> comentar el que no usamos (o crear perfiles)
-    //ROWMAPPER globales -> hacer package protected
-    //Backup BD (si no la semana que viene)
-    //TODO: pedir que sea el mismo dia de la semana que el inicio!
     @Override
     public PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
@@ -251,21 +280,17 @@ public class TripDaoImpl implements TripDao {
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
-//        startDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime)
-//                                .withWhere(QueryBuilder.DbField.START_DATE_TIME, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime));
         endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime)
                                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime));
         dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1.getValue()));
         minPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.GREATER_OR_EQUALS,price));
         maxPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.LESS_OR_EQUAL,price));
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        //TODO: fix for recurrent trips
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),getTripRowMapper(Optional.of(startDateTime),endDateTime),queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
-    //TODO: agregar que traiga los datos para las fechas pedidas
 
     @Override
     public Optional<Trip> findById(long tripId) {
@@ -279,11 +304,11 @@ public class TripDaoImpl implements TripDao {
                 .withWhere(QueryBuilder.DbField.TRIP_ID, QueryBuilder.DbComparator.EQUALS,tripId)
                 .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.GREATER_OR_EQUALS,start)
                 .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,end);
-        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst();
+        return jdbcTemplate.query(queryBuilder.getString(),getTripRowMapper(Optional.of(start),Optional.of(end)),queryBuilder.getArguments().toArray()).stream().findFirst();
     }
 
     private static class QueryBuilder{
-        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price";
+        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price";
         private static final String selectCount = "select sum(count) as count FROM (select count(distinct trip_id) as count ";
         private static final String from = "FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(\n" +
                 "    SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count\n" +
@@ -312,7 +337,7 @@ public class TripDaoImpl implements TripDao {
                         .append(having).append('\n')
                         .append(orderBy).append('\n')
                         .append(offset).append('\n')
-                        .append(limit).append(';')
+                        .append(limit)
                         .toString();
         }
         public String getCountString(){

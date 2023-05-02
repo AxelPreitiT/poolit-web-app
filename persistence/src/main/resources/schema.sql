@@ -1,6 +1,11 @@
+CREATE TABLE IF NOT EXISTS images(
+    image_id SERIAL PRIMARY KEY,
+    bytea BYTEA
+);
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
-    username TEXT,
+    name TEXT,
     surname TEXT,
     email TEXT NOT NULL,
     phone VARCHAR(20) NOT NULL,
@@ -8,7 +13,10 @@ CREATE TABLE IF NOT EXISTS users(
     birthdate TIMESTAMP,
     city_id INT,
     user_role TEXT,
-    UNIQUE(email)
+    user_image_id INT,
+    UNIQUE(email),
+    CONSTRAINT users_to_images FOREIGN KEY (user_image_id) REFERENCES images (image_id) ON DELETE SET NULL,
+    CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS provinces (
@@ -27,20 +35,16 @@ CREATE TABLE IF NOT EXISTS cities (
     CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS images(
-                                     image_id SERIAL PRIMARY KEY,
-                                     bytea BYTEA
-);
 
 CREATE TABLE IF NOT EXISTS cars(
     car_id SERIAL PRIMARY KEY,
     plate TEXT NOT NULL,
     info_car TEXT NOT NULL,
     user_id INT NOT NULL,
-    image_id INT NOT NULL,
+    image_id INT,
     UNIQUE(user_id,plate),
-    FOREIGN KEY (user_id) REFERENCES users (user_id),
-    FOREIGN KEY (image_id) REFERENCES images (image_id)
+    CONSTRAINT cars_to_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+    CONSTRAINT cars_to_images FOREIGN KEY (image_id) REFERENCES images (image_id)
 );
 CREATE TABLE IF NOT EXISTS trips(
     trip_id SERIAL PRIMARY KEY,

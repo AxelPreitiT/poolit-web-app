@@ -48,13 +48,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final String birthdate, final City bornCity, String role) {
+                           final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id) {
         if(role == null){
             role = Roles.USER.role;
         }
         String finalRole = role;
         LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime, bornCity, finalRole);
+        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime, bornCity, finalRole, user_image_id);
     }
 
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
@@ -73,14 +73,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUserIfNotExists(final String username, final String surname, final String email,
-                                      final String phone, final String password, final String birthdate, final City bornCity, String role){
+                                      final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id){
         if(role == null){
             role = Roles.USER.role;
         }
         String finalRole = role;
         Optional<User> current = userDao.findByEmail(email);
         LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCity, finalRole));
+        return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCity, finalRole, user_image_id));
     }
 
     @Override

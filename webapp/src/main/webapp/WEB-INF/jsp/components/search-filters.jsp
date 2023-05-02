@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <link href="<c:url value="/resources/css/components/search-filters.css"/>" rel="stylesheet" type="text/css"/>
 <script src="<c:url value="/resources/js/components/searchFilters.js"/>" type="module"></script>
@@ -20,7 +21,7 @@
             <div class="route-filter">
                 <div class="title-row">
                     <i class="bi bi-geo-alt-fill light-text h5"></i>
-                    <h5 class="light-text">Ruta</h5>
+                    <h5 class="light-text"><spring:message code="component.filter.route"/></h5>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
@@ -51,7 +52,7 @@
             <div class="date-filter">
                 <div class="title-row">
                     <i class="bi bi-calendar light-text h5"></i>
-                    <h5 class="light-text">Fecha</h5>
+                    <h5 class="light-text"><spring:message code="trip.date"/></h5>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
@@ -92,8 +93,7 @@
                             <div class="input-group-text" id="is-multitrip-container">
                                 <form:checkbox path="multitrip" id="is-multitrip" cssClass="form-check-input mt-0"/>
                                 <div id="is-multitrip-text">
-                                    <span class="placeholder-text">Viaje</span>
-                                    <span class="placeholder-text">recurrente</span>
+                                    <spring:message code="trip.recurrent"/>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
             <div class="price-filter">
                 <div class="title-row">
                     <i class="bi bi-currency-dollar light-text h5"></i>
-                    <h5 class="light-text">Precio</h5>
+                    <h5 class="light-text"><spring:message code="trip.price"/></h5>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
@@ -116,14 +116,14 @@
                             <form:input path="maxPrice" cssClass="form-control form-control-sm" id="max-price" name="max-price" placeholder="Máximo"/>
                             <form:errors cssClass="formError" element="p"/>
                         </div>
-                        <span class="light-text h6">ARS</span>
+                        <span class="light-text h6"><spring:message code="createTrip.money"/></span>
                     </div>
                 </div>
             </div>
             <div class="search-button-container">
                 <button type="submit" class="btn button-style button-color shadow-btn">
                     <i class="bi bi-search light-text h4"></i>
-                    <span class="button-text-style light-text h4">Buscar</span>
+                    <span class="button-text-style light-text h4"><spring:message code="component.filter.btn"/></span>
                 </button>
             </div>
     </div>

@@ -9,7 +9,6 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.exceptions.*;
-import ar.edu.itba.paw.webapp.form.CreateCarForm;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
@@ -17,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -31,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class TripController extends LoggedUserController {
@@ -67,7 +63,7 @@ public class TripController extends LoggedUserController {
         System.out.println("Start date"+form.getStartDate());
         System.out.println("End date" + form.getEndDate());
         //TODO: buscar al trip en el rango especificado
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
         return mv;
@@ -77,41 +73,18 @@ public class TripController extends LoggedUserController {
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
                                            final BindingResult errors){
-        System.out.println("POST Start date"+form.getStartDate());
-        System.out.println("POST Start time" + form.getStartTime());
-        System.out.println("POST End date" + form.getEndDate());
         if(errors.hasErrors()){
             return getTripDetails(tripId,form);
         }
-        System.out.println("No hay errores");
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
         final User passenger = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        //User passenger = userService.createUserIfNotExists(form.getEmail(), form.getPhone(), form.getPhone());
-        //sacar el form.getPhone(), esta solo para que no falle
-//        boolean ans = tripService.addPassenger(tripId,passenger);
-//        Optional<Trip> trip = tripService.findById(tripId);
-//        if(ans && trip.isPresent()){
-//        User passenger = userService.createUserIfNotExists(form.getEmail(),form.getPhone());
-        System.out.println("Encuentra al usuario");
         //TODO: buscar al trip en el rango especificado
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        System.out.println("Encontre el viaje");
-        boolean ans = false;
-        try{
-            ans = tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        System.out.println("Intenta agregar al usuario");
-        if(ans){
-            ModelAndView successMV = new ModelAndView("/select-trip/success");
-            successMV.addObject("trip",trip);
-            successMV.addObject("passenger",passenger);
-            return successMV;
-        }
-        // TODO: Throw error 500 internal server error
-        return new ModelAndView("/static/not-found-404");
+        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
+        tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
+        ModelAndView successMV = new ModelAndView("/select-trip/success");
+        successMV.addObject("trip",trip);
+        successMV.addObject("passenger",passenger);
+        return successMV;
     }
     //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
@@ -130,7 +103,7 @@ public class TripController extends LoggedUserController {
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
-        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getDate(), form.getTime(),page-1,PAGE_SIZE);
+        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestination(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(),page-1,PAGE_SIZE);
         mav.addObject("tripsContent", tripsContent);
         return mav;
     }
@@ -153,7 +126,6 @@ public class TripController extends LoggedUserController {
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        //TODO: throw custom Exception
         List<Car> userCars = carService.findByUser(user);
 
         final ModelAndView mav = new ModelAndView("/create-trip/main");
@@ -175,11 +147,8 @@ public class TripController extends LoggedUserController {
         City originCity = cityService.findCityById(form.getOriginCityId()).orElseThrow(CityNotFoundException::new);
         City destinationCity = cityService.findCityById(form.getDestinationCityId()).orElseThrow(CityNotFoundException::new);
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //final String userId = userService.findByEmail(email).orElseThrow(UsernameNotFoundException::new).getUserId();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-//        Car car = carService.createCarIfNotExists("AE062TP", "Honda Fit azul", user);
         Car car = carService.findById(form.getCarId()).orElseThrow(CarNotFoundException::new);
-        //TODO: get maxSeats from car
         Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),user,form.getLastDate(), form.getTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
@@ -195,11 +164,10 @@ public class TripController extends LoggedUserController {
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         if(!trip.getDriver().equals(user)){
-            //TODO: manejar de otra manera
             throw new IllegalStateException();
         }
         tripService.deleteTrip(trip);
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUser(user, 0, PAGE_SIZE);
+        PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE);
         final ModelAndView mav = new ModelAndView("/created-trips/next");
         mav.addObject("trips", trips);
         mav.addObject("tripDeleted", true);

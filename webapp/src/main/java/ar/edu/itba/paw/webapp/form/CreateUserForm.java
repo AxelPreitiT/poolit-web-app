@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.webapp.form.annotations.MPFile;
 import ar.edu.itba.paw.webapp.form.annotations.PasswordMatches;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -21,13 +23,17 @@ public class CreateUserForm {
     @Pattern(regexp = "^\\d{2,3}\\s?\\d{4}\\s?\\d{4}")
     private String phone;
 
-    @Size(min = 0, max = 10)
-    private String password = "";
+    @Size(min = 3, max = 10)
+    private String password;
 
-    @Size(min = 0, max = 10)
-    private String repeatPassword = "";
+    @Size(min = 3, max = 10)
+    private String repeatPassword;
+    @Pattern(regexp = ".+")
     private String birthdate;
     private int bornCityId;
+
+    @MPFile
+    private MultipartFile imageFile;
 
     public String getRepeatPassword() {
         return repeatPassword;
@@ -91,4 +97,8 @@ public class CreateUserForm {
     public int getBornCityId() {
         return bornCityId;
     }
+
+    public MultipartFile getImageFile() { return imageFile; }
+
+    public void setImageFile(MultipartFile imageFile) { this.imageFile = imageFile; }
 }
