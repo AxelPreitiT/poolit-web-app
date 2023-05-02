@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
 
     protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) ->{
             LocalDateTime localDateTime = resultSet.getTimestamp("birthdate")==null?LocalDateTime.now():resultSet.getTimestamp("birthdate").toLocalDateTime();
-            return new User(resultSet.getLong("user_id"), resultSet.getString("username"),
+            return new User(resultSet.getLong("user_id"), resultSet.getString("name"),
                     resultSet.getString("surname"), resultSet.getString("email"),
                     resultSet.getString("phone"), resultSet.getString("password"),
                     localDateTime,
