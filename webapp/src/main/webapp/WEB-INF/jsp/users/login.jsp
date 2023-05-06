@@ -19,8 +19,8 @@
         <div class="main-container-style container-bg-color">
             <h1 class="text"><spring:message code="login.title"/></h1>
             <hr>
-            <c:url value="${postUrl}" var="url"/>
-            <form action="${url}" method="post">
+            <c:url value="/users/login" var="loginUrl"/>
+            <form action="${loginUrl}" method="post">
                 <div class="user-info-row">
                     <div class="user-info-item">
                         <div class="form-floating">

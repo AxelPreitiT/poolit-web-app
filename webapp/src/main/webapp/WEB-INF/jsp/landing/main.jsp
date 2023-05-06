@@ -29,6 +29,7 @@
                     <span class="light-text subtitle"><spring:message code="landing.segundText"/></span>
                 </div>
                 <div class="col-lg-5 col-xl-4" id="banner-search-column">
+                    <c:url value="/search" var="searchUrl"/>
                     <jsp:include page="/WEB-INF/jsp/components/search-filters.jsp">
                         <jsp:param name="url" value="${searchUrl}"/>
                     </jsp:include>
