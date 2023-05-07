@@ -83,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendMailNewPassenger(Trip trip, User passenger) throws MessagingException, IOException {
+    public void sendMailNewPassenger(Trip trip, Passenger passenger) throws MessagingException, IOException {
         String subject = messageSource.getMessage("emails.subject.newPassengerDriver",null,LocaleContextHolder.getLocale());
         // Variables para el html
         final Context ctx = new Context();
