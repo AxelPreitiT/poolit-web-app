@@ -177,14 +177,15 @@ public class UserController extends LoggedUserController {
     }
 
     @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
+    public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page, @RequestParam(value = "time", required = false, defaultValue = "future") final String time) {
 //        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         //TODO: hacer que sean los que son a partir de ahora
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
 
-        final ModelAndView mav = new ModelAndView("/reserved-trips/next");
+        PagedContent<Trip> trips = (Objects.equals(time, "past")) ? tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE) : tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
+
+        final ModelAndView mav = new ModelAndView("/reserved-trips/main");
         mav.addObject("trips", trips);
         return mav;
     }
@@ -202,13 +203,14 @@ public class UserController extends LoggedUserController {
     }
 
     @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
+    public ModelAndView getNextCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page, @RequestParam(value = "time", required = false, defaultValue = "future") final String time) {
 //        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
 
-        final ModelAndView mav = new ModelAndView("/created-trips/next");
+        PagedContent<Trip> trips = (Objects.equals(time, "past")) ? tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE) : tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
+
+        final ModelAndView mav = new ModelAndView("/created-trips/main");
         mav.addObject("trips", trips);
         mav.addObject("tripDeleted", false);
         return mav;
