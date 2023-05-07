@@ -95,6 +95,17 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
+    public void sendMailTripCancelledToDriver(Trip trip,Passenger passenger) throws MessagingException,IOException{
+        String subject = messageSource.getMessage("emails.subject.passengerCancelTrip",null,LocaleContextHolder.getLocale());
+        // Variables para el html
+        final Context ctx = new Context();
+        ctx.setVariable("trip", trip);
+        ctx.setVariable("passenger", passenger);
+        //enviamos el mail
+        sendEmail(trip.getDriver().getEmail(),subject,"trip-cancelled-driver",ctx);
+    }
+    @Async
+    @Override
     public void sendMailTripDeletedToPassenger(Trip trip, Passenger passenger) throws MessagingException,IOException{
         String subject = messageSource.getMessage("emails.subject.tripCancelledPassenger",null,LocaleContextHolder.getLocale());
 

@@ -12,6 +12,8 @@ public interface EmailService {
 
     void sendMailNewTrip(Trip trip) throws Exception;
 
+    void sendMailTripCancelledToDriver(Trip trip,Passenger passenger) throws Exception;
+
     void sendMailTripConfirmation(Trip trip, Passenger passenger) throws Exception;
 
     void sendMailTripDeletedToPassenger(Trip trip, Passenger passenger) throws Exception;

@@ -187,15 +187,15 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public boolean removePassenger(final Trip trip, final User passenger){
-        if(trip == null || passenger == null){
+    public boolean removePassenger(final Trip trip, final User user){
+        if(trip == null || user == null){
             throw new IllegalArgumentException();
         }
-        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        //Revisamos si es un pasajero
-        //TODO: revisar, deberia funcionar porque Passenger extiende a User y por lo tanto hereda a su equals (que es solo por userId)
-        if(passengers.stream().noneMatch(p -> p.getUserId() == passenger.getUserId())){
-            throw new IllegalStateException();
+        Passenger passenger = tripDao.getPassenger(trip,user).orElseThrow(IllegalStateException::new);
+        try{
+            emailService.sendMailTripCancelledToDriver(trip,passenger);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return tripDao.removePassenger(trip,passenger);
     }

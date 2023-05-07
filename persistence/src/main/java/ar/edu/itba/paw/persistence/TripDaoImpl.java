@@ -198,6 +198,12 @@ public class TripDaoImpl implements TripDao {
                 ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
     @Override
+    public Optional<Passenger> getPassenger(final Trip trip, final User user){
+        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
+                        "WHERE trip_id = ? AND user_id = ?"
+                ,PASSENGER_ROW_MAPPER,trip.getTripId(),user.getUserId()).stream().findFirst();
+    }
+    @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
         return getTripInstances(trip,page,pageSize,trip.getStartDateTime(),trip.getEndDateTime());
     }
