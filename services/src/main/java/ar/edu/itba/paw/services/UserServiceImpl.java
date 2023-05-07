@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -83,6 +84,15 @@ public class UserServiceImpl implements UserService {
         return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCity, finalRole, user_image_id));
     }
 
+    @Override
+    public Optional<User> getCurrentUser(){
+        final Object authUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (! (authUser instanceof org.springframework.security.core.userdetails.User)){
+            return Optional.empty();
+        }
+        final org.springframework.security.core.userdetails.User aux = (org.springframework.security.core.userdetails.User) authUser;
+        return findByEmail(aux.getUsername());
+    }
     @Override
     public Optional<User> findById(long userId){
         return userDao.findById(userId);

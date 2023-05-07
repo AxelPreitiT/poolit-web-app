@@ -158,14 +158,14 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value = "/trips/{id:\\d+$}/delete", method = RequestMethod.POST)
     public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
-        //TODO: cambiar y que lo haga el service
         //Validar que es el creador
+        //TODO: hacer que el service tenga un metodo para traer al usuario actual
         final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        if(!trip.getDriver().equals(user)){
-            throw new IllegalStateException();
-        }
+//        if(!trip.getDriver().equals(user)){
+//            throw new IllegalStateException();
+//        }
         tripService.deleteTrip(trip);
         PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE);
         final ModelAndView mav = new ModelAndView("/created-trips/next");
