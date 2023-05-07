@@ -86,13 +86,10 @@ public class TripServiceImpl implements TripService {
         if(date == null || time == null || date.length()==0 || time.length()==0){
             return Optional.empty();
         }
-        System.out.println("Intenta con" + date);
         LocalDateTime ans;
         try{
             String[] timeTokens = time.split(":");
-            System.out.println("Logra separar los tokens");
             ans = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
-            System.out.println("Parsea la fecha");
         }catch (Exception e){
             return Optional.empty();
         }

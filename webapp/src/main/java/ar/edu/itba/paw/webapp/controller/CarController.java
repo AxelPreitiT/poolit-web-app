@@ -46,8 +46,9 @@ public class CarController extends LoggedUserController {
         if(errors.hasErrors()){
             return createCarForm(form);
         }
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         byte[] data = form.getImageFile().getBytes();
         Image image=imageService.createImage(data);
         carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId() );

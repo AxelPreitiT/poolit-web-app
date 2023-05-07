@@ -102,7 +102,6 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
     public ModelAndView loginUserGet() {
         final ModelAndView mav = new ModelAndView("users/login");
-//        mav.addObject("postUrl", LOGIN_USER_PATH);
         return mav;
     }
 
@@ -113,11 +112,11 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(){
-        SecurityContext pepe = SecurityContextHolder.getContext();
+//        SecurityContext pepe = SecurityContextHolder.getContext();
         //TODO: ver por que explota si no esta autenticado
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         if(Objects.equals(user.getRole(), "USER")){
             List<Trip> futureTrips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
             List<Trip> pastTrips = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
@@ -142,9 +141,9 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
     public ModelAndView profilePost(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
 
         if(Objects.equals(user.getRole(), "DRIVER")){
             //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
@@ -179,9 +178,9 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
     public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         //TODO: hacer que sean los que son a partir de ahora
         PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
 
@@ -192,10 +191,9 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = RESERVED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
     public ModelAndView getHistoricReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
-        //TODO: hacer los que son antes de ahora
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/history");
@@ -205,9 +203,9 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
     public ModelAndView getNextCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        //TODO: traer las que son a futuro (o actual)
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/next");
@@ -218,9 +216,9 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = CREATED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
     public ModelAndView getHistoricCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        //TODO: traer las que pasaron
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         PagedContent<Trip> trips = tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/history");

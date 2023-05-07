@@ -13,6 +13,7 @@ public interface UserService {
     User createUserIfNotExists(final String username, final String surname, final String email,
                                final String phone, final String password, final String birthdate, final City bornCityId, String role, long user_image_id);
 
+    Optional<User> getCurrentUser();
     Optional<User> findById(long userId);
 
     Optional<User> findByEmail(String email);

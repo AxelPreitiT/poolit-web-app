@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.webapp.auth.AuthValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ import java.util.concurrent.TimeUnit;
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private AuthValidator authValidator;
+
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
@@ -53,13 +57,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return simpleUrlAuthenticationFailureHandler;
     }
     */
-
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                     .invalidSessionUrl("/users/login")
                 .and().authorizeRequests()
                     .antMatchers("/users/login", "/users/create").anonymous()
+                    .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
                     .antMatchers("/trips/create", "/cars/**", "/users/created").hasRole("DRIVER")
                     //.antMatchers("/trips/create", "/profile/driver").hasRole("DRIVER")
                     //.antMatchers("/profile/user").hasRole("USER")
