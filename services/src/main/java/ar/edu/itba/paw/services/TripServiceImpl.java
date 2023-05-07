@@ -148,6 +148,11 @@ public class TripServiceImpl implements TripService {
         if(passengers.size()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
+        //TODO: arreglar (hacerlo cuando tenga varias vistas para inscribirse a un viaje)
+        //El chequeo este
+//        startDateTime.isBefore(LocalDateTime.now())
+        //Esta mal cuando se quiere inscribir a un viaje desde el discovery
+        //Tenemos que hacer que se inscriba desde el momento actual
         if(    startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
@@ -189,7 +194,7 @@ public class TripServiceImpl implements TripService {
         List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         //Revisamos si es un pasajero
         //TODO: revisar, deberia funcionar porque Passenger extiende a User y por lo tanto hereda a su equals (que es solo por userId)
-        if(!passengers.contains(passenger)){
+        if(passengers.stream().noneMatch(p -> p.getUserId() == passenger.getUserId())){
             throw new IllegalStateException();
         }
         return tripDao.removePassenger(trip,passenger);
@@ -296,7 +301,7 @@ public class TripServiceImpl implements TripService {
             final int page, final int pageSize){
         validatePageAndSize(page,pageSize);
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
-        Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
+        LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime.get());
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
     }
 }

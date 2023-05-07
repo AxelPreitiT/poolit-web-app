@@ -186,8 +186,15 @@ public class TripDaoImpl implements TripDao {
     }
     @Override
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+        //A-{1,3}
+        //B-{2,4}
+        //[1,1] => A(los que esten despues del 1 (start_date>=?) y que empiecen antes del 2 (start_date<=1)
+        //Si pedia que passengers.start_date>=1 AND passengers.end_date>=1 -> A y B, pero solo queria A
+        //Si pedia que passengers.start_date>=1 AND passengers.end_date<=1 -> A, pero esto tiene un problema
+        //[1,2] -> A,B
+        //Si pedia que passengers.start_date>=1 AND passengers.end_date<=2 -> A (y estoy dejando a B)
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
-                        "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
+                        "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.start_date<=? "
                 ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
     @Override
@@ -197,6 +204,9 @@ public class TripDaoImpl implements TripDao {
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
 //        validatePageAndSize(page,pageSize);
+        //passengers.start_date<=days<=passenger.end_date
+        //"los pasajeros que empiecen antes o en el dia y terminen en o despues del dia"
+        //Con eso me traigo a los pasajeros que esten en ese dia
         String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
                 "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? " +
                 "WHERE days.days>=? AND days.days<=? " +
