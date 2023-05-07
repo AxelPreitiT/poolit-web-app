@@ -74,14 +74,14 @@
       <img src="https://cdn.discordapp.com/attachments/1090791209095659590/1102380392222298142/poolit.png" alt="Poolit logo"/>
     </a>
   </div>
-  <h1 class="text-center mb-4">¡Tu viaje fue cancelado!</h1>
-  <p>Hola <span th:text="${passenger.name}"></span>,</p>
-  <p>Te escribimos para avisarte que tu viaje desde <span th:text="${trip.originCity.name}"></span> hasta <span th:text="${trip.destinationCity.name}"></span> a cargo de <span th:text="${trip.driver.name}"></span> <span th:text="${trip.driver.surname}"/> fue cancelado.</p>
+  <h1 class="text-center mb-4" th:text="#{emails.deleteTripPassenger.title}"></h1>
+  <p th:text="#{emails.helloMessage (${trip.driver.name})}"></p>
+  <p th:text="#{emails.deleteTripPassenger.message (${trip.originCity.name},${trip.destinationCity.name},${trip.driver.name},${trip.driver.surname})}"></p>
   <div>
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
       <span>
-               <span th:text="${trip.originAddress}"/> en <span th:text="${trip.originCity.name}"/>
+          <spam th:text="#{emails.startLocation (${trip.originAddress},${trip.originCity.name})}"/>
            </span>
     </div>
     <div>
@@ -90,21 +90,21 @@
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102389955977818182/geo-alt-fill.png" alt="endLocation"/>
       <span>
-               <span th:text="${trip.destinationAddress}"/> en <span th:text="${trip.destinationCity.name}"/>
+            <span th:text="#{emails.endLocation (${trip.destinationAddress},${trip.destinationCity.name})}"/>
            </span>
     </div>
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
       <span>
-               <span th:text="${trip.dayOfWeekString}"/> <span th:if="${passenger.recurrent}">desde el </span> <span th:text="${passenger.startDateString}"/>
-                <span th:if="${passenger.recurrent}" >hasta el </span><span th:if="${passenger.recurrent}" th:text="${passenger.endDateString}"/> a las <span th:text="${trip.startTimeString}"/>
+              <span th:text="${trip.dayOfWeekString}"/> <span th:if="${passenger.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${passenger.startDateString}"/>
+                <span th:if="${passenger.recurrent}" th:text="#{emails.toDate (${passenger.endDateString})}"/> <span th:text="#{emails.time (${trip.startTimeString})}"/>
            </span>
     </div>
   </div>
-  <p>No te preocupes, seguramente hay otros viajes que puedes tomar. ¡En nuestro buscador vas a poder encontrar el viaje que más te sirva!</p>
+  <p th:text="#{emails.deleteTripPassenger.closeMessage}"></p>
   <div class="btn-container">
-    <a th:href="@{{baseUrl}/(baseUrl=${baseUrl})}" class="btn">
-      Buscar otro viaje</a>
+    <a th:href="@{{baseUrl}/(baseUrl=${baseUrl})}" class="btn" th:text ="#{emails.deleteTripPassenger.button}">
+      </a>
   </div>
 </div>
 </body>
