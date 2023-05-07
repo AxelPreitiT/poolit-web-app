@@ -182,6 +182,20 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public boolean removePassenger(final Trip trip, final User passenger){
+        if(trip == null || passenger == null){
+            throw new IllegalArgumentException();
+        }
+        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        //Revisamos si es un pasajero
+        //TODO: revisar, deberia funcionar porque Passenger extiende a User y por lo tanto hereda a su equals (que es solo por userId)
+        if(!passengers.contains(passenger)){
+            throw new IllegalStateException();
+        }
+        return tripDao.removePassenger(trip,passenger);
+    }
+
+    @Override
     public Optional<Trip> findById(long id) {
         return tripDao.findById(id);
     }

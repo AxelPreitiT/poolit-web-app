@@ -169,6 +169,10 @@ public class TripDaoImpl implements TripDao {
         int tripRows = jdbcTemplate.update("DELETE FROM trips WHERE trip_id = ?",trip.getTripId());
         return tripRows>0 && tripCarsDriversRows>0;
     }
+    @Override
+    public boolean removePassenger(final Trip trip, final User passenger){
+        return  jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ? AND user_id = ?",trip.getTripId(), passenger.getUserId())>0;
+    }
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
