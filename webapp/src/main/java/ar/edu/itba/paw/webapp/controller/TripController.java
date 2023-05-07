@@ -150,9 +150,10 @@ public class TripController extends LoggedUserController {
     public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
         //Validar que es el creador
         //TODO: hacer que el service tenga un metodo para traer al usuario actual
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
 //        if(!trip.getDriver().equals(user)){
 //            throw new IllegalStateException();
 //        }
@@ -161,7 +162,17 @@ public class TripController extends LoggedUserController {
         final ModelAndView mav = new ModelAndView("/created-trips/next");
         mav.addObject("trips", trips);
         mav.addObject("tripDeleted", true);
-
+        return mav;
+    }
+    @RequestMapping(value ="/trips/{id:\\d+$}/cancel", method = RequestMethod.POST)
+    public ModelAndView cancelTrip(@PathVariable("id") final int tripId){
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        tripService.removePassenger(trip,user);
+        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE);
+        final ModelAndView mav = new ModelAndView("/reserved-trips/next");
+        mav.addObject("trips", trips);
+        mav.addObject("tripCancelled", true);
         return mav;
     }
 }

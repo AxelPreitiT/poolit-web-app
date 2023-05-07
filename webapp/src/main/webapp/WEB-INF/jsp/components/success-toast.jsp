@@ -12,7 +12,7 @@
 <div id="toast">
     <div id="success-toast" class="toast fade success-bg-color" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header success-bg-color">
-            <strong class="light-text h3"><c:out value="${param.title}"/></strong>
+            <strong class="light-text h3"><spring:message code="${param.title}"/></strong>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">

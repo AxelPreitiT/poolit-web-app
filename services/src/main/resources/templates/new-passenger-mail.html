@@ -91,6 +91,7 @@
         <div class="info-container">
             <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
             <span>
+<!--                TODO: cambiar para poner solo los dias que se queda el pasajero-->
                <span th:text="${trip.dayOfWeekString}"/> <span th:if="${trip.recurrent}">desde el </span> <span th:text="${trip.startDateString}"/>
                 <span th:if="${trip.recurrent}" >hasta el </span><span th:if="${trip.recurrent}" th:text="${trip.endDateString}"/> a las <span th:text="${trip.startTimeString}"/>
            </span>

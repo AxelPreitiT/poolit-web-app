@@ -28,8 +28,8 @@
   <c:if test="${!(empty tripDeleted) && tripDeleted}">
     <div id="toast-container">
       <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-        <jsp:param name="title" value="¡Viaje eliminado!"/>
-        <jsp:param name="message" value="selectTrip.deleteTitle"/>
+        <jsp:param name="title" value="cancelTrip.success.toast.title"/>
+        <jsp:param name="message" value="cancelTrip.success.toast.message"/>
       </jsp:include>
     </div>
   </c:if>

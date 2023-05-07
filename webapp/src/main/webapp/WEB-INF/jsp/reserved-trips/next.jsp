@@ -18,8 +18,17 @@
       <hr class="secondary-color">
     </div>
     <div id="trip-card-date-list-container">
+      <c:set var="allowCancel" value="true" scope="request"/>
       <jsp:include page="/WEB-INF/jsp/components/trip-card-date-list.jsp"/>
     </div>
   </div>
+  <c:if test="${!(empty tripCancelled) && tripCancelled}">
+    <div id="toast-container">
+      <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+        <jsp:param name="title" value="deleteTrip.success.toast.title"/>
+        <jsp:param name="message" value="deleteTrip.success.toast.message"/>
+      </jsp:include>
+    </div>
+  </c:if>
 </body>
 </html>
