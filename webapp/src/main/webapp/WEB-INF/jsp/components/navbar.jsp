@@ -9,15 +9,10 @@
 <nav class="navbar navbar-expand-md primary-bg-color">
     <div class="container-fluid navbar-style">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="POOLIT" class="brand-logo">
+            <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="<spring:message code="navbar.poolit"/>" class="brand-logo">
         </a>
         <div class="collapse navbar-collapse navbar-link-items">
             <ul class="navbar-nav nav-items">
-                <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/"/>">
-                        <h4 class="light-text"><spring:message code="navbar.begin"/></h4>
-                    </a>
-                </li>
                 <sec:authorize access="isAuthenticated()">
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value="/users/reserved"/>">
@@ -50,16 +45,16 @@
             <div class="profile-container dropdown">
                 <button class="btn rounded-circle shadow-btn" data-bs-toggle="dropdown">
                     <c:url value="/image/${loggedUser.userImageId}" var="imageUrl"/>
-                    <img class="image-photo" src="${imageUrl}" alt="userImage">
-<%--                    <i class="bi bi-person-circle light-text h1 profile-btn"></i>--%>
+                    <img class="image-photo" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>">
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end primary-bg-color">
                     <li>
                         <a class="dropdown-item" href="<c:url value="/users/profile"/>">
                             <div class="container text-center">
                                 <div class="row dropdown-row">
-                                    <div class="col-sm-2">
-                                        <img class="image-photo" src="${imageUrl}" alt="userImage">
+                                    <div class="col-sm-2 dropdown-row-media">
+                                        <img class="image-photo" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>">
+                                        <img class="image-photo with-title" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>" title="<spring:message code="navbar.profile"/>">
                                     </div>
                                     <div class="col-sm-10 dropdown-row-text">
                                         <span class="button-text-style light-text h1">
@@ -82,8 +77,9 @@
                         <a class="dropdown-item" href="<c:url value="/logout"/>">
                             <div class="container text-center">
                                 <div class="row dropdown-row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 dropdown-row-media">
                                         <i class="bi bi-box-arrow-right light-text h5"></i>
+                                        <i class="bi bi-box-arrow-right light-text h5 with-title" title="<spring:message code="navbar.logout"/>"></i>
                                     </div>
                                     <div class="col-sm-10 dropdown-row-text">
                                         <span class="button-text-style light-text h5"><spring:message code="navbar.logout"/></span>
@@ -100,13 +96,19 @@
                 <a href="<c:url value="/users/create"/>">
                     <button class="btn button-style button-color shadow-btn">
                         <i class="bi bi-person-circle light-text h5"></i>
-                        <span class="button-text-style light-text h5">Registrarse</span>
+                        <span class="button-text-style light-text h5"><spring:message code="navbar.register"/></span>
+                    </button>
+                    <button class="btn button-style button-color shadow-btn with-title" title="<spring:message code="navbar.register"/>">
+                        <i class="bi bi-person-circle light-text h5"></i>
                     </button>
                 </a>
                 <a href="<c:url value="/users/login"/>">
                     <button class="btn button-style button-color shadow-btn">
                         <i class="bi bi-box-arrow-in-right light-text h5"></i>
-                        <span class="button-text-style light-text h5">Iniciar sesión</span>
+                        <span class="button-text-style light-text h5"><spring:message code="navbar.login"/></span>
+                    </button>
+                    <button class="btn button-style button-color shadow-btn with-title" title="<spring:message code="navbar.login"/>">
+                        <i class="bi bi-box-arrow-in-right light-text h5"></i>
                     </button>
                 </a>
             </div>
