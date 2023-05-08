@@ -55,7 +55,6 @@ public class TripController extends LoggedUserController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
-        //TODO: buscar al trip en el rango especificado
 //        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
 //        List<Passenger> passengers;
 //        if(trip.isRecurrent()){
@@ -74,23 +73,28 @@ public class TripController extends LoggedUserController {
 
     private ModelAndView tripDetailsForDriver(final long tripId){
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        final List<Passenger> passengers = tripService.getPassengers(trip);
-        final ModelAndView mav = new ModelAndView();
+//        final List<Passenger> passengers = tripService.getPassengers(trip);
+        final List<Passenger> passengers = new ArrayList<>();
+        final ModelAndView mav = new ModelAndView("/trip-info/driver");
+        mav.addObject("trip",trip);
+        mav.addObject("passengers",passengers);
         return mav;
     }
 
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final Passenger passenger = tripService.getPassenger(trip,user).orElseThrow(UserNotFoundException::new);
-        final ModelAndView mav = new ModelAndView();
+        final ModelAndView mav = new ModelAndView("/trip-info/passenger");
+        mav.addObject("trip",trip);
+        mav.addObject("passenger",passenger);
         return mav;
     }
 
     private ModelAndView tripDetailsForReservation(final long tripId, final User user, final SelectionForm form){
+        //TODO: revisar que la fecha de inicio sea posterior a la actualidad
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
-//        mv.addObject("passengers",passengers);
         return mv;
     }
 
@@ -107,17 +111,20 @@ public class TripController extends LoggedUserController {
         //TODO: buscar al trip en el rango especificado
         Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
-        List<Passenger> passengers;
-        if(trip.isRecurrent()){
-            passengers=tripService.getPassengersRecurrent(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        }else {
-            passengers=tripService.getPassengers(trip,trip.getStartDateTime());
-        }
-        ModelAndView successMV = new ModelAndView("/select-trip/success");
-        successMV.addObject("trip",trip);
-        successMV.addObject("passenger",passenger);
-        successMV.addObject("passengers",passengers);
-        return successMV;
+//        List<Passenger> passengers;
+//        if(trip.isRecurrent()){
+//            passengers=tripService.getPassengersRecurrent(trip,trip.getStartDateTime(),trip.getEndDateTime());
+//        }else {
+//            passengers=tripService.getPassengers(trip,trip.getStartDateTime());
+//        }
+//        ModelAndView successMV = new ModelAndView("/select-trip/success");
+//        successMV.addObject("trip",trip);
+//        successMV.addObject("passenger",passenger);
+//        successMV.addObject("passengers",passengers);
+//        return successMV;
+        final ModelAndView mav = tripDetailsForPassenger(tripId,passenger);
+        mav.addObject("successInscription",true);
+        return mav;
     }
     //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
