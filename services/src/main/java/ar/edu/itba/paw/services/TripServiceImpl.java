@@ -256,6 +256,11 @@ public class TripServiceImpl implements TripService {
         return tripDao.getIncomingTrips(page,pageSize);
     }
     @Override
+    public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getIncomingTripsByOrigin(origin_city_id,page,pageSize);
+    }
+    @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,

@@ -29,5 +29,6 @@ public interface TripDao {
             Optional<Double> minPrice, Optional<Double> maxPrice,
             int page, int pageSize);
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
+    PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize);
 
 }

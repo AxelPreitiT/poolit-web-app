@@ -101,11 +101,18 @@ public class TripController extends LoggedUserController {
     @RequestMapping(value = LANDING_PAGE_PATH, method = RequestMethod.GET)
     public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        List<Trip> trips = tripService.getIncomingTrips(0,PAGE_SIZE).getElements();
-
         final ModelAndView mav = new ModelAndView("/landing/main");
-        mav.addObject("trips", trips);
         mav.addObject("cities", cities);
+        final User user;
+        try {
+            final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+        }
+        catch (Exception e){
+            return mav;
+        }
+        List<Trip> trips = tripService.getIncomingTripsByOrigin(user.getBornCity().getId(),0,PAGE_SIZE).getElements();
+        mav.addObject("trips", trips);
 
         return mav;
     }
