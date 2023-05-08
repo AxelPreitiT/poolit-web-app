@@ -33,6 +33,8 @@ public class ReviewDaoImpl implements ReviewDao {
 
     private static final RowMapper<Long> TRIPS_ROW_MAPPER = (resultSet, rowNum)-> resultSet.getLong("trip_id");
 
+    private static final RowMapper<Double> RATING_ROW_MAPPER = (resultSet, rowNum)-> resultSet.getDouble("avg_rating");
+
     private final JdbcTemplate jdbcTemplate;
 
     private final SimpleJdbcInsert jdbcInsert;
@@ -59,12 +61,12 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public double getRating(User driver) {
-        return 0;
+        return jdbcTemplate.query("SELECT avg(rating) FROM reviews NATURAL JOIN trips_cars_drivers as trips(trip_id, driver_id, car_id) WHERE driver_id = ?", RATING_ROW_MAPPER, driver.getUserId()).stream().findFirst().orElse(0.0);
     }
 
     @Override
     public List<Review> findByDriver(User driver) {
-        return null;
+        return jdbcTemplate.query("select review_id, trip_id, user_id, rating, review  from reviews natural join trips_cars_drivers as trips(trip_id, driver_id, car_id) where driver_id = ?;", ROW_MAPPER, driver.getUserId());
     }
 
     @Override

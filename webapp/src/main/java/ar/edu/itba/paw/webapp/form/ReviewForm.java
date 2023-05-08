@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.webapp.form;
 
+import javax.validation.constraints.Pattern;
+
 public class ReviewForm {
 
     private int rating;
 
+    @Pattern(regexp = ".+")
     private String review;
 
     public int getRating() {
