@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.CarService;
-import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.TripService;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
@@ -27,6 +23,7 @@ import java.util.List;
 @Controller
 public class TripController extends LoggedUserController {
     private final TripService tripService;
+    private final ReviewService reviewService;
     private final CityService cityService;
     private final UserService userService;
     private final CarService carService;
@@ -42,9 +39,10 @@ public class TripController extends LoggedUserController {
 
 
     @Autowired
-    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
+    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
         super(userService);
         this.tripService = tripService;
+        this.reviewService = reviewService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
@@ -99,6 +97,8 @@ public class TripController extends LoggedUserController {
         if(errors.hasErrors()){
             return getReviewDetails(tripId, reviewForm);
         }
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        Review review = reviewService.createReview(tripId, user, reviewForm.getRating(), reviewForm.getReview());
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         ModelAndView successMV = new ModelAndView("/review-trip/main");
         successMV.addObject("trip",trip);

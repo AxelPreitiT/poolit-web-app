@@ -40,15 +40,16 @@
                                     <div class="rating-container">
                                         <h3>Rating:</h3>
                                         <div class="rating">
-                                            <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                                            <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                                            <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                                            <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                                            <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                                            <form:select path="rating" cssClass="form-select form-select-sm">
+                                                <form:option value="1" label="☆"/>
+                                                <form:option value="2" label="☆☆"/>
+                                                <form:option value="3" label="☆☆☆"/>
+                                                <form:option value="4" label="☆☆☆☆"/>
+                                            </form:select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleFormControlTextarea1"></label><textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Escriba su reseña aqui"></textarea>
+                                        <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="Fecha"/>
                                     </div>
                                 </div>
                             </div>

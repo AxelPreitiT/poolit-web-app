@@ -4,13 +4,17 @@ import ar.edu.itba.paw.interfaces.persistence.ReviewDao;
 import ar.edu.itba.paw.interfaces.services.ReviewService;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewDao reviewDao;
 
+    @Autowired
     public ReviewServiceImpl(ReviewDao reviewDao) {
         this.reviewDao = reviewDao;
     }

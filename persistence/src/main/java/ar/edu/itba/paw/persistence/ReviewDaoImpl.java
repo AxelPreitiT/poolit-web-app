@@ -21,7 +21,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     private static final RowMapper<Review> ROW_MAPPER = (resultSet, rowNum) ->
             new Review(
-                    resultSet.getLong("review_id"), resultSet.getLong("travel_id"),
+                    resultSet.getLong("review_id"), resultSet.getLong("trip_id"),
                     new User(resultSet.getLong("user_id"),resultSet.getString("username"),
                             resultSet.getString("surname"),resultSet.getString("email"),
                             resultSet.getString("phone"),resultSet.getString("password"),
@@ -46,7 +46,7 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public Review create(long travelId, User user, int rating, String review) {
         Map<String,Object> data = new HashMap<>();
-        data.put("travel_id", travelId);
+        data.put("trip_id", travelId);
         data.put("user_id", user.getUserId());
         data.put("rating", rating);
         data.put("review", review);
