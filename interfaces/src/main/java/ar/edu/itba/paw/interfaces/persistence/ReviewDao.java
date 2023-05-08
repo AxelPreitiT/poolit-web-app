@@ -14,5 +14,7 @@ public interface ReviewDao {
 
     List<Review> findByDriver(User driver);
 
-    List<Review> findByUser(User user);
+    List<Review> findReviewsByUser(User user);
+
+    List<Long> findTravelIdByUser(User user);
 }

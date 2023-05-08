@@ -98,9 +98,9 @@ public class TripController extends LoggedUserController {
             return getReviewDetails(tripId, reviewForm);
         }
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        Review review = reviewService.createReview(tripId, user, reviewForm.getRating(), reviewForm.getReview());
+        reviewService.createReview(tripId, user, reviewForm.getRating(), reviewForm.getReview());
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        ModelAndView successMV = new ModelAndView("/review-trip/main");
+        ModelAndView successMV = new ModelAndView("/review-trip/success");
         successMV.addObject("trip",trip);
         return successMV;
     }

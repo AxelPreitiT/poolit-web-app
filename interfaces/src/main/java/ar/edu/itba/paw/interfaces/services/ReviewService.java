@@ -13,4 +13,6 @@ public interface ReviewService {
     List<Review> getDriverReviews(User driver);
 
     List<Review> getUsersIdReviews(User user);
+
+    List<Long> getTravelsIdReviewedByUser(User user);
 }

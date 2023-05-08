@@ -18,6 +18,8 @@
           <hr class="secondary-color">
         </div>
         <div id="trip-card-date-list-container">
+            <c:set var="allowReview" value="true" scope="request"/>
+            <c:set var="reviews" value="${reviews}" scope="request"/>
           <jsp:include page="/WEB-INF/jsp/components/trip-card-date-list.jsp"/>
         </div>
     </div>

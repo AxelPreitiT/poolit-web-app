@@ -45,6 +45,7 @@
                                                 <form:option value="2" label="☆☆"/>
                                                 <form:option value="3" label="☆☆☆"/>
                                                 <form:option value="4" label="☆☆☆☆"/>
+                                                <form:option value="5" label="☆☆☆☆☆"/>
                                             </form:select>
                                         </div>
                                     </div>

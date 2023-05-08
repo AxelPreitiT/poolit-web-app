@@ -3,18 +3,11 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.webapp.form.CreateCarForm;
-import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -23,18 +16,16 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 
 import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 public class UserController extends LoggedUserController {
 
     private final CityService cityService;
 
+    private final ReviewService reviewService;
     private final CarService carService;
 
     private final TripService tripService;
@@ -56,11 +47,12 @@ public class UserController extends LoggedUserController {
     private final static int PAGE_SIZE = 3;
 
     @Autowired
-    public UserController(final CityService cityService, final  UserService userService,
+    public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                        final CarService carService, final ImageService imageService){
+                          final CarService carService, final ImageService imageService){
         super(userService);
         this.cityService = cityService;
+        this.reviewService = reviewService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
@@ -180,8 +172,8 @@ public class UserController extends LoggedUserController {
     public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
 //        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         //TODO: hacer que sean los que son a partir de ahora
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/next");
@@ -194,10 +186,12 @@ public class UserController extends LoggedUserController {
 //        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        List<Long> reviews = reviewService.getTravelsIdReviewedByUser(user);
         PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/history");
         mav.addObject("trips", trips);
+        mav.addObject("reviews", reviews);
         return mav;
     }
 

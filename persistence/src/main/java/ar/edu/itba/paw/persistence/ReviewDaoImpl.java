@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
@@ -29,6 +30,8 @@ public class ReviewDaoImpl implements ReviewDao {
                             new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")),
                             resultSet.getString("user_role"), resultSet.getLong("user_image_id")),
                     resultSet.getInt("rating"), resultSet.getString("review"));
+
+    private static final RowMapper<Long> TRIPS_ROW_MAPPER = (resultSet, rowNum)-> resultSet.getLong("trip_id");
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -65,7 +68,12 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<Review> findByUser(User user) {
+    public List<Review> findReviewsByUser(User user) {
         return jdbcTemplate.query("SELECT * FROM reviews WHERE user_id = ?", ROW_MAPPER, user.getUserId());
+    }
+
+    @Override
+    public List<Long> findTravelIdByUser(User user) {
+        return jdbcTemplate.query("SELECT trip_id FROM reviews WHERE user_id = ?", TRIPS_ROW_MAPPER, user.getUserId());
     }
 }

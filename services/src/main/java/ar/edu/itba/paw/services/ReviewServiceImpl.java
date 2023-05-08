@@ -36,6 +36,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getUsersIdReviews(User user) {
-        return reviewDao.findByUser(user);
+        return reviewDao.findReviewsByUser(user);
+    }
+
+    @Override
+    public List<Long> getTravelsIdReviewedByUser(User user) {
+        return reviewDao.findTravelIdByUser(user);
     }
 }

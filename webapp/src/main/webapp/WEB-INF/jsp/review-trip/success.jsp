@@ -49,7 +49,7 @@
 <div id="toast-container">
     <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
         <jsp:param name="title" value="¡POOLIT!"/>
-        <jsp:param name="message" value="selectTrip.success.pageTitle"/>
+        <jsp:param name="message" value="reviewTrip.success.pageTitle"/>
     </jsp:include>
 </div>
 </body>
