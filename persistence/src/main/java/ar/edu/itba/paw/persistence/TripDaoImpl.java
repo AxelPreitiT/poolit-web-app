@@ -193,6 +193,7 @@ public class TripDaoImpl implements TripDao {
         //Si pedia que passengers.start_date>=1 AND passengers.end_date<=1 -> A, pero esto tiene un problema
         //[1,2] -> A,B
         //Si pedia que passengers.start_date>=1 AND passengers.end_date<=2 -> A (y estoy dejando a B)
+        //"WHERE trip_id = ? AND passengers.start_date>=? AND passengers.end_date<=? "
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.start_date<=? "
                 ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);

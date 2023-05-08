@@ -231,6 +231,16 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassengers(trip,dateTime);
     }
     @Override
+    public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
+        if( trip.getStartDateTime().isAfter(startDate)
+                || trip.getEndDateTime().isBefore(startDate)
+                || Period.between(trip.getStartDateTime().toLocalDate(),startDate.toLocalDate()).getDays()%7!=0
+        ){
+            throw new IllegalArgumentException();
+        }
+        return tripDao.getPassengers(trip,startDate,endDate);
+    }
+    @Override
     public List<Passenger> getPassengers(TripInstance tripInstance){
         return tripDao.getPassengers(tripInstance);
     }
