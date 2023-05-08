@@ -3,12 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Confirmación de reserva de viaje</title>
-  <!--    <link href="/css/main.css" rel="stylesheet">-->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-
     body {
       font-family: Arial, sans-serif;
     }
@@ -74,14 +69,14 @@
       <img src="https://cdn.discordapp.com/attachments/1090791209095659590/1102380392222298142/poolit.png" alt="Poolit logo"/>
     </a>
   </div>
-  <h1 class="text-center mb-4" th:text="#{emails.deleteTripPassenger.title}"></h1>
+  <h1 class="text-center mb-4" th:text="#{emails.passengerCancel.title}"></h1>
   <p th:text="#{emails.helloMessage (${trip.driver.name})}"></p>
-  <p th:text="#{emails.deleteTripPassenger.message (${trip.originCity.name},${trip.destinationCity.name},${trip.driver.name},${trip.driver.surname})}"></p>
+  <p th:text="#{emails.passengerCancel.message (${passenger.name},${passenger.surname})}"></p>
   <div>
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
       <span>
-          <spam th:text="#{emails.startLocation (${trip.originAddress},${trip.originCity.name})}"/>
+              <spam th:text="#{emails.startLocation (${trip.originAddress},${trip.originCity.name})}"/>
            </span>
     </div>
     <div>
@@ -90,21 +85,25 @@
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102389955977818182/geo-alt-fill.png" alt="endLocation"/>
       <span>
-            <span th:text="#{emails.endLocation (${trip.destinationAddress},${trip.destinationCity.name})}"/>
+              <span th:text="#{emails.endLocation (${trip.destinationAddress},${trip.destinationCity.name})}"/>
            </span>
     </div>
     <div class="info-container">
       <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
       <span>
-              <span th:text="${trip.dayOfWeekString}"/> <span th:if="${passenger.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${passenger.startDateString}"/>
+               <span th:text="${trip.dayOfWeekString}"/> <span th:if="${passenger.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${passenger.startDateString}"/>
                 <span th:if="${passenger.recurrent}" th:text="#{emails.toDate (${passenger.endDateString})}"/> <span th:text="#{emails.time (${trip.startTimeString})}"/>
            </span>
     </div>
+    <div class="info-container">
+      <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102393206974447627/person-fill.png" alt="user"/>
+      <span>
+               <span th:text="${passenger.name}"/> <span th:text="${passenger.surname}"/> (<span th:text="${passenger.email}"/>)
+           </span>
+    </div>
   </div>
-  <p th:text="#{emails.deleteTripPassenger.closeMessage}"></p>
   <div class="btn-container">
-    <a th:href="@{{baseUrl}/(baseUrl=${baseUrl})}" class="btn" th:text ="#{emails.deleteTripPassenger.button}">
-      </a>
+    <a th:href="@{{baseUrl}/users/created(baseUrl=${baseUrl})}" class="btn" th:text="#{emails.passengerCancel.button}"></a>
   </div>
 </div>
 </body>

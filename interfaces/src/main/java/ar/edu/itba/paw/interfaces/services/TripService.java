@@ -21,6 +21,7 @@ public interface TripService {
     boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
     boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime);
+    boolean removePassenger(final Trip trip, final User passenger);
     //
     Optional<Trip> findById(long id);
     //
