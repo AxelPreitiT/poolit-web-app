@@ -6,6 +6,7 @@ import ar.edu.itba.paw.webapp.form.annotations.Price;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 
 @DateAndTimeSearch
 @MultitripSearch
@@ -30,9 +31,9 @@ public class SearchTripForm {
     private String lastDate;
 
 
-    private Double minPrice;
+    private BigDecimal minPrice;
 
-    private Double maxPrice;
+    private BigDecimal maxPrice;
 
 
     public long getOriginCityId() {
@@ -83,19 +84,19 @@ public class SearchTripForm {
         this.lastDate = lastDate;
     }
 
-    public Double getMinPrice() {
+    public BigDecimal getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(Double minPrice) {
+    public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
     }
 
-    public Double getMaxPrice() {
+    public BigDecimal getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(Double maxPrice) {
+    public void setMaxPrice(BigDecimal maxPrice) {
         this.maxPrice = maxPrice;
     }
 }
