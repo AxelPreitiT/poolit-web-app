@@ -23,13 +23,18 @@ public class EmailConfig {
     public String baseUrl(){
         return environment.getProperty("base_url");
     }
+
+    private static final String SENDER_USERNAME = "poolit.noreply@gmail.com";
+
+    private static final String SENDER_PASSWORD ="dpwfwbmwyuqguljk";
+
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("poolit.noreply@gmail.com");
-        mailSender.setPassword("dpwfwbmwyuqguljk");
+        mailSender.setUsername(SENDER_USERNAME);
+        mailSender.setPassword(SENDER_PASSWORD);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", true);
