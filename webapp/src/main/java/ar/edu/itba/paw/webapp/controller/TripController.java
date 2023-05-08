@@ -82,8 +82,9 @@ public class TripController extends LoggedUserController {
     }
 
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
-        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        final Passenger passenger = tripService.getPassenger(trip,user).orElseThrow(UserNotFoundException::new);
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
+//        Buscamos la informacion del viaje relevante para ese passenger
+        final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
         mav.addObject("passenger",passenger);

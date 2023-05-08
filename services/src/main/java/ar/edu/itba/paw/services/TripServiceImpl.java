@@ -233,6 +233,10 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassenger(trip,user);
     }
     @Override
+    public Optional<Passenger> getPassenger(final long tripId, final User user){
+        return tripDao.getPassenger(tripId,user);
+    }
+    @Override
     public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
         if( trip.getStartDateTime().isAfter(dateTime)
                 || trip.getEndDateTime().isBefore(dateTime)

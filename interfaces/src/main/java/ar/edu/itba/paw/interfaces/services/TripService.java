@@ -32,6 +32,8 @@ public interface TripService {
     Optional<Trip> findById(long id, String startDate, String startTime, String endDate);
     boolean userIsDriver(final long tripId, final User user);
     boolean userIsPassenger(final long tripId, final User user);
+
+    Optional<Passenger> getPassenger(final long tripId, final User user);
     Optional<Passenger> getPassenger(final Trip trip, final User user);
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
@@ -39,6 +41,7 @@ public interface TripService {
     List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
         //
     List<Passenger> getPassengers(TripInstance tripInstance);
+
     //
     List<Passenger> getPassengers(Trip trip);
     //
