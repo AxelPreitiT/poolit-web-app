@@ -10,6 +10,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
+import ar.edu.itba.paw.webapp.form.ReviewForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,33 @@ public class TripController extends LoggedUserController {
         successMV.addObject("passenger",passenger);
         return successMV;
     }
+
+
+    @RequestMapping(value = "/review/{id:\\d+$}",method = RequestMethod.GET)
+    public ModelAndView getReviewDetails(@PathVariable("id") final long tripId,
+                                         @ModelAttribute("reviewForm") final ReviewForm reviewForm
+    ){
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        ModelAndView mv = new ModelAndView("/review-trip/main");
+        mv.addObject("trip",trip);
+        return mv;
+    }
+
+    @RequestMapping(value = "/review/{id:\\d+$}",method = RequestMethod.POST)
+    public ModelAndView addReviewToTrip(@PathVariable("id") final long tripId,
+                                            @ModelAttribute("reviewForm") final ReviewForm reviewForm,
+                                           final BindingResult errors){
+        if(errors.hasErrors()){
+            return getReviewDetails(tripId, reviewForm);
+        }
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        ModelAndView successMV = new ModelAndView("/review-trip/main");
+        successMV.addObject("trip",trip);
+        return successMV;
+    }
+
+
+
     //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
     public ModelAndView getSearchedTrips(

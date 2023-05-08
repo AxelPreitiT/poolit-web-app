@@ -1,0 +1,20 @@
+@import "/resources/css/base/elements.css";
+@import "/resources/css/review-trip/review-trip.css";
+
+#button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#button-container > form {
+    margin-bottom: 0;
+}
+
+.no-seats-left-container {
+    margin-top: 0.3em;
+}
+
+.hidden-input {
+    display: none;
+}
