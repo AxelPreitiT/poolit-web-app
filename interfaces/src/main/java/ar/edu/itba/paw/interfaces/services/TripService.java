@@ -34,6 +34,8 @@ public interface TripService {
     //
     List<Passenger> getPassengers(TripInstance tripInstance);
     //
+    List<Passenger> getPassengers(Trip trip);
+    //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);

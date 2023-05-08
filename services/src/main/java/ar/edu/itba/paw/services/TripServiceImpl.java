@@ -212,6 +212,10 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassengers(trip,dateTime);
     }
     @Override
+    public List<Passenger> getPassengers(Trip trip){
+        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+    }
+    @Override
     public List<Passenger> getPassengers(TripInstance tripInstance){
         return tripDao.getPassengers(tripInstance);
     }

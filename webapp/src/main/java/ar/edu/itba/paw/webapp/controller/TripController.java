@@ -54,11 +54,38 @@ public class TripController extends LoggedUserController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
+//        if(userIsDriver){
+//
+//        }else if (userIsPassenger){
+//
+//        }else{
+//
+//        }
         //TODO: buscar al trip en el rango especificado
         Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
         return mv;
+    }
+
+    private ModelAndView tripDetailsForDriver(final int tripId){
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final List<Passenger> passengers = tripService.getPassengers(trip);
+        final ModelAndView mav = new ModelAndView();
+        return mav;
+    }
+
+    private ModelAndView tripDetailsForPassenger(final int tripId, final User user){
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+//        final Passenger passenger = tripService.getPassenger()
+        final ModelAndView mav = new ModelAndView();
+        return mav;
+    }
+
+    private ModelAndView tripDetailsForReservation(final int tripId, final User user, final SelectionForm form){
+        final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
+        final ModelAndView mav = new ModelAndView();
+        return mav;
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.POST)
