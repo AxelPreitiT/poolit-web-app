@@ -55,6 +55,14 @@ public class TripController extends LoggedUserController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
+        //TODO: buscar al trip en el rango especificado
+//        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
+//        List<Passenger> passengers;
+//        if(trip.isRecurrent()){
+//            passengers=tripService.getPassengersRecurrent(trip,trip.getStartDateTime(),trip.getEndDateTime());
+//        }else {
+//            passengers=tripService.getPassengers(trip,trip.getStartDateTime());
+//        }
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         if(tripService.userIsDriver(tripId,user)){
             return tripDetailsForDriver(tripId);
@@ -82,6 +90,7 @@ public class TripController extends LoggedUserController {
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
+//        mv.addObject("passengers",passengers);
         return mv;
     }
 
@@ -90,6 +99,7 @@ public class TripController extends LoggedUserController {
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
                                            final BindingResult errors){
+        //TODO: devolver el que es para inscriptos
         if(errors.hasErrors()){
             return getTripDetails(tripId,form);
         }
@@ -97,9 +107,16 @@ public class TripController extends LoggedUserController {
         //TODO: buscar al trip en el rango especificado
         Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
+        List<Passenger> passengers;
+        if(trip.isRecurrent()){
+            passengers=tripService.getPassengersRecurrent(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        }else {
+            passengers=tripService.getPassengers(trip,trip.getStartDateTime());
+        }
         ModelAndView successMV = new ModelAndView("/select-trip/success");
         successMV.addObject("trip",trip);
         successMV.addObject("passenger",passenger);
+        successMV.addObject("passengers",passengers);
         return successMV;
     }
     //TODO: preguntar como validar a page
