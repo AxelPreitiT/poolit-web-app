@@ -55,40 +55,37 @@ public class TripController extends LoggedUserController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
-//        if(userIsDriver){
-//
-//        }else if (userIsPassenger){
-//
-//        }else{
-//
-//        }
-        //TODO: buscar al trip en el rango especificado
-        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
-        ModelAndView mv = new ModelAndView("/select-trip/main");
-        mv.addObject("trip",trip);
-        return mv;
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        if(tripService.userIsDriver(tripId,user)){
+            return tripDetailsForDriver(tripId);
+        }else if (tripService.userIsPassenger(tripId,user)){
+            return tripDetailsForPassenger(tripId,user);
+        }
+        return tripDetailsForReservation(tripId,user,form);
     }
 
-    private ModelAndView tripDetailsForDriver(final int tripId){
+    private ModelAndView tripDetailsForDriver(final long tripId){
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengers = tripService.getPassengers(trip);
         final ModelAndView mav = new ModelAndView();
         return mav;
     }
 
-    private ModelAndView tripDetailsForPassenger(final int tripId, final User user){
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-//        final Passenger passenger = tripService.getPassenger()
+        final Passenger passenger = tripService.getPassenger(trip,user).orElseThrow(UserNotFoundException::new);
         final ModelAndView mav = new ModelAndView();
         return mav;
     }
 
-    private ModelAndView tripDetailsForReservation(final int tripId, final User user, final SelectionForm form){
+    private ModelAndView tripDetailsForReservation(final long tripId, final User user, final SelectionForm form){
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
-        final ModelAndView mav = new ModelAndView();
-        return mav;
+        ModelAndView mv = new ModelAndView("/select-trip/main");
+        mv.addObject("trip",trip);
+        return mv;
     }
 
+    //TODO: preguntar si la regla de que solo llame alguien que no es pasajero lo ponemos en security o en el service y lanzamos una excepcion
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.POST)
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,

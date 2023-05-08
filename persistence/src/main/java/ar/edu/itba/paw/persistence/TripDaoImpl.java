@@ -199,9 +199,13 @@ public class TripDaoImpl implements TripDao {
     }
     @Override
     public Optional<Passenger> getPassenger(final Trip trip, final User user){
+        return getPassenger(trip.getTripId(),user);
+    }
+    @Override
+    public Optional<Passenger> getPassenger(final long tripId, final User user){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND user_id = ?"
-                ,PASSENGER_ROW_MAPPER,trip.getTripId(),user.getUserId()).stream().findFirst();
+                ,PASSENGER_ROW_MAPPER,tripId,user.getUserId()).stream().findFirst();
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){

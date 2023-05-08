@@ -30,6 +30,9 @@ public interface TripService {
     Optional<Trip> findById(long id, LocalDateTime dateTime);
 
     Optional<Trip> findById(long id, String startDate, String startTime, String endDate);
+    boolean userIsDriver(final long tripId, final User user);
+    boolean userIsPassenger(final long tripId, final User user);
+    Optional<Passenger> getPassenger(final Trip trip, final User user);
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //
