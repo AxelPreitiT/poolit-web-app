@@ -38,7 +38,7 @@ public class ErrorsController extends LoggedUserController {
     //TODO: ver por que se llama todo el tiempo y preguntarlo
     @RequestMapping(value = "/errors", method = RequestMethod.GET)
     public ModelAndView runtimeError(HttpServletRequest servletRequest){
-        ModelAndView mav = new ModelAndView("/errors/default");
+        final ModelAndView mav = new ModelAndView("/errors/default");
         Integer httpErrorCode = (Integer) servletRequest.getAttribute("javax.servlet.error.status_code");
         mav.addObject("errorCode",httpErrorCode);
         ErrorMessage message = errorMessages.getOrDefault(httpErrorCode,new ErrorMessage("errors.default","errors.default.description"));

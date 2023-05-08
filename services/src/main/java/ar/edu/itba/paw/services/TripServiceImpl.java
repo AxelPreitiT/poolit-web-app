@@ -148,6 +148,11 @@ public class TripServiceImpl implements TripService {
         if(passengers.size()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
+        //TODO: arreglar (hacerlo cuando tenga varias vistas para inscribirse a un viaje)
+        //El chequeo este
+//        startDateTime.isBefore(LocalDateTime.now())
+        //Esta mal cuando se quiere inscribir a un viaje desde el discovery
+        //Tenemos que hacer que se inscriba desde el momento actual
         if(    startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
@@ -179,6 +184,20 @@ public class TripServiceImpl implements TripService {
     @Override
     public boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime){
         return addPassenger(tripId,passenger,dateTime,dateTime);
+    }
+
+    @Override
+    public boolean removePassenger(final Trip trip, final User user){
+        if(trip == null || user == null){
+            throw new IllegalArgumentException();
+        }
+        Passenger passenger = tripDao.getPassenger(trip,user).orElseThrow(IllegalStateException::new);
+        try{
+            emailService.sendMailTripCancelledToDriver(trip,passenger);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return tripDao.removePassenger(trip,passenger);
     }
 
     @Override
@@ -219,7 +238,7 @@ public class TripServiceImpl implements TripService {
         ){
             throw new IllegalArgumentException();
         }
-        return tripDao.getPassengersRecurrent(trip,startDate,endDate);
+        return tripDao.getPassengers(trip,startDate,endDate);
     }
     @Override
     public List<Passenger> getPassengers(TripInstance tripInstance){
@@ -292,7 +311,7 @@ public class TripServiceImpl implements TripService {
             final int page, final int pageSize){
         validatePageAndSize(page,pageSize);
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
-        Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
+        LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime.get());
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
     }
 }

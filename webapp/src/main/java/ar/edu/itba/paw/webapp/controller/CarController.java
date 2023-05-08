@@ -46,15 +46,12 @@ public class CarController extends LoggedUserController {
         if(errors.hasErrors()){
             return createCarForm(form);
         }
-//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         byte[] data = form.getImageFile().getBytes();
-        Image image=imageService.createImage(data);
+        final Image image=imageService.createImage(data);
         carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId() );
-        //Hacer un redirect si se hace desde el perfil la creacion de autos
-        ModelAndView modelAndView = new ModelAndView("create-auto/success");
-        return modelAndView;
+        //TODO: Hacer un redirect si se hace desde el perfil la creacion de autos
+        return new ModelAndView("create-auto/success");
 
     }
 }
