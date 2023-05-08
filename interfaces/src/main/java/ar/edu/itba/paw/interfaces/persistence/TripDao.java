@@ -15,6 +15,7 @@ public interface TripDao {
     boolean addPassenger(final Trip trip, final Passenger passenger);
     List<Passenger> getPassengers(final TripInstance tripInstance);
     List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime);
+    List<Passenger> getPassengersRecurrent(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime);
     List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime);
     PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize);
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);

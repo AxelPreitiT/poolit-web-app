@@ -181,9 +181,13 @@ public class TripDaoImpl implements TripDao {
         return getPassengers(trip,dateTime,dateTime);
     }
     @Override
+    public List<Passenger> getPassengersRecurrent(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+        return getPassengers(trip,startDateTime,endDateTime);
+    }
+    @Override
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
-                        "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
+                        "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.end_date<=? "
                 ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
     }
     @Override

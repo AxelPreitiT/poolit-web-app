@@ -32,6 +32,8 @@ public interface TripService {
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //
+    List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
+        //
     List<Passenger> getPassengers(TripInstance tripInstance);
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
@@ -45,6 +47,7 @@ public interface TripService {
     //
     //
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
+
     boolean deleteTrip(final Trip trip);
     boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate);
     boolean deleteTrip(int tripId);
