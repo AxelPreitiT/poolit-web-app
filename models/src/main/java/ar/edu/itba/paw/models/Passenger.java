@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Passenger extends User{
 

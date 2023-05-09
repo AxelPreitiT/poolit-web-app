@@ -23,42 +23,42 @@ public class ExceptionController extends LoggedUserController {
     }
     @ExceptionHandler(TripNotFoundException.class)
     public ModelAndView tripNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.tripNotFound",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.tripNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
     @ExceptionHandler(CityNotFoundException.class)
     public ModelAndView cityNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.cityNotFound",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.cityNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
     @ExceptionHandler(ImageNotFoundException.class)
     public ModelAndView imageNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.imageNotFound",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.imageNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
     @ExceptionHandler(UserNotFoundException.class)
     public ModelAndView userNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.userNotFound",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.userNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
     @ExceptionHandler(CarNotFoundException.class)
     public ModelAndView carNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.carNotFound",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.carNotFound.description",null,LocaleContextHolder.getLocale()));
         return mav;
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView illegalArgument(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalArgument",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalArgument.description",null,LocaleContextHolder.getLocale()));
         return mav;
@@ -66,7 +66,7 @@ public class ExceptionController extends LoggedUserController {
 
     @ExceptionHandler(IllegalStateException.class)
     public ModelAndView illegalState(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalState",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalState.description",null,LocaleContextHolder.getLocale()));
         return mav;
