@@ -60,7 +60,7 @@
                                         <span class="button-text-style light-text h1">
                                             <c:choose>
                                                 <c:when test="${loggedUser == null}">
-                                                    Mi perfil
+                                                    <spring:message code="navbar.profile"/>
                                                 </c:when>
                                                 <c:otherwise>
                                                     ${loggedUser.name} ${loggedUser.surname}
