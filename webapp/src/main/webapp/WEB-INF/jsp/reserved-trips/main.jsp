@@ -2,6 +2,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<!-- Beans:
+        - url: url to be used in the tabs
+-->
+
 <html>
 <head>
   <title><spring:message code="reservedTrips.title"/></title>
@@ -19,7 +23,7 @@
     </div>
     <div id="time-tabs-row">
       <jsp:include page="/WEB-INF/jsp/components/trip-nav-tabs.jsp">
-        <jsp:param name="path" value="/users/reserved"/>
+        <jsp:param name="path" value="${url}"/>
         <jsp:param name="springMessagePrefix" value="reservedTrips"/>
       </jsp:include>
     </div>

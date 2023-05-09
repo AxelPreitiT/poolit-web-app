@@ -4,6 +4,7 @@
 
 <!-- Beans:
         - tripDeleted: boolean that indicates if a trip was deleted before rendering this page
+        - url: url to be used in the tabs
 -->
 
 <html>
@@ -23,7 +24,7 @@
     </div>
     <div id="time-tabs-row">
       <jsp:include page="/WEB-INF/jsp/components/trip-nav-tabs.jsp">
-        <jsp:param name="path" value="/users/created"/>
+        <jsp:param name="path" value="${url}"/>
         <jsp:param name="springMessagePrefix" value="createdTrips"/>
       </jsp:include>
     </div>

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class TripController extends LoggedUserController {
@@ -37,9 +38,10 @@ public class TripController extends LoggedUserController {
     private final static String SEARCH_TRIP_PATH = BASE_RELATED_PATH + "search";
     private final static String CREATE_TRIP_PATH = TRIP_PATH + "create";
     private static final String RESERVED_TRIPS_PATH = TRIP_PATH + "reserved";
-    private static final String RESERVED_TRIPS_HISTORIC_PATH = RESERVED_TRIPS_PATH + "/history";
     private static final String CREATED_TRIPS_PATH = TRIP_PATH + "created";
-    private static final String CREATED_TRIPS_HISTORIC_PATH = CREATED_TRIPS_PATH + "/history";
+
+    private static final String TIME_QUERY_PARAM_NAME = "time";
+    private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
     public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
@@ -156,43 +158,30 @@ public class TripController extends LoggedUserController {
     }
 
     @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
+    public ModelAndView getReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page,
+                                         @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time) {
+
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
+        final PagedContent<Trip> trips = Objects.equals(time, "past") ? tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE) : tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
 
-        final ModelAndView mav = new ModelAndView("/reserved-trips/next");
+        final ModelAndView mav = new ModelAndView("/reserved-trips/main");
         mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = RESERVED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
-    public ModelAndView getHistoricReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE);
-
-        final ModelAndView mav = new ModelAndView("/reserved-trips/history");
-        mav.addObject("trips", trips);
+        mav.addObject("url", RESERVED_TRIPS_PATH);
         return mav;
     }
 
     @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
+    public ModelAndView getCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page,
+                                        @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time) {
 
-        final ModelAndView mav = new ModelAndView("/created-trips/next");
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+
+        final PagedContent<Trip> trips = Objects.equals(time, "past") ? tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE) : tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
+
+        final ModelAndView mav = new ModelAndView("/created-trips/main");
         mav.addObject("trips", trips);
         mav.addObject("tripDeleted", false);
-        return mav;
-    }
-
-    @RequestMapping(value = CREATED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
-    public ModelAndView getHistoricCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE);
-
-        final ModelAndView mav = new ModelAndView("/created-trips/history");
-        mav.addObject("trips", trips);
+        mav.addObject("url", CREATED_TRIPS_PATH);
         return mav;
     }
 
@@ -201,7 +190,7 @@ public class TripController extends LoggedUserController {
     public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         tripService.deleteTrip(trip);
-        final ModelAndView mav = getNextCreatedTrips(1);
+        final ModelAndView mav = getCreatedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         mav.addObject("tripDeleted", true);
         return mav;
     }
@@ -211,7 +200,7 @@ public class TripController extends LoggedUserController {
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         tripService.removePassenger(trip,user);
-        final ModelAndView mav = getNextReservedTrips(1);
+        final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         mav.addObject("tripCancelled", true);
         return mav;
     }
