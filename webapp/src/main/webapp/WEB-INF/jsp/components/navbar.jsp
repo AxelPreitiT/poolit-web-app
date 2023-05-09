@@ -15,13 +15,13 @@
             <ul class="navbar-nav nav-items">
                 <sec:authorize access="isAuthenticated()">
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/users/reserved"/>">
+                        <a class="nav-link" href="<c:url value="/trips/reserved"/>">
                             <h4 class="light-text"><spring:message code="navbar.reservados"/></h4>
                         </a>
                     </li>
                     <sec:authorize access="hasRole('ROLE_DRIVER')">
                         <li class="nav-item">
-                            <a class="nav-link" href="<c:url value="/users/created"/>">
+                            <a class="nav-link" href="<c:url value="/trips/created"/>">
                                 <h4 class="light-text"><spring:message code="navbar.created"/></h4>
                             </a>
                         </li>
