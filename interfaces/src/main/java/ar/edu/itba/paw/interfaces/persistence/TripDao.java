@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +30,7 @@ public interface TripDao {
     PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime,
-            Optional<Double> minPrice, Optional<Double> maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             int page, int pageSize);
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
 

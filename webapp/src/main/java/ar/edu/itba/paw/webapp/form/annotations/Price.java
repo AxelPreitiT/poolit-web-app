@@ -24,9 +24,12 @@ class PriceValidator implements ConstraintValidator<Price, SearchTripForm> {
 
     @Override
     public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
-        if(form.getMinPrice() == null || form.getMaxPrice() == null) {
+        if(form.getMinPrice() != null && form.getMinPrice().doubleValue() < 0) {
             return false;
         }
-        return form.getMinPrice() >= 0 && form.getMaxPrice() >= 0 && form.getMinPrice() <= form.getMaxPrice();
+        if(form.getMaxPrice() != null && form.getMaxPrice().doubleValue() < 0) {
+            return false;
+        }
+        return form.getMinPrice() == null || form.getMaxPrice() == null || form.getMinPrice().compareTo(form.getMaxPrice()) <= 0;
     }
 }

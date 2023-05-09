@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +62,6 @@ public interface TripService {
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
-            double minPrice, double maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             final int page, final int pageSize);
 }

@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class TripController extends LoggedUserController {
@@ -108,7 +109,7 @@ public class TripController extends LoggedUserController {
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
-        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(),form.getMinPrice(),form.getMaxPrice(),page-1,PAGE_SIZE);
+        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),page-1,PAGE_SIZE);
         mav.addObject("tripsContent", tripsContent);
         return mav;
     }

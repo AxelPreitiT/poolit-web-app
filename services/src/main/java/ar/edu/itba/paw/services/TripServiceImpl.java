@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -307,11 +308,11 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
-            double minPrice, double maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             final int page, final int pageSize){
         validatePageAndSize(page,pageSize);
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
         LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime.get());
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),minPrice,maxPrice,page,pageSize);
     }
 }
