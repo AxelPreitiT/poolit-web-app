@@ -57,20 +57,42 @@ public class TripController extends LoggedUserController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
-        //TODO: buscar al trip en el rango especificado
-        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
-        List<Passenger> passengers;
-        if(trip.isRecurrent()){
-            passengers=tripService.getPassengersRecurrent(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        }else {
-            passengers=tripService.getPassengers(trip,trip.getStartDateTime());
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        if(tripService.userIsDriver(tripId,user)){
+            return tripDetailsForDriver(tripId);
+        }else if (tripService.userIsPassenger(tripId,user)){
+            return tripDetailsForPassenger(tripId,user);
         }
+        return tripDetailsForReservation(tripId,user,form);
+    }
+
+    private ModelAndView tripDetailsForDriver(final long tripId){
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final List<Passenger> passengers = tripService.getPassengers(trip);
+        final ModelAndView mav = new ModelAndView("/trip-info/driver");
+        mav.addObject("trip",trip);
+        mav.addObject("passengers",passengers);
+        return mav;
+    }
+
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
+        final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
+        final ModelAndView mav = new ModelAndView("/trip-info/passenger");
+        mav.addObject("trip",trip);
+        mav.addObject("passenger",passenger);
+        return mav;
+    }
+
+    private ModelAndView tripDetailsForReservation(final long tripId, final User user, final SelectionForm form){
+        //TODO: revisar que la fecha de inicio sea posterior a la actualidad
+        final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
-        mv.addObject("passengers",passengers);
         return mv;
     }
 
+    //TODO: preguntar si la regla de que solo llame alguien que no es pasajero lo ponemos en security o en el service y lanzamos una excepcion
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.POST)
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
@@ -79,20 +101,11 @@ public class TripController extends LoggedUserController {
             return getTripDetails(tripId,form);
         }
         final User passenger = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        //TODO: buscar al trip en el rango especificado
         Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
-        List<Passenger> passengers;
-        if(trip.isRecurrent()){
-            passengers=tripService.getPassengersRecurrent(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        }else {
-            passengers=tripService.getPassengers(trip,trip.getStartDateTime());
-        }
-        ModelAndView successMV = new ModelAndView("/select-trip/success");
-        successMV.addObject("trip",trip);
-        successMV.addObject("passenger",passenger);
-        successMV.addObject("passengers",passengers);
-        return successMV;
+        final ModelAndView mav = tripDetailsForPassenger(tripId,passenger);
+        mav.addObject("successInscription",true);
+        return mav;
     }
 
 
@@ -215,6 +228,7 @@ public class TripController extends LoggedUserController {
     }
 
     //TODO: preguntar si la regla de que acceda solo si es el creador esta bien en el nivel de Spring security (o deberia ser solo de los servicios)
+    //este si
     @RequestMapping(value = "/trips/{id:\\d+$}/delete", method = RequestMethod.POST)
     public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
