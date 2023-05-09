@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -169,6 +170,10 @@ public class TripDaoImpl implements TripDao {
         int tripRows = jdbcTemplate.update("DELETE FROM trips WHERE trip_id = ?",trip.getTripId());
         return tripRows>0 && tripCarsDriversRows>0;
     }
+    @Override
+    public boolean removePassenger(final Trip trip, final User passenger){
+        return  jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ? AND user_id = ?",trip.getTripId(), passenger.getUserId())>0;
+    }
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
@@ -182,9 +187,23 @@ public class TripDaoImpl implements TripDao {
     }
     @Override
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
+        //A-{1,3}
+        //B-{2,4}
+        //[1,1] => A(los que esten despues del 1 (start_date>=?) y que empiecen antes del 2 (start_date<=1)
+        //Si pedia que passengers.start_date>=1 AND passengers.end_date>=1 -> A y B, pero solo queria A
+        //Si pedia que passengers.start_date>=1 AND passengers.end_date<=1 -> A, pero esto tiene un problema
+        //[1,2] -> A,B
+        //Si pedia que passengers.start_date>=1 AND passengers.end_date<=2 -> A (y estoy dejando a B)
+        //"WHERE trip_id = ? AND passengers.start_date>=? AND passengers.end_date<=? "
         return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
-                        "WHERE trip_id = ? AND passengers.start_date<=? AND passengers.end_date>=? "
+                        "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.start_date<=? "
                 ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
+    }
+    @Override
+    public Optional<Passenger> getPassenger(final Trip trip, final User user){
+        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
+                        "WHERE trip_id = ? AND user_id = ?"
+                ,PASSENGER_ROW_MAPPER,trip.getTripId(),user.getUserId()).stream().findFirst();
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
@@ -193,6 +212,9 @@ public class TripDaoImpl implements TripDao {
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
 //        validatePageAndSize(page,pageSize);
+        //passengers.start_date<=days<=passenger.end_date
+        //"los pasajeros que empiecen antes o en el dia y terminen en o despues del dia"
+        //Con eso me traigo a los pasajeros que esten en ese dia
         String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
                 "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? " +
                 "WHERE days.days>=? AND days.days<=? " +
@@ -269,7 +291,7 @@ public class TripDaoImpl implements TripDao {
     public PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime,
-            Optional<Double> minPrice, Optional<Double> maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             int page, int pageSize){
         validatePageAndSize(page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
@@ -283,8 +305,8 @@ public class TripDaoImpl implements TripDao {
         endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime)
                                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime));
         dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1.getValue()));
-        minPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.GREATER_OR_EQUALS,price));
-        maxPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.LESS_OR_EQUAL,price));
+        minPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.GREATER_OR_EQUALS,price.doubleValue()));
+        maxPrice.ifPresent(price -> queryBuilder.withWhere(QueryBuilder.DbField.TRIP_PRICE, QueryBuilder.DbComparator.LESS_OR_EQUAL,price.doubleValue()));
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);

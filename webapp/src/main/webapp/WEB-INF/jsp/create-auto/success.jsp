@@ -14,6 +14,7 @@
     <div id="navbar-container">
         <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     </div>
+<%--    TODO: cambiar--%>
     <div class="main-container-style container-color">
         <div id="footer-container">
             <div id="button-container">
@@ -29,8 +30,8 @@
     </div>
     <div id="toast-container">
         <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-            <jsp:param name="title" value="¡POOLIT!"/>
-            <jsp:param name="message" value="createTrip.sucessToast"/>
+            <jsp:param name="title" value="createCar.success.toast.title"/>
+            <jsp:param name="message" value="createCar.success.toast.message"/>
         </jsp:include>
     </div>
 </body>

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public interface TripService {
     boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
     boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime);
+    boolean removePassenger(final Trip trip, final User passenger);
     //
     Optional<Trip> findById(long id);
     //
@@ -32,6 +34,8 @@ public interface TripService {
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //
+    List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
+        //
     List<Passenger> getPassengers(TripInstance tripInstance);
     //
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
@@ -45,6 +49,7 @@ public interface TripService {
     //
     //
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
+
     boolean deleteTrip(final Trip trip);
     boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate);
     boolean deleteTrip(int tripId);
@@ -57,6 +62,6 @@ public interface TripService {
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
-            double minPrice, double maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             final int page, final int pageSize);
 }

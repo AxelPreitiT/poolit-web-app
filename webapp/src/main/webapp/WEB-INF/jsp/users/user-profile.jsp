@@ -20,7 +20,7 @@
     <jsp:param name="path" value="${userProfileUrl}"/>
   </jsp:include>
   <div class="List-properties-container">
-    <c:url value="/users/reserved" var="reservedTripsUrl"/>
+    <c:url value="/trips/reserved" var="reservedTripsUrl"/>
     <c:set var="trips" value="${futureTrips}" scope="request"/>
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
       <jsp:param name="title" value="nextTrips.reserved.title"/>
@@ -28,7 +28,7 @@
       <jsp:param name="trips" value="${futureTrips}"/>
       <jsp:param name="url" value="${reservedTripsUrl}"/>
     </jsp:include>
-    <c:url value="/users/reserved/history" var="reservedTripsHistoryUrl"/>
+    <c:url value="/trips/reserved/history" var="reservedTripsHistoryUrl"/>
     <c:set var="trips" value="${pastTrips}" scope="request"/>
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
       <jsp:param name="title" value="historyTrips.reserved.title"/>
