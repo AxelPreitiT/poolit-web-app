@@ -219,8 +219,24 @@ public class TripServiceImpl implements TripService {
     public Optional<Trip> findById(long id, LocalDateTime dateTime){
         return tripDao.findById(id,dateTime,dateTime);
     }
-
-    //TODO: preguntar si validamos aca tambien o con peristence alcanza
+    @Override
+    public boolean userIsDriver(final long tripId, final User user){
+        //TODO: cambiar a excepciones conocidas
+        final Trip trip = tripDao.findById(tripId).orElseThrow(IllegalArgumentException::new);
+        return trip.getDriver().equals(user);
+    }
+    @Override
+    public boolean userIsPassenger(final long tripId, final User user){
+        return tripDao.getPassenger(tripId,user).isPresent();
+    }
+    @Override
+    public Optional<Passenger> getPassenger(final Trip trip, final User user){
+        return tripDao.getPassenger(trip,user);
+    }
+    @Override
+    public Optional<Passenger> getPassenger(final long tripId, final User user){
+        return tripDao.getPassenger(tripId,user);
+    }
     @Override
     public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
         if( trip.getStartDateTime().isAfter(dateTime)
@@ -240,6 +256,10 @@ public class TripServiceImpl implements TripService {
             throw new IllegalArgumentException();
         }
         return tripDao.getPassengers(trip,startDate,endDate);
+    }
+    @Override
+    public List<Passenger> getPassengers(Trip trip){
+        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
     }
     @Override
     public List<Passenger> getPassengers(TripInstance tripInstance){
