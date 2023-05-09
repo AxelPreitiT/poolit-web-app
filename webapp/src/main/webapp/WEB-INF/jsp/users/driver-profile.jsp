@@ -18,6 +18,7 @@
         <jsp:param name="user" value="${user}"/>
         <jsp:param name="role" value="USER"/>
         <jsp:param name="path" value="${userProfileUrl}"/>
+        <jsp:param name="rating" value="${rating}"/>
     </jsp:include>
     <div class="List-properties-container">
         <c:url value="/users/created" var="createdTripsUrl"/>
@@ -48,7 +49,7 @@
             </div>
             <a href="<c:url value="/cars/create"/>">
                 <div class="plus-btn">
-                    <h3 class="text"><spring:message code="profile.createCar"/>${rating}</h3>
+                    <h3 class="text"><spring:message code="profile.createCar"/></h3>
                     <i class="h3 bi text bi-box-arrow-in-up-right"></i>
                 </div>
             </a>

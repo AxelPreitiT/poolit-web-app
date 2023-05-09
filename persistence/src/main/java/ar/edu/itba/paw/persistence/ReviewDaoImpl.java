@@ -33,7 +33,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     private static final RowMapper<Long> TRIPS_ROW_MAPPER = (resultSet, rowNum)-> resultSet.getLong("trip_id");
 
-    private static final RowMapper<Double> RATING_ROW_MAPPER = (resultSet, rowNum)-> resultSet.getDouble("avg_rating");
+    private static final RowMapper<Double> RATING_ROW_MAPPER = (resultSet, rowNum)-> resultSet.getDouble("avg");
 
     private final JdbcTemplate jdbcTemplate;
 

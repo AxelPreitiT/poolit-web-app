@@ -26,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public double getDriverRating(User driver) {
-        return 4;
+        return reviewDao.getRating(driver);
     }
 
     @Override
