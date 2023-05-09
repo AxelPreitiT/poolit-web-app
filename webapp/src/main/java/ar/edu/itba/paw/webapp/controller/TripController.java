@@ -81,6 +81,7 @@ public class TripController extends LoggedUserController {
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
         mav.addObject("passenger",passenger);
+        mav.addObject("reviewForm", new ReviewForm());
         return mav;
     }
 
@@ -245,6 +246,15 @@ public class TripController extends LoggedUserController {
         tripService.removePassenger(trip,user);
         final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         mav.addObject("tripCancelled", true);
+        return mav;
+    }
+
+    @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
+    public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
+                                   @ModelAttribute("reviewForm") final ReviewForm form){
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        reviewService.createReview(tripId, user, form.getRating(), form.getReview());
+        final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         return mav;
     }
 }
