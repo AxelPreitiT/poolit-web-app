@@ -8,9 +8,11 @@ import java.io.IOException;
 
 public interface EmailService {
 
-    void sendMailNewPassenger(Trip trip,  User passenger) throws Exception;
+    void sendMailNewPassenger(Trip trip, Passenger passenger) throws Exception;
 
     void sendMailNewTrip(Trip trip) throws Exception;
+
+    void sendMailTripCancelledToDriver(Trip trip,Passenger passenger) throws Exception;
 
     void sendMailTripConfirmation(Trip trip, Passenger passenger) throws Exception;
 
