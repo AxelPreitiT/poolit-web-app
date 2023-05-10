@@ -78,10 +78,12 @@ public class TripController extends LoggedUserController {
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
-        final boolean done = tripService.tripDone(passenger);
+        final boolean done = reviewService.canReview(passenger);
+        final boolean reviewed = reviewService.haveReview(trip ,passenger);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
         mav.addObject("done",done);
+        mav.addObject("reviewed",reviewed);
         mav.addObject("passenger",passenger);
         mav.addObject("reviewForm", new ReviewForm());
         return mav;
@@ -111,31 +113,6 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-
-    @RequestMapping(value = "/review/{id:\\d+$}",method = RequestMethod.GET)
-    public ModelAndView getReviewDetails(@PathVariable("id") final long tripId,
-                                         @ModelAttribute("reviewForm") final ReviewForm reviewForm
-    ){
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        ModelAndView mv = new ModelAndView("/review-trip/main");
-        mv.addObject("trip",trip);
-        return mv;
-    }
-
-    @RequestMapping(value = "/review/{id:\\d+$}",method = RequestMethod.POST)
-    public ModelAndView addReviewToTrip(@PathVariable("id") final long tripId,
-                                            @ModelAttribute("reviewForm") final ReviewForm reviewForm,
-                                           final BindingResult errors){
-        if(errors.hasErrors()){
-            return getReviewDetails(tripId, reviewForm);
-        }
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        reviewService.createReview(tripId, user, reviewForm.getRating(), reviewForm.getReview());
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        ModelAndView successMV = new ModelAndView("/review-trip/success");
-        successMV.addObject("trip",trip);
-        return successMV;
-    }
 
 
 
@@ -255,8 +232,10 @@ public class TripController extends LoggedUserController {
     public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
                                    @ModelAttribute("reviewForm") final ReviewForm form){
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        reviewService.createReview(tripId, user, form.getRating(), form.getReview());
-        final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
+        reviewService.createReview(tripId, passenger, form.getRating(), form.getReview());
+        final ModelAndView mav = tripDetailsForPassenger(tripId, user);
+        mav.addObject("tripReviewed", true);
         return mav;
     }
 }

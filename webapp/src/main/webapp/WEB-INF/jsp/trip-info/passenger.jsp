@@ -40,7 +40,7 @@
       </div>
     </div>
     <div id="button-container">
-      <c:if test="${done}">
+      <c:if test="${!done}">
         <div class="delete-trip-container">
           <button type="submit" class="btn button-style  danger-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
             <i class="bi bi-x light-text h3"></i>
@@ -74,12 +74,20 @@
           </div>
         </div>
       </c:if>
-      <c:if test="${!done}">
+      <c:if test="${done}">
         <div class="delete-trip-container">
-          <button type="submit" class="btn button-style  secondary-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
-            <i class="bi bi-plus-lg light-text h3"></i>
-            <span class="button-text-style light-text h3">Reseñar viaje</span>
-          </button>
+          <c:if test="${!reviewed}">
+            <button type="submit" class="btn button-style  secondary-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
+              <i class="bi bi-plus-lg light-text h3"></i>
+              <span class="button-text-style light-text h3">Reseñar viaje</span>
+            </button>
+          </c:if>
+          <c:if test="${reviewed}">
+            <button type="submit" disabled class="btn button-style success-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
+              <i class="bi bi-check-lg light-text h3"></i>
+              <span class="button-text-style light-text h3">Viaje reseñado</span>
+            </button>
+          </c:if>
         </div>
         <div class="modal fade" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -134,5 +142,13 @@
     </div>
   </div>
 </div>
+<c:if test="${!(empty tripReviewed) && tripReviewed}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+      <jsp:param name="title" value="review.toast.title"/>
+      <jsp:param name="message" value="review.toast.message"/>
+    </jsp:include>
+  </div>
+</c:if>
 </body>
 </html>

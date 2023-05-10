@@ -2,11 +2,14 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.persistence.ReviewDao;
 import ar.edu.itba.paw.interfaces.services.ReviewService;
+import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.trips.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,8 +23,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review createReview(long travelId, User user, int rating, String review) {
-        return reviewDao.create(travelId, user, rating, review);
+    public Review createReview(long travelId, Passenger passenger, int rating, String review) {
+        if(!canReview(passenger)){
+            throw new IllegalStateException();
+        }
+        return reviewDao.create(travelId, passenger, rating, review);
     }
 
     @Override
@@ -42,5 +48,16 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<Long> getTravelsIdReviewedByUser(User user) {
         return reviewDao.findTravelIdByUser(user);
+    }
+
+    @Override
+    public boolean canReview(Passenger passenger) {
+        return passenger.getEndDateTime().isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public boolean haveReview(Trip trip, Passenger passenger){
+        //return reviewDao.reviewByTripAndPassanger(trip, passenger).isPresent();
+        return false;
     }
 }

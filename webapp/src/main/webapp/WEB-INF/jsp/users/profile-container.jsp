@@ -35,7 +35,24 @@
     <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
       <h6><spring:message code="user.rating"/></h6>
-      <h4><c:out value="${rating}"/></h4>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="ratings">
+          <c:forEach var="i" begin="1" end="${rating}">
+            <i class="bi bi-star-fill secondary-color h4"></i>
+          </c:forEach>
+          <c:if test="${rating % 1 >= 0.5}">
+            <i class="bi bi-star-half secondary-color h4"></i>
+            <c:forEach var="i" begin="${rating + 2}" end="5">
+              <i class="bi bi-star secondary-color h4"></i>
+            </c:forEach>
+          </c:if>
+          <c:if test="${rating % 1 < 0.5}">
+            <c:forEach var="i" begin="${rating + 1}" end="5">
+              <i class="bi bi-star secondary-color h4"></i>
+            </c:forEach>
+          </c:if>
+        </div>
+      </div>
     </div>
   </c:if>
   <form:form method = "POST" action = "${param.path}">

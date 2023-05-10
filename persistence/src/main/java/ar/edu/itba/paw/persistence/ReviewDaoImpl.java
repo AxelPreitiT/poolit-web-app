@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ReviewDao;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.trips.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,10 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao {
@@ -66,7 +61,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Review> findByDriver(User driver) {
-        return jdbcTemplate.query("select review_id, trip_id, user_id, rating, review  from reviews natural join trips_cars_drivers as trips(trip_id, driver_id, car_id) where driver_id = ?;", ROW_MAPPER, driver.getUserId());
+        return jdbcTemplate.query("select review_id, trip_id, user_id, rating, review  from reviews natural join trips_cars_drivers as trips(trip_id, driver_id, car_id) where driver_id = ?", ROW_MAPPER, driver.getUserId());
     }
 
     @Override
@@ -77,5 +72,10 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public List<Long> findTravelIdByUser(User user) {
         return jdbcTemplate.query("SELECT trip_id FROM reviews WHERE user_id = ?", TRIPS_ROW_MAPPER, user.getUserId());
+    }
+
+    @Override
+    public Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger){
+        return jdbcTemplate.query("SELECT * FROM reviews WHERE trip_id = ? AND user_id = ?", ROW_MAPPER, trip.getTripId(), passenger.getUserId()).stream().findFirst();
     }
 }

@@ -73,5 +73,4 @@ public interface TripService {
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             final int page, final int pageSize);
 
-    boolean tripDone(Passenger passenger);
 }
