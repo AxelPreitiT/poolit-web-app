@@ -30,7 +30,7 @@ public interface TripDao {
     boolean deleteTrip(final Trip trip);
     PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
-            LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime,
+            LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             int page, int pageSize);
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);

@@ -21,6 +21,8 @@ import java.util.Optional;
 @Service
 public class TripServiceImpl implements TripService {
 
+    private static final int OFFSET_MINUTES = 30;
+
     @Autowired
     private EmailService emailService;
 
@@ -322,7 +324,7 @@ public class TripServiceImpl implements TripService {
         }
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
 
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,OFFSET_MINUTES,Optional.empty(),Optional.empty(), page, pageSize);
     }
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
@@ -333,6 +335,6 @@ public class TripServiceImpl implements TripService {
         validatePageAndSize(page,pageSize);
         Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
         LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime.get());
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),minPrice,maxPrice,page,pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,page,pageSize);
     }
 }
