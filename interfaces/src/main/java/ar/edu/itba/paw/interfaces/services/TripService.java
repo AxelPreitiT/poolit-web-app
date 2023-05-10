@@ -72,4 +72,6 @@ public interface TripService {
             final String startTime, final String endDate, final String endTime,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
             final int page, final int pageSize);
+
+    boolean tripDone(Passenger passenger);
 }
