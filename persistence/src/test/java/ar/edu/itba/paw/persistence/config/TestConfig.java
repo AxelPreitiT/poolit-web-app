@@ -13,17 +13,17 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
-//
-//@ComponentScan({"ar.edu.itba.paw.persistence"})
-//@Configuration
-//public class TestConfig {
-//    @Value("classpath:hsqldb.sql")
-//    private Resource hsqldb;
-//    @Value("classpath:cities.sql")
-//    private Resource cities;
-//
-////    @Value("classpath:schema.sql")
-////    private Resource schema;
+
+@ComponentScan({"ar.edu.itba.paw.persistence"})
+@Configuration
+public class TestConfig {
+    @Value("classpath:hsqldb.sql")
+    private Resource hsqldb;
+    @Value("classpath:cities.sql")
+    private Resource cities;
+
+//    @Value("classpath:schema.sql")
+//    private Resource schema;
 //    @Bean
 //    public DataSource dataSource() {
 //        final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
@@ -33,18 +33,26 @@ import javax.sql.DataSource;
 //        dataSource.setPassword("test");
 //        return dataSource;
 //    }
-//    @Bean
-//    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
-//        final DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
-//        dataSourceInitializer.setDataSource(ds);
-//        dataSourceInitializer.setDatabasePopulator(databasePopulator());
-//        return dataSourceInitializer;
-//    }
-//    private DatabasePopulator databasePopulator(){
-//        final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
-//        databasePopulator.addScript(hsqldb);
-////        databasePopulator.addScript(cities);
-////        databasePopulator.addScript(schema);
-//        return databasePopulator;
-//    }
-//}
+    @Bean
+    public DataSource dataSource(){
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(JDBCDriver.class);
+        ds.setUrl("jdbc:hsqldb:mem:paw");
+        ds.setUsername("ha");
+        ds.setPassword("");
+        return ds;
+    }
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
+        final DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+        dataSourceInitializer.setDataSource(ds);
+        dataSourceInitializer.setDatabasePopulator(databasePopulator());
+        return dataSourceInitializer;
+    }
+    private DatabasePopulator databasePopulator(){
+        final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+        databasePopulator.addScript(hsqldb);
+        databasePopulator.addScript(cities);
+        return databasePopulator;
+    }
+}

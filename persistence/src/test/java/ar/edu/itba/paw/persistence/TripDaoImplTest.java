@@ -3,7 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
-//import ar.edu.itba.paw.persistence.config.TestConfig;
+import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,7 +80,6 @@ import static org.junit.Assert.assertNotNull;
 //                .withTableName("passengers");
 //        tripsCarsDriversInsert = new SimpleJdbcInsert(ds)
 //                .withTableName("trips_cars_drivers");
-//        /*
 //        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(ds)
 //                .withTableName("users")
 //                .usingGeneratedKeyColumns("user_id");
@@ -88,14 +87,13 @@ import static org.junit.Assert.assertNotNull;
 //        user1Info.put("email",email);
 //        user1Info.put("phone",phone);
 //        Number key = jdbcInsert.executeAndReturnKey(user1Info);
-//        user1 = new User(key.longValue(),email,phone);
+//        user1 = new User(key.longValue(),email,phone,);
 //        Map<String,Object> user2Info = new HashMap<>();
 //        user2Info.put("email",email2);
 //        user2Info.put("phone",phone2);
 //        Number key2 = jdbcInsert.executeAndReturnKey(user2Info);
 //        user2 = new User(key2.longValue(),email,phone);
 //        city = jdbcTemplate.query("SELECT * FROM cities WHERE name LIKE ?",(rs,rc)->new City(rs.getLong("city_id"),rs.getString("name"),rs.getLong("province_id")),cityName).stream().findFirst().orElseThrow(IllegalStateException::new);
-//         */
 //    }
 //
 //    @Test

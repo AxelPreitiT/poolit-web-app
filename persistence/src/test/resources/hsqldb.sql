@@ -1,40 +1,56 @@
--- TODO: change to use original schema if we continue with postgres
+CREATE TABLE IF NOT EXISTS images(
+                                     image_id IDENTITY PRIMARY KEY,
+                                     bytea BLOB
+);
+
 CREATE TABLE IF NOT EXISTS users(
-                                    user_id SERIAL PRIMARY KEY,
-                                    email TEXT NOT NULL,
+                                    user_id IDENTITY PRIMARY KEY,
+                                    username VARCHAR(2000),
+                                    surname VARCHAR(2000),
+                                    email VARCHAR(2000) NOT NULL,
                                     phone VARCHAR(20) NOT NULL,
-                                    UNIQUE(email)
+                                    password VARCHAR(2000),
+                                    birthdate TIMESTAMP,
+                                    city_id INT,
+                                    user_role VARCHAR(200),
+                                    user_image_id INT,
+                                    UNIQUE(email),
+                                    CONSTRAINT users_to_images FOREIGN KEY (user_image_id) REFERENCES images (image_id) ON DELETE SET NULL,
+                                    CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS provinces (
-                                         province_id SERIAL NOT NULL,
-                                         name TEXT NOT NULL,
+                                         province_id IDENTITY NOT NULL,
+                                         name VARCHAR(2000) NOT NULL,
                                          PRIMARY KEY (province_id),
                                          UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS cities (
-                                      city_id SERIAL NOT NULL,
-                                      name TEXT NOT NULL,
+                                      city_id IDENTITY NOT NULL,
+                                      name VARCHAR(2000) NOT NULL,
                                       province_id INT NOT NULL,
                                       PRIMARY KEY (province_id, name),
                                       UNIQUE (city_id),
                                       CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
 );
 
+
 CREATE TABLE IF NOT EXISTS cars(
-                                   car_id SERIAL PRIMARY KEY,
-                                   plate TEXT NOT NULL,
-                                   info_car TEXT NOT NULL,
+                                   car_id IDENTITY PRIMARY KEY,
+                                   plate VARCHAR(2000) NOT NULL,
+                                   info_car VARCHAR(2000) NOT NULL,
                                    user_id INT NOT NULL,
+                                   image_id INT DEFAULT 1,
                                    UNIQUE(user_id,plate),
-                                   FOREIGN KEY (user_id) REFERENCES users (user_id)
+                                   CONSTRAINT cars_to_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+                                   CONSTRAINT cars_to_images FOREIGN KEY (image_id) REFERENCES images (image_id)
 );
 CREATE TABLE IF NOT EXISTS trips(
-                                    trip_id SERIAL PRIMARY KEY,
+                                    trip_id IDENTITY PRIMARY KEY,
                                     max_passengers INT,
-                                    origin_address TEXT NOT NULL ,
-                                    destination_address text NOT NULL,
+                                    origin_address VARCHAR(2000) NOT NULL ,
+                                    destination_address VARCHAR(2000) NOT NULL,
                                     price DOUBLE PRECISION DEFAULT 0.0,
                                     start_date_time TIMESTAMP NOT NULL,
                                     end_date_time TIMESTAMP NOT NULL,
