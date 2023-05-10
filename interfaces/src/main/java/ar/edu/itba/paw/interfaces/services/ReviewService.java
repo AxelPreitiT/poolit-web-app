@@ -8,7 +8,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import java.util.List;
 
 public interface ReviewService {
-    Review createReview(long travelId, Passenger user, int rating, String review);
+    Review createReview(long tripId, Passenger user, int rating, String review);
 
     double getDriverRating(final User driver);
 
@@ -16,7 +16,7 @@ public interface ReviewService {
 
     List<Review> getUsersIdReviews(User user);
 
-    List<Long> getTravelsIdReviewedByUser(User user);
+    List<Long> getTripIdReviewedByUser(User user);
 
     boolean canReview(Passenger passenger);
 

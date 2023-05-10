@@ -23,11 +23,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review createReview(long travelId, Passenger passenger, int rating, String review) {
+    public Review createReview(long tripId, Passenger passenger, int rating, String review) {
         if(!canReview(passenger)){
             throw new IllegalStateException();
         }
-        return reviewDao.create(travelId, passenger, rating, review);
+        return reviewDao.create(tripId, passenger, rating, review);
     }
 
     @Override
@@ -46,8 +46,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Long> getTravelsIdReviewedByUser(User user) {
-        return reviewDao.findTravelIdByUser(user);
+    public List<Long> getTripIdReviewedByUser(User user) {
+        return reviewDao.findTripIdByUser(user);
     }
 
     @Override
@@ -57,7 +57,6 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public boolean haveReview(Trip trip, Passenger passenger){
-        //return reviewDao.reviewByTripAndPassanger(trip, passenger).isPresent();
-        return false;
+        return reviewDao.reviewByTripAndPassanger(trip, passenger).isPresent();
     }
 }

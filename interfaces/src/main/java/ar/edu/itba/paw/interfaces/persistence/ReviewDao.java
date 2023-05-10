@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ReviewDao {
 
-    Review create(long travelId, User user, int rating, String review);
+    Review create(long TripId, User user, int rating, String review);
 
     double getRating(final User driver);
 
@@ -19,7 +19,7 @@ public interface ReviewDao {
 
     List<Review> findReviewsByUser(User user);
 
-    List<Long> findTravelIdByUser(User user);
+    List<Long> findTripIdByUser(User user);
 
     Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger);
 }

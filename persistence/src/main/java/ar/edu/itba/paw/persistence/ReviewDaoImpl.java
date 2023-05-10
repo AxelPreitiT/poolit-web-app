@@ -44,14 +44,14 @@ public class ReviewDaoImpl implements ReviewDao {
 
 
     @Override
-    public Review create(long travelId, User user, int rating, String review) {
+    public Review create(long TripId, User user, int rating, String review) {
         Map<String,Object> data = new HashMap<>();
-        data.put("trip_id", travelId);
+        data.put("trip_id", TripId);
         data.put("user_id", user.getUserId());
         data.put("rating", rating);
         data.put("review", review);
         Number key = jdbcInsert.executeAndReturnKey(data);
-        return new Review(key.longValue(), travelId, user, rating, review);
+        return new Review(key.longValue(), TripId, user, rating, review);
     }
 
     @Override
@@ -70,12 +70,12 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     @Override
-    public List<Long> findTravelIdByUser(User user) {
+    public List<Long> findTripIdByUser(User user) {
         return jdbcTemplate.query("SELECT trip_id FROM reviews WHERE user_id = ?", TRIPS_ROW_MAPPER, user.getUserId());
     }
 
     @Override
     public Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger){
-        return jdbcTemplate.query("SELECT * FROM reviews WHERE trip_id = ? AND user_id = ?", ROW_MAPPER, trip.getTripId(), passenger.getUserId()).stream().findFirst();
+        return jdbcTemplate.query("SELECT * FROM reviews NATURAL JOIN users NATURAL JOIN cities WHERE trip_id = ? AND user_id = ?", ROW_MAPPER, trip.getTripId(), passenger.getUserId()).stream().findFirst();
     }
 }

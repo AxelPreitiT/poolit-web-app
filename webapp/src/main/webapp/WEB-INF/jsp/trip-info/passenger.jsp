@@ -79,13 +79,13 @@
           <c:if test="${!reviewed}">
             <button type="submit" class="btn button-style  secondary-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
               <i class="bi bi-plus-lg light-text h3"></i>
-              <span class="button-text-style light-text h3">Reseñar viaje</span>
+              <span class="button-text-style light-text h3"><spring:message code="review.btn"/></span>
             </button>
           </c:if>
           <c:if test="${reviewed}">
             <button type="submit" disabled class="btn button-style success-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
               <i class="bi bi-check-lg light-text h3"></i>
-              <span class="button-text-style light-text h3">Viaje reseñado</span>
+              <span class="button-text-style light-text h3"><spring:message code="review.btnDisable"/></span>
             </button>
           </c:if>
         </div>
@@ -93,7 +93,7 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h3 class="modal-title secondary-color">Reseña del viaje:</h3>
+                <h3 class="modal-title secondary-color"><spring:message code="review.title"/></h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
@@ -101,7 +101,7 @@
                 <form:form modelAttribute="reviewForm" method="POST" action="${reviewTripUrl}">
                 <div class="review-form">
                   <div class="rating-container">
-                    <h3>Rating:</h3>
+                    <h3><spring:message code="review.rating"/></h3>
                     <div class="rating">
                       <form:select path="rating" cssClass="form-select form-select-sm">
                         <form:option value="1" label="☆"/>
@@ -113,20 +113,20 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <h3>Review:</h3>
-                    <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="Review del viaje"/>
+                    <h3><spring:message code="review.review"/></h3>
+                    <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="Ingrese review del viaje"/>
                   </div>
                   <div>
-                    <h6 class="italic-text">Esta informacion aparecerá en el perfil del conductor.</h6>
+                    <h6 class="italic-text"><spring:message code="review.textInfo"/></h6>
                   </div>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn danger-bg-color" data-bs-dismiss="modal">
-                  <span class="light-text">Cancelar</span>
+                  <span class="light-text"><spring:message code="review.cancel"/></span>
                 </button>
                 <button type="submit" class="btn primary-bg-color">
-                  <span class="light-text">Confirmar</span>
+                  <span class="light-text"><spring:message code="review.submit"/></span>
                 </button>
                 </form:form>
               </div>

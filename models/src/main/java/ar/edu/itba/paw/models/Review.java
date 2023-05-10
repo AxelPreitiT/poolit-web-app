@@ -3,7 +3,7 @@ package ar.edu.itba.paw.models;
 public class Review {
 
     private final long reviewId;
-    private final long travelId;
+    private final long tripId;
 
     private final User user;
 
@@ -11,9 +11,9 @@ public class Review {
 
     private final String review;
 
-    public Review(long reviewId, long travelId, User user, int rating, String review) {
+    public Review(long reviewId, long tripId, User user, int rating, String review) {
         this.reviewId = reviewId;
-        this.travelId = travelId;
+        this.tripId = tripId;
         this.user = user;
         this.rating = rating;
         this.review = review;
@@ -23,8 +23,8 @@ public class Review {
         return reviewId;
     }
 
-    public long getTravelId() {
-        return travelId;
+    public long getTripId() {
+        return tripId;
     }
 
     public User getUser() {
@@ -32,7 +32,7 @@ public class Review {
     }
 
     public long getDriver() {
-        return travelId;
+        return tripId;
     }
 
     public String getReview() {
