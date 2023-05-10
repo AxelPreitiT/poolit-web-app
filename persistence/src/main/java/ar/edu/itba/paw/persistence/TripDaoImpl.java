@@ -249,31 +249,85 @@ public class TripDaoImpl implements TripDao {
 
     @Override
     public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize) {
-        List<Object> args = new ArrayList<>();
-        args.add(user.getUserId());
-        QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhereIn(QueryBuilder.DbField.TRIP_ID, "SELECT trip_id FROM passengers WHERE user_id = ?", args);
-        int total = jdbcTemplate.query(queryBuilder.getCountString(), COUNT_ROW_MAPPER, queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        queryBuilder.withOffset(page * pageSize)
-                .withLimit(pageSize);
-        //Quiero traer para cada trip, la fecha donde esta el usuario que estoy buscando
-        //No lo puedo traer en la anterior, porque tengo que agrupar por fecha, no por pasajero, para tener la cantidad de asientos en esa fecha (que no solo sean del pasajero)
-        //TODO: esto no soluciona que los datos sean los del intervalo donde es pasajero
-        //Arreglar despues (ver si puedo hacer un findById para cada Id, es ineficiente pero si no es muy dificil)
-        String query = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin_city_name, origin_city_id, origin_province_id, destination_address, destination_city_name, destination_city_id, destination_province_id, user_email, trips.user_id as user_id, user_phone,  user_birthdate, user_role, user_password,  user_username, user_surname, user_image_id,  user_city_id,  user_city_name,  user_city_province_id , car_id, car_plate, car_info_car,  car_image_id, occupied_seats, trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "
-                + "FROM passengers p JOIN ( " + queryBuilder.getString() + " ) trips ON trips.trip_id = p.trip_id "
-                + "WHERE p.user_id = ?";
-        List<Object> arguments = queryBuilder.getArguments();
+//        List<Object> args = new ArrayList<>();
+//        args.add(user.getUserId());
+//        QueryBuilder queryBuilder = new QueryBuilder()
+//                .withWhereIn(QueryBuilder.DbField.TRIP_ID, "SELECT trip_id FROM passengers WHERE user_id = ?", args);
+        String totalQuery = "SELECT count(*)"+
+                "FROM passengers NATURAL JOIN trips "+
+                "WHERE passengers.user_id = ?";
+        int total = jdbcTemplate.query(totalQuery, COUNT_ROW_MAPPER, user.getUserId()).stream().findFirst().orElse(0);
+//        queryBuilder.withOffset(page * pageSize)
+//                .withLimit(pageSize);
+//        //Quiero traer para cada trip, la fecha donde esta el usuario que estoy buscando
+//        //No lo puedo traer en la anterior, porque tengo que agrupar por fecha, no por pasajero, para tener la cantidad de asientos en esa fecha (que no solo sean del pasajero)
+//        //TODO: esto no soluciona que los datos sean los del intervalo donde es pasajero
+//        //Arreglar despues (ver si puedo hacer un findById para cada Id, es ineficiente pero si no es muy dificil)
+////      //Esto deberia funcionar, voy a ver si lo puedo mejorar
+//        String q1 = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin_city_name, origin_city_id, origin_province_id, destination_address, destination_city_name, destination_city_id, destination_province_id, user_email, trips.user_id as user_id, user_phone,  user_birthdate, user_role, user_password,  user_username, user_surname, user_image_id,  user_city_id,  user_city_name,  user_city_province_id , car_id, car_plate, car_info_car,  car_image_id, occupied_seats, trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "+
+//                "FROM passengers p JOIN LATERAL ( "+
+//                "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price "+
+//                "FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(" +
+//                "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count "+
+//                "FROM generate_series(p.start_date,p.end_date,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
+//                "GROUP BY days.days,passengers.trip_id "+
+//                ")aux NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id " +
+//                "GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone,  users.birthdate, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car, cars.image_id "+
+//                "OFFSET ?" +
+//                "LIMIT ?"+
+//                ")trips ON trips.trip_id = p.trip_id "+
+//                "WHERE p.user_id = ?"
+//                ;
+        List<Object> arguments = new ArrayList<>();
+        String q = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "+
+                    "FROM trips trips NATURAL JOIN passengers p LEFT OUTER JOIN LATERAL( "+
+                    "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count "+
+                    "FROM generate_series(p.start_date,p.end_date,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
+                    "GROUP BY days.days,passengers.trip_id "+
+                    ")aux ON aux.trip_id = trips.trip_id JOIN trips_cars_drivers drivers on drivers.trip_id = trips.trip_id JOIN users ON drivers.user_id = users.user_id JOIN cars ON cars.user_id = users.user_id JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id "+
+                    "WHERE p.user_id = ? ";
         arguments.add(user.getUserId());
         if(minDateTime.isPresent()){
-            query += " AND p.end_date >= ? ";
+            q += " AND p.end_date >= ? ";
             arguments.add(minDateTime.get());
         }
         if(maxDateTime.isPresent()){
-            query += " AND p.end_date <= ? ";
+            q += " AND p.end_date <= ? ";
             arguments.add(maxDateTime.get());
         }
-        List<Trip> ans =  jdbcTemplate.query(query,PASSENGER_TRIPS_ROW_MAPPER,arguments.toArray());
+        q += "GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone,  users.birthdate, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car, cars.image_id, p.start_date, p.end_date "+
+                    "OFFSET ? "+
+                    "LIMIT ?";
+        arguments.add(page * pageSize);
+        arguments.add(pageSize);
+
+//        String q2 = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin_city_name, origin_city_id, origin_province_id, destination_address, destination_city_name, destination_city_id, destination_province_id, user_email, trips.user_id as user_id, user_phone,  user_birthdate, user_role, user_password,  user_username, user_surname, user_image_id,  user_city_id,  user_city_name,  user_city_province_id , car_id, car_plate, car_info_car,  car_image_id, occupied_seats, trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "+
+//                "FROM passengers p JOIN LATERAL (" +
+//                "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price" +
+//                "FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(\n" +
+//                "    SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count\n" +
+//                "    FROM generate_series(trips.start_date_time,trips.end_date_time,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days\n" +
+//                "    GROUP BY days.days,passengers.trip_id\n" +
+//                ") aux NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id "+
+//                "WHERE "+
+//                "OFFSET ? "+
+//                "LIMIT ?"+
+//                ")trips ON trips.trip_id = p.trip_id "+
+//                "WHERE p.user_id = ?";
+//        String query = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin_city_name, origin_city_id, origin_province_id, destination_address, destination_city_name, destination_city_id, destination_province_id, user_email, trips.user_id as user_id, user_phone,  user_birthdate, user_role, user_password,  user_username, user_surname, user_image_id,  user_city_id,  user_city_name,  user_city_province_id , car_id, car_plate, car_info_car,  car_image_id, occupied_seats, trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "
+//                + "FROM passengers p JOIN ( " + queryBuilder.getString() + " ) trips ON trips.trip_id = p.trip_id "
+//                + "WHERE p.user_id = ?";
+//        List<Object> arguments = queryBuilder.getArguments();
+//        arguments.add(user.getUserId());
+//        if(minDateTime.isPresent()){
+//            query += " AND p.end_date >= ? ";
+//            arguments.add(minDateTime.get());
+//        }
+//        if(maxDateTime.isPresent()){
+//            query += " AND p.end_date <= ? ";
+//            arguments.add(maxDateTime.get());
+//        }
+        List<Trip> ans =  jdbcTemplate.query(q,PASSENGER_TRIPS_ROW_MAPPER,arguments.toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
@@ -406,17 +460,17 @@ public class TripDaoImpl implements TripDao {
             this.where.append(field.dbName).append(' ').append(comparator.dbName).append(' ').append(field2.dbName);
             return this;
         }
-        //TODO: revisar esto, no es muy lindo
-        public QueryBuilder withWhereIn(DbField field, String setSelect, List<Object> arguments){
-            if(this.where.length()>0){
-                this.where.append(" AND ");
-            }else{
-                this.where.append("WHERE ");
-            }
-            this.where.append(field.dbName).append(" IN ").append(" (").append(setSelect).append(") ");
-            whereArguments.addAll(arguments);
-            return this;
-        }
+//        //TODO: revisar esto, no es muy lindo
+//        public QueryBuilder withWhereIn(DbField field, String setSelect, List<Object> arguments){
+//            if(this.where.length()>0){
+//                this.where.append(" AND ");
+//            }else{
+//                this.where.append("WHERE ");
+//            }
+//            this.where.append(field.dbName).append(" IN ").append(" (").append(setSelect).append(") ");
+//            whereArguments.addAll(arguments);
+//            return this;
+//        }
         public QueryBuilder withHaving(DbField field, DbComparator comparator, DbField field2){
             if(this.having.length()>0){
                 this.having.append(" AND ");
