@@ -81,6 +81,8 @@ public class TripDaoImpl implements TripDao {
               resultSet.getTimestamp("start_date").toLocalDateTime(),
               resultSet.getTimestamp("end_date").toLocalDateTime());
     };
+    private static final LocalTime MIN_TIME = LocalTime.of(0,0);
+    private static final LocalTime MAX_TIME = LocalTime.of(23,59);
     private final JdbcTemplate jdbcTemplate;
 
     private final SimpleJdbcInsert tripsInsert;
@@ -299,24 +301,30 @@ public class TripDaoImpl implements TripDao {
         List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
+    private QueryBuilder.DbField getSortField(final Trip.SortType sortType){
+        if(sortType.equals(Trip.SortType.TIME)){
+            return QueryBuilder.DbField.TIME;
+        }
+        return QueryBuilder.DbField.TRIP_PRICE;
+    }
     @Override
     public PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
-            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
             int page, int pageSize){
         validatePageAndSize(page,pageSize);
         LocalTime minTime = startDateTime.toLocalTime();
         if (startDateTime.minusMinutes(minutes).getDayOfWeek().equals(startDateTime.getDayOfWeek())){
             minTime = minTime.minusMinutes(minutes);
         }else{
-            minTime = LocalTime.of(0,0);
+            minTime = MIN_TIME;
         }
         LocalTime maxTime = startDateTime.toLocalTime();
         if(startDateTime.plusMinutes(minutes).getDayOfWeek().equals(startDateTime.getDayOfWeek())){
             maxTime = maxTime.plusMinutes(minutes);
         }else{
-            maxTime = LocalTime.of(23,59);
+            maxTime = MAX_TIME;
         }
         QueryBuilder queryBuilder = new QueryBuilder()
                 //Busco a las ocurrencias de ese viaje que sean desde ahora
@@ -327,7 +335,7 @@ public class TripDaoImpl implements TripDao {
                 .withWhere(QueryBuilder.DbField.TIME, QueryBuilder.DbComparator.LESS_OR_EQUAL,maxTime)
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
-                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
+                .withOrderBy(getSortField(sortType), descending? QueryBuilder.DbOrder.DESC : QueryBuilder.DbOrder.ASC);
         endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime.plusMinutes(minutes))
                                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime.minusMinutes(minutes)));
         dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1.getValue()));
@@ -428,17 +436,6 @@ public class TripDaoImpl implements TripDao {
             this.where.append(field.dbName).append(' ').append(comparator.dbName).append(' ').append(field2.dbName);
             return this;
         }
-//        //TODO: revisar esto, no es muy lindo
-//        public QueryBuilder withWhereIn(DbField field, String setSelect, List<Object> arguments){
-//            if(this.where.length()>0){
-//                this.where.append(" AND ");
-//            }else{
-//                this.where.append("WHERE ");
-//            }
-//            this.where.append(field.dbName).append(" IN ").append(" (").append(setSelect).append(") ");
-//            whereArguments.addAll(arguments);
-//            return this;
-//        }
         public QueryBuilder withHaving(DbField field, DbComparator comparator, DbField field2){
             if(this.having.length()>0){
                 this.having.append(" AND ");

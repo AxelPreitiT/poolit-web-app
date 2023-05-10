@@ -70,6 +70,6 @@ public interface TripService {
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
-            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
             final int page, final int pageSize);
 }
