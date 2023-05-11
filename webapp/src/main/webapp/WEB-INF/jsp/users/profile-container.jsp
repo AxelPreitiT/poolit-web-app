@@ -31,7 +31,11 @@
     <h6><spring:message code="user.district"/></h6>
     <h4><c:out value="${user.bornCity.name}"/></h4>
   </div>
-  <c:if test="${(param.role eq 'USER')}">
+  <div class="row-info">
+    <h6><spring:message code="user.role"/></h6>
+    <h4><c:out value="${user.role}"/></h4>
+  </div>
+  <c:if test="${(user.role eq 'DRIVER')}">
     <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
       <h6><spring:message code="user.rating"/></h6>
@@ -55,8 +59,5 @@
       </div>
     </div>
   </c:if>
-  <form:form method = "POST" action = "${param.path}">
-    <button type="submit" class="btn btn-primary btn-lg"><spring:message code="user.btnAction" arguments="${param.role}"/></button>
-  </form:form>
 </div>
 

@@ -16,8 +16,6 @@
     <c:url value="/users/profile" var="userProfileUrl"/>
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
         <jsp:param name="user" value="${user}"/>
-        <jsp:param name="role" value="USER"/>
-        <jsp:param name="path" value="${userProfileUrl}"/>
         <jsp:param name="rating" value="${rating}"/>
     </jsp:include>
     <div class="List-properties-container">

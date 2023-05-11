@@ -51,22 +51,25 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title danger"><spring:message code="tripCard.delete"/></h3>
+                                    <h3 class="modal-title danger"><spring:message code="navbar.modal.title"/></h3>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <!-- Avisar a axel que toque un poco el formato con el de hasta -->
-                                    <span class="text">Jose</span>
-                                    <span class="text">Pepe</span>
+                                    <div>
+                                        <span class="text"><spring:message code="navbar.modal.warning"/></span>
+                                    </div>
+                                    <div class="warning-text">
+                                        <span class="italic-text text bold"><spring:message code="navbar.modal.secondWarning"/></span>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
-                                        <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
+                                        <span class="light-text"><spring:message code="navbar.modal.btnCancel"/></span>
                                     </button>
                                     <c:url value="/changeRole" var="changeRole"/>
                                     <form:form method="POST" action="${changeRole}">
-                                        <button type="submit" class="btn danger-bg-color">
-                                            <span class="light-text">Crear</span>
+                                        <button type="submit" class="btn secondary-bg-color">
+                                            <span class="light-text"><spring:message code="navbar.modal.btnAccept"/></span>
                                         </button>
                                     </form:form>
                                 </div>
@@ -83,7 +86,7 @@
                     <c:url value="/image/${loggedUser.userImageId}" var="imageUrl"/>
                     <img class="image-photo" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>">
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end primary-bg-color">
+                <ul class="dropdown-menu dropdown-menu-end primary-bg-color modal-profile">
                     <li>
                         <a class="dropdown-item" href="<c:url value="/users/profile"/>">
                             <div class="container text-center">
