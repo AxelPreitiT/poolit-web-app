@@ -21,7 +21,8 @@ public class TestConfig {
     private Resource hsqldb;
     @Value("classpath:cities.sql")
     private Resource cities;
-
+    @Value("classpath:defaults.sql")
+    private Resource defaults;
 //    @Value("classpath:schema.sql")
 //    private Resource schema;
 //    @Bean
@@ -53,6 +54,7 @@ public class TestConfig {
         final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
         databasePopulator.addScript(hsqldb);
         databasePopulator.addScript(cities);
+        databasePopulator.addScript(defaults);
         return databasePopulator;
     }
 }

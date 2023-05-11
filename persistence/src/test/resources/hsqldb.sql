@@ -2,6 +2,19 @@ CREATE TABLE IF NOT EXISTS images(
                                      image_id IDENTITY PRIMARY KEY,
                                      bytea BLOB
 );
+CREATE TABLE IF NOT EXISTS provinces (
+                                         province_id IDENTITY NOT NULL,
+                                         name VARCHAR(2000) NOT NULL,
+                                         UNIQUE (name)
+);
+
+CREATE TABLE IF NOT EXISTS cities (
+                                      city_id IDENTITY NOT NULL,
+                                      name VARCHAR(2000) NOT NULL,
+                                      province_id INT NOT NULL,
+                                      UNIQUE (province_id, name),
+                                      CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS users(
                                     user_id IDENTITY PRIMARY KEY,
@@ -19,25 +32,8 @@ CREATE TABLE IF NOT EXISTS users(
                                     CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS provinces (
-                                         province_id IDENTITY NOT NULL,
-                                         name VARCHAR(2000) NOT NULL,
-                                         PRIMARY KEY (province_id),
-                                         UNIQUE (name)
-);
-
-CREATE TABLE IF NOT EXISTS cities (
-                                      city_id IDENTITY NOT NULL,
-                                      name VARCHAR(2000) NOT NULL,
-                                      province_id INT NOT NULL,
-                                      PRIMARY KEY (province_id, name),
-                                      UNIQUE (city_id),
-                                      CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
-);
-
-
 CREATE TABLE IF NOT EXISTS cars(
-                                   car_id IDENTITY PRIMARY KEY,
+                                   car_id IDENTITY,
                                    plate VARCHAR(2000) NOT NULL,
                                    info_car VARCHAR(2000) NOT NULL,
                                    user_id INT NOT NULL,
