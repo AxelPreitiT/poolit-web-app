@@ -17,6 +17,11 @@
     </c:if>
   </div>
   <div>
+    <c:if test="${reviews.size() == 0}">
+      <div class="review-empty-container">
+        <h2 class="italic-text placeholder-text">Aún no tienes reseñas.</h2>
+      </div>
+    </c:if>
     <c:forEach items="${reviews}" var="review">
       <c:set var="review" value="${review}" scope="request"/>
       <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
