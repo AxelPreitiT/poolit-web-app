@@ -37,7 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public List<Review> getDriverReviews(User driver) {
-        return null;
+        return reviewDao.findByDriver(driver);
     }
 
     @Override

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
+import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -167,7 +168,29 @@ public class UserController extends LoggedUserController {
         mav.addObject("pastTrips",pastTrips);
         mav.addObject("cars", cars);
         return mav;
+    }
 
+    @RequestMapping(value = "/profile/{id:\\d+$}", method = RequestMethod.GET)
+    public ModelAndView profilePost(@PathVariable("id") final long userId)
+    {
+        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if(Objects.equals(user.getRole(), "USER")){
+            List<Review> reviews = reviewService.getUsersIdReviews(user);
+
+            final ModelAndView mav = new ModelAndView("/users/public-profile");
+            mav.addObject("user", user);
+            mav.addObject("reviews", reviews);
+            return mav;
+        }
+        List<Review> reviews = reviewService.getDriverReviews(user);
+        Double rating = reviewService.getDriverRating(user);
+
+        final ModelAndView mav = new ModelAndView("/users/public-profile");
+        mav.addObject("user", user);
+        mav.addObject("rating", rating);
+        mav.addObject("reviews", reviews);
+        return mav;
     }
 
     /*

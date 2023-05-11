@@ -61,12 +61,12 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Review> findByDriver(User driver) {
-        return jdbcTemplate.query("select review_id, trip_id, user_id, rating, review  from reviews natural join trips_cars_drivers as trips(trip_id, driver_id, car_id) where driver_id = ?", ROW_MAPPER, driver.getUserId());
+        return jdbcTemplate.query("SELECT city_id, user_id, review_id, trip_id, rating, review, username, surname, email, phone, password, birthdate, user_role, user_image_id, name, province_id FROM reviews NATURAL JOIN trips_cars_drivers as trips(trip_id, driver_id, car_id) NATURAL JOIN users NATURAL JOIN cities where driver_id = ?", ROW_MAPPER, driver.getUserId());
     }
 
     @Override
     public List<Review> findReviewsByUser(User user) {
-        return jdbcTemplate.query("SELECT * FROM reviews WHERE user_id = ?", ROW_MAPPER, user.getUserId());
+        return jdbcTemplate.query("SELECT * FROM reviews NATURAL JOIN users NATURAL JOIN cities WHERE user_id = ?", ROW_MAPPER, user.getUserId());
     }
 
     @Override
