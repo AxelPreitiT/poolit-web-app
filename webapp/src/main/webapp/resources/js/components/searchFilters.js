@@ -29,6 +29,7 @@ const lastDateInputElement = document.getElementById('last-date');
 const dayRepeatContainerElement = document.getElementById('day-repeat-container');
 const dayRepeatTextElement = document.getElementById('day-repeat-text');
 const multitripContainerElement = document.getElementById('multitrip-container');
+const isMultitripInput = document.getElementById('is-multitrip');
 
 const initialTimeValue = timeInputElement.value;
 const initialDateValue = dateInputElement.value;
@@ -56,6 +57,7 @@ if(dateFormatRegex.test(initialDateValue)) {
 
 if(initialLastDateValue !== "") {
     multitripTabElement.classList.add('active');
+    isMultitripInput.value = true;
     currentTab = 'multitrip-tab';
     new bootstrap.Collapse(multitripContainerElement, {
         show: true
@@ -70,6 +72,7 @@ if(initialLastDateValue !== "") {
 } else {
     uniqueTripTabElement.classList.add('active');
     currentTab = 'unique-trip-tab';
+    isMultitripInput.value = false;
 }
 
 const timePicker = new tempusDominus.TempusDominus(timeElement, {
@@ -96,6 +99,7 @@ uniqueTripTabElement.addEventListener('click', () => {
     if(currentTab === "unique-trip-tab"){
         return;
     }
+    isMultitripInput.value = false;
     currentTab = "unique-trip-tab";
     uniqueTripTabElement.classList.add('active');
     multitripTabElement.classList.remove('active');
@@ -116,6 +120,7 @@ multitripTabElement.addEventListener('click', () => {
     if(currentTab === "multitrip-tab"){
         return;
     }
+    isMultitripInput.value = true;
     currentTab = "multitrip-tab";
     uniqueTripTabElement.classList.remove('active');
     multitripTabElement.classList.add('active');

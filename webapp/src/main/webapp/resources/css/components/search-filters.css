@@ -1,7 +1,42 @@
 @import "../base/elements.css";
 
+#custom-errors-container > .error-row > span {
+    max-width: 100%;
+}
+
+#custom-errors-container:not(:has(span)) {
+    display: none;
+}
+
+.error-container:not(:has(span)) {
+    display: none;
+}
+
+.error-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 1em;
+    margin-bottom: 0;
+}
+
+.error-row:not(:has(span)) {
+    display: none;
+}
+
+.error-row > span {
+    flex-grow: 1;
+    word-break: break-word;
+    max-width: 49%;
+}
+
+.error-row > .right-item {
+    margin-left: auto;
+}
+
 .formError{
-    color: red;
+    font-size: 0.9rem;
+    font-weight: 400;
 }
 
 #form-style {
@@ -82,18 +117,7 @@
     justify-content: flex-start;
 }
 
-.input-plus-error-row {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    row-gap: 0.2em;
-}
-
-.input-plus-error-row p {
-    margin-bottom: 0;
-}
-
-.input-plus-error-row:has(div#last-date-picker) {
+.input-row:has(div#last-date-picker) {
     max-width: 49%;
 }
 
