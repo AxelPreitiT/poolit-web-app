@@ -193,6 +193,14 @@ public class UserController extends LoggedUserController {
         return mav;
     }
 
+    @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
+    public ModelAndView changeRoleToDriver(){
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        pawUserDetailsService.update(user);
+        userService.changeToDriver(user);
+        return new ModelAndView("redirect:/trips/create");
+    }
+
     /*
     @RequestMapping(value = "/profile/user", method = RequestMethod.GET)
     public ModelAndView GetUserprofile(){
