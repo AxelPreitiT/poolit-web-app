@@ -1,21 +1,51 @@
-@import "/resources/css/base/elements.css";
+@import "../base/elements.css";
 
 .formError{
     color: red;
 }
 
-.form-style {
+#form-style {
     padding: 1em;
     border-radius: 16px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 0;
 }
 
-.filter-container {
+#search-filters-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    row-gap: 2em;
+    row-gap: 0.5em;
     margin-bottom: 0;
+}
+
+#search-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0;
+}
+
+#search-tabs > li {
+    flex-grow: 1;
+    flex-wrap: nowrap;
+}
+
+#search-tabs a {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    column-gap: 0.5em;
+    width: 100%;
+    cursor: pointer;
+}
+
+#two-way-search-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 1.5em;
 }
 
 .route-filter, .date-filter, .price-filter {
@@ -63,35 +93,20 @@
     margin-bottom: 0;
 }
 
+.input-plus-error-row:has(div#last-date-picker) {
+    max-width: 49%;
+}
+
+#day-repeat-container {
+    padding: 0 0 0.2em 0.5em;
+}
+
 #day-repeat-container * {
     font-size: 0.8rem;
 }
 
-#day-repeat-text {
-    text-transform: capitalize;
-}
-
 #last-date-button:disabled {
     border-color: transparent;
-}
-
-#is-multitrip-container {
-    width: 100%;
-    column-gap: 5%;
-}
-
-#is-multitrip-container > input {
-    border: 1px solid #FFA216;
-}
-
-#is-multitrip-text {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    column-gap: 0.2em;
-    flex-wrap: wrap;
 }
 
 .title-row * {
