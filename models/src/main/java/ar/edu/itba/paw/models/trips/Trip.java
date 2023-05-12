@@ -164,4 +164,8 @@ public class Trip {
         return price * getQueryTotalTrips();
     }
 
+    public enum SortType{
+        PRICE(),
+        TIME(),
+    }
 }

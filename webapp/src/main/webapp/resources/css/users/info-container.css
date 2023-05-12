@@ -21,6 +21,17 @@ a {
     margin-bottom: 1%;
 }
 
+.review-empty-container{
+    border-top: 2px solid #8b8b8b ;
+    display: flex;
+    min-height: 70px;
+    padding: 1.5% 1% 1% 1%;
+    flex-direction: row;
+    align-items: center;
+    gap: 3%;
+    justify-content: center;
+}
+
 .plus-btn{
     border-top: 2px solid #8b8b8b ;
     display: flex;

@@ -202,3 +202,18 @@
         margin: 0;
     }
 }
+
+.modal-body{
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+}
+
+.warning-text{
+    display: flex;
+    margin-top: 2%;
+}
+
+.modal-profile{
+    min-width: fit-content;
+}
