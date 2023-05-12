@@ -75,6 +75,16 @@
             </div>
         </a>
     </div>
+    <c:if test="${!(empty allowReview) && allowReview}">
+        <div class="review-trip-container">
+            <a href="<c:url value="/review/${trip.tripId}"/>">
+                <button type="submit" class="btn button-style button-color shadow-btn">
+                    <i class="bi bi-plus-lg light-text h4"></i>
+                    <span class="button-text-style light-text h4">Review</span>
+                </button>
+            </a>
+        </div>
+    </c:if>
     <c:if test="${!(empty allowDelete) && allowDelete}">
         <div class="delete-trip-container">
             <button type="submit" class="btn rounded-circle button-style button-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">

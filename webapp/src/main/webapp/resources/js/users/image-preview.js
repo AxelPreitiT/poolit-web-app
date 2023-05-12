@@ -1,34 +1,30 @@
-const input = document.getElementById('imageFile');
+const inputElement = document.getElementById('image-file');
+const labelElement = document.getElementById("image-label");
 const preview = document.querySelector('.preview');
 
-
-document.getElementById('imageFile').addEventListener('change', updateImageDisplay);
+inputElement.addEventListener('change', updateImageDisplay);
 
 function updateImageDisplay() {
-  while(preview.firstChild) {
-    preview.removeChild(preview.firstChild);
+  while (labelElement.firstChild) {
+    labelElement.removeChild(labelElement.firstChild);
   }
 
-  const curFiles = input.files;
+  const curFiles = inputElement.files;
   if (curFiles.length === 0) {
-    const para = document.createElement('p');
-    para.textContent = 'No files currently selected for upload';
-    preview.appendChild(para);
+    const icon = document.createElement('i');
+    icon.classList.add("bi", "bi-person-fill", "light-text", "h1");
+    labelElement.appendChild(icon);
   } else {
-    const list = document.createElement('div');
-    preview.appendChild(list);
+    const imageFile = curFiles[0];
+    const image = document.createElement('img');
+    image.src = URL.createObjectURL(imageFile);
+    labelElement.appendChild(image);
 
-    for (const file of curFiles) {
-      const listItem = document.createElement('div');
-      const para = document.createElement('p');
-
-      const image = document.createElement('img');
-      image.src = URL.createObjectURL(file);
-      listItem.appendChild(image);
-      listItem.appendChild(para);
-
-
-      list.appendChild(listItem);
-    }
+    const iconOverlay = document.createElement('div');
+    iconOverlay.classList.add("overlay");
+    const icon = document.createElement('i');
+    icon.classList.add("icon", "bi", "bi-pencil-fill", "secondary-color", "h1");
+    iconOverlay.appendChild(icon);
+    labelElement.appendChild(iconOverlay);
   }
 }
