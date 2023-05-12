@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
         final org.springframework.security.core.userdetails.User aux = (org.springframework.security.core.userdetails.User) authUser;
         return findByEmail(aux.getUsername());
     }
+
     @Override
     public Optional<User> findById(long userId){
         return userDao.findById(userId);
