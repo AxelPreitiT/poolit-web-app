@@ -81,8 +81,9 @@ public class UserController extends LoggedUserController {
         Image image=imageService.createImage(data);
         City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
         try {
+            // TODO: Remove birthdate from form
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                    form.getPassword(), form.getBirthdate(), originCity, null, image.getImageId());
+                    form.getPassword(), "2001-12-25", originCity, null, image.getImageId());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             return createUserGet(form);
