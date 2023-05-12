@@ -13,6 +13,12 @@
 </head>
 <body class="background-bg-color">
     <div class="main-container-style">
+        <div id="banner-container">
+            <img src="<c:url value="/resources/images/register/register-banner.jpg"/>" alt="banner" id="banner-image">
+            <div id="banner-content">
+                <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="poolit" id="banner-logo">
+            </div>
+        </div>
         <div id="form-container" class="primary-bg-color">
             <c:url value="${postUrl}" var="createUser" />
             <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
@@ -48,7 +54,7 @@
                         </div>
                         <div class="error-row">
                             <form:errors path="username" cssClass="error-style danger" element="span"/>
-                            <form:errors path="surname" cssClass="error-style danger" element="span"/>
+                            <form:errors path="surname" cssClass="error-style danger error-style-right" element="span"/>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
@@ -62,7 +68,7 @@
                         </div>
                         <div class="error-row">
                             <form:errors path="email" cssClass="error-style danger" element="span"/>
-                            <form:errors path="phone" cssClass="error-style danger" element="span"/>
+                            <form:errors path="phone" cssClass="error-style danger error-style-right" element="span"/>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
@@ -76,7 +82,7 @@
                         </div>
                         <div class="error-row">
                             <form:errors path="password" cssClass="error-style danger" element="span"/>
-                            <form:errors path="repeatPassword" cssClass="error-style danger" element="span"/>
+                            <form:errors path="repeatPassword" cssClass="error-style danger error-style-right" element="span"/>
                         </div>
                         <div class="error-row error-row-center">
                             <form:errors cssClass="error-style danger" element="span"/>

@@ -2,15 +2,38 @@
 @import "users.css";
 
 div.main-container-style {
-    background-image: linear-gradient(270deg, rgba(28,76,150,.3), rgba(28,76,150,.2)), url("../../images/register/register-banner.jpg");
-    background-size: cover;
-    background-position: top;
-    background-repeat: no-repeat;
     padding: 0;
     min-width: fit-content;
     margin-left: 10% !important;
     margin-right: 10% !important;
     margin-bottom: 0 !important;
+    display: flex;
+    flex-direction: row;
+}
+
+#banner-container {
+    width: 60%;
+    position: relative;
+    border-radius: 12px 0 0 12px;
+}
+
+#banner-container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+#banner-content {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    padding-top: 0.8em;
+    transform: translateX(-50%);
+}
+
+#banner-content > img {
+    height: 4em;
 }
 
 #form-container {
@@ -139,7 +162,7 @@ div.main-container-style {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     column-gap: 0.5em;
 }
 
@@ -162,6 +185,10 @@ div.main-container-style {
     max-width: fit-content;
 }
 
+.error-style.error-style-right {
+    margin-left: auto;
+}
+
 .login-container {
     display: flex;
     flex-direction: row;
@@ -171,16 +198,24 @@ div.main-container-style {
 }
 
 hr {
-    margin: 0.5em 0;
+    margin: 1em 0;
 }
 
 @media (max-width: 1200px) {
+    #banner-container {
+        width: 50%;
+    }
+
     #form-container {
         width: 50%;
     }
 }
 
 @media (max-width: 900px) {
+    #banner-container {
+        display: none;
+    }
+
     #form-container {
         width: 100%;
     }
