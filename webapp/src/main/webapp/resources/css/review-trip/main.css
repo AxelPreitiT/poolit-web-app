@@ -1,0 +1,194 @@
+.trip-route{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    padding-top: 4%;
+}
+
+.icon-style, .title-style{
+    font-size: 2.5vw;
+}
+
+.description-style {
+    font-size: 1.25vw;
+}
+
+.location-line{
+    width: 100vw;
+    height: 2.5vw;
+    align-items: end;
+    position: relative;
+}
+
+.location-line-content {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.dotted-line {
+    border-bottom: 2px dashed black;
+    width: 100%;
+}
+
+.trip-details-style{
+    margin: 4% 10% 0 10%;
+    padding: 2% 5%;
+    border-radius: 4px 4px 0 0;
+    height: fit-content;
+    min-height: 100%;
+}
+
+#animated-car {
+    position: relative;
+    animation: myanimation 100s,bounce 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    line-height: 1em;
+    margin-bottom: 0;
+    font-size: 1.75vw;
+}
+
+@keyframes myanimation {
+    0% {
+        left: 0;
+        transform: translateX(-100%)
+    }
+    100% {
+        left: 90%;
+        transform: translateX(100%)
+    }
+}
+
+@keyframes bounce {
+    0%,
+    25%,
+    50%,
+    75%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-5px);
+    }
+    60% {
+        transform: translateY(-3px);
+    }
+}
+
+.location-container {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 0.25em;
+}
+
+.location-data{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    box-sizing: content-box;
+}
+
+.data-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    margin-top: 5%;
+    width: 100%;
+}
+
+.driver-data, .passenger-data, .passenger-form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1.5em;
+    width: 100%;
+}
+
+.driver-data {
+    border-right: 1px solid lightgray;
+    gap: 2em;
+}
+
+.passenger-data {
+    border-left: 1px solid lightgray;
+    padding-left: 3%;
+}
+
+.driver-data-item-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.driver-data-item-title h6 {
+    margin-bottom: 0;
+}
+
+.driver-data-item p {
+    margin-bottom: 0;
+}
+
+.passenger-form {
+    margin-block-end: 0;
+    height: 100%;
+}
+
+.passenger-data-item {
+    display: flex;
+    align-items: start;
+    gap: 0.5em;
+    width: 100%;
+}
+
+.icon-container{
+    margin-top: 4%;
+}
+
+.input-style {
+    background-color: white;
+}
+
+.form-floating {
+    width: 60%;
+    max-height: fit-content;
+}
+
+.confirm-btn {
+    margin-left: auto;
+    margin-top: auto;
+}
+
+.confirm-btn button {
+    display: block;
+    margin-left: auto;
+}
+
+.confirm-btn p {
+    margin-bottom: 0;
+}
+
+label {
+    font-size: 1.25vw;
+}
+
+.form-floating:not(.form-floating:disabled)::before {
+    width: 0;
+}
+
+.form-floating>.form-control {
+    height: 4vw;
+}
+
+.error-container{
+    display: block;
+    justify-content: center;
+    height: 20px;
+}
+
+.formError{
+    color: red;
+}

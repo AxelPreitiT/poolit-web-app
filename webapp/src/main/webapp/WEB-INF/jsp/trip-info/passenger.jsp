@@ -40,38 +40,100 @@
       </div>
     </div>
     <div id="button-container">
-      <div class="delete-trip-container">
-        <button type="submit" class="btn button-style  danger-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
-          <i class="bi bi-x light-text h3"></i>
-          <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.deleteButton"/></span>
-        </button>
-      </div>
-      <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h3 class="modal-title danger"><spring:message code="tripCard.user.cancel"/></h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <!-- Avisar a axel que toque un poco el formato con el de hasta -->
-              <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
-              <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
-                <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
-              </button>
-              <c:url value="/trips/${trip.tripId}/cancel" var="cancelTripUrl"/>
-              <form:form method="DELETE" action="${cancelTripUrl}">
-                <button type="submit" class="btn danger-bg-color">
-                  <span class="light-text"><spring:message code="tripCard.user.btn.cancel"/></span>
+      <c:if test="${!done}">
+        <div class="delete-trip-container">
+          <button type="submit" class="btn button-style  danger-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
+            <i class="bi bi-x light-text h3"></i>
+            <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.deleteButton"/></span>
+          </button>
+        </div>
+        <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title danger"><spring:message code="tripCard.user.cancel"/></h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <!-- Avisar a axel que toque un poco el formato con el de hasta -->
+                <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                  <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                 </button>
-              </form:form>
+                <c:url value="/trips/${trip.tripId}/cancel" var="cancelTripUrl"/>
+                <form:form method="DELETE" action="${cancelTripUrl}">
+                  <button type="submit" class="btn danger-bg-color">
+                    <span class="light-text"><spring:message code="tripCard.user.btn.cancel"/></span>
+                  </button>
+                </form:form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </c:if>
+      <c:if test="${done}">
+        <div class="delete-trip-container">
+          <c:if test="${!reviewed}">
+            <button type="submit" class="btn button-style  secondary-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
+              <i class="bi bi-plus-lg light-text h3"></i>
+              <span class="button-text-style light-text h3"><spring:message code="review.btn"/></span>
+            </button>
+          </c:if>
+          <c:if test="${reviewed}">
+            <button type="submit" disabled class="btn button-style success-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
+              <i class="bi bi-check-lg light-text h3"></i>
+              <span class="button-text-style light-text h3"><spring:message code="review.btnDisable"/></span>
+            </button>
+          </c:if>
+        </div>
+        <div class="modal fade" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title secondary-color"><spring:message code="review.title"/></h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <c:url value="/trips/${trip.tripId}/review" var="reviewTripUrl"/>
+                <form:form modelAttribute="reviewForm" method="POST" action="${reviewTripUrl}">
+                <div class="review-form">
+                  <div class="rating-container">
+                    <h3><spring:message code="review.rating"/></h3>
+                    <div class="rating">
+                      <form:select path="rating" cssClass="form-select form-select-sm">
+                        <form:option value="1" label="☆"/>
+                        <form:option value="2" label="☆☆"/>
+                        <form:option value="3" label="☆☆☆"/>
+                        <form:option value="4" label="☆☆☆☆"/>
+                        <form:option value="5" label="☆☆☆☆☆"/>
+                      </form:select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <h3><spring:message code="review.review"/></h3>
+                    <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="Ingrese review del viaje"/>
+                  </div>
+                  <div>
+                    <h6 class="italic-text"><spring:message code="review.textInfo"/></h6>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn danger-bg-color" data-bs-dismiss="modal">
+                  <span class="light-text"><spring:message code="review.cancel"/></span>
+                </button>
+                <button type="submit" class="btn primary-bg-color">
+                  <span class="light-text"><spring:message code="review.submit"/></span>
+                </button>
+                </form:form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </c:if>
       <c:url value="/trips/reserved" var="joinUrl"/>
       <a class="btn button-style button-bg-color shadow-btn">
         <i class="bi bi-car-front-fill light-text h3"></i>
@@ -80,5 +142,13 @@
     </div>
   </div>
 </div>
+<c:if test="${!(empty tripReviewed) && tripReviewed}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+      <jsp:param name="title" value="review.toast.title"/>
+      <jsp:param name="message" value="review.toast.message"/>
+    </jsp:include>
+  </div>
+</c:if>
 </body>
 </html>

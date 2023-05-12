@@ -20,4 +20,5 @@ public interface UserService {
 
     public void changeRole(long userId, String role);
 
+    public void changeToDriver(User user);
 }
