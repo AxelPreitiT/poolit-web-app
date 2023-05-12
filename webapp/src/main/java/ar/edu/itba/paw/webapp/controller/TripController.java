@@ -1,14 +1,11 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.CarService;
-import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.TripService;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.interfaces.services.ImageService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.CreateTripForm;
+import ar.edu.itba.paw.webapp.form.ReviewForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +23,7 @@ import java.util.Optional;
 @Controller
 public class TripController extends LoggedUserController {
     private final TripService tripService;
+    private final ReviewService reviewService;
     private final CityService cityService;
     private final UserService userService;
     private final CarService carService;
@@ -45,9 +43,10 @@ public class TripController extends LoggedUserController {
     private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
-    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
+    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
         super(userService);
         this.tripService = tripService;
+        this.reviewService = reviewService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
@@ -79,9 +78,14 @@ public class TripController extends LoggedUserController {
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
+        final boolean done = reviewService.canReview(passenger);
+        final boolean reviewed = reviewService.haveReview(trip ,passenger);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
+        mav.addObject("done",done);
+        mav.addObject("reviewed",reviewed);
         mav.addObject("passenger",passenger);
+        mav.addObject("reviewForm", new ReviewForm());
         return mav;
     }
 
@@ -108,6 +112,10 @@ public class TripController extends LoggedUserController {
         mav.addObject("successInscription",true);
         return mav;
     }
+
+
+
+
     //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
     public ModelAndView getSearchedTrips(
@@ -219,6 +227,17 @@ public class TripController extends LoggedUserController {
         tripService.removePassenger(trip,user);
         final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         mav.addObject("tripCancelled", true);
+        return mav;
+    }
+
+    @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
+    public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
+                                   @ModelAttribute("reviewForm") final ReviewForm form){
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
+        reviewService.createReview(tripId, passenger, form.getRating(), form.getReview());
+        final ModelAndView mav = tripDetailsForPassenger(tripId, user);
+        mav.addObject("tripReviewed", true);
         return mav;
     }
 }

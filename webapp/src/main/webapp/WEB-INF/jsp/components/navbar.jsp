@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
@@ -39,6 +40,44 @@
                         </a>
                     </div>
                 </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <div class="create-trip-btn" data-bs-toggle="modal" data-bs-target="#modal-create">
+                        <button class="btn button-style button-color shadow-btn">
+                            <i class="bi bi-plus light-text h3"></i>
+                            <span class="button-text-style light-text h3"><spring:message code="navbar.btnCreated"/></span>
+                        </button>
+                    </div>
+                    <div class="modal fade" id="modal-create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title danger"><spring:message code="navbar.modal.title"/></h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <span class="text"><spring:message code="navbar.modal.warning"/></span>
+                                    </div>
+                                    <div class="warning-text">
+                                        <span class="italic-text text bold"><spring:message code="navbar.modal.secondWarning"/></span>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                                        <span class="light-text"><spring:message code="navbar.modal.btnCancel"/></span>
+                                    </button>
+                                    <c:url value="/changeRole" var="changeRole"/>
+                                    <form:form method="POST" action="${changeRole}">
+                                        <button type="submit" class="btn secondary-bg-color">
+                                            <span class="light-text"><spring:message code="navbar.modal.btnAccept"/></span>
+                                        </button>
+                                    </form:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </sec:authorize>
             </sec:authorize>
         </div>
         <sec:authorize access="isAuthenticated()">
@@ -47,7 +86,7 @@
                     <c:url value="/image/${loggedUser.userImageId}" var="imageUrl"/>
                     <img class="image-photo" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>">
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end primary-bg-color">
+                <ul class="dropdown-menu dropdown-menu-end primary-bg-color modal-profile">
                     <li>
                         <a class="dropdown-item" href="<c:url value="/users/profile"/>">
                             <div class="container text-center">

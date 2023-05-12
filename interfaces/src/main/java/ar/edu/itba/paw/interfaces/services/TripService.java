@@ -72,4 +72,5 @@ public interface TripService {
             final String startTime, final String endDate, final String endTime,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
             final int page, final int pageSize);
+
 }

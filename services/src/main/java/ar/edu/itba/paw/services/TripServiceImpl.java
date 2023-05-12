@@ -347,4 +347,5 @@ public class TripServiceImpl implements TripService {
         LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime);
         return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,page,pageSize);
     }
+
 }
