@@ -21,6 +21,8 @@ import java.util.Optional;
 @Service
 public class TripServiceImpl implements TripService {
 
+    private static final int OFFSET_MINUTES = 30;
+
     @Autowired
     private EmailService emailService;
 
@@ -322,17 +324,27 @@ public class TripServiceImpl implements TripService {
         }
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
 
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,OFFSET_MINUTES,Optional.empty(),Optional.empty(),getTripSortType("price"),false, page, pageSize);
     }
+    private Trip.SortType getTripSortType(final String sortType){
+        try{
+            Trip.SortType aux = Trip.SortType.valueOf(sortType.toUpperCase());
+            return aux;
+        }catch (Exception e){
+            return Trip.SortType.PRICE;
+        }
+    }
+
+    //TODO: sacar los optional que nunca se usan
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
-            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
             final int page, final int pageSize){
         validatePageAndSize(page,pageSize);
-        Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
-        LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime.get());
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),Optional.of(endDateTime),minPrice,maxPrice,page,pageSize);
+        LocalDateTime startDateTime = getLocalDateTime(startDate,startTime).orElseThrow(IllegalArgumentException::new);
+        LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,page,pageSize);
     }
 }

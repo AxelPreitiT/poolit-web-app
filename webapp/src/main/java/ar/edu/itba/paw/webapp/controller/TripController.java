@@ -113,6 +113,8 @@ public class TripController extends LoggedUserController {
     public ModelAndView getSearchedTrips(
             @Valid @ModelAttribute("searchTripForm") final SearchTripForm form,
             final BindingResult errors,
+            @RequestParam(value = "sortType", required = false, defaultValue = "price") final String sortType,
+            @RequestParam(value = "descending",required = false,defaultValue = "false") final boolean descending,
             @RequestParam(value = "page",required = false,defaultValue = "1")  final int page){
 
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
@@ -122,7 +124,7 @@ public class TripController extends LoggedUserController {
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
-        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),page-1,PAGE_SIZE);
+        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,page-1,PAGE_SIZE);
         mav.addObject("tripsContent", tripsContent);
         return mav;
     }
