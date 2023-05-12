@@ -1,5 +1,6 @@
 @import "../base/elements.css";
 @import "users.css";
+@import "../base/elements.css";
 
 .full-container{
     display: flex;
@@ -12,6 +13,9 @@ div.main-container-style {
     margin-right: 35%;
 }
 
+.error-container:not(:has(span)) {
+    display: none;
+}
 
 .error-container{
     height: 20px;
@@ -19,6 +23,8 @@ div.main-container-style {
 
 .error{
     color: red;
+    font-size: 1.2rem;
+    font-weight: 400;
 }
 
 .form-floating{
