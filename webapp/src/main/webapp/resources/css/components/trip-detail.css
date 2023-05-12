@@ -1,4 +1,4 @@
-@import "/resources/css/base/elements.css";
+@import "../base/elements.css";
 
 #main-header-row > hr {
     margin: 0;

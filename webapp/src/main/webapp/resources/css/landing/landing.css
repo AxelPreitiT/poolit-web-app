@@ -1,4 +1,4 @@
-@import "/resources/css/base/elements.css";
+@import "../base/elements.css";
 
 #banner-container {
     background-image: linear-gradient(rgba(28,76,150,.4), rgba(213,227,247,.2)), url("../../images/landing/landing-banner.jpg");

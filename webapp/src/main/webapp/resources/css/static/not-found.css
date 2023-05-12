@@ -1,3 +1,5 @@
+@import "../base/elements.css";
+
 .title-container {
     display: flex;
     flex-direction: row;
