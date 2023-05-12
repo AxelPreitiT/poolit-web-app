@@ -1,3 +1,4 @@
+@import "../base/elements.css";
 
 #trip-card-list-container {
     display: flex;

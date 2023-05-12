@@ -1,5 +1,5 @@
-@import "/resources/css/base/colors.css";
-@import "/resources/css/base/elements.css";
+@import "../base/colors.css";
+@import "../base/elements.css";
 
 .navbar {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
