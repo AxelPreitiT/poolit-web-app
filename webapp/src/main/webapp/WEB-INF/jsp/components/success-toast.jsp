@@ -21,4 +21,4 @@
     </div>
 </div>
 
-<script src="<c:url value="/resources/js/components/successToast.js"/>" type="text/javascript"></script>```
+<script src="<c:url value="/resources/js/components/successToast.js"/>" type="text/javascript"></script>
