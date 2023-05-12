@@ -85,4 +85,13 @@ CREATE TABLE IF NOT EXISTS trips_cars_drivers(
     CONSTRAINT trips_to_cars FOREIGN KEY(car_id) references cars(car_id)
 );
 
+CREATE TABLE IF NOT EXISTS reviews(
+  review_id SERIAL PRIMARY KEY,
+  trip_id INT NOT NULL,
+  user_id INT NOT NULL,
+  rating INT NOT NULL,
+  review TEXT NOT NULL
+);
+
+
 

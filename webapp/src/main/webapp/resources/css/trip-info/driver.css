@@ -1,5 +1,5 @@
-@import "/resources/css/base/elements.css";
-@import "/resources/css/trip-detail/trip-detail.css";
+@import "../base/elements.css";
+@import "../trip-detail/trip-detail.css";
 
 #button-container {
     display: flex;
@@ -76,4 +76,11 @@
 }
 .detail {
     text-transform: capitalize;
+}
+
+.review-form{
+   height: 200px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
 }
