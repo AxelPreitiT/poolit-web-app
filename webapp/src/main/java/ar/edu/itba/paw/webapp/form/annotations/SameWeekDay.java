@@ -11,19 +11,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = PriceValidator.class)
+@Constraint(validatedBy = SameWeekDayValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Price {
-    String message() default "{Price.error}";
+public @interface SameWeekDay {
+    String message() default "{SameWeekDay.error}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }
 
-class PriceValidator implements ConstraintValidator<Price, SearchTripForm> {
+class SameWeekDayValidator implements ConstraintValidator<SameWeekDay, SearchTripForm> {
 
     @Override
     public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
-        return form.getMinPrice() == null || form.getMaxPrice() == null || form.getMinPrice().compareTo(form.getMaxPrice()) <= 0;
+        return !form.isMultitrip() || form.getLastDate() == null || form.getDate().getDayOfWeek().equals(form.getLastDate().getDayOfWeek());
     }
 }
