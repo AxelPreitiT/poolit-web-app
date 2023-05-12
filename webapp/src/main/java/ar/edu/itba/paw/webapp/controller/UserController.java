@@ -103,7 +103,7 @@ public class UserController extends LoggedUserController {
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
-    public ModelAndView profileView(){
+    public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded){
 //        SecurityContext pepe = SecurityContextHolder.getContext();
         //TODO: ver por que explota si no esta autenticado
 //        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -130,6 +130,7 @@ public class UserController extends LoggedUserController {
         mav.addObject("futureTrips", futureTrips);
         mav.addObject("pastTrips",pastTrips);
         mav.addObject("cars", cars);
+        mav.addObject("carAdded", carAdded);
         return mav;
     }
 

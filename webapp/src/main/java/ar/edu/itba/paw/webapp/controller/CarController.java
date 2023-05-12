@@ -36,8 +36,7 @@ public class CarController extends LoggedUserController {
 
     @RequestMapping(value = "/cars/create", method = RequestMethod.GET)
     public ModelAndView createCarForm(@ModelAttribute("createCarForm") final CreateCarForm form) {
-        final ModelAndView mav = new ModelAndView("create-auto/main");
-        return mav;
+        return new ModelAndView("create-car/main");
     }
 
     @RequestMapping(value = "/cars/create", method = RequestMethod.POST)
@@ -50,8 +49,6 @@ public class CarController extends LoggedUserController {
         byte[] data = form.getImageFile().getBytes();
         final Image image=imageService.createImage(data);
         carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId() );
-        //TODO: Hacer un redirect si se hace desde el perfil la creacion de autos
-        return new ModelAndView("create-auto/success");
-
+        return new ModelAndView("redirect:/users/profile?carAdded=true");
     }
 }
