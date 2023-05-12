@@ -1,0 +1,67 @@
+package ar.edu.itba.paw.service;
+
+import ar.edu.itba.paw.interfaces.persistence.TripDao;
+import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.trips.Trip;
+import ar.edu.itba.paw.services.EmailServiceImpl;
+import ar.edu.itba.paw.services.TripServiceImpl;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+
+import org.mockito.junit.MockitoJUnitRunner;
+
+import java.time.LocalDateTime;
+
+@RunWith(MockitoJUnitRunner.class)
+public class TripServiceImplTest {
+
+    private static final User user = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1), "USER", 1L);
+    private static final City originCity = new City(1, "Agronomía", 1);
+    private static final City destinationCity = new City(1, "Agronomía", 1);
+    private static final String originAddress = "ORIGIN ADDRESS";
+    private static final String destinationAddress = "DESTINATION ADDRESS";
+    private static final Car car = new Car(1, "ABC123", "INFO", user, 1L);
+    private static final String startDate = "02/05/2023";
+    private static final String startTime = "10:00";
+    private static final double price = 10.0;
+    private static final int maxSeats = 4;
+    private static final User driver = new User(2, "DRIVER", "SURNAME", "driver@gmail.com", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1), "DRIVER", 1L);
+    ;
+    private static final String endDate = "02/05/2023";
+    private static final String endTime = "10:00";
+    private static final long tripId = 1L;
+
+
+    @Mock
+    private TripDao tripDao;
+    @InjectMocks
+    private TripServiceImpl tripService;
+
+    @Mock
+    private EmailService emailService;
+
+    @Test
+    public void TestCreateTrip(){
+        // precondiciones
+        when(tripDao.create(eq(originCity), eq(originAddress), eq(destinationCity), eq(destinationAddress), eq(car), any(), any(), eq(false), eq(price), eq(maxSeats), eq(driver)))
+                .thenReturn(new Trip(1, originCity, originAddress, destinationCity, destinationAddress, LocalDateTime.now(), LocalDateTime.now(), maxSeats, driver, car, 0, price));
+
+        // ejercitar la clase
+        Trip newTrip = tripService.createTrip(originCity, originAddress, destinationCity, destinationAddress, car, startDate, startTime, price, maxSeats, driver, endDate, endTime);
+
+        // assertions
+        Assert.assertNotNull(newTrip);
+        Assert.assertEquals(tripId, newTrip.getTripId());
+    }
+
+
+}
