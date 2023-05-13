@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
-import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
@@ -22,8 +21,8 @@ public class CarDaoImpl implements CarDao {
                     new User(resultSet.getLong("user_id"),resultSet.getString("username"),
                             resultSet.getString("surname"),resultSet.getString("email"),
                             resultSet.getString("phone"),resultSet.getString("password"),
-                            resultSet.getTimestamp("birthdate").toLocalDateTime(),
                             new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")),
+                            new Locale(resultSet.getString("mail_locale")),
                             resultSet.getString("user_role"), resultSet.getLong("user_image_id")),
                             resultSet.getLong("image_id"));
 

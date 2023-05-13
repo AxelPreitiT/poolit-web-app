@@ -2,19 +2,19 @@ package ar.edu.itba.paw.models;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
+import java.util.Locale;
 
 public class Passenger extends User{
 
     private final LocalDateTime startDateTime;
     private final LocalDateTime endDateTime;
-    public Passenger(long userId, String username, String surname, String email, String phone, String password, LocalDateTime birthdate, City bornCity, String role,long imageId, LocalDateTime startDateTime,LocalDateTime endDateTime){
-        super(userId, username, surname, email, phone, password, birthdate, bornCity, role,imageId);
+    public Passenger(long userId, String username, String surname, String email, String phone, String password, City bornCity, Locale mailLocale, String role, long imageId, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        super(userId, username, surname, email, phone, password, bornCity, mailLocale, role,imageId);
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
     public Passenger(User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
-        super(user.getUserId(),user.getName(),user.getSurname(),user.getEmail(),user.getPhone(),user.getPassword(),user.getBirthdate(),user.getBornCity(),user.getRole(),user.getUserImageId());
+        super(user.getUserId(),user.getName(),user.getSurname(),user.getEmail(),user.getPhone(),user.getPassword(),user.getBornCity(),user.getMailLocale(),user.getRole(),user.getUserImageId());
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }

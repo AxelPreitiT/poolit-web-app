@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -23,7 +24,7 @@ public class CarServiceImplTest {
 
     private static final String plate = "ABC123";
     private static final String infoCar = "INFO";
-    private static final User user = new User(1, "USER", "SURNAME", "EMAIL", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1),"USER", 1L);
+    private static final User user = new User(1, "USER", "SURNAME", "EMAIL", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "USER", 1L);
     private static final long image_id = 1L;
     private static final long carId = 2L;
 

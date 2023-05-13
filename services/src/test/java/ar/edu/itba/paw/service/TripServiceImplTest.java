@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TripServiceImplTest {
@@ -31,7 +32,7 @@ public class TripServiceImplTest {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
-    private static final User user = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1), "USER", 1L);
+    private static final User user = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "USER", 1L);
     private static final City originCity = new City(1, "Agronomía", 1);
     private static final City destinationCity = new City(1, "Agronomía", 1);
     private static final String originAddress = "ORIGIN ADDRESS";
@@ -41,7 +42,7 @@ public class TripServiceImplTest {
     private static final LocalTime startTime = LocalTime.parse("10:00", TIME_FORMAT);
     private static final BigDecimal price = BigDecimal.valueOf(10.0);
     private static final int maxSeats = 4;
-    private static final User driver = new User(2, "DRIVER", "SURNAME", "driver@gmail.com", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1), "DRIVER", 1L);
+    private static final User driver = new User(2, "DRIVER", "SURNAME", "driver@gmail.com", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "DRIVER", 1L);
     ;
     private static final LocalDate endDate = LocalDate.parse("02/05/2023", DATE_FORMAT);
     private static final LocalTime endTime = LocalTime.parse("10:00", TIME_FORMAT);
