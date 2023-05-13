@@ -94,8 +94,8 @@
                         <form:errors path="time" cssClass="formError danger right-item" element="span"/>
                     </div>
                     <div id="multitrip-container" class="collapse">
-                        <div class="input-row collapse" id="day-repeat-container">
-                            <i class="bi bi-arrow-repeat light-text"></i>
+                        <div class="collapse" id="day-repeat-container">
+                            <i class="bi bi-arrow-repeat light-text me-1"></i>
                             <span class="italic-text light-text"><spring:message code="searchFilters.every"/></span>
                             <strong class="italic-text light-text" id="day-repeat-text"></strong>
                             <span class="italic-text light-text"><spring:message code="searchFilters.until"/></span>

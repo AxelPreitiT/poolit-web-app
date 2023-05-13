@@ -19,10 +19,17 @@ import static org.mockito.Mockito.any;
 
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TripServiceImplTest {
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     private static final User user = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1), "USER", 1L);
     private static final City originCity = new City(1, "Agronomía", 1);
@@ -30,14 +37,14 @@ public class TripServiceImplTest {
     private static final String originAddress = "ORIGIN ADDRESS";
     private static final String destinationAddress = "DESTINATION ADDRESS";
     private static final Car car = new Car(1, "ABC123", "INFO", user, 1L);
-    private static final String startDate = "02/05/2023";
-    private static final String startTime = "10:00";
-    private static final double price = 10.0;
+    private static final LocalDate startDate = LocalDate.parse("02/05/2023", DATE_FORMAT);
+    private static final LocalTime startTime = LocalTime.parse("10:00", TIME_FORMAT);
+    private static final BigDecimal price = BigDecimal.valueOf(10.0);
     private static final int maxSeats = 4;
     private static final User driver = new User(2, "DRIVER", "SURNAME", "driver@gmail.com", "PHONE", "PASSWORD", LocalDateTime.now(), new City(1, "Agronomía", 1), "DRIVER", 1L);
     ;
-    private static final String endDate = "02/05/2023";
-    private static final String endTime = "10:00";
+    private static final LocalDate endDate = LocalDate.parse("02/05/2023", DATE_FORMAT);
+    private static final LocalTime endTime = LocalTime.parse("10:00", TIME_FORMAT);
     private static final long tripId = 1L;
 
 
@@ -52,8 +59,8 @@ public class TripServiceImplTest {
     @Test
     public void TestCreateTrip(){
         // precondiciones
-        when(tripDao.create(eq(originCity), eq(originAddress), eq(destinationCity), eq(destinationAddress), eq(car), any(), any(), eq(false), eq(price), eq(maxSeats), eq(driver)))
-                .thenReturn(new Trip(1, originCity, originAddress, destinationCity, destinationAddress, LocalDateTime.now(), LocalDateTime.now(), maxSeats, driver, car, 0, price));
+        when(tripDao.create(eq(originCity), eq(originAddress), eq(destinationCity), eq(destinationAddress), eq(car), any(), any(), eq(false), eq(price.doubleValue()), eq(maxSeats), eq(driver)))
+                .thenReturn(new Trip(1, originCity, originAddress, destinationCity, destinationAddress, LocalDateTime.now(), LocalDateTime.now(), maxSeats, driver, car, 0, price.doubleValue()));
 
         // ejercitar la clase
         Trip newTrip = tripService.createTrip(originCity, originAddress, destinationCity, destinationAddress, car, startDate, startTime, price, maxSeats, driver, endDate, endTime);
