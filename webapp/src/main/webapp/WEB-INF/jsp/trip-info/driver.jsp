@@ -78,7 +78,7 @@
     </div>
     <div id="button-container">
       <div class="delete-trip-container">
-        <button class="btn button-style shadow-btn danger-bg-color" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
+        <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
           <i class="bi bi-trash-fill light-text h5"></i>
           <span class="button-text-style light-text h3"><spring:message code="tripInfo.driver.deleteButton"/></span>
         </button>
@@ -91,17 +91,20 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-              <!-- Avisar a axel que toque un poco el formato con el de hasta -->
-              <span class="text"><spring:message code="tripCard.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+              <span class="text"><spring:message code="tripCard.warning.title"/>
+                <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
+                <strong class="secondary-color">-</strong>
+                <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
+              </span>
               <span class="text"><spring:message code="tripCard.warning.messege"/></span>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+              <button type="button" class="btn primary-button" data-bs-dismiss="modal">
                 <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
               </button>
               <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
               <form:form method="DELETE" action="${deleteTripUrl}">
-                <button type="submit" class="btn danger-bg-color">
+                <button type="submit" class="btn danger-button">
                   <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
                 </button>
               </form:form>
@@ -110,7 +113,7 @@
         </div>
       </div>
       <c:url value="/trips/created" var="myTripsUrl"/>
-      <a href="${myTripsUrl}" class="btn button-style button-bg-color shadow-btn">
+      <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
         <i class="bi bi-car-front-fill light-text h3"></i>
         <span class="button-text-style light-text h3"><spring:message code="tripInfo.driver.button"/></span>
       </a>

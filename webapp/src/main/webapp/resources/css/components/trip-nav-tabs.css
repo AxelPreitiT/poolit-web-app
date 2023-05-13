@@ -1,3 +1,4 @@
+@import "../base/elements.css";
 
 #time-tabs-row > nav > .nav-link {
     border-top: none;

@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -93,6 +94,7 @@ public class UserServiceImpl implements UserService {
         final org.springframework.security.core.userdetails.User aux = (org.springframework.security.core.userdetails.User) authUser;
         return findByEmail(aux.getUsername());
     }
+
     @Override
     public Optional<User> findById(long userId){
         return userDao.findById(userId);
@@ -112,4 +114,10 @@ public class UserServiceImpl implements UserService {
         }
         userDao.changeRole(userId, role);
     }
+
+    @Override
+    public void changeToDriver(User user) {
+        userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
+    }
+
 }

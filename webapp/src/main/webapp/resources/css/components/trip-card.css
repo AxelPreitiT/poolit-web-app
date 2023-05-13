@@ -1,4 +1,4 @@
-@import "/resources/css/base/elements.css";
+@import "../base/elements.css";
 
 .card-container {
     position: relative;
@@ -127,6 +127,9 @@ a {
     z-index: 2;
     right: -20px;
     top: -20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .delete-trip-container form {
@@ -135,4 +138,23 @@ a {
 
 .delete-trip-container button {
     aspect-ratio: 1/1;
+}
+
+.bnt-review{
+    display: flex;
+    flex-direction: row;
+}
+
+.review-trip-container {
+    position: absolute;
+    z-index: 2;
+    right: -20px;
+    top: -20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.modal-dialog {
+    max-width: fit-content !important;
 }

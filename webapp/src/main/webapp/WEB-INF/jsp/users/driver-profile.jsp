@@ -16,8 +16,7 @@
     <c:url value="/users/profile" var="userProfileUrl"/>
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
         <jsp:param name="user" value="${user}"/>
-        <jsp:param name="role" value="USER"/>
-        <jsp:param name="path" value="${userProfileUrl}"/>
+        <jsp:param name="rating" value="${rating}"/>
     </jsp:include>
     <div class="List-properties-container">
         <ul class="nav nav-justified-pills mb-3" id="pills-tab" role="tablist">
@@ -85,7 +84,14 @@
 
 
     </div>
-</div>
+    <c:if test="${!(empty carAdded) && carAdded}">
+        <div id="toast-container">
+            <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                <jsp:param name="title" value="createCar.success.toast.title"/>
+                <jsp:param name="message" value="createCar.success.toast.message"/>
+            </jsp:include>
+        </div>
+    </c:if>
 </body>
 </html>
 
