@@ -28,11 +28,13 @@
                 <div class="section-container">
                     <div class="input-container">
                         <div class="input-row">
+                            <spring:message code="createTrip.city" var="city"/>
                             <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                 <jsp:param name="id" value="originCityId"/>
-                                <jsp:param name="defaultText" value="Ciudad"/>
+                                <jsp:param name="defaultText" value="${city}"/>
                             </jsp:include>
-                            <form:input path="originAddress" cssClass="form-control form-control-sm" id="originAddress" placeholder="Dirección"/>
+                            <spring:message code="createTrip.address" var="address"/>
+                            <form:input path="originAddress" cssClass="form-control form-control-sm" id="originAddress" placeholder="${address}"/>
                         </div>
                         <div class="error-row">
                             <form:errors path="originCityId" cssClass="formError" element="span"/>
@@ -41,17 +43,19 @@
                     </div>
                     <div class="input-container">
                         <div class="input-row">
-                            <div class="input-group input-group-sm" id="first-date-picker">
+                            <div class="input-group input-group-sm" id="date-picker">
                                 <button type="button" class="btn button-color">
                                     <i class="bi bi-calendar-fill light-text"></i>
                                 </button>
-                                <form:input path="date" cssClass="form-control form-control-sm" id="first-date" placeholder="Fecha"/>
+                                <spring:message code="createTrip.date" var="date"/>
+                                <form:input path="date" cssClass="form-control form-control-sm" id="date" placeholder="${date}"/>
                             </div>
                             <div class="input-group input-group-sm" id="time-picker">
                                 <button type="button" class="btn button-color">
                                     <i class="bi bi-clock-fill light-text"></i>
                                 </button>
-                                <form:input path="time" cssClass="form-control form-control-sm" id="time" placeholder="Hora"/>
+                                <spring:message code="createTrip.time" var="time"/>
+                                <form:input path="time" cssClass="form-control form-control-sm" id="time" placeholder="${time}"/>
                             </div>
                         </div>
                         <div class="error-row">
@@ -61,16 +65,25 @@
                     </div>
                     <div class="input-container">
                         <div class="input-row">
-                            <div class="input-group input-group-sm" id="last-date-picker">
-                                <button type="button" class="btn button-color" id="last-date-button" disabled>
-                                    <i class="bi bi-calendar-fill light-text"></i>
-                                </button>
-                                <form:input path="lastDate" cssClass="form-control form-control-sm" id="last-date" placeholder="Última fecha" disabled="true"/>
+                            <div class="secondary-bg-color"  id="multitrip-toggle">
+                                <form:checkbox path="multitrip" cssClass="form-check-input" id="multitrip-checkbox"/>
+                                <span class="light-text"><spring:message code="createTrip.recurrentTrip"/></span>
                             </div>
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text" id="is-multitrip-container">
-                                    <form:checkbox path="multitrip" cssClass="form-check-input mt-0" id="is-multitrip"/>
-                                    <span class="mb-0 ml-1 placeholder-text"><spring:message code="trip.recurrent"/></span>
+                        </div>
+                        <div class="collapse" id="multitrip-info">
+                            <div class="input-row">
+                                <div>
+                                    <i class="bi bi-arrow-repeat secondary-color" id="repeat-icon"></i>
+                                    <span class="secondary-color italic-text"><spring:message code="createTrip.every"/></span>
+                                    <strong id="multitrip-text" class="secondary-color italic-text"></strong>
+                                    <span class="secondary-color italic-text"><spring:message code="createTrip.until"/></span>
+                                </div>
+                                <div class="input-group input-group-sm" id="last-date-picker">
+                                    <button type="button" class="btn button-color" id="last-date-button">
+                                        <i class="bi bi-calendar-fill light-text"></i>
+                                    </button>
+                                    <spring:message code="createTrip.lastDate" var="lastDate"/>
+                                    <form:input path="lastDate" cssClass="form-control form-control-sm" id="last-date" placeholder="${lastDate}"/>
                                 </div>
                             </div>
                         </div>
@@ -91,9 +104,9 @@
                         <div class="input-row">
                             <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                 <jsp:param name="id" value="destinationCityId"/>
-                                <jsp:param name="defaultText" value="Ciudad"/>
+                                <jsp:param name="defaultText" value="${city}"/>
                             </jsp:include>
-                            <form:input path="destinationAddress" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="Dirección"/>
+                            <form:input path="destinationAddress" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="${address}"/>
                         </div>
                         <div class="error-row">
                             <form:errors path="destinationCityId" cssClass="formError" element="span"/>
@@ -110,14 +123,27 @@
                 <div class="section-container">
                     <div class="input-container">
                         <div class="input-row">
-                            <div class="input-group input-group-sm">
-                                <div class="input-group-text">
-                                    <i class="bi bi-car-front-fill text"></i>
+                            <div id="car-info-text">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-text">
+                                        <i class="bi bi-car-front-fill text"></i>
+                                    </div>
+                                    <spring:message code="createTrip.selectCar" var="selectCar"/>
+                                    <form:select path="carId" cssClass="form-select form-select-sm" id="car-select" disabled="${empty cars}">
+                                        <form:option value="-1" label="${selectCar}"/>
+                                        <form:options items="${cars}" itemValue="carId" itemLabel="infoCar"/>
+                                    </form:select>
                                 </div>
-                                <form:select path="carId" cssClass="form-select form-select-sm" id="car-select" disabled="${empty cars}">
-                                    <form:option value="-1" label="Seleccionar auto"/>
-                                    <form:options items="${cars}" itemValue="carId" itemLabel="infoCar"/>
-                                </form:select>
+                                <c:forEach items="${cars}" var="car">
+                                    <div class="collapse" id="car-info-details-<c:out value="${car.carId}"/>">
+                                        <div class="primary-bg-color" id="car-info-details-container">
+                                            <div class="car-info-details-row">
+                                                <i class="bi bi-caret-right-fill light-text"></i>
+                                                <span class="light-text"><spring:message code="profile.plate" arguments="${car.plate}"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
                             </div>
                             <c:if test="${empty cars}">
                                 <div id="no-cars-container">
@@ -130,7 +156,7 @@
                                     </a>
                                 </div>
                             </c:if>
-                            <div class="col-6" id="car-image-container">
+                            <div id="car-image-container">
                                 <c:forEach items="${cars}" var="car">
                                     <div class="collapse collapse-horizontal" id="car-info-image-<c:out value="${car.carId}"/>">
                                         <c:url value="/image/${car.image_id}" var="carImageUrl"/>
@@ -144,16 +170,6 @@
                         <div class="error-row">
                             <form:errors path="carId" cssClass="formError" element="span"/>
                         </div>
-                        <c:forEach items="${cars}" var="car">
-                            <div class="collapse" id="car-info-details-<c:out value="${car.carId}"/>">
-                                <div class="primary-bg-color" id="car-info-details-container">
-                                    <div class="car-info-details-row">
-                                        <i class="bi bi-caret-right-fill light-text"></i>
-                                        <span class="light-text"><spring:message code="profile.plate" arguments="${car.plate}"/></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
                     </div>
                     <div class="input-container">
                         <div class="input-row">
@@ -161,7 +177,8 @@
                                 <div class="input-group-text">
                                     <i class="bi bi-people-fill text"></i>
                                 </div>
-                                <form:input path="maxSeats" cssClass="form-control form-control-sm" id="seats" placeholder="Cantidad de asientos"/>
+                                <spring:message code="createTrip.numberSeats" var="numberSeats"/>
+                                <form:input path="maxSeats" cssClass="form-control form-control-sm" id="seats" placeholder="${numberSeats}"/>
                             </div>
                         </div>
                         <div class="error-row">
@@ -174,7 +191,8 @@
                                 <div class="input-group-text">
                                     <i class="bi bi-currency-dollar text"></i>
                                 </div>
-                                <form:input path="price" cssClass="form-control form-control-sm" id="price" placeholder="Precio por viaje"/>
+                                <spring:message code="createTrip.price" var="price"/>
+                                <form:input path="price" cssClass="form-control form-control-sm" id="price" placeholder="${price}"/>
                                 <div class="input-group-text">
                                     <span class="text"><spring:message code="createTrip.money"/></span>
                                 </div>
@@ -189,7 +207,7 @@
             <div class="confirm-button-container">
                 <button id="create-trip-button" type="submit" class="btn button-style button-color shadow-btn" disabled>
                     <i class="bi bi-check2 light-text h3"></i>
-                    <span class="button-text-style light-text h3"><spring:message code="createTrip.btn"/></span>
+                    <span class="button-text-style light-text h3"><spring:message code="createTrip.btnCreate"/></span>
                 </button>
             </div>
         </form:form>
