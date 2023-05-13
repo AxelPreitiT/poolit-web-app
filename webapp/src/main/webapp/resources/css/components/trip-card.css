@@ -154,3 +154,7 @@ a {
     flex-direction: row;
     justify-content: flex-end;
 }
+
+.modal-dialog {
+    max-width: fit-content !important;
+}

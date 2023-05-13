@@ -1,6 +1,24 @@
 @import "../base/elements.css";
 
+#trip-card-date-list {
+    margin-top: 1em;
+}
+
+#no-results-container {
+    margin-top: 3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#no-results-container i {
+    font-size: 3rem;
+    margin-bottom: 0.5em;
+}
+
 #trip-card-list-container {
+    margin-top: 3em;
     display: flex;
     flex-direction: column;
     justify-content: center;

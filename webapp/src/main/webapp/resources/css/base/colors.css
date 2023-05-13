@@ -23,6 +23,14 @@
     background-color: #1C4C96 !important;
 }
 
+.primary-button {
+    background-color: #1C4C96 !important;
+}
+
+.primary-button:hover, .primary-button:active, .primary-button:focus {
+    background-color: #133D7A !important;
+}
+
 .secondary-color {
     color: #FFA216 !important;
 }
@@ -172,6 +180,14 @@
 
 .danger-bg-color {
     background-color: #dc3545;
+}
+
+.danger-button {
+    background-color: #dc3545;
+}
+
+.danger-button:hover, .danger-button:active, .danger-button:focus {
+    background-color: #c82333;
 }
 
 .warning {

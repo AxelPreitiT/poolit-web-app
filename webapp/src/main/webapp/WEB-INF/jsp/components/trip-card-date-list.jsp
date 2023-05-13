@@ -8,37 +8,53 @@
         - trips: List of trips to be displayed
 -->
 
+<!-- Params:
+        - noTripsTitleCode: Spring message code for the title to be displayed when there are no trips
+        - noTripsSubtitleCode: Spring message code for the subtitle to be displayed when there are no trips
+-->
+
 <link href="<c:url value="/resources/css/components/trip-card-date-list.css"/>" rel="stylesheet"/>
 
 <div id="trip-card-date-list">
-  <div id="trip-card-list-container">
-    <c:forEach items="${trips.elements}" var="trip">
-      <c:url value="/trips/${trip.tripId}" var="tripUrl">
-        <c:param name="startDate" value="${trip.startDateString}"/>
-        <c:param name="startTime" value="${trip.startTimeString}"/>
-        <c:param name="endDate" value="${trip.endDateString}"/>
-      </c:url>
-      <div class="trip-card-row">
-        <div class="trip-card-row-header">
-          <i class="bi bi-calendar secondary-color h3"></i>
-          <c:choose>
-            <c:when test="${trip.recurrent}">
-              <span class="secondary-color h3"><spring:message code="tripDetails.card.formateDateRecurrent" arguments="${trip.startDateString}, ${trip.endDateString}"/></span>
-            </c:when>
-            <c:otherwise>
-              <span class="secondary-color h3"><c:out value="${trip.startDateString}"/></span>
-            </c:otherwise>
-          </c:choose>
-        </div>
-        <div class="trip-car-row-body">
-          <c:set var="trip" value="${trip}" scope="request"/>
-          <jsp:include page="/WEB-INF/jsp/components/trip-card.jsp">
-            <jsp:param name="tripUrl" value="${tripUrl}"/>
-          </jsp:include>
-        </div>
+  <c:choose>
+    <c:when test="${empty trips.elements}">
+      <div id="no-results-container">
+        <i class="fa-solid fa-car-side secondary-color h2"></i>
+        <h3><spring:message code="${param.noTripsTitleCode}"/></h3>
+        <h6><spring:message code="${param.noTripsSubtitleCode}"/></h6>
       </div>
-    </c:forEach>
-  </div>
+    </c:when>
+    <c:otherwise>
+      <div id="trip-card-list-container">
+        <c:forEach items="${trips.elements}" var="trip">
+          <c:url value="/trips/${trip.tripId}" var="tripUrl">
+            <c:param name="startDate" value="${trip.startDateString}"/>
+            <c:param name="startTime" value="${trip.startTimeString}"/>
+            <c:param name="endDate" value="${trip.endDateString}"/>
+          </c:url>
+          <div class="trip-card-row">
+            <div class="trip-card-row-header">
+              <i class="bi bi-calendar secondary-color h3"></i>
+              <c:choose>
+                <c:when test="${trip.recurrent}">
+                  <span class="secondary-color h3"><spring:message code="tripDetails.card.formateDateRecurrent" arguments="${trip.startDateString}, ${trip.endDateString}"/></span>
+                </c:when>
+                <c:otherwise>
+                  <span class="secondary-color h3"><c:out value="${trip.startDateString}"/></span>
+                </c:otherwise>
+              </c:choose>
+            </div>
+            <div class="trip-car-row-body">
+              <c:set var="trip" value="${trip}" scope="request"/>
+              <jsp:include page="/WEB-INF/jsp/components/trip-card.jsp">
+                <jsp:param name="tripUrl" value="${tripUrl}"/>
+              </jsp:include>
+            </div>
+          </div>
+        </c:forEach>
+      </div>
+    </c:otherwise>
+  </c:choose>
   <c:url value="" var="baseUrl">
     <c:forEach var="p" items="${param}">
       <c:if test="${!(p.key eq 'page')}">

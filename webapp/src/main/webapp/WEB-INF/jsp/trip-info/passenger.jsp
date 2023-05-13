@@ -42,7 +42,7 @@
     <div id="button-container">
       <c:if test="${!done}">
         <div class="delete-trip-container">
-          <button type="submit" class="btn button-style  danger-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
+          <button type="submit" class="btn button-style danger-button shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
             <i class="bi bi-x light-text h3"></i>
             <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.deleteButton"/></span>
           </button>
@@ -60,12 +60,12 @@
                 <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                <button type="button" class="btn primary-button" data-bs-dismiss="modal">
                   <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                 </button>
                 <c:url value="/trips/${trip.tripId}/cancel" var="cancelTripUrl"/>
                 <form:form method="DELETE" action="${cancelTripUrl}">
-                  <button type="submit" class="btn danger-bg-color">
+                  <button type="submit" class="btn danger-button">
                     <span class="light-text"><spring:message code="tripCard.user.btn.cancel"/></span>
                   </button>
                 </form:form>
@@ -122,10 +122,10 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn danger-bg-color" data-bs-dismiss="modal">
+                <button type="button" class="btn danger-button" data-bs-dismiss="modal">
                   <span class="light-text"><spring:message code="review.cancel"/></span>
                 </button>
-                <button type="submit" class="btn primary-bg-color">
+                <button type="submit" class="btn primary-button">
                   <span class="light-text"><spring:message code="review.submit"/></span>
                 </button>
                 </form:form>
@@ -135,7 +135,7 @@
         </div>
       </c:if>
       <c:url value="/trips/reserved" var="joinUrl"/>
-      <a class="btn button-style button-bg-color shadow-btn">
+      <a class="btn button-style primary-button shadow-btn">
         <i class="bi bi-car-front-fill light-text h3"></i>
         <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.button"/></span>
       </a>
