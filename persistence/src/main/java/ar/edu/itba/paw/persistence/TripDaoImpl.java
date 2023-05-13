@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -352,6 +353,10 @@ public class TripDaoImpl implements TripDao {
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(getSortField(sortType), descending? QueryBuilder.DbOrder.DESC : QueryBuilder.DbOrder.ASC);
+        if(startDateTime.toLocalDate().equals(LocalDate.now())){
+            //Si es en el mismo dia, entonces da solo los viajes que no pasaron (para no traer inconsistencias con los minutos
+            queryBuilder.withWhere(QueryBuilder.DbField.TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalTime.now());
+        }
         endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime.plusMinutes(minutes))
                                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime.minusMinutes(minutes)));
         dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1.getValue()));
