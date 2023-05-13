@@ -1,5 +1,14 @@
 @import "../base/elements.css";
 
+.error-style {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.right-item {
+    margin-left: auto;
+}
+
 div.main-container-style {
     margin-left: 20%;
     margin-right: 20%;
@@ -41,7 +50,7 @@ div.main-container-style {
     width: 100%;
 }
 
-.input-row {
+.input-row, .error-row {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -50,7 +59,19 @@ div.main-container-style {
     z-index: 1;
 }
 
-.input-row > input, .input-row > div {
+.error-row {
+    align-items: flex-start;
+}
+
+.error-row:not(:has(span)) {
+    display: none;
+}
+
+.error-row:has(.error-style-line), .error-row .error-style-line {
+    width: 100%;
+}
+
+.input-row > input, .input-row > div, .error-row > span {
     width: 15rem;
 }
 
@@ -74,7 +95,7 @@ div.main-container-style {
         margin-right: 5%;
     }
 
-    .input-row > input, .input-row > div {
+    .input-row > input, .input-row > div, .error-row > span {
         width: 13rem;
     }
 
@@ -89,7 +110,7 @@ div.main-container-style {
         margin-right: 2%;
     }
 
-    .input-row {
+    .input-row, .error-row {
         flex-direction: column;
     }
 }
@@ -126,6 +147,7 @@ div.main-container-style {
     margin: -130px 0 -10px 14px;
     transition: margin-top 0.5s ease;
 }
+
 
 #vertical-dotted-line.expanded {
     margin-top: -160px;

@@ -31,16 +31,16 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String startDate, final String startTime,final double price, final int maxSeats, User driver, final String endDate, final String endTime) {
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, User driver, final LocalDate endDate, final LocalTime endTime) {
         //Usamos que el front debe pasar el date en ISO-8601
-        LocalDateTime startDateTime = getLocalDateTime(startDate,startTime).get();
+        LocalDateTime startDateTime = startDate.atTime(startTime);
         //If Trip is not recurrent, then endDateTime is the same as startDateTime
-        LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime);
+        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
         if(!startDateTime.getDayOfWeek().equals(endDateTime.getDayOfWeek())
         || startDateTime.isAfter(endDateTime)
         || originCity == null || destinationCity == null
         || car == null || driver == null
-        || maxSeats<=0 || price<0){
+        || maxSeats<=0 || price.doubleValue()<0){
             throw new IllegalArgumentException();
         }
         Trip newTrip = tripDao.create(
@@ -52,7 +52,7 @@ public class TripServiceImpl implements TripService {
                 startDateTime,
                 endDateTime,
                 !startDateTime.equals(endDateTime),
-                price,
+                price.doubleValue(),
                 maxSeats,
                 driver
         );
@@ -65,7 +65,7 @@ public class TripServiceImpl implements TripService {
         return newTrip;
     }
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String date, final String time,final double price, final int maxSeats, User driver){
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate date, final LocalTime time,final BigDecimal price, final int maxSeats, User driver){
         return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
     }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){

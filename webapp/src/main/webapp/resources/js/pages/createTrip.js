@@ -16,6 +16,8 @@ if(priceInputElement.value === "0.0") {
 
 // Vertical dotted line management
 const verticalDottedLineElement = document.getElementById('vertical-dotted-line');
+const originInfoContainerElement = document.getElementById('origin-info-container');
+const originInfoContainerErrorRows = Array.from(originInfoContainerElement.getElementsByClassName('error-row')).filter(row => window.getComputedStyle(row).display !== 'none');
 
 const shouldExpandVerticalDottedLine = (value) => {
     if(value){
@@ -25,6 +27,15 @@ const shouldExpandVerticalDottedLine = (value) => {
         verticalDottedLineElement.classList.remove('expanded');
     }
 }
+
+if(originInfoContainerErrorRows.length > 0) {
+    const verticalDottedLineStyle = window.getComputedStyle(verticalDottedLineElement);
+    const verticalDottedLineHeight = parseInt(verticalDottedLineStyle.getPropertyValue('height')) / 16;
+    const verticalDottedLineMarginTop = parseInt(verticalDottedLineStyle.getPropertyValue('margin-top'));
+    verticalDottedLineElement.style.height = (verticalDottedLineHeight + 2 * originInfoContainerErrorRows.length).toString() + 'em';
+    verticalDottedLineElement.style.marginTop = (verticalDottedLineMarginTop - 35 * originInfoContainerErrorRows.length).toString() + 'px';
+}
+
 
 // Recurrent trip management
 const day = 24 * 60 * 60 * 1000;
@@ -185,6 +196,7 @@ if(currentSelectedCarId !== "-1") {
     new bootstrap.Collapse(carInfoImageElement, {
         show: true
     });
+    createTripButtonElement.disabled = false;
 }
 
 carSelectElement.addEventListener('change', (e) => {

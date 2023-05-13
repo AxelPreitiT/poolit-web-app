@@ -9,7 +9,6 @@
     <jsp:include page="/resources/external-resources.jsp"/>
     <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
     <link href="<c:url value="/resources/css/create-trip/create-trip.css"/>" rel="stylesheet" type="text/css"/>
-    <script src="<c:url value="/resources/js/pages/createTrip.js"/>" type="module"></script>
 </head>
 <body class="background-color">
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
@@ -37,8 +36,8 @@
                             <form:input path="originAddress" cssClass="form-control form-control-sm" id="originAddress" placeholder="${address}"/>
                         </div>
                         <div class="error-row">
-                            <form:errors path="originCityId" cssClass="formError" element="span"/>
-                            <form:errors path="originAddress" cssClass="formError" element="span"/>
+                            <form:errors path="originCityId" cssClass="error-style danger" element="span"/>
+                            <form:errors path="originAddress" cssClass="error-style danger right-item" element="span"/>
                         </div>
                     </div>
                     <div class="input-container">
@@ -59,8 +58,8 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="date" cssClass="formError" element="span"/>
-                            <form:errors path="time" cssClass="formError" element="span"/>
+                            <form:errors path="date" cssClass="error-style danger" element="span"/>
+                            <form:errors path="time" cssClass="error-style danger right-item" element="span"/>
                         </div>
                     </div>
                     <div class="input-container">
@@ -88,7 +87,7 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors cssClass="formError" element="span"/>
+                            <form:errors cssClass="error-style danger error-style-line" element="span"/>
                         </div>
                     </div>
                 </div>
@@ -109,8 +108,8 @@
                             <form:input path="destinationAddress" cssClass="form-control form-control-sm" id="destinationAddress" placeholder="${address}"/>
                         </div>
                         <div class="error-row">
-                            <form:errors path="destinationCityId" cssClass="formError" element="span"/>
-                            <form:errors path="destinationAddress" cssClass="formError" element="span"/>
+                            <form:errors path="destinationCityId" cssClass="error-style danger" element="span"/>
+                            <form:errors path="destinationAddress" cssClass="error-style danger right-item" element="span"/>
                         </div>
                     </div>
                 </div>
@@ -168,7 +167,7 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="carId" cssClass="formError" element="span"/>
+                            <form:errors path="carId" cssClass="error-style danger" element="span"/>
                         </div>
                     </div>
                     <div class="input-container">
@@ -182,7 +181,7 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="maxSeats" cssClass="formError" element="span"/>
+                            <form:errors path="maxSeats" cssClass="error-style danger" element="span"/>
                         </div>
                     </div>
                     <div class="input-container">
@@ -199,7 +198,7 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="price" cssClass="formError" element="span"/>
+                            <form:errors path="price" cssClass="error-style danger" element="span"/>
                         </div>
                     </div>
                 </div>
@@ -212,5 +211,6 @@
             </div>
         </form:form>
     </div>
+    <script src="<c:url value="/resources/js/pages/createTrip.js"/>" type="module"></script>
 </body>
 </html>
