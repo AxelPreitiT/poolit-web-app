@@ -18,6 +18,11 @@
     <jsp:param name="user" value="${user}"/>
   </jsp:include>
   <div class="List-properties-container">
+    <c:set var="reviews" value="${reviewsAsUser}" scope="request"/>
+      <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+        <jsp:param name="reviews" value="${reviewsAsUser}"/>
+        <jsp:param name="role" value="USER"/>
+      </jsp:include>
     <c:url value="/trips/reserved" var="reservedTripsUrl"/>
     <c:set var="trips" value="${futureTripsPassanger}" scope="request"/>
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
