@@ -308,6 +308,22 @@ public class TripDaoImpl implements TripDao {
         return QueryBuilder.DbField.TRIP_PRICE;
     }
     @Override
+    public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        QueryBuilder queryBuilder = new QueryBuilder()
+                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
+                .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID,QueryBuilder.DbComparator.EQUALS,origin_city_id)
+                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
+                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
+        queryBuilder
+                .withOffset(page * pageSize)
+                .withLimit(pageSize);
+        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        return new PagedContent<>(ans,page,pageSize,total);
+    }
+
+    @Override
     public PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,

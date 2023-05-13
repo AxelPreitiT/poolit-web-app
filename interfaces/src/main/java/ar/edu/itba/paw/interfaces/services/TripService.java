@@ -59,6 +59,9 @@ public interface TripService {
     //
     //
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
+    //
+    PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize);
+    //
 
     boolean deleteTrip(final Trip trip);
     boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate);
