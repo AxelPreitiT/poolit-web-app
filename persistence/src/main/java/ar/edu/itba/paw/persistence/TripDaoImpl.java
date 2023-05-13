@@ -308,6 +308,21 @@ public class TripDaoImpl implements TripDao {
         }
         return QueryBuilder.DbField.TRIP_PRICE;
     }
+
+    @Override
+    public PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize){
+        QueryBuilder queryBuilder = new QueryBuilder()
+                .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
+                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,startDateTime)
+                .withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,startDateTime.getDayOfWeek().getValue())
+                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
+                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
+        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
+        queryBuilder.withOffset(page*pageSize)
+                .withLimit(pageSize);
+        List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        return new PagedContent<>(ans,page,pageSize,total);
+    }
     @Override
     public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
         validatePageAndSize(page,pageSize);

@@ -34,6 +34,7 @@ public interface TripDao {
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
             int page, int pageSize);
     PagedContent<Trip> getIncomingTrips(int page, int pageSize);
+    PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize);
     PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize);
 
 }

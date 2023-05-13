@@ -148,7 +148,8 @@ public class TripController extends LoggedUserController {
 
         final ModelAndView mav = new ModelAndView("/landing/main");
         if(user.isPresent()){
-            final List<Trip> trips = tripService.getIncomingTripsByOrigin(user.get().getBornCity().getId(),0,PAGE_SIZE).getElements();
+            final List<Trip> trips = tripService.getRecommendedTripsForUser(user.get(),0,PAGE_SIZE).getElements();
+//            final List<Trip> trips = tripService.getIncomingTripsByOrigin(user.get().getBornCity().getId(),0,PAGE_SIZE).getElements();
             mav.addObject("trips", trips);
         }
         mav.addObject("cities", cities);

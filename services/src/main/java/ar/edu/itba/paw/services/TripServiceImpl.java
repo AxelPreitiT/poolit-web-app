@@ -98,6 +98,8 @@ public class TripServiceImpl implements TripService {
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
+
+    //TODO: preguntar si hay que mantenerlo por consistencia
     public boolean deleteTrip(final Trip trip){
         List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         //Notify passengers that trip was deleted
@@ -247,16 +249,6 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassengers(trip,dateTime);
     }
     @Override
-    public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
-        if( trip.getStartDateTime().isAfter(startDate)
-                || trip.getEndDateTime().isBefore(startDate)
-                || Period.between(trip.getStartDateTime().toLocalDate(),startDate.toLocalDate()).getDays()%7!=0
-        ){
-            throw new IllegalArgumentException();
-        }
-        return tripDao.getPassengers(trip,startDate,endDate);
-    }
-    @Override
     public List<Passenger> getPassengers(Trip trip){
         return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
     }
@@ -308,6 +300,13 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getIncomingTripsByOrigin(origin_city_id,page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        LocalDateTime start = LocalDateTime.now();
+        return tripDao.getTripsByOriginAndStart(user.getBornCity().getId(),start,page,pageSize);
     }
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(

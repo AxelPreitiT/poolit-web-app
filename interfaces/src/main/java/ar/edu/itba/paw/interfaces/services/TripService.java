@@ -41,8 +41,6 @@ public interface TripService {
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
     //
-    List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
-        //
     List<Passenger> getPassengers(TripInstance tripInstance);
 
     //
@@ -71,6 +69,8 @@ public interface TripService {
             long origin_city_id, long destination_city_id, final String startDate,
             final String startTime, final String endDate, final String endTime,
             final int page, final int pageSize);
+    //
+    PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize);
     //
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final LocalDate startDate,
