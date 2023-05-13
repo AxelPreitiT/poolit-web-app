@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.SearchTripForm;
+import ar.edu.itba.paw.webapp.form.RecurrentTripForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -20,10 +20,10 @@ public @interface SameWeekDay {
     Class<? extends Payload>[] payload() default { };
 }
 
-class SameWeekDayValidator implements ConstraintValidator<SameWeekDay, SearchTripForm> {
+class SameWeekDayValidator implements ConstraintValidator<SameWeekDay, RecurrentTripForm> {
 
     @Override
-    public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(RecurrentTripForm form, ConstraintValidatorContext constraintValidatorContext) {
         return !form.isMultitrip() || form.getLastDate() == null || form.getDate().getDayOfWeek().equals(form.getLastDate().getDayOfWeek());
     }
 }

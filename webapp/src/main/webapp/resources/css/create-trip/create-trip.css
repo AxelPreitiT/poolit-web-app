@@ -1,5 +1,19 @@
 @import "../base/elements.css";
 
+.error-style {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.right-item {
+    margin-left: auto;
+}
+
+div.main-container-style {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
 .header-row {
     display: flex;
     flex-direction: row;
@@ -7,30 +21,6 @@
     justify-content: flex-start;
     column-gap: 3%;
     width: 100%;
-}
-
-.formError{
-    color: red;
-}
-
-.inline_container{
-    display: flex;
-    flex-direction: row;
-}
-
-.error_container{
-    min-width: 100%;
-    display: flex;
-    margin-left: 3%;
-}
-
-.form_container{
-    min-width: 100%;
-}
-
-
-img {
-    max-width: 150px;
 }
 
 .form-style {
@@ -49,53 +39,106 @@ img {
     row-gap: 0.5em;
 }
 
-.input-container {
+.section-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-left: 4em;
+    padding-left: 3.5em;
     row-gap: 0.5em;
+    z-index: 1;
     width: 100%;
 }
 
-.input-row {
+.input-row, .error-row {
     display: flex;
     flex-direction: row;
     align-items: center;
-    column-gap: 10em;
+    column-gap: 5em;
     width: 100%;
     z-index: 1;
 }
 
-.input-row > .container > .row > div > div {
-    width: 100%;
-    max-width: 15rem;
+.error-row {
+    align-items: flex-start;
 }
 
-#day-repeat-row {
+.error-row:not(:has(span)) {
+    display: none;
+}
+
+.error-row:has(.error-style-line), .error-row .error-style-line {
+    width: 100%;
+}
+
+.input-row > input, .input-row > div, .error-row > span {
+    width: 15rem;
+}
+
+@media (max-width: 1200px) {
+    div.main-container-style {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+}
+
+@media (max-width: 992px) {
+    div.main-container-style {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+
+@media (max-width: 820px) {
+    div.main-container-style {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    .input-row > input, .input-row > div, .error-row > span {
+        width: 13rem;
+    }
+
+    #multitrip-info .input-row {
+        align-items: center;
+    }
+}
+
+@media (max-width: 650px) {
+    div.main-container-style {
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    .input-row, .error-row {
+        flex-direction: column;
+    }
+}
+
+#multitrip-toggle {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     column-gap: 0.5em;
+    padding: 0.2em 0.5em;
+    border-radius: 6px;
 }
 
-#day-repeat-row > i {
-    padding-left: 0.5em;
+#multitrip-toggle > .form-check-input {
+    margin: 0;
 }
 
-#day-repeat-row > span {
-    text-transform: capitalize;
+#multitrip-toggle > .form-check-input:checked {
+    border-color: white !important;
 }
 
-#is-multitrip-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    column-gap: 1em;
-    width: 100%;
+#multitrip-info .input-row {
+    align-items: flex-end;
+}
+
+#repeat-icon {
+    margin: 0 0.5em 0 7px;
 }
 
 #vertical-dotted-line {
@@ -105,6 +148,7 @@ img {
     transition: margin-top 0.5s ease;
 }
 
+
 #vertical-dotted-line.expanded {
     margin-top: -160px;
 }
@@ -113,19 +157,12 @@ img {
     margin-top: 1em;
 }
 
-.container {
-    min-width: fit-content;
-    margin: 0;
-    padding: 0;
-}
-
 #car-info-text {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     row-gap: 0.5em;
-    width: 100%;
 }
 
 #car-info-details {
@@ -163,7 +200,6 @@ img {
     align-items: center;
     justify-content: center;
     height: 100%;
-    max-height: 7em;
     aspect-ratio: 1/1;
 }
 
@@ -182,7 +218,7 @@ img {
 }
 
 #car-image-container.active {
-    height: 7em;
+    height: 6em;
 }
 
 #car-image-container > div.show {

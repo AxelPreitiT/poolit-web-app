@@ -21,7 +21,6 @@ export const calendarConfig = {
     restrictions: {
         minDate: today,
     },
-    useCurrent: false,
 }
 
 export const getDaysOfWeekDisabled = (dayNumber) => {

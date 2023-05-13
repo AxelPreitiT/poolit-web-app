@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.SearchTripForm;
+import ar.edu.itba.paw.webapp.form.RecurrentTripForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -20,10 +20,10 @@ public @interface LastDateIsAfterDate {
     Class<? extends Payload>[] payload() default { };
 }
 
-class LastDateIsAfterDateValidator implements ConstraintValidator<LastDateIsAfterDate, SearchTripForm> {
+class LastDateIsAfterDateValidator implements ConstraintValidator<LastDateIsAfterDate, RecurrentTripForm> {
 
     @Override
-    public boolean isValid(SearchTripForm form, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(RecurrentTripForm form, ConstraintValidatorContext constraintValidatorContext) {
         return !form.isMultitrip() || form.getLastDate() == null || form.getLastDate().isAfter(form.getDate());
     }
 }
