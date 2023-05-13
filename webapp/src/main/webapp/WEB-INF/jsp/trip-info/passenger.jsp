@@ -150,5 +150,13 @@
     </jsp:include>
   </div>
 </c:if>
+<c:if test="${!(empty successInscription) && successInscription}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+      <jsp:param name="title" value="selectTrip.success.toast.title"/>
+      <jsp:param name="message" value="selectTrip.success.toast.message"/>
+    </jsp:include>
+  </div>
+</c:if>
 </body>
 </html>

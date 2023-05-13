@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div id="button-container">
-                    <c:url value="/trips/${trip.tripId}" var="joinUrl"/>
+                    <c:url value="/trips/${trip.tripId}/join" var="joinUrl"/>
                     <form:form action="${joinUrl}" modelAttribute="selectForm" method="post">
                         <form:input path="startDate" cssClass="hidden-input"/>
                         <form:input path="startTime" cssClass="hidden-input"/>

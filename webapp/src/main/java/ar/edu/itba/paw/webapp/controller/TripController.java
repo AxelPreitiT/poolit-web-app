@@ -57,13 +57,17 @@ public class TripController extends LoggedUserController {
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final Optional<User> userOp = userService.getCurrentUser();
+        if(!userOp.isPresent()){
+            return tripDetailsForReservation(tripId,form);
+        }
+        final User user = userOp.get();
         if(tripService.userIsDriver(tripId,user)){
             return tripDetailsForDriver(tripId);
         }else if (tripService.userIsPassenger(tripId,user)){
             return tripDetailsForPassenger(tripId,user);
         }
-        return tripDetailsForReservation(tripId,user,form);
+        return tripDetailsForReservation(tripId,form);
     }
 
     private ModelAndView tripDetailsForDriver(final long tripId){
@@ -89,7 +93,7 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForReservation(final long tripId, final User user, final SelectionForm form){
+    private ModelAndView tripDetailsForReservation(final long tripId, final SelectionForm form){
         //TODO: revisar que la fecha de inicio sea posterior a la actualidad
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
@@ -98,7 +102,7 @@ public class TripController extends LoggedUserController {
     }
 
     //TODO: preguntar si la regla de que solo llame alguien que no es pasajero lo ponemos en security o en el service y lanzamos una excepcion
-    @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.POST)
+    @RequestMapping(value = "/trips/{id:\\d+$}/join",method = RequestMethod.POST)
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
                                            final BindingResult errors){
