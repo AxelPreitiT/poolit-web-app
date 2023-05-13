@@ -127,9 +127,14 @@ h6{
   text-transform: uppercase;
   transition: all 0.3s ease;
   margin:auto;
+  width:100%;
 }
 
 .nav-justified-pills .nav-link.active, .nav-justified-pills .nav-link:hover {
   color: #fff;
   background-color: #FFA216;
+}
+
+.nav-link:hover {
+  opacity:0.8;
 }
