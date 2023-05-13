@@ -1,4 +1,4 @@
-@import "/resources/css/base/elements.css";
+@import "../base/elements.css";
 
 a {
     text-decoration: none !important;
@@ -32,6 +32,7 @@ a {
 
 .List-properties-container{
     flex-grow: 2;
+    max-width:65%;
 }
 
 h6{
@@ -99,4 +100,36 @@ h6{
 
 .form-floating>label {
     padding: 0.5rem 0.75rem;
+}
+
+.nav-justified-pills {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.nav-justified-pills .nav-item {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-justified-pills .nav-link {
+  color: #FFA216;
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  margin:auto;
+}
+
+.nav-justified-pills .nav-link.active, .nav-justified-pills .nav-link:hover {
+  color: #fff;
+  background-color: #FFA216;
 }

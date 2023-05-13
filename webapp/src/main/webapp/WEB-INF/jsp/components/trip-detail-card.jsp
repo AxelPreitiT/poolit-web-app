@@ -20,7 +20,7 @@
         <div class="show-row" >
             <i class="bi bi-calendar light-text h5"></i>
             <div class="show-row-content">
-                <span class="light-text detail"><c:out value="${trip.dayOfWeekString}"/></span>
+                <span class="light-text detail detail-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
                 <span class="light-text"><spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.startDateString}"/>
                 <c:if test="${trip.recurrent}">
                     <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.endDateString}"/>
@@ -49,10 +49,14 @@
         </div>
         <hr/>
         <div class="show-row">
-            <i class="bi bi-person-circle light-text h5"></i>
-            <div class="show-row-content">
-                <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
-            </div>
+            <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
+            <c:url value="/profile/${trip.driver.userId}" var="userUrl"/>
+            <a href="${userUrl}" class="show-row profile-link">
+                <img src="${userImageId}" alt="user image" class="image-photo"/>
+                <div class="show-row-content">
+                    <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
+                </div>
+            </a>
         </div>
         <div class="show-row">
             <i class="bi bi-envelope-fill light-text h5"></i>

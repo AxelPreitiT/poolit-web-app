@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -64,11 +65,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     .antMatchers("/users/login", "/users/create").anonymous()
                     .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
+                    .antMatchers("/trips/{id:\\d+$}/cancel").hasRole("USER")
                     .antMatchers("/trips/create", "/cars/**", "/users/created").hasRole("DRIVER")
+                    .antMatchers("/trips/created/**").hasRole("DRIVER")
                     //.antMatchers("/trips/create", "/profile/driver").hasRole("DRIVER")
                     //.antMatchers("/profile/user").hasRole("USER")
-                    .antMatchers("/trips", "/trips/").permitAll()
-                    .antMatchers( "/trips/**", "/users/**").authenticated()
+                    .antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
+                    .antMatchers(  "/users/**", "/trips/{id:\\d+$}/join").authenticated()
                     .antMatchers("/**").permitAll()
                 .and().formLogin()
                     .loginPage("/users/login")
@@ -93,5 +96,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "favicon.ico", "/static/403");
+    }
+
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

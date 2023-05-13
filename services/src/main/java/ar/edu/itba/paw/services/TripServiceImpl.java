@@ -9,16 +9,16 @@ import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
+import java.math.BigDecimal;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements TripService {
+
+    private static final int OFFSET_MINUTES = 30;
 
     @Autowired
     private EmailService emailService;
@@ -31,16 +31,16 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String startDate, final String startTime,final double price, final int maxSeats, User driver, final String endDate, final String endTime) {
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, User driver, final LocalDate endDate, final LocalTime endTime) {
         //Usamos que el front debe pasar el date en ISO-8601
-        LocalDateTime startDateTime = getLocalDateTime(startDate,startTime).get();
+        LocalDateTime startDateTime = startDate.atTime(startTime);
         //If Trip is not recurrent, then endDateTime is the same as startDateTime
-        LocalDateTime endDateTime = getLocalDateTime(endDate,endTime).orElse(startDateTime);
+        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
         if(!startDateTime.getDayOfWeek().equals(endDateTime.getDayOfWeek())
         || startDateTime.isAfter(endDateTime)
         || originCity == null || destinationCity == null
         || car == null || driver == null
-        || maxSeats<=0 || price<0){
+        || maxSeats<=0 || price.doubleValue()<0){
             throw new IllegalArgumentException();
         }
         Trip newTrip = tripDao.create(
@@ -52,7 +52,7 @@ public class TripServiceImpl implements TripService {
                 startDateTime,
                 endDateTime,
                 !startDateTime.equals(endDateTime),
-                price,
+                price.doubleValue(),
                 maxSeats,
                 driver
         );
@@ -65,7 +65,7 @@ public class TripServiceImpl implements TripService {
         return newTrip;
     }
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final String date, final String time,final double price, final int maxSeats, User driver){
+    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate date, final LocalTime time,final BigDecimal price, final int maxSeats, User driver){
         return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
     }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
@@ -148,6 +148,11 @@ public class TripServiceImpl implements TripService {
         if(passengers.size()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
+        //TODO: arreglar (hacerlo cuando tenga varias vistas para inscribirse a un viaje)
+        //El chequeo este
+//        startDateTime.isBefore(LocalDateTime.now())
+        //Esta mal cuando se quiere inscribir a un viaje desde el discovery
+        //Tenemos que hacer que se inscriba desde el momento actual
         if(    startDateTime == null || endDateTime == null
             || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
@@ -182,6 +187,20 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public boolean removePassenger(final Trip trip, final User user){
+        if(trip == null || user == null){
+            throw new IllegalArgumentException();
+        }
+        Passenger passenger = tripDao.getPassenger(trip,user).orElseThrow(IllegalStateException::new);
+        try{
+            emailService.sendMailTripCancelledToDriver(trip,passenger);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return tripDao.removePassenger(trip,passenger);
+    }
+
+    @Override
     public Optional<Trip> findById(long id) {
         return tripDao.findById(id);
     }
@@ -199,8 +218,24 @@ public class TripServiceImpl implements TripService {
     public Optional<Trip> findById(long id, LocalDateTime dateTime){
         return tripDao.findById(id,dateTime,dateTime);
     }
-
-    //TODO: preguntar si validamos aca tambien o con peristence alcanza
+    @Override
+    public boolean userIsDriver(final long tripId, final User user){
+        //TODO: cambiar a excepciones conocidas
+        final Trip trip = tripDao.findById(tripId).orElseThrow(IllegalArgumentException::new);
+        return trip.getDriver().equals(user);
+    }
+    @Override
+    public boolean userIsPassenger(final long tripId, final User user){
+        return tripDao.getPassenger(tripId,user).isPresent();
+    }
+    @Override
+    public Optional<Passenger> getPassenger(final Trip trip, final User user){
+        return tripDao.getPassenger(trip,user);
+    }
+    @Override
+    public Optional<Passenger> getPassenger(final long tripId, final User user){
+        return tripDao.getPassenger(tripId,user);
+    }
     @Override
     public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
         if( trip.getStartDateTime().isAfter(dateTime)
@@ -210,6 +245,20 @@ public class TripServiceImpl implements TripService {
             throw new IllegalArgumentException();
         }
         return tripDao.getPassengers(trip,dateTime);
+    }
+    @Override
+    public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
+        if( trip.getStartDateTime().isAfter(startDate)
+                || trip.getEndDateTime().isBefore(startDate)
+                || Period.between(trip.getStartDateTime().toLocalDate(),startDate.toLocalDate()).getDays()%7!=0
+        ){
+            throw new IllegalArgumentException();
+        }
+        return tripDao.getPassengers(trip,startDate,endDate);
+    }
+    @Override
+    public List<Passenger> getPassengers(Trip trip){
+        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
     }
     @Override
     public List<Passenger> getPassengers(TripInstance tripInstance){
@@ -277,17 +326,28 @@ public class TripServiceImpl implements TripService {
         }
         Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
 
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,Optional.empty(),Optional.empty(), page, pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,OFFSET_MINUTES,Optional.empty(),Optional.empty(),getTripSortType("price"),false, page, pageSize);
     }
+    private Trip.SortType getTripSortType(final String sortType){
+        try{
+            Trip.SortType aux = Trip.SortType.valueOf(sortType.toUpperCase());
+            return aux;
+        }catch (Exception e){
+            return Trip.SortType.PRICE;
+        }
+    }
+
+    //TODO: sacar los optional que nunca se usan
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
-            long origin_city_id, long destination_city_id, final String startDate,
-            final String startTime, final String endDate, final String endTime,
-            double minPrice, double maxPrice,
+            long origin_city_id, long destination_city_id, final LocalDate startDate,
+            final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
+            final Optional<BigDecimal> minPrice, final Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
             final int page, final int pageSize){
         validatePageAndSize(page,pageSize);
-        Optional<LocalDateTime> startDateTime = getLocalDateTime(startDate,startTime);
-        Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime.get(),Optional.of(startDateTime.get().getDayOfWeek()),endDateTime,Optional.of(minPrice),Optional.of(maxPrice),page,pageSize);
+        LocalDateTime startDateTime = startDate.atTime(startTime);
+        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,page,pageSize);
     }
+
 }
