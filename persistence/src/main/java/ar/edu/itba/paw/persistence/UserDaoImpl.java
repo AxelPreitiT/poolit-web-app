@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import javax.sql.DataSource;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class UserDaoImpl implements UserDao {
         data.put("email", savedEmail);
         data.put("phone", savedPhone);
         data.put("password", savedPassword);
-        data.put("birthdate", birthdate);
+        data.put("birthdate", Timestamp.valueOf(birthdate));
         data.put("city_id", bornCity.getId());
         data.put("user_role", role);
         data.put("user_image_id", user_image_id);
@@ -92,6 +93,6 @@ public class UserDaoImpl implements UserDao {
     public void updateProfile(final String username, final String surname, final String email,
                               final String password, final LocalDateTime birthdate, final City bornCity, String role, long user_image_id){
         jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, birthdate = ?, city_id = ?, user_role = ?, user_image_id = ?  WHERE email = ?",
-                username, surname, password, birthdate, bornCity.getId(), role, user_image_id, email);
+                username, surname, password, Timestamp.valueOf(birthdate), bornCity.getId(), role, user_image_id, email);
     }
 }

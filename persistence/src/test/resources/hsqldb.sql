@@ -1,15 +1,16 @@
+SET DATABASE SQL SYNTAX PGS TRUE;
 CREATE TABLE IF NOT EXISTS images(
                                      image_id IDENTITY PRIMARY KEY,
                                      bytea BLOB
 );
 CREATE TABLE IF NOT EXISTS provinces (
-                                         province_id IDENTITY NOT NULL,
+                                         province_id IDENTITY NOT NULL PRIMARY KEY ,
                                          name VARCHAR(2000) NOT NULL,
                                          UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS cities (
-                                      city_id IDENTITY NOT NULL,
+                                      city_id IDENTITY NOT NULL PRIMARY KEY,
                                       name VARCHAR(2000) NOT NULL,
                                       province_id INT NOT NULL,
                                       UNIQUE (province_id, name),
@@ -33,7 +34,7 @@ CREATE TABLE IF NOT EXISTS users(
 );
 
 CREATE TABLE IF NOT EXISTS cars(
-                                   car_id IDENTITY,
+                                   car_id IDENTITY PRIMARY KEY ,
                                    plate VARCHAR(2000) NOT NULL,
                                    info_car VARCHAR(2000) NOT NULL,
                                    user_id INT NOT NULL,
@@ -50,7 +51,6 @@ CREATE TABLE IF NOT EXISTS trips(
                                     price DOUBLE PRECISION DEFAULT 0.0,
                                     start_date_time TIMESTAMP NOT NULL,
                                     end_date_time TIMESTAMP NOT NULL,
---     is_recurrent BOOLEAN DEFAULT false,
 -- day_of_week es 1->Lunes, 7->Domingo
                                     day_of_week INT NOT NULL,
                                     origin_city_id INT NOT NULL,
@@ -73,7 +73,6 @@ create TABLE IF NOT EXISTS passengers(
 CREATE TABLE IF NOT EXISTS trips_cars_drivers(
                                                  trip_id INT NOT NULL,
                                                  user_id INT NOT NULL,
---     TODO: ver que pasa si se elimina un auto (CASCADE/SET NULL/...)
                                                  car_id INT,
                                                  PRIMARY KEY(trip_id,user_id),
                                                  UNIQUE(trip_id,car_id),
