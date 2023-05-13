@@ -24,7 +24,7 @@
             <p class="error-code-style"><c:out value="${errorMessage}"/></p>
         </div>
         <a class="anchor-style" href="<c:url value="/"/>">
-            <button class="btn button-bg-color button-style">
+            <button class="btn primary-button button-style">
                 <span class="light-text h5"><spring:message code="errors.button"/></span>
             </button>
         </a>

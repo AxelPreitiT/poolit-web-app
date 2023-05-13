@@ -28,7 +28,10 @@
       </jsp:include>
     </div>
     <div id="trip-card-date-list-container">
-      <jsp:include page="/WEB-INF/jsp/components/trip-card-date-list.jsp"/>
+      <jsp:include page="/WEB-INF/jsp/components/trip-card-date-list.jsp">
+        <jsp:param name="noTripsTitleCode" value="reservedTrips.notFound.title"/>
+        <jsp:param name="noTripsSubtitleCode" value="reservedTrips.notFound.subtitle"/>
+      </jsp:include>
     </div>
   </div>
 </body>

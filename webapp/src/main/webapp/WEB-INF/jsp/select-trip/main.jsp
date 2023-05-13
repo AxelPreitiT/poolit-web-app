@@ -50,7 +50,7 @@
                                     <c:out value="disabled"/>
                                 </c:if>>
                             <i class="bi bi-check2 light-text h3"></i>
-                            <span class="button-text-style light-text h3"><spring:message code="selectTrip.btnConfirm"/></span>
+                            <span class="button-text-style light-text h3"><spring:message code="selectTrip.btnJoin"/></span>
                         </button>
                     </form:form>
                     <c:if test="${trip.freeSeats == 0}">
