@@ -36,5 +36,5 @@
     width: 100%;
     aspect-ratio: 16/9;
     border-radius: 16px;
-    object-fit: contain;
+    object-fit: cover;
 }

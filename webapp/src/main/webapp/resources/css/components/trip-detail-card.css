@@ -86,3 +86,8 @@
     border-radius: 50%;
     aspect-ratio: 1;
 }
+
+.profile-link {
+    text-decoration-line: underline;
+    text-decoration-color: white;
+}

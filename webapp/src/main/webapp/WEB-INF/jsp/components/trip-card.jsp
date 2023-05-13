@@ -99,17 +99,20 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Avisar a axel que toque un poco el formato con el de hasta -->
-                        <span class="text"><spring:message code="tripCard.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                        <span class="text"><spring:message code="tripCard.warning.title"/>
+                            <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
+                            <strong class="secondary-color">-</strong>
+                            <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
+                          </span>
                         <span class="text"><spring:message code="tripCard.warning.messege"/></span>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                        <button type="button" class="btn primary-button" data-bs-dismiss="modal">
                             <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                         </button>
                         <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
                         <form:form method="DELETE" action="${deleteTripUrl}">
-                            <button type="submit" class="btn danger-bg-color">
+                            <button type="submit" class="btn danger-button">
                                 <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
                             </button>
                         </form:form>
@@ -137,12 +140,12 @@
                         <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                        <button type="button" class="btn primary-button" data-bs-dismiss="modal">
                             <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                         </button>
                         <c:url value="/trips/${trip.tripId}/cancel" var="cancelTripUrl"/>
                         <form:form method="DELETE" action="${cancelTripUrl}">
-                            <button type="submit" class="btn danger-bg-color">
+                            <button type="submit" class="btn danger-button">
                                 <span class="light-text"><spring:message code="tripCard.user.btn.cancel"/></span>
                             </button>
                         </form:form>

@@ -51,7 +51,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title danger"><spring:message code="navbar.modal.title"/></h3>
+                                    <h3 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h3>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
