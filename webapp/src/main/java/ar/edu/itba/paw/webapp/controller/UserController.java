@@ -9,6 +9,10 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -20,6 +24,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.Authenticator;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,12 +48,14 @@ public class UserController extends LoggedUserController {
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
 
+    private final AuthenticationManager authenticationManager;
+
     private final static int PAGE_SIZE = 3;
 
     @Autowired
     public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                          final CarService carService, final ImageService imageService){
+                          final CarService carService, final ImageService imageService, final AuthenticationManager authenticationManager) {
         super(userService);
         this.cityService = cityService;
         this.reviewService = reviewService;
@@ -57,6 +64,8 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
+        this.authenticationManager = authenticationManager;
+
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -69,6 +78,7 @@ public class UserController extends LoggedUserController {
         mav.addObject("postUrl", CREATE_USER_PATH);
         return mav;
     }
+
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.POST)
     public ModelAndView createUserPost(
@@ -88,7 +98,10 @@ public class UserController extends LoggedUserController {
             errors.rejectValue("email", "validation.email.alreadyExists");
             return createUserGet(form);
         }
-        return new ModelAndView("redirect:/users/login" );
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());
+        Authentication auth = authenticationManager.authenticate(authRequest);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return new ModelAndView("redirect:/" );
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
