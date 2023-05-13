@@ -267,7 +267,7 @@ public class TripDaoImpl implements TripDao {
                     "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count "+
                     "FROM generate_series(p.start_date,p.end_date,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
                     "GROUP BY days.days,passengers.trip_id "+
-                    ")aux ON aux.trip_id = trips.trip_id JOIN trips_cars_drivers drivers on drivers.trip_id = trips.trip_id JOIN users ON drivers.user_id = users.user_id JOIN cars ON cars.user_id = users.user_id JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id "+
+                    ")aux ON aux.trip_id = trips.trip_id JOIN trips_cars_drivers drivers on drivers.trip_id = trips.trip_id JOIN users ON drivers.user_id = users.user_id JOIN cars ON cars.car_id = drivers.car_id JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id "+
                     "WHERE p.user_id = ? ";
         arguments.add(user.getUserId());
         if(minDateTime.isPresent()){
