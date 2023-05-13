@@ -49,7 +49,7 @@
                                 <i class="bi bi-calendar text"></i>
                                 <div class="date-info-column">
                                     <c:choose>
-                                        <c:when test="${trip.recurrent}">
+                                        <c:when test="${trip.queryIsRecurrent}">
                                             <span class="text text-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
                                         </c:when>
                                         <c:otherwise>
@@ -63,7 +63,7 @@
                                 <span class="text"><c:out value="${trip.startTimeString}"/></span>
                             </div>
                             <div class="footer-price-container">
-                                <h2 class="secondary-color">$<c:out value="${trip.price}"/></h2>
+                                <h2 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h2>
                             </div>
                         </div>
                     </div>

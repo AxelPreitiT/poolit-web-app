@@ -164,6 +164,10 @@ public class Trip {
         return price * getQueryTotalTrips();
     }
 
+    public boolean getQueryIsRecurrent(){
+        return !queryStartDateTime.equals(queryEndDateTime);
+    }
+
     public enum SortType{
         PRICE(),
         TIME(),

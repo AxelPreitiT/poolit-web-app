@@ -66,12 +66,12 @@
                         <span class="h3 text"><spring:message code="reviewTrip.price"/></span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color"><spring:message code="reviewTrip.priceFormat" arguments="${trip.price}"/></span>
+                        <span class="h2 secondary-color"><spring:message code="reviewTrip.priceFormat" arguments="${trip.queryTotalPrice}"/></span>
                     </div>
                 </div>
                 <div class="trip-price-row items-to-end">
                     <c:choose>
-                        <c:when test="${trip.recurrent}">
+                        <c:when test="${trip.queryIsRecurrent}">
                             <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
                         </c:when>
                         <c:otherwise>
