@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
@@ -17,13 +18,13 @@ public interface TripService {
     //
     Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate date, final LocalTime time,final BigDecimal price, final int maxSeats, User driver);
     //
-    boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime);
+    boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException;
     //
-    boolean addPassenger(Trip trip, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    boolean addPassenger(Trip trip, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException;
     //
-    boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException;
     //
-    boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime);
+    boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException;
     boolean removePassenger(final Trip trip, final User passenger);
     //
     Optional<Trip> findById(long id);
@@ -62,7 +63,7 @@ public interface TripService {
     //
 
     boolean deleteTrip(final Trip trip);
-    boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate);
+    boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate) throws TripAlreadyStartedException;
     boolean deleteTrip(int tripId);
     //
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(
