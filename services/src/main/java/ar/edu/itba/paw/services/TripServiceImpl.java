@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.*;
@@ -30,6 +31,7 @@ public class TripServiceImpl implements TripService {
         this.tripDao = tripDao;
     }
 
+    @Transactional
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, User driver, final LocalDate endDate, final LocalTime endTime) {
         //Usamos que el front debe pasar el date en ISO-8601
@@ -64,6 +66,7 @@ public class TripServiceImpl implements TripService {
         }
         return newTrip;
     }
+    @Transactional
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate date, final LocalTime time,final BigDecimal price, final int maxSeats, User driver){
         return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
@@ -98,6 +101,7 @@ public class TripServiceImpl implements TripService {
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) throw new IllegalArgumentException();
     }
+    @Transactional
     public boolean deleteTrip(final Trip trip){
         List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         //Notify passengers that trip was deleted
@@ -126,6 +130,7 @@ public class TripServiceImpl implements TripService {
     public boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime){
         return addPassenger(trip,passenger,dateTime,dateTime);
     }
+    @Transactional
     @Override
     public boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate){
         LocalDateTime startDateTime = getIsoLocalDateTime(startDate,startTime).get();
@@ -171,6 +176,7 @@ public class TripServiceImpl implements TripService {
         }
         return tripDao.addPassenger(trip,passenger);
     }
+    @Transactional
     @Override
     public boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
         Optional<Trip> trip = findById(tripId);
@@ -186,6 +192,7 @@ public class TripServiceImpl implements TripService {
         return addPassenger(tripId,passenger,dateTime,dateTime);
     }
 
+    @Transactional
     @Override
     public boolean removePassenger(final Trip trip, final User user){
         if(trip == null || user == null){

@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email);
     }
 
+    @Transactional
     @Override
     public void changeRole(long userId, String role) {
         if(Objects.equals(role, Roles.USER.role)){
@@ -118,6 +119,7 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(userId, role);
     }
 
+    @Transactional
     @Override
     public void changeToDriver(User user) {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
