@@ -138,6 +138,10 @@ public class Trip {
         return price*getTotalTrips();
     }
 
+    public boolean getTripHasEnded(){
+        return endDateTime.isBefore(LocalDateTime.now());
+    }
+
     public LocalDateTime getQueryStartDateTime() {
         return queryStartDateTime;
     }
