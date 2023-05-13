@@ -12,9 +12,9 @@
 <body class="background-bg-color">
     <div class="full-container">
         <div class="favicon_container">
-            <div class="img-container">
+            <a id="img-container" href="<c:url value="/"/>">
                 <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="POOLIT" class="brand-logo">
-            </div>
+            </a>
         </div>
         <div class="main-container-style primary-bg-color">
             <h1 class="light-text"><spring:message code="login.title"/></h1>
