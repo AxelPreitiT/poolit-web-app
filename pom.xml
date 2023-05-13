@@ -15,23 +15,26 @@
 
   <properties>
 <!--      <org.springframework.version>4.3.4.RELEASE</org.springframework.version> -->
-    <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+      <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
 <!--      <spring-security.version>4.2.0.RELEASE</spring-security.version> -->
-    <spring-security.version>4.0.4.RELEASE</spring-security.version>
-    <servlet-api.version>2.5</servlet-api.version>
-    <jstl.version>1.2</jstl.version>
+      <spring-security.version>4.0.4.RELEASE</spring-security.version>
+      <servlet-api.version>2.5</servlet-api.version>
+      <jstl.version>1.2</jstl.version>
       <mockito.version>2.25.1</mockito.version>
-    <org.postgresql.version>42.2.5</org.postgresql.version>
-    <javax.validation-api.version>2.0.1.Final</javax.validation-api.version>
-    <javax.mail.version>1.6.2</javax.mail.version>
+      <org.postgresql.version>42.2.5</org.postgresql.version>
+      <javax.validation-api.version>2.0.1.Final</javax.validation-api.version>
+      <javax.mail.version>1.6.2</javax.mail.version>
 <!--      No usamos thymeleaf 3.0.11 porque es vulnerable-->
-    <thymeleaf.version>3.0.13.RELEASE</thymeleaf.version>
-    <org.hsqldb.version>2.3.1</org.hsqldb.version>
-    <org.hibernate.validator>5.4.3.Final</org.hibernate.validator>
-    <commons.fileupload.version>1.4</commons.fileupload.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+      <thymeleaf.version>3.0.13.RELEASE</thymeleaf.version>
+      <org.hsqldb.version>2.3.1</org.hsqldb.version>
+      <org.hibernate.validator>5.4.3.Final</org.hibernate.validator>
+      <commons.fileupload.version>1.4</commons.fileupload.version>
+      <org.slf4j.version>1.7.5</org.slf4j.version>
+      <logback.version>1.1.2</logback.version>
+      <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencyManagement>
@@ -149,16 +152,41 @@
             <version>${spring-security.version}</version>
         </dependency>
 
-      <dependency>
-        <groupId>commons-fileupload</groupId>
-        <artifactId>commons-fileupload</artifactId>
-        <version>${commons.fileupload.version}</version>
-      </dependency>
+<!--      Commons FileUpload-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons.fileupload.version}</version>
+        </dependency>
 
-
-
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${org.slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+            <version>${logback-ext-spring.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
-
   </dependencyManagement>
 
   <modules>
