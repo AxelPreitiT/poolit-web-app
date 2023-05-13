@@ -40,8 +40,8 @@ public class PagedContent<T>{
         return currentPage*pageSize;
     }
     public int getEndNumber(){
-//        return Math.min(getStartNumber()+pageSize,totalCount);
-        return getStartNumber()+pageSize-1;
+        int start = getStartNumber();
+        return Math.min(start+pageSize-1, totalCount-1);
     }
 
     public int getTotalPages(){
