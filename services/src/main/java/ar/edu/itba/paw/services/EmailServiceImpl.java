@@ -82,31 +82,31 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendMailNewPassenger(Trip trip, Passenger passenger) throws MessagingException, IOException {
-        String subject = messageSource.getMessage("emails.subject.newPassengerDriver",null,passenger.getMailLocale());
+        String subject = messageSource.getMessage("emails.subject.newPassengerDriver",null,trip.getDriver().getMailLocale());
 
         // Variables para el html
         final Context ctx = new Context();
         ctx.setVariable("trip", trip);
         ctx.setVariable("passenger", passenger);
-        ctx.setLocale(passenger.getMailLocale());
+        ctx.setLocale(trip.getDriver().getMailLocale());
 
         //enviamos el mail
-        sendEmail(trip.getDriver().getEmail(),subject,"new-passenger-mail",ctx, passenger.getMailLocale());
+        sendEmail(trip.getDriver().getEmail(),subject,"new-passenger-mail",ctx, trip.getDriver().getMailLocale());
     }
 
     @Async
     @Override
     public void sendMailTripCancelledToDriver(Trip trip,Passenger passenger) throws MessagingException,IOException{
-        String subject = messageSource.getMessage("emails.subject.passengerCancelTrip",null,passenger.getMailLocale());
+        String subject = messageSource.getMessage("emails.subject.passengerCancelTrip",null,trip.getDriver().getMailLocale());
 
         // Variables para el html
         final Context ctx = new Context();
         ctx.setVariable("trip", trip);
         ctx.setVariable("passenger", passenger);
-        ctx.setLocale(passenger.getMailLocale());
+        ctx.setLocale(trip.getDriver().getMailLocale());
 
         //enviamos el mail
-        sendEmail(trip.getDriver().getEmail(),subject,"trip-cancelled-driver",ctx, passenger.getMailLocale());
+        sendEmail(trip.getDriver().getEmail(),subject,"trip-cancelled-driver",ctx, trip.getDriver().getMailLocale());
     }
     @Async
     @Override
