@@ -56,20 +56,9 @@ public interface TripService {
     PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize);
     PagedContent<Trip> getTripsWhereUserIsPassengerPast(final User user, int page, int pageSize);
     //
-    //
-    PagedContent<Trip> getIncomingTrips(int page, int pageSize);
-    //
-    PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize);
-    //
-
     boolean deleteTrip(final Trip trip);
     boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate) throws TripAlreadyStartedException;
     boolean deleteTrip(int tripId);
-    //
-    PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(
-            long origin_city_id, long destination_city_id, final String startDate,
-            final String startTime, final String endDate, final String endTime,
-            final int page, final int pageSize);
     //
     PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize);
     //

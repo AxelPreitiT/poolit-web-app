@@ -287,41 +287,12 @@ public class TripServiceImpl implements TripService {
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
     }
-    @Override
-    public PagedContent<Trip> getIncomingTrips(int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getIncomingTrips(page,pageSize);
-    }
-    @Override
-    public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getIncomingTripsByOrigin(origin_city_id,page,pageSize);
-    }
 
     @Override
     public PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         LocalDateTime start = LocalDateTime.now();
         return tripDao.getTripsByOriginAndStart(user.getBornCity().getId(),start,page,pageSize);
-    }
-    @Override
-    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(
-            long origin_city_id, long destination_city_id, final String startDate,
-            final String startTime, final String endDate, final String endTime,
-            final int page, final int pageSize){
-        validatePageAndSize(page,pageSize);
-        LocalDateTime startDateTime;
-        Optional<DayOfWeek> dayOfWeek = Optional.empty();
-        Optional<LocalDateTime> aux = getLocalDateTime(startDate,startTime);
-        if(aux.isPresent()){
-            startDateTime = aux.get();
-            dayOfWeek = Optional.of(startDateTime.getDayOfWeek());
-        }else{
-            startDateTime = LocalDateTime.now();
-        }
-        Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
-
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,OFFSET_MINUTES,Optional.empty(),Optional.empty(),getTripSortType("price"),false, page, pageSize);
     }
     private Trip.SortType getTripSortType(final String sortType){
         try{

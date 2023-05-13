@@ -194,6 +194,7 @@ public class TripDaoImpl implements TripDao {
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime){
         return getPassengers(trip,dateTime,dateTime);
     }
+    //TODO: revisar
     @Override
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
         //A-{1,3}
@@ -288,20 +289,6 @@ public class TripDaoImpl implements TripDao {
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
-    @Override
-    public PagedContent<Trip> getIncomingTrips(int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
-                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
-                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
-        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        queryBuilder
-                .withOffset(page * pageSize)
-                .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
-    }
     private QueryBuilder.DbField getSortField(final Trip.SortType sortType){
         if(sortType.equals(Trip.SortType.TIME)){
             return QueryBuilder.DbField.TIME;
@@ -321,21 +308,6 @@ public class TripDaoImpl implements TripDao {
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
         List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
-    }
-    @Override
-    public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
-                .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID,QueryBuilder.DbComparator.EQUALS,origin_city_id)
-                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
-                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
-        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        queryBuilder
-                .withOffset(page * pageSize)
-                .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
