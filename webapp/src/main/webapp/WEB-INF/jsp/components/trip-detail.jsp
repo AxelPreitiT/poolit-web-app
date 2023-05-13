@@ -19,7 +19,9 @@
     <div class="row">
       <div class="col-sm-6 col-md-5 col-lg-4">
         <div id="trip-info-text-container">
-          <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp"/>
+          <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+            <jsp:param name="showDriverInfo" value="${param.showDriverInfo}"/>
+          </jsp:include>
         </div>
       </div>
       <div class="col-sm-6 col-md-5 col-lg-5">

@@ -19,7 +19,9 @@
     <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
     <div class="trip-info-container">
       <div class="trip-info">
-        <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp"/>
+        <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+          <jsp:param name="showDriverInfo" value="true"/>
+        </jsp:include>
       </div>
       <div class="trip-passengers">
         <c:choose>

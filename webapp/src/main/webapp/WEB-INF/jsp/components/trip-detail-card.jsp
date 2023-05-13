@@ -58,6 +58,7 @@
                 </div>
             </a>
         </div>
+        <c:if test="${param.showDriverInfo}">
         <div class="show-row">
             <i class="bi bi-envelope-fill light-text h5"></i>
             <div class="show-row-content">
@@ -70,5 +71,6 @@
                 <span class="light-text detail"><c:out value="${trip.driver.phone}"/></span>
             </div>
         </div>
+        </c:if>
     </div>
 </div>
