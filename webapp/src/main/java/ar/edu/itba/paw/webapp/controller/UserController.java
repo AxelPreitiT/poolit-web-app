@@ -41,6 +41,8 @@ public class UserController extends LoggedUserController {
 
     private final ImageService imageService;
 
+    private final AuthenticationManager authenticationManager;
+
     private final PawUserDetailsService pawUserDetailsService;
 
     private final UserService userService;
@@ -55,7 +57,7 @@ public class UserController extends LoggedUserController {
     @Autowired
     public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                          final CarService carService, final ImageService imageService) {
+                          final CarService carService, final ImageService imageService, final AuthenticationManager authenticationManager) {
         super(userService);
         this.cityService = cityService;
         this.reviewService = reviewService;
@@ -64,7 +66,7 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
-
+        this.authenticationManager = authenticationManager;
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -92,6 +94,7 @@ public class UserController extends LoggedUserController {
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
+            userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             return createUserGet(form);
@@ -147,49 +150,6 @@ public class UserController extends LoggedUserController {
         return mav;
     }
 
-    @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
-    public ModelAndView profilePost(){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-
-        final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTripsPassanger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
-        if(Objects.equals(user.getRole(), "DRIVER")){
-            //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
-            pawUserDetailsService.update(user);
-            userService.changeRole(user.getUserId(), user.getRole());
-
-            final ModelAndView mav = new ModelAndView("/users/user-profile");
-            mav.addObject("user", user);
-            mav.addObject("futureTripsPassanger", futureTripsPassanger);
-            mav.addObject("pastTripsPassanger", pastTripsPassanger);
-
-            mav.addObject("reviews", reviewsAsUser);
-            return mav;
-        }
-        final List<Review> reviews = reviewService.getDriverReviews(user);
-        //TODO: traer las que ya pasaron y las que van a hacerse
-        final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
-        final List<Car> cars = carService.findByUser(user);
-        Double rating = reviewService.getDriverRating(user);
-
-        pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("rating", rating);
-        mav.addObject("futureTrips", futureTrips);
-        mav.addObject("pastTrips",pastTrips);
-        mav.addObject("futureTripsPassanger", futureTripsPassanger);
-        mav.addObject("pastTripsPassanger",pastTripsPassanger);
-        mav.addObject("cars", cars);
-        mav.addObject("reviews", reviews);
-        mav.addObject("reviewsAsUser", reviewsAsUser);
-        return mav;
-    }
-
     @RequestMapping(value = "/profile/{id:\\d+$}", method = RequestMethod.GET)
     public ModelAndView profilePost(@PathVariable("id") final long userId)
     {
@@ -203,12 +163,14 @@ public class UserController extends LoggedUserController {
             mav.addObject("reviews", reviews);
             return mav;
         }
-        List<Review> reviews = reviewService.getDriverReviews(user);
-        Double rating = reviewService.getDriverRating(user);
+        final List<Review> reviews = reviewService.getDriverReviews(user);
+        final Double rating = reviewService.getDriverRating(user);
+        final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
 
         final ModelAndView mav = new ModelAndView("/users/public-profile");
         mav.addObject("user", user);
         mav.addObject("rating", rating);
+        mav.addObject("countTrips",createdTrips.getTotalCount());
         mav.addObject("reviews", reviews);
         return mav;
     }

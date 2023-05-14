@@ -293,6 +293,12 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
+    }
+
+    @Override
     public PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);

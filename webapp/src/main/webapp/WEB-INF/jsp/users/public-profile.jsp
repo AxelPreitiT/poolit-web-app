@@ -14,11 +14,12 @@
   <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
   <div class="main-container">
     <c:url value="/users/profile" var="userProfileUrl"/>
-    <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
+    <jsp:include page="/WEB-INF/jsp/users/public-profile-container.jsp">
       <jsp:param name="user" value="${user}"/>
       <jsp:param name="role" value="DRIVER"/>
       <jsp:param name="path" value="${userProfileUrl}"/>
       <jsp:param name="rating" value="${rating}"/>
+      <jsp:param name="countTrips" value="${countTrips}"/>
     </jsp:include>
     <div class="List-properties-container">
       <c:set var="reviews" value="${reviews}" scope="request"/>
