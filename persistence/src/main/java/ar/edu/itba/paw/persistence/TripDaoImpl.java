@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -193,6 +194,7 @@ public class TripDaoImpl implements TripDao {
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime){
         return getPassengers(trip,dateTime,dateTime);
     }
+    //TODO: revisar
     @Override
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
         //A-{1,3}
@@ -287,39 +289,25 @@ public class TripDaoImpl implements TripDao {
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
-    @Override
-    public PagedContent<Trip> getIncomingTrips(int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
-                .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
-                .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
-        int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        queryBuilder
-                .withOffset(page * pageSize)
-                .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
-    }
     private QueryBuilder.DbField getSortField(final Trip.SortType sortType){
         if(sortType.equals(Trip.SortType.TIME)){
             return QueryBuilder.DbField.TIME;
         }
         return QueryBuilder.DbField.TRIP_PRICE;
     }
+
     @Override
-    public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
+    public PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize){
         QueryBuilder queryBuilder = new QueryBuilder()
-                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalDateTime.now())
-                .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID,QueryBuilder.DbComparator.EQUALS,origin_city_id)
+                .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
+                .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,startDateTime)
+                .withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,startDateTime.getDayOfWeek().getValue())
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbOrder.ASC);
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
-        queryBuilder
-                .withOffset(page * pageSize)
+        queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
-        List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
         return new PagedContent<>(ans,page,pageSize,total);
     }
 
@@ -352,6 +340,10 @@ public class TripDaoImpl implements TripDao {
                 .withWhere(QueryBuilder.DbField.DESTINATION_CITY_ID, QueryBuilder.DbComparator.EQUALS,destination_city_id)
                 .withHaving(QueryBuilder.DbField.OCCUPIED_SEATS, QueryBuilder.DbComparator.LESS, QueryBuilder.DbField.MAX_PASSENGERS)
                 .withOrderBy(getSortField(sortType), descending? QueryBuilder.DbOrder.DESC : QueryBuilder.DbOrder.ASC);
+        if(startDateTime.toLocalDate().equals(LocalDate.now())){
+            //Si es en el mismo dia, entonces da solo los viajes que no pasaron (para no traer inconsistencias con los minutos
+            queryBuilder.withWhere(QueryBuilder.DbField.TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,LocalTime.now());
+        }
         endDateTime.ifPresent(localDateTime -> queryBuilder.withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,localDateTime.plusMinutes(minutes))
                                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,localDateTime.minusMinutes(minutes)));
         dayOfWeek.ifPresent(dayOfWeek1 -> queryBuilder.withWhere(QueryBuilder.DbField.DAY_OF_WEEK, QueryBuilder.DbComparator.EQUALS,dayOfWeek1.getValue()));

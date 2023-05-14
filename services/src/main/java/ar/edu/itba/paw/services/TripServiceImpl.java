@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
@@ -127,19 +128,19 @@ public class TripServiceImpl implements TripService {
         return deleteTrip(tripToDelete);
     }
     @Override
-    public boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime){
+    public boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException{
         return addPassenger(trip,passenger,dateTime,dateTime);
     }
     @Transactional
     @Override
-    public boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate){
+    public boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate) throws TripAlreadyStartedException{
         LocalDateTime startDateTime = getIsoLocalDateTime(startDate,startTime).get();
         LocalDateTime endDateTime = getIsoLocalDateTime(endDate,startTime).orElse(startDateTime);
         return addPassenger(trip,passenger,startDateTime,endDateTime);
     }
     @Override
-    public boolean addPassenger(Trip trip, User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
-        if(trip==null || user==null){
+    public boolean addPassenger(Trip trip, User user, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException {
+        if(trip==null || user==null || startDateTime == null || endDateTime == null){
             throw new IllegalArgumentException();
         }
         Passenger passenger = new Passenger(user,startDateTime,endDateTime);
@@ -147,22 +148,17 @@ public class TripServiceImpl implements TripService {
         if(passengers.contains(passenger)){
             throw new IllegalStateException();
         }
-        //TODO: se puede obviar si se pide al trip en el mismo intervalo en el que se va a inscribir a la persona
-        //Y en ese caso se puede comparar de manera segura a getOccupiedSeats con maxSeats
         passengers = tripDao.getPassengers(trip,startDateTime,endDateTime);
         if(passengers.size()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
-        //TODO: arreglar (hacerlo cuando tenga varias vistas para inscribirse a un viaje)
-        //El chequeo este
-//        startDateTime.isBefore(LocalDateTime.now())
-        //Esta mal cuando se quiere inscribir a un viaje desde el discovery
-        //Tenemos que hacer que se inscriba desde el momento actual
-        if(    startDateTime == null || endDateTime == null
-            || startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
+        if(startDateTime.isBefore(LocalDateTime.now())){
+            throw new TripAlreadyStartedException();
+        }
+        if(     startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
             || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
-            || startDateTime.isBefore(LocalDateTime.now()) || trip.getDriver().equals(user)
+            || trip.getDriver().equals(user)
             || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
             throw new IllegalArgumentException();
         }
@@ -178,7 +174,7 @@ public class TripServiceImpl implements TripService {
     }
     @Transactional
     @Override
-    public boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime){
+    public boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException{
         Optional<Trip> trip = findById(tripId);
         if(!trip.isPresent()){
             throw new IllegalStateException();
@@ -188,7 +184,7 @@ public class TripServiceImpl implements TripService {
         return addPassenger(trip.get()  ,passenger,startDateTime,endDateTime);
     }
     @Override
-    public boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime){
+    public boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException{
         return addPassenger(tripId,passenger,dateTime,dateTime);
     }
 
@@ -306,34 +302,12 @@ public class TripServiceImpl implements TripService {
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
     }
-    @Override
-    public PagedContent<Trip> getIncomingTrips(int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getIncomingTrips(page,pageSize);
-    }
-    @Override
-    public PagedContent<Trip> getIncomingTripsByOrigin(long origin_city_id, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getIncomingTripsByOrigin(origin_city_id,page,pageSize);
-    }
-    @Override
-    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestination(
-            long origin_city_id, long destination_city_id, final String startDate,
-            final String startTime, final String endDate, final String endTime,
-            final int page, final int pageSize){
-        validatePageAndSize(page,pageSize);
-        LocalDateTime startDateTime;
-        Optional<DayOfWeek> dayOfWeek = Optional.empty();
-        Optional<LocalDateTime> aux = getLocalDateTime(startDate,startTime);
-        if(aux.isPresent()){
-            startDateTime = aux.get();
-            dayOfWeek = Optional.of(startDateTime.getDayOfWeek());
-        }else{
-            startDateTime = LocalDateTime.now();
-        }
-        Optional<LocalDateTime> endDateTime = getLocalDateTime(endDate,endTime);
 
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek,endDateTime,OFFSET_MINUTES,Optional.empty(),Optional.empty(),getTripSortType("price"),false, page, pageSize);
+    @Override
+    public PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        LocalDateTime start = LocalDateTime.now();
+        return tripDao.getTripsByOriginAndStart(user.getBornCity().getId(),start,page,pageSize);
     }
     private Trip.SortType getTripSortType(final String sortType){
         try{

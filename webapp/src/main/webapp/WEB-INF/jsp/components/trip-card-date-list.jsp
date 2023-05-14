@@ -36,11 +36,11 @@
             <div class="trip-card-row-header">
               <i class="bi bi-calendar secondary-color h3"></i>
               <c:choose>
-                <c:when test="${trip.recurrent}">
-                  <span class="secondary-color h3"><spring:message code="tripDetails.card.formateDateRecurrent" arguments="${trip.startDateString}, ${trip.endDateString}"/></span>
+                <c:when test="${trip.queryIsRecurrent}">
+                  <span class="secondary-color h3"><spring:message code="tripDetails.card.formateDateRecurrent" arguments="${trip.queryStartDateString}, ${trip.queryEndDateString}"/></span>
                 </c:when>
                 <c:otherwise>
-                  <span class="secondary-color h3"><c:out value="${trip.startDateString}"/></span>
+                  <span class="secondary-color h3"><c:out value="${trip.queryStartDateString}"/></span>
                 </c:otherwise>
               </c:choose>
             </div>

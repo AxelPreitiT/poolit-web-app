@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final AuthenticationManager authenticationManager;
+
     private enum Roles{
         USER("USER"),
         DRIVER("DRIVER");
@@ -42,9 +45,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder){
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,final AuthenticationManager authenticationManager){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @Transactional
@@ -53,7 +57,11 @@ public class UserServiceImpl implements UserService {
                            final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) {
 
         String finalRole = (role == null) ? Roles.USER.role : role;
-        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
+        User ans = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(ans.getEmail(), ans.getPassword());
+        Authentication auth = authenticationManager.authenticate(authRequest);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return ans;
     }
 
     @Override

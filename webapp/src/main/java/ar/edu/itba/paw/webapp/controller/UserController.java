@@ -49,14 +49,13 @@ public class UserController extends LoggedUserController {
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
 
-    private final AuthenticationManager authenticationManager;
 
     private final static int PAGE_SIZE = 3;
 
     @Autowired
     public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                          final CarService carService, final ImageService imageService, final AuthenticationManager authenticationManager) {
+                          final CarService carService, final ImageService imageService) {
         super(userService);
         this.cityService = cityService;
         this.reviewService = reviewService;
@@ -65,7 +64,6 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
-        this.authenticationManager = authenticationManager;
 
     }
 
@@ -98,9 +96,6 @@ public class UserController extends LoggedUserController {
             errors.rejectValue("email", "validation.email.alreadyExists");
             return createUserGet(form);
         }
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(form.getEmail(), form.getPassword());
-        Authentication auth = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(auth);
         return new ModelAndView("redirect:/" );
     }
 
@@ -117,10 +112,6 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded){
-//        SecurityContext pepe = SecurityContextHolder.getContext();
-        //TODO: ver por que explota si no esta autenticado
-//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
 
         final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
@@ -154,8 +145,6 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
     public ModelAndView profilePost(){
-//        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
 
         final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
@@ -223,73 +212,4 @@ public class UserController extends LoggedUserController {
         return new ModelAndView("redirect:/trips/create");
     }
 
-    /*
-    @RequestMapping(value = "/profile/user", method = RequestMethod.GET)
-    public ModelAndView GetUserprofile(){
-
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
-
-        final ModelAndView mav = new ModelAndView("/users/user-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/user", method = RequestMethod.POST)
-    public ModelAndView PostUserprofile(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
-
-        pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/user-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/driver", method = RequestMethod.GET)
-    public ModelAndView GetDriverprofile(){
-
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/driver", method = RequestMethod.POST)
-    public ModelAndView Driverprofile(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
-
-        pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-*/
-
-    /*
-    @ModelAttribute("userLogged")
-    public User loggedUser(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(userService.findByEmail(authUser.getUsername()).isPresent()){
-            return userService.findByEmail(authUser.getUsername()).get();
-        }
-        return null;
-    }
-    */
 }

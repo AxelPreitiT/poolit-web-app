@@ -138,6 +138,10 @@ public class Trip {
         return price*getTotalTrips();
     }
 
+    public boolean getTripHasEnded(){
+        return endDateTime.isBefore(LocalDateTime.now());
+    }
+
     public LocalDateTime getQueryStartDateTime() {
         return queryStartDateTime;
     }
@@ -162,6 +166,10 @@ public class Trip {
     }
     public double getQueryTotalPrice() {
         return price * getQueryTotalTrips();
+    }
+
+    public boolean getQueryIsRecurrent(){
+        return !queryStartDateTime.equals(queryEndDateTime);
     }
 
     public enum SortType{

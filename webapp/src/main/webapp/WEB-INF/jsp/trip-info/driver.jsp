@@ -19,7 +19,9 @@
     <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
     <div class="trip-info-container">
       <div class="trip-info">
-        <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp"/>
+        <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+          <jsp:param name="showDriverInfo" value="true"/>
+        </jsp:include>
       </div>
       <div class="trip-passengers">
         <c:choose>
@@ -77,6 +79,7 @@
       </div>
     </div>
     <div id="button-container">
+      <c:if test="${!trip.tripHasEnded}">
       <div class="delete-trip-container">
         <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
           <i class="bi bi-trash-fill light-text h5"></i>
@@ -112,6 +115,7 @@
           </div>
         </div>
       </div>
+      </c:if>
       <c:url value="/trips/created" var="myTripsUrl"/>
       <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
         <i class="bi bi-car-front-fill light-text h3"></i>
