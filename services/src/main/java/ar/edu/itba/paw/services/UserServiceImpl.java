@@ -13,8 +13,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.Role;
+import java.beans.Transient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     @Override
     public User createUser(final String username, final String surname, final String email,
                            final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id) {
@@ -105,6 +108,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email);
     }
 
+    @Transactional
     @Override
     public void changeRole(long userId, String role) {
         if(Objects.equals(role, Roles.USER.role)){
@@ -115,6 +119,7 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(userId, role);
     }
 
+    @Transactional
     @Override
     public void changeToDriver(User user) {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
