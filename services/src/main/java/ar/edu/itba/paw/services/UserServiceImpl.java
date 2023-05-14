@@ -20,10 +20,7 @@ import java.beans.Transient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -53,39 +50,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id) {
-        if(role == null){
-            role = Roles.USER.role;
-        }
-        String finalRole = role;
-        LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime, bornCity, finalRole, user_image_id);
-    }
+                           final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) {
 
-    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
-        if(date.length()==0 || time.length()==0){
-            return Optional.empty();
-        }
-        LocalDateTime ans;
-        try{
-            String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
-        }catch (Exception e){
-            return Optional.empty();
-        }
-        return Optional.of(ans);
+        String finalRole = (role == null) ? Roles.USER.role : role;
+        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
     }
 
     @Override
     public User createUserIfNotExists(final String username, final String surname, final String email,
-                                      final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id){
-        if(role == null){
-            role = Roles.USER.role;
-        }
-        String finalRole = role;
-        Optional<User> current = userDao.findByEmail(email);
-        LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCity, finalRole, user_image_id));
+                                      final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id){
+
+        return userDao.findByEmail(email).orElseGet(() -> createUser(username, surname, email, phone, password, bornCity, mailLocale, role, user_image_id));
     }
 
     @Override

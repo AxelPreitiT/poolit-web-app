@@ -21,8 +21,8 @@ public class ReviewDaoImpl implements ReviewDao {
                     new User(resultSet.getLong("user_id"),resultSet.getString("username"),
                             resultSet.getString("surname"),resultSet.getString("email"),
                             resultSet.getString("phone"),resultSet.getString("password"),
-                            resultSet.getTimestamp("birthdate").toLocalDateTime(),
                             new City(resultSet.getLong("city_id"),resultSet.getString("name"), resultSet.getLong("province_id")),
+                            new Locale(resultSet.getString("mail_locale")),
                             resultSet.getString("user_role"), resultSet.getLong("user_image_id")),
                     resultSet.getInt("rating"), resultSet.getString("review"));
 
@@ -61,7 +61,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Review> findByDriver(User driver) {
-        return jdbcTemplate.query("SELECT city_id, user_id, review_id, trip_id, rating, review, username, surname, email, phone, password, birthdate, user_role, user_image_id, name, province_id FROM reviews NATURAL JOIN trips_cars_drivers as trips(trip_id, driver_id, car_id) NATURAL JOIN users NATURAL JOIN cities where driver_id = ?", ROW_MAPPER, driver.getUserId());
+        return jdbcTemplate.query("SELECT city_id, user_id, review_id, trip_id, rating, review, username, surname, email, phone, password, user_role, user_image_id, name, province_id FROM reviews NATURAL JOIN trips_cars_drivers as trips(trip_id, driver_id, car_id) NATURAL JOIN users NATURAL JOIN cities where driver_id = ?", ROW_MAPPER, driver.getUserId());
     }
 
     @Override
