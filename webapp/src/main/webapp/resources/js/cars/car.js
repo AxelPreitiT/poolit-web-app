@@ -1,36 +1,29 @@
-const input = document.querySelector('input');
-const preview = document.querySelector('.preview');
+const imageFileElement = document.getElementById('image-file');
+const imageLabelElement = document.getElementById('image-label');
 
-document.getElementById('imageFile').style.opacity=0;
-
-
-document.getElementById('imageFile').addEventListener('change', updateImageDisplay);
+imageFileElement.addEventListener('change', updateImageDisplay);
 
 function updateImageDisplay() {
-  while(preview.firstChild) {
-    preview.removeChild(preview.firstChild);
+  while(imageLabelElement.firstChild) {
+    imageLabelElement.removeChild(imageLabelElement.firstChild);
   }
 
-  const curFiles = input.files;
+  const curFiles = imageFileElement.files;
   if (curFiles.length === 0) {
-    const para = document.createElement('p');
-    para.textContent = 'No files currently selected for upload';
-    preview.appendChild(para);
+    const icon = document.createElement('i');
+    icon.classList.add("bi", "bi-car-front-fill", "light-text", "h1");
+    imageLabelElement.appendChild(icon);
   } else {
-    const list = document.createElement('div');
-    preview.appendChild(list);
+    const imageFile = curFiles[0];
+    const image = document.createElement('img');
+    image.src = URL.createObjectURL(imageFile);
+    imageLabelElement.appendChild(image);
 
-    for (const file of curFiles) {
-      const listItem = document.createElement('div');
-      const para = document.createElement('p');
-
-      const image = document.createElement('img');
-      image.src = URL.createObjectURL(file);
-      listItem.appendChild(image);
-      listItem.appendChild(para);
-
-
-      list.appendChild(listItem);
-    }
+    const iconOverlay = document.createElement('div');
+    iconOverlay.classList.add("overlay");
+    const icon = document.createElement('i');
+    icon.classList.add("icon", "bi", "bi-pencil-fill", "secondary-color", "h1");
+    iconOverlay.appendChild(icon);
+    imageLabelElement.appendChild(iconOverlay);
   }
 }

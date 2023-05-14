@@ -12,19 +12,19 @@
 <body class="background-bg-color">
     <div class="full-container">
         <div class="favicon_container">
-            <div class="img-container">
+            <a id="img-container" href="<c:url value="/"/>">
                 <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="POOLIT" class="brand-logo">
-            </div>
+            </a>
         </div>
-        <div class="main-container-style container-bg-color">
-            <h1 class="text"><spring:message code="login.title"/></h1>
-            <hr>
+        <div class="main-container-style primary-bg-color">
+            <h1 class="light-text"><spring:message code="login.title"/></h1>
+            <hr class="light-text">
             <c:url value="/users/login" var="loginUrl"/>
             <form action="${loginUrl}" method="post">
                 <div class="user-info-row">
                     <div class="user-info-item">
                         <div class="form-floating">
-                            <input type="email" id="email" name="email" class="form-control text" placeholder="Email">
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Email">
                             <label for="email" class="placeholder-text"><spring:message code="user.email"/></label>
                         </div>
                     </div>
@@ -32,7 +32,7 @@
                 <div class="user-info-row">
                     <div class="user-info-item">
                         <div class="form-floating">
-                            <input type="password" id="password" name="password" class="form-control text" placeholder=".">
+                            <input type="password" id="password" name="password" class="form-control" placeholder=".">
                             <label for="password" class="placeholder-text"><spring:message code="register.password"/></label>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                 <div class="user-info-row">
                     <div class="user-info-item form-check">
                         <input class="form-check-input" type="checkbox" id="keepLoggedIn" name="rememberme">
-                        <label class="form-check-label" for="keepLoggedIn">
+                        <label class="form-check-label light-text" for="keepLoggedIn">
                             <spring:message code="login.rememberMe"/>
                         </label>
                     </div>
@@ -58,9 +58,9 @@
             </form>
             <hr>
             <div class="create-container">
-                <h4><spring:message code="login.register"/></h4>
+                <h4 class="light-text"><spring:message code="login.register"/></h4>
                 <a href="<c:url value="/users/create"/>">
-                    <h5><spring:message code="login.registerBtn"/></h5>
+                    <h5 class="secondary-color"><spring:message code="login.registerBtn"/></h5>
                 </a>
             </div>
         </div>

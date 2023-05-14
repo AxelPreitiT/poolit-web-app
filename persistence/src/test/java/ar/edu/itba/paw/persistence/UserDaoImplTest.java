@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class UserDaoImplTest {
     private static final String EMAIL = "poolit.noreply@gmail.com";
     private static final String PHONE = "1139150686";
     private static final String PASSWORD = "PASS";
-    private static final LocalDateTime BIRTH_DATE = LocalDateTime.now();
+    private static final Locale LOCALE = Locale.US;
     private static final City city = new City(KNOWN_CITY_ID,"",KNOWN_PROVINCE_ID);
 
     private static final String ROLE = "USER";
@@ -70,19 +71,19 @@ public class UserDaoImplTest {
     }
 
     private User addUser(final String username, final String surname, final String email,
-                         final String phone, final String password, final LocalDateTime birthdate, final City bornCity, String role, long user_image_id){
+                         final String phone, final String password, final Locale locale, final City bornCity, String role, long user_image_id){
         Map<String, Object> data = new HashMap<>();
         data.put("username", username);
         data.put("surname", surname);
         data.put("email", email);
         data.put("phone", phone);
         data.put("password", password);
-        data.put("birthdate", Timestamp.valueOf(birthdate));
         data.put("city_id", bornCity.getId());
+        data.put("mail_locale",locale.toString());
         data.put("user_role", role);
         data.put("user_image_id", user_image_id);
         Number key = jdbcInsert.executeAndReturnKey(data);
-        return new User(key.longValue(),username,surname,email,phone,password,birthdate,city,role,user_image_id);
+        return new User(key.longValue(),username,surname,email,phone,password,city,locale,role,user_image_id);
     }
 
     @Rollback
@@ -91,14 +92,14 @@ public class UserDaoImplTest {
         //No setup
 
         //Execute
-        User user = userDao.create(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,BIRTH_DATE,city,ROLE,KNOWN_IMAGE_ID);
+        User user = userDao.create(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,city,LOCALE,ROLE,KNOWN_IMAGE_ID);
 
         Assert.assertEquals(USERNAME,user.getName());
         Assert.assertEquals(SURNAME,user.getSurname());
         Assert.assertEquals(EMAIL,user.getEmail());
         Assert.assertEquals(PHONE,user.getPhone());
         Assert.assertEquals(PASSWORD,user.getPassword());
-        Assert.assertEquals(BIRTH_DATE,user.getBirthdate());
+        Assert.assertEquals(LOCALE,user.getMailLocale());
         Assert.assertEquals(ROLE,user.getRole());
         Assert.assertEquals(KNOWN_CITY_ID,user.getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.getUserImageId());
@@ -109,7 +110,7 @@ public class UserDaoImplTest {
     @Test
     public void testFindById(){
         //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,BIRTH_DATE,city,ROLE,KNOWN_IMAGE_ID);
+        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
 
         //Execute
         final Optional<User> user = userDao.findById(aux.getUserId());
@@ -122,7 +123,7 @@ public class UserDaoImplTest {
         Assert.assertEquals(PHONE,user.get().getPhone());
         Assert.assertEquals(PASSWORD,user.get().getPassword());
         Assert.assertEquals(ROLE,user.get().getRole());
-        Assert.assertEquals(BIRTH_DATE,user.get().getBirthdate());
+        Assert.assertEquals(LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
         Assert.assertEquals(aux.getUserId(),user.get().getUserId());
@@ -132,7 +133,7 @@ public class UserDaoImplTest {
     @Test
     public void testFindByEmail(){
         //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,BIRTH_DATE,city,ROLE,KNOWN_IMAGE_ID);
+        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
 
         final Optional<User> user = userDao.findByEmail(EMAIL);
 
@@ -143,7 +144,7 @@ public class UserDaoImplTest {
         Assert.assertEquals(PHONE,user.get().getPhone());
         Assert.assertEquals(PASSWORD,user.get().getPassword());
         Assert.assertEquals(ROLE,user.get().getRole());
-        Assert.assertEquals(BIRTH_DATE,user.get().getBirthdate());
+        Assert.assertEquals(LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
         Assert.assertEquals(aux.getUserId(),user.get().getUserId());
@@ -153,7 +154,7 @@ public class UserDaoImplTest {
     @Test
     public void testChangeRole(){
         //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,BIRTH_DATE,city,ROLE,KNOWN_IMAGE_ID);
+        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
 
         final String TEST_ROLE = "DRIVER";
         //Execute
@@ -165,8 +166,8 @@ public class UserDaoImplTest {
                 new User(rs.getLong("user_id"), rs.getString("username"),
                         rs.getString("surname"), rs.getString("email"),
                         rs.getString("phone"), rs.getString("password"),
-                        rs.getTimestamp("birthdate").toLocalDateTime(),
                         new City(rs.getLong("city_id"),city.getName(),city.getProvinceId()),
+                        new Locale(rs.getString("mail_locale")),
                         rs.getString("user_role"), rs.getLong("user_image_id")),aux.getUserId()).stream().findFirst();
 
         Assert.assertTrue(user.isPresent());
@@ -176,7 +177,7 @@ public class UserDaoImplTest {
         Assert.assertEquals(PHONE,user.get().getPhone());
         Assert.assertEquals(PASSWORD,user.get().getPassword());
         Assert.assertEquals(TEST_ROLE,user.get().getRole());
-        Assert.assertEquals(BIRTH_DATE,user.get().getBirthdate());
+        Assert.assertEquals(LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
         Assert.assertEquals(aux.getUserId(),user.get().getUserId());
@@ -185,14 +186,14 @@ public class UserDaoImplTest {
     @Test
     public void testUpdateUser(){
         //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,BIRTH_DATE,city,ROLE,KNOWN_IMAGE_ID);
+        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
         final String TEST_NAME = "TestName";
         final String TEST_SURNAME = "TestSurname";
         final String TEST_PASSWORD = "Pass";
-        final LocalDateTime TEST_BIRTH_DATE = BIRTH_DATE.plusDays(2);
+        final Locale TEST_LOCALE = Locale.UK;
         final String TEST_ROLE = "OTHER_ROLE";
         //Execute
-        userDao.updateProfile(TEST_NAME,TEST_SURNAME,EMAIL,TEST_PASSWORD,TEST_BIRTH_DATE,city,TEST_ROLE,KNOWN_IMAGE_ID);
+        userDao.updateProfile(TEST_NAME,TEST_SURNAME,EMAIL,TEST_PASSWORD,city,TEST_LOCALE.toString(),TEST_ROLE,KNOWN_IMAGE_ID);
 
         //Assert
         //Hacemos esto para evitar depender de los metodos del userDao
@@ -200,8 +201,8 @@ public class UserDaoImplTest {
                 new User(rs.getLong("user_id"), rs.getString("username"),
                         rs.getString("surname"), rs.getString("email"),
                         rs.getString("phone"), rs.getString("password"),
-                        rs.getTimestamp("birthdate").toLocalDateTime(),
                         new City(rs.getLong("city_id"),city.getName(),city.getProvinceId()),
+                        new Locale(rs.getString("mail_locale")),
                         rs.getString("user_role"), rs.getLong("user_image_id")),aux.getUserId()).stream().findFirst();
 
         Assert.assertTrue(user.isPresent());
@@ -211,7 +212,7 @@ public class UserDaoImplTest {
         Assert.assertEquals(PHONE,user.get().getPhone());
         Assert.assertEquals(TEST_PASSWORD,user.get().getPassword());
         Assert.assertEquals(TEST_ROLE,user.get().getRole());
-        Assert.assertEquals(TEST_BIRTH_DATE,user.get().getBirthdate());
+        Assert.assertEquals(TEST_LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
         Assert.assertEquals(aux.getUserId(),user.get().getUserId());

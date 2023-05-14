@@ -20,10 +20,7 @@ import javax.sql.DataSource;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,11 +50,11 @@ public class TripDaoImplTest {
     private static final long USER_ID_2 = 2;
     private static final String USER_1_EMAIL = "jmentasti@itba.edu.ar";
     private static final String USER_2_EMAIL = "jrmenta2@gmail.com";
-    private static final LocalDateTime BIRTH_DATE = LocalDateTime.now();
+    private static final Locale USER_LOCALE = Locale.US;
     private static final String USER_ROLE_1 = "USER";
     private static final String USER_ROLE_2 = "DRIVER";
-    private static final User USER_1 = new User(USER_ID_1,"","",USER_1_EMAIL,"","",BIRTH_DATE,CITY,USER_ROLE_1,IMAGE_ID);
-    private static final User USER_2 = new User(USER_ID_2,"","",USER_2_EMAIL,"","",BIRTH_DATE,CITY,USER_ROLE_2,IMAGE_ID);
+    private static final User USER_1 = new User(USER_ID_1,"","",USER_1_EMAIL,"","",CITY,USER_LOCALE,USER_ROLE_1,IMAGE_ID);
+    private static final User USER_2 = new User(USER_ID_2,"","",USER_2_EMAIL,"","",CITY,USER_LOCALE,USER_ROLE_2,IMAGE_ID);
     private static final long CAR_ID_1 = 1;
     private static final long CAR_ID_2 = 2;
     private static final String CAR_PLATE = "AE062TP";
@@ -106,8 +103,8 @@ public class TripDaoImplTest {
         jdbcTemplate.update("INSERT INTO provinces (province_id, name) VALUES (?, ?)",PROVINCE_ID,PROVINCE_NAME);
         jdbcTemplate.update("INSERT INTO cities (city_id,name, province_id) VALUES (?, ?,?)",CITY_ID,CITY_NAME,PROVINCE_ID);
         jdbcTemplate.update("INSERT INTO images VALUES (?,?)",IMAGE_ID,null);
-        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",USER_ID_1,"","",USER_1_EMAIL,"","",Timestamp.valueOf(BIRTH_DATE),CITY_ID,USER_ROLE_1,IMAGE_ID);
-        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",USER_ID_2,"","",USER_2_EMAIL,"","",Timestamp.valueOf(BIRTH_DATE),CITY_ID,USER_ROLE_2,IMAGE_ID);
+        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",USER_ID_1,"","",USER_1_EMAIL,"","",CITY_ID,USER_LOCALE.toString(),USER_ROLE_1,IMAGE_ID);
+        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",USER_ID_2,"","",USER_2_EMAIL,"","",CITY_ID,USER_LOCALE.toString(),USER_ROLE_2,IMAGE_ID);
         jdbcTemplate.update("INSERT INTO cars VALUES(?,?,?,?,?)",CAR_ID_1,CAR_PLATE,CAR_INFO,USER_ID_1,IMAGE_ID);
         jdbcTemplate.update("INSERT INTO cars VALUES(?,?,?,?,?)",CAR_ID_2,CAR_PLATE,CAR_INFO,USER_ID_2,IMAGE_ID);
     }

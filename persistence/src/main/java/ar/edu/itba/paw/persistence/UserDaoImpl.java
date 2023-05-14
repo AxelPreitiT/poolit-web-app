@@ -12,9 +12,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import javax.sql.DataSource;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,14 +22,12 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
 
 
-    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) ->{
-            LocalDateTime localDateTime = resultSet.getTimestamp("birthdate")==null?LocalDateTime.now():resultSet.getTimestamp("birthdate").toLocalDateTime();
-            return new User(resultSet.getLong("user_id"), resultSet.getString("username"),
-                    resultSet.getString("surname"), resultSet.getString("email"),
-                    resultSet.getString("phone"), resultSet.getString("password"),
-                    localDateTime,
-                    new City(resultSet.getLong("city_id"), resultSet.getString("name"), resultSet.getLong("province_id")),
-                    resultSet.getString("user_role"), resultSet.getLong("user_image_id"));};
+    protected static final RowMapper<User> ROW_MAPPER = (resultSet, rowNum) -> new User(resultSet.getLong("user_id"), resultSet.getString("username"),
+            resultSet.getString("surname"), resultSet.getString("email"),
+            resultSet.getString("phone"), resultSet.getString("password"),
+            new City(resultSet.getLong("city_id"), resultSet.getString("name"), resultSet.getLong("province_id")),
+            new Locale(resultSet.getString("mail_locale")),
+            resultSet.getString("user_role"), resultSet.getLong("user_image_id"));
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -45,7 +43,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User create(final String username, final String surname, final String email,
-                       final String phone, final String password, final LocalDateTime birthdate, final City bornCity, String role, long user_image_id) {
+                       final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) {
         Map<String, Object> data = new HashMap<>();
         String savedEmail = email.toLowerCase().replaceAll("\\s", "");
         String savedPhone = phone.replaceAll("\\s", "");
@@ -55,8 +53,8 @@ public class UserDaoImpl implements UserDao {
         data.put("email", savedEmail);
         data.put("phone", savedPhone);
         data.put("password", savedPassword);
-        data.put("birthdate", Timestamp.valueOf(birthdate));
         data.put("city_id", bornCity.getId());
+        data.put("mail_locale", mailLocale.toString());
         data.put("user_role", role);
         data.put("user_image_id", user_image_id);
         Number key = 0;
@@ -67,11 +65,11 @@ public class UserDaoImpl implements UserDao {
                 if (findByEmail(email).get().getPassword() != null) {
                     throw new EmailAlreadyExistsException();
                 } else {
-                    updateProfile(username, surname, email, password, birthdate, bornCity, role, user_image_id);
+                    updateProfile(username, surname, email, password, bornCity, mailLocale.toString(), role, user_image_id);
                 }
             }
         }
-        return new User(key.longValue(), username, surname, savedEmail, savedPhone, savedPassword, birthdate, bornCity, role, user_image_id);
+        return new User(key.longValue(), username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, user_image_id);
     }
 
     @Override
@@ -91,8 +89,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     public void updateProfile(final String username, final String surname, final String email,
-                              final String password, final LocalDateTime birthdate, final City bornCity, String role, long user_image_id){
-        jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, birthdate = ?, city_id = ?, user_role = ?, user_image_id = ?  WHERE email = ?",
-                username, surname, password, Timestamp.valueOf(birthdate), bornCity.getId(), role, user_image_id, email);
+                              final String password, final City bornCity, final String mailLocale, final String role, long user_image_id){
+        jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, city_id = ?, mail_locale = ?, user_role = ?, user_image_id = ?  WHERE email = ?",
+                username, surname, password, bornCity.getId(), mailLocale, role, user_image_id, email);
     }
 }

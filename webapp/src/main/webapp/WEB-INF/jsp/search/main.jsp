@@ -22,7 +22,16 @@
             <div class="col-md-8 col-lg-9">
                 <c:choose>
                     <c:when test="${tripsContent.totalCount>0}">
-                        <jsp:include page="/WEB-INF/jsp/components/trip-order-by-selector.jsp"/>
+                        <c:url value="" var="baseSortUrl">
+                            <c:forEach var="p" items="${param}">
+                                <c:if test="${!(p.key eq 'sortType') && !(p.key eq 'descending')}">
+                                    <c:param name="${p.key}" value="${p.value}"/>
+                                </c:if>
+                            </c:forEach>
+                        </c:url>
+                        <jsp:include page="/WEB-INF/jsp/components/trip-order-by-selector.jsp">
+                            <jsp:param name="baseUrl" value="${baseSortUrl}"/>
+                        </jsp:include>
                         <c:set value="${tripsContent.elements}" var="trips" scope="request"/>
                         <jsp:include page="/WEB-INF/jsp/components/trip-card-search-list.jsp">
                             <jsp:param name="startDate" value="${searchTripForm.date}"/>
@@ -34,7 +43,7 @@
                                 <spring:message code="searchTrip.foundFormat" arguments="${tripsContent.startNumber+1}, ${tripsContent.endNumber+1}, ${tripsContent.totalCount}"/>
                             </span>
                         </div>
-                        <c:url value="" var="baseUrl">
+                        <c:url value="" var="basePaginationUrl">
                             <c:forEach var="p" items="${param}">
                                 <c:if test="${!(p.key eq 'page')}">
                                     <c:param name="${p.key}" value="${p.value}"/>
@@ -44,7 +53,7 @@
                         <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
                             <jsp:param name="totalPages" value="${tripsContent.totalPages}"/>
                             <jsp:param name="currentPage" value="${tripsContent.currentPage+1}"/>
-                            <jsp:param name="baseUrl" value="${baseUrl}"/>
+                            <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
                         </jsp:include>
                     </c:when>
                     <c:otherwise>

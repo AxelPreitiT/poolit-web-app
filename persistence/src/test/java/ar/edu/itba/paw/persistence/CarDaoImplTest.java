@@ -21,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -62,9 +59,9 @@ public class CarDaoImplTest {
         jdbcTemplate.update("INSERT INTO provinces VALUES(?,?)",1,"CABA");
         jdbcTemplate.update("INSERT INTO cities values (?,?,?)",KNOWN_CITY_ID,"Recoleta",1);
         jdbcTemplate.update("INSERT INTO images values (?,?)",KNOWN_IMAGE_ID,null);
-        LocalDateTime birthDate = LocalDateTime.now();
-        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",KNOWN_USER_ID,"Poolit","Trips","poolit@gmail.com","1139150686","", Timestamp.valueOf(birthDate),KNOWN_CITY_ID,"DRIVER",KNOWN_IMAGE_ID);
-        user = new User(KNOWN_USER_ID,"Poolit","Trips","poolit@gmail.com","1139150686","",birthDate,new City(KNOWN_CITY_ID,"",1),"USER",KNOWN_IMAGE_ID);
+        Locale locale = Locale.US;
+        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",KNOWN_USER_ID,"Poolit","Trips","poolit@gmail.com","1139150686","",KNOWN_CITY_ID,locale.toString(),"DRIVER",KNOWN_IMAGE_ID);
+        user = new User(KNOWN_USER_ID,"Poolit","Trips","poolit@gmail.com","1139150686","",new City(KNOWN_CITY_ID,"",1),locale,"USER",KNOWN_IMAGE_ID);
     }
 
     @Rollback

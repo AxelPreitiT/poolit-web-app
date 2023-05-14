@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class CarServiceImpl implements CarService {
         this.carDao=carDao;
     }
 
+    @Transactional
     @Override
     public Car createCar(String plate, String infoCar, User user, long image_id) {
         return carDao.create(plate, infoCar, user, image_id);
