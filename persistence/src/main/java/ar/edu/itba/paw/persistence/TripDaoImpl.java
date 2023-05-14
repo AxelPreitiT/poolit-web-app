@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -153,8 +154,8 @@ public class TripDaoImpl implements TripDao {
         tripData.put("origin_address",originAddress);
         tripData.put("destination_address",destinationAddress);
         tripData.put("price",price);
-        tripData.put("start_date_time",startDateTime);
-        tripData.put("end_date_time",endDateTime);
+        tripData.put("start_date_time", Timestamp.valueOf(startDateTime));
+        tripData.put("end_date_time",Timestamp.valueOf(endDateTime));
         tripData.put("day_of_week",startDateTime.getDayOfWeek().getValue());
         tripData.put("destination_city_id",destinationCity.getId());
         tripData.put("origin_city_id",originCity.getId());
@@ -179,8 +180,8 @@ public class TripDaoImpl implements TripDao {
         Map<String,Object> passengerData = new HashMap<>();
         passengerData.put("user_id",passenger.getUserId());
         passengerData.put("trip_id",trip.getTripId());
-        passengerData.put("start_date",passenger.getStartDateTime());
-        passengerData.put("end_date",passenger.getEndDateTime());
+        passengerData.put("start_date",Timestamp.valueOf(passenger.getStartDateTime()));
+        passengerData.put("end_date",Timestamp.valueOf(passenger.getEndDateTime()));
         LOGGER.debug("Adding new passenger with id {} to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
         final boolean result = passengerInsert.execute(passengerData)>0;
         if(result) {
@@ -244,7 +245,7 @@ public class TripDaoImpl implements TripDao {
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         final List<Passenger> result = jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.start_date<=? "
-                ,PASSENGER_ROW_MAPPER,trip.getTripId(),startDateTime,endDateTime);
+                ,PASSENGER_ROW_MAPPER,trip.getTripId(),Timestamp.valueOf(startDateTime),Timestamp.valueOf(endDateTime));
         LOGGER.debug("Found {} in the database", result);
         return result;
     }

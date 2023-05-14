@@ -172,8 +172,8 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        passengers = tripDao.getPassengers(trip,startDateTime,endDateTime);
-        if(passengers.size()>=trip.getMaxSeats()){
+        Trip aux = tripDao.findById(trip.getTripId(),startDateTime,endDateTime).orElseThrow(IllegalArgumentException::new);
+        if(aux.getOccupiedSeats()>=trip.getMaxSeats()){
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
             throw e;
@@ -354,6 +354,12 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
     }
 
     @Override

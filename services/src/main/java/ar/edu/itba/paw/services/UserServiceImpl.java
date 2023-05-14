@@ -48,10 +48,14 @@ public class UserServiceImpl implements UserService {
 
         String finalRole = (role == null) ? Roles.USER.role : role;
         User ans = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
-        //UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(ans.getEmail(), ans.getPassword());
-        //Authentication auth = authenticationManager.authenticate(authRequest);
-        //SecurityContextHolder.getContext().setAuthentication(auth);
         return ans;
+    }
+
+    @Override
+    public void loginUser(final String email, final String password){
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
+        Authentication auth = authenticationManager.authenticate(authRequest);
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     @Override

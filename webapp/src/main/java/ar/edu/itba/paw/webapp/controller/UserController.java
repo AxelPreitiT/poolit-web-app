@@ -11,6 +11,7 @@ import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,7 @@ public class UserController extends LoggedUserController {
 
     private final ImageService imageService;
 
+
     private final PawUserDetailsService pawUserDetailsService;
 
     private final UserService userService;
@@ -61,7 +63,6 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
-
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -92,6 +93,7 @@ public class UserController extends LoggedUserController {
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
+            userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             LOGGER.warn("Email already exists: {}", form.getEmail());
@@ -120,7 +122,7 @@ public class UserController extends LoggedUserController {
 
         final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-
+        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
 
         if(Objects.equals(user.getRole(), "USER")){
 
@@ -128,8 +130,10 @@ public class UserController extends LoggedUserController {
             mav.addObject("user", user);
             mav.addObject("futureTripsPassanger", futureTripsPassenger);
             mav.addObject("pastTripsPassanger", pastTripsPassenger);
+            mav.addObject("reviewsAsUser", reviewsAsUser);
             return mav;
         }
+        final List<Review> reviews = reviewService.getDriverReviews(user);
         final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
         final List<Car> cars = carService.findByUser(user);
@@ -144,45 +148,8 @@ public class UserController extends LoggedUserController {
         mav.addObject("pastTripsPassanger",pastTripsPassenger);
         mav.addObject("cars", cars);
         mav.addObject("carAdded", carAdded);
-        return mav;
-    }
-
-    @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
-    public ModelAndView profilePost(){
-        LOGGER.debug("POST Request to /users/profile");
-        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-
-        final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-
-        if(Objects.equals(user.getRole(), "DRIVER")){
-            //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
-            pawUserDetailsService.update(user);
-            userService.changeRole(user.getUserId(), user.getRole());
-
-            final ModelAndView mav = new ModelAndView("/users/user-profile");
-            mav.addObject("user", user);
-            mav.addObject("futureTripsPassanger", futureTripsPassenger);
-            mav.addObject("pastTripsPassanger", pastTripsPassenger);
-            return mav;
-        }
-        //TODO: traer las que ya pasaron y las que van a hacerse
-        final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
-        final List<Car> cars = carService.findByUser(user);
-        Double rating = reviewService.getDriverRating(user);
-
-        pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("rating", rating);
-        mav.addObject("futureTrips", futureTrips);
-        mav.addObject("pastTrips",pastTrips);
-        mav.addObject("futureTripsPassanger", futureTripsPassenger);
-        mav.addObject("pastTripsPassanger",pastTripsPassenger);
-        mav.addObject("cars", cars);
+        mav.addObject("reviews", reviews);
+        mav.addObject("reviewsAsUser", reviewsAsUser);
         return mav;
     }
 
@@ -200,12 +167,14 @@ public class UserController extends LoggedUserController {
             mav.addObject("reviews", reviews);
             return mav;
         }
-        List<Review> reviews = reviewService.getDriverReviews(user);
-        Double rating = reviewService.getDriverRating(user);
+        final List<Review> reviews = reviewService.getDriverReviews(user);
+        final Double rating = reviewService.getDriverRating(user);
+        final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
 
         final ModelAndView mav = new ModelAndView("/users/public-profile");
         mav.addObject("user", user);
         mav.addObject("rating", rating);
+        mav.addObject("countTrips",createdTrips.getTotalCount());
         mav.addObject("reviews", reviews);
         return mav;
     }

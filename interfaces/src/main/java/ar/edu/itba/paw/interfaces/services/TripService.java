@@ -53,6 +53,7 @@ public interface TripService {
     //
     PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize);
     PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize);
     PagedContent<Trip> getTripsWhereUserIsPassengerFuture(final User user, int page, int pageSize);
     PagedContent<Trip> getTripsWhereUserIsPassengerPast(final User user, int page, int pageSize);
     //

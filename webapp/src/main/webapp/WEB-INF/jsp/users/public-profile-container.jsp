@@ -24,23 +24,14 @@
     <h4><c:out value="${user.email}"/></h4>
   </div>
   <div class="row-info">
-    <h6><spring:message code="user.phone"/></h6>
-    <h4><c:out value="${user.phone}"/></h4>
-  </div>
-  <div class="row-info">
     <h6><spring:message code="user.district"/></h6>
     <h4><c:out value="${user.bornCity.name}"/></h4>
   </div>
-  <div class="row-info">
-    <h6><spring:message code="user.locale"/></h6>
-    <c:if test="${(user.mailLocale eq 'es')}">
-      <h4><spring:message code="user.locale.es"/></h4>
-    </c:if>
-    <c:if test="${(user.mailLocale eq 'en')}">
-      <h4><spring:message code="user.locale.en"/></h4>
-    </c:if>
-  </div>
   <c:if test="${(user.role eq 'DRIVER')}">
+    <div class="row-info">
+      <h6><spring:message code="user.countTrips"/></h6>
+      <h4><c:out value="${param.countTrips}"/></h4>
+    </div>
     <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
       <h6><spring:message code="user.rating"/></h6>
