@@ -1,44 +1,56 @@
--- TODO: change to use original schema if we continue with postgres
-CREATE TABLE IF NOT EXISTS users(
-                                    user_id SERIAL PRIMARY KEY,
-                                    email TEXT NOT NULL,
-                                    phone VARCHAR(20) NOT NULL,
-                                    UNIQUE(email)
+SET DATABASE SQL SYNTAX PGS TRUE;
+CREATE TABLE IF NOT EXISTS images(
+                                     image_id IDENTITY PRIMARY KEY,
+                                     bytea BLOB
 );
-
 CREATE TABLE IF NOT EXISTS provinces (
-                                         province_id SERIAL NOT NULL,
-                                         name TEXT NOT NULL,
-                                         PRIMARY KEY (province_id),
+                                         province_id IDENTITY NOT NULL PRIMARY KEY ,
+                                         name VARCHAR(2000) NOT NULL,
                                          UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS cities (
-                                      city_id SERIAL NOT NULL,
-                                      name TEXT NOT NULL,
+                                      city_id IDENTITY NOT NULL PRIMARY KEY,
+                                      name VARCHAR(2000) NOT NULL,
                                       province_id INT NOT NULL,
-                                      PRIMARY KEY (province_id, name),
-                                      UNIQUE (city_id),
+                                      UNIQUE (province_id, name),
                                       CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS users(
+                                    user_id IDENTITY PRIMARY KEY,
+                                    username VARCHAR(2000),
+                                    surname VARCHAR(2000),
+                                    email VARCHAR(2000) NOT NULL,
+                                    phone VARCHAR(20) NOT NULL,
+                                    password VARCHAR(2000),
+                                    city_id INT,
+                                    mail_locale VARCHAR(2000) NOT NULL,
+                                    user_role VARCHAR(200),
+                                    user_image_id INT,
+                                    UNIQUE(email),
+                                    CONSTRAINT users_to_images FOREIGN KEY (user_image_id) REFERENCES images (image_id) ON DELETE SET NULL,
+                                    CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
+);
+
 CREATE TABLE IF NOT EXISTS cars(
-                                   car_id SERIAL PRIMARY KEY,
-                                   plate TEXT NOT NULL,
-                                   info_car TEXT NOT NULL,
+                                   car_id IDENTITY PRIMARY KEY ,
+                                   plate VARCHAR(2000) NOT NULL,
+                                   info_car VARCHAR(2000) NOT NULL,
                                    user_id INT NOT NULL,
+                                   image_id INT DEFAULT 1,
                                    UNIQUE(user_id,plate),
-                                   FOREIGN KEY (user_id) REFERENCES users (user_id)
+                                   CONSTRAINT cars_to_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+                                   CONSTRAINT cars_to_images FOREIGN KEY (image_id) REFERENCES images (image_id)
 );
 CREATE TABLE IF NOT EXISTS trips(
-                                    trip_id SERIAL PRIMARY KEY,
+                                    trip_id IDENTITY PRIMARY KEY,
                                     max_passengers INT,
-                                    origin_address TEXT NOT NULL ,
-                                    destination_address text NOT NULL,
+                                    origin_address VARCHAR(2000) NOT NULL ,
+                                    destination_address VARCHAR(2000) NOT NULL,
                                     price DOUBLE PRECISION DEFAULT 0.0,
                                     start_date_time TIMESTAMP NOT NULL,
                                     end_date_time TIMESTAMP NOT NULL,
---     is_recurrent BOOLEAN DEFAULT false,
 -- day_of_week es 1->Lunes, 7->Domingo
                                     day_of_week INT NOT NULL,
                                     origin_city_id INT NOT NULL,
@@ -61,10 +73,19 @@ create TABLE IF NOT EXISTS passengers(
 CREATE TABLE IF NOT EXISTS trips_cars_drivers(
                                                  trip_id INT NOT NULL,
                                                  user_id INT NOT NULL,
---     TODO: ver que pasa si se elimina un auto (CASCADE/SET NULL/...)
                                                  car_id INT,
                                                  PRIMARY KEY(trip_id,user_id),
                                                  UNIQUE(trip_id,car_id),
                                                  CONSTRAINT trips_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
                                                  CONSTRAINT trips_to_cars FOREIGN KEY(car_id) references cars(car_id)
+);
+CREATE TABLE IF NOT EXISTS reviews(
+                                      review_id IDENTITY PRIMARY KEY,
+                                      trip_id INT NOT NULL,
+                                      user_id INT NOT NULL,
+                                      rating INT NOT NULL,
+                                      review VARCHAR(2000) NOT NULL,
+                                      UNIQUE(trip_id,user_id),
+                                      CONSTRAINT reviews_to_trips FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
+                                      CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
