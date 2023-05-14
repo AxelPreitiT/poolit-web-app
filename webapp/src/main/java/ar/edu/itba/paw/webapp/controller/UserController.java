@@ -6,13 +6,11 @@ import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
-import ar.edu.itba.paw.webapp.form.SelectionForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -21,16 +19,15 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 
 import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
-import java.net.Authenticator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 @Controller
 public class UserController extends LoggedUserController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private final CityService cityService;
 
@@ -71,6 +68,7 @@ public class UserController extends LoggedUserController {
     public ModelAndView createUserGet(
              @ModelAttribute("createUserForm") final CreateUserForm form
     ) {
+        LOGGER.debug("GET Request to {}", CREATE_USER_PATH);
         List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("users/register");
         mav.addObject("cities", cities);
@@ -83,17 +81,20 @@ public class UserController extends LoggedUserController {
     public ModelAndView createUserPost(
             @Valid @ModelAttribute("createUserForm") final CreateUserForm form, final BindingResult errors
     ) throws IOException {
+        LOGGER.debug("POST Request to {}", CREATE_USER_PATH);
         if(errors.hasErrors()){
+            LOGGER.warn("Errors found in CreateUserForm: {}", errors.getAllErrors());
             return createUserGet(form);
         }
         byte[] data = form.getImageFile().getBytes();
         Image image=imageService.createImage(data);
-        City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
+        City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
+            LOGGER.warn("Email already exists: {}", form.getEmail());
             return createUserGet(form);
         }
         return new ModelAndView("redirect:/" );
@@ -101,29 +102,32 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
     public ModelAndView loginUserGet() {
+        LOGGER.debug("GET Request to {}", LOGIN_USER_PATH);
         final ModelAndView mav = new ModelAndView("users/login");
         return mav;
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.POST)
     public ModelAndView loginUserPost() {
+        LOGGER.debug("POST Request to {}", LOGIN_USER_PATH);
         return new ModelAndView("users/login");
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("GET Request to /users/profile");
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
-        final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTripsPassanger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
 
 
         if(Objects.equals(user.getRole(), "USER")){
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
             mav.addObject("user", user);
-            mav.addObject("futureTripsPassanger", futureTripsPassanger);
-            mav.addObject("pastTripsPassanger", pastTripsPassanger);
+            mav.addObject("futureTripsPassanger", futureTripsPassenger);
+            mav.addObject("pastTripsPassanger", pastTripsPassenger);
             return mav;
         }
         final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
@@ -136,8 +140,8 @@ public class UserController extends LoggedUserController {
         mav.addObject("rating", rating);
         mav.addObject("futureTrips", futureTrips);
         mav.addObject("pastTrips",pastTrips);
-        mav.addObject("futureTripsPassanger", futureTripsPassanger);
-        mav.addObject("pastTripsPassanger",pastTripsPassanger);
+        mav.addObject("futureTripsPassanger", futureTripsPassenger);
+        mav.addObject("pastTripsPassanger",pastTripsPassenger);
         mav.addObject("cars", cars);
         mav.addObject("carAdded", carAdded);
         return mav;
@@ -145,10 +149,11 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
     public ModelAndView profilePost(){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("POST Request to /users/profile");
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
-        final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTripsPassanger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
 
         if(Objects.equals(user.getRole(), "DRIVER")){
             //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
@@ -157,8 +162,8 @@ public class UserController extends LoggedUserController {
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
             mav.addObject("user", user);
-            mav.addObject("futureTripsPassanger", futureTripsPassanger);
-            mav.addObject("pastTripsPassanger", pastTripsPassanger);
+            mav.addObject("futureTripsPassanger", futureTripsPassenger);
+            mav.addObject("pastTripsPassanger", pastTripsPassenger);
             return mav;
         }
         //TODO: traer las que ya pasaron y las que van a hacerse
@@ -175,8 +180,8 @@ public class UserController extends LoggedUserController {
         mav.addObject("rating", rating);
         mav.addObject("futureTrips", futureTrips);
         mav.addObject("pastTrips",pastTrips);
-        mav.addObject("futureTripsPassanger", futureTripsPassanger);
-        mav.addObject("pastTripsPassanger",pastTripsPassanger);
+        mav.addObject("futureTripsPassanger", futureTripsPassenger);
+        mav.addObject("pastTripsPassanger",pastTripsPassenger);
         mav.addObject("cars", cars);
         return mav;
     }
@@ -184,7 +189,8 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value = "/profile/{id:\\d+$}", method = RequestMethod.GET)
     public ModelAndView profilePost(@PathVariable("id") final long userId)
     {
-        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("GET Request to /profile/{}", userId);
+        final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         if(Objects.equals(user.getRole(), "USER")){
             List<Review> reviews = reviewService.getUsersIdReviews(user);
@@ -206,7 +212,8 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
     public ModelAndView changeRoleToDriver(){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("POST Request to /changeRole");
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         pawUserDetailsService.update(user);
         userService.changeToDriver(user);
         return new ModelAndView("redirect:/trips/create");

@@ -9,6 +9,8 @@ import ar.edu.itba.paw.webapp.form.CreateTripForm;
 import ar.edu.itba.paw.webapp.form.ReviewForm;
 import ar.edu.itba.paw.webapp.form.SearchTripForm;
 import ar.edu.itba.paw.webapp.form.SelectionForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,12 +25,14 @@ import java.util.Optional;
 
 @Controller
 public class TripController extends LoggedUserController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
+
     private final TripService tripService;
     private final ReviewService reviewService;
     private final CityService cityService;
     private final UserService userService;
     private final CarService carService;
-    private final ImageService imageService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static int PAGE_SIZE = 10;
@@ -44,20 +48,20 @@ public class TripController extends LoggedUserController {
     private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
-    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService, final ImageService imageService){
+    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService){
         super(userService);
         this.tripService = tripService;
         this.reviewService = reviewService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
-        this.imageService = imageService;
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
                                        @ModelAttribute("selectForm") final SelectionForm form
                                        ){
+        LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();
         if(!userOp.isPresent()){
             return tripDetailsForReservation(tripId,form);
@@ -72,7 +76,7 @@ public class TripController extends LoggedUserController {
     }
 
     private ModelAndView tripDetailsForDriver(final long tripId){
-        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengers(trip);
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
@@ -81,8 +85,8 @@ public class TripController extends LoggedUserController {
     }
 
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
-        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
-        final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
+        final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
         final boolean done = reviewService.canReview(passenger);
         final boolean reviewed = reviewService.haveReview(trip ,passenger);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
@@ -95,7 +99,7 @@ public class TripController extends LoggedUserController {
     }
 
     private ModelAndView tripDetailsForReservation(final long tripId, final SelectionForm form){
-        final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
+        final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(() -> new TripNotFoundException(tripId));
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
         return mv;
@@ -105,18 +109,18 @@ public class TripController extends LoggedUserController {
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
                                            final BindingResult errors)throws TripAlreadyStartedException {
+        LOGGER.debug("POST Request to /trips/{}/join", tripId);
         if(errors.hasErrors()){
+            LOGGER.warn("Errors found in SelectionForm: {}", errors.getAllErrors());
             return getTripDetails(tripId,form);
         }
-        final User passenger = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
+        final User passenger = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(() -> new TripNotFoundException(tripId));
         tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
         final ModelAndView mav = tripDetailsForPassenger(tripId,passenger);
         mav.addObject("successInscription",true);
         return mav;
     }
-
-
 
 
     //TODO: preguntar como validar a page
@@ -128,10 +132,12 @@ public class TripController extends LoggedUserController {
             @RequestParam(value = "descending",required = false,defaultValue = "false") final boolean descending,
             @RequestParam(value = "page",required = false,defaultValue = "1")  final int page){
 
+        LOGGER.debug("GET Request to {}", SEARCH_TRIP_PATH);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
         if(errors.hasErrors()){
+            LOGGER.warn("Errors found in SearchTripForm: {}", errors.getAllErrors());
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
@@ -142,13 +148,13 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value = LANDING_PAGE_PATH, method = RequestMethod.GET)
     public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
+        LOGGER.debug("GET Request to {}", LANDING_PAGE_PATH);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final Optional<User> user = userService.getCurrentUser();
 
         final ModelAndView mav = new ModelAndView("/landing/main");
         if(user.isPresent()){
             final List<Trip> trips = tripService.getRecommendedTripsForUser(user.get(),0,PAGE_SIZE).getElements();
-//            final List<Trip> trips = tripService.getIncomingTripsByOrigin(user.get().getBornCity().getId(),0,PAGE_SIZE).getElements();
             mav.addObject("trips", trips);
         }
         mav.addObject("cities", cities);
@@ -158,7 +164,8 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value = CREATE_TRIP_PATH, method = RequestMethod.GET)
     public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("GET Request to {}", CREATE_TRIP_PATH);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final List<Car> userCars = carService.findByUser(user);
 
@@ -174,13 +181,15 @@ public class TripController extends LoggedUserController {
             @Valid @ModelAttribute("createTripForm") final CreateTripForm form,
             final BindingResult errors
     ){
+        LOGGER.debug("POST Request to {}", CREATE_TRIP_PATH);
         if(errors.hasErrors()){
+            LOGGER.warn("Errors found in CreateTripForm: {}", errors.getAllErrors());
             return createTripForm(form);
         }
-        final City originCity = cityService.findCityById(form.getOriginCityId()).orElseThrow(CityNotFoundException::new);
-        final City destinationCity = cityService.findCityById(form.getDestinationCityId()).orElseThrow(CityNotFoundException::new);
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        final Car car = carService.findById(form.getCarId()).orElseThrow(CarNotFoundException::new);
+        final City originCity = cityService.findCityById(form.getOriginCityId()).orElseThrow(() -> new CityNotFoundException(form.getOriginCityId()));
+        final City destinationCity = cityService.findCityById(form.getDestinationCityId()).orElseThrow(() -> new CityNotFoundException(form.getDestinationCityId()));
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final Car car = carService.findById(form.getCarId()).orElseThrow(() -> new CarNotFoundException(form.getCarId()));
         final Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),user,form.getLastDate(), form.getTime());
         final ModelAndView mav = new ModelAndView("/create-trip/success");
         mav.addObject("trip", trip);
@@ -192,7 +201,8 @@ public class TripController extends LoggedUserController {
     public ModelAndView getReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page,
                                          @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time) {
 
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("GET Request to {}", RESERVED_TRIPS_PATH);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final PagedContent<Trip> trips = Objects.equals(time, "past") ? tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE) : tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/main");
@@ -205,7 +215,8 @@ public class TripController extends LoggedUserController {
     public ModelAndView getCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page,
                                         @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time) {
 
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("GET Request to {}", CREATED_TRIPS_PATH);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
         final PagedContent<Trip> trips = Objects.equals(time, "past") ? tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE) : tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
 
@@ -220,7 +231,8 @@ public class TripController extends LoggedUserController {
     //este si
     @RequestMapping(value = "/trips/{id:\\d+$}/delete", method = RequestMethod.POST)
     public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
-        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        LOGGER.debug("POST Request to /trips/{}/delete", tripId);
+        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         tripService.deleteTrip(trip);
         final ModelAndView mav = getCreatedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         mav.addObject("tripDeleted", true);
@@ -229,8 +241,9 @@ public class TripController extends LoggedUserController {
     //TODO: preguntar si deberiamos hacer una regla de seguridad que vea si esta inscripto para esto tambien
     @RequestMapping(value ="/trips/{id:\\d+$}/cancel", method = RequestMethod.POST)
     public ModelAndView cancelTrip(@PathVariable("id") final int tripId){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        LOGGER.debug("POST Request to /trips/{}/cancel", tripId);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         tripService.removePassenger(trip,user);
         final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
         mav.addObject("tripCancelled", true);
@@ -240,8 +253,9 @@ public class TripController extends LoggedUserController {
     @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
     public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
                                    @ModelAttribute("reviewForm") final ReviewForm form){
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(UserNotFoundException::new);
+        LOGGER.debug("POST Request to /trips/{}/review", tripId);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         reviewService.createReview(tripId, passenger, form.getRating(), form.getReview());
         final ModelAndView mav = tripDetailsForPassenger(tripId, user);
         mav.addObject("tripReviewed", true);

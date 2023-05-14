@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -27,7 +29,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.concurrent.TimeUnit;
 
 @EnableAsync
@@ -37,6 +38,8 @@ import java.util.concurrent.TimeUnit;
 @ComponentScan({"ar.edu.itba.paw.webapp.controller","ar.edu.itba.paw.services","ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(WebConfig.class);
 
     @Autowired
     private Environment environment;
@@ -55,6 +58,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 //    @Bean
 //    public DataSource dataSource() {
+//        LOGGER.info("Connecting to Postgres DB");
 //        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 //        ds.setDriverClass(org.postgresql.Driver.class);
 //        ds.setUrl(String.format("jdbc:postgresql://localhost/%s",environment.getProperty("DB_NAME")));
@@ -65,6 +69,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public DataSource dataSource() {
+        LOGGER.info("Connecting to Postgres DB");
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl(String.format("jdbc:postgresql://localhost:%s/%s",environment.getProperty("DB_PORT"),environment.getProperty("DB_NAME")));
@@ -82,6 +87,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
         final DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
+        LOGGER.info("Populating DB");
         initializer.setDatabasePopulator(databasePopulator());
         return initializer;
     }
