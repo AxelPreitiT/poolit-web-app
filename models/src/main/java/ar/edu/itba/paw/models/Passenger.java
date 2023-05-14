@@ -19,6 +19,12 @@ public class Passenger extends User{
         this.endDateTime = endDateTime;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Passenger { userId: %d, startDateTime: '%s', endDateTime: '%s' }",
+                getUserId(), startDateTime, endDateTime);
+    }
+
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }

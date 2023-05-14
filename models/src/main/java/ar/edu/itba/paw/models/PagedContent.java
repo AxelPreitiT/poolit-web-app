@@ -21,6 +21,12 @@ public class PagedContent<T>{
         this.totalCount = totalCount;
     }
 
+    @Override
+    public String toString() {
+        return String.format("PagedContent { totalCount: %d, pageSize: %d, currentPage: %d, elements: %s }",
+                totalCount, pageSize, currentPage, elements);
+    }
+
     public List<T> getElements() {
         return elements;
     }

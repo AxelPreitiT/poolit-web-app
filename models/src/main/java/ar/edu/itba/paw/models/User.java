@@ -29,6 +29,12 @@ public class User {
         this.userImageId = userImageId;
     }
 
+    @Override
+    public String toString() {
+        return String.format("User { id: %d, name: '%s', surname: '%s', email: '%s', phone: '%s', bornCity: '%s', mailLocale: '%s', role: '%s', userImageId: %d }",
+                userId, name, surname, email, phone, bornCity, mailLocale, role, userImageId);
+    }
+
     public String getRole() {
         return role;
     }
