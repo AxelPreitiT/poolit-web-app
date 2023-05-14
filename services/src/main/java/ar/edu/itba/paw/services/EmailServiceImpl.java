@@ -3,6 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.trips.Trip;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -25,6 +27,9 @@ import java.util.Map;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
+
     private final String baseUrl;
     private static final String FROM = "poolit.noreply@gmail.com";
 
@@ -43,14 +48,17 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private Map<String, Object> getVariablesMap(Context context) {
+        LOGGER.debug("Getting variables from context {}", context);
         Map<String, Object> variablesMap = new HashMap<>();
         for (String variableName : context.getVariableNames()) {
             variablesMap.put(variableName, context.getVariable(variableName));
         }
+        LOGGER.debug("Variables map: {}", variablesMap);
         return variablesMap;
     }
 
     private String loadTemplate(String name, Locale mailLocale, Map<String, Object> model) throws IOException {
+        LOGGER.debug("Loading template {} with Locale {}", name, mailLocale);
         final String templateFileName = name + ".html";
         final ClassPathResource resource = new ClassPathResource("templates/" + templateFileName);
         final byte[] templateBytes = StreamUtils.copyToByteArray(resource.getInputStream());
@@ -76,6 +84,7 @@ public class EmailServiceImpl implements EmailService {
 
         message.setContent(htmlContent,"text/html; charset=UTF-8");
 
+        LOGGER.info("Sending email to '{}' with subject '{}' and Locale '{}'", to, subject, mailLocale);
         mailSender.send(message);
     }
 

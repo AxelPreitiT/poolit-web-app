@@ -19,6 +19,12 @@ public class Review {
         this.review = review;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Review { id: %d, tripId: %d, userId: %d, rating: %d, review: '%s' }",
+                reviewId, tripId, user.getUserId(), rating, review);
+    }
+
     public long getReviewId() {
         return reviewId;
     }

@@ -59,6 +59,14 @@ public class Trip {
         this.queryStartDateTime = startDateTime;
         this.queryEndDateTime = endDateTime;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Trip { id: %d, originCity: '%s', originAddress: '%s', destinationCity: '%s', destinationAddress: '%s', isRecurrent: %b, dayOfWeek: '%s', startDateTime: '%s', endDateTime: '%s', queryStartDateTime: '%s', queryEndDateTime: '%s', maxSeats: %d, occupiedSeats: %d, price: $%f, carId: %d, driverId: %d }",
+                tripId, originCity, originAddress, destinationCity, destinationAddress, isRecurrent, dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH), startDateTime, endDateTime, queryStartDateTime, queryEndDateTime, maxSeats, occupiedSeats, price, car.getCarId(), driver.getUserId());
+    }
+
+
     public City getOriginCity() {
         return originCity;
     }

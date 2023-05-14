@@ -7,6 +7,8 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements TripService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(TripServiceImpl.class);
 
     private static final int OFFSET_MINUTES = 30;
 
@@ -44,7 +48,10 @@ public class TripServiceImpl implements TripService {
         || originCity == null || destinationCity == null
         || car == null || driver == null
         || maxSeats<=0 || price.doubleValue()<0){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Trip with originCity with id {}, originAddress '{}', destinationCity with id {}, destinationAddress '{}', car with id {}, startDateTime '{}', endDateTime '{}', price ${}, maxSeats {} and driver with id {} has invalid values",
+                    originCity.getId(), originAddress, destinationCity.getId(), destinationAddress, car.getCarId(), startDateTime, endDateTime, price, maxSeats, driver.getUserId(), e);
+            throw e;
         }
         Trip newTrip = tripDao.create(
                 originCity,
@@ -63,7 +70,7 @@ public class TripServiceImpl implements TripService {
             emailService.sendMailNewTrip(newTrip);
         }
         catch( Exception e){
-            e.printStackTrace();
+            LOGGER.error("There was an error sending the email for the new trip with id {} to the driver with id {}", newTrip.getTripId(), driver.getUserId(), e);
         }
         return newTrip;
     }
@@ -82,8 +89,10 @@ public class TripServiceImpl implements TripService {
             String[] timeTokens = time.split(":");
             ans = LocalDate.parse(date, formatter).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
         }catch (Exception e){
+            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
             return Optional.empty();
         }
+        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
         return Optional.of(ans);
     }
     private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
@@ -95,12 +104,18 @@ public class TripServiceImpl implements TripService {
             String[] timeTokens = time.split(":");
             ans = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
         }catch (Exception e){
+            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
             return Optional.empty();
         }
+        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
         return Optional.of(ans);
     }
     private static void validatePageAndSize(int page, int pageSize){
-        if(page<0 || pageSize<0) throw new IllegalArgumentException();
+        if(page<0 || pageSize<0) {
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Page {} and pageSize {} must be positive", page, pageSize, e);
+            throw e;
+        }
     }
     @Transactional
     public boolean deleteTrip(final Trip trip){
@@ -110,22 +125,27 @@ public class TripServiceImpl implements TripService {
             try{
                 emailService.sendMailTripDeletedToPassenger(trip,passenger);
             }catch (Exception e){
-                e.printStackTrace();
+                LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
                 throw new IllegalStateException();
             }
         }
         try{
             emailService.sendMailTripDeletedToDriver(trip);
         }catch (Exception e){
-            e.printStackTrace();
+            LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
             throw new IllegalStateException();
         }
         return tripDao.deleteTrip(trip);
     }
     public boolean deleteTrip(int tripId){
         //TODO: change for TripNotFoundException
-        Trip tripToDelete = tripDao.findById(tripId).orElseThrow(IllegalArgumentException::new);
-        return deleteTrip(tripToDelete);
+        Optional<Trip> tripToDelete = tripDao.findById(tripId);
+        if(!tripToDelete.isPresent()){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Trip with id {} cannot be deleted", tripId, e);
+            throw e;
+        }
+        return deleteTrip(tripToDelete.get());
     }
     @Override
     public boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException{
@@ -141,34 +161,48 @@ public class TripServiceImpl implements TripService {
     @Override
     public boolean addPassenger(Trip trip, User user, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException {
         if(trip==null || user==null || startDateTime == null || endDateTime == null){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);
+            throw e;
         }
         Passenger passenger = new Passenger(user,startDateTime,endDateTime);
         List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         if(passengers.contains(passenger)){
-            throw new IllegalStateException();
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
+            throw e;
         }
         Trip aux = tripDao.findById(trip.getTripId(),startDateTime,endDateTime).orElseThrow(IllegalArgumentException::new);
         if(aux.getOccupiedSeats()>=trip.getMaxSeats()){
-            throw new IllegalStateException();
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
+            throw e;
         }
         if(startDateTime.isBefore(LocalDateTime.now())){
-            throw new TripAlreadyStartedException();
+            TripAlreadyStartedException e = new TripAlreadyStartedException();
+            LOGGER.error("Trip with id {} already started", trip.getTripId(), e);
+            throw e;
         }
         if(     startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
             || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
             || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
             || trip.getDriver().equals(user)
             || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("{}, startDateTime '{}' or endDateTime '{}' have invalid values", trip, startDateTime, endDateTime, e);
+            throw e;
         }
         try{
             emailService.sendMailNewPassenger(trip, passenger);
-            emailService.sendMailTripConfirmation(trip, passenger);
         }
         catch( Exception e){
-            //TODO: change for logging
-            e.printStackTrace();
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
+        }
+        try {
+            emailService.sendMailTripConfirmation(trip, passenger);
+        }
+        catch (Exception e) {
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
         }
         return tripDao.addPassenger(trip,passenger);
     }
@@ -177,7 +211,9 @@ public class TripServiceImpl implements TripService {
     public boolean addPassenger(long tripId, User passenger, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException{
         Optional<Trip> trip = findById(tripId);
         if(!trip.isPresent()){
-            throw new IllegalStateException();
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Trip with id {} not found", tripId, e);
+            throw e;
         }
         //Ignorar suggestion, usar filter no tiene mucho sentido aca (funciona porque devuelve boolean)
         //Trip trip = findById(tripId);
@@ -192,13 +228,21 @@ public class TripServiceImpl implements TripService {
     @Override
     public boolean removePassenger(final Trip trip, final User user){
         if(trip == null || user == null){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Trip {} or User {} cannot be null", trip, user, e);
+            throw e;
         }
-        Passenger passenger = tripDao.getPassenger(trip,user).orElseThrow(IllegalStateException::new);
+        final Optional<Passenger> passengerOptional = tripDao.getPassenger(trip,user);
+        if(!passengerOptional.isPresent()) {
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Passenger with id {} is not in trip with id {}", user.getUserId(), trip.getTripId(), e);
+            throw e;
+        }
+        final Passenger passenger = passengerOptional.get();
         try{
             emailService.sendMailTripCancelledToDriver(trip,passenger);
         }catch (Exception e){
-            e.printStackTrace();
+            LOGGER.error("There was an error sending the email for the cancelled trip with id {} by the passenger with id {} to the driver with id {}", trip.getTripId(), passenger.getUserId(), trip.getDriver().getUserId(), e);
         }
         return tripDao.removePassenger(trip,passenger);
     }
@@ -209,9 +253,19 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public Optional<Trip> findById(long id, String startDate, String startTime, String endDate){
-        LocalDateTime start = getIsoLocalDateTime(startDate,startTime).orElseThrow(IllegalArgumentException::new);
-        LocalDateTime end = getIsoLocalDateTime(endDate,startTime).orElseThrow(IllegalArgumentException::new);
-        return findById(id,start,end);
+        Optional<LocalDateTime> start = getIsoLocalDateTime(startDate,startTime);
+        if(!start.isPresent()){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("StartDate '{}' or startTime '{}' have invalid values", startDate, startTime, e);
+            throw e;
+        }
+        Optional<LocalDateTime> end = getIsoLocalDateTime(endDate,startTime);
+        if(!end.isPresent()){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("EndDate '{}' or endTime '{}' have invalid values", endDate, startTime, e);
+            throw e;
+        }
+        return findById(id,start.get(),end.get());
     }
     @Override
     public Optional<Trip> findById(long id,LocalDateTime start, LocalDateTime end){
@@ -223,9 +277,13 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public boolean userIsDriver(final long tripId, final User user){
-        //TODO: cambiar a excepciones conocidas
-        final Trip trip = tripDao.findById(tripId).orElseThrow(IllegalArgumentException::new);
-        return trip.getDriver().equals(user);
+        final Optional<Trip> trip = tripDao.findById(tripId);
+        if(!trip.isPresent()){
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Trip with id {} not found", tripId, e);
+            throw e;
+        }
+        return trip.get().getDriver().equals(user);
     }
     @Override
     public boolean userIsPassenger(final long tripId, final User user){
@@ -245,7 +303,9 @@ public class TripServiceImpl implements TripService {
                 || trip.getEndDateTime().isBefore(dateTime)
                 || Period.between(trip.getStartDateTime().toLocalDate(),dateTime.toLocalDate()).getDays()%7!=0
         ){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("{} or dateTime '{}' have invalid values", trip, dateTime, e);
+            throw e;
         }
         return tripDao.getPassengers(trip,dateTime);
     }
@@ -255,7 +315,9 @@ public class TripServiceImpl implements TripService {
                 || trip.getEndDateTime().isBefore(startDate)
                 || Period.between(trip.getStartDateTime().toLocalDate(),startDate.toLocalDate()).getDays()%7!=0
         ){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("{} or startDate '{}' or endDate '{}' have invalid values", trip, startDate, endDate, e);
+            throw e;
         }
         return tripDao.getPassengers(trip,startDate,endDate);
     }
@@ -277,7 +339,9 @@ public class TripServiceImpl implements TripService {
         validatePageAndSize(page,pageSize);
         if(start.isBefore(trip.getStartDateTime()) || end.isAfter(trip.getEndDateTime())
          || !start.getDayOfWeek().equals(end.getDayOfWeek()) || !start.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek())){
-            throw new IllegalArgumentException();
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("StartDateTime '{}' or endDateTime '{}' have invalid values", start, end, e);
+            throw e;
         }
         return tripDao.getTripInstances(trip,page,pageSize,start,end);
     }
@@ -317,8 +381,7 @@ public class TripServiceImpl implements TripService {
     }
     private Trip.SortType getTripSortType(final String sortType){
         try{
-            Trip.SortType aux = Trip.SortType.valueOf(sortType.toUpperCase());
-            return aux;
+            return Trip.SortType.valueOf(sortType.toUpperCase());
         }catch (Exception e){
             return Trip.SortType.PRICE;
         }

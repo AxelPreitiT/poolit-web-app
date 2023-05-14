@@ -6,20 +6,20 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerMapping;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.Optional;
 
 @Component
 public class AuthValidator {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(AuthValidator.class);
+
     final UserService userService;
     final TripService tripService;
     @Autowired
@@ -30,12 +30,12 @@ public class AuthValidator {
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest){
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
         //TODO: preguntar si esta bien lanzar estas excepciones aca
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         if(!user.getRole().equals("DRIVER")){
             return false;
         }
         //User is a driver
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         return trip.getDriver().equals(user);
     }
 }

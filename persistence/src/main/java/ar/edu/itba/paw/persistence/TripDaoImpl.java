@@ -7,6 +7,8 @@ import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,6 +30,9 @@ import java.util.*;
 
 @Repository
 public class TripDaoImpl implements TripDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TripDaoImpl.class);
+
     private static final RowMapper<Integer> COUNT_ROW_MAPPER = (resultSet,rowNum)-> resultSet.getInt("count");
 
     private final RowMapper<Trip> ROW_MAPPER = (resultSet,rowNum)-> {
@@ -154,14 +159,20 @@ public class TripDaoImpl implements TripDao {
         tripData.put("day_of_week",startDateTime.getDayOfWeek().getValue());
         tripData.put("destination_city_id",destinationCity.getId());
         tripData.put("origin_city_id",originCity.getId());
+        LOGGER.debug("Adding new trip from '{}' to '{}', with startDate '{}' and endDate '{}', and created by driver with id {} to the database",originCity,destinationCity,startDateTime,endDateTime,driver.getUserId());
         Number tripKey = tripsInsert.executeAndReturnKey(tripData);
+        LOGGER.info("Trip added to the database with id {}",tripKey);
+        final Trip trip = new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,startDateTime,endDateTime,max_passengers,driver,car,0,price,startDateTime,endDateTime);
+        LOGGER.debug("New {}", trip);
         //Insertamos el auto y usuario en la tabla trips_cars_drivers
         Map<String,Object> driverCarData = new HashMap<>();
         driverCarData.put("trip_id",tripKey.longValue());
         driverCarData.put("user_id",driver.getUserId());
         driverCarData.put("car_id",car.getCarId());
+        LOGGER.debug("Adding new trip_car_driver relation with tripId {}, driverId {} and carId {} to the database",tripKey.longValue(),driver.getUserId(),car.getCarId());
         driverCarInsert.execute(driverCarData);
-        return new Trip(tripKey.longValue(),originCity,originAddress,destinationCity,destinationAddress,startDateTime,endDateTime,max_passengers,driver,car,0,price,startDateTime,endDateTime);
+        LOGGER.info("Trip_car_driver relation with tripId {}, driverId {} and carId {} added to the database",tripKey.longValue(),driver.getUserId(),car.getCarId());
+        return trip;
     }
 
     @Override
@@ -171,21 +182,46 @@ public class TripDaoImpl implements TripDao {
         passengerData.put("trip_id",trip.getTripId());
         passengerData.put("start_date",Timestamp.valueOf(passenger.getStartDateTime()));
         passengerData.put("end_date",Timestamp.valueOf(passenger.getEndDateTime()));
-        return passengerInsert.execute(passengerData)>0;
+        LOGGER.debug("Adding new passenger with id {} to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        final boolean result = passengerInsert.execute(passengerData)>0;
+        if(result) {
+            LOGGER.info("Passenger with id {} added to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        } else {
+            LOGGER.warn("Passenger with id {} could not be added to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        }
+        return result;
     }
     @Override
     public boolean deleteTrip(final Trip trip){
         int tripCarsDriversRows = jdbcTemplate.update("DELETE FROM trips_cars_drivers WHERE trip_id = ?",trip.getTripId());
         jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ?",trip.getTripId());
         int tripRows = jdbcTemplate.update("DELETE FROM trips WHERE trip_id = ?",trip.getTripId());
-        return tripRows>0 && tripCarsDriversRows>0;
+        LOGGER.debug("Deleting trip with id {} from the database",trip.getTripId());
+        final boolean result = tripRows>0 && tripCarsDriversRows>0;
+        if(result) {
+            LOGGER.info("Trip with id {} deleted from the database",trip.getTripId());
+        } else {
+            LOGGER.warn("Trip with id {} could not be deleted from the database",trip.getTripId());
+        }
+        return result;
     }
     @Override
     public boolean removePassenger(final Trip trip, final User passenger){
-        return  jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ? AND user_id = ?",trip.getTripId(), passenger.getUserId())>0;
+        LOGGER.debug("Removing passenger with id {} from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        final boolean result = jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ? AND user_id = ?",trip.getTripId(), passenger.getUserId())>0;
+        if(result) {
+            LOGGER.info("Passenger with id {} removed from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        } else {
+            LOGGER.warn("Passenger with id {} could not be removed from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        }
+        return result;
     }
     private static void validatePageAndSize(int page, int pageSize){
-        if(page<0 || pageSize<0) throw new IllegalArgumentException();
+        if(page<0 || pageSize<0) {
+            final IllegalArgumentException exception = new IllegalArgumentException();
+            LOGGER.error("Invalid page number {} or page size {}",page,pageSize, exception);
+            throw exception;
+        }
     }
     @Override
     public List<Passenger> getPassengers(final TripInstance tripInstance){
@@ -206,9 +242,12 @@ public class TripDaoImpl implements TripDao {
         //[1,2] -> A,B
         //Si pedia que passengers.start_date>=1 AND passengers.end_date<=2 -> A (y estoy dejando a B)
         //"WHERE trip_id = ? AND passengers.start_date>=? AND passengers.end_date<=? "
-        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
+        LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
+        final List<Passenger> result = jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.start_date<=? "
                 ,PASSENGER_ROW_MAPPER,trip.getTripId(),Timestamp.valueOf(startDateTime),Timestamp.valueOf(endDateTime));
+        LOGGER.debug("Found {} in the database", result);
+        return result;
     }
     @Override
     public Optional<Passenger> getPassenger(final Trip trip, final User user){
@@ -216,9 +255,12 @@ public class TripDaoImpl implements TripDao {
     }
     @Override
     public Optional<Passenger> getPassenger(final long tripId, final User user){
-        return jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
+        LOGGER.debug("Looking for the passenger with id {} of the trip with id {} in the database",user.getUserId(),tripId);
+        final Optional<Passenger> result = jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
                         "WHERE trip_id = ? AND user_id = ?"
                 ,PASSENGER_ROW_MAPPER,tripId,user.getUserId()).stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        return result;
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize){
@@ -230,6 +272,7 @@ public class TripDaoImpl implements TripDao {
         //passengers.start_date<=days<=passenger.end_date
         //"los pasajeros que empiecen antes o en el dia y terminen en o despues del dia"
         //Con eso me traigo a los pasajeros que esten en ese dia
+        LOGGER.debug("Looking for the trip instances of the trip with id {}, between '{}' and '{}', in page {} with size {} in the database",trip.getTripId(),start,end,page,pageSize);
         String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
                 "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? " +
                 "WHERE days.days>=? AND days.days<=? " +
@@ -239,10 +282,13 @@ public class TripDaoImpl implements TripDao {
                 "OFFSET ? " +
                 "LIMIT ?",getTripInstanceRowMapper(trip),trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end,page*pageSize,pageSize);
         int total = jdbcTemplate.query("SELECT sum(aux) as count FROM ( SELECT count(*) as aux " + query +") t",COUNT_ROW_MAPPER,trip.getStartDateTime(),trip.getEndDateTime(),trip.getTripId(),start,end).stream().findFirst().orElse(0);
-        return new PagedContent<>(ans,page,pageSize,total);
+        final PagedContent<TripInstance> result = new PagedContent<>(ans,page,pageSize,total);
+        LOGGER.debug("Found {} in the database", result);
+        return result;
     }
     @Override
     public PagedContent<Trip> getTripsCreatedByUser(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime,int page, int pageSize){
+        LOGGER.debug("Looking for the trips created by the user with id {}, between '{}' and '{}', in page {} with size {} in the database",user.getUserId(),minDateTime,maxDateTime,page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.USER_ID, QueryBuilder.DbComparator.EQUALS,user.getUserId());
         minDateTime.ifPresent(dateTime->
@@ -255,11 +301,14 @@ public class TripDaoImpl implements TripDao {
         queryBuilder.withOffset(page*pageSize)
                     .withLimit(pageSize);
         List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
+        final PagedContent<Trip> result = new PagedContent<>(ans,page,pageSize,total);
+        LOGGER.debug("Found {} in the database", result);
+        return result;
     }
 
     @Override
     public PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize) {
+        LOGGER.debug("Looking for the trips where the user with id {} is passenger, between '{}' and '{}', in page {} with size {} in the database",user.getUserId(),minDateTime,maxDateTime,page,pageSize);
         String totalQuery = "SELECT count(*)"+
                 "FROM passengers NATURAL JOIN trips "+
                 "WHERE passengers.user_id = ?";
@@ -287,7 +336,9 @@ public class TripDaoImpl implements TripDao {
         arguments.add(page * pageSize);
         arguments.add(pageSize);
         List<Trip> ans =  jdbcTemplate.query(q,PASSENGER_TRIPS_ROW_MAPPER,arguments.toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
+        final PagedContent<Trip> result = new PagedContent<>(ans,page,pageSize,total);
+        LOGGER.debug("Found {} in the database", result);
+        return result;
     }
 
     private QueryBuilder.DbField getSortField(final Trip.SortType sortType){
@@ -299,6 +350,7 @@ public class TripDaoImpl implements TripDao {
 
     @Override
     public PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize){
+        LOGGER.debug("Looking for the trips with originCity with id {} and startDateTime '{}' in page {} with size {} in the database",origin_city_id,startDateTime,page,pageSize);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.ORIGIN_CITY_ID, QueryBuilder.DbComparator.EQUALS,origin_city_id)
                 .withWhere(QueryBuilder.DbField.END_DATE_TIME, QueryBuilder.DbComparator.GREATER_OR_EQUALS,startDateTime)
@@ -309,7 +361,9 @@ public class TripDaoImpl implements TripDao {
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
         List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
+        final PagedContent<Trip> result = new PagedContent<>(ans,page,pageSize,total);
+        LOGGER.debug("Found {} in the database", result);
+        return result;
     }
 
     @Override
@@ -318,7 +372,15 @@ public class TripDaoImpl implements TripDao {
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
             int page, int pageSize){
+
         validatePageAndSize(page,pageSize);
+
+        LOGGER.debug("Looking for the trips with originCity with id {}, destinationCity with id {}, startDateTime '{}',{}{} range of {} minutes,{}{} sortType '{}' ({}) page {} and size {} in the database",
+                origin_city_id, destination_city_id, startDateTime, dayOfWeek.map(day -> " dayOfWeek '" + day + "',").orElse(""),
+                endDateTime.map(endDateTimeValue -> " endDateTime '" + endDateTimeValue + "',").orElse(""), minutes,
+                minPrice.map(price -> " minPrice $" + price + ",").orElse(""), maxPrice.map(price -> " maxPrice $" + price + ","),
+                sortType, descending ? "descending" : "ascending", page, pageSize);
+
         LocalTime minTime = startDateTime.toLocalTime();
         if (startDateTime.minusMinutes(minutes).getDayOfWeek().equals(startDateTime.getDayOfWeek())){
             minTime = minTime.minusMinutes(minutes);
@@ -354,22 +416,30 @@ public class TripDaoImpl implements TripDao {
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
         List<Trip> ans =  jdbcTemplate.query(queryBuilder.getString(),getTripRowMapper(Optional.of(startDateTime),endDateTime),queryBuilder.getArguments().toArray());
-        return new PagedContent<>(ans,page,pageSize,total);
+        final PagedContent<Trip> result = new PagedContent<>(ans,page,pageSize,total);
+        LOGGER.debug("Found {} in the database", result);
+        return result;
     }
 
     @Override
     public Optional<Trip> findById(long tripId) {
+        LOGGER.debug("Looking for the trip with id {} in the database", tripId);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.TRIP_ID, QueryBuilder.DbComparator.EQUALS, tripId);
-        return jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst();
+        final Optional<Trip> result = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        return result;
     }
     @Override
     public Optional<Trip> findById(long tripId, LocalDateTime start, LocalDateTime end){
+        LOGGER.debug("Looking for the trip with id {}, between '{}' and '{}', in the database", tripId, start, end);
         QueryBuilder queryBuilder = new QueryBuilder()
                 .withWhere(QueryBuilder.DbField.TRIP_ID, QueryBuilder.DbComparator.EQUALS,tripId)
                 .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.GREATER_OR_EQUALS,start)
                 .withWhere(QueryBuilder.DbField.TRIPS_DAYS, QueryBuilder.DbComparator.LESS_OR_EQUAL,end);
-        return jdbcTemplate.query(queryBuilder.getString(),getTripRowMapper(Optional.of(start),Optional.of(end)),queryBuilder.getArguments().toArray()).stream().findFirst();
+        final Optional<Trip> result = jdbcTemplate.query(queryBuilder.getString(),getTripRowMapper(Optional.of(start),Optional.of(end)),queryBuilder.getArguments().toArray()).stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        return result;
     }
 
     private static class QueryBuilder{

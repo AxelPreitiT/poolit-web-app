@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     private final ReviewDao reviewDao;
 
@@ -27,7 +31,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review createReview(long tripId, Passenger passenger, int rating, String review) {
         if(!canReview(passenger)){
-            throw new IllegalStateException();
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Passenger with id {} tried to review trip with id {}, but it's not finished yet", passenger.getUserId(), tripId, e);
+            throw e;
         }
         return reviewDao.create(tripId, passenger, rating, review);
     }
