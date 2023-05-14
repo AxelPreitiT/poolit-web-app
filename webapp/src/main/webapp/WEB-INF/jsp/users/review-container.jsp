@@ -17,14 +17,26 @@
     </c:if>
   </div>
   <div>
-    <c:if test="${reviews.size() == 0}">
+  <c:choose>
+    <c:when test="${reviews.size() == 0}">
       <div class="review-empty-container">
-        <h2 class="italic-text placeholder-text">Aún no tienes reseñas.</h2>
+          <i class="bi-solid bi-book secondary-color h2"></i>
+          <h3 class="italic-text placeholder-text"><spring:message code="review.none"/></h3>
       </div>
-    </c:if>
-    <c:forEach items="${reviews}" var="review">
-      <c:set var="review" value="${review}" scope="request"/>
-      <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
-    </c:forEach>
+    </c:when>
+    <c:otherwise>
+    <div id="reviews-container" class="reviews-container">
+        <c:forEach items="${reviews}" var="review">
+          <div class="revs">
+          <c:set var="review" value="${review}" scope="request"/>
+          <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
+          </div>
+        </c:forEach>
+        <button class="show-more-btn btn button-style button-color shadow-btn "><spring:message code="review.more"/></button>
+    </div>
+
+    </c:otherwise>
+    </c:choose>
   </div>
+  <script src="<c:url value="/resources/js/users/reviews.js"/>" type="application/javascript"></script>
 </div>

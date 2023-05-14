@@ -65,11 +65,14 @@
     column-gap: 1em;
 }
 .passenger-list{
-    overflow: scroll;
+    overflow-y: auto;
     max-height: 260px;
 }
 .individual-profile{
     padding: 2%;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .no-passengers-text{
     text-align: center;
@@ -84,4 +87,8 @@
 
 .modal-dialog {
     max-width: fit-content !important;
+}
+
+.dates {
+    margin: 0;
 }

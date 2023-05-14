@@ -41,6 +41,11 @@
                         <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
                       </div>
                     </a>
+                    <c:if test="${trip.recurrent}">
+                        <div class="dates light-text detail">
+                            <c:out value="${user.startDateString}"/> - <c:out value="${user.endDateString}"/>
+                        </div>
+                    </c:if>
                   </div>
                 </c:forEach>
               </div>

@@ -148,8 +148,8 @@ public class TripServiceImpl implements TripService {
         if(passengers.contains(passenger)){
             throw new IllegalStateException();
         }
-        passengers = tripDao.getPassengers(trip,startDateTime,endDateTime);
-        if(passengers.size()>=trip.getMaxSeats()){
+        Trip aux = tripDao.findById(trip.getTripId(),startDateTime,endDateTime).orElseThrow(IllegalArgumentException::new);
+        if(aux.getOccupiedSeats()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
         if(startDateTime.isBefore(LocalDateTime.now())){
@@ -290,6 +290,12 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getTripsCreatedByUserPast(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
     }
 
     @Override

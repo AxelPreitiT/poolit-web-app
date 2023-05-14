@@ -18,6 +18,7 @@ public interface UserService {
     Optional<User> findById(long userId);
 
     Optional<User> findByEmail(String email);
+    void loginUser(final String email, final String password);
 
     public void changeRole(long userId, String role);
 

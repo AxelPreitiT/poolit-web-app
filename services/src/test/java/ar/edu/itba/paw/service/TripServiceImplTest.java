@@ -51,8 +51,9 @@ public class TripServiceImplTest {
     private static final LocalDate endDate = LocalDate.parse("02/05/2023", DATE_FORMAT);
     private static final LocalTime endTime = LocalTime.parse("10:00", TIME_FORMAT);
     private static final long tripId = 1L;
-    private static final Trip trip = new Trip(tripId, originCity, originAddress, destinationCity, destinationAddress, LocalDateTime.now(), LocalDateTime.now(), maxSeats, driver, car, 0, price.doubleValue());
     private static final LocalDateTime dateTime = LocalDateTime.now();
+    private static final Trip trip = new Trip(tripId, originCity, originAddress, destinationCity, destinationAddress, dateTime, dateTime.plusDays(7), maxSeats, driver, car, 0, price.doubleValue());
+    private static final Passenger passenger = new Passenger(user, dateTime, dateTime.plusDays(7));
 
 
     @Mock
@@ -92,36 +93,55 @@ public class TripServiceImplTest {
         Assert.fail();
     }
 
-/*
     @Test
-    public void TestGetPassengersRecurrent() throws Exception {
+    public void TestRemovePassenger() throws Exception {
         // precondiciones
-        List<Passenger> passengers = new ArrayList<>();
-        passengers.add(new Passenger());
-
-        when(tripDao.getPassengers(eq(trip), eq(dateTime), eq(dateTime)))
-                .thenReturn(passengers);
-        when(tripDao.getPassengers(eq(trip), eq(dateTime), eq(dateTime)))
-                .thenReturn(new List<Passenger>(1, originCity, originAddress, destinationCity, destinationAddress, LocalDateTime.now(), LocalDateTime.now(), maxSeats, driver, car, 0, price.doubleValue()));
-        doNothing().when(emailService).sendMailNewTrip(any());
+        when(tripDao.removePassenger(eq(trip), eq(passenger)))
+                .thenReturn(true);
+        when(tripDao.getPassenger(eq(trip), eq(user)))
+                .thenReturn(Optional.of(passenger));
 
         // ejercitar la clase
-        Trip newTrip = tripService.createTrip(originCity, originAddress, destinationCity, destinationAddress, car, startDate, startTime, price, maxSeats, driver, endDate, endTime);
+        boolean ans = tripService.removePassenger(trip, user);
 
         // assertions
-        Assert.assertNotNull(newTrip);
-        Assert.assertEquals(tripId, newTrip.getTripId());
+        Assert.assertTrue(ans);
     }
 
-    @Override
-    public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
-        if( trip.getStartDateTime().isAfter(startDate)
-                || trip.getEndDateTime().isBefore(startDate)
-                || Period.between(trip.getStartDateTime().toLocalDate(),startDate.toLocalDate()).getDays()%7!=0
-        ){
-            throw new IllegalArgumentException();
-        }
-        return tripDao.getPassengers(trip,startDate,endDate);
+    @Test(expected = IllegalArgumentException.class)
+    public void TestRemovePassengerWithNull() throws Exception {
+        // ejercitar la clase
+        tripService.removePassenger(null, user);
+
+        // assertions
+        Assert.fail();
     }
-*/
+
+    @Test(expected = IllegalArgumentException.class)
+    public void TestBadOriginDateGetPassengers() throws Exception {
+        // precondiciones
+
+        // ejercitar la clase
+        List<Passenger> passengers2 = tripService.getPassengers(trip, dateTime.plusDays(-3));
+
+        // assertions
+        Assert.fail();
+    }
+
+    @Test
+    public void TestGetPassengers() throws Exception {
+        // precondiciones
+        List<Passenger> passengers = new ArrayList<>();
+        passengers.add(passenger);
+
+        when(tripDao.getPassengers(eq(trip), eq(dateTime)))
+                .thenReturn(passengers);
+
+        // ejercitar la clase
+        List<Passenger> passengers2 = tripService.getPassengers(trip, dateTime);
+
+        // assertions
+        Assert.assertNotNull(passengers2);
+    }
+
 }
