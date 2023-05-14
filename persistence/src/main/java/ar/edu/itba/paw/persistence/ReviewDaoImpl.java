@@ -64,7 +64,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public double getRating(User driver) {
-        LOGGER.debug("Looking for rating of driver {} in the database", driver);
+        LOGGER.debug("Looking for rating of driver with id {} in the database", driver.getUserId());
         final double result = jdbcTemplate.query("SELECT avg(rating) FROM reviews NATURAL JOIN trips_cars_drivers as trips(trip_id, driver_id, car_id) WHERE driver_id = ?", RATING_ROW_MAPPER, driver.getUserId()).stream().findFirst().orElse(0.0);
         LOGGER.debug("Found {} in the database", result);
         return result;
@@ -72,7 +72,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Review> findByDriver(User driver) {
-        LOGGER.debug("Looking for reviews of driver {} in the database", driver);
+        LOGGER.debug("Looking for reviews of driver with id {} in the database", driver.getUserId());
         final List<Review> result = jdbcTemplate.query("SELECT city_id, user_id, review_id, trip_id, rating, review, username, surname, email, phone, password, user_role, user_image_id, name, province_id FROM reviews NATURAL JOIN trips_cars_drivers as trips(trip_id, driver_id, car_id) NATURAL JOIN users NATURAL JOIN cities where driver_id = ?", ROW_MAPPER, driver.getUserId());
         LOGGER.debug("Found {} in the database", result);
         return result;
@@ -80,7 +80,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Review> findReviewsByUser(User user) {
-        LOGGER.debug("Looking for reviews written by user {} in the database", user);
+        LOGGER.debug("Looking for reviews written by user with id {} in the database", user.getUserId());
         final List<Review> result = jdbcTemplate.query("SELECT * FROM reviews NATURAL JOIN users NATURAL JOIN cities WHERE user_id = ?", ROW_MAPPER, user.getUserId());
         LOGGER.debug("Found {} in the database", result);
         return result;
@@ -88,7 +88,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Long> findTripIdByUser(User user) {
-        LOGGER.debug("Looking for trips that were reviewed by user {} in the database", user);
+        LOGGER.debug("Looking for trips that were reviewed by user with id {} in the database", user.getUserId());
         final List<Long> result = jdbcTemplate.query("SELECT trip_id FROM reviews WHERE user_id = ?", TRIPS_ROW_MAPPER, user.getUserId());
         LOGGER.debug("Found {} in the database", result);
         return result;
@@ -96,7 +96,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger){
-        LOGGER.debug("Looking for review of trip {} written by passenger {} in the database", trip, passenger);
+        LOGGER.debug("Looking for review of trip {} written by passenger with id {} in the database", trip, passenger.getUserId());
         final Optional<Review> result = jdbcTemplate.query("SELECT * FROM reviews NATURAL JOIN users NATURAL JOIN cities WHERE trip_id = ? AND user_id = ?", ROW_MAPPER, trip.getTripId(), passenger.getUserId()).stream().findFirst();
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;

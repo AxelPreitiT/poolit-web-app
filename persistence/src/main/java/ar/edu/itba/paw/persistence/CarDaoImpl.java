@@ -67,7 +67,7 @@ public class CarDaoImpl implements CarDao {
 
     @Override
     public Optional<Car> findByPlateAndUser(String plate, User user) {
-        LOGGER.debug("Looking for car with plate '{}' from {} in the database", plate, user);
+        LOGGER.debug("Looking for car with plate '{}' from user with id {} in the database", plate, user.getUserId());
         final Optional<Car> result = jdbcTemplate.query("SELECT * FROM cars NATURAL JOIN users NATURAL JOIN cities WHERE plate = ? and user_id = ?",ROW_MAPPER,plate, user.getUserId()).stream().findFirst();
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
@@ -75,7 +75,7 @@ public class CarDaoImpl implements CarDao {
 
     @Override
     public List<Car> findByUser(User user) {
-        LOGGER.debug("Looking for cars from {} in the database", user);
+        LOGGER.debug("Looking for cars from user with id {} in the database", user.getUserId());
         final List<Car> result = jdbcTemplate.query("SELECT * FROM users NATURAL JOIN cars NATURAL JOIN cities WHERE user_id = ?", ROW_MAPPER, user.getUserId());
         LOGGER.debug("Found {} in the database", result);
         return result;
