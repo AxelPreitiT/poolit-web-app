@@ -14,15 +14,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.Role;
+import java.beans.Transient;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,45 +51,24 @@ public class UserServiceImpl implements UserService {
         this.authenticationManager = authenticationManager;
     }
 
+    @Transactional
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id) {
-        if(role == null){
-            role = Roles.USER.role;
-        }
-        String finalRole = role;
-        LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        User ans = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime, bornCity, finalRole, user_image_id);
+                           final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) {
+
+        String finalRole = (role == null) ? Roles.USER.role : role;
+        User ans = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(ans.getEmail(), ans.getPassword());
         Authentication auth = authenticationManager.authenticate(authRequest);
         SecurityContextHolder.getContext().setAuthentication(auth);
         return ans;
     }
 
-    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
-        if(date.length()==0 || time.length()==0){
-            return Optional.empty();
-        }
-        LocalDateTime ans;
-        try{
-            String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, DateTimeFormatter.ISO_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
-        }catch (Exception e){
-            return Optional.empty();
-        }
-        return Optional.of(ans);
-    }
-
     @Override
     public User createUserIfNotExists(final String username, final String surname, final String email,
-                                      final String phone, final String password, final String birthdate, final City bornCity, String role, long user_image_id){
-        if(role == null){
-            role = Roles.USER.role;
-        }
-        String finalRole = role;
-        Optional<User> current = userDao.findByEmail(email);
-        LocalDateTime dateTime = getLocalDateTime(birthdate,"00:00").get();
-        return current.orElseGet(() -> userDao.create(username,surname,email, phone, passwordEncoder.encode(password), dateTime,bornCity, finalRole, user_image_id));
+                                      final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id){
+
+        return userDao.findByEmail(email).orElseGet(() -> createUser(username, surname, email, phone, password, bornCity, mailLocale, role, user_image_id));
     }
 
     @Override
@@ -113,6 +91,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email);
     }
 
+    @Transactional
     @Override
     public void changeRole(long userId, String role) {
         if(Objects.equals(role, Roles.USER.role)){
@@ -123,6 +102,7 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(userId, role);
     }
 
+    @Transactional
     @Override
     public void changeToDriver(User user) {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);

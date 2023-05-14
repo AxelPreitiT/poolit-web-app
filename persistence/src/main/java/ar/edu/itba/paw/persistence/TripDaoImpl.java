@@ -33,8 +33,8 @@ public class TripDaoImpl implements TripDao {
         User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
                 resultSet.getString("user_surname"),resultSet.getString("user_email"),
                 resultSet.getString("user_phone"),resultSet.getString("user_password"),
-                resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
                 new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
+                new Locale(resultSet.getString("user_mail_locale")),
                 resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
         return new Trip(
                 resultSet.getLong("trip_id"),
@@ -55,8 +55,8 @@ public class TripDaoImpl implements TripDao {
         User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
                 resultSet.getString("user_surname"),resultSet.getString("user_email"),
                 resultSet.getString("user_phone"),resultSet.getString("user_password"),
-                resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
                 new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
+                new Locale(resultSet.getString("user_mail_locale")),
                 resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
         return new Trip(
                 resultSet.getLong("trip_id"),
@@ -113,8 +113,8 @@ public class TripDaoImpl implements TripDao {
             User user = new User(resultSet.getLong("user_id"),resultSet.getString("user_username"),
                     resultSet.getString("user_surname"),resultSet.getString("user_email"),
                     resultSet.getString("user_phone"),resultSet.getString("user_password"),
-                    resultSet.getTimestamp("user_birthdate").toLocalDateTime(),
                     new City(resultSet.getLong("user_city_id"),resultSet.getString("user_city_name"), resultSet.getLong("user_city_province_id")),
+                    new Locale(resultSet.getString("user_mail_locale")),
                     resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
             LocalDateTime startDateTime = resultSet.getTimestamp("start_date_time").toLocalDateTime();
             LocalDateTime endDateTime = resultSet.getTimestamp("end_date_time").toLocalDateTime();
@@ -264,7 +264,7 @@ public class TripDaoImpl implements TripDao {
                 "WHERE passengers.user_id = ?";
         int total = jdbcTemplate.query(totalQuery, COUNT_ROW_MAPPER, user.getUserId()).stream().findFirst().orElse(0);
         List<Object> arguments = new ArrayList<>();
-        String q = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "+
+        String q = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id, users.mail_locale as user_mail_locale, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price, p.start_date as passenger_start_date, p.end_date as passenger_end_date "+
                     "FROM trips trips NATURAL JOIN passengers p LEFT OUTER JOIN LATERAL( "+
                     "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count "+
                     "FROM generate_series(p.start_date,p.end_date,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
@@ -280,7 +280,7 @@ public class TripDaoImpl implements TripDao {
             q += " AND p.end_date <= ? ";
             arguments.add(maxDateTime.get());
         }
-        q += "GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone,  users.birthdate, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car, cars.image_id, p.start_date, p.end_date "+
+        q += "GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car, cars.image_id, p.start_date, p.end_date "+
                     "OFFSET ? "+
                     "LIMIT ?";
         arguments.add(page * pageSize);
@@ -372,7 +372,7 @@ public class TripDaoImpl implements TripDao {
     }
 
     private static class QueryBuilder{
-        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.birthdate as user_birthdate, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id , cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price";
+        private static final String select = "SELECT trips.trip_id, trips.max_passengers, trips.start_date_time,trips.end_date_time, trips.origin_address, origin.name as origin_city_name, origin.city_id as origin_city_id, origin.province_id as origin_province_id, trips.destination_address, destination.name as destination_city_name, destination.city_id as destination_city_id, destination.province_id as destination_province_id, users.email as user_email, users.user_id as user_id, users.phone as user_phone, users.user_role as user_role, users.password as user_password, users.username as user_username, users.surname as user_surname, users.user_image_id as user_image_id, user_city.city_id as user_city_id, user_city.name as user_city_name, user_city.province_id as user_city_province_id, users.mail_locale as user_mail_locale, cars.car_id as car_id, cars.plate  as car_plate, cars.info_car as car_info_car, cars.image_id as car_image_id, COALESCE(max(aux.count),0) as occupied_seats, trips.price as trip_price";
         private static final String selectCount = "select sum(count) as count FROM (select count(distinct trip_id) as count ";
         private static final String from = "FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(\n" +
                 "    SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as count\n" +
@@ -380,7 +380,7 @@ public class TripDaoImpl implements TripDao {
                 "    GROUP BY days.days,passengers.trip_id\n" +
                 ") aux NATURAL JOIN trips_cars_drivers NATURAL JOIN users NATURAL JOIN cars JOIN cities origin ON trips.origin_city_id = origin.city_id JOIN cities destination ON trips.destination_city_id=destination.city_id JOIN cities user_city ON users.city_id = user_city.city_id";
         private final StringBuilder where = new StringBuilder();
-        private static final String groupBy ="GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone,  users.birthdate, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car, cars.image_id";
+        private static final String groupBy ="GROUP BY trips.trip_id,trips.start_date_time, trips.end_date_time, trips.max_passengers, trips.origin_address, origin.name, origin.city_id, origin.province_id, destination_address, destination.name, destination.city_id, destination.province_id, users.email, users.user_id, users.phone, users.user_role, users.password, users.username, users.surname, user_city.city_id, user_city.name, user_city.province_id, cars.car_id, cars.plate, cars.info_car, cars.image_id";
 
         private final StringBuilder having = new StringBuilder();
         private final StringBuilder orderBy = new StringBuilder();

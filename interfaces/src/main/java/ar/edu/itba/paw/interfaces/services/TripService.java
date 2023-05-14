@@ -59,6 +59,7 @@ public interface TripService {
     boolean deleteTrip(final Trip trip);
     boolean addPassenger(Trip trip,User passenger, String startDate,String startTime, String endDate) throws TripAlreadyStartedException;
     boolean deleteTrip(int tripId);
+    List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
     //
     PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize);
     //
