@@ -31,7 +31,9 @@
       <jsp:param name="trips" value="${futureTripsPassanger}"/>
       <jsp:param name="url" value="${reservedTripsUrl}"/>
     </jsp:include>
-    <c:url value="/trips/reserved/history" var="reservedTripsHistoryUrl"/>
+    <c:url value="/trips/reserved" var="reservedTripsHistoryUrl">
+      <c:param name="time" value="past"/>
+    </c:url>
     <c:set var="trips" value="${pastTripsPassanger}" scope="request"/>
     <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
       <jsp:param name="title" value="historyTrips.reserved.title"/>

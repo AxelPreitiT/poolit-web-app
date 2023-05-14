@@ -59,24 +59,7 @@ public class UserDaoImpl implements UserDao {
         data.put("user_role", role);
         data.put("user_image_id", user_image_id);
         LOGGER.debug("Adding new user with email '{}' to the database", savedEmail);
-        Number key = 0;
-        try {
-            key = jdbcInsert.executeAndReturnKey(data);
-            LOGGER.info("User with email '{}' added to the database with id {}", savedEmail, key.longValue());
-        } catch (DuplicateKeyException e) {
-            if (e.getMessage().contains("users_email_key")) {
-                LOGGER.debug("Email '{}' already exists in the database", savedEmail);
-                if (findByEmail(email).get().getPassword() != null) {
-                    final EmailAlreadyExistsException exception = new EmailAlreadyExistsException();
-                    LOGGER.error("Email '{}' already exists in the database and has already registered", savedEmail, exception);
-                    throw exception;
-                } else {
-                    LOGGER.debug("Email '{}' already exists in the database but has not registered yet, updating user", savedEmail);
-                    updateProfile(username, surname, email, password, bornCity, mailLocale.toString(), role, user_image_id);
-                    LOGGER.info("User with email '{}' updated in the database", savedEmail);
-                }
-            }
-        }
+        Number key = jdbcInsert.executeAndReturnKey(data);
         final User user = new User(key.longValue(), username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, user_image_id);
         LOGGER.debug("New {}", user);
         return user;
@@ -105,10 +88,12 @@ public class UserDaoImpl implements UserDao {
         jdbcTemplate.update("UPDATE users SET user_role = ? WHERE user_id = ?", role, userId);
     }
 
-    public void updateProfile(final String username, final String surname, final String email,
+    @Override
+    public User updateProfile(final String username, final String surname, final String email,
                               final String password, final City bornCity, final String mailLocale, final String role, long user_image_id){
         LOGGER.debug("Updating user with email '{}' in the database", email);
         jdbcTemplate.update("UPDATE users SET username = ?, surname = ?, password = ?, city_id = ?, mail_locale = ?, user_role = ?, user_image_id = ?  WHERE email = ?",
                 username, surname, password, bornCity.getId(), mailLocale, role, user_image_id, email);
+        return findByEmail(email).orElseThrow(IllegalStateException::new);
     }
 }

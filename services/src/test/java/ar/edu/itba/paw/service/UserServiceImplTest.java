@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.City;
@@ -42,7 +43,7 @@ public class UserServiceImplTest {
     private UserServiceImpl us;
 
     @Test
-    public void testCreateUser() {
+    public void testCreateUser() throws EmailAlreadyExistsException {
         // precondiciones
         when(userDao.create(eq(name), eq(surname), eq(email), eq(phone), eq(password), any(), eq(mailLocale), eq(role), anyLong()))
                 .thenReturn(new User(userId, name, surname, email, phone, password, bornCity, mailLocale, role, userImageId));
