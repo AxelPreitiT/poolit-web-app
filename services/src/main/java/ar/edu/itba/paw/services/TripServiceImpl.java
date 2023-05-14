@@ -20,14 +20,14 @@ public class TripServiceImpl implements TripService {
 
     private static final int OFFSET_MINUTES = 30;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     private final TripDao tripDao;
 
     @Autowired
-    public TripServiceImpl(final TripDao tripDao){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService1){
         this.tripDao = tripDao;
+        this.emailService = emailService1;
     }
 
     @Override
