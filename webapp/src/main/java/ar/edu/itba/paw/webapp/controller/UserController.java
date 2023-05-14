@@ -116,7 +116,7 @@ public class UserController extends LoggedUserController {
 
         final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsPassanger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-
+        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
 
         if(Objects.equals(user.getRole(), "USER")){
 
@@ -124,8 +124,10 @@ public class UserController extends LoggedUserController {
             mav.addObject("user", user);
             mav.addObject("futureTripsPassanger", futureTripsPassanger);
             mav.addObject("pastTripsPassanger", pastTripsPassanger);
+            mav.addObject("reviewsAsUser", reviewsAsUser);
             return mav;
         }
+        final List<Review> reviews = reviewService.getDriverReviews(user);
         final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
         final List<Car> cars = carService.findByUser(user);
@@ -140,6 +142,8 @@ public class UserController extends LoggedUserController {
         mav.addObject("pastTripsPassanger",pastTripsPassanger);
         mav.addObject("cars", cars);
         mav.addObject("carAdded", carAdded);
+        mav.addObject("reviews", reviews);
+        mav.addObject("reviewsAsUser", reviewsAsUser);
         return mav;
     }
 
@@ -149,7 +153,7 @@ public class UserController extends LoggedUserController {
 
         final List<Trip> futureTripsPassanger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsPassanger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-
+        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
         if(Objects.equals(user.getRole(), "DRIVER")){
             //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
             pawUserDetailsService.update(user);
@@ -159,8 +163,11 @@ public class UserController extends LoggedUserController {
             mav.addObject("user", user);
             mav.addObject("futureTripsPassanger", futureTripsPassanger);
             mav.addObject("pastTripsPassanger", pastTripsPassanger);
+
+            mav.addObject("reviews", reviewsAsUser);
             return mav;
         }
+        final List<Review> reviews = reviewService.getDriverReviews(user);
         //TODO: traer las que ya pasaron y las que van a hacerse
         final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
@@ -178,6 +185,8 @@ public class UserController extends LoggedUserController {
         mav.addObject("futureTripsPassanger", futureTripsPassanger);
         mav.addObject("pastTripsPassanger",pastTripsPassanger);
         mav.addObject("cars", cars);
+        mav.addObject("reviews", reviews);
+        mav.addObject("reviewsAsUser", reviewsAsUser);
         return mav;
     }
 
