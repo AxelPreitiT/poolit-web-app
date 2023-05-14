@@ -25,11 +25,18 @@
       </div>
     </c:when>
     <c:otherwise>
+    <div id="reviews-container" class="reviews-container">
         <c:forEach items="${reviews}" var="review">
+          <div class="revs">
           <c:set var="review" value="${review}" scope="request"/>
           <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
+          </div>
         </c:forEach>
+        <button class="show-more-btn btn button-style button-color shadow-btn "><spring:message code="review.more"/></button>
+    </div>
+
     </c:otherwise>
     </c:choose>
   </div>
+  <script src="<c:url value="/resources/js/users/reviews.js"/>" type="application/javascript"></script>
 </div>
