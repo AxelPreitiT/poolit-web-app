@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS users(
     email TEXT NOT NULL,
     phone VARCHAR(20) NOT NULL,
     password TEXT,
-    birthdate TIMESTAMP,
     city_id INT,
+    mail_locale TEXT NOT NULL,
     user_role TEXT,
     user_image_id INT,
     UNIQUE(email),
@@ -90,7 +90,10 @@ CREATE TABLE IF NOT EXISTS reviews(
   trip_id INT NOT NULL,
   user_id INT NOT NULL,
   rating INT NOT NULL,
-  review TEXT NOT NULL
+  review TEXT NOT NULL,
+  UNIQUE(trip_id,user_id),
+  CONSTRAINT reviews_to_trips FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
+  CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
 

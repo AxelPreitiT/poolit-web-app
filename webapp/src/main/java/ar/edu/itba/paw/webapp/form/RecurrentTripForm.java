@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.form.annotations.LastDateIsAfterDate;
 import ar.edu.itba.paw.webapp.form.annotations.SameWeekDay;
-import ar.edu.itba.paw.webapp.form.annotations.TodayOrLater;
+import ar.edu.itba.paw.webapp.form.annotations.NowOrLater;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -11,10 +11,10 @@ import java.time.LocalTime;
 
 @SameWeekDay
 @LastDateIsAfterDate
+@NowOrLater
 public class RecurrentTripForm {
 
     @NotNull
-    @TodayOrLater
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
 

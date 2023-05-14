@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,13 @@ public class ExceptionController extends LoggedUserController {
         final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage",messageSource.getMessage("exceptions.carNotFound",null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage("exceptions.carNotFound.description",null,LocaleContextHolder.getLocale()));
+        return mav;
+    }
+    @ExceptionHandler(TripAlreadyStartedException.class)
+    public ModelAndView tripAlreadyStarted(){
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage",messageSource.getMessage("exceptions.tripAlreadyStarted",null, LocaleContextHolder.getLocale()));
+        mav.addObject("errorDescription",messageSource.getMessage("exceptions.tripAlreadyStarted.message",null,LocaleContextHolder.getLocale()));
         return mav;
     }
     @ExceptionHandler(IllegalArgumentException.class)

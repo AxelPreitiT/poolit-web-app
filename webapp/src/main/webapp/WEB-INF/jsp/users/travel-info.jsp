@@ -53,7 +53,7 @@
                         <span class="text"><c:out value="${trip.startTimeString}"/></span>
                     </div>
                     <div>
-                        <h5 class="text"><spring:message code="format.price" arguments="${trip.price}"/></h5>
+                        <h5 class="text"><spring:message code="format.price" arguments="${trip.queryTotalPrice}"/></h5>
                     </div>
                 </div>
             </div>

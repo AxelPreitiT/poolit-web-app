@@ -15,9 +15,9 @@
     <div class="main-container-style">
         <div id="banner-container">
             <img src="<c:url value="/resources/images/register/register-banner.jpg"/>" alt="banner" id="banner-image">
-            <div id="banner-content">
+            <a id="banner-content" href="<c:url value="/"/>">
                 <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="poolit" id="banner-logo">
-            </div>
+            </a>
         </div>
         <div id="form-container" class="primary-bg-color">
             <c:url value="${postUrl}" var="createUser" />

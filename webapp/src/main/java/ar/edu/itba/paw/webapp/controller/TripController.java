@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -94,18 +95,16 @@ public class TripController extends LoggedUserController {
     }
 
     private ModelAndView tripDetailsForReservation(final long tripId, final SelectionForm form){
-        //TODO: revisar que la fecha de inicio sea posterior a la actualidad
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(TripNotFoundException::new);
         ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
         return mv;
     }
 
-    //TODO: preguntar si la regla de que solo llame alguien que no es pasajero lo ponemos en security o en el service y lanzamos una excepcion
     @RequestMapping(value = "/trips/{id:\\d+$}/join",method = RequestMethod.POST)
     public ModelAndView addPassengerToTrip(@PathVariable("id") final long tripId,
                                            @Valid @ModelAttribute("selectForm") final SelectionForm form,
-                                           final BindingResult errors){
+                                           final BindingResult errors)throws TripAlreadyStartedException {
         if(errors.hasErrors()){
             return getTripDetails(tripId,form);
         }
@@ -144,10 +143,14 @@ public class TripController extends LoggedUserController {
     @RequestMapping(value = LANDING_PAGE_PATH, method = RequestMethod.GET)
     public ModelAndView landingPage(@ModelAttribute("searchTripForm") final SearchTripForm form){
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        final List<Trip> trips = tripService.getIncomingTrips(0,PAGE_SIZE).getElements();
+        final Optional<User> user = userService.getCurrentUser();
 
         final ModelAndView mav = new ModelAndView("/landing/main");
-        mav.addObject("trips", trips);
+        if(user.isPresent()){
+            final List<Trip> trips = tripService.getRecommendedTripsForUser(user.get(),0,PAGE_SIZE).getElements();
+//            final List<Trip> trips = tripService.getIncomingTripsByOrigin(user.get().getBornCity().getId(),0,PAGE_SIZE).getElements();
+            mav.addObject("trips", trips);
+        }
         mav.addObject("cities", cities);
 
         return mav;

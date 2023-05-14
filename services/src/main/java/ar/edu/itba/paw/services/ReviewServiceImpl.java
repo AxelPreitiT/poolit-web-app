@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
         this.reviewDao = reviewDao;
     }
 
+    @Transactional
     @Override
     public Review createReview(long tripId, Passenger passenger, int rating, String review) {
         if(!canReview(passenger)){

@@ -21,9 +21,9 @@
             <i class="bi bi-calendar light-text h5"></i>
             <div class="show-row-content">
                 <span class="light-text detail detail-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
-                <span class="light-text"><spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.startDateString}"/>
-                <c:if test="${trip.recurrent}">
-                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.endDateString}"/>
+                <span class="light-text"><spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.queryStartDateString}"/>
+                <c:if test="${trip.queryIsRecurrent}">
+                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryEndDateString}"/>
                 </c:if>
                 </span>
             </div>
@@ -58,6 +58,7 @@
                 </div>
             </a>
         </div>
+        <c:if test="${param.showDriverInfo}">
         <div class="show-row">
             <i class="bi bi-envelope-fill light-text h5"></i>
             <div class="show-row-content">
@@ -70,5 +71,6 @@
                 <span class="light-text detail"><c:out value="${trip.driver.phone}"/></span>
             </div>
         </div>
+        </c:if>
     </div>
 </div>
