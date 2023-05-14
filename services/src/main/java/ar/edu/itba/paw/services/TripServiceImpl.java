@@ -148,8 +148,8 @@ public class TripServiceImpl implements TripService {
         if(passengers.contains(passenger)){
             throw new IllegalStateException();
         }
-        passengers = tripDao.getPassengers(trip,startDateTime,endDateTime);
-        if(passengers.size()>=trip.getMaxSeats()){
+        Trip aux = tripDao.findById(trip.getTripId(),startDateTime,endDateTime).orElseThrow(IllegalArgumentException::new);
+        if(aux.getOccupiedSeats()>=trip.getMaxSeats()){
             throw new IllegalStateException();
         }
         if(startDateTime.isBefore(LocalDateTime.now())){
