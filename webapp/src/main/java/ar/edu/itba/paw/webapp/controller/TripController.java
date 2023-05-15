@@ -100,7 +100,7 @@ public class TripController extends LoggedUserController {
 
     private ModelAndView tripDetailsForReservation(final long tripId, final SelectionForm form){
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(() -> new TripNotFoundException(tripId));
-        ModelAndView mv = new ModelAndView("/select-trip/main");
+        final ModelAndView mv = new ModelAndView("/select-trip/main");
         mv.addObject("trip",trip);
         return mv;
     }
@@ -122,8 +122,6 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-
-    //TODO: preguntar como validar a page
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
     public ModelAndView getSearchedTrips(
             @Valid @ModelAttribute("searchTripForm") final SearchTripForm form,
@@ -158,7 +156,6 @@ public class TripController extends LoggedUserController {
             mav.addObject("trips", trips);
         }
         mav.addObject("cities", cities);
-
         return mav;
     }
 
@@ -227,8 +224,6 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-    //TODO: preguntar si la regla de que acceda solo si es el creador esta bien en el nivel de Spring security (o deberia ser solo de los servicios)
-    //este si
     @RequestMapping(value = "/trips/{id:\\d+$}/delete", method = RequestMethod.POST)
     public ModelAndView deleteTrip(@PathVariable("id") final int tripId) {
         LOGGER.debug("POST Request to /trips/{}/delete", tripId);
@@ -238,7 +233,6 @@ public class TripController extends LoggedUserController {
         mav.addObject("tripDeleted", true);
         return mav;
     }
-    //TODO: preguntar si deberiamos hacer una regla de seguridad que vea si esta inscripto para esto tambien
     @RequestMapping(value ="/trips/{id:\\d+$}/cancel", method = RequestMethod.POST)
     public ModelAndView cancelTrip(@PathVariable("id") final int tripId){
         LOGGER.debug("POST Request to /trips/{}/cancel", tripId);

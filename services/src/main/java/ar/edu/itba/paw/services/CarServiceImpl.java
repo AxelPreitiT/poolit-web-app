@@ -28,19 +28,8 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car createCarIfNotExists(String plate,String infoCar,  User user, long image_id) {
-        Optional<Car> current = carDao.findByPlateAndUser(plate, user);
-        return current.orElseGet(() -> carDao.create(plate, infoCar, user, image_id));
-    }
-
-    @Override
     public Optional<Car> findById(long carId) {
         return carDao.findById(carId);
-    }
-
-    @Override
-    public Optional<Car> findByPlateAndUser(String plate, User user) {
-        return carDao.findByPlateAndUser(plate, user);
     }
 
     @Override

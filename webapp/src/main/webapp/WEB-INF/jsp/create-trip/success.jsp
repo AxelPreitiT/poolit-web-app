@@ -30,7 +30,7 @@
                         <span class="h3 text no-bold"><spring:message code="createTrip.success.price"/></span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.queryTotalPrice}"/></span>
+                        <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
                     </div>
                 </div>
             </div>

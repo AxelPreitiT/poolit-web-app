@@ -24,9 +24,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
-//Timestamp en SQL
-//LocalDateTime para Java
-//En Java no usar los SQL
 
 @Repository
 public class TripDaoImpl implements TripDao {
@@ -124,9 +121,6 @@ public class TripDaoImpl implements TripDao {
                     resultSet.getString("user_role"),resultSet.getLong("user_image_id"));
             LocalDateTime startDateTime = resultSet.getTimestamp("start_date_time").toLocalDateTime();
             LocalDateTime endDateTime = resultSet.getTimestamp("end_date_time").toLocalDateTime();
-            //Para permitir que se pueda buscar en un rango horario y mantener la consistencia
-            //Tenemos que dar los resultados de busqueda en ese rango, pero que en el tiempo tengan el tiempo del viaje
-            //y no el tiempo medio en donde fueron buscados (por eso nos quedamos con startDateTime.toLocalTime())
             return new Trip(
                     resultSet.getLong("trip_id"),
                     new City(resultSet.getLong("origin_city_id"),resultSet.getString("origin_city_name"),resultSet.getLong("origin_province_id")),
@@ -216,13 +210,6 @@ public class TripDaoImpl implements TripDao {
         }
         return result;
     }
-    private static void validatePageAndSize(int page, int pageSize){
-        if(page<0 || pageSize<0) {
-            final IllegalArgumentException exception = new IllegalArgumentException();
-            LOGGER.error("Invalid page number {} or page size {}",page,pageSize, exception);
-            throw exception;
-        }
-    }
     @Override
     public List<Passenger> getPassengers(final TripInstance tripInstance){
         return getPassengers(tripInstance.getTrip(),tripInstance.getDateTime());
@@ -231,21 +218,12 @@ public class TripDaoImpl implements TripDao {
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime){
         return getPassengers(trip,dateTime,dateTime);
     }
-    //TODO: revisar
     @Override
     public List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime){
-        //A-{1,3}
-        //B-{2,4}
-        //[1,1] => A(los que esten despues del 1 (start_date>=?) y que empiecen antes del 2 (start_date<=1)
-        //Si pedia que passengers.start_date>=1 AND passengers.end_date>=1 -> A y B, pero solo queria A
-        //Si pedia que passengers.start_date>=1 AND passengers.end_date<=1 -> A, pero esto tiene un problema
-        //[1,2] -> A,B
-        //Si pedia que passengers.start_date>=1 AND passengers.end_date<=2 -> A (y estoy dejando a B)
-        //"WHERE trip_id = ? AND passengers.start_date>=? AND passengers.end_date<=? "
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         final List<Passenger> result = jdbcTemplate.query("SELECT * FROM passengers NATURAL JOIN users NATURAL JOIN cities " +
-                        "WHERE trip_id = ? AND passengers.start_date>=? AND passengers.start_date<=? "
-                ,PASSENGER_ROW_MAPPER,trip.getTripId(),Timestamp.valueOf(startDateTime),Timestamp.valueOf(endDateTime));
+                        "WHERE trip_id = ? AND ((passengers.start_date<=? AND passengers.end_date>=?) OR (passengers.start_date<=? AND passengers.end_date>=?)) "
+                ,PASSENGER_ROW_MAPPER,trip.getTripId(),Timestamp.valueOf(startDateTime),Timestamp.valueOf(startDateTime),Timestamp.valueOf(endDateTime),Timestamp.valueOf(endDateTime));
         LOGGER.debug("Found {} in the database", result);
         return result;
     }
@@ -268,10 +246,6 @@ public class TripDaoImpl implements TripDao {
     }
     @Override
     public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
-//        validatePageAndSize(page,pageSize);
-        //passengers.start_date<=days<=passenger.end_date
-        //"los pasajeros que empiecen antes o en el dia y terminen en o despues del dia"
-        //Con eso me traigo a los pasajeros que esten en ese dia
         LOGGER.debug("Looking for the trip instances of the trip with id {}, between '{}' and '{}', in page {} with size {} in the database",trip.getTripId(),start,end,page,pageSize);
         String query = "FROM generate_series(?,?, '7 day'::interval) days LEFT OUTER JOIN passengers " +
                 "ON passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.trip_id=? " +
@@ -372,8 +346,6 @@ public class TripDaoImpl implements TripDao {
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
             int page, int pageSize){
-
-        validatePageAndSize(page,pageSize);
 
         LOGGER.debug("Looking for the trips with originCity with id {}, destinationCity with id {}, startDateTime '{}',{}{} range of {} minutes,{}{} sortType '{}' ({}) page {} and size {} in the database",
                 origin_city_id, destination_city_id, startDateTime, dayOfWeek.map(day -> " dayOfWeek '" + day + "',").orElse(""),

@@ -39,7 +39,6 @@ public class TripServiceImpl implements TripService {
     @Transactional
     @Override
     public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, User driver, final LocalDate endDate, final LocalTime endTime) {
-        //Usamos que el front debe pasar el date en ISO-8601
         LocalDateTime startDateTime = startDate.atTime(startTime);
         //If Trip is not recurrent, then endDateTime is the same as startDateTime
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
@@ -137,6 +136,7 @@ public class TripServiceImpl implements TripService {
         }
         return tripDao.deleteTrip(trip);
     }
+    @Transactional
     public boolean deleteTrip(int tripId){
         //TODO: change for TripNotFoundException
         Optional<Trip> tripToDelete = tripDao.findById(tripId);
@@ -148,6 +148,7 @@ public class TripServiceImpl implements TripService {
         return deleteTrip(tripToDelete.get());
     }
     @Override
+    @Transactional
     public boolean addPassenger(Trip trip, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException{
         return addPassenger(trip,passenger,dateTime,dateTime);
     }
@@ -158,6 +159,7 @@ public class TripServiceImpl implements TripService {
         LocalDateTime endDateTime = getIsoLocalDateTime(endDate,startTime).orElse(startDateTime);
         return addPassenger(trip,passenger,startDateTime,endDateTime);
     }
+    @Transactional
     @Override
     public boolean addPassenger(Trip trip, User user, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripAlreadyStartedException {
         if(trip==null || user==null || startDateTime == null || endDateTime == null){
@@ -215,10 +217,9 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Trip with id {} not found", tripId, e);
             throw e;
         }
-        //Ignorar suggestion, usar filter no tiene mucho sentido aca (funciona porque devuelve boolean)
-        //Trip trip = findById(tripId);
         return addPassenger(trip.get()  ,passenger,startDateTime,endDateTime);
     }
+    @Transactional
     @Override
     public boolean addPassenger(long tripId, User passenger, LocalDateTime dateTime) throws TripAlreadyStartedException{
         return addPassenger(tripId,passenger,dateTime,dateTime);
@@ -387,7 +388,6 @@ public class TripServiceImpl implements TripService {
         }
     }
 
-    //TODO: sacar los optional que nunca se usan
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final LocalDate startDate,

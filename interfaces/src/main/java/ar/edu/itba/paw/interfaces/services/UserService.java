@@ -18,7 +18,5 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     void loginUser(final String email, final String password);
 
-    public void changeRole(long userId, String role);
-
-    public void changeToDriver(User user);
+    void changeToDriver(User user);
 }

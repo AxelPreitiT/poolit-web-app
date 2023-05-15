@@ -40,15 +40,14 @@ public class ErrorsController extends LoggedUserController {
         return new ModelAndView("static/403");
     }
 
-    //TODO: ver por que se llama todo el tiempo y preguntarlo
     @RequestMapping(value = "/errors", method = RequestMethod.GET)
     public ModelAndView runtimeError(HttpServletRequest servletRequest){
         LOGGER.debug("GET Request to /errors");
         final ModelAndView mav = new ModelAndView("/errors/default");
-        Integer httpErrorCode = (Integer) servletRequest.getAttribute("javax.servlet.error.status_code");
+        final Integer httpErrorCode = (Integer) servletRequest.getAttribute("javax.servlet.error.status_code");
         mav.addObject("errorCode",httpErrorCode);
         LOGGER.warn("Raised error with code {} in controller", httpErrorCode);
-        ErrorMessage message = errorMessages.getOrDefault(httpErrorCode,new ErrorMessage("errors.default","errors.default.description"));
+        final ErrorMessage message = errorMessages.getOrDefault(httpErrorCode,new ErrorMessage("errors.default","errors.default.description"));
         mav.addObject("errorMessage",messageSource.getMessage(message.getError(),null, LocaleContextHolder.getLocale()));
         mav.addObject("errorDescription",messageSource.getMessage(message.getDescription(),null,LocaleContextHolder.getLocale()));
         return mav;

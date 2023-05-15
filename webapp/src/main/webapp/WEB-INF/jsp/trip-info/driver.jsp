@@ -69,7 +69,9 @@
           <span class="h3 text"><spring:message code="selectTrip.price"/></span>
         </div>
         <div>
-          <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.price}"/></span>
+          <span class="h2 secondary-color">
+            <spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/>
+          </span>
         </div>
       </div>
       <div class="trip-price-row items-to-end">

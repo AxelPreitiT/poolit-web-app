@@ -28,9 +28,6 @@ import java.util.concurrent.TimeUnit;
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthValidator authValidator;
-
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Bean
@@ -47,14 +44,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Value("classpath:rememberMeKey.pem")
     private Resource rememberMeKey;
-    /*
-    @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
-        SimpleUrlAuthenticationFailureHandler simpleUrlAuthenticationFailureHandler = new SimpleUrlAuthenticationFailureHandler("/loginFailed");
-        simpleUrlAuthenticationFailureHandler.setUseForward(true);
-        return simpleUrlAuthenticationFailureHandler;
-    }
-    */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
@@ -62,11 +51,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                     .antMatchers("/users/login", "/users/create").anonymous()
                     .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
-                    .antMatchers("/trips/{id:\\d+$}/cancel").hasRole("USER")
+                    .antMatchers("/trips/{id:\\d+$}/cancel","/changeRole").hasRole("USER")
                     .antMatchers("/trips/create", "/cars/**", "/users/created").hasRole("DRIVER")
                     .antMatchers("/trips/created/**").hasRole("DRIVER")
-                    //.antMatchers("/trips/create", "/profile/driver").hasRole("DRIVER")
-                    //.antMatchers("/profile/user").hasRole("USER")
                     .antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
                     .antMatchers(  "/users/**", "/trips/{id:\\d+$}/join").authenticated()
                     .antMatchers("/**").permitAll()
@@ -74,8 +61,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/users/login")
                     .usernameParameter("email")
                     .passwordParameter("password")
-                    //.failureUrl("/users/login/error")
-                    //.failureHandler(authenticationFailureHandler())
                     .defaultSuccessUrl("/", false)
                 .and().rememberMe()
                     .rememberMeParameter("rememberme")

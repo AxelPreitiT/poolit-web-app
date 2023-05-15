@@ -27,7 +27,7 @@
           <span class="h3 text"><spring:message code="selectTrip.price"/></span>
         </div>
         <div>
-          <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.queryTotalPrice}"/></span>
+          <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
         </div>
       </div>
       <div class="trip-price-row items-to-end">
@@ -57,8 +57,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                <!-- Avisar a axel que toque un poco el formato con el de hasta -->
-                <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name},${trip.destinationCity.name}"/></span>
                 <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
               </div>
               <div class="modal-footer">
@@ -116,7 +115,8 @@
                   </div>
                   <div class="form-group">
                     <h3><spring:message code="review.review"/></h3>
-                    <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="Ingrese review del viaje"/>
+                    <spring:message code="review.placeholder" var="reviewPlaceholder"/>
+                    <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="${reviewPlaceholder}"/>
                   </div>
                   <div>
                     <h6 class="italic-text"><spring:message code="review.textInfo"/></h6>
@@ -136,8 +136,8 @@
           </div>
         </div>
       </c:if>
-      <c:url value="/trips/reserved" var="joinUrl"/>
-      <a class="btn button-style primary-button shadow-btn">
+      <c:url value="/trips/reserved" var="reservedUrl"/>
+      <a class="btn button-style primary-button shadow-btn" href="${reservedUrl}">
         <i class="bi bi-car-front-fill light-text h3"></i>
         <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.button"/></span>
       </a>

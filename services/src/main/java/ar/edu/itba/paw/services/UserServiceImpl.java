@@ -101,17 +101,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeRole(long userId, String role) {
-        if(Objects.equals(role, Roles.USER.role)){
-            role = Roles.DRIVER.role;
-        }else{
-            role = Roles.USER.role;
-        }
-        userDao.changeRole(userId, role);
-    }
-
-    @Transactional
-    @Override
     public void changeToDriver(User user) {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
     }

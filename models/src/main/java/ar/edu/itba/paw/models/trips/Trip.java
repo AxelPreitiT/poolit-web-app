@@ -172,8 +172,17 @@ public class Trip {
     public int getQueryTotalTrips(){
         return (Period.between(queryStartDateTime.toLocalDate(),queryEndDateTime.toLocalDate()).getDays())/7+1;
     }
-    public double getQueryTotalPrice() {
-        return price * getQueryTotalTrips();
+
+    public String getQueryTotalPrice() {
+        return String.format("%.2f",price * getQueryTotalTrips());
+    }
+
+    public int getDecimalQueryTotalPrice() {
+        return (int) Math.round(((price * getQueryTotalTrips())-getIntegerQueryTotalPrice())*100);
+    }
+
+    public int getIntegerQueryTotalPrice(){
+        return Double.valueOf(price * getQueryTotalTrips()).intValue();
     }
 
     public boolean getQueryIsRecurrent(){

@@ -70,7 +70,7 @@ public class UserController extends LoggedUserController {
              @ModelAttribute("createUserForm") final CreateUserForm form
     ) {
         LOGGER.debug("GET Request to {}", CREATE_USER_PATH);
-        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("users/register");
         mav.addObject("cities", cities);
         mav.addObject("postUrl", CREATE_USER_PATH);
@@ -87,9 +87,9 @@ public class UserController extends LoggedUserController {
             LOGGER.warn("Errors found in CreateUserForm: {}", errors.getAllErrors());
             return createUserGet(form);
         }
-        byte[] data = form.getImageFile().getBytes();
-        Image image=imageService.createImage(data);
-        City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
+        final byte[] data = form.getImageFile().getBytes();
+        final Image image=imageService.createImage(data);
+        final City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
@@ -137,7 +137,7 @@ public class UserController extends LoggedUserController {
         final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
         final List<Car> cars = carService.findByUser(user);
-        Double rating = reviewService.getDriverRating(user);
+        final Double rating = reviewService.getDriverRating(user);
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
@@ -178,7 +178,6 @@ public class UserController extends LoggedUserController {
         mav.addObject("reviews", reviews);
         return mav;
     }
-
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
     public ModelAndView changeRoleToDriver(){
         LOGGER.debug("POST Request to /changeRole");

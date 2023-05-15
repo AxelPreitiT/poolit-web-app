@@ -29,13 +29,17 @@ public class AuthValidator {
     }
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest){
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
-        //TODO: preguntar si esta bien lanzar estas excepciones aca
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         if(!user.getRole().equals("DRIVER")){
+            LOGGER.debug("User with id {} tried to delete a trip without being a driver",user.getUserId());
             return false;
         }
         //User is a driver
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
-        return trip.getDriver().equals(user);
+        boolean ans = trip.getDriver().equals(user);
+        if(!ans){
+            LOGGER.debug("User {} tried to delete a trip without being it's creator",user.getUserId());
+        }
+        return ans;
     }
 }

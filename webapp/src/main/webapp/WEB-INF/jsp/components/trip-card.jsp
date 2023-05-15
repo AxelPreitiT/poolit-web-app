@@ -135,7 +135,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Avisar a axel que toque un poco el formato con el de hasta -->
                         <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
                         <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
                     </div>

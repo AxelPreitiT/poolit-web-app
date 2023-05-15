@@ -30,25 +30,6 @@
           <div class="placeholder-image">
             <img src="${carImageUrl}" alt="car image"/>
           </div>
-<%--          <div class="details-container primary-bg-color passenger-container">--%>
-<%--          <div class="light-text h4"><spring:message code="tripDetails.passengers"/></div>--%>
-<%--          <c:forEach items="${passengers}" var="user">--%>
-<%--                <c:url value="/profile/${user.userId}" var="userUrl"/>--%>
-<%--                <c:url value="/image/${user.userImageId}" var="userImageId"/>--%>
-<%--                <div class="col-sm-12 col-xl-6">--%>
-<%--                  <div>--%>
-<%--                      <a href="${userUrl}" class="show-row profile-link">--%>
-<%--                          <div>--%>
-<%--                              <img src="${userImageId}" alt="user image" class="image-photo"/>--%>
-<%--                          </div>--%>
-<%--                          <div class="show-row-content">--%>
-<%--                              <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>--%>
-<%--                          </div>--%>
-<%--                      </a>--%>
-<%--                  </div>--%>
-<%--                </div>--%>
-<%--            </c:forEach>--%>
-<%--          </div>--%>
         </div>
       </div>
     </div>
