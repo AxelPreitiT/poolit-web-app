@@ -138,7 +138,6 @@ public class TripServiceImpl implements TripService {
     }
     @Transactional
     public boolean deleteTrip(int tripId){
-        //TODO: change for TripNotFoundException
         Optional<Trip> tripToDelete = tripDao.findById(tripId);
         if(!tripToDelete.isPresent()){
             IllegalArgumentException e = new IllegalArgumentException();

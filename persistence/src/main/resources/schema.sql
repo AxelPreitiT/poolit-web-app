@@ -77,7 +77,6 @@ create TABLE IF NOT EXISTS passengers(
 CREATE TABLE IF NOT EXISTS trips_cars_drivers(
     trip_id INT NOT NULL,
     user_id INT NOT NULL,
---     TODO: ver que pasa si se elimina un auto (CASCADE/SET NULL/...)
     car_id INT,
     PRIMARY KEY(trip_id,user_id),
     UNIQUE(trip_id,car_id),
