@@ -59,6 +59,14 @@ public class Trip {
         this.queryStartDateTime = startDateTime;
         this.queryEndDateTime = endDateTime;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Trip { id: %d, originCity: '%s', originAddress: '%s', destinationCity: '%s', destinationAddress: '%s', isRecurrent: %b, dayOfWeek: '%s', startDateTime: '%s', endDateTime: '%s', queryStartDateTime: '%s', queryEndDateTime: '%s', maxSeats: %d, occupiedSeats: %d, price: $%f, carId: %d, driverId: %d }",
+                tripId, originCity, originAddress, destinationCity, destinationAddress, isRecurrent, dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH), startDateTime, endDateTime, queryStartDateTime, queryEndDateTime, maxSeats, occupiedSeats, price, car.getCarId(), driver.getUserId());
+    }
+
+
     public City getOriginCity() {
         return originCity;
     }
@@ -128,7 +136,10 @@ public class Trip {
     }
 
     public String getDayOfWeekString(){
-        return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault());
+        final String[] messageCodes = new String[]{
+                "monday","tuesday","wednesday","thursday","friday","saturday","sunday"
+        };
+        return messageCodes[dayOfWeek.getValue()-1];
     }
 
     public int getTotalTrips(){
@@ -136,6 +147,10 @@ public class Trip {
     }
     public double getTotalPrice(){
         return price*getTotalTrips();
+    }
+
+    public boolean getTripHasEnded(){
+        return endDateTime.isBefore(LocalDateTime.now());
     }
 
     public LocalDateTime getQueryStartDateTime() {
@@ -160,8 +175,25 @@ public class Trip {
     public int getQueryTotalTrips(){
         return (Period.between(queryStartDateTime.toLocalDate(),queryEndDateTime.toLocalDate()).getDays())/7+1;
     }
-    public double getQueryTotalPrice() {
-        return price * getQueryTotalTrips();
+
+    public String getQueryTotalPrice() {
+        return String.format("%.2f",price * getQueryTotalTrips());
     }
 
+    public int getDecimalQueryTotalPrice() {
+        return (int) Math.round(((price * getQueryTotalTrips())-getIntegerQueryTotalPrice())*100);
+    }
+
+    public int getIntegerQueryTotalPrice(){
+        return Double.valueOf(price * getQueryTotalTrips()).intValue();
+    }
+
+    public boolean getQueryIsRecurrent(){
+        return !queryStartDateTime.equals(queryEndDateTime);
+    }
+
+    public enum SortType{
+        PRICE(),
+        TIME(),
+    }
 }

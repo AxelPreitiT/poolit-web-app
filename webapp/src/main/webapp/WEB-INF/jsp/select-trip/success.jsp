@@ -19,7 +19,9 @@
     </div>
     <div class="main-container-style container-color">
         <div id="trip-detail-container">
-            <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
+                <jsp:param name="showDriverInfo" value="true"/>
+            </jsp:include>
         </div>
         <div id="footer-container">
             <div id="trip-price-container">
@@ -28,7 +30,7 @@
                         <span class="h3 text"><spring:message code="selectTrip.price"/></span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color">$<c:out value="${trip.price}"/></span>
+                        <span class="h2 secondary-color">$<c:out value="${trip.queryTotalPrice}"/></span>
                     </div>
                 </div>
                 <div class="trip-price-row items-to-end">
@@ -48,8 +50,8 @@
     </div>
     <div id="toast-container">
         <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-            <jsp:param name="title" value="¡POOLIT!"/>
-            <jsp:param name="message" value="selectTrip.success.pageTitle"/>
+            <jsp:param name="title" value="selectTrip.success.toast.title"/>
+            <jsp:param name="message" value="selectTrip.success.toast.message"/>
         </jsp:include>
     </div>
 </body>

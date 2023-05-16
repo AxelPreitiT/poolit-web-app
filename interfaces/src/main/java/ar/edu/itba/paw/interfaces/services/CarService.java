@@ -10,11 +10,9 @@ public interface CarService {
 
     Car createCar(String plate, String infoCar, User user, long image_id);
 
-    Car createCarIfNotExists(String plate, String infoCar, User user, long image_id);
-
     Optional<Car> findById(long carId);
 
-    Optional<Car> findByPlateAndUser(String plate, User user);
-
     List<Car> findByUser(User user);
+
+    Optional<Car> findByUserAndPlate(User user, String plate);
 }

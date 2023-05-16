@@ -12,105 +12,128 @@
     <script src="<c:url value="/resources/js/users/image-preview.js"/>" type="module"></script>
 </head>
 <body class="background-bg-color">
-    <div class="container-bg-color main-container-style">
-        <h1 class="text"><spring:message code="register.viewTitle"/></h1>
-        <hr>
-        <c:url value="${postUrl}" var="createUser" />
-        <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
-            <div class="user-info-row">
-                <div class="user-info-item form-floating">
-                    <form:input path="username" type="text" class="form-control text" id="username" name="username" placeholder="Av. del Libertador 1234"/>
-                    <form:label path="username" for="username" class="placeholder-text"><spring:message code="user.name"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="username" cssClass="formError" element="p"/>
+    <div class="main-container-style">
+        <div id="banner-container">
+            <img src="<c:url value="/resources/images/register/register-banner.jpg"/>" alt="banner" id="banner-image">
+            <a id="banner-content" href="<c:url value="/"/>">
+                <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="poolit" id="banner-logo">
+            </a>
+        </div>
+        <div id="form-container" class="primary-bg-color">
+            <c:url value="${postUrl}" var="createUser" />
+            <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
+                <div class="container" id="profile-image-container">
+                    <div id="profile-image-title">
+                        <h4 class="light-text"><spring:message code="register.avatar"/></h4>
+                    </div>
+                    <div id="profile-image-display">
+                        <label for="image-file" id="image-label"  class="secondary-bg-color shadow-btn button-style">
+                            <i class="bi bi-person-fill light-text h1"></i>
+                        </label>
+                        <form:input path="imageFile" type="file" id="image-file" name="image-file" class="form-control" accept="image/*"/>
+                    </div>
+                    <div class="error-row error-row-center mt-1">
+                        <form:errors path="imageFile" cssClass="error-style danger max-width-fit" element="span"/>
                     </div>
                 </div>
-                <div class="user-info-item form-floating">
-                    <form:input path="surname" type="tel" class="form-control text h5 input-style" id="surname" placeholder='<spring:message code="trip.phone"/>'/>
-                    <form:label path="surname" for="surname" class="placeholder-text"><spring:message code="user.surname"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="surname" cssClass="formError" element="p"/>
+                <hr class="light-text">
+                <div class="container" id="user-info-container">
+                    <div id="user-info-title">
+                        <h4 class="light-text"><spring:message code="register.personalInfo"/></h4>
                     </div>
-                </div>
-            </div>
-            <div class="user-info-row">
-                <div class="user-info-item form-floating">
-                    <form:input path="email" class="form-control text h5 input-style" id="email" placeholder='<spring:message code="trip.email"/>'/>
-                    <form:label path="email" for="email" class="placeholder-text"><spring:message code="trip.email"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="email" cssClass="formError" element="p"/>
-                    </div>
-                </div>
-                <div class="user-info-item form-floating">
-                    <form:input path="phone" type="tel" class="form-control text h5 input-style" id="phone" placeholder='<spring:message code="trip.phone"/>'/>
-                    <form:label path="phone" for="phone" class="placeholder-text"><spring:message code="trip.phone"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="phone" cssClass="formError" element="p"/>
-                    </div>
-                </div>
-            </div>
-            <div class="user-info-row">
-                <div class="user-info-item form-floating">
-                    <form:input path="password" type="password" class="form-control text h5 input-style" id="password" placeholder='<spring:message code="trip.phone"/>'/>
-                    <form:label path="password" for="password" class="placeholder-text"><spring:message code="register.password"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="password" cssClass="formError" element="p"/>
-                        <form:errors cssClass="formError" element="p"/>
-                    </div>
-                </div>
-                <div class="user-info-item">
-                    <div class="user-info-item form-floating">
-                        <form:input path="repeatPassword" type="password" class="form-control text h5 input-style" id="repeatPassword" placeholder='<spring:message code="trip.phone"/>'/>
-                        <form:label path="repeatPassword" for="repeatPassword" class="placeholder-text"><spring:message code="register.secondPassword"/></form:label>
-                        <div class="error-container">
-                            <form:errors path="repeatPassword" cssClass="formError text-sm text-red-500" element="p"/>
+                    <div id="user-info-input">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <spring:message code="user.name" var="namePlaceholder"/>
+                                <form:input path="username" type="text" class="form-control form-control" id="username" name="username" placeholder="${namePlaceholder}"/>
+                            </div>
+                            <div class="input-group">
+                                <spring:message code="user.surname" var="surnamePlaceholder"/>
+                                <form:input path="surname" type="tel" class="form-control form-control" id="surname" placeholder='${surnamePlaceholder}'/>
+                            </div>
+                        </div>
+                        <div class="error-row">
+                            <form:errors path="username" cssClass="error-style danger" element="span"/>
+                            <form:errors path="surname" cssClass="error-style danger error-style-right" element="span"/>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <spring:message code="user.email" var="emailPlaceholder"/>
+                                <form:input path="email" type="text" class="form-control form-control" id="email" name="email" placeholder="${emailPlaceholder}"/>
+                            </div>
+                            <div class="input-group">
+                                <spring:message code="user.phone" var="phonePlaceholder"/>
+                                <form:input path="phone" type="text" class="form-control form-control" id="phone" name="phone" placeholder="${phonePlaceholder}"/>
+                            </div>
+                        </div>
+                        <div class="error-row">
+                            <form:errors path="email" cssClass="error-style danger" element="span"/>
+                            <form:errors path="phone" cssClass="error-style danger error-style-right" element="span"/>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <spring:message code="register.password" var="passwordPlaceholder"/>
+                                <form:input path="password" type="password" class="form-control form-control" id="password" name="password" placeholder="${passwordPlaceholder}"/>
+                            </div>
+                            <div class="input-group">
+                                <spring:message code="register.secondPassword" var="repeatPasswordPlaceholder"/>
+                                <form:input path="repeatPassword" type="password" class="form-control form-control" id="repeat-password" name="repeat-password" placeholder="${repeatPasswordPlaceholder}"/>
+                            </div>
+                        </div>
+                        <div class="error-row">
+                            <form:errors path="password" cssClass="error-style danger" element="span"/>
+                            <form:errors path="repeatPassword" cssClass="error-style danger error-style-right" element="span"/>
+                        </div>
+                        <div class="error-row error-row-center">
+                            <form:errors cssClass="error-style danger" element="span"/>
+                        </div>
+                        <div class="input-row input-row-start">
+                            <spring:message code="user.district" var="districtPlaceholder"/>
+                            <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
+                                <jsp:param name="id" value="bornCityId"/>
+                                <jsp:param name="defaultText" value="${districtPlaceholder}"/>
+                            </jsp:include>
+                        </div>
+                        <div class="error-row">
+                            <form:errors path="bornCityId" cssClass="error-style danger" element="span"/>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="user-info-row">
-                <div class="user-info-item form-floating">
-                    <form:input path="birthdate" type="date" id="birthdate" cssClass="form-control h5 text"/>
-                    <form:label path="birthdate" for="birthdate" cssClass="placeholder-text h5"><spring:message code="user.birthday"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="birthdate" cssClass="formError" element="p"/>
+                <hr class="light-text">
+                <div class="container" id="preferences-container">
+                    <div id="preferences-title">
+                        <h4 class="light-text"><spring:message code="register.preferences"/></h4>
+                    </div>
+                    <div class="preference-item">
+                        <label class="light-text"><spring:message code="register.mailLanguage"/></label>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <form:select path="mailLocale" class="form-select" id="mail-locale" name="mail-locale">
+                                    <form:option value="es"><spring:message code="register.spanish"/></form:option>
+                                    <form:option value="en"><spring:message code="register.english"/></form:option>
+                                </form:select>
+                            </div>
+                        </div>
+                        <div class="error-row">
+                            <form:errors path="mailLocale" cssClass="error-style danger" element="span"/>
+                        </div>
                     </div>
                 </div>
-                <div class="user-info-item form-floating">
-                    <form:select path="bornCityId" id="bornCityId" class="form-select h6 text" name="Origen">
-                        <c:forEach items="${cities}" var="city">
-                            <form:option value="${city.id}"><c:out value="${city.name}"/></form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:label path="bornCityId" for="bornCityId" class="placeholder-text h5"><spring:message code="user.district"/></form:label>
-                    <div class="error-container">
-                        <form:errors path="bornCityId" cssClass="formError" element="p"/>
+                <div class="user-info-row">
+                    <div class="submit-row">
+                        <form:button type="submit" class="btn button-color btn-lg"><span class="light-text"><spring:message code="register.btnString"/></span></form:button>
                     </div>
                 </div>
-            </div>
-            <div class="user-info-row">
-                <div class="user-info-item">
-                    <label for="imageFile" class="form-label"><spring:message code="user.photo"/></label>
-                    <form:input path="imageFile" type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" onChange="updateImageDisplay"/>
-                    <div class="preview">
-                        <p></p>
-                    </div>
-                    <form:errors path="imageFile" cssClass="formError" element="p"/>
-                </div>
-            </div>
-            <div class="user-info-row">
-                <div class="submit-row">
-                    <form:button type="submit" class="btn button-color btn-lg"><span class="light-text"><spring:message code="register.btnString"/></span></form:button>
-                </div>
-            </div>
-        </form:form>
-        <hr>
-        <div class="login-container">
-                <h4><spring:message code="register.toLogin"/></h4>
+            </form:form>
+            <hr class="light-text">
+            <div class="login-container">
+                <h4 class="light-text"><spring:message code="register.toLogin"/></h4>
                 <a href="<c:url value="/users/login"/>">
-                    <h5><spring:message code="register.toLogin.btn"/></h5>
+                    <h5 class="secondary-color"><spring:message code="register.toLogin.btn"/></h5>
                 </a>
+            </div>
         </div>
     </div>
+    <script src="<c:url value="/resources/js/pages/register.js"/>" type="application/javascript"></script>
 </body>
 </html>

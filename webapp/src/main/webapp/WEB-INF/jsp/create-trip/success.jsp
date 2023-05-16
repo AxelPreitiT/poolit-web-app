@@ -30,7 +30,7 @@
                         <span class="h3 text no-bold"><spring:message code="createTrip.success.price"/></span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.price}"/></span>
+                        <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,8 @@
     </div>
     <div id="toast-container">
         <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-            <jsp:param name="title" value="¡Viaje creado!"/>
-            <jsp:param name="message" value="createTrip.success.toast"/>
+            <jsp:param name="title" value="createTrip.success.toast.title"/>
+            <jsp:param name="message" value="createTrip.success.toast.message"/>
         </jsp:include>
     </div>
 </body>

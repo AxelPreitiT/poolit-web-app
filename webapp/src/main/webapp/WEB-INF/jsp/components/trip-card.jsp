@@ -49,8 +49,8 @@
                                 <i class="bi bi-calendar text"></i>
                                 <div class="date-info-column">
                                     <c:choose>
-                                        <c:when test="${trip.recurrent}">
-                                            <span class="text text-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
+                                        <c:when test="${trip.queryIsRecurrent}">
+                                            <span class="text text-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
                                         </c:when>
                                         <c:otherwise>
                                             <span class="text"><c:out value="${trip.queryStartDateString}"/></span>
@@ -63,7 +63,7 @@
                                 <span class="text"><c:out value="${trip.startTimeString}"/></span>
                             </div>
                             <div class="footer-price-container">
-                                <h2 class="secondary-color">$<c:out value="${trip.price}"/></h2>
+                                <h2 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h2>
                             </div>
                         </div>
                     </div>
@@ -75,6 +75,16 @@
             </div>
         </a>
     </div>
+    <c:if test="${!(empty allowReview) && allowReview}">
+        <div class="review-trip-container">
+            <a href="<c:url value="/review/${trip.tripId}"/>">
+                <button type="submit" class="btn button-style button-color shadow-btn">
+                    <i class="bi bi-plus-lg light-text h4"></i>
+                    <span class="button-text-style light-text h4">Review</span>
+                </button>
+            </a>
+        </div>
+    </c:if>
     <c:if test="${!(empty allowDelete) && allowDelete}">
         <div class="delete-trip-container">
             <button type="submit" class="btn rounded-circle button-style button-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
@@ -89,18 +99,53 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Avisar a axel que toque un poco el formato con el de hasta -->
-                        <span class="text"><spring:message code="tripCard.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                        <span class="text"><spring:message code="tripCard.warning.title"/>
+                            <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
+                            <strong class="secondary-color">-</strong>
+                            <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
+                          </span>
                         <span class="text"><spring:message code="tripCard.warning.messege"/></span>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                        <button type="button" class="btn primary-button" data-bs-dismiss="modal">
                             <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                         </button>
                         <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
                         <form:form method="DELETE" action="${deleteTripUrl}">
-                            <button type="submit" class="btn danger-bg-color">
+                            <button type="submit" class="btn danger-button">
                                 <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
+                            </button>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
+    <c:if test="${!(empty allowCancel) && allowCancel}">
+        <div class="delete-trip-container">
+            <button type="submit" class="btn rounded-circle button-style button-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
+                <i class="bi bi-x-lg light-text h5"></i>
+            </button>
+        </div>
+        <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title danger"><spring:message code="tripCard.user.cancel"/></h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                        <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn primary-button" data-bs-dismiss="modal">
+                            <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
+                        </button>
+                        <c:url value="/trips/${trip.tripId}/cancel" var="cancelTripUrl"/>
+                        <form:form method="DELETE" action="${cancelTripUrl}">
+                            <button type="submit" class="btn danger-button">
+                                <span class="light-text"><spring:message code="tripCard.user.btn.cancel"/></span>
                             </button>
                         </form:form>
                     </div>

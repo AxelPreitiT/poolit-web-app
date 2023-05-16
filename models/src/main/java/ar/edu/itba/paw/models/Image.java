@@ -9,6 +9,12 @@ public class Image {
         this.data = data;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Image { imageId: %d }",
+                imageId);
+    }
+
     public Long getImageId() {
         return imageId;
     }

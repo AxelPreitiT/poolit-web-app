@@ -1,0 +1,59 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<jsp:useBean id="user" type="ar.edu.itba.paw.models.User"  scope="request"/>
+
+<link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
+
+<div class="user-info-container">
+  <div class="avatar-img">
+    <div class="circular--landscape">
+      <c:url value="/image/${user.userImageId}" var="profileImageUrl"/>
+      <img class="circular--square" src="${profileImageUrl}">
+    </div>
+  </div>
+  <div class="row-info">
+    <h6><spring:message code="user.fullname"/></h6>
+    <h4><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h4>
+  </div>
+  <div class="row-info">
+    <h6><spring:message code="user.email"/></h6>
+    <h4><c:out value="${user.email}"/></h4>
+  </div>
+  <div class="row-info">
+    <h6><spring:message code="user.district"/></h6>
+    <h4><c:out value="${user.bornCity.name}"/></h4>
+  </div>
+  <c:if test="${(user.role eq 'DRIVER')}">
+    <div class="row-info">
+      <h6><spring:message code="user.countTrips"/></h6>
+      <h4><c:out value="${param.countTrips}"/></h4>
+    </div>
+    <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
+    <div class="row-info">
+      <h6><spring:message code="user.rating"/></h6>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="ratings">
+          <c:forEach var="i" begin="1" end="${rating}">
+            <i class="bi bi-star-fill secondary-color h4"></i>
+          </c:forEach>
+          <c:if test="${rating % 1 >= 0.5}">
+            <i class="bi bi-star-half secondary-color h4"></i>
+            <c:forEach var="i" begin="${rating + 2}" end="5">
+              <i class="bi bi-star secondary-color h4"></i>
+            </c:forEach>
+          </c:if>
+          <c:if test="${rating % 1 < 0.5}">
+            <c:forEach var="i" begin="${rating + 1}" end="5">
+              <i class="bi bi-star secondary-color h4"></i>
+            </c:forEach>
+          </c:if>
+        </div>
+      </div>
+    </div>
+  </c:if>
+</div>
+

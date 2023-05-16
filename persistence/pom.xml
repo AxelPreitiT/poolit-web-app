@@ -29,10 +29,9 @@
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
     </dependency>
-<!--    TODO: remove if tests are not done in container-->
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
+    <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
     </dependency>
 <!--    JDBC-->
     <dependency>
@@ -54,6 +53,10 @@
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
   </dependencies>
 

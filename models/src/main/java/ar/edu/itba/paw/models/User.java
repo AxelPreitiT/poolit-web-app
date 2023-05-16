@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import java.util.Locale;
 import java.util.Objects;
-
-import java.time.LocalDateTime;
 
 public class User {
     private final long userId;
@@ -11,23 +10,29 @@ public class User {
     private final String email;
     private String phone;
     private final String password;
-    private final LocalDateTime birthdate;
     private final City bornCity;
+    private final Locale mailLocale;
     private String role;
     private long userImageId;
 
     public User(long userId, final String name, final String surname, final String email,
-                final String phone, String password, final LocalDateTime birthdate, final City bornCity, final String role,long userImageId) {
+                final String phone, String password, final City bornCity, final Locale mailLocale, final String role,long userImageId) {
         this.userId = userId;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
         this.password = password;
-        this.birthdate = birthdate;
         this.bornCity = bornCity;
+        this.mailLocale = mailLocale;
         this.role = role;
         this.userImageId = userImageId;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("User { id: %d, name: '%s', surname: '%s', email: '%s', phone: '%s', bornCity: '%s', mailLocale: '%s', role: '%s', userImageId: %d }",
+                userId, name, surname, email, phone, bornCity, mailLocale, role, userImageId);
     }
 
     public String getRole() {
@@ -79,8 +84,8 @@ public class User {
         return surname;
     }
 
-    public LocalDateTime getBirthdate() {
-        return birthdate;
+    public Locale getMailLocale() {
+        return mailLocale;
     }
 
     public String getName() {

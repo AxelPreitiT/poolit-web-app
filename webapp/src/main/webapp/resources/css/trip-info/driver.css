@@ -1,0 +1,94 @@
+@import "../base/elements.css";
+@import "../trip-detail/trip-detail.css";
+
+#button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: end;
+    column-gap: 1em;
+}
+
+#button-container > form {
+    margin-bottom: 0;
+}
+
+.no-seats-left-container {
+    margin-top: 0.3em;
+}
+
+.hidden-input {
+    display: none;
+}
+.passenger-container {
+    padding: 1em;
+    border-radius: 16px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+}
+.trip-info-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 40px;
+    padding-top: 2%;
+    align-items: flex-start;
+    padding-bottom: 2%;
+}
+.trip-info{
+    max-width: 40%;
+    flex-grow: 1;
+}
+.trip-passengers{
+    max-width: 40%;
+    flex-grow: 1;
+}
+.info-container{
+    padding-top: 2%;
+}
+.profile-link {
+    text-decoration-line: underline;
+    text-decoration-color: white;
+}
+
+.image-photo{
+    max-height: 40px;
+    max-width: 40px;
+    border-radius: 50%;
+    aspect-ratio: 1;
+}
+.show-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+}
+.passenger-list{
+    overflow-y: auto;
+    max-height: 260px;
+}
+.individual-profile{
+    padding: 2%;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.no-passengers-text{
+    text-align: center;
+}
+
+.review-form{
+   height: 200px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.modal-dialog {
+    max-width: fit-content !important;
+}
+
+.dates {
+    margin: 0;
+}

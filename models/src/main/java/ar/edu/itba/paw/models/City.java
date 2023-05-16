@@ -14,6 +14,12 @@ public class City {
         this.provinceId = provinceId;
     }
 
+    @Override
+    public String toString() {
+        return String.format("City { id: %d, name: '%s', provinceId: %d }",
+                id, name, provinceId);
+    }
+
     public String getName() {
         return name;
     }

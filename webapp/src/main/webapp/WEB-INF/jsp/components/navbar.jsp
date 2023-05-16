@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
@@ -9,24 +10,19 @@
 <nav class="navbar navbar-expand-md primary-bg-color">
     <div class="container-fluid navbar-style">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="POOLIT" class="brand-logo">
+            <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="<spring:message code="navbar.poolit"/>" class="brand-logo">
         </a>
         <div class="collapse navbar-collapse navbar-link-items">
             <ul class="navbar-nav nav-items">
-                <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/"/>">
-                        <h4 class="light-text"><spring:message code="navbar.begin"/></h4>
-                    </a>
-                </li>
                 <sec:authorize access="isAuthenticated()">
                     <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/users/reserved"/>">
+                        <a class="nav-link" href="<c:url value="/trips/reserved"/>">
                             <h4 class="light-text"><spring:message code="navbar.reservados"/></h4>
                         </a>
                     </li>
                     <sec:authorize access="hasRole('ROLE_DRIVER')">
                         <li class="nav-item">
-                            <a class="nav-link" href="<c:url value="/users/created"/>">
+                            <a class="nav-link" href="<c:url value="/trips/created"/>">
                                 <h4 class="light-text"><spring:message code="navbar.created"/></h4>
                             </a>
                         </li>
@@ -44,28 +40,66 @@
                         </a>
                     </div>
                 </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <div class="create-trip-btn" data-bs-toggle="modal" data-bs-target="#modal-create">
+                        <button class="btn button-style button-color shadow-btn">
+                            <i class="bi bi-plus light-text h3"></i>
+                            <span class="button-text-style light-text h3"><spring:message code="navbar.btnCreated"/></span>
+                        </button>
+                    </div>
+                    <div class="modal fade" id="modal-create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <span class="text"><spring:message code="navbar.modal.warning"/></span>
+                                    </div>
+                                    <div class="warning-text">
+                                        <span class="italic-text text bold"><spring:message code="navbar.modal.secondWarning"/></span>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
+                                        <span class="light-text"><spring:message code="navbar.modal.btnCancel"/></span>
+                                    </button>
+                                    <c:url value="/changeRole" var="changeRole"/>
+                                    <form:form method="POST" action="${changeRole}">
+                                        <button type="submit" class="btn secondary-bg-color">
+                                            <span class="light-text"><spring:message code="navbar.modal.btnAccept"/></span>
+                                        </button>
+                                    </form:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </sec:authorize>
             </sec:authorize>
         </div>
         <sec:authorize access="isAuthenticated()">
             <div class="profile-container dropdown">
                 <button class="btn rounded-circle shadow-btn" data-bs-toggle="dropdown">
                     <c:url value="/image/${loggedUser.userImageId}" var="imageUrl"/>
-                    <img class="image-photo" src="${imageUrl}" alt="userImage">
-<%--                    <i class="bi bi-person-circle light-text h1 profile-btn"></i>--%>
+                    <img class="image-photo" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>">
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end primary-bg-color">
+                <ul class="dropdown-menu dropdown-menu-end primary-bg-color modal-profile">
                     <li>
                         <a class="dropdown-item" href="<c:url value="/users/profile"/>">
                             <div class="container text-center">
                                 <div class="row dropdown-row">
-                                    <div class="col-sm-2">
-                                        <img class="image-photo" src="${imageUrl}" alt="userImage">
+                                    <div class="col-sm-2 dropdown-row-media">
+                                        <img class="image-photo" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>">
+                                        <img class="image-photo with-title" src="${imageUrl}" alt="<spring:message code="navbar.profile"/>" title="<spring:message code="navbar.profile"/>">
                                     </div>
                                     <div class="col-sm-10 dropdown-row-text">
                                         <span class="button-text-style light-text h1">
                                             <c:choose>
                                                 <c:when test="${loggedUser == null}">
-                                                    Mi perfil
+                                                    <spring:message code="navbar.profile"/>
                                                 </c:when>
                                                 <c:otherwise>
                                                     ${loggedUser.name} ${loggedUser.surname}
@@ -82,8 +116,9 @@
                         <a class="dropdown-item" href="<c:url value="/logout"/>">
                             <div class="container text-center">
                                 <div class="row dropdown-row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 dropdown-row-media">
                                         <i class="bi bi-box-arrow-right light-text h5"></i>
+                                        <i class="bi bi-box-arrow-right light-text h5 with-title" title="<spring:message code="navbar.logout"/>"></i>
                                     </div>
                                     <div class="col-sm-10 dropdown-row-text">
                                         <span class="button-text-style light-text h5"><spring:message code="navbar.logout"/></span>
@@ -100,13 +135,19 @@
                 <a href="<c:url value="/users/create"/>">
                     <button class="btn button-style button-color shadow-btn">
                         <i class="bi bi-person-circle light-text h5"></i>
-                        <span class="button-text-style light-text h5">Registrarse</span>
+                        <span class="button-text-style light-text h5"><spring:message code="navbar.register"/></span>
+                    </button>
+                    <button class="btn button-style button-color shadow-btn with-title" title="<spring:message code="navbar.register"/>">
+                        <i class="bi bi-person-circle light-text h5"></i>
                     </button>
                 </a>
                 <a href="<c:url value="/users/login"/>">
                     <button class="btn button-style button-color shadow-btn">
                         <i class="bi bi-box-arrow-in-right light-text h5"></i>
-                        <span class="button-text-style light-text h5">Iniciar sesión</span>
+                        <span class="button-text-style light-text h5"><spring:message code="navbar.login"/></span>
+                    </button>
+                    <button class="btn button-style button-color shadow-btn with-title" title="<spring:message code="navbar.login"/>">
+                        <i class="bi bi-box-arrow-in-right light-text h5"></i>
                     </button>
                 </a>
             </div>

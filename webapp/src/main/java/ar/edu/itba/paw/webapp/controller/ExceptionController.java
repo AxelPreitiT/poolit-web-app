@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,61 +17,92 @@ import java.util.Locale;
 @ControllerAdvice
 public class ExceptionController extends LoggedUserController {
 
-    private final MessageSource messageSource;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionController.class);
+
 
     @Autowired
-    public ExceptionController(final UserService userService, final MessageSource messageSource){
+    public ExceptionController(final UserService userService){
         super(userService);
-        this.messageSource = messageSource;
     }
     @ExceptionHandler(TripNotFoundException.class)
     public ModelAndView tripNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.tripNotFound",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.tripNotFound.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised TripNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.tripNotFound");
+        mav.addObject("errorDescription","exceptions.tripNotFound.description");
         return mav;
     }
     @ExceptionHandler(CityNotFoundException.class)
     public ModelAndView cityNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.cityNotFound",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.cityNotFound.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised CityNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.cityNotFound");
+        mav.addObject("errorDescription","exceptions.cityNotFound.description");
         return mav;
     }
     @ExceptionHandler(ImageNotFoundException.class)
     public ModelAndView imageNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.imageNotFound",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.imageNotFound.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised ImageNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage", "exceptions.imageNotFound");
+        mav.addObject("errorDescription","exceptions.imageNotFound.description");
         return mav;
     }
     @ExceptionHandler(UserNotFoundException.class)
     public ModelAndView userNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.userNotFound",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.userNotFound.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised UserNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.userNotFound");
+        mav.addObject("errorDescription","exceptions.userNotFound.description");
+        return mav;
+    }
+    @ExceptionHandler(UserNotLoggedInException.class)
+    public ModelAndView userNotLoggedIn() {
+        LOGGER.warn("Raised UserNotLoggedInException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage", "exceptions.userNotLoggedIn");
+        mav.addObject("errorDescription", "exceptions.userNotLoggedIn.description");
+        return mav;
+    }
+    @ExceptionHandler(PassengerNotFoundException.class)
+    public ModelAndView passengerNotFound(){
+        LOGGER.warn("Raised PassengerNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.passengerNotFound");
+        mav.addObject("errorDescription","exceptions.passengerNotFound.description");
         return mav;
     }
     @ExceptionHandler(CarNotFoundException.class)
     public ModelAndView carNotFound(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.carNotFound",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.carNotFound.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised CarNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.carNotFound");
+        mav.addObject("errorDescription","exceptions.carNotFound.description");
+        return mav;
+    }
+    @ExceptionHandler(TripAlreadyStartedException.class)
+    public ModelAndView tripAlreadyStarted(){
+        LOGGER.warn("Raised TripAlreadyStartedException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.tripAlreadyStarted");
+        mav.addObject("errorDescription","exceptions.tripAlreadyStarted.message");
         return mav;
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView illegalArgument(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalArgument",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalArgument.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised IllegalArgumentException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage", "exceptions.illegalArgument");
+        mav.addObject("errorDescription", "exceptions.illegalArgument.description");
         return mav;
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ModelAndView illegalState(){
-        ModelAndView mav = new ModelAndView("/exceptions/default");
-        mav.addObject("errorMessage",messageSource.getMessage("exceptions.illegalState",null, LocaleContextHolder.getLocale()));
-        mav.addObject("errorDescription",messageSource.getMessage("exceptions.illegalState.description",null,LocaleContextHolder.getLocale()));
+        LOGGER.warn("Raised IllegalStateException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.illegalState");
+        mav.addObject("errorDescription","exceptions.illegalState.description");
         return mav;
     }
 

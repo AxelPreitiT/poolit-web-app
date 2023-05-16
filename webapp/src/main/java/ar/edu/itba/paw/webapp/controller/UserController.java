@@ -3,18 +3,15 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.webapp.form.CreateCarForm;
-import ar.edu.itba.paw.webapp.auth.AuthUser;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.WebAttributes;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -23,23 +20,25 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 
 import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 public class UserController extends LoggedUserController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     private final CityService cityService;
 
+    private final ReviewService reviewService;
     private final CarService carService;
 
     private final TripService tripService;
 
     private final ImageService imageService;
+
 
     private final PawUserDetailsService pawUserDetailsService;
 
@@ -48,19 +47,17 @@ public class UserController extends LoggedUserController {
     private final static String BASE_RELATED_PATH = "/users/";
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
-    private final static String RESERVED_TRIPS_PATH = BASE_RELATED_PATH + "reserved";
-    private final static String RESERVED_TRIPS_HISTORIC_PATH = RESERVED_TRIPS_PATH + "/history";
-    private final static String CREATED_TRIPS_PATH = BASE_RELATED_PATH + "created";
-    private final static String CREATED_TRIPS_HISTORIC_PATH = CREATED_TRIPS_PATH + "/history";
+
 
     private final static int PAGE_SIZE = 3;
 
     @Autowired
-    public UserController(final CityService cityService, final  UserService userService,
+    public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                        final CarService carService, final ImageService imageService){
+                          final CarService carService, final ImageService imageService) {
         super(userService);
         this.cityService = cityService;
+        this.reviewService = reviewService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
@@ -72,229 +69,122 @@ public class UserController extends LoggedUserController {
     public ModelAndView createUserGet(
              @ModelAttribute("createUserForm") final CreateUserForm form
     ) {
-        List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        LOGGER.debug("GET Request to {}", CREATE_USER_PATH);
+        final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final ModelAndView mav = new ModelAndView("users/register");
         mav.addObject("cities", cities);
         mav.addObject("postUrl", CREATE_USER_PATH);
         return mav;
     }
 
+
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.POST)
     public ModelAndView createUserPost(
             @Valid @ModelAttribute("createUserForm") final CreateUserForm form, final BindingResult errors
     ) throws IOException {
+        LOGGER.debug("POST Request to {}", CREATE_USER_PATH);
         if(errors.hasErrors()){
+            LOGGER.warn("Errors found in CreateUserForm: {}", errors.getAllErrors());
             return createUserGet(form);
         }
-        byte[] data = form.getImageFile().getBytes();
-        Image image=imageService.createImage(data);
-        City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(CityNotFoundException::new);
+        final byte[] data = form.getImageFile().getBytes();
+        final Image image=imageService.createImage(data);
+        final City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                    form.getPassword(), form.getBirthdate(), originCity, null, image.getImageId());
+                    form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
+            userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
+            LOGGER.warn("Email already exists: {}", form.getEmail());
             return createUserGet(form);
         }
-        return new ModelAndView("redirect:/users/login" );
+        return new ModelAndView("redirect:/" );
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
     public ModelAndView loginUserGet() {
+        LOGGER.debug("GET Request to {}", LOGIN_USER_PATH);
         final ModelAndView mav = new ModelAndView("users/login");
-//        mav.addObject("postUrl", LOGIN_USER_PATH);
         return mav;
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.POST)
     public ModelAndView loginUserPost() {
+        LOGGER.debug("POST Request to {}", LOGIN_USER_PATH);
         return new ModelAndView("users/login");
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
-    public ModelAndView profileView(){
-        SecurityContext pepe = SecurityContextHolder.getContext();
-        //TODO: ver por que explota si no esta autenticado
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+    public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded){
+        LOGGER.debug("GET Request to /users/profile");
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+
+        final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
+        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
 
         if(Objects.equals(user.getRole(), "USER")){
-            List<Trip> futureTrips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-            List<Trip> pastTrips = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
             mav.addObject("user", user);
-            mav.addObject("futureTrips", futureTrips);
-            mav.addObject("pastTrips", pastTrips);
+            mav.addObject("futureTripsPassanger", futureTripsPassenger);
+            mav.addObject("pastTripsPassanger", pastTripsPassenger);
+            mav.addObject("reviewsAsUser", reviewsAsUser);
             return mav;
         }
-        List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
-        List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
-        List<Car> cars = carService.findByUser(user);
+        final List<Review> reviews = reviewService.getDriverReviews(user);
+        final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
+        final List<Car> cars = carService.findByUser(user);
+        final Double rating = reviewService.getDriverRating(user);
 
         final ModelAndView mav = new ModelAndView("/users/driver-profile");
         mav.addObject("user", user);
+        mav.addObject("rating", rating);
         mav.addObject("futureTrips", futureTrips);
         mav.addObject("pastTrips",pastTrips);
+        mav.addObject("futureTripsPassanger", futureTripsPassenger);
+        mav.addObject("pastTripsPassanger",pastTripsPassenger);
         mav.addObject("cars", cars);
+        mav.addObject("carAdded", carAdded);
+        mav.addObject("reviews", reviews);
+        mav.addObject("reviewsAsUser", reviewsAsUser);
         return mav;
     }
 
-    @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
-    public ModelAndView profilePost(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
+    @RequestMapping(value = "/profile/{id:\\d+$}", method = RequestMethod.GET)
+    public ModelAndView profilePost(@PathVariable("id") final long userId)
+    {
+        LOGGER.debug("GET Request to /profile/{}", userId);
+        final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
+        if(Objects.equals(user.getRole(), "USER")){
+            List<Review> reviews = reviewService.getUsersIdReviews(user);
 
-        if(Objects.equals(user.getRole(), "DRIVER")){
-            //TODO: traer los que son a partir de ahora y los de antes (hacer el servicio)
-            List<Trip> futureTrips = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-            List<Trip> pastTrips = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-
-            pawUserDetailsService.update(user);
-            userService.changeRole(user.getUserId(), user.getRole());
-
-            final ModelAndView mav = new ModelAndView("/users/user-profile");
+            final ModelAndView mav = new ModelAndView("/users/public-profile");
             mav.addObject("user", user);
-            mav.addObject("futureTrips", futureTrips);
-            mav.addObject("pastTrips", pastTrips);
+            mav.addObject("reviews", reviews);
             return mav;
         }
-        //TODO: traer las que ya pasaron y las que van a hacerse
-        List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
-        List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
-        List<Car> cars = carService.findByUser(user);
+        final List<Review> reviews = reviewService.getDriverReviews(user);
+        final Double rating = reviewService.getDriverRating(user);
+        final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
 
+        final ModelAndView mav = new ModelAndView("/users/public-profile");
+        mav.addObject("user", user);
+        mav.addObject("rating", rating);
+        mav.addObject("countTrips",createdTrips.getTotalCount());
+        mav.addObject("reviews", reviews);
+        return mav;
+    }
+    @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
+    public ModelAndView changeRoleToDriver(){
+        LOGGER.debug("POST Request to /changeRole");
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("futureTrips", futureTrips);
-        mav.addObject("pastTrips",pastTrips);
-        mav.addObject("cars", cars);
-        return mav;
-
+        userService.changeToDriver(user);
+        return new ModelAndView("redirect:/trips/create");
     }
 
-    @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
-        //TODO: hacer que sean los que son a partir de ahora
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerFuture(user, page-1, PAGE_SIZE);
-
-        final ModelAndView mav = new ModelAndView("/reserved-trips/next");
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = RESERVED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
-    public ModelAndView getHistoricReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-
-        //TODO: hacer los que son antes de ahora
-        PagedContent<Trip> trips = tripService.getTripsWhereUserIsPassengerPast(user, page-1, PAGE_SIZE);
-
-        final ModelAndView mav = new ModelAndView("/reserved-trips/history");
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
-    public ModelAndView getNextCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        //TODO: traer las que son a futuro (o actual)
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUserFuture(user, page-1, PAGE_SIZE);
-
-        final ModelAndView mav = new ModelAndView("/created-trips/next");
-        mav.addObject("trips", trips);
-        mav.addObject("tripDeleted", false);
-        return mav;
-    }
-
-    @RequestMapping(value = CREATED_TRIPS_HISTORIC_PATH, method = RequestMethod.GET)
-    public ModelAndView getHistoricCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page) {
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).orElseThrow(UserNotFoundException::new);
-        //TODO: traer las que pasaron
-        PagedContent<Trip> trips = tripService.getTripsCreatedByUserPast(user, page-1, PAGE_SIZE);
-
-        final ModelAndView mav = new ModelAndView("/created-trips/history");
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    /*
-    @RequestMapping(value = "/profile/user", method = RequestMethod.GET)
-    public ModelAndView GetUserprofile(){
-
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
-
-        final ModelAndView mav = new ModelAndView("/users/user-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/user", method = RequestMethod.POST)
-    public ModelAndView PostUserprofile(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-        List<Trip> trips = tripService.getTripsWhereUserIsPassenger(user, 0, 3).getElements();
-
-        pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/user-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/driver", method = RequestMethod.GET)
-    public ModelAndView GetDriverprofile(){
-
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-
-    @RequestMapping(value = "/profile/driver", method = RequestMethod.POST)
-    public ModelAndView Driverprofile(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userService.findByEmail(authUser.getUsername()).get();
-        List<Trip> trips = tripService.getTripsCreatedByUser(user, 0, 3).getElements();
-
-        pawUserDetailsService.update(user);
-        userService.changeRole(user.getUserId(), user.getRole());
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("trips", trips);
-        return mav;
-    }
-*/
-
-    /*
-    @ModelAttribute("userLogged")
-    public User loggedUser(){
-        final AuthUser authUser = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(userService.findByEmail(authUser.getUsername()).isPresent()){
-            return userService.findByEmail(authUser.getUsername()).get();
-        }
-        return null;
-    }
-    */
 }

@@ -1,4 +1,4 @@
-@import "/resources/css/base/elements.css";
+@import "../base/elements.css";
 
 a {
     text-decoration: none !important;
@@ -13,11 +13,14 @@ a {
 }
 
 .card-info:hover{
-    opacity: 0.5;
+    opacity: 0.8;
+    box-shadow: 0 5px 0 0 rgba(0, 0, 0, 0.25);
+
 }
 
 .data-container{
     flex-grow: 4;
+    width:50%;
 }
 
 .img-container{
@@ -27,6 +30,7 @@ a {
     align-content: center;
     border-radius: 20px;
     display: flex;
+    /*object-fit: cover;*/
     justify-content: center;
 }
 
@@ -87,6 +91,8 @@ a {
 }
 
 .car-container{
+    object-fit: contain;
+    max-width: 200px;
     border-radius: 20px;
 }
 

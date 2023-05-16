@@ -12,6 +12,12 @@ public class Province {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Province { id: %d, name: '%s' }",
+                id, name);
+    }
+
     public String getName() {
         return name;
     }

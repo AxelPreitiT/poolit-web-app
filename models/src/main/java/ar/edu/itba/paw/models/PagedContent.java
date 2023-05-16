@@ -21,6 +21,12 @@ public class PagedContent<T>{
         this.totalCount = totalCount;
     }
 
+    @Override
+    public String toString() {
+        return String.format("PagedContent { totalCount: %d, pageSize: %d, currentPage: %d, elements: %s }",
+                totalCount, pageSize, currentPage, elements);
+    }
+
     public List<T> getElements() {
         return elements;
     }
@@ -40,8 +46,8 @@ public class PagedContent<T>{
         return currentPage*pageSize;
     }
     public int getEndNumber(){
-//        return Math.min(getStartNumber()+pageSize,totalCount);
-        return getStartNumber()+pageSize-1;
+        int start = getStartNumber();
+        return Math.min(start+pageSize-1, totalCount-1);
     }
 
     public int getTotalPages(){

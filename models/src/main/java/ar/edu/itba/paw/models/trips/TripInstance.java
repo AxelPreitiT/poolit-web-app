@@ -16,6 +16,12 @@ public class TripInstance {
         this.passengerCount = passengerCount;
     }
 
+    @Override
+    public String toString() {
+        return String.format("TripInstance { tripId: %d, dateTime: '%s', passengerCount: %d }",
+                trip.getTripId(), dateTime, passengerCount);
+    }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }

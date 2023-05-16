@@ -5,6 +5,7 @@
 
 
 <link href="<c:url value="/resources/css/components/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
+<link href="<c:url value="/resources/css/components/trip-detail-card.css"/>" rel="stylesheet" type="text/css"/>
 
 <div id="main-header-row">
   <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
@@ -18,10 +19,12 @@
     <div class="row">
       <div class="col-sm-6 col-md-5 col-lg-4">
         <div id="trip-info-text-container">
-          <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp"/>
+          <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+            <jsp:param name="showDriverInfo" value="${param.showDriverInfo}"/>
+          </jsp:include>
         </div>
       </div>
-      <div class="col-sm-6 col-md-5 col-lg-4">
+      <div class="col-sm-6 col-md-5 col-lg-5">
         <div id="car-info-image">
           <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
           <div class="placeholder-image">

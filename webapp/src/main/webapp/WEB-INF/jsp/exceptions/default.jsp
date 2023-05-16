@@ -17,14 +17,14 @@
         <h1 class="danger title"><spring:message code="errors.title"/></h1>
     </div>
     <h5 class="danger"><spring:message code="errors.subtitle"/></h5>
-    <h5 class="danger"><c:out value="${errorDescription}"/></h5>
+    <h5 class="danger"><spring:message code="${errorDescription}"/></h5>
     <h6><spring:message code="errors.recommendation"/> </h6>
     <div class="footer-container">
         <div class="error-code-container error-code">
-            <p class="error-code-style"><c:out value="${errorMessage}"/></p>
+            <p class="error-code-style"><spring:message code="${errorMessage}"/></p>
         </div>
         <a class="anchor-style" href="<c:url value="/"/>">
-            <button class="btn button-bg-color button-style">
+            <button class="btn primary-button button-style">
                 <span class="light-text h5"><spring:message code="errors.button"/></span>
             </button>
         </a>

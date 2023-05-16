@@ -16,7 +16,9 @@
         </div>
         <div class="main-container-style container-color">
             <div id="trip-detail-container">
-                <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp"/>
+                <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
+                    <jsp:param name="showDriverInfo" value="false"/>
+                </jsp:include>
             </div>
             <div id="footer-container">
                 <div id="trip-price-container">
@@ -25,12 +27,12 @@
                             <span class="h3 text"><spring:message code="selectTrip.price"/></span>
                         </div>
                         <div>
-                            <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.price}"/></span>
+                            <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
                         </div>
                     </div>
                     <div class="trip-price-row items-to-end">
                     <c:choose>
-                        <c:when test="${trip.recurrent}">
+                        <c:when test="${trip.queryIsRecurrent}">
                             <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
                         </c:when>
                         <c:otherwise>
@@ -40,7 +42,7 @@
                     </div>
                 </div>
                 <div id="button-container">
-                    <c:url value="/trips/${trip.tripId}" var="joinUrl"/>
+                    <c:url value="/trips/${trip.tripId}/join" var="joinUrl"/>
                     <form:form action="${joinUrl}" modelAttribute="selectForm" method="post">
                         <form:input path="startDate" cssClass="hidden-input"/>
                         <form:input path="startTime" cssClass="hidden-input"/>
@@ -50,7 +52,7 @@
                                     <c:out value="disabled"/>
                                 </c:if>>
                             <i class="bi bi-check2 light-text h3"></i>
-                            <span class="button-text-style light-text h3"><spring:message code="selectTrip.btnConfirm"/></span>
+                            <span class="button-text-style light-text h3"><spring:message code="selectTrip.btnJoin"/></span>
                         </button>
                     </form:form>
                     <c:if test="${trip.freeSeats == 0}">

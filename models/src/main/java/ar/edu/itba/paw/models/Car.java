@@ -18,6 +18,12 @@ public class Car {
         this.image_id=image_id;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Car { id: %d, plate: '%s', infoCar: '%s', userId: %d, imageId: %d }",
+                carId, plate, infoCar, user.getUserId(), image_id);
+    }
+
     public long getCarId() {
         return carId;
     }
