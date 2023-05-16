@@ -58,7 +58,6 @@
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <!--    Ya le pegaria por interfaces, pero lo dejamos para que no sea implicito-->
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>models</artifactId>
