@@ -25,7 +25,6 @@ import java.util.Optional;
 
 @Controller
 public class TripController extends LoggedUserController {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
 
     private final TripService tripService;

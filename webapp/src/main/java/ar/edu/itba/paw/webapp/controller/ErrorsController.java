@@ -31,6 +31,7 @@ public class ErrorsController extends LoggedUserController {
         errorMessages.put(404, new ErrorMessage("errors.404","errors.404.description"));
         errorMessages.put(500, new ErrorMessage("errors.500","errors.500.description"));
         errorMessages.put(403, new ErrorMessage("errors.403","errors.403.description"));
+        errorMessages.put(405, new ErrorMessage("errors.405","errors.405.description"));
     }
 
     @RequestMapping("/static/403")

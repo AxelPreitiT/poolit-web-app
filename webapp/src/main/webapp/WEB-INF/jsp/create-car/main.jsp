@@ -32,6 +32,7 @@
                     <spring:message code="createCar.platePlaceholder" var="carPlateHolder"/>
                     <form:input path="plate" cssClass="form-control" id="plate" placeholder='${carPlateHolder}'/>
                     <form:errors path="plate" cssClass="danger error-style" element="span"/>
+                    <form:errors cssClass="danger error-style" element="span"/>
                 </div>
             </div>
             <div id="car-image-container">

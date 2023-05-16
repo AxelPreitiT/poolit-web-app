@@ -58,6 +58,10 @@
     <error-code>403</error-code>
     <location>/errors</location>
   </error-page>
+  <error-page>
+    <error-code>405</error-code>
+    <location>/errors</location>
+  </error-page>
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

@@ -36,13 +36,13 @@
                         <c:choose>
                             <c:when test="${trip.recurrent}">
                                 <div class="format_date">
-                                    <div><span class="text"><c:out value="${trip.dayOfWeekString}"/></span></div>
+                                    <div><span class="text"><spring:message code="${trip.dayOfWeekString}"/></span></div>
                                     <div><span class="text"><spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}"/></span></div>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="format_date">
-                                    <div><span class="text"><c:out value="${trip.dayOfWeekString}"/></span></div>
+                                    <div><span class="text"><spring:message code="${trip.dayOfWeekString}"/></span></div>
                                     <div><span class="text"><c:out value="${trip.startDateString}"/></span></div>
                                 </div>
                             </c:otherwise>

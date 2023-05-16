@@ -109,8 +109,8 @@
                         <div class="input-row">
                             <div class="input-group">
                                 <form:select path="mailLocale" class="form-select" id="mail-locale" name="mail-locale">
-                                    <option value="es"><spring:message code="register.spanish"/></option>
-                                    <option value="en"><spring:message code="register.english"/></option>
+                                    <form:option value="es"><spring:message code="register.spanish"/></form:option>
+                                    <form:option value="en"><spring:message code="register.english"/></form:option>
                                 </form:select>
                             </div>
                         </div>

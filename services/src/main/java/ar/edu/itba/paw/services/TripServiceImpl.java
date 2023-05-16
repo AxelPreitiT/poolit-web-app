@@ -118,6 +118,12 @@ public class TripServiceImpl implements TripService {
     }
     @Transactional
     public boolean deleteTrip(final Trip trip){
+        //Si el viaje ya termino
+        if(trip.getEndDateTime().isBefore(LocalDateTime.now())){
+            RuntimeException e = new IllegalStateException();
+            LOGGER.error("Driver {} tried deleting the trip with id {} after it ended", trip.getDriver().getUserId(), trip.getTripId(), e);
+            throw e;
+        }
         List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         //Notify passengers that trip was deleted
         for(Passenger passenger : tripPassengers){
@@ -236,6 +242,11 @@ public class TripServiceImpl implements TripService {
         if(!passengerOptional.isPresent()) {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} is not in trip with id {}", user.getUserId(), trip.getTripId(), e);
+            throw e;
+        }
+        if(passengerOptional.get().getEndDateTime().isBefore(LocalDateTime.now())){
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Passenger with id {} tried to get out of trip {} after the period has ended", user.getUserId(), trip.getTripId(), e);
             throw e;
         }
         final Passenger passenger = passengerOptional.get();

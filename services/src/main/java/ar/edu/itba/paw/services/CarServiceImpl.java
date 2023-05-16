@@ -36,4 +36,9 @@ public class CarServiceImpl implements CarService {
     public List<Car> findByUser(User user) {
         return carDao.findByUser(user);
     }
+
+    @Override
+    public Optional<Car> findByUserAndPlate(User user, String plate){
+        return carDao.findByPlateAndUser(plate,user);
+    }
 }

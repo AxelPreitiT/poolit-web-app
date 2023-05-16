@@ -29,7 +29,9 @@
       </jsp:include>
     </div>
     <div id="trip-card-date-list-container">
-      <c:set var="allowDelete" value="true" scope="request"/>
+      <c:if test="${(empty param.time) || (param.time eq 'future')}">
+        <c:set var="allowDelete" value="true" scope="request"/>
+      </c:if>
       <jsp:include page="/WEB-INF/jsp/components/trip-card-date-list.jsp">
         <jsp:param name="noTripsTitleCode" value="createdTrips.notFound.title"/>
         <jsp:param name="noTripsSubtitleCode" value="createdTrips.notFound.subtitle"/>
@@ -39,7 +41,7 @@
   <c:if test="${!(empty tripDeleted) && tripDeleted}">
     <div id="toast-container">
       <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-        <jsp:param name="title" value="¡Viaje eliminado!"/>
+        <jsp:param name="title" value="selectTrip.delete.Title"/>
         <jsp:param name="message" value="selectTrip.deleteTitle"/>
       </jsp:include>
     </div>

@@ -136,7 +136,10 @@ public class Trip {
     }
 
     public String getDayOfWeekString(){
-        return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault());
+        final String[] messageCodes = new String[]{
+                "monday","tuesday","wednesday","thursday","friday","saturday","sunday"
+        };
+        return messageCodes[dayOfWeek.getValue()-1];
     }
 
     public int getTotalTrips(){

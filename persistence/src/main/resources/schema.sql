@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS reviews(
   rating INT NOT NULL,
   review TEXT NOT NULL,
   UNIQUE(trip_id,user_id),
-  CONSTRAINT reviews_to_trips FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
+  CONSTRAINT reviews_to_trips FOREIGN KEY(trip_id) REFERENCES trips(trip_id) ON DELETE CASCADE,
   CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 

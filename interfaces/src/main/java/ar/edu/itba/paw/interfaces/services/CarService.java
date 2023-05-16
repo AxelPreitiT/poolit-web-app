@@ -13,4 +13,6 @@ public interface CarService {
     Optional<Car> findById(long carId);
 
     List<Car> findByUser(User user);
+
+    Optional<Car> findByUserAndPlate(User user, String plate);
 }

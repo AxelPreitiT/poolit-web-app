@@ -201,6 +201,7 @@ div.main-container-style {
     justify-content: center;
     height: 100%;
     aspect-ratio: 1/1;
+    /*object-fit: cover;*/
 }
 
 #no-cars-container {

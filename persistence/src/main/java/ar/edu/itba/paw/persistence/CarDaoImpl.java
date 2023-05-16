@@ -45,7 +45,8 @@ public class CarDaoImpl implements CarDao {
     @Override
     public Car create(final String plate, String infoCar, final User user, long image_id) {
         Map<String,Object> data = new HashMap<>();
-        data.put("plate",plate);
+        final String savedPlate = plate.toUpperCase();
+        data.put("plate",savedPlate);
         data.put("user_id", user.getUserId());
         data.put("info_car", infoCar);
         data.put("image_id", image_id);
@@ -67,8 +68,9 @@ public class CarDaoImpl implements CarDao {
 
     @Override
     public Optional<Car> findByPlateAndUser(String plate, User user) {
+        final String plateToSearch = plate.toUpperCase();
         LOGGER.debug("Looking for car with plate '{}' from user with id {} in the database", plate, user.getUserId());
-        final Optional<Car> result = jdbcTemplate.query("SELECT * FROM cars NATURAL JOIN users NATURAL JOIN cities WHERE plate = ? and user_id = ?",ROW_MAPPER,plate, user.getUserId()).stream().findFirst();
+        final Optional<Car> result = jdbcTemplate.query("SELECT * FROM cars NATURAL JOIN users NATURAL JOIN cities WHERE plate = ? and user_id = ?",ROW_MAPPER,plateToSearch, user.getUserId()).stream().findFirst();
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
     }

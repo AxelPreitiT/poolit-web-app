@@ -20,10 +20,13 @@
         <div class="show-row" >
             <i class="bi bi-calendar light-text h5"></i>
             <div class="show-row-content">
-                <span class="light-text detail detail-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
-                <span class="light-text"><spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.queryStartDateString}"/>
+                <span class="light-text detail detail-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
+                <span class="light-text">
+                <c:if test="${!trip.queryIsRecurrent}">
+                    <spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.queryStartDateString}"/>
+                </c:if>
                 <c:if test="${trip.queryIsRecurrent}">
-                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryEndDateString}"/>
+                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryStartDateString},${trip.queryEndDateString}"/>
                 </c:if>
                 </span>
             </div>

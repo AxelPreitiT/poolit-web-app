@@ -50,7 +50,7 @@
                                 <div class="date-info-column">
                                     <c:choose>
                                         <c:when test="${trip.queryIsRecurrent}">
-                                            <span class="text text-capitalize"><c:out value="${trip.dayOfWeekString}"/></span>
+                                            <span class="text text-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
                                         </c:when>
                                         <c:otherwise>
                                             <span class="text"><c:out value="${trip.queryStartDateString}"/></span>
