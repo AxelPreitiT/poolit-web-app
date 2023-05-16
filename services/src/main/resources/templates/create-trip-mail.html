@@ -92,7 +92,7 @@
         <div class="info-container">
             <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
             <span>
-                <span th:text="${trip.dayOfWeekString}"/> <span th:if="${trip.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${trip.startDateString}"/>
+                <span th:text="#{${trip.dayOfWeekString}}"/> <span th:if="${trip.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${trip.startDateString}"/>
                 <span th:if="${trip.recurrent}" th:text="#{emails.toDate (${trip.endDateString})}"/> <span th:text="#{emails.time (${trip.startTimeString})}"/>
            </span>
         </div>

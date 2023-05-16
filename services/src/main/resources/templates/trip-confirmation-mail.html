@@ -69,7 +69,7 @@
             </a>
         </div>
         <h1 class="text-center mb-4" th:text="#{emails.tripConfirmation.title}"></h1>
-        <p th:text="#{emails.helloMessage (${trip.driver.name})}"></p>
+        <p th:text="#{emails.helloMessage (${passenger.name})}"></p>
         <p th:text="#{emails.tripConfirmation.message (${trip.originCity.name},${trip.destinationCity.name})}"></p>
         <div>
             <div class="info-container">
@@ -90,7 +90,7 @@
             <div class="info-container">
                 <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
                 <span>
-                    <span th:text="${trip.dayOfWeekString}"/> <span th:if="${passenger.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${passenger.startDateString}"/>
+                    <span th:text="#{${trip.dayOfWeekString}}"/> <span th:if="${passenger.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${passenger.startDateString}"/>
                 <span th:if="${passenger.recurrent}" th:text="#{emails.toDate (${passenger.endDateString})}"/> <span th:text="#{emails.time (${trip.startTimeString})}"/>
            </span>
             </div>

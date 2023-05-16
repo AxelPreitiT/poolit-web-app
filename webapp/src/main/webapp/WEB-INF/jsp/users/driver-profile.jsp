@@ -30,11 +30,6 @@
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="pills-driver" role="tabpanel" aria-labelledby="pills-driver-tab" tabindex="0">
             <c:url value="/trips/created" var="createdTripsUrl"/>
-              <c:set var="reviews" value="${reviews}" scope="request"/>
-              <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
-                <jsp:param name="reviews" value="${reviews}"/>
-                <jsp:param name="role" value="${user.role}"/>
-              </jsp:include>
             <c:set var="trips" value="${futureTrips}" scope="request"/>
             <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
                 <jsp:param name="title" value="profile.nextTrips"/>
@@ -68,13 +63,13 @@
                         <i class="h3 bi text bi-box-arrow-in-up-right"></i>
                     </div>
                 </a>
-            </div></div>
+            </div>
+              <c:set var="reviews" value="${reviews}" scope="request"/>
+              <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+                  <jsp:param name="reviews" value="${reviews}"/>
+                  <jsp:param name="role" value="${user.role}"/>
+              </jsp:include></div>
           <div class="tab-pane fade" id="pills-passanger" role="tabpanel" aria-labelledby="pills-passanger-tab" tabindex="0">
-                  <c:set var="reviews" value="${reviewsAsUser}" scope="request"/>
-                  <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
-                    <jsp:param name="reviews" value="${reviewsAsUser}"/>
-                    <jsp:param name="role" value="USER"/>
-                  </jsp:include>
                 <c:url value="/trips/reserved" var="reservedTripsUrl"/>
                 <c:set var="trips" value="${futureTripsPassanger}" scope="request"/>
                 <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
@@ -93,6 +88,11 @@
                   <jsp:param name="trips" value="${pastTripsPassanger}"/>
                   <jsp:param name="url" value="${reservedTripsHistoryUrl}"/>
                 </jsp:include>
+                  <c:set var="reviews" value="${reviewsAsUser}" scope="request"/>
+                  <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+                      <jsp:param name="reviews" value="${reviewsAsUser}"/>
+                      <jsp:param name="role" value="USER"/>
+                  </jsp:include>
             </div>
         </div>
 

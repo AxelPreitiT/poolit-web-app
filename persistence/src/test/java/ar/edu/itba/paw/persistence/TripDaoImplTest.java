@@ -276,7 +276,7 @@ public class TripDaoImplTest {
 
     @Test
     @Rollback
-    public void testGetPassengerInIntervals(){
+    public void testGetPassengerInIntervalsPunctual(){
         //SetUp
         Trip trip = createTrip(new Trip(0,CITY,ORIGIN_ADDRESS,CITY,DESTINATION_ADDRESS,START,END,MAX_SEATS,USER_2,CAR_2,0,PRICE,START,END));
         jdbcTemplate.update("INSERT INTO passengers VALUES(?,?,?,?)",trip.getTripId(),USER_1.getUserId(),Timestamp.valueOf(START),Timestamp.valueOf(START));
@@ -287,11 +287,30 @@ public class TripDaoImplTest {
 
         //Execute
         List<Passenger> passengers1 = tripDao.getPassengers(trip,START,START);
-        List<Passenger> passengers2 = tripDao.getPassengers(trip,START.plusDays(1),END);
+
         //Assert
         Assert.assertEquals(1,passengers1.size());
-        Assert.assertEquals(1,passengers2.size());
         Assert.assertTrue(passengers1.stream().anyMatch(p -> p.getUserId() == USER_ID_1 && p.getStartDateTime().equals(START) && p.getEndDateTime().equals(START)));
+        Assert.assertEquals(passengerCount,JdbcTestUtils.countRowsInTable(jdbcTemplate,"passengers"));
+        Assert.assertEquals(tripCount,JdbcTestUtils.countRowsInTable(jdbcTemplate,"trips"));
+        Assert.assertEquals(countDrivers,JdbcTestUtils.countRowsInTable(jdbcTemplate,"trips_cars_drivers"));
+    }
+    @Test
+    @Rollback
+    public void testGetPassengerInIntervalsMultiple(){
+        //SetUp
+        Trip trip = createTrip(new Trip(0,CITY,ORIGIN_ADDRESS,CITY,DESTINATION_ADDRESS,START,END,MAX_SEATS,USER_2,CAR_2,0,PRICE,START,END));
+        jdbcTemplate.update("INSERT INTO passengers VALUES(?,?,?,?)",trip.getTripId(),USER_1.getUserId(),Timestamp.valueOf(START),Timestamp.valueOf(START));
+        jdbcTemplate.update("INSERT INTO passengers VALUES(?,?,?,?)",trip.getTripId(),USER_2.getUserId(),Timestamp.valueOf(START.plusDays(1)),Timestamp.valueOf(END));
+        int passengerCount = JdbcTestUtils.countRowsInTable(jdbcTemplate,"passengers");
+        int tripCount = JdbcTestUtils.countRowsInTable(jdbcTemplate,"trips");
+        int countDrivers = JdbcTestUtils.countRowsInTable(jdbcTemplate,"trips_cars_drivers");
+
+        //Execute
+        List<Passenger> passengers2 = tripDao.getPassengers(trip,START.plusDays(1),END);
+
+        //Assert
+        Assert.assertEquals(1,passengers2.size());
         Assert.assertTrue(passengers2.stream().anyMatch(p -> p.getUserId() == USER_ID_2 && p.getStartDateTime().equals(START.plusDays(1)) && p.getEndDateTime().equals(END)));
         Assert.assertEquals(passengerCount,JdbcTestUtils.countRowsInTable(jdbcTemplate,"passengers"));
         Assert.assertEquals(tripCount,JdbcTestUtils.countRowsInTable(jdbcTemplate,"trips"));

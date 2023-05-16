@@ -32,7 +32,9 @@
           <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
           </div>
         </c:forEach>
-        <button class="show-more-btn plus-btn "><spring:message code="review.more"/></button>
+        <div class="plus-btn show-more-btn">
+          <h3 class="text"><spring:message code="review.more"/></h3>
+        </div>
     </div>
 
     </c:otherwise>

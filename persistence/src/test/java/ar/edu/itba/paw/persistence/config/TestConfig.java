@@ -21,6 +21,9 @@ import javax.sql.DataSource;
 public class TestConfig {
     @Value("classpath:hsqldb.sql")
     private Resource hsqldb;
+
+    @Value("classpath:schema.sql")
+    private Resource schema;
     @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -40,6 +43,7 @@ public class TestConfig {
     private DatabasePopulator databasePopulator(){
         final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
         databasePopulator.addScript(hsqldb);
+        databasePopulator.addScript(schema);
         return databasePopulator;
     }
 

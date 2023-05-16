@@ -3,6 +3,22 @@ CREATE TABLE IF NOT EXISTS images(
     bytea BYTEA
 );
 
+CREATE TABLE IF NOT EXISTS provinces (
+                                         province_id SERIAL NOT NULL,
+                                         name TEXT NOT NULL,
+                                         PRIMARY KEY (province_id),
+                                         UNIQUE (name)
+);
+
+CREATE TABLE IF NOT EXISTS cities (
+                                      city_id SERIAL NOT NULL,
+                                      name TEXT NOT NULL,
+                                      province_id INT NOT NULL,
+                                      PRIMARY KEY (province_id, name),
+                                      UNIQUE (city_id),
+                                      CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS users(
     user_id SERIAL PRIMARY KEY,
     username TEXT,
@@ -18,23 +34,6 @@ CREATE TABLE IF NOT EXISTS users(
     CONSTRAINT users_to_images FOREIGN KEY (user_image_id) REFERENCES images (image_id) ON DELETE SET NULL,
     CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
 );
-
-CREATE TABLE IF NOT EXISTS provinces (
-    province_id SERIAL NOT NULL,
-    name TEXT NOT NULL,
-    PRIMARY KEY (province_id),
-    UNIQUE (name)
-);
-
-CREATE TABLE IF NOT EXISTS cities (
-    city_id SERIAL NOT NULL,
-    name TEXT NOT NULL,
-    province_id INT NOT NULL,
-    PRIMARY KEY (province_id, name),
-    UNIQUE (city_id),
-    CONSTRAINT cities_to_provinces FOREIGN KEY (province_id) REFERENCES provinces(province_id) ON DELETE CASCADE
-);
-
 
 CREATE TABLE IF NOT EXISTS cars(
     car_id SERIAL PRIMARY KEY,
