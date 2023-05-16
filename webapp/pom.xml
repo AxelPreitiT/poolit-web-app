@@ -134,10 +134,9 @@
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
           <version>3.2.2</version>
-          <!-- TODO: Descomentar esto cuando se haga el deploy -->
-<!--          <configuration>
+          <configuration>
             <packagingExcludes>**/logback-test.xml</packagingExcludes>
-          </configuration>-->
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

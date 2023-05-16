@@ -57,23 +57,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-//    @Bean
-//    public DataSource dataSource() {
-//        LOGGER.info("Connecting to Postgres DB");
-//        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-//        ds.setDriverClass(org.postgresql.Driver.class);
-//        ds.setUrl(String.format("jdbc:postgresql://localhost/%s",environment.getProperty("DB_NAME")));
-//        ds.setUsername(environment.getProperty("DB_USER"));
-//        ds.setPassword(environment.getProperty("DB_PASSWORD"));
-//        return ds;
-//    }
-
     @Bean
     public DataSource dataSource() {
         LOGGER.info("Connecting to Postgres DB");
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl(String.format("jdbc:postgresql://localhost:%s/%s",environment.getProperty("DB_PORT"),environment.getProperty("DB_NAME")));
+        ds.setUrl(String.format("jdbc:postgresql://localhost/%s",environment.getProperty("DB_NAME")));
         ds.setUsername(environment.getProperty("DB_USER"));
         ds.setPassword(environment.getProperty("DB_PASSWORD"));
         return ds;
