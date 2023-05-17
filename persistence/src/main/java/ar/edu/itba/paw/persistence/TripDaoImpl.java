@@ -334,7 +334,7 @@ public class TripDaoImpl implements TripDao {
         int total = jdbcTemplate.query(queryBuilder.getCountString(),COUNT_ROW_MAPPER,queryBuilder.getArguments().toArray()).stream().findFirst().orElse(0);
         queryBuilder.withOffset(page*pageSize)
                 .withLimit(pageSize);
-        List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),ROW_MAPPER,queryBuilder.getArguments().toArray());
+        List<Trip> ans = jdbcTemplate.query(queryBuilder.getString(),getTripRowMapper(Optional.of(startDateTime),Optional.empty()),queryBuilder.getArguments().toArray());
         final PagedContent<Trip> result = new PagedContent<>(ans,page,pageSize,total);
         LOGGER.debug("Found {} in the database", result);
         return result;

@@ -34,7 +34,7 @@
                     <div class="line-container">
                         <i class="bi bi-calendar text"></i>
                         <c:choose>
-                            <c:when test="${trip.recurrent}">
+                            <c:when test="${trip.queryIsRecurrent}">
                                 <div class="format_date">
                                     <div><span class="text"><spring:message code="${trip.dayOfWeekString}"/></span></div>
                                     <div><span class="text"><spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}"/></span></div>
