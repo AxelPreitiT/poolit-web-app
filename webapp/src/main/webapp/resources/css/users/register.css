@@ -110,7 +110,7 @@ div.main-container-style {
     transition: opacity 0.3s ease-in-out;
 }
 
-#image-label .icon:hover {
+#image-label:hover .icon {
     opacity: 1;
 }
 

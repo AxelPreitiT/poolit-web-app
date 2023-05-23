@@ -12,7 +12,7 @@ function updateImageDisplay() {
   const curFiles = inputElement.files;
   if (curFiles.length === 0) {
     const icon = document.createElement('i');
-    icon.classList.add("bi", "bi-person-fill", "light-text", "h1");
+    icon.classList.add("bi", "bi-image", "light-text", "h1");
     labelElement.appendChild(icon);
   } else {
     const imageFile = curFiles[0];

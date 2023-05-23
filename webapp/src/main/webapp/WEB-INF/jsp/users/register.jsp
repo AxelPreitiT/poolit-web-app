@@ -24,11 +24,11 @@
             <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
                 <div class="container" id="profile-image-container">
                     <div id="profile-image-title">
-                        <h4 class="light-text"><spring:message code="register.avatar"/></h4>
+                        <h4 class="light-text"><spring:message code="register.profileImage"/></h4>
                     </div>
                     <div id="profile-image-display">
                         <label for="image-file" id="image-label"  class="secondary-bg-color shadow-btn button-style">
-                            <i class="bi bi-person-fill light-text h1"></i>
+                            <i class="bi bi-image light-text h1"></i>
                         </label>
                         <form:input path="imageFile" type="file" id="image-file" name="image-file" class="form-control" accept="image/*"/>
                     </div>
