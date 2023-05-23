@@ -55,18 +55,20 @@
       </div>
     </c:otherwise>
   </c:choose>
-  <c:url value="" var="baseUrl">
-    <c:forEach var="p" items="${param}">
-      <c:if test="${!(p.key eq 'page')}">
-        <c:param name="${p.key}" value="${p.value}"/>
-      </c:if>
-    </c:forEach>
-  </c:url>
-  <div id="list-pagination">
-    <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
-      <jsp:param name="currentPage" value="${trips.currentPage+1}"/>
-      <jsp:param name="totalPages" value="${trips.totalPages}"/>
-      <jsp:param name="baseUrl" value="${baseUrl}"/>
-    </jsp:include>
-  </div>
+  <c:if test="${trips.moreThanOnePage}">
+    <c:url value="" var="baseUrl">
+      <c:forEach var="p" items="${param}">
+        <c:if test="${!(p.key eq 'page')}">
+          <c:param name="${p.key}" value="${p.value}"/>
+        </c:if>
+      </c:forEach>
+    </c:url>
+    <div id="list-pagination">
+      <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+        <jsp:param name="currentPage" value="${trips.currentPage+1}"/>
+        <jsp:param name="totalPages" value="${trips.totalPages}"/>
+        <jsp:param name="baseUrl" value="${baseUrl}"/>
+      </jsp:include>
+    </div>
+  </c:if>
 </div>
