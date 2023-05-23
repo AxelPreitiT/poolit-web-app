@@ -121,7 +121,7 @@
                 </div>
                 <div class="user-info-row">
                     <div class="submit-row">
-                        <form:button type="submit" class="btn button-color btn-lg"><span class="light-text"><spring:message code="register.btnString"/></span></form:button>
+                        <form:button type="submit" class="btn button-color btn-lg"><span class="light-text h5"><spring:message code="register.btnString"/></span></form:button>
                     </div>
                 </div>
             </form:form>
