@@ -25,7 +25,7 @@ public class ProvinceHibernateDao implements ProvinceDao{
     @Override
     public Optional<Province> findProvinceById(long id) {
         LOGGER.debug("Looking for province with id {} in the database", id);
-        final Optional<Province> result =  Optional.of(em.find(Province.class, id));
+        final Optional<Province> result =  Optional.ofNullable(em.find(Province.class, id));
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
     }

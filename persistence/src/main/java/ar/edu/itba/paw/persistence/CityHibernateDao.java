@@ -25,7 +25,7 @@ public class CityHibernateDao implements CityDao {
     @Override
     public Optional<City> findCityById(long id) {
         LOGGER.debug("Looking for city with id {} in the database", id);
-        final Optional<City> result =  Optional.of(em.find(City.class, id));
+        final Optional<City> result =  Optional.ofNullable(em.find(City.class, id));
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
     }

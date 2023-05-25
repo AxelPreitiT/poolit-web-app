@@ -50,9 +50,9 @@ public class UserHibernateDao implements UserDao {
         String searchEmail = email.toLowerCase().replaceAll("\\s", "");
         final TypedQuery<User> query= (em.createQuery("from User as u where u.email= :email",User.class));
         query.setParameter("email", searchEmail);
-        final List<User> result= query.getResultList();
-        LOGGER.debug("Found {} in the database", !result.isEmpty() ? result.get(0) : "nothing");
-        return !result.isEmpty() ? Optional.of(result.get(0)) : Optional.empty();
+        final Optional<User> result= query.getResultList().stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent()? result.get() : "nothing");
+        return result;
     }
 
     @Override

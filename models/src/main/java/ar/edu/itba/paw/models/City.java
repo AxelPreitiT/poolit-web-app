@@ -39,6 +39,7 @@ public class City {
     public City(final long id, final String name, final long provinceId){
         this.name = name;
         this.id = id;
+        this.province = new Province(provinceId,"NAME");
     }
 
     @Override
