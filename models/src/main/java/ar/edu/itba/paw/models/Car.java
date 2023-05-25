@@ -1,14 +1,33 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "cars")
 public class Car {
 
-    private final long carId;
+    @Id
+    @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="cars_car_id_seq" )
+    @SequenceGenerator(sequenceName = "cars_car_id_seq" , name = "cars_car_id_seq", allocationSize = 1)
+    @Column(name = "car_id")
+    private long carId;
 
-    private final String plate, infoCar;
+    @Column(name = "plate")
+    private String plate;
 
-    private final User user;
+    @Column(name = "info_car")
+    private String infoCar;
 
-    private final long image_id;
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "image_id")
+    private long image_id;
+
+    protected Car(){
+
+    }
 
     public Car(final long carId, String plate, String infoCar, final User user, final long image_id){
         this.carId=carId;
@@ -16,6 +35,13 @@ public class Car {
         this.infoCar=infoCar;
         this.user=user;
         this.image_id=image_id;
+    }
+
+    public Car(String plate, String infoCar, User user, long image_id) {
+        this.plate = plate;
+        this.infoCar = infoCar;
+        this.user = user;
+        this.image_id = image_id;
     }
 
     @Override

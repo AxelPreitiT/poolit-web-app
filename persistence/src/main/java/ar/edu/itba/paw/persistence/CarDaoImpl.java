@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.*;
 
-@Repository
+//@Repository
 public class CarDaoImpl implements CarDao {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CarDaoImpl.class);
@@ -34,7 +34,7 @@ public class CarDaoImpl implements CarDao {
 
     private final SimpleJdbcInsert jdbcInsert;
 
-    @Autowired
+//    @Autowired
     public CarDaoImpl(final DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)
