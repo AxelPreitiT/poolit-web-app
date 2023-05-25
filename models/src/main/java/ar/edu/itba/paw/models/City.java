@@ -16,6 +16,7 @@ public class City {
     @Column(name = "city_id")
     private long id;
 
+    //TODO Revisar si es eager, solo traeria la provincia creo.
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn( name = "province_id")
     private Province province;

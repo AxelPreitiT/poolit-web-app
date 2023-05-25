@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="users_user_id_seq" )
@@ -22,7 +23,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    //TODO: mapear relaciones
+    //TODO Revisar Eager, si solo trae una ciudad y una imagen.
+    @OneToOne(fetch=FetchType.EAGER,optional=false)
+    @JoinColumn( name = "city_id")
     private City bornCity;
     @Column(name = "mail_locale")
     //Si no funciona, ir aca
@@ -30,11 +33,29 @@ public class User {
     private Locale mailLocale;
     @Column(name = "user_role")
     private String role;
-    @Column(name = "user_image_id")
+
+//    @OneToOne(fetch=FetchType.EAGER,optional=false)
+//    @JoinColumn( name = "user_image_id")
+//    private Image userImage;
+
+    @Column(name="user_image_id")
     private long userImageId;
 
     protected User(){
 
+    }
+
+    public User( final String name, final String surname, final String email,
+                final String phone, String password, final City bornCity, final Locale mailLocale, final String role,long userImageId) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.bornCity = bornCity;
+        this.mailLocale = mailLocale;
+        this.role = role;
+        this.userImageId = userImageId;
     }
 
     public User(long userId, final String name, final String surname, final String email,
@@ -117,4 +138,24 @@ public class User {
     public long getUserImageId() { return userImageId; }
 
     public void setUserImageId(long userImageId) { this.userImageId = userImageId; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setBornCity(City bornCity) {
+        this.bornCity = bornCity;
+    }
+
+    public void setMailLocale(Locale mailLocale) {
+        this.mailLocale = mailLocale;
+    }
 }

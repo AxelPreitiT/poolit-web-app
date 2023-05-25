@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
 public class UserDaoImpl implements UserDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
