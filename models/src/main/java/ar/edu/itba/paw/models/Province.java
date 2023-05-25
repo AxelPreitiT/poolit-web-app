@@ -1,11 +1,31 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "provinces")
 public class Province {
 
-    private final String name;
-    private final long id;
+    private String name;
+
+    @Id
+    @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="provinces_province_id_seq" )
+    @SequenceGenerator(sequenceName = "provinces_province_id_seq" , name = "provinces_province_id_seq", allocationSize = 1)
+    @Column(name = "province_id")
+    private long id;
+
+    @OneToMany(fetch=FetchType.LAZY,orphanRemoval=true,	mappedBy="province")
+    private List<City> cities;
+
+    protected Province() {
+
+    }
+
+    public Province( final String name){
+        this.name = name;
+    }
 
     public Province(final long id, final String name){
         this.name = name;

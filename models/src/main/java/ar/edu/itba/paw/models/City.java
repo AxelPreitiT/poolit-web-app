@@ -1,23 +1,49 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "cities")
 public class City {
 
-    private final String name;
-    private final long id;
-    private final long provinceId;
 
+    private String name;
+
+    @Id
+    @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="cities_city_id_seq" )
+    @SequenceGenerator(sequenceName = "cities_city_id_seq" , name = "cities_city_id_seq", allocationSize = 1)
+    @Column(name = "city_id")
+    private long id;
+
+    @ManyToOne(fetch=FetchType.EAGER,optional=false)
+    @JoinColumn( name = "province_id")
+    private Province province;
+
+    protected City(){
+    }
+
+    public City(final String name, final Province province){
+        this.name = name;
+        this.province = province;
+    }
+
+    public City(final long id, final String name, final Province province){
+        this.name = name;
+        this.id = id;
+        this.province = province;
+    }
+
+    //TODO remove provinceId implementation
     public City(final long id, final String name, final long provinceId){
         this.name = name;
         this.id = id;
-        this.provinceId = provinceId;
     }
 
     @Override
     public String toString() {
         return String.format("City { id: %d, name: '%s', provinceId: %d }",
-                id, name, provinceId);
+                id, name, province.getId());
     }
 
     public String getName() {
@@ -29,7 +55,7 @@ public class City {
     }
 
     public long getProvinceId() {
-        return provinceId;
+        return province.getId();
     }
 
     @Override
