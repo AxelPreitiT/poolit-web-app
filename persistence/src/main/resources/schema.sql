@@ -58,6 +58,10 @@ CREATE TABLE IF NOT EXISTS trips(
     day_of_week INT NOT NULL,
     origin_city_id INT NOT NULL,
     destination_city_id INT NOT NULL,
+    driver_id INT NOT NULL,
+    car_id INT NOT NULL,
+    CONSTRAINT trips_to_drivers FOREIGN KEY (driver_id) REFERENCES users(user_id),
+    CONSTRAINT trips_to_cars FOREIGN KEY (car_id) REFERENCES cars(car_id),
     CONSTRAINT trips_to_origin FOREIGN KEY(origin_city_id) REFERENCES cities(city_id),
     CONSTRAINT trips_to_destination FOREIGN KEY(destination_city_id) REFERENCES cities(city_id)
 );
