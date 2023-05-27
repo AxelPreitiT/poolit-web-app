@@ -16,7 +16,8 @@ public class Province {
     @Column(name = "province_id")
     private long id;
 
-    @OneToMany(fetch=FetchType.LAZY,orphanRemoval=true,	mappedBy="province")
+    //@OneToMany(fetch=FetchType.LAZY,orphanRemoval=true,	mappedBy="province")
+    @OneToMany(fetch=FetchType.EAGER,orphanRemoval=true,	mappedBy="province")
     private List<City> cities;
 
     protected Province() {
