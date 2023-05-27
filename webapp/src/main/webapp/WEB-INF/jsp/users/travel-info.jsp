@@ -20,14 +20,14 @@
                     <div class="secondary-color horizontal_dotted_line"></div>
                     <i class="secondary-color bi bi-geo-alt-fill icon-style"></i>
                 </div>
-                <div class="adress-container">
+                <div class="address-container">
                     <div class="route-info-text">
                         <span class="secondary-color h3"><c:out value="${trip.originCity.name}"/></span>
                         <span class="text"><c:out value="${trip.originAddress}"/></span>
                     </div>
                     <div class="route-info-text">
-                        <span class="secondary-color h3 aling-right"><c:out value="${trip.destinationCity.name}"/></span>
-                        <span class="text aling-right"><c:out value="${trip.destinationAddress}"/></span>
+                        <span class="secondary-color h3 align-right"><c:out value="${trip.destinationCity.name}"/></span>
+                        <span class="text align-right"><c:out value="${trip.destinationAddress}"/></span>
                     </div>
                 </div>
                 <div class="extra-info-container">
@@ -36,14 +36,14 @@
                         <c:choose>
                             <c:when test="${trip.queryIsRecurrent}">
                                 <div class="format_date">
-                                    <div><span class="text"><spring:message code="${trip.dayOfWeekString}"/></span></div>
-                                    <div><span class="text"><spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}"/></span></div>
+                                    <span class="text"><spring:message code="${trip.dayOfWeekString}"/></span>
+                                    <span class="italic-text date-text"><spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}"/></span>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="format_date">
-                                    <div><span class="text"><spring:message code="${trip.dayOfWeekString}"/></span></div>
-                                    <div><span class="text"><c:out value="${trip.startDateString}"/></span></div>
+                                    <span class="text"><spring:message code="${trip.dayOfWeekString}"/></span>
+                                    <span class="italic-text date-text"><c:out value="${trip.startDateString}"/></span>
                                 </div>
                             </c:otherwise>
                         </c:choose>
@@ -53,14 +53,13 @@
                         <span class="text"><c:out value="${trip.startTimeString}"/></span>
                     </div>
                     <div>
-                        <h5 class="text"><spring:message code="format.price" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></h5>
+                        <h2 class="secondary-color"><spring:message code="format.price" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></h2>
                     </div>
                 </div>
             </div>
             <div class="img-container">
-<%--                <img class="car-container"  src="https://lumiere-a.akamaihd.net/v1/images/og_cars_lightningmcqueenday_18244_4435f27a.jpeg?region=40,0,1120,630">--%>
                 <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
-                <img  class="car-container" src="${carImageUrl}"/>
+                <img class="car-container" src="${carImageUrl}" alt="<spring:message code="createCar.carImage"/>"/>
             </div>
         </div>
     </a>

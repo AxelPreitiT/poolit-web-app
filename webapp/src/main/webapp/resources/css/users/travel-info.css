@@ -62,10 +62,10 @@ a {
     margin: auto;
 }
 
-.adress-container{
+.address-container{
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1%;
+    margin-bottom: 1em;
 }
 
 .route-info-text{
@@ -73,7 +73,7 @@ a {
     flex-direction: column;
 }
 
-.aling-right{
+.align-right{
     text-align: right;
 }
 
@@ -81,13 +81,14 @@ a {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: start;
+    align-items: end;
 }
 
 .line-container{
     display: flex;
     flex-direction: row;
-    gap: 2%;
+    column-gap: 0.5em;
+    align-items: center;
 }
 
 .car-container{
@@ -97,6 +98,12 @@ a {
 }
 
 .format_date{
+    display: flex;
     flex-direction: column;
-    width: 200px;
+    max-width: 200px;
+}
+
+.format_date .date-text {
+    font-size: 0.9rem;
+    margin-top: -0.5em;
 }

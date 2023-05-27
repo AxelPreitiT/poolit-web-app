@@ -34,8 +34,8 @@
                     <div class="create-trip-btn">
                         <a href="<c:url value="/trips/create"/>">
                             <button class="btn button-style button-color shadow-btn">
-                                <i class="bi bi-plus light-text h3"></i>
-                                <span class="button-text-style light-text h3"><spring:message code="navbar.btnCreated"/></span>
+                                <i class="bi bi-plus light-text h4"></i>
+                                <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
                             </button>
                         </a>
                     </div>
@@ -43,8 +43,8 @@
                 <sec:authorize access="hasRole('ROLE_USER')">
                     <div class="create-trip-btn" data-bs-toggle="modal" data-bs-target="#modal-create">
                         <button class="btn button-style button-color shadow-btn">
-                            <i class="bi bi-plus light-text h3"></i>
-                            <span class="button-text-style light-text h3"><spring:message code="navbar.btnCreated"/></span>
+                            <i class="bi bi-plus light-text h4"></i>
+                            <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
                         </button>
                     </div>
                     <div class="modal fade" id="modal-create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">

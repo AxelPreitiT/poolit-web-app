@@ -1,5 +1,5 @@
 
-.review-cointainer{
+#review-info-container{
     border-top: 2px solid #8b8b8b ;
     display: flex;
     min-height: 70px;
@@ -9,10 +9,22 @@
     gap: 3%;
 }
 
-.rating-container{
+#rating-container{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     min-width: 150px;
+}
+
+#review-container .review-text {
+    word-break: break-all;
+}
+
+#go-to-trip-container {
+    margin-left: auto;
+}
+
+#go-to-trip-container button{
+    min-width: max-content;
 }

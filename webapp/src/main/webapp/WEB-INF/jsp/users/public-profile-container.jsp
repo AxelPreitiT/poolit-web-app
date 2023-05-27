@@ -12,13 +12,10 @@
   <div class="avatar-img">
     <div class="circular--landscape">
       <c:url value="/image/${user.userImageId}" var="profileImageUrl"/>
-      <img class="circular--square" src="${profileImageUrl}">
+      <img class="circular--square" src="${profileImageUrl}" alt="<spring:message code="register.profileImage"/>">
     </div>
   </div>
-  <div class="row-info">
-    <h6><spring:message code="user.fullname"/></h6>
-    <h4><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h4>
-  </div>
+  <h3 id="user-name"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
   <div class="row-info">
     <h6><spring:message code="user.email"/></h6>
     <h4><c:out value="${user.email}"/></h4>

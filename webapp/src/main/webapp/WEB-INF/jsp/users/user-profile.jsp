@@ -13,7 +13,6 @@
 <body class="background-color">
 <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
 <div class="main-container">
-  <c:url value="/users/profile" var="userProfileUrl"/>
   <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
     <jsp:param name="user" value="${user}"/>
   </jsp:include>
