@@ -55,9 +55,9 @@ if(dateFormatRegex.test(initialDateValue)) {
     dayRepeatTextElement.innerText = dayOfWeek;
 }
 
-if(initialLastDateValue !== "") {
-    multitripTabElement.classList.add('active');
+if(isMultitripInput.value === "true") {
     isMultitripInput.value = true;
+    multitripTabElement.classList.add('active');
     currentTab = 'multitrip-tab';
     new bootstrap.Collapse(multitripContainerElement, {
         show: true

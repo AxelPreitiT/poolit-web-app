@@ -75,7 +75,7 @@ div.main-container-style {
     margin-right: 0.2em;
 }
 
-.error-item.align-to-input-icon {
+.error-item > i.align-to-input-icon {
     margin-left: 0.45em;
 }
 

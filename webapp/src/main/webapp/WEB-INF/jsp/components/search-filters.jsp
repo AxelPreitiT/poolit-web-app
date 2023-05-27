@@ -4,7 +4,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <link href="<c:url value="/resources/css/components/search-filters.css"/>" rel="stylesheet" type="text/css"/>
-<script src="<c:url value="/resources/js/components/searchFilters.js"/>" type="module"></script>
 
 <!-- Beans:
         - searchTripForm: form backing object
@@ -18,7 +17,7 @@
 
 <form:form modelAttribute="searchTripForm" method="get" action="${param.url}" id="form-style" cssClass="primary-bg-color">
     <div id="search-filters-container">
-        <form:hidden path="multitrip" id="is-multitrip" value="false"/>
+        <form:hidden path="multitrip" id="is-multitrip"/>
         <ul id="search-tabs" class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link secondary-bg-color" id="unique-trip-tab">
@@ -169,4 +168,4 @@
         </div>
     </div>
 </form:form>
-
+<script src="<c:url value="/resources/js/components/searchFilters.js"/>" type="module"></script>

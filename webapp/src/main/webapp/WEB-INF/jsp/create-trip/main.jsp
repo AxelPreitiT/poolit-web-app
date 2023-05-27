@@ -64,12 +64,12 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <div class="error-item align-to-input-icon">
-                                <i class="bi bi-exclamation-circle-fill danger"></i>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill danger align-to-input-icon"></i>
                                 <form:errors path="date" cssClass="error-style danger" element="span"/>
                             </div>
-                            <div class="error-item right-item align-to-input-icon">
-                                <i class="bi bi-exclamation-circle-fill danger"></i>
+                            <div class="error-item right-item">
+                                <i class="bi bi-exclamation-circle-fill danger align-to-input-icon"></i>
                                 <form:errors path="time" cssClass="error-style danger" element="span"/>
                             </div>
                         </div>
@@ -99,8 +99,8 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <div class="error-item align-to-input-icon">
-                                <i class="bi bi-exclamation-circle-fill danger"></i>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill danger align-to-input-icon"></i>
                                 <form:errors cssClass="error-style danger error-style-line" element="span"/>
                             </div>
                         </div>
@@ -188,8 +188,8 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <div class="error-item align-to-input-icon">
-                                <i class="bi bi-exclamation-circle-fill danger"></i>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill danger align-to-input-icon"></i>
                                 <form:errors path="carId" cssClass="error-style danger" element="span"/>
                             </div>
                         </div>
@@ -205,8 +205,8 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <div class="error-item align-to-input-icon">
-                                <i class="bi bi-exclamation-circle-fill danger"></i>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill danger align-to-input-icon"></i>
                                 <form:errors path="maxSeats" cssClass="error-style danger" element="span"/>
                             </div>
                         </div>
@@ -225,8 +225,8 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <div class="error-item align-to-input-icon">
-                                <i class="bi bi-exclamation-circle-fill danger"></i>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill danger align-to-input-icon"></i>
                                 <form:errors path="price" cssClass="error-style danger" element="span"/>
                             </div>
                         </div>

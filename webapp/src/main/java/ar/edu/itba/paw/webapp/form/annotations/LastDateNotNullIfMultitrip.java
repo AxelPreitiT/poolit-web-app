@@ -11,19 +11,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = SameWeekDayValidator.class)
+@Constraint(validatedBy = LastDateNotNullIfMultitripValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SameWeekDay {
-    String message() default "{SameWeekDay.error}";
+public @interface LastDateNotNullIfMultitrip {
+    String message() default "{LastDateNotNullIfMultitrip.error}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 }
 
-class SameWeekDayValidator implements ConstraintValidator<SameWeekDay, RecurrentTripForm> {
+class LastDateNotNullIfMultitripValidator implements ConstraintValidator<LastDateNotNullIfMultitrip, RecurrentTripForm> {
 
     @Override
     public boolean isValid(RecurrentTripForm form, ConstraintValidatorContext constraintValidatorContext) {
-        return !form.isMultitrip() || form.getDate() == null || form.getLastDate() == null || form.getDate().getDayOfWeek().equals(form.getLastDate().getDayOfWeek());
+        return !form.isMultitrip() || form.getLastDate() != null;
     }
 }
