@@ -36,6 +36,10 @@
     font-size: 0.9rem;
 }
 
+.error-item > i {
+    margin-right: 0.2em;
+}
+
 .error-item > span {
     flex-grow: 1;
     word-break: break-word;

@@ -196,6 +196,7 @@ div.main-container-style {
 
 .error-item > i {
     margin-top: 0.2em;
+    margin-right: 0.2em;
 }
 
 .error-item:not(:has(.error-style)) {

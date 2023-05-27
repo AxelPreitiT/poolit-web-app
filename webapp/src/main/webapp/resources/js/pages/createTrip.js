@@ -32,8 +32,8 @@ if(originInfoContainerErrorRows.length > 0) {
     const verticalDottedLineStyle = window.getComputedStyle(verticalDottedLineElement);
     const verticalDottedLineHeight = parseInt(verticalDottedLineStyle.getPropertyValue('height')) / 16;
     const verticalDottedLineMarginTop = parseInt(verticalDottedLineStyle.getPropertyValue('margin-top'));
-    verticalDottedLineElement.style.height = (verticalDottedLineHeight + 2 * originInfoContainerErrorRows.length).toString() + 'em';
-    verticalDottedLineElement.style.marginTop = (verticalDottedLineMarginTop - 35 * originInfoContainerErrorRows.length).toString() + 'px';
+    verticalDottedLineElement.style.height = (verticalDottedLineHeight + 2.5 * originInfoContainerErrorRows.length).toString() + 'em';
+    verticalDottedLineElement.style.marginTop = (verticalDottedLineMarginTop - 50 * originInfoContainerErrorRows.length).toString() + 'px';
 }
 
 
