@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models.trips;
 
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.models.Format;
 import ar.edu.itba.paw.models.User;
 
 import java.time.DayOfWeek;
@@ -111,16 +112,16 @@ public class Trip {
     }
 
     public String getStartDateString(){
-        return startDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return startDateTime.format(Format.getDateFormatter());
     }
     public String getEndDateString(){
-        return endDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return endDateTime.format(Format.getDateFormatter());
     }
     public String getStartTimeString(){
-        return String.format("%02d:%02d",startDateTime.getHour(),startDateTime.getMinute());
+        return startDateTime.format(Format.getTimeFormatter());
     }
     public String getEndTimeString(){
-        return String.format("%02d:%02d",endDateTime.getHour(),endDateTime.getMinute());
+        return endDateTime.format(Format.getTimeFormatter());
     }
 
     public DayOfWeek getDayOfWeek() {
@@ -161,16 +162,16 @@ public class Trip {
         return queryEndDateTime;
     }
     public String getQueryStartDateString(){
-        return queryStartDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return queryStartDateTime.format(Format.getDateFormatter());
     }
     public String getQueryEndDateString(){
-        return queryEndDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return queryEndDateTime.format(Format.getDateFormatter());
     }
     public String getQueryStartTimeString(){
-        return String.format("%02d:%02d",queryStartDateTime.getHour(),queryStartDateTime.getMinute());
+        return queryStartDateTime.format(Format.getTimeFormatter());
     }
     public String getQueryEndTimeString(){
-        return String.format("%02d:%02d",queryEndDateTime.getHour(),queryEndDateTime.getMinute());
+        return queryEndDateTime.format(Format.getTimeFormatter());
     }
     public int getQueryTotalTrips(){
         return (Period.between(queryStartDateTime.toLocalDate(),queryEndDateTime.toLocalDate()).getDays())/7+1;
