@@ -9,6 +9,7 @@
   <jsp:include page="/resources/external-resources.jsp"/>
   <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
   <link href="<c:url value="/resources/css/trip-info/driver.css"/>" rel="stylesheet" type="text/css"/>
+  <link href="<c:url value="/resources/css/trip-info/passenger.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
 <div id="navbar-container">
@@ -90,7 +91,7 @@
             </button>
           </c:if>
         </div>
-        <div class="modal fade" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal fade <c:if test="${failedReview}">show-on-load</c:if>" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
@@ -112,13 +113,21 @@
                         <form:option value="5" label="☆☆☆☆☆"/>
                       </form:select>
                     </div>
+                    <div class="error-item">
+                      <i class="bi bi-exclamation-circle-fill danger"></i>
+                      <form:errors path="rating" cssClass="danger" element="span"/>
+                    </div>
                   </div>
                   <div class="form-group">
                     <h3><spring:message code="review.review"/></h3>
                     <spring:message code="review.placeholder" var="reviewPlaceholder"/>
                     <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="${reviewPlaceholder}"/>
+                    <div class="error-item">
+                      <i class="bi bi-exclamation-circle-fill danger"></i>
+                      <form:errors path="review" cssClass="danger" element="span"/>
+                    </div>
                   </div>
-                  <div>
+                  <div id="warning-message">
                     <h6 class="italic-text"><spring:message code="review.textInfo"/></h6>
                   </div>
                 </div>
@@ -160,5 +169,6 @@
     </jsp:include>
   </div>
 </c:if>
+<script src="<c:url value="/resources/js/pages/trip-info/passenger.js"/>" type="text/javascript"></script>
 </body>
 </html>
