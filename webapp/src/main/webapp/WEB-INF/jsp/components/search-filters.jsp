@@ -39,22 +39,25 @@
                     <h5 class="light-text"><spring:message code="searchFilters.route"/></h5>
                 </div>
                 <div class="input-container">
-                    <div class="input-row">
+                    <div class="input-row" id="route-input-row">
                         <div id="origin-city-selector">
-                            <spring:message code="searchFilters.origin" var="originDefaultText"/>
+                            <span class="light-text subtitle"><spring:message code="searchFilters.origin"/></span>
+                            <spring:message code="city-selector.district" var="districtDefaultText"/>
                             <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                 <jsp:param name="id" value="originCityId"/>
-                                <jsp:param name="defaultText" value="${originDefaultText}"/>
+                                <jsp:param name="defaultText" value="${districtDefaultText}"/>
                             </jsp:include>
                         </div>
-                        <div class="route-arrow">
-                            <i class="bi bi-arrow-right light-text"></i>
+                        <div id="swap-cities-container">
+                            <button type="button" class="btn button-color shadow-btn" id="swap-cities" title="<spring:message code="searchFilters.swapDistricts"/>" disabled>
+                                <i class="bi bi-arrow-left-right light-text"></i>
+                            </button>
                         </div>
                         <div id="destination-city-selector">
-                            <spring:message code="searchFilters.destination" var="destinationDefaultText"/>
+                            <span class="light-text"><spring:message code="searchFilters.destination"/></span>
                             <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                 <jsp:param name="id" value="destinationCityId"/>
-                                <jsp:param name="defaultText" value="${destinationDefaultText}"/>
+                                <jsp:param name="defaultText" value="${districtDefaultText}"/>
                             </jsp:include>
                         </div>
                     </div>
@@ -65,7 +68,7 @@
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="originCityId" cssClass="warning" element="span"/>
                         </div>
-                        <div class="error-item">
+                        <div class="error-item right-item">
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="destinationCityId" cssClass="warning" element="span"/>
                         </div>
@@ -99,7 +102,7 @@
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="date" cssClass="warning" element="span"/>
                         </div>
-                        <div class="error-item">
+                        <div class="error-item right-item">
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="time" cssClass="warning" element="span"/>
                         </div>
@@ -144,7 +147,7 @@
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="minPrice" cssClass="warning" element="span"/>
                         </div>
-                        <div class="error-item">
+                        <div class="error-item right-item">
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="maxPrice" cssClass="warning" element="span"/>
                         </div>
