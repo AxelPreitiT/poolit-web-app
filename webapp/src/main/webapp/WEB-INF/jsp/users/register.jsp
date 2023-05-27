@@ -32,8 +32,11 @@
                         </label>
                         <form:input path="imageFile" type="file" id="image-file" name="image-file" class="form-control" accept="image/*"/>
                     </div>
-                    <div class="error-row error-row-center mt-1">
-                        <form:errors path="imageFile" cssClass="error-style danger max-width-fit" element="span"/>
+                    <div class="error-row error-row-center">
+                        <div class="error-item">
+                            <i class="bi bi-cone-striped secondary-color"></i>
+                            <form:errors path="imageFile" cssClass="error-style secondary-color max-width-fit" element="span"/>
+                        </div>
                     </div>
                 </div>
                 <hr class="light-text">
@@ -53,8 +56,14 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="username" cssClass="error-style danger" element="span"/>
-                            <form:errors path="surname" cssClass="error-style danger error-style-right" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="username" cssClass="error-style secondary-color" element="span"/>
+                            </div>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="surname" cssClass="error-style secondary-color error-style-right" element="span"/>
+                            </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
@@ -67,8 +76,14 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="email" cssClass="error-style danger" element="span"/>
-                            <form:errors path="phone" cssClass="error-style danger error-style-right" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="email" cssClass="error-style secondary-color" element="span"/>
+                            </div>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="phone" cssClass="error-style secondary-color error-style-right" element="span"/>
+                            </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
@@ -81,11 +96,14 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="password" cssClass="error-style danger" element="span"/>
-                            <form:errors path="repeatPassword" cssClass="error-style danger error-style-right" element="span"/>
-                        </div>
-                        <div class="error-row error-row-center">
-                            <form:errors cssClass="error-style danger" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="password" cssClass="error-style secondary-color" element="span"/>
+                            </div>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors cssClass="error-style secondary-color" element="span"/>
+                            </div>
                         </div>
                         <div class="input-row input-row-start">
                             <spring:message code="user.district" var="districtPlaceholder"/>
@@ -95,7 +113,10 @@
                             </jsp:include>
                         </div>
                         <div class="error-row">
-                            <form:errors path="bornCityId" cssClass="error-style danger" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="bornCityId" cssClass="error-style secondary-color" element="span"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,7 +136,10 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="mailLocale" cssClass="error-style danger" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-cone-striped secondary-color"></i>
+                                <form:errors path="mailLocale" cssClass="error-style secondary-color" element="span"/>
+                            </div>
                         </div>
                     </div>
                 </div>
