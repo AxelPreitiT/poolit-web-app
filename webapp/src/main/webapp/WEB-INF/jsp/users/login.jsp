@@ -48,8 +48,8 @@
                 <c:if test="${param.error != null}">
                     <div class="user-info-row">
                         <div class="error-container">
-                            <i class="bi bi-cone-striped secondary-color"></i>
-                            <span class="secondary-color"><spring:message code="login.error"/></span>
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <span class="warning"><spring:message code="login.error"/></span>
                         </div>
                     </div>
                 </c:if>

@@ -62,8 +62,14 @@
                 </div>
                 <div class="error-container">
                     <div class="error-row">
-                        <form:errors path="originCityId" cssClass="formError danger" element="span"/>
-                        <form:errors path="destinationCityId" cssClass="formError danger right-item" element="span"/>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="originCityId" cssClass="warning" element="span"/>
+                        </div>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="destinationCityId" cssClass="warning" element="span"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,8 +96,14 @@
                         </div>
                     </div>
                     <div class="error-row">
-                        <form:errors path="date" cssClass="formError danger" element="span"/>
-                        <form:errors path="time" cssClass="formError danger right-item" element="span"/>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="date" cssClass="warning" element="span"/>
+                        </div>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="time" cssClass="warning" element="span"/>
+                        </div>
                     </div>
                     <div id="multitrip-container" class="collapse">
                         <div class="collapse" id="day-repeat-container">
@@ -129,14 +141,23 @@
                 </div>
                 <div class="error-container">
                     <div class="error-row">
-                        <form:errors path="minPrice" cssClass="formError danger" element="span"/>
-                        <form:errors path="maxPrice" cssClass="formError danger right-item" element="span"/>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="minPrice" cssClass="warning" element="span"/>
+                        </div>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="maxPrice" cssClass="warning" element="span"/>
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="custom-errors-container">
                 <div class="error-row">
-                    <form:errors cssClass="formError danger" element="span"/>
+                    <div class="error-item">
+                        <i class="bi bi-exclamation-circle-fill warning"></i>
+                        <form:errors cssClass="warning" element="span"/>
+                    </div>
                 </div>
             </div>
             <div class="search-button-container">

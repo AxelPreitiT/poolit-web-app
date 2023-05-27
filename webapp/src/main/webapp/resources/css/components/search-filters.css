@@ -16,27 +16,55 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    column-gap: 1em;
-    margin-bottom: 0;
+    column-gap: 0.5em;
+    margin-bottom: -0.5em;
 }
 
 .error-row:not(:has(span)) {
     display: none;
 }
 
-.error-row > span {
+.error-item {
+    width: 50%;
+}
+
+.error-item:not(:has(span)) {
+    display: none;
+}
+
+.error-item > * {
+    font-size: 0.9rem;
+}
+
+.error-item > span {
     flex-grow: 1;
     word-break: break-word;
     max-width: 49%;
+    font-weight: 500;
 }
 
 .error-row > .right-item {
     margin-left: auto;
 }
 
-.formError{
-    font-size: 0.9rem;
-    font-weight: 400;
+.route-filter .error-row > .error-item {
+    max-width: 45%;
+}
+
+.date-filter .error-row {
+    margin-bottom: 0.1em;
+}
+
+.price-filter .error-row {
+    justify-content: flex-start;
+}
+
+.price-filter .error-row > .error-item {
+    max-width: 45%;
+}
+
+#custom-errors-container .error-item {
+    width: 100%;
 }
 
 #form-style {

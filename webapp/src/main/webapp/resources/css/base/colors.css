@@ -89,11 +89,11 @@
 }
 
 .warning {
-    color: #ffc107 !important;
+    color: #ffdd00 !important;
 }
 
 .warning-bg-color {
-    background-color: #ffc107 !important;
+    background-color: #ffdd00 !important;
 }
 
 .error-code {
@@ -191,11 +191,11 @@
 }
 
 .warning {
-    color: #ffc107;
+    color: #ffdd00;
 }
 
 .warning-bg-color {
-    background-color: #ffc107;
+    background-color: #ffdd00;
 }
 
 .error-code {

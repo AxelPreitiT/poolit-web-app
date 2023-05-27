@@ -34,8 +34,8 @@
                     </div>
                     <div class="error-row error-row-center">
                         <div class="error-item">
-                            <i class="bi bi-cone-striped secondary-color"></i>
-                            <form:errors path="imageFile" cssClass="error-style secondary-color max-width-fit" element="span"/>
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="imageFile" cssClass="error-style warning max-width-fit" element="span"/>
                         </div>
                     </div>
                 </div>
@@ -57,12 +57,12 @@
                         </div>
                         <div class="error-row">
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="username" cssClass="error-style secondary-color" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="username" cssClass="error-style warning" element="span"/>
                             </div>
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="surname" cssClass="error-style secondary-color error-style-right" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="surname" cssClass="error-style warning error-style-right" element="span"/>
                             </div>
                         </div>
                         <div class="input-row">
@@ -77,12 +77,12 @@
                         </div>
                         <div class="error-row">
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="email" cssClass="error-style secondary-color" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="email" cssClass="error-style warning" element="span"/>
                             </div>
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="phone" cssClass="error-style secondary-color error-style-right" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="phone" cssClass="error-style warning error-style-right" element="span"/>
                             </div>
                         </div>
                         <div class="input-row">
@@ -97,12 +97,12 @@
                         </div>
                         <div class="error-row">
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="password" cssClass="error-style secondary-color" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="password" cssClass="error-style warning" element="span"/>
                             </div>
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors cssClass="error-style secondary-color" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors cssClass="error-style warning" element="span"/>
                             </div>
                         </div>
                         <div class="input-row input-row-start">
@@ -114,8 +114,8 @@
                         </div>
                         <div class="error-row">
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="bornCityId" cssClass="error-style secondary-color" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="bornCityId" cssClass="error-style warning" element="span"/>
                             </div>
                         </div>
                     </div>
@@ -137,8 +137,8 @@
                         </div>
                         <div class="error-row">
                             <div class="error-item">
-                                <i class="bi bi-cone-striped secondary-color"></i>
-                                <form:errors path="mailLocale" cssClass="error-style secondary-color" element="span"/>
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="mailLocale" cssClass="error-style warning" element="span"/>
                             </div>
                         </div>
                     </div>

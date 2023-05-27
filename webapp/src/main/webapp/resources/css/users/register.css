@@ -28,7 +28,7 @@ div.main-container-style {
     position: absolute;
     top: 0;
     left: 50%;
-    margin-top: 0.8em;
+    margin-top: 2em;
     transform: translateX(-50%);
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
@@ -39,7 +39,7 @@ div.main-container-style {
 }
 
 #banner-content > img {
-    height: 4em;
+    height: 3.5em;
 }
 
 #form-container {
@@ -202,8 +202,11 @@ div.main-container-style {
     display: none;
 }
 
-.error-row .error-style {
+.error-item > * {
     font-size: 0.9rem;
+}
+
+.error-row .error-style {
     font-weight: 500;
     width: 50%;
     flex-wrap: nowrap;
