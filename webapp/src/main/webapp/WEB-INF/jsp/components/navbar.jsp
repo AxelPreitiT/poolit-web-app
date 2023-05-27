@@ -51,25 +51,19 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h3>
+                                    <h4 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h4>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div>
-                                        <span class="text"><spring:message code="navbar.modal.warning"/></span>
-                                    </div>
-                                    <div class="warning-text">
-                                        <span class="italic-text text bold"><spring:message code="navbar.modal.secondWarning"/></span>
+                                        <span class="text"><spring:message code="navbar.modal.info"/></span>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
-                                        <span class="light-text"><spring:message code="navbar.modal.btnCancel"/></span>
-                                    </button>
                                     <c:url value="/changeRole" var="changeRole"/>
                                     <form:form method="POST" action="${changeRole}">
                                         <button type="submit" class="btn secondary-bg-color">
-                                            <span class="light-text"><spring:message code="navbar.modal.btnAccept"/></span>
+                                            <span class="light-text"><spring:message code="navbar.modal.btnContinue"/></span>
                                         </button>
                                     </form:form>
                                 </div>
