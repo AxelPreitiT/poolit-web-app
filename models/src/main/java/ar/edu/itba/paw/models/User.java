@@ -24,7 +24,7 @@ public class User {
     private String password;
 
     //TODO Revisar Eager, si solo trae una ciudad y una imagen.
-    @OneToOne(fetch=FetchType.EAGER,optional=false)
+    @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn( name = "city_id")
     private City bornCity;
     @Column(name = "mail_locale")
