@@ -18,7 +18,8 @@ public class Car {
     @Column(name = "info_car")
     private String infoCar;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    //@ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 

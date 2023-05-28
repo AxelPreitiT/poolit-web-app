@@ -30,6 +30,7 @@ public class UserHibernateDao implements UserDao {
         String savedPassword = password.replaceAll("\\s", "");
         LOGGER.debug("Adding new user with email '{}' to the database", savedEmail);
         LOGGER.debug("need help '{}' to the database", user_image_id);
+//        em.merge(bornCity);
         final User user= new User(username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, user_image_id);
         em.persist(user);
         LOGGER.debug("New {}", user);
