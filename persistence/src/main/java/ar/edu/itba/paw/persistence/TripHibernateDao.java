@@ -40,7 +40,7 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public boolean removePassenger(Trip trip, User user) {
+    public boolean removePassenger(Trip trip, Passenger passenger) {
         return false;
     }
 

@@ -200,7 +200,7 @@ public class TripDaoImpl implements TripDao {
         return result;
     }
     @Override
-    public boolean removePassenger(final Trip trip, final User passenger){
+    public boolean removePassenger(final Trip trip, final Passenger passenger){
         LOGGER.debug("Removing passenger with id {} from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
         final boolean result = jdbcTemplate.update("DELETE FROM passengers WHERE trip_id = ? AND user_id = ?",trip.getTripId(), passenger.getUserId())>0;
         if(result) {

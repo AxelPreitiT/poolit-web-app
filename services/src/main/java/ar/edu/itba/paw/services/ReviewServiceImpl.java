@@ -35,7 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
             LOGGER.error("Passenger with id {} tried to review trip with id {}, but it's not finished yet", passenger.getUserId(), tripId, e);
             throw e;
         }
-        return reviewDao.create(tripId, passenger, rating, review);
+        return reviewDao.create(tripId, passenger.getUser(), rating, review);
     }
 
     @Override
