@@ -177,7 +177,7 @@ public class TripDaoImplTest {
         int passengerCount = JdbcTestUtils.countRowsInTable(jdbcTemplate,"passengers");
 
         //Execute and Assert
-        Assert.assertTrue(tripDao.addPassenger(trip,new Passenger(USER_1,START,START)));
+        Assert.assertTrue(tripDao.addPassenger(trip,USER_1,START,START));
         Assert.assertEquals(passengerCount+1,JdbcTestUtils.countRowsInTable(jdbcTemplate,"passengers"));
     }
 

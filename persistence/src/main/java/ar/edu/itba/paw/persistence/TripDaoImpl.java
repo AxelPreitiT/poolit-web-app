@@ -170,18 +170,18 @@ public class TripDaoImpl implements TripDao {
     }
 
     @Override
-    public boolean addPassenger(final Trip trip, final Passenger passenger){
+    public boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime){
         Map<String,Object> passengerData = new HashMap<>();
-        passengerData.put("user_id",passenger.getUserId());
+        passengerData.put("user_id",user.getUserId());
         passengerData.put("trip_id",trip.getTripId());
-        passengerData.put("start_date",Timestamp.valueOf(passenger.getStartDateTime()));
-        passengerData.put("end_date",Timestamp.valueOf(passenger.getEndDateTime()));
-        LOGGER.debug("Adding new passenger with id {} to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+        passengerData.put("start_date",Timestamp.valueOf(startDateTime));
+        passengerData.put("end_date",Timestamp.valueOf(endDateTime));
+        LOGGER.debug("Adding new passenger with id {} to the trip with id {} in the database",user.getUserId(),trip.getTripId());
         final boolean result = passengerInsert.execute(passengerData)>0;
         if(result) {
-            LOGGER.info("Passenger with id {} added to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+            LOGGER.info("Passenger with id {} added to the trip with id {} in the database",user.getUserId(),trip.getTripId());
         } else {
-            LOGGER.warn("Passenger with id {} could not be added to the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
+            LOGGER.warn("Passenger with id {} could not be added to the trip with id {} in the database",user.getUserId(),trip.getTripId());
         }
         return result;
     }
@@ -339,7 +339,14 @@ public class TripDaoImpl implements TripDao {
         LOGGER.debug("Found {} in the database", result);
         return result;
     }
-
+    @Override
+    public PagedContent<Trip> getTripsWithFilters(
+            long origin_city_id, long destination_city_id,
+            LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
+            int page, int pageSize){
+        return getTripsWithFilters(origin_city_id, destination_city_id, startDateTime,Optional.of(dayOfWeek), Optional.of(endDateTime), minutes,  minPrice, maxPrice, sortType,descending, page, pageSize);
+    }
     @Override
     public PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,

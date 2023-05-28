@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models.trips;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.converters.DayOfWeekConverter;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
@@ -32,16 +33,12 @@ public class Trip {
     private String destinationAddress;
 
     @Column(name = "start_date_time")
-//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime startDateTime;
     @Column(name = "end_date_time")
-//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime endDateTime;
 
-//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     @Column(name = "start_date_time", insertable = false, updatable = false)
     private LocalDateTime queryStartDateTime;
-//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     @Column(name = "end_date_time", insertable = false, updatable = false)
     private LocalDateTime queryEndDateTime;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
@@ -54,7 +51,7 @@ public class Trip {
     private int maxSeats;
     @Column(name = "price")
     private double price;
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = DayOfWeekConverter.class)
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 

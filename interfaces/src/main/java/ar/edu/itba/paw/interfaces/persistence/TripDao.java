@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface TripDao {
 
     Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final boolean isRecurrent, final double price, final int max_passengers, final User driver);
-    boolean addPassenger(final Trip trip, final Passenger passenger);
+    boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime);
     boolean removePassenger(final Trip trip, final Passenger passenger);
     List<Passenger> getPassengers(final TripInstance tripInstance);
     List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime);
@@ -32,6 +32,12 @@ public interface TripDao {
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
             int page, int pageSize);
+    PagedContent<Trip> getTripsWithFilters(
+            long origin_city_id, long destination_city_id,
+            LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
+            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
+            int page, int pageSize);
+
     PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize);
 
 }

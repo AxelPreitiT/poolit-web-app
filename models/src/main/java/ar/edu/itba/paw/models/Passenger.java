@@ -14,22 +14,17 @@ import java.util.Objects;
 public class Passenger{
 
     @Id
-    @Column(name = "trip_id",insertable = false,updatable = false)
-    private long tripId;
-    @Id
-    @Column(name = "user_id",insertable = false,updatable = false)
-    private long userId;
-
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id")
     private User user;
+    @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "trip_id")
     private Trip trip;
     @Column(name = "start_date")
     private LocalDateTime startDateTime;
     @Column(name = "end_date")
-    private LocalDateTime endDateTime;  
+    private LocalDateTime endDateTime;
 
     public Passenger(){}
     public Passenger(User user,Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
@@ -39,6 +34,7 @@ public class Passenger{
         this.endDateTime = endDateTime;
     }
     public Passenger(User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        this.user = user;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
