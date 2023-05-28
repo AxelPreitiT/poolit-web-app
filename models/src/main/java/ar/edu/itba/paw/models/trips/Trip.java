@@ -3,8 +3,6 @@ package ar.edu.itba.paw.models.trips;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
@@ -21,7 +19,7 @@ public class Trip {
     @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="trips_trip_id_seq" )
     @SequenceGenerator(sequenceName = "trips_trip_id_seq" , name = "trips_trip_id_seq", allocationSize = 1)
     @Column(name = "trip_id")
-    private long tripId;
+    private Long tripId;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "origin_city_id")
     private City originCity;
@@ -56,11 +54,11 @@ public class Trip {
     private DayOfWeek dayOfWeek;
 
     //TODO: test
-    @Basic(fetch = FetchType.LAZY) //No queremos que se busque siempre, solo cuando se muestra
-    @Formula(value = "SELECT max(passenger_count) FROM (SELECT count(passengers.user_id) as passenger_count" +
-            "FROM generate_series(queryStartDateTime,queryEndDateTime,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id =tripId AND passengers.start_date<=days.days AND passengers.end_date>=days.days" +
-            "GROUP BY days.days) aux")
-    private int occupiedSeats;
+//    @Basic(fetch = FetchType.LAZY) //No queremos que se busque siempre, solo cuando se muestra
+//    @Formula(value = "SELECT max(passenger_count) FROM (SELECT count(passengers.user_id) as passenger_count" +
+//            "FROM generate_series(queryStartDateTime,queryEndDateTime,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id =tripId AND passengers.start_date<=days.days AND passengers.end_date>=days.days" +
+//            "GROUP BY days.days) aux")
+    private int occupiedSeats = 0;
 
     protected Trip(){
 
