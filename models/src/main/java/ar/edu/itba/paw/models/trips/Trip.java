@@ -32,12 +32,16 @@ public class Trip {
     private String destinationAddress;
 
     @Column(name = "start_date_time")
+//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime startDateTime;
     @Column(name = "end_date_time")
+//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     private LocalDateTime endDateTime;
 
+//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     @Column(name = "start_date_time", insertable = false, updatable = false)
     private LocalDateTime queryStartDateTime;
+//    @Type(type= "org.hibernate.type.LocalDateTimeType")
     @Column(name = "end_date_time", insertable = false, updatable = false)
     private LocalDateTime queryEndDateTime;
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
@@ -51,6 +55,7 @@ public class Trip {
     @Column(name = "price")
     private double price;
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 
     //TODO: test
@@ -58,7 +63,7 @@ public class Trip {
 //    @Formula(value = "SELECT max(passenger_count) FROM (SELECT count(passengers.user_id) as passenger_count" +
 //            "FROM generate_series(queryStartDateTime,queryEndDateTime,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id =tripId AND passengers.start_date<=days.days AND passengers.end_date>=days.days" +
 //            "GROUP BY days.days) aux")
-    private int occupiedSeats = 0;
+    private transient int occupiedSeats = 0;
 
     protected Trip(){
 
@@ -93,6 +98,21 @@ public class Trip {
         this.driver = driver;
         this.car = car;
         this.occupiedSeats = occupiedSeats;
+        this.price = price;
+        this.queryStartDateTime = startDateTime;
+        this.queryEndDateTime = endDateTime;
+    }
+    public Trip(City originCity, String originAddress, City destinationCity, String destinationAddress, LocalDateTime startDateTime, LocalDateTime endDateTime, int maxPassengers, User driver, Car car, double price) {
+        this.originCity = originCity;
+        this.originAddress = originAddress;
+        this.destinationCity = destinationCity;
+        this.destinationAddress = destinationAddress;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.dayOfWeek = startDateTime.getDayOfWeek();
+        this.maxSeats = maxPassengers;
+        this.driver = driver;
+        this.car = car;
         this.price = price;
         this.queryStartDateTime = startDateTime;
         this.queryEndDateTime = endDateTime;

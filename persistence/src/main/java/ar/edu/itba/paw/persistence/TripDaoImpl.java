@@ -25,7 +25,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 
-@Repository
+//@Repository
 public class TripDaoImpl implements TripDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripDaoImpl.class);
