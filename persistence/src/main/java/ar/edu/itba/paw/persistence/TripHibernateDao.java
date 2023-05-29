@@ -213,6 +213,18 @@ public class TripHibernateDao implements TripDao {
         return getTripPagedContent(page, pageSize, countQuery, idQuery);
     }
 
+    private int getTripCountSeats(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        int ans = 0;
+        for(LocalDateTime dateTime = startDateTime; !dateTime.isAfter(endDateTime);dateTime = dateTime.plusDays(7)){
+            Query countQuery = em.createNativeQuery("SELECT coalesce(count(user_id),0) as passenger_count FROM passengers WHERE trip_id= :tripId AND start_date <= :dateTime AND end_date>= :dateTime");
+            countQuery.setParameter("tripId",tripId);
+            countQuery.setParameter("dateTime",Timestamp.valueOf(dateTime));
+            @SuppressWarnings("unchecked")
+            int aux = ((List<Object>)countQuery.getResultList()).stream().map(elem-> ((Number) elem).intValue()).findFirst().orElse(0);
+            ans = Math.max(aux,ans);
+        }
+        return ans;
+    }
     @Override
     public Optional<Trip> findById(long tripId) {
         LOGGER.debug("Looking for the trip with id {} in the database", tripId);
@@ -220,6 +232,10 @@ public class TripHibernateDao implements TripDao {
         query.setParameter("tripId",tripId);
         final Optional<Trip> result = query.getResultList().stream().findFirst();
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        if(result.isPresent()){
+            int occupiedSeats = getTripCountSeats(tripId,result.get().getStartDateTime(),result.get().getEndDateTime());
+            result.get().setOccupiedSeats(occupiedSeats);
+        }
         return result;
     }
 
@@ -228,7 +244,11 @@ public class TripHibernateDao implements TripDao {
         final Optional<Trip> result = findById(tripId);
         //Aprovechamos que el valor de los asientos ocupados se saca cuando se pide
         //Entonces lo cambiamos en la instancia para que se pida con los valores correctos
-        result.ifPresent(res->{res.setQueryStartDateTime(start);res.setQueryEndDateTime(end);});
+        result.ifPresent(res->{
+            res.setQueryStartDateTime(start);
+            res.setQueryEndDateTime(end);
+            res.setOccupiedSeats(getTripCountSeats(tripId,start,end));
+        });
         return result;
     }
 

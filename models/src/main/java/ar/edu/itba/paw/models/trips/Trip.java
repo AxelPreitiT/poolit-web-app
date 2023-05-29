@@ -55,11 +55,6 @@ public class Trip {
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 
-    //TODO: test
-//    @Basic(fetch = FetchType.LAZY) //No queremos que se busque siempre, solo cuando se muestra
-//    @Formula(value = "SELECT max(passenger_count) FROM (SELECT count(passengers.user_id) as passenger_count" +
-//            "FROM generate_series(queryStartDateTime,queryEndDateTime,'7 day'::interval) days LEFT OUTER JOIN passengers ON passengers.trip_id =tripId AND passengers.start_date<=days.days AND passengers.end_date>=days.days" +
-//            "GROUP BY days.days) aux")
     private transient int occupiedSeats = 0;
 
     protected Trip(){
@@ -253,6 +248,10 @@ public class Trip {
 
     public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {
         this.queryEndDateTime = queryEndDateTime;
+    }
+
+    public void setOccupiedSeats(int occupiedSeats) {
+        this.occupiedSeats = occupiedSeats;
     }
 
     public enum SortType{
