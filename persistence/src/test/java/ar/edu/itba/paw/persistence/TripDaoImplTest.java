@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-
+/*
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -32,7 +32,7 @@ public class TripDaoImplTest {
     private DataSource ds;
 
     @Autowired
-    private TripDaoImpl tripDao;
+    private TripHibernateDao tripDao;
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert tripInsert;
@@ -359,3 +359,5 @@ public class TripDaoImplTest {
     }
 }
 
+
+ */

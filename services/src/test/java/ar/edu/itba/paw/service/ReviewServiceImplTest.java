@@ -46,7 +46,7 @@ public class ReviewServiceImplTest {
         Assert.assertNotNull(newReview);
         Assert.assertEquals(reviewId, newReview.getReviewId());
         Assert.assertEquals(tripId, newReview.getTripId());
-        Assert.assertEquals(passenger, newReview.getUser());
+        Assert.assertEquals(passenger.getUser(), newReview.getUser());
         Assert.assertEquals(rating, newReview.getRating());
         Assert.assertEquals(review, newReview.getReview());
     }

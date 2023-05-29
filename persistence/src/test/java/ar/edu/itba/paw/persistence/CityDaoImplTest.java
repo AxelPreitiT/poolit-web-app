@@ -27,7 +27,7 @@ public class CityDaoImplTest {
     private DataSource dataSource;
 
     @Autowired
-    private CityDaoImpl cityDao;
+    private CityHibernateDao cityDao;
 
     private static final long PROVINCE_ID = 1;
 
