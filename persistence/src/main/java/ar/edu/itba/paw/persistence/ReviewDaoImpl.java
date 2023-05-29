@@ -14,7 +14,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.*;
 
-@Repository
+//@Repository
+/*
 public class ReviewDaoImpl implements ReviewDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewDaoImpl.class);
@@ -38,7 +39,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     private final SimpleJdbcInsert jdbcInsert;
 
-    @Autowired
+    //@Autowired
     public ReviewDaoImpl(final DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.jdbcInsert = new SimpleJdbcInsert(dataSource)
@@ -102,3 +103,4 @@ public class ReviewDaoImpl implements ReviewDao {
         return result;
     }
 }
+ */
