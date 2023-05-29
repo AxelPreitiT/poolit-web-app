@@ -5,8 +5,8 @@
 <jsp:useBean id="review" type="ar.edu.itba.paw.models.Review" scope="request"/>
 <link href="<c:url value="/resources/css/users/review-info.css"/>" rel="stylesheet" type="text/css"/>
 
-<div class="review-cointainer">
-    <div class="rating-container">
+<div id="review-info-container">
+    <div id="rating-container">
         <div class="d-flex justify-content-between align-items-center">
             <div class="ratings">
                 <c:forEach var="i" begin="1" end="${review.rating}">
@@ -26,7 +26,15 @@
             </div>
         </div>
     </div>
-    <div class="review-container">
-        <h4>${review.review}</h4>
+    <div id="review-container">
+        <h4 class="review-text">${review.review}</h4>
+    </div>
+    <div id="go-to-trip-container">
+        <a href="<c:url value="/trips/${review.tripId}"/>">
+            <button class="btn button-style button-color shadow-btn">
+                <i class="bi bi-chevron-right light-text"></i>
+                <span class="light-text h5"><spring:message code="review.checkTrip"/></span>
+            </button>
+        </a>
     </div>
 </div>

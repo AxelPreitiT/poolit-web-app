@@ -17,27 +17,27 @@
     </c:if>
   </div>
   <div>
-  <c:choose>
-    <c:when test="${reviews.size() == 0}">
-      <div class="review-empty-container">
-          <i class="bi-solid bi-book secondary-color h2"></i>
-          <h3 class="italic-text placeholder-text"><spring:message code="review.none"/></h3>
-      </div>
-    </c:when>
-    <c:otherwise>
-    <div id="reviews-container" class="reviews-container">
-        <c:forEach items="${reviews}" var="review">
-          <div class="revs">
-          <c:set var="review" value="${review}" scope="request"/>
-          <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
-          </div>
-        </c:forEach>
-        <div class="plus-btn show-more-btn">
-          <h3 class="text"><spring:message code="review.more"/></h3>
+    <c:choose>
+      <c:when test="${reviews.size() == 0}">
+        <div class="review-empty-container">
+            <i class="bi-solid bi-book secondary-color h2"></i>
+            <h3 class="italic-text placeholder-text"><spring:message code="review.none"/></h3>
         </div>
-    </div>
+      </c:when>
+      <c:otherwise>
+      <div id="reviews-container" class="reviews-container">
+          <c:forEach items="${reviews}" var="review">
+            <div class="revs">
+              <c:set var="review" value="${review}" scope="request"/>
+              <jsp:include page="/WEB-INF/jsp/users/review-info.jsp"/>
+            </div>
+          </c:forEach>
+          <div class="plus-btn show-more-btn">
+            <h3 class="text"><spring:message code="review.more"/></h3>
+          </div>
+      </div>
 
-    </c:otherwise>
+      </c:otherwise>
     </c:choose>
   </div>
   <script src="<c:url value="/resources/js/users/reviews.js"/>" type="application/javascript"></script>

@@ -35,14 +35,17 @@
           <div class="trip-card-row">
             <div class="trip-card-row-header">
               <i class="bi bi-calendar secondary-color h3"></i>
-              <c:choose>
-                <c:when test="${trip.queryIsRecurrent}">
-                  <span class="secondary-color h3"><spring:message code="tripDetails.card.formateDateRecurrent" arguments="${trip.queryStartDateString}, ${trip.queryEndDateString}"/></span>
-                </c:when>
-                <c:otherwise>
-                  <span class="secondary-color h3"><c:out value="${trip.queryStartDateString}"/></span>
-                </c:otherwise>
-              </c:choose>
+              <div class="date-container">
+                <h2 class="secondary-color"><spring:message code="${trip.dayOfWeekString}"/></h2>
+                <c:choose>
+                  <c:when test="${trip.queryIsRecurrent}">
+                    <h5 class="italic-text"><spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryStartDateString}, ${trip.queryEndDateString}"/></h5>
+                  </c:when>
+                  <c:otherwise>
+                    <h5 class="italic-text"><c:out value="${trip.queryStartDateString}"/></h5>
+                  </c:otherwise>
+                </c:choose>
+              </div>
             </div>
             <div class="trip-car-row-body">
               <c:set var="trip" value="${trip}" scope="request"/>
@@ -55,18 +58,20 @@
       </div>
     </c:otherwise>
   </c:choose>
-  <c:url value="" var="baseUrl">
-    <c:forEach var="p" items="${param}">
-      <c:if test="${!(p.key eq 'page')}">
-        <c:param name="${p.key}" value="${p.value}"/>
-      </c:if>
-    </c:forEach>
-  </c:url>
-  <div id="list-pagination">
-    <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
-      <jsp:param name="currentPage" value="${trips.currentPage+1}"/>
-      <jsp:param name="totalPages" value="${trips.totalPages}"/>
-      <jsp:param name="baseUrl" value="${baseUrl}"/>
-    </jsp:include>
-  </div>
+  <c:if test="${trips.moreThanOnePage}">
+    <c:url value="" var="baseUrl">
+      <c:forEach var="p" items="${param}">
+        <c:if test="${!(p.key eq 'page')}">
+          <c:param name="${p.key}" value="${p.value}"/>
+        </c:if>
+      </c:forEach>
+    </c:url>
+    <div id="list-pagination">
+      <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+        <jsp:param name="currentPage" value="${trips.currentPage+1}"/>
+        <jsp:param name="totalPages" value="${trips.totalPages}"/>
+        <jsp:param name="baseUrl" value="${baseUrl}"/>
+      </jsp:include>
+    </div>
+  </c:if>
 </div>

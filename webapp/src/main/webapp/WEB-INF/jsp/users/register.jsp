@@ -24,16 +24,19 @@
             <form:form modelAttribute="createUserForm" cssClass="passenger-form" action="${createUser}" method="post" enctype="multipart/form-data">
                 <div class="container" id="profile-image-container">
                     <div id="profile-image-title">
-                        <h4 class="light-text"><spring:message code="register.avatar"/></h4>
+                        <h4 class="light-text"><spring:message code="register.profileImage"/></h4>
                     </div>
                     <div id="profile-image-display">
                         <label for="image-file" id="image-label"  class="secondary-bg-color shadow-btn button-style">
-                            <i class="bi bi-person-fill light-text h1"></i>
+                            <i class="bi bi-image light-text h1"></i>
                         </label>
                         <form:input path="imageFile" type="file" id="image-file" name="image-file" class="form-control" accept="image/*"/>
                     </div>
-                    <div class="error-row error-row-center mt-1">
-                        <form:errors path="imageFile" cssClass="error-style danger max-width-fit" element="span"/>
+                    <div class="error-row error-row-center">
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="imageFile" cssClass="error-style warning max-width-fit" element="span"/>
+                        </div>
                     </div>
                 </div>
                 <hr class="light-text">
@@ -53,8 +56,14 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="username" cssClass="error-style danger" element="span"/>
-                            <form:errors path="surname" cssClass="error-style danger error-style-right" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="username" cssClass="error-style warning" element="span"/>
+                            </div>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="surname" cssClass="error-style warning error-style-right" element="span"/>
+                            </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
@@ -67,8 +76,14 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="email" cssClass="error-style danger" element="span"/>
-                            <form:errors path="phone" cssClass="error-style danger error-style-right" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="email" cssClass="error-style warning" element="span"/>
+                            </div>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="phone" cssClass="error-style warning error-style-right" element="span"/>
+                            </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
@@ -81,11 +96,14 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="password" cssClass="error-style danger" element="span"/>
-                            <form:errors path="repeatPassword" cssClass="error-style danger error-style-right" element="span"/>
-                        </div>
-                        <div class="error-row error-row-center">
-                            <form:errors cssClass="error-style danger" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="password" cssClass="error-style warning" element="span"/>
+                            </div>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors cssClass="error-style warning" element="span"/>
+                            </div>
                         </div>
                         <div class="input-row input-row-start">
                             <spring:message code="user.district" var="districtPlaceholder"/>
@@ -95,7 +113,10 @@
                             </jsp:include>
                         </div>
                         <div class="error-row">
-                            <form:errors path="bornCityId" cssClass="error-style danger" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="bornCityId" cssClass="error-style warning" element="span"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,13 +136,16 @@
                             </div>
                         </div>
                         <div class="error-row">
-                            <form:errors path="mailLocale" cssClass="error-style danger" element="span"/>
+                            <div class="error-item">
+                                <i class="bi bi-exclamation-circle-fill warning"></i>
+                                <form:errors path="mailLocale" cssClass="error-style warning" element="span"/>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="user-info-row">
                     <div class="submit-row">
-                        <form:button type="submit" class="btn button-color btn-lg"><span class="light-text"><spring:message code="register.btnString"/></span></form:button>
+                        <form:button type="submit" class="btn button-color btn-lg"><span class="light-text h5"><spring:message code="register.btnString"/></span></form:button>
                     </div>
                 </div>
             </form:form>

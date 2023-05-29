@@ -5,6 +5,26 @@ let currentTab = 'unique-trip-tab';
 const uniqueTripTabElement = document.getElementById('unique-trip-tab');
 const multitripTabElement = document.getElementById('multitrip-tab');
 
+const originCitySelectorComponent = document.getElementById('originCityId');
+const destinationCitySelectorComponent = document.getElementById('destinationCityId');
+const swapCitiesButtonComponent = document.getElementById('swap-cities');
+
+const checkCitySelectorValues = () => {
+    swapCitiesButtonComponent.disabled = !(originCitySelectorComponent.value > 0 || destinationCitySelectorComponent.value > 0);
+}
+
+checkCitySelectorValues();
+originCitySelectorComponent.addEventListener('change',  checkCitySelectorValues);
+destinationCitySelectorComponent.addEventListener('change',  checkCitySelectorValues);
+
+swapCitiesButtonComponent.addEventListener('click', () => {
+    const originCityId = originCitySelectorComponent.value;
+    const destinationCityId = destinationCitySelectorComponent.value;
+    originCitySelectorComponent.value = destinationCityId;
+    destinationCitySelectorComponent.value = originCityId;
+    checkCitySelectorValues();
+});
+
 
 const minPriceElement = document.getElementById('min-price');
 const maxPriceElement = document.getElementById('max-price');
@@ -55,9 +75,9 @@ if(dateFormatRegex.test(initialDateValue)) {
     dayRepeatTextElement.innerText = dayOfWeek;
 }
 
-if(initialLastDateValue !== "") {
-    multitripTabElement.classList.add('active');
+if(isMultitripInput.value === "true") {
     isMultitripInput.value = true;
+    multitripTabElement.classList.add('active');
     currentTab = 'multitrip-tab';
     new bootstrap.Collapse(multitripContainerElement, {
         show: true

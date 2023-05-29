@@ -24,6 +24,6 @@ class LastDateIsAfterDateValidator implements ConstraintValidator<LastDateIsAfte
 
     @Override
     public boolean isValid(RecurrentTripForm form, ConstraintValidatorContext constraintValidatorContext) {
-        return !form.isMultitrip() || form.getLastDate() == null || form.getLastDate().isAfter(form.getDate());
+        return !form.isMultitrip() || form.getDate() == null || form.getLastDate() == null || form.getLastDate().isAfter(form.getDate());
     }
 }

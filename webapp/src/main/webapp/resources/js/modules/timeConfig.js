@@ -17,6 +17,7 @@ export const timeConfig = {
     },
     localization: {
         format: 'HH:mm',
+        hourCycle: 'h23',
     },
     stepping: 10,
 }

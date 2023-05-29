@@ -17,8 +17,8 @@
             </a>
         </div>
         <div class="main-container-style primary-bg-color">
-            <h1 class="light-text"><spring:message code="login.title"/></h1>
-            <hr class="light-text">
+            <h2 class="light-text"><spring:message code="login.title"/></h2>
+            <hr class="light-text" id="title-hr">
             <c:url value="/users/login" var="loginUrl"/>
             <form action="${loginUrl}" method="post">
                 <div class="user-info-row">
@@ -45,18 +45,21 @@
                         </label>
                     </div>
                 </div>
-                <div class="user-info-row">
-                    <div class="error-container">
-                        <c:if test="${param.error != null}"><span class="error"><spring:message code="login.error"/></span></c:if>
+                <c:if test="${param.error != null}">
+                    <div class="user-info-row">
+                        <div class="error-container">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <span class="warning"><spring:message code="login.error"/></span>
+                        </div>
                     </div>
-                </div>
+                </c:if>
                 <div class="d-grid gap-2 submit-row">
                     <button type="submit" class="btn button-color btn-lg">
-                        <span class="light-text"><spring:message code="login.title"/></span>
+                        <span class="light-text h5"><spring:message code="login.btnString"/></span>
                     </button>
                 </div>
             </form>
-            <hr>
+            <hr class="light-text">
             <div class="create-container">
                 <h4 class="light-text"><spring:message code="login.register"/></h4>
                 <a href="<c:url value="/users/create"/>">

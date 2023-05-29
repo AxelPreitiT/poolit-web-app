@@ -43,18 +43,20 @@
                                 <spring:message code="searchTrip.foundFormat" arguments="${tripsContent.startNumber+1}, ${tripsContent.endNumber+1}, ${tripsContent.totalCount}"/>
                             </span>
                         </div>
-                        <c:url value="" var="basePaginationUrl">
-                            <c:forEach var="p" items="${param}">
-                                <c:if test="${!(p.key eq 'page')}">
-                                    <c:param name="${p.key}" value="${p.value}"/>
-                                </c:if>
-                            </c:forEach>
-                        </c:url>
-                        <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
-                            <jsp:param name="totalPages" value="${tripsContent.totalPages}"/>
-                            <jsp:param name="currentPage" value="${tripsContent.currentPage+1}"/>
-                            <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
-                        </jsp:include>
+                        <c:if test="${tripsContent.moreThanOnePage}">
+                            <c:url value="" var="basePaginationUrl">
+                                <c:forEach var="p" items="${param}">
+                                    <c:if test="${!(p.key eq 'page')}">
+                                        <c:param name="${p.key}" value="${p.value}"/>
+                                    </c:if>
+                                </c:forEach>
+                            </c:url>
+                            <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+                                <jsp:param name="totalPages" value="${tripsContent.totalPages}"/>
+                                <jsp:param name="currentPage" value="${tripsContent.currentPage+1}"/>
+                                <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
+                            </jsp:include>
+                        </c:if>
                     </c:when>
                     <c:otherwise>
                         <div class="no-results-container">

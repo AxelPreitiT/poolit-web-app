@@ -25,14 +25,23 @@
                     <span class="h3 secondary-color title-container"><spring:message code="createCar.carInfo"/></span>
                     <spring:message code="createCar.carInfoPlaceholder" var="carInfoHolder"/>
                     <form:input path="carInfo" cssClass="form-control" id="carInfo" placeholder='${carInfoHolder}'/>
-                    <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
+                    <div class="error-item">
+                        <i class="bi bi-exclamation-circle-fill danger"></i>
+                        <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
+                    </div>
                 </div>
                 <div class="car-data-row">
                     <span class="h3 secondary-color title-container"><spring:message code="createCar.plate"/></span>
                     <spring:message code="createCar.platePlaceholder" var="carPlateHolder"/>
                     <form:input path="plate" cssClass="form-control" id="plate" placeholder='${carPlateHolder}'/>
-                    <form:errors path="plate" cssClass="danger error-style" element="span"/>
-                    <form:errors cssClass="danger error-style" element="span"/>
+                    <div class="error-item">
+                        <i class="bi bi-exclamation-circle-fill danger"></i>
+                        <form:errors path="plate" cssClass="danger error-style" element="span"/>
+                    </div>
+                    <div class="error-item">
+                        <i class="bi bi-exclamation-circle-fill danger"></i>
+                        <form:errors cssClass="danger error-style" element="span"/>
+                    </div>
                 </div>
             </div>
             <div id="car-image-container">
@@ -41,11 +50,12 @@
                 </div>
                 <div id="car-image-display">
                     <label for="image-file" id="image-label" class="secondary-bg-color shadow-btn button-style">
-                        <i class="bi bi-car-front-fill light-text h1"></i>
+                        <i class="bi bi-image light-text h1"></i>
                     </label>
                     <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
                 </div>
-                <div id="car-image-error">
+                <div id="car-image-error" class="error-item">
+                    <i class="bi bi-exclamation-circle-fill danger"></i>
                     <form:errors path="imageFile" cssClass="danger error-style" element="span"/>
                 </div>
             </div>
