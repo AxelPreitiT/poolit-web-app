@@ -1,14 +1,5 @@
 @import "../base/elements.css";
 
-.error-style {
-    font-size: 0.9rem;
-    font-weight: 400;
-}
-
-.right-item {
-    margin-left: auto;
-}
-
 div.main-container-style {
     margin-left: 20%;
     margin-right: 20%;
@@ -67,11 +58,37 @@ div.main-container-style {
     display: none;
 }
 
-.error-row:has(.error-style-line), .error-row .error-style-line {
+.error-item:not(:has(span)) {
+    display: none;
+}
+
+.error-item:has(.error-style-line), .error-item .error-style-line {
     width: 100%;
 }
 
-.input-row > input, .input-row > div, .error-row > span {
+.error-item {
+    margin-top: 0.2em;
+    margin-bottom: 0.5em;
+}
+
+.error-item > i {
+    margin-right: 0.2em;
+}
+
+.error-item > i.align-to-input-icon {
+    margin-left: 0.45em;
+}
+
+.error-style {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.right-item {
+    margin-left: auto;
+}
+
+.input-row > input, .input-row > div, .error-item {
     width: 15rem;
 }
 

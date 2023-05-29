@@ -54,16 +54,16 @@ public class Passenger{
     }
 
     public String getStartDateString(){
-        return startDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return startDateTime.format(Format.getDateFormatter());
     }
     public String getEndDateString(){
-        return endDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return endDateTime.format(Format.getDateFormatter());
     }
     public String getStartTimeString(){
-        return String.format("%02d:%02d",startDateTime.getHour(),startDateTime.getMinute());
+        return startDateTime.format(Format.getTimeFormatter());
     }
     public String getEndTimeString(){
-        return String.format("%02d:%02d",endDateTime.getHour(),endDateTime.getMinute());
+        return endDateTime.format(Format.getTimeFormatter());
     }
     public boolean getRecurrent(){
         return !startDateTime.equals(endDateTime);

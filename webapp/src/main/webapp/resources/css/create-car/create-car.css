@@ -97,9 +97,17 @@
     height: 0;
 }
 
+.error-item:not(:has(span)) {
+    display: none;
+}
+
+.error-item > i {
+    margin-right: 0.2em;
+}
+
 .error-style {
     font-size: 0.9rem;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 #confirm-button-container {

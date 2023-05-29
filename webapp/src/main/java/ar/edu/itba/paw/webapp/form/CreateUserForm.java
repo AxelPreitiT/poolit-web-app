@@ -27,7 +27,6 @@ public class CreateUserForm {
     @Size(min = 3, max = 20)
     private String password;
 
-    @Size(min = 3, max = 20)
     private String repeatPassword;
 
     @Min(value = 1)

@@ -4,7 +4,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <link href="<c:url value="/resources/css/components/search-filters.css"/>" rel="stylesheet" type="text/css"/>
-<script src="<c:url value="/resources/js/components/searchFilters.js"/>" type="module"></script>
 
 <!-- Beans:
         - searchTripForm: form backing object
@@ -18,7 +17,7 @@
 
 <form:form modelAttribute="searchTripForm" method="get" action="${param.url}" id="form-style" cssClass="primary-bg-color">
     <div id="search-filters-container">
-        <form:hidden path="multitrip" id="is-multitrip" value="false"/>
+        <form:hidden path="multitrip" id="is-multitrip"/>
         <ul id="search-tabs" class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link secondary-bg-color" id="unique-trip-tab">
@@ -40,30 +39,39 @@
                     <h5 class="light-text"><spring:message code="searchFilters.route"/></h5>
                 </div>
                 <div class="input-container">
-                    <div class="input-row">
+                    <div class="input-row" id="route-input-row">
                         <div id="origin-city-selector">
-                            <spring:message code="searchFilters.origin" var="originDefaultText"/>
+                            <span class="light-text subtitle"><spring:message code="searchFilters.origin"/></span>
+                            <spring:message code="city-selector.district" var="districtDefaultText"/>
                             <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                 <jsp:param name="id" value="originCityId"/>
-                                <jsp:param name="defaultText" value="${originDefaultText}"/>
+                                <jsp:param name="defaultText" value="${districtDefaultText}"/>
                             </jsp:include>
                         </div>
-                        <div class="route-arrow">
-                            <i class="bi bi-arrow-right light-text"></i>
+                        <div id="swap-cities-container">
+                            <button type="button" class="btn button-color shadow-btn" id="swap-cities" title="<spring:message code="searchFilters.swapDistricts"/>" disabled>
+                                <i class="bi bi-arrow-left-right light-text"></i>
+                            </button>
                         </div>
                         <div id="destination-city-selector">
-                            <spring:message code="searchFilters.destination" var="destinationDefaultText"/>
+                            <span class="light-text"><spring:message code="searchFilters.destination"/></span>
                             <jsp:include page="/WEB-INF/jsp/components/city-selector.jsp">
                                 <jsp:param name="id" value="destinationCityId"/>
-                                <jsp:param name="defaultText" value="${destinationDefaultText}"/>
+                                <jsp:param name="defaultText" value="${districtDefaultText}"/>
                             </jsp:include>
                         </div>
                     </div>
                 </div>
                 <div class="error-container">
                     <div class="error-row">
-                        <form:errors path="originCityId" cssClass="formError danger" element="span"/>
-                        <form:errors path="destinationCityId" cssClass="formError danger right-item" element="span"/>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="originCityId" cssClass="warning" element="span"/>
+                        </div>
+                        <div class="error-item right-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="destinationCityId" cssClass="warning" element="span"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,8 +98,14 @@
                         </div>
                     </div>
                     <div class="error-row">
-                        <form:errors path="date" cssClass="formError danger" element="span"/>
-                        <form:errors path="time" cssClass="formError danger right-item" element="span"/>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="date" cssClass="warning" element="span"/>
+                        </div>
+                        <div class="error-item right-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="time" cssClass="warning" element="span"/>
+                        </div>
                     </div>
                     <div id="multitrip-container" class="collapse">
                         <div class="collapse" id="day-repeat-container">
@@ -129,14 +143,23 @@
                 </div>
                 <div class="error-container">
                     <div class="error-row">
-                        <form:errors path="minPrice" cssClass="formError danger" element="span"/>
-                        <form:errors path="maxPrice" cssClass="formError danger right-item" element="span"/>
+                        <div class="error-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="minPrice" cssClass="warning" element="span"/>
+                        </div>
+                        <div class="error-item right-item">
+                            <i class="bi bi-exclamation-circle-fill warning"></i>
+                            <form:errors path="maxPrice" cssClass="warning" element="span"/>
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="custom-errors-container">
                 <div class="error-row">
-                    <form:errors cssClass="formError danger" element="span"/>
+                    <div class="error-item">
+                        <i class="bi bi-exclamation-circle-fill warning"></i>
+                        <form:errors cssClass="warning" element="span"/>
+                    </div>
                 </div>
             </div>
             <div class="search-button-container">
@@ -148,4 +171,4 @@
         </div>
     </div>
 </form:form>
-
+<script src="<c:url value="/resources/js/components/searchFilters.js"/>" type="module"></script>

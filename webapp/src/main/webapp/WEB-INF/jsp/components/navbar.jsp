@@ -34,8 +34,8 @@
                     <div class="create-trip-btn">
                         <a href="<c:url value="/trips/create"/>">
                             <button class="btn button-style button-color shadow-btn">
-                                <i class="bi bi-plus light-text h3"></i>
-                                <span class="button-text-style light-text h3"><spring:message code="navbar.btnCreated"/></span>
+                                <i class="bi bi-plus light-text h4"></i>
+                                <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
                             </button>
                         </a>
                     </div>
@@ -43,33 +43,27 @@
                 <sec:authorize access="hasRole('ROLE_USER')">
                     <div class="create-trip-btn" data-bs-toggle="modal" data-bs-target="#modal-create">
                         <button class="btn button-style button-color shadow-btn">
-                            <i class="bi bi-plus light-text h3"></i>
-                            <span class="button-text-style light-text h3"><spring:message code="navbar.btnCreated"/></span>
+                            <i class="bi bi-plus light-text h4"></i>
+                            <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
                         </button>
                     </div>
                     <div class="modal fade" id="modal-create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h3>
+                                    <h4 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h4>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div>
-                                        <span class="text"><spring:message code="navbar.modal.warning"/></span>
-                                    </div>
-                                    <div class="warning-text">
-                                        <span class="italic-text text bold"><spring:message code="navbar.modal.secondWarning"/></span>
+                                        <span class="text"><spring:message code="navbar.modal.info"/></span>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn primary-bg-color" data-bs-dismiss="modal">
-                                        <span class="light-text"><spring:message code="navbar.modal.btnCancel"/></span>
-                                    </button>
                                     <c:url value="/changeRole" var="changeRole"/>
                                     <form:form method="POST" action="${changeRole}">
                                         <button type="submit" class="btn secondary-bg-color">
-                                            <span class="light-text"><spring:message code="navbar.modal.btnAccept"/></span>
+                                            <span class="light-text"><spring:message code="navbar.modal.btnContinue"/></span>
                                         </button>
                                     </form:form>
                                 </div>

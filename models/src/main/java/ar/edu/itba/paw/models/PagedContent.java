@@ -53,4 +53,8 @@ public class PagedContent<T>{
     public int getTotalPages(){
         return (int) Math.ceil( (double) totalCount /pageSize);
     }
+
+    public boolean isMoreThanOnePage(){
+        return getTotalPages()>1;
+    }
 }

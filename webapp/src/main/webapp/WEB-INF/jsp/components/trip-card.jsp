@@ -135,7 +135,11 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <span class="text"><spring:message code="tripCard.user.cancel.warning.title" arguments="${trip.originCity.name}, ${trip.destinationCity.name}"/></span>
+                        <span class="text"><spring:message code="tripCard.user.cancel.warning.title"/>
+                          <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
+                          <strong class="secondary-color">-</strong>
+                          <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
+                        </span>
                         <span class="text"><spring:message code="tripCard.user.cancel.warning.message"/></span>
                     </div>
                     <div class="modal-footer">

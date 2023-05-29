@@ -2,10 +2,18 @@
 @import "users.css";
 @import "../base/elements.css";
 
+hr {
+    margin: 1em 0;
+}
+
+hr#title-hr {
+    margin-top: 0;
+}
+
 .full-container{
     display: flex;
     flex-direction: column;
-    margin-top: 5%;
+    margin-top: 2em;
 }
 
 div.main-container-style {
@@ -17,15 +25,11 @@ div.main-container-style {
     display: none;
 }
 
-.error-container{
-    height: 20px;
+.error-container span {
+    font-weight: 500;
+    margin-left: 5px;
 }
 
-.error{
-    color: red;
-    font-size: 1.2rem;
-    font-weight: 400;
-}
 
 .form-floating{
     width: 100%;
