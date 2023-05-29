@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+
 public class CityDaoImpl implements CityDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CityDaoImpl.class);

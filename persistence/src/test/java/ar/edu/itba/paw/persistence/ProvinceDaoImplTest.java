@@ -27,7 +27,7 @@ public class ProvinceDaoImplTest {
     private DataSource dataSource;
 
     @Autowired
-    private ProvinceDaoImpl provinceDao;
+    private ProvinceHibernateDao provinceDao;
 
     private JdbcTemplate jdbcTemplate;
 

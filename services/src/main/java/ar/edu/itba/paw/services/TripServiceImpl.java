@@ -211,7 +211,7 @@ public class TripServiceImpl implements TripService {
         catch (Exception e) {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
         }
-        return tripDao.addPassenger(trip,passenger);
+        return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
     }
     @Transactional
     @Override

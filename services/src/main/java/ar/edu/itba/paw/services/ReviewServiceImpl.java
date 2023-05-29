@@ -29,13 +29,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public Review createReview(long tripId, Passenger passenger, int rating, String review) {
+    public Review createReview(Trip trip, Passenger passenger, int rating, String review) {
         if(!canReview(passenger)){
             IllegalStateException e = new IllegalStateException();
-            LOGGER.error("Passenger with id {} tried to review trip with id {}, but it's not finished yet", passenger.getUserId(), tripId, e);
+            LOGGER.error("Passenger with id {} tried to review trip with id {}, but it's not finished yet", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        return reviewDao.create(tripId, passenger, rating, review);
+        return reviewDao.create(trip, passenger.getUser(), rating, review);
     }
 
     @Override
@@ -53,10 +53,6 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewDao.findReviewsByUser(user);
     }
 
-    @Override
-    public List<Long> getTripIdReviewedByUser(User user) {
-        return reviewDao.findTripIdByUser(user);
-    }
 
     @Override
     public boolean canReview(Passenger passenger) {

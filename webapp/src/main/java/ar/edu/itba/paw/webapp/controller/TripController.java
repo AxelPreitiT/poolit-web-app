@@ -260,7 +260,8 @@ public class TripController extends LoggedUserController {
         }
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
-        reviewService.createReview(tripId, passenger, form.getRating(), form.getReview());
+        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
+        reviewService.createReview(trip, passenger, form.getRating(), form.getReview());
         final ModelAndView mav = tripDetailsForPassenger(tripId, user, form);
         mav.addObject("tripReviewed", true);
         return mav;
