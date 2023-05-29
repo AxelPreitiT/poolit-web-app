@@ -78,13 +78,6 @@
     text-align: center;
 }
 
-.review-form{
-   height: 200px;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-}
-
 .modal-dialog {
     max-width: fit-content !important;
 }

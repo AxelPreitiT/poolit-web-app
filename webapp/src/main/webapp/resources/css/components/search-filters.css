@@ -16,27 +16,59 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    column-gap: 1em;
-    margin-bottom: 0;
+    column-gap: 0.5em;
+    margin-bottom: -0.5em;
 }
 
 .error-row:not(:has(span)) {
     display: none;
 }
 
-.error-row > span {
+.error-item {
+    width: 48%;
+}
+
+.error-item:not(:has(span)) {
+    display: none;
+}
+
+.error-item > * {
+    font-size: 0.9rem;
+}
+
+.error-item > i {
+    margin-right: 0.2em;
+}
+
+.error-item > span {
     flex-grow: 1;
     word-break: break-word;
     max-width: 49%;
+    font-weight: 500;
 }
 
 .error-row > .right-item {
     margin-left: auto;
 }
 
-.formError{
-    font-size: 0.9rem;
-    font-weight: 400;
+.route-filter .error-row > .error-item {
+    max-width: 45%;
+}
+
+.date-filter .error-row {
+    margin-bottom: 0.1em;
+}
+
+.price-filter .error-row {
+    justify-content: flex-start;
+}
+
+.price-filter .error-row > .error-item {
+    max-width: 45%;
+}
+
+#custom-errors-container .error-item {
+    width: 100%;
 }
 
 #form-style {
@@ -83,6 +115,11 @@
     row-gap: 1.5em;
 }
 
+#swap-cities {
+    padding: 0.3em;
+    margin-bottom: 0.1em;
+}
+
 .route-filter, .date-filter, .price-filter {
     display: flex;
     flex-direction: column;
@@ -103,6 +140,15 @@
     flex-direction: column;
     justify-content: flex-start;
     row-gap: 0.5em;
+}
+
+#route-input-row {
+    margin-top: -0.5em;
+    align-items: flex-end;
+}
+
+#route-input-row > div > span {
+    font-size: 0.8rem;
 }
 
 .input-row {

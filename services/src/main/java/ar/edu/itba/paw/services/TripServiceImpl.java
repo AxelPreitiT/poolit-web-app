@@ -101,7 +101,7 @@ public class TripServiceImpl implements TripService {
         LocalDateTime ans;
         try{
             String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+            ans = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
         }catch (Exception e){
             LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
             return Optional.empty();
@@ -211,7 +211,7 @@ public class TripServiceImpl implements TripService {
         catch (Exception e) {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
         }
-        return tripDao.addPassenger(trip,passenger);
+        return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
     }
     @Transactional
     @Override

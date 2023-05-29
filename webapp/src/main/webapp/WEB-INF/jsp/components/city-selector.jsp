@@ -15,7 +15,7 @@
 <jsp:useBean id="cities" scope="request" type="java.util.List"/>
 
 <div>
-    <form:select path="${param.id}" cssClass="form-select form-select-sm">
+    <form:select path="${param.id}" cssClass="form-select form-select-sm" id="${param.id}">
         <form:option value="-1" label="${param.defaultText}"/>
         <form:options items="${cities}" itemValue="id" itemLabel="name"/>
     </form:select>

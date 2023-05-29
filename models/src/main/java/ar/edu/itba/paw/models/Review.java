@@ -1,28 +1,55 @@
 package ar.edu.itba.paw.models;
 
+import ar.edu.itba.paw.models.trips.Trip;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "reviews")
 public class Review {
+    @Id
+    @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="reviews_review_id_seq" )
+    @SequenceGenerator(sequenceName = "reviews_review_id_seq" , name = "reviews_review_id_seq", allocationSize = 1)
+    @Column(name = "review_id")
+    private Long reviewId;
 
-    private final long reviewId;
-    private final long tripId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "trip_id")
+    private Trip trip;
 
-    private final User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private final int rating;
+    @Column(name = "rating")
+    private int rating;
 
-    private final String review;
+    @Column(name = "review")
+    private String review;
 
-    public Review(long reviewId, long tripId, User user, int rating, String review) {
-        this.reviewId = reviewId;
-        this.tripId = tripId;
+//    public Review(long reviewId, Trip trip , User user, int rating, String review) {
+//        this.reviewId = reviewId;
+//        this.trip = trip;
+//        this.user = user;
+//        this.rating = rating;
+//        this.review = review;
+//    }
+
+    public Review(Trip trip, User user, int rating, String review) {
+        this.trip = trip;
         this.user = user;
         this.rating = rating;
         this.review = review;
     }
 
+    protected Review(){
+
+    }
+
     @Override
     public String toString() {
         return String.format("Review { id: %d, tripId: %d, userId: %d, rating: %d, review: '%s' }",
-                reviewId, tripId, user.getUserId(), rating, review);
+                reviewId, trip.getTripId(), user.getUserId(), rating, review);
     }
 
     public long getReviewId() {
@@ -30,16 +57,13 @@ public class Review {
     }
 
     public long getTripId() {
-        return tripId;
+        return trip.getTripId();
     }
 
     public User getUser() {
         return user;
     }
 
-    public long getDriver() {
-        return tripId;
-    }
 
     public String getReview() {
         return review;

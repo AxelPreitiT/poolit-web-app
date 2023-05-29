@@ -7,7 +7,6 @@ a {
 .main-container {
     display: flex;
     margin: 3% 2% 3% 2%;
-    height: 100%;
     max-width: none;
     gap: 2%;
 }

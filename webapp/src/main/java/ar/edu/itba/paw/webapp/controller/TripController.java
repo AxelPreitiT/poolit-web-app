@@ -84,6 +84,10 @@ public class TripController extends LoggedUserController {
     }
 
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
+        return tripDetailsForPassenger(tripId,user, new ReviewForm());
+    }
+
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final ReviewForm reviewForm){
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
         final boolean done = reviewService.canReview(passenger);
@@ -93,7 +97,8 @@ public class TripController extends LoggedUserController {
         mav.addObject("done",done);
         mav.addObject("reviewed",reviewed);
         mav.addObject("passenger",passenger);
-        mav.addObject("reviewForm", new ReviewForm());
+        mav.addObject("reviewForm", reviewForm);
+        mav.addObject("failedReview", reviewForm.isFailedReview());
         return mav;
     }
 
@@ -245,12 +250,19 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
     public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
-                                   @ModelAttribute("reviewForm") final ReviewForm form){
+                                   @Valid @ModelAttribute("reviewForm") final ReviewForm form,
+                                   final BindingResult errors){
         LOGGER.debug("POST Request to /trips/{}/review", tripId);
+        if(errors.hasErrors()) {
+            LOGGER.warn("Errors found in ReviewForm: {}", errors.getAllErrors());
+            form.setFailedReview(true);
+            return tripDetailsForPassenger(tripId, userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new), form);
+        }
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
-        reviewService.createReview(tripId, passenger, form.getRating(), form.getReview());
-        final ModelAndView mav = tripDetailsForPassenger(tripId, user);
+        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
+        reviewService.createReview(trip, passenger, form.getRating(), form.getReview());
+        final ModelAndView mav = tripDetailsForPassenger(tripId, user, form);
         mav.addObject("tripReviewed", true);
         return mav;
     }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Repository
+// @Repository
 public class ImageDaoImpl implements ImageDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageDaoImpl.class);

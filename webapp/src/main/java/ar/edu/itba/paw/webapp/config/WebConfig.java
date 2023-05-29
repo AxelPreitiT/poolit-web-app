@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
@@ -17,6 +14,10 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -28,8 +29,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 @EnableAsync
@@ -68,10 +72,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ds;
     }
 
-    @Bean
-    public PlatformTransactionManager transactionManager(final DataSource ds){
-        return new DataSourceTransactionManager(ds);
-    }
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
@@ -93,6 +93,30 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         super.addResourceHandlers(registry);
 
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
+
+    //Hibernate ORM
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
+        factoryBean.setDataSource(dataSource());
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        factoryBean.setJpaVendorAdapter(vendorAdapter);
+        final Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
+        //TODO: sacar
+        // Si ponen esto en prod, hay tabla!!!
+//        properties.setProperty("hibernate.show_sql", "true");
+//        properties.setProperty("format_sql", "true");
+        factoryBean.setJpaProperties(properties);
+        return factoryBean;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
     }
 
     @Bean

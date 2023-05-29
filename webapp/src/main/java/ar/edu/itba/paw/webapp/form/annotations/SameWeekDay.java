@@ -24,6 +24,6 @@ class SameWeekDayValidator implements ConstraintValidator<SameWeekDay, Recurrent
 
     @Override
     public boolean isValid(RecurrentTripForm form, ConstraintValidatorContext constraintValidatorContext) {
-        return !form.isMultitrip() || form.getLastDate() == null || form.getDate().getDayOfWeek().equals(form.getLastDate().getDayOfWeek());
+        return !form.isMultitrip() || form.getDate() == null || form.getLastDate() == null || form.getDate().getDayOfWeek().equals(form.getLastDate().getDayOfWeek());
     }
 }

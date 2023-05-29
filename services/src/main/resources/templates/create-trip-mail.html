@@ -75,30 +75,30 @@
     <p th:text="#{emails.createTrip.message}"></p>
     <div>
         <div class="info-container">
-            <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
-           <span>
+            <img style="display: inline; margin: 4px"  src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
+           <span  style="margin: 4px">
                <spam th:text="#{emails.startLocation (${trip.originAddress},${trip.originCity.name})}"/>
            </span>
         </div>
-        <div>
+        <div style="margin: 4px">
             <div class="dotted-line"></div>
         </div>
         <div class="info-container">
-            <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102389955977818182/geo-alt-fill.png" alt="endLocation"/>
-            <span>
+            <img style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102389955977818182/geo-alt-fill.png" alt="endLocation"/>
+            <span style="margin: 4px">
               <span th:text="#{emails.endLocation (${trip.destinationAddress},${trip.destinationCity.name})}"/>
            </span>
         </div>
         <div class="info-container">
-            <img style="display: inline" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
-            <span>
+            <img  style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
+            <span style="margin: 4px">
                 <span th:text="#{${trip.dayOfWeekString}}"/> <span th:if="${trip.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${trip.startDateString}"/>
                 <span th:if="${trip.recurrent}" th:text="#{emails.toDate (${trip.endDateString})}"/> <span th:text="#{emails.time (${trip.startTimeString})}"/>
            </span>
         </div>
     </div>
     <div class="btn-container">
-        <a th:href="@{{baseUrl}/trips/created(baseUrl=${baseUrl})}" class="btn" th:text="#{emails.createTrip.button}"></a>
+        <a style="color: white !important;" th:href="@{{baseUrl}/trips/created(baseUrl=${baseUrl})}" class="btn" th:text="#{emails.createTrip.button}"></a>
     </div>
 </div>
 </body>

@@ -81,19 +81,19 @@
 }
 
 .danger {
-    color: #dc3545 !important;
+    color: #ff4242 !important;
 }
 
 .danger-bg-color {
-    background-color: #dc3545 !important;
+    background-color: #ff4242 !important;
 }
 
 .warning {
-    color: #ffc107 !important;
+    color: #ffdd00 !important;
 }
 
 .warning-bg-color {
-    background-color: #ffc107 !important;
+    background-color: #ffdd00 !important;
 }
 
 .error-code {
@@ -191,11 +191,11 @@
 }
 
 .warning {
-    color: #ffc107;
+    color: #ffdd00;
 }
 
 .warning-bg-color {
-    background-color: #ffc107;
+    background-color: #ffdd00;
 }
 
 .error-code {

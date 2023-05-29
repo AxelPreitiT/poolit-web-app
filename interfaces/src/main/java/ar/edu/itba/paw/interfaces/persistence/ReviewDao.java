@@ -11,15 +11,13 @@ import java.util.Optional;
 
 public interface ReviewDao {
 
-    Review create(long TripId, User user, int rating, String review);
+    Review create(Trip trip, User user, int rating, String review);
 
     double getRating(final User driver);
 
     List<Review> findByDriver(User driver);
 
     List<Review> findReviewsByUser(User user);
-
-    List<Long> findTripIdByUser(User user);
 
     Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger);
 }

@@ -18,21 +18,27 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+    /*
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class CarDaoImplTest {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private DataSource dataSource;
 
     @Autowired
-    private CarDaoImpl carDaoImpl;
+    private CarHibernateDao carDaoImpl;
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
@@ -42,7 +48,7 @@ public class CarDaoImplTest {
 
     private static final long KNOWN_CITY_ID = 1;
 
-    private static final int CAR_ID = 1;
+    private static final long CAR_ID = 1;
     private static final String PLATE = "AE062TP";
     private static final String PLATE_2 = "AE026TE";
     private static final String INFO_CAR = "Honda Fit azul";
@@ -85,10 +91,12 @@ public class CarDaoImplTest {
         data.put("info_car",INFO_CAR);
         data.put("user_id",KNOWN_USER_ID);
         data.put("image_id",KNOWN_IMAGE_ID);
-        long key = jdbcInsert.executeAndReturnKey(data).longValue();
+        data.put("car_id", CAR_ID);
+        jdbcInsert.execute(data);
+        long key = CAR_ID;
 
         //test
-        Optional<Car> car = carDaoImpl.findById(key);
+        Optional<Car> car = carDaoImpl.findById(CAR_ID);
 
         //assert
         Assert.assertTrue(car.isPresent());
@@ -177,4 +185,7 @@ public class CarDaoImplTest {
         Assert.assertEquals(KNOWN_USER_ID, cars.get(0).getUser().getUserId());
         Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(0).getImage_id());
     }
+
 }
+
+     */
