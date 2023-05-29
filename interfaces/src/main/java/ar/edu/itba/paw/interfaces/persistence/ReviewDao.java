@@ -19,7 +19,5 @@ public interface ReviewDao {
 
     List<Review> findReviewsByUser(User user);
 
-    List<Long> findTripIdByUser(User user);
-
     Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger);
 }

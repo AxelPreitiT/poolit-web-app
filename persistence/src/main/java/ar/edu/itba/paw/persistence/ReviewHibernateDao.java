@@ -40,16 +40,16 @@ public class ReviewHibernateDao implements ReviewDao {
 
     @Override
     public double getRating(User driver) {
-        Query avgQuery = em.createNativeQuery("SELECT AVG(rating) as avg FROM reviews NATURAL JOIN trips WHERE driver_id = :driverId");
+        Query avgQuery = em.createNativeQuery("SELECT coalesce(AVG(rating),0) as avg FROM reviews NATURAL JOIN trips WHERE driver_id = :driverId");
         avgQuery.setParameter("driverId", driver.getUserId());
-        return avgQuery.getFirstResult();
+        return ((List<Object>)avgQuery.getResultList()).stream().map(elem -> ((Number) elem).doubleValue()).findFirst().orElse(0.0);
     }
 
     @Override
     public List<Review> findByDriver(User driver) {
-        Query ListQuery = em.createQuery("from Review where trip.driver.userId = :driverId",Review.class);
-        ListQuery.setParameter("driverId", driver.getUserId());
-        return (List<Review>) ListQuery.getResultList();
+        TypedQuery<Review> listQuery = em.createQuery("from Review where trip.driver.userId = :driverId",Review.class);
+        listQuery.setParameter("driverId", driver.getUserId());
+        return listQuery.getResultList();
     }
 
 
@@ -63,13 +63,6 @@ public class ReviewHibernateDao implements ReviewDao {
         return result;
     }
 
-    @Override
-    public List<Long> findTripIdByUser(User user) {
-        LOGGER.debug("Looking for trips that were reviewed by user with id {} in the database", user.getUserId());
-        final List<Long> result = em.createQuery("select trip_id from Review r where r.user = :user", Long.class).setParameter("user",user).getResultList();
-        LOGGER.debug("Found {} in the database", result);
-        return result;
-    }
 
     @Override
     public Optional<Review> reviewByTripAndPassanger(Trip trip, Passenger passenger) {

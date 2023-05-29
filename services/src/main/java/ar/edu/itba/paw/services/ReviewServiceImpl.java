@@ -53,10 +53,6 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewDao.findReviewsByUser(user);
     }
 
-    @Override
-    public List<Long> getTripIdReviewedByUser(User user) {
-        return reviewDao.findTripIdByUser(user);
-    }
 
     @Override
     public boolean canReview(Passenger passenger) {

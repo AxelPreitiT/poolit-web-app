@@ -49,7 +49,7 @@ public class Review {
     @Override
     public String toString() {
         return String.format("Review { id: %d, tripId: %d, userId: %d, rating: %d, review: '%s' }",
-                reviewId, trip, user.getUserId(), rating, review);
+                reviewId, trip.getTripId(), user.getUserId(), rating, review);
     }
 
     public long getReviewId() {

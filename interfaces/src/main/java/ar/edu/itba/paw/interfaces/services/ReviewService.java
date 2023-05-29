@@ -16,8 +16,6 @@ public interface ReviewService {
 
     List<Review> getUsersIdReviews(User user);
 
-    List<Long> getTripIdReviewedByUser(User user);
-
     boolean canReview(Passenger passenger);
 
     boolean haveReview(Trip tripId, Passenger passenger);
