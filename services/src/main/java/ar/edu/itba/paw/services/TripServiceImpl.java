@@ -101,7 +101,7 @@ public class TripServiceImpl implements TripService {
         LocalDateTime ans;
         try{
             String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+            ans = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
         }catch (Exception e){
             LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
             return Optional.empty();
