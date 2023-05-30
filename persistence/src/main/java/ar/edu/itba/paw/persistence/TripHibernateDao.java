@@ -210,7 +210,23 @@ public class TripHibernateDao implements TripDao {
         });
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
-        return getTripPagedContent(page, pageSize, countQuery, idQuery);
+        @SuppressWarnings("unchecked")
+        Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
+        @SuppressWarnings("unchecked")
+        List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
+        if(ids.isEmpty()){
+            return new PagedContent<>(new ArrayList<>(),page,pageSize,total);
+        }
+        TypedQuery<Passenger> query = em.createQuery("from Passenger WHERE trip.tripId IN :ids and user.userId = :userId",Passenger.class);
+        query.setParameter("ids",ids);
+        query.setParameter("userId",user.getUserId());
+        List<Trip> ans = query.getResultList().stream().map(passenger ->{
+            Trip aux = passenger.getTrip();
+            aux.setQueryStartDateTime(passenger.getStartDateTime());
+            aux.setQueryEndDateTime(passenger.getEndDateTime());
+            return aux;
+        }).collect(Collectors.toList());
+        return new PagedContent<>(ans,page,pageSize,total);
     }
 
     private int getTripCountSeats(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime){
