@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.form.annotations.MPFile;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
 import ar.edu.itba.paw.webapp.form.annotations.NotSamePlate;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -19,6 +21,17 @@ public class CreateCarForm {
 
     @MPFile
     private MultipartFile imageFile;
+
+    @Min(value = 1)
+    private int seats;
+
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
 
     public String getCarInfo() {
         return carInfo;

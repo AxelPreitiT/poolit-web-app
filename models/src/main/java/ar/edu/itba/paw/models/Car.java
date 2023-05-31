@@ -12,6 +12,15 @@ public class Car {
     @Column(name = "car_id")
     private long carId;
 
+    @Column(name = "seats")
+    private int seats;
+
+    @Column(name = "features")
+    private FeatureCar features;
+
+    @Column(name = "brand")
+    private CarBrand brand;
+
     @Column(name = "plate")
     private String plate;
 
@@ -38,17 +47,44 @@ public class Car {
         this.image_id=image_id;
     }
 
-    public Car(String plate, String infoCar, User user, long image_id) {
+    public Car(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, FeatureCar features) {
         this.plate = plate;
         this.infoCar = infoCar;
         this.user = user;
         this.image_id = image_id;
+        this.seats = seats;
+        this.brand = brand;
+        this.features = features;
     }
 
     @Override
     public String toString() {
         return String.format("Car { id: %d, plate: '%s', infoCar: '%s', userId: %d, imageId: %d }",
                 carId, plate, infoCar, user.getUserId(), image_id);
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public CarBrand getBrand() {
+        return brand;
+    }
+
+    public FeatureCar getFeatures() {
+        return features;
+    }
+
+    public void setBrand(CarBrand brand) {
+        this.brand = brand;
+    }
+
+    public void setFeatures(FeatureCar features) {
+        this.features = features;
+    }
+
+    public void setSeats(int seats) {
+        this.seats = seats;
     }
 
     public long getCarId() {

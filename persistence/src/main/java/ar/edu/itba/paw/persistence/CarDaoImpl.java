@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
-
+/*
 //@Repository
 public class CarDaoImpl implements CarDao {
 
@@ -83,3 +83,4 @@ public class CarDaoImpl implements CarDao {
         return result;
     }
 }
+*/

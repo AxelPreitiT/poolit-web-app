@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.CarBrand;
+import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +24,9 @@ public class CarHibernateDao implements CarDao {
     private EntityManager em;
 
     @Override
-    public Car create(String plate, String infoCar, User user, long image_id) {
+    public Car create(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, FeatureCar features) {
         LOGGER.debug("Adding new car with plate '{}' from user with id {} to the database", plate, user.getUserId());
-        final Car car = new Car(plate,infoCar,user,image_id);
+        final Car car = new Car(plate,infoCar,user,image_id, seats, brand, features);
         em.persist(car);
         LOGGER.info("Car with plate '{}' added to the database with id {}", plate, car.getCarId());
         LOGGER.debug("New {}", car);

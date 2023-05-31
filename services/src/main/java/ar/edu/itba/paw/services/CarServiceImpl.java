@@ -3,6 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.CarBrand;
+import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,8 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public Car createCar(String plate, String infoCar, User user, long image_id) {
-        return carDao.create(plate, infoCar, user, image_id);
+    public Car createCar(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, FeatureCar features){
+        return carDao.create(plate, infoCar, user, image_id, seats, brand, features);
     }
 
     @Override

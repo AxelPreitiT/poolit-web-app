@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.CarBrand;
+import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -57,7 +59,7 @@ public class CarController extends LoggedUserController {
         try {
             byte[] data = form.getImageFile().getBytes();
             final Image image=imageService.createImage(data);
-            carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId() );
+            carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), CarBrand.HONDA, FeatureCar.AIR);
         } catch (IOException e) {
             LOGGER.error("Error while reading image file", e);
             throw e;

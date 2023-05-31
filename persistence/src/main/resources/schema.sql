@@ -41,10 +41,14 @@ CREATE TABLE IF NOT EXISTS cars(
     info_car TEXT NOT NULL,
     user_id INT NOT NULL,
     image_id INT DEFAULT 1,
+    seats INT NOT NULL,
+    features INT NOT NULL,
+    brand INT NOT NULL,
     UNIQUE(user_id,plate),
     CONSTRAINT cars_to_users FOREIGN KEY (user_id) REFERENCES users (user_id),
     CONSTRAINT cars_to_images FOREIGN KEY (image_id) REFERENCES images (image_id)
 );
+
 CREATE TABLE IF NOT EXISTS trips(
     trip_id SERIAL PRIMARY KEY,
     max_passengers INT,

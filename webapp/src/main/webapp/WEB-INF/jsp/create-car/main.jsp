@@ -57,13 +57,13 @@
                         <form:errors cssClass="danger error-style" element="span"/>
                     </div>
                 </div>
-                <div class"car-data-row">
-                    <div class="h3 secondary-color title-container">
-                        <div><spring:message code="createCar.seats"/></div>
-                    </div>
-                    <div>
-                    <input cssClass="form-control form-control-sm" placeholder="4"/>
-                    <div class="h6 secondary-color title-container"> <spring:message code="createCar.seatsChange"/> </div>
+                <div class="car-data-row">
+                    <div class="h3 secondary-color title-container"><div><spring:message code="createCar.seats"/></div></div>
+                    <spring:message code="createCar.seatsChange" var="seatsChange"/>
+                    <form:input path="seats" cssClass="form-control" id="seats" placeholder='${seatsChange}'/>
+                    <div class="error-item">
+                        <i class="bi bi-exclamation-circle-fill danger"></i>
+                        <form:errors path="seats" cssClass="danger error-style" element="span"/>
                     </div>
                 </div>
             </div>
