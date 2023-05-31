@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "cars")
@@ -15,9 +16,11 @@ public class Car {
     @Column(name = "seats")
     private int seats;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "features")
     private FeatureCar features;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "brand")
     private CarBrand brand;
 
@@ -71,16 +74,16 @@ public class Car {
         return brand;
     }
 
-    public FeatureCar getFeatures() {
-        return features;
+    public void setFeatures(FeatureCar features) {
+        this.features = features;
     }
 
     public void setBrand(CarBrand brand) {
         this.brand = brand;
     }
 
-    public void setFeatures(FeatureCar features) {
-        this.features = features;
+    public FeatureCar getFeatures() {
+        return features;
     }
 
     public void setSeats(int seats) {
