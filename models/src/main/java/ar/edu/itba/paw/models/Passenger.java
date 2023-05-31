@@ -70,7 +70,10 @@ public class Passenger{
     }
 
     public Trip getTrip() {
-        return trip;
+        final Trip ans =  trip;
+        trip.setQueryStartDateTime(startDateTime);
+        trip.setQueryEndDateTime(endDateTime);
+        return ans;
     }
 
     public User getUser() {
@@ -123,4 +126,9 @@ public class Passenger{
     }
 
     public long getUserImageId() { return user.getUserImageId(); }
+
+    public double getTotalPrice(){
+        //Hacemos getTrip para tener bien las fechas de query
+        return getTrip().getQueryPrice();
+    }
 }
