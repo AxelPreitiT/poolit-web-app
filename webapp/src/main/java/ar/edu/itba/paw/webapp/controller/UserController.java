@@ -112,7 +112,9 @@ public class UserController extends LoggedUserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return new ModelAndView("redirect:/users/login" );
+        final ModelAndView mav = new ModelAndView("/users/login");
+        mav.addObject("sentToken", true);
+        return mav;
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
@@ -226,7 +228,9 @@ public class UserController extends LoggedUserController {
             String token = tokenService.updateToken(user.get());
             emailService.sendVerificationEmail(user.get(), token);
         }
-        return new ModelAndView("redirect:/users/login");
+        final ModelAndView mav = new ModelAndView("/users/login");
+        mav.addObject("sentToken", true);
+        return mav;
     }
 
 

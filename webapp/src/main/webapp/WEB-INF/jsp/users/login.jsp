@@ -68,5 +68,13 @@
             </div>
         </div>
     </div>
+    <c:if test="${!(empty sentToken) && sentToken}">
+        <div id="toast-container">
+            <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                <jsp:param name="title" value="sendToken.success.title"/>
+                <jsp:param name="message" value="sendToken.success.message"/>
+            </jsp:include>
+        </div>
+    </c:if>
 </body>
 </html>
