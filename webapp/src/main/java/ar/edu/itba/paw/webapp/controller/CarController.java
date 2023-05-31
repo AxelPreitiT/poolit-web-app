@@ -22,6 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -44,6 +47,8 @@ public class CarController extends LoggedUserController {
     @RequestMapping(value = "/cars/create", method = RequestMethod.GET)
     public ModelAndView createCarForm(@ModelAttribute("createCarForm") final CreateCarForm form) {
         LOGGER.debug("GET Request to /cars/create");
+        //Por si se necesitan las marcas para el front
+        //List<CarBrand> brands = Arrays.asList(CarBrand.values());
         return new ModelAndView("create-car/main");
     }
 
@@ -59,7 +64,12 @@ public class CarController extends LoggedUserController {
         try {
             byte[] data = form.getImageFile().getBytes();
             final Image image=imageService.createImage(data);
-            carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), CarBrand.HONDA, FeatureCar.AIR);
+            //TODO: Manejar la marca y los features con forms algo asi
+            //carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), form.getBrand(), form.getListFeatures());
+            ArrayList<FeatureCar> listFeatures = new ArrayList<>();
+            listFeatures.add(FeatureCar.AIR);
+            listFeatures.add(FeatureCar.PET_FRIENDLY);
+            carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), CarBrand.HONDA, listFeatures);
         } catch (IOException e) {
             LOGGER.error("Error while reading image file", e);
             throw e;

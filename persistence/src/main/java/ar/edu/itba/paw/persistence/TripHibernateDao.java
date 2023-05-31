@@ -42,7 +42,6 @@ public class TripHibernateDao implements TripDao {
         return trip;
     }
 
-
     @Override
     public boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime) {
         Passenger aux = new Passenger(user,trip,startDateTime,endDateTime);

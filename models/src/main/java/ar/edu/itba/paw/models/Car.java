@@ -16,9 +16,11 @@ public class Car {
     @Column(name = "seats")
     private int seats;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "features")
-    private FeatureCar features;
+    @ElementCollection(targetClass = FeatureCar.class)
+    private List<FeatureCar> features;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "brand")
@@ -50,7 +52,7 @@ public class Car {
         this.image_id=image_id;
     }
 
-    public Car(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, FeatureCar features) {
+    public Car(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, List<FeatureCar> features) {
         this.plate = plate;
         this.infoCar = infoCar;
         this.user = user;
@@ -66,6 +68,14 @@ public class Car {
                 carId, plate, infoCar, user.getUserId(), image_id);
     }
 
+    public void setInfoCar(String infoCar) {
+        this.infoCar = infoCar;
+    }
+
+    public void setImage_id(long image_id) {
+        this.image_id = image_id;
+    }
+
     public int getSeats() {
         return seats;
     }
@@ -74,7 +84,7 @@ public class Car {
         return brand;
     }
 
-    public void setFeatures(FeatureCar features) {
+    public void setFeatures(List<FeatureCar> features) {
         this.features = features;
     }
 
@@ -82,7 +92,7 @@ public class Car {
         this.brand = brand;
     }
 
-    public FeatureCar getFeatures() {
+    public List<FeatureCar> getFeatures() {
         return features;
     }
 

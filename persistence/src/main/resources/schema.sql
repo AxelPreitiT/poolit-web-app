@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS cars(
     user_id INT NOT NULL,
     image_id INT DEFAULT 1,
     seats INT NOT NULL,
-    features INT NOT NULL,
+    features TEXT NOT NULL,
     brand INT NOT NULL,
     UNIQUE(user_id,plate),
     CONSTRAINT cars_to_users FOREIGN KEY (user_id) REFERENCES users (user_id),

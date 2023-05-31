@@ -12,5 +12,8 @@
   <div class="car-desc">
     <h5><c:out value="${car.infoCar}"/></h5>
     <h5><spring:message code="profile.plate" arguments="${car.plate}"/></h5>
+    <c:forEach items="${car.features}" var="feature">
+      <h5><c:out value="${feature}"/></h5>
+    </c:forEach>
   </div>
 </div>

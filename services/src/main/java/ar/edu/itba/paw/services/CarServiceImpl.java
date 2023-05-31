@@ -25,8 +25,13 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public Car createCar(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, FeatureCar features){
+    public Car createCar(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, List<FeatureCar> features){
         return carDao.create(plate, infoCar, user, image_id, seats, brand, features);
+    }
+
+    @Override
+    public Car ModifyCar(String plate, String infoCar, long image_id, int seats, CarBrand brand, List<FeatureCar> features) {
+        return carDao.ModifyCar(plate, infoCar, image_id, seats, brand, features);
     }
 
     @Override

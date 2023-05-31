@@ -10,7 +10,9 @@ import java.util.Optional;
 
 public interface CarService {
 
-    Car createCar(String plate, String infoCar, final User user, final long image_id, int seats, CarBrand brand, FeatureCar features);
+    Car createCar(String plate, String infoCar, final User user, final long image_id, int seats, CarBrand brand, List<FeatureCar> features);
+
+    Car ModifyCar(String plate, String infoCar, final long image_id, int seats, CarBrand brand, List<FeatureCar> features);
 
     Optional<Car> findById(long carId);
 
