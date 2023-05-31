@@ -2,12 +2,14 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.webapp.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
-import ar.edu.itba.paw.webapp.form.CreateUserForm;
+import ar.edu.itba.paw.webapp.form.*;
+import jdk.nashorn.internal.runtime.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class UserController extends LoggedUserController {
@@ -197,7 +200,6 @@ public class UserController extends LoggedUserController {
         return new ModelAndView("redirect:/trips/create");
     }
 
-
     @RequestMapping(value = "/register/confirm")
     public ModelAndView confirmRegistration(@RequestParam("token") final String token) {
         VerificationToken verificationToken = tokenService.getToken(token).orElseThrow(RuntimeException::new);
@@ -207,4 +209,25 @@ public class UserController extends LoggedUserController {
         }
         return new ModelAndView("redirect:/tokenTimedOut?token=" + token);
     }
+
+    @RequestMapping(value = "/register/sendToken", method = RequestMethod.GET)
+    public ModelAndView sendToken(@ModelAttribute("emailForm") final EmailForm form) {
+        return new ModelAndView("/users/sendToken");
+    }
+
+    @RequestMapping(value = "/register/sendToken", method = RequestMethod.POST)
+    public ModelAndView postCar(@Valid @ModelAttribute("emailForm") final EmailForm form,
+                                final BindingResult errors) throws Exception {
+        if(errors.hasErrors()){
+            return sendToken(form);
+        }
+        Optional<User> user = userService.findByEmail(form.getEmail());
+        if(user.isPresent()){
+            String token = tokenService.updateToken(user.get());
+            emailService.sendVerificationEmail(user.get(), token);
+        }
+        return new ModelAndView("redirect:/users/login");
+    }
+
+
 }

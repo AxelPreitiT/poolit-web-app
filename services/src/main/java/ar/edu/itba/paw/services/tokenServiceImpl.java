@@ -60,4 +60,12 @@ public class tokenServiceImpl implements TokenService {
     public void renewToken(VerificationToken token) {
         token.setExpiryDate(calculateExpiryDate(EXPIRATION));
     }
+
+    @Transactional
+    @Override
+    public String updateToken(User user) {
+        String token = UUID.randomUUID().toString();
+        tokenDao.updateToken(token, user, calculateExpiryDate(EXPIRATION));
+        return token;
+    }
 }

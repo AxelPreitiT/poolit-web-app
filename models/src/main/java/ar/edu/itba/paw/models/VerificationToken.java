@@ -9,6 +9,11 @@ import java.util.Date;
 public class VerificationToken {
 
     @Id
+    @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="tokens_token_id_seq" )
+    @SequenceGenerator(sequenceName = "tokens_token_id_seq" , name = "tokens_token_id_seq", allocationSize = 1)
+    @Column(name = "token_id")
+    private long tokenId;
+
     @Column(length = 100, nullable = false)
     private String token;
 
@@ -28,6 +33,14 @@ public class VerificationToken {
 
     VerificationToken(){
 
+    }
+
+    public void setTokenId(long tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public long getTokenId() {
+        return tokenId;
     }
 
     public User getUser() {
@@ -53,5 +66,9 @@ public class VerificationToken {
 
     public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

@@ -12,4 +12,6 @@ public interface TokenDao {
     Optional<VerificationToken> getToken(String token);
 
     void deleteToken(VerificationToken token);
+
+    void updateToken(String token, User user, Date date);
 }

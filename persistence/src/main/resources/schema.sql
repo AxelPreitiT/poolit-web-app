@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS reviews(
 );
 
 CREATE TABLE IF NOT EXISTS tokens(
+    token_id SERIAL PRIMARY KEY,
     token    TEXT NOT NULL,
     user_id  INT  NOT NULL,
     date TIMESTAMP NOT NULL,

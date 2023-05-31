@@ -42,4 +42,16 @@ public class TokenHibernateDao implements TokenDao {
     public void deleteToken(VerificationToken token) {
         em.remove(token);
     }
+
+    @Override
+    public void updateToken(String token, User user, Date date) {
+        final TypedQuery<VerificationToken> query = em.createQuery("from VerificationToken where user = :user", VerificationToken.class);
+        query.setParameter("user", user);
+        query.getResultList().stream().findFirst().ifPresent(t -> {
+            t.setToken(token);
+            t.setDate(date);
+            em.merge(t);
+        });
+    }
+
 }
