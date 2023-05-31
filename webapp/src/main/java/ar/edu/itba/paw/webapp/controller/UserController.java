@@ -8,9 +8,11 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
+import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,9 @@ public class UserController extends LoggedUserController {
 
     private final ImageService imageService;
 
+    private final tokenService tokenService;
+
+    private final EmailService emailService;
 
     private final PawUserDetailsService pawUserDetailsService;
 
@@ -54,7 +59,8 @@ public class UserController extends LoggedUserController {
     @Autowired
     public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                          final CarService carService, final ImageService imageService) {
+                          final CarService carService, final ImageService imageService,
+                          final tokenService tokenService, final EmailService emailService) {
         super(userService);
         this.cityService = cityService;
         this.reviewService = reviewService;
@@ -63,6 +69,8 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
+        this.tokenService = tokenService;
+        this.emailService = emailService;
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -91,13 +99,18 @@ public class UserController extends LoggedUserController {
         final Image image=imageService.createImage(data);
         final City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
         try {
-            userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
+            User user = userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
+            VerificationToken token = tokenService.createToken(user);
+            emailService.sendVerificationEmail(user, token.getToken());
+
             userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             LOGGER.warn("Email already exists: {}", form.getEmail());
             return createUserGet(form);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return new ModelAndView("redirect:/" );
     }

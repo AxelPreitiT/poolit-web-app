@@ -20,4 +20,6 @@ public interface EmailService {
 
     void sendMailTripDeletedToDriver(Trip trip) throws Exception;
 
+    void sendVerificationEmail(User user, String token) throws Exception;
+
 }
