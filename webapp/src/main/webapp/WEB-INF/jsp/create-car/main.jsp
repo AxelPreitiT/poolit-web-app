@@ -23,6 +23,20 @@
             <div id="car-data-container">
                 <div class="car-data-row">
                     <span class="h3 secondary-color title-container"><spring:message code="createCar.carInfo"/></span>
+
+                    <select name="marcaAuto" class="form-select form-select-sm">
+                      <option value="-1"><spring:message code="createCar.brand"/></option>
+                      <option value="peugeot">Peugeot</option>
+                      <option value="renault">Renault</option>
+                      <option value="fiat">Fiat</option>
+                      <option value="volkswagen">Volkswagen</option>
+                    </select>
+                    <!-- TODO ver como en el form meter select
+                    <form:select path="${}" cssClass="form-select form-select-sm" id="${}">
+                        <form:option value="-1" label="${}"/>
+                        <form:options items="${brands}" itemValue="id" itemLabel="name"/>
+                    </form:select>
+                    -->
                     <spring:message code="createCar.carInfoPlaceholder" var="carInfoHolder"/>
                     <form:input path="carInfo" cssClass="form-control" id="carInfo" placeholder='${carInfoHolder}'/>
                     <div class="error-item">
@@ -43,6 +57,15 @@
                         <form:errors cssClass="danger error-style" element="span"/>
                     </div>
                 </div>
+                <div class"car-data-row">
+                    <div class="h3 secondary-color title-container">
+                        <div><spring:message code="createCar.seats"/></div>
+                    </div>
+                    <div>
+                    <input cssClass="form-control form-control-sm" placeholder="4"/>
+                    <div class="h6 secondary-color title-container"> <spring:message code="createCar.seatsChange"/> </div>
+                    </div>
+                </div>
             </div>
             <div id="car-image-container">
                 <div id="car-image-title">
@@ -57,6 +80,26 @@
                 <div id="car-image-error" class="error-item">
                     <i class="bi bi-exclamation-circle-fill danger"></i>
                     <form:errors path="imageFile" cssClass="danger error-style" element="span"/>
+                </div>
+            </div>
+            <div class="car-features-container">
+                <div data-toggle="buttons">
+                  <label class="btn btn-custom">
+                    <input type="checkbox" id="air-conditioning" autocomplete="off">
+                    <spring:message code="createCar.airConditioning"/>
+                  </label>
+                  <label class="btn btn-custom">
+                    <input type="checkbox" id="pet-friendly" autocomplete="off">
+                    <spring:message code="createCar.petFriendly"/>
+                  </label>
+                  <label class="btn btn-custom">
+                    <input type="checkbox" id="trunk-space" autocomplete="off">
+                    <spring:message code="createCar.trunkSpace"/>
+                  </label>
+                  <label class="btn btn-custom">
+                    <input type="checkbox" id="music" autocomplete="off">
+                    <spring:message code="createCar.music"/>
+                  </label>
                 </div>
             </div>
         </div>
