@@ -8,12 +8,9 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
-import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -41,7 +38,7 @@ public class UserController extends LoggedUserController {
 
     private final ImageService imageService;
 
-    private final tokenService tokenService;
+    private final TokenService tokenService;
 
     private final EmailService emailService;
 
@@ -60,7 +57,7 @@ public class UserController extends LoggedUserController {
     public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
                           final CarService carService, final ImageService imageService,
-                          final tokenService tokenService, final EmailService emailService) {
+                          final TokenService tokenService, final EmailService emailService) {
         super(userService);
         this.cityService = cityService;
         this.reviewService = reviewService;
@@ -104,7 +101,7 @@ public class UserController extends LoggedUserController {
             VerificationToken token = tokenService.createToken(user);
             emailService.sendVerificationEmail(user, token.getToken());
 
-            userService.loginUser(form.getEmail(), form.getPassword());
+            //userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             LOGGER.warn("Email already exists: {}", form.getEmail());
@@ -112,7 +109,7 @@ public class UserController extends LoggedUserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return new ModelAndView("redirect:/" );
+        return new ModelAndView("redirect:/users/login" );
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
@@ -200,4 +197,14 @@ public class UserController extends LoggedUserController {
         return new ModelAndView("redirect:/trips/create");
     }
 
+
+    @RequestMapping(value = "/register/confirm")
+    public ModelAndView confirmRegistration(@RequestParam("token") final String token) {
+        VerificationToken verificationToken = tokenService.getToken(token).orElseThrow(RuntimeException::new);
+
+        if (userService.confirmRegister(verificationToken)) {
+            return new ModelAndView("redirect:/users/login");
+        }
+        return new ModelAndView("redirect:/tokenTimedOut?token=" + token);
+    }
 }

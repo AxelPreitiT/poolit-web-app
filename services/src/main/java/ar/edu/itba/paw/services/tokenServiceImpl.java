@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.persistence.TokenDao;
-import ar.edu.itba.paw.interfaces.services.tokenService;
+import ar.edu.itba.paw.interfaces.services.TokenService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class tokenServiceImpl implements tokenService {
+public class tokenServiceImpl implements TokenService {
     static final int EXPIRATION = 60 * 24;
 
     private final TokenDao tokenDao;

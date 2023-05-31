@@ -10,10 +10,12 @@
 </head>
 <body>
 <div>
-    <div>
-        <a th:href="@{{baseUrl}/register/confirm(token=${token}, baseUrl=${baseUrl})}">
-            <button style="background-color: #b23cfd;border: none;color: white;padding: 10px;text-align: center;border-radius: 20px;" th:text="HOLA"></button>
-        </a>
+    <div class="email-container">
+        <div>
+            <a th:href="@{{baseUrl}/register/confirm(token=${token}, baseUrl=${baseUrl})}">
+                <button th:text="HOLA"></button>
+            </a>
+        </div>
     </div>
 </div>
 </body>

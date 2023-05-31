@@ -5,7 +5,7 @@ import ar.edu.itba.paw.models.VerificationToken;
 
 import java.util.Optional;
 
-public interface tokenService {
+public interface TokenService {
     VerificationToken createToken(User user);
 
     Optional<VerificationToken> getToken(String token);

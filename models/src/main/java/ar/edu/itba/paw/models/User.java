@@ -162,4 +162,8 @@ public class User {
     public void setMailLocale(Locale mailLocale) {
         this.mailLocale = mailLocale;
     }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }
