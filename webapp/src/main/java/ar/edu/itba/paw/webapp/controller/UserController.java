@@ -204,31 +204,39 @@ public class UserController extends LoggedUserController {
 
     @RequestMapping(value = "/register/confirm")
     public ModelAndView confirmRegistration(@RequestParam("token") final String token) {
-        VerificationToken verificationToken = tokenService.getToken(token).orElseThrow(RuntimeException::new);
+        VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
 
         if (userService.confirmRegister(verificationToken)) {
             return new ModelAndView("redirect:/users/login");
         }
-        return new ModelAndView("redirect:/tokenTimedOut?token=" + token);
+        final ModelAndView mav = new ModelAndView("/users/sendToken");
+        mav.addObject("failToken", true);
+        mav.addObject("emailForm", new EmailForm());
+        return mav;
     }
 
-    @RequestMapping(value = "/register/sendToken", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/sendToken", method = RequestMethod.GET)
     public ModelAndView sendToken(@ModelAttribute("emailForm") final EmailForm form) {
-        return new ModelAndView("/users/sendToken");
+         return new ModelAndView("/users/sendToken");
     }
 
-    @RequestMapping(value = "/register/sendToken", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/sendToken", method = RequestMethod.POST)
     public ModelAndView postCar(@Valid @ModelAttribute("emailForm") final EmailForm form,
                                 final BindingResult errors) throws Exception {
         if(errors.hasErrors()){
             return sendToken(form);
         }
+        final ModelAndView mav = new ModelAndView("/users/login");
+        //TODO: Revisar reducir la logica en controller
         Optional<User> user = userService.findByEmail(form.getEmail());
         if(user.isPresent()){
+            if(user.get().isEnabled()){
+                mav.addObject("alreadyValidation", true);
+                return mav;
+            }
             String token = tokenService.updateToken(user.get());
             emailService.sendVerificationEmail(user.get(), token);
         }
-        final ModelAndView mav = new ModelAndView("/users/login");
         mav.addObject("sentToken", true);
         return mav;
     }

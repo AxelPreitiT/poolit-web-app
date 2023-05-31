@@ -20,14 +20,20 @@
   <div class="main-container-style primary-bg-color">
     <h2 class="light-text"><spring:message code="sendToken.title"/></h2>
     <hr class="light-text" id="title-hr">
-    <c:url value="/register/sendToken" var="postUrl"/>
-    <form:form modelAttribute="emailForm" action="${postUrl}" method="post" cssClass="form-style"  enctype="multipart/form-data">
+    <c:url value="/users/sendToken" var="postUrl"/>
+    <form:form modelAttribute="emailForm" action="${postUrl}" method="post" enctype="multipart/form-data">
       <div class="user-info-row">
         <div class="user-info-item">
-          <div class="form-floating">
-            <spring:message code="user.email" var="email"/>
-            <form:input path="email" cssClass="form-control" id="plate" placeholder='${email}'/>
+          <div class="form-floating-token">
+            <spring:message code="user.email" var="emailText"/>
+            <form:input path="email"  cssClass="form-control" id="email" placeholder='${emailText}'/>
           </div>
+        </div>
+      </div>
+      <div class="user-info-row">
+        <div class="error-container">
+          <i class="bi bi-exclamation-circle-fill warning"></i>
+          <form:errors path="email" cssClass="error-style warning" element="span"/>
         </div>
       </div>
       <div class="d-grid gap-2 submit-row">
@@ -45,5 +51,13 @@
     </div>
   </div>
 </div>
+<c:if test="${!(empty failToken) && failToken}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/failure-toast.jsp">
+      <jsp:param name="title" value="sendToken.failure.title"/>
+      <jsp:param name="message" value="sendToken.failure.message"/>
+    </jsp:include>
+  </div>
+</c:if>
 </body>
 </html>

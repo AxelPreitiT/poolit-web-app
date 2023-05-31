@@ -133,6 +133,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean confirmRegister(VerificationToken verificationToken) {
+        if(verificationToken == null){
+            return false;
+        }
         boolean isValidToken = tokenService.isValidToken(verificationToken);
         if (isValidToken) {
             final User user = verificationToken.getUser();
