@@ -122,7 +122,7 @@ public class UserController extends LoggedUserController {
 
         final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
+        final List<Review> reviewsAsUser = reviewService.getUserReviews(user);
 
         if(Objects.equals(user.getRole(), "USER")){
 
@@ -160,7 +160,7 @@ public class UserController extends LoggedUserController {
         final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         if(Objects.equals(user.getRole(), "USER")){
-            List<Review> reviews = reviewService.getUsersIdReviews(user);
+            List<Review> reviews = reviewService.getUserReviews(user);
 
             final ModelAndView mav = new ModelAndView("/users/public-profile");
             mav.addObject("user", user);

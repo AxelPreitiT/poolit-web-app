@@ -29,18 +29,28 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public Review createReview(Trip trip, Passenger passenger, int rating, String review) {
+    public Review createReview(Trip trip, Passenger passenger, int rating, String review, User receiver) {
         if(!canReview(passenger)){
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} tried to review trip with id {}, but it's not finished yet", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        return reviewDao.create(trip, passenger.getUser(), rating, review);
+        return reviewDao.create(trip, passenger.getUser(), rating, review, receiver);
     }
 
     @Override
     public double getDriverRating(User driver) {
-        return reviewDao.getRating(driver);
+        return reviewDao.getDriverRating(driver);
+    }
+
+    @Override
+    public double getUserRating(User user) {
+        return reviewDao.getUserRating(user);
+    }
+
+    @Override
+    public List<Review> getReceiverReviews(User receiver) {
+        return reviewDao.findByReceiver(receiver);
     }
 
     @Override
@@ -49,8 +59,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getUsersIdReviews(User user) {
-        return reviewDao.findReviewsByUser(user);
+    public List<Review> getUserReviews(User user) {
+        return reviewDao.findByUser(user);
     }
 
 

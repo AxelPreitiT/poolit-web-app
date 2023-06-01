@@ -90,13 +90,25 @@ CREATE TABLE IF NOT EXISTS trips_cars_drivers(
 CREATE TABLE IF NOT EXISTS reviews(
   review_id SERIAL PRIMARY KEY,
   trip_id INT NOT NULL,
+  receiver_id INT NOT NULL,
   user_id INT NOT NULL,
   rating INT NOT NULL,
   review TEXT NOT NULL,
   UNIQUE(trip_id,user_id),
   CONSTRAINT reviews_to_trips FOREIGN KEY(trip_id) REFERENCES trips(trip_id) ON DELETE CASCADE,
-  CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
+  CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
+  CONSTRAINT reviews_from_receiver FOREIGN KEY(receiver_id) REFERENCES users(user_id)
 );
 
+
+CREATE TABLE IF NOT EXISTS car_reviews(
+    review_id SERIAL PRIMARY KEY,
+    car_id INT NOT NULL,
+    review TEXT NOT NULL,
+    rating INT NOT NULL,
+    user_id INT NOT NULL,
+    CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id),
+    CONSTRAINT reviews_to_cars FOREIGN KEY(car_id) REFERENCES cars(car_id)
+);
 
 

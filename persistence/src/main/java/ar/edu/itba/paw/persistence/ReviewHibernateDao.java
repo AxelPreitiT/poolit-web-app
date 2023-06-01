@@ -29,9 +29,9 @@ public class ReviewHibernateDao implements ReviewDao {
 
 
     @Override
-    public Review create(Trip trip, User user, int rating, String review) {
+    public Review create(Trip trip, User user, int rating, String review, User receiver) {
         LOGGER.debug("Adding new review to the trip with id {} and written by user with id {} to the database", trip.getTripId(), user.getUserId());
-        final Review reviewModel= new Review(trip, user, rating, review);
+        final Review reviewModel= new Review(trip, user, rating, review, receiver);
         em.persist(reviewModel);
         LOGGER.info("Review for {} added to the database", user.getUserId());
         LOGGER.debug("New {}", reviewModel);
@@ -39,10 +39,24 @@ public class ReviewHibernateDao implements ReviewDao {
     }
 
     @Override
-    public double getRating(User driver) {
+    public double getDriverRating(User driver) {
         Query avgQuery = em.createNativeQuery("SELECT coalesce(AVG(rating),0) as avg FROM reviews NATURAL JOIN trips WHERE driver_id = :driverId");
         avgQuery.setParameter("driverId", driver.getUserId());
         return ((List<Object>)avgQuery.getResultList()).stream().map(elem -> ((Number) elem).doubleValue()).findFirst().orElse(0.0);
+    }
+
+    @Override
+    public double getUserRating(User user) {
+        Query avgQuery = em.createNativeQuery("SELECT coalesce(AVG(rating),0) as avg FROM reviews NATURAL JOIN trips WHERE driver_id != :userId AND user_id = :userId");
+        avgQuery.setParameter("userId", user.getUserId());
+        return ((List<Object>)avgQuery.getResultList()).stream().map(elem -> ((Number) elem).doubleValue()).findFirst().orElse(0.0);
+    }
+
+    @Override
+    public List<Review> findByReceiver(User receiver) {
+        TypedQuery<Review> listQuery = em.createQuery("from Review where trip.driver.userId != :userId AND user.userId = :UserId",Review.class);
+        listQuery.setParameter("userId", receiver.getUserId());
+        return listQuery.getResultList();
     }
 
     @Override
@@ -54,7 +68,7 @@ public class ReviewHibernateDao implements ReviewDao {
 
 
     @Override
-    public List<Review> findReviewsByUser(User user) {
+    public List<Review> findByUser(User user) {
         LOGGER.debug("Looking for reviews written by user with id {} in the database", user.getUserId());
         final TypedQuery<Review> query = em.createQuery("from Review r where r.user = :user", Review.class);
         query.setParameter("user",user);

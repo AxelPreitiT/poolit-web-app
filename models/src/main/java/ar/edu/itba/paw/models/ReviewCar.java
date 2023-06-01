@@ -5,8 +5,8 @@ import ar.edu.itba.paw.models.trips.Trip;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "reviews")
-public class Review {
+@Table(name = "car_reviews")
+public class ReviewCar {
     @Id
     @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="reviews_review_id_seq" )
     @SequenceGenerator(sequenceName = "reviews_review_id_seq" , name = "reviews_review_id_seq", allocationSize = 1)
@@ -14,12 +14,8 @@ public class Review {
     private Long reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "trip_id")
-    private Trip trip;
+    @JoinColumn(name = "car_id")
+    private Car car;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
@@ -31,47 +27,54 @@ public class Review {
     @Column(name = "review")
     private String review;
 
-
-    public Review(Trip trip, User user, int rating, String review, User receiver) {
-        this.trip = trip;
+    public ReviewCar(User user, int rating, String review, Car car) {
         this.user = user;
         this.rating = rating;
         this.review = review;
-        this.receiver = receiver;
+        this.car = car;
     }
 
-    protected Review(){
+    protected ReviewCar(){
 
     }
 
-    @Override
-    public String toString() {
-        return String.format("Review { id: %d, tripId: %d, userId: %d, rating: %d, review: '%s' }",
-                reviewId, trip.getTripId(), user.getUserId(), rating, review);
-    }
-
-    public User getReceiver() {
-        return receiver;
-    }
-
-    public long getReviewId() {
+    public Long getReviewId() {
         return reviewId;
     }
 
-    public long getTripId() {
-        return trip.getTripId();
+    public Car getCar() {
+        return car;
     }
 
     public User getUser() {
         return user;
     }
 
+    public int getRating() {
+        return rating;
+    }
 
     public String getReview() {
         return review;
     }
 
-    public int getRating() {
-        return rating;
+    public void setReviewId(Long reviewId) {
+        this.reviewId = reviewId;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public void setReview(String review) {
+        this.review = review;
     }
 }
