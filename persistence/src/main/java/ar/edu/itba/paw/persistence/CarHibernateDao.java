@@ -70,15 +70,14 @@ public class CarHibernateDao implements CarDao {
         return result;
     }
 
+
     @Override
-    public Car ModifyCar(String plate, String infoCar, final long image_id, int seats, CarBrand brand, List<FeatureCar> features){
-        Optional<Car> car = findByPlate(plate);
+    public Car ModifyCar(long carId, String infoCar, int seats,  List<FeatureCar> features){
+        Optional<Car> car = findById(carId);
         if(car.isPresent()){
             Car carToModify = car.get();
             carToModify.setInfoCar(infoCar);
-            carToModify.setImage_id(image_id);
             carToModify.setSeats(seats);
-            carToModify.setBrand(brand);
             carToModify.setFeatures(features);
             em.merge(carToModify);
             return carToModify;
