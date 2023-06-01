@@ -33,10 +33,11 @@
                     <div class="trip-price-row items-to-end">
                     <c:choose>
                         <c:when test="${trip.queryIsRecurrent}">
-                            <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
+                            <spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/>
+                            <c:out value="${totalTripsString}"/>
                         </c:when>
                         <c:otherwise>
-                            <span class="h6 italic-text">Viaje único</span>
+                            <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
                         </c:otherwise>
                     </c:choose>
                     </div>

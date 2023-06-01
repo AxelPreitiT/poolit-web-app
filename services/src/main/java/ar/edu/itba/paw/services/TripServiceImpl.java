@@ -301,6 +301,10 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassenger(tripId,user).isPresent();
     }
     @Override
+    public double getTotalTripEarnings(List<Passenger> passengers){
+        return passengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(0.0);
+    }
+    @Override
     public Optional<Passenger> getPassenger(final Trip trip, final User user){
         return tripDao.getPassenger(trip,user);
     }

@@ -78,12 +78,10 @@ public class TripController extends LoggedUserController {
     private ModelAndView tripDetailsForDriver(final long tripId){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengers(trip);
-        final double totalPrice = passengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(0.0);
+        final double totalPrice = tripService.getTotalTripEarnings(passengers);
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
         mav.addObject("passengers",passengers);
-        //TODO: si esto sirve para el precio, cambiar el resto
-        //TODO: revisar
         mav.addObject("totalIncome",String.format(LocaleContextHolder.getLocale(),"%.2f",totalPrice));
         return mav;
     }
