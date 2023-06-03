@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +43,21 @@ public class User {
     @Column(name="user_image_id")
     private long userImageId;
 
+
+    @ManyToMany
+    @JoinTable(name="blocks",
+            joinColumns=@JoinColumn(name="blockedById"),
+            inverseJoinColumns=@JoinColumn(name="blockedId")
+    )
+    private Set<User> blocked;
+
+    @ManyToMany
+    @JoinTable(name="blocks",
+            joinColumns=@JoinColumn(name="blockedId"),
+            inverseJoinColumns=@JoinColumn(name="blockedById")
+    )
+    private Set<User> blockedBy;
+
     protected User(){
 
     }
@@ -56,6 +73,8 @@ public class User {
         this.mailLocale = mailLocale;
         this.role = role;
         this.userImageId = userImageId;
+        this.blocked = new HashSet<>();
+        this.blockedBy = new HashSet<>();
     }
 
     public User(long userId, final String name, final String surname, final String email,
@@ -70,6 +89,8 @@ public class User {
         this.mailLocale = mailLocale;
         this.role = role;
         this.userImageId = userImageId;
+        this.blocked = new HashSet<>();
+        this.blockedBy = new HashSet<>();
     }
 
     @Override
@@ -158,4 +179,24 @@ public class User {
     public void setMailLocale(Locale mailLocale) {
         this.mailLocale = mailLocale;
     }
+
+    public Set<User> getBlocked() {
+        return blocked;
+    }
+
+    public void insertBlocked(User blocked) {
+        this.blocked.add(blocked);
+    }
+
+    public void removeBlocked(User blocked) { this.blocked.remove(blocked); }
+
+    public Set<User> getBlockedBy() {
+        return blockedBy;
+    }
+
+    public void insertBlockedBy(User blockedBy) {
+        this.blockedBy.add(blockedBy);
+    }
+
+    public void removeBlockedBy(User blockedBy) { this.blockedBy.remove(blockedBy); }
 }

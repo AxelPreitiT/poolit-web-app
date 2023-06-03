@@ -95,4 +95,14 @@ public class UserDaoImpl implements UserDao {
                 username, surname, password, bornCity.getId(), mailLocale, role, user_image_id, email);
         return findByEmail(email).orElseThrow(IllegalStateException::new);
     }
+
+    @Override
+    public void blockUser(User blocker, User blocked) {
+
+    }
+
+    @Override
+    public void unblockUser(User blocker, User blocked) {
+
+    }
 }

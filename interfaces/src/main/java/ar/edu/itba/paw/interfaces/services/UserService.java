@@ -19,4 +19,7 @@ public interface UserService {
     void loginUser(final String email, final String password);
 
     void changeToDriver(User user);
+
+    void blockUser(User blocker, User blocked);
+    void unblockUser(User blocker, User blocked);
 }

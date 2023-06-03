@@ -87,4 +87,21 @@ public class UserHibernateDao implements UserDao {
         }
         return null;
     }
+
+    @Override
+    public void blockUser(User blocker, User blocked) {
+        //TODO hace falta tener lista de blockedby?
+        blocker.insertBlocked(blocked);
+        em.persist(blocker);
+
+    }
+
+    @Override
+    public void unblockUser(User blocker, User blocked) {
+        //TODO hace falta tener lista de blockedby?
+        blocker.removeBlocked(blocked);
+
+        em.persist(blocker);
+
+    }
 }

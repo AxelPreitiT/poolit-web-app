@@ -105,4 +105,16 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
     }
 
+    @Transactional
+    @Override
+    public void blockUser(User blocker, User blocked) {
+        userDao.blockUser(blocker,blocked);
+    }
+
+    @Transactional
+    @Override
+    public void unblockUser(User blocker, User blocked) {
+        userDao.unblockUser(blocker,blocked);
+    }
+
 }

@@ -20,6 +20,7 @@
       <jsp:param name="path" value="${userProfileUrl}"/>
       <jsp:param name="rating" value="${rating}"/>
       <jsp:param name="countTrips" value="${countTrips}"/>
+      <jsp:param name="isBlocked" value="${isBlocked}"/>
     </jsp:include>
     <div class="List-properties-container">
       <c:set var="reviews" value="${reviews}" scope="request"/>
