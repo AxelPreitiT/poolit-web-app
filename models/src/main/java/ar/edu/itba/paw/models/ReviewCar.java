@@ -5,7 +5,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "car_reviews")
+@Table(name = "car_review")
 public class ReviewCar {
     @Id
     @GeneratedValue(strategy =  GenerationType.SEQUENCE, generator ="reviews_review_id_seq" )
