@@ -20,11 +20,13 @@
   <h3 id="user-name">"${car.brand}"</h3>
   <div class="row-info">
     <h6><spring:message code="createCar.carInfo"/></h6>
-    <form:input path="carInfo" id="carInfo" cssClass="form-control" />
+    <h4 class="no-edit"><c:out value="${car.infoCar}"/></h5>
+    <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
   </div>
   <div class="row-info">
     <h6><spring:message code="createCar.seats"/></h6>
-    <form:input path="seats" cssClass="form-control" id="seats"/>
+    <h4 class="no-edit"><c:out value="${car.seats}"/></h5>
+    <form:input path="seats" cssClass="form-control hidden edit" id="seats" />
   </div>
   <div class="row-info">
     <h6><spring:message code="createCar.plate"/></h6>
@@ -64,12 +66,22 @@
         </div>
       </div>
     </div>
-    <div class="row-info">
-      <button id="update-car" type="submit" class="btn button-style button-color shadow-btn">
+    <div class="row-info hidden edit">
+      <button id="update-car" type="submit" class="btn button-style button-color shadow-btn hidden edit">
           <i class="bi bi-check2 light-text h3"></i>
           <span class="button-text-style light-text h3"><spring:message code="updateCar.save"/></span>
       </button>
+
+
+    </div>
+    <div class="row-info">
+        <button id="edit-car" type="button" class="btn button-style button-color shadow-btn no-edit">
+              <i class="bi bi-pencil-square light-text h3"></i>
+              <span class="button-text-style light-text h3" id="editButton" onclick="toggleEdit()">Editar</span>
+          </button>
     </div>
   </form:form>
+  <script src="<c:url value="/resources/js/cars/editCar.js"/>" type="application/javascript"></script>
+
 
 </div>
