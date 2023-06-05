@@ -48,14 +48,6 @@
     width: 100%;
 }
 
-.show-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: 1em;
-}
-
 .show-row-content {
     display: flex;
     flex-direction: column;
@@ -85,9 +77,16 @@
     max-width: 40px;
     border-radius: 50%;
     aspect-ratio: 1;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .profile-link {
     text-decoration-line: underline;
     text-decoration-color: white;
 }
+
+.car-image {
+    border-radius: 4px;
+}
+
+

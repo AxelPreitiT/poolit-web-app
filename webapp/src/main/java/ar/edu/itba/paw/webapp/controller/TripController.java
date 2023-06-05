@@ -3,12 +3,10 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.exceptions.*;
-import ar.edu.itba.paw.webapp.form.CreateTripForm;
-import ar.edu.itba.paw.webapp.form.ReviewForm;
-import ar.edu.itba.paw.webapp.form.SearchTripForm;
-import ar.edu.itba.paw.webapp.form.SelectionForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +30,16 @@ public class TripController extends LoggedUserController {
     private final CityService cityService;
     private final UserService userService;
     private final CarService carService;
+    private final PassengerReviewService passengerReviewService;
+    private final DriverReviewService driverReviewService;
+    private final CarReviewService carReviewService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static int PAGE_SIZE = 10;
     private final static String BASE_RELATED_PATH = "/";
     private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
     private final static String TRIP_PATH = BASE_RELATED_PATH + "trips/";
+    private final static String TRIP_DETAILS_PATH = TRIP_PATH + "{id:\\d+}";
     private final static String SEARCH_TRIP_PATH = BASE_RELATED_PATH + "search";
     private final static String CREATE_TRIP_PATH = TRIP_PATH + "create";
     private static final String RESERVED_TRIPS_PATH = TRIP_PATH + "reserved";
@@ -47,18 +49,24 @@ public class TripController extends LoggedUserController {
     private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
-    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService){
+    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService, final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService) {
         super(userService);
         this.tripService = tripService;
         this.reviewService = reviewService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
+        this.passengerReviewService = passengerReviewService;
+        this.driverReviewService = driverReviewService;
+        this.carReviewService = carReviewService;
     }
 
-    @RequestMapping(value = "/trips/{id:\\d+$}",method = RequestMethod.GET)
+    @RequestMapping(value = TRIP_DETAILS_PATH,method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
-                                       @ModelAttribute("selectForm") final SelectionForm form
+                                       @ModelAttribute("selectForm") final SelectionForm form,
+                                       @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
+                                       @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
+                                       @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
                                        ){
         LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();
@@ -67,38 +75,38 @@ public class TripController extends LoggedUserController {
         }
         final User user = userOp.get();
         if(tripService.userIsDriver(tripId,user)){
-            return tripDetailsForDriver(tripId);
+            return tripDetailsForDriver(tripId, user);
         }else if (tripService.userIsPassenger(tripId,user)){
             return tripDetailsForPassenger(tripId,user);
         }
         return tripDetailsForReservation(tripId,form);
     }
 
-    private ModelAndView tripDetailsForDriver(final long tripId){
+    private ModelAndView tripDetailsForDriver(final long tripId, final User user){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengers(trip);
+        final List<Passenger> passengersToReview = passengerReviewService.filterPassengersToReview(trip, user, passengers);
+        final TripReviewCollection tripReviewCollection = new TripReviewCollection(null, null, passengersToReview);
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
         mav.addObject("passengers",passengers);
+        mav.addObject("tripReviewCollection", tripReviewCollection);
         return mav;
     }
 
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
-        return tripDetailsForPassenger(tripId,user, new ReviewForm());
-    }
-
-    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final ReviewForm reviewForm){
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
-        final boolean done = reviewService.canReview(passenger);
-        final boolean reviewed = reviewService.haveReview(trip ,passenger);
+        final List<Passenger> passengers = tripService.getPassengersRecurrent(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
+        final List<Passenger> passengersToReview = passengerReviewService.filterPassengersToReview(trip, user, passengers);
+        final User driver = driverReviewService.canReviewDriver(trip, passenger, trip.getDriver()) ? trip.getDriver() : null;
+        final Car car = carReviewService.canReviewCar(trip, passenger, trip.getCar()) ? trip.getCar() : null;
+        final TripReviewCollection tripReviewCollection = new TripReviewCollection(driver, car, passengersToReview);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
-        mav.addObject("done",done);
-        mav.addObject("reviewed",reviewed);
         mav.addObject("passenger",passenger);
-        mav.addObject("reviewForm", reviewForm);
-        mav.addObject("failedReview", reviewForm.isFailedReview());
+        mav.addObject("tripReviewCollection", tripReviewCollection);
+        mav.addObject("passengers",passengers);
         return mav;
     }
 
@@ -116,7 +124,7 @@ public class TripController extends LoggedUserController {
         LOGGER.debug("POST Request to /trips/{}/join", tripId);
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in SelectionForm: {}", errors.getAllErrors());
-            return getTripDetails(tripId,form);
+            return new ModelAndView("redirect:" + TRIP_DETAILS_PATH.replace("{id}",String.valueOf(tripId)));
         }
         final User passenger = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(() -> new TripNotFoundException(tripId));
@@ -248,22 +256,21 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-    @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
-    public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
-                                   @Valid @ModelAttribute("reviewForm") final ReviewForm form,
-                                   final BindingResult errors){
-        LOGGER.debug("POST Request to /trips/{}/review", tripId);
-        if(errors.hasErrors()) {
-            LOGGER.warn("Errors found in ReviewForm: {}", errors.getAllErrors());
-            form.setFailedReview(true);
-            return tripDetailsForPassenger(tripId, userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new), form);
-        }
-        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
-        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
-        reviewService.createReview(trip, passenger, form.getRating(), form.getReview(), trip.getDriver());
-        final ModelAndView mav = tripDetailsForPassenger(tripId, user, form);
-        mav.addObject("tripReviewed", true);
-        return mav;
-    }
+//    @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
+//    public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
+//                                   @Valid @ModelAttribute("reviewForm") final ReviewForm form,
+//                                   final BindingResult errors){
+//        LOGGER.debug("POST Request to /trips/{}/review", tripId);
+//        if(errors.hasErrors()) {
+//            LOGGER.warn("Errors found in ReviewForm: {}", errors.getAllErrors());
+//            return tripDetailsForPassenger(tripId, userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new), form);
+//        }
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+//        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
+//        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
+//        reviewService.createReview(trip, passenger, form.getRating(), form.getReview(), trip.getDriver());
+//        final ModelAndView mav = tripDetailsForPassenger(tripId, user, form);
+//        mav.addObject("tripReviewed", true);
+//        return mav;
+//    }
 }

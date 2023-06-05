@@ -18,5 +18,5 @@ public interface PassengerReviewService {
 
     boolean canReviewPassenger(final Trip trip, final User reviewer, final Passenger reviewed);
 
-    List<Passenger> getPassengersToReview(final Trip trip, final User reviewer);
+    List<Passenger> filterPassengersToReview(final Trip trip, final User reviewer, final List<Passenger> passengers);
 }

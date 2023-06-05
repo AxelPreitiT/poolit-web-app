@@ -2,7 +2,6 @@ package ar.edu.itba.paw.models.reviews;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public enum DriverReviewOptions {
     NOT_FRIENDLY(Arrays.asList(1)),
@@ -34,14 +33,11 @@ public enum DriverReviewOptions {
         return this.name();
     }
 
+    public List<Integer> getRatings() {
+        return ratings;
+    }
+
     public String getSpringMessageCode() {
         return "driver.review.option." + this.name();
     }
-
-    public List<DriverReviewOptions> getOptionsByRating(int rating) {
-        return Arrays.stream(DriverReviewOptions.values())
-                .filter(option -> option.ratings.contains(rating))
-                .collect(Collectors.toList());
-    }
-
 }

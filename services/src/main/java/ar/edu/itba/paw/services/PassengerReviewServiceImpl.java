@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,11 +106,11 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     }
 
     @Override
-    public List<Passenger> getPassengersToReview(final Trip trip, User reviewer) {
-        List<Passenger> passengers;
+    public List<Passenger> filterPassengersToReview(final Trip trip, User reviewer, List<Passenger> passengers) {
+        List<Passenger> passengersToReview = new ArrayList<>(passengers);
+        passengersToReview.removeIf(passenger -> reviewer.getUserId() == passenger.getUserId());
         if(tripService.userIsDriver(trip.getTripId(), reviewer)) {
-            passengers = tripService.getPassengers(trip);
-            passengers.removeIf(passenger -> !canDriverReviewPassenger(trip, reviewer, passenger));
+            passengersToReview.removeIf(passenger -> !canDriverReviewPassenger(trip, reviewer, passenger));
         } else if (tripService.userIsPassenger(trip.getTripId(), reviewer)) {
             final Optional<Passenger> reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer);
             if(!reviewerPassenger.isPresent()) {
@@ -117,13 +118,12 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
                 LOGGER.error("Can't find passenger with id {} in trip with id {}", reviewer.getUserId(), trip.getTripId(), e);
                 throw e;
             }
-            passengers = tripService.getPassengersRecurrent(trip, reviewerPassenger.get().getEndDateTime(), reviewerPassenger.get().getStartDateTime());
-            passengers.removeIf(passenger -> !canPassengerReviewPassenger(reviewerPassenger.get(), passenger));
+            passengersToReview.removeIf(passenger -> !canPassengerReviewPassenger(reviewerPassenger.get(), passenger));
         } else {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("User with id {} is not a passenger nor the driver in trip with id {}", reviewer.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        return passengers;
+        return passengersToReview;
     }
 }

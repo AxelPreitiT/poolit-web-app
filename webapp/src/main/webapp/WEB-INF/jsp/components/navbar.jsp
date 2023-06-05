@@ -7,7 +7,7 @@
 
 <link href="<c:url value="/resources/css/components/navbar.css"/>" rel="stylesheet" type="text/css"/>
 
-<nav class="navbar navbar-expand-md primary-bg-color">
+<nav class="navbar navbar-expand-md primary-bg-color" id="main-navbar">
     <div class="container-fluid navbar-style">
         <a class="navbar-brand" href="<c:url value="/"/>">
             <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="<spring:message code="navbar.poolit"/>" class="brand-logo">

@@ -2,7 +2,6 @@ package ar.edu.itba.paw.models.reviews;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public enum CarReviewOptions {
     VERY_BAD_STATE(Arrays.asList(1)),
@@ -38,13 +37,11 @@ public enum CarReviewOptions {
         return this.name();
     }
 
-    public String getSpringMessageCode() {
-        return "car.review.option." + this.name();
+    public List<Integer> getRatings() {
+        return ratings;
     }
 
-    public List<CarReviewOptions> getOptionsByRating(int rating) {
-        return Arrays.stream(CarReviewOptions.values())
-                .filter(option -> option.ratings.contains(rating))
-                .collect(Collectors.toList());
+    public String getSpringMessageCode() {
+        return "car.review.option." + this.name();
     }
 }
