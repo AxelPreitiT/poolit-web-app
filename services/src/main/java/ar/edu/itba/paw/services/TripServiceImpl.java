@@ -26,6 +26,8 @@ public class TripServiceImpl implements TripService {
 
     private static final int OFFSET_MINUTES = 30;
 
+    private static final double DEFAULT_EARNINGS = 0.0;
+
     private final EmailService emailService;
 
     private final TripDao tripDao;
@@ -302,7 +304,7 @@ public class TripServiceImpl implements TripService {
     }
     @Override
     public double getTotalTripEarnings(List<Passenger> passengers){
-        return passengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(0.0);
+        return passengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(DEFAULT_EARNINGS);
     }
     @Override
     public Optional<Passenger> getPassenger(final Trip trip, final User user){
