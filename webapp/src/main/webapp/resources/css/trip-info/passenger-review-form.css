@@ -35,15 +35,20 @@
 
 .passenger-review-form {
     padding: 1em 2em;
-}
-
-.passenger-review-form > form {
     display: flex;
     flex-direction: column;
     row-gap: 1em;
     align-items: flex-start;
 }
 
-.passenger-review-form select[disabled] {
+.passenger-review-form > div {
+    width: 100%;
+}
+
+.passenger-review-form > div > * {
+    width: 100%;
+}
+
+#form-container select[disabled] {
     display: none;
 }

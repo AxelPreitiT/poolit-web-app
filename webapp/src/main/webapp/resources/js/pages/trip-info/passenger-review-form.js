@@ -39,5 +39,6 @@ for (const ratingSelectorElement of ratingSelectorElements) {
         newOptionSelectorElement.removeAttribute("disabled");
         newOptionSelectorContainerElement.removeAttribute("hidden");
         ratingSelectorElementMapItem.optionSelectorElement = newOptionSelectorElement;
+        ratingSelectorElementMapItem.optionSelectorContainerElement = newOptionSelectorContainerElement;
     });
 }

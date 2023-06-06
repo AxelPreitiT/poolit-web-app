@@ -34,18 +34,24 @@
     <c:forEach items="${tripReviewCollection.passengers}" var="passengerReviewItem">
       <c:set var="passenger" value="${passengerReviewItem.item}"/>
       <div class="modal fade" id="review-passenger-${passenger.userId}">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-body">
-              <c:set var="passenger" value="${passenger}" scope="request"/>
-              <jsp:include page="/WEB-INF/jsp/trip-info/passenger-review-form.jsp"/>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <c:url value="/reviews/trip/${passenger.trip.tripId}/passengers/${passenger.user.userId}" var="passengerReviewUrl"/>
+          <form:form modelAttribute="passengerReviewForm" method="post" action="${passengerReviewUrl}">
+            <div class="modal-content">
+              <div class="modal-body">
+                <c:set var="passenger" value="${passenger}" scope="request"/>
+                <jsp:include page="/WEB-INF/jsp/trip-info/passenger-review-form.jsp"/>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-modal" data-bs-toggle="modal">
+                  <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
+                </button>
+                <button type="submit" class="btn shadow-btn button-style button-color">
+                  <span class="light-text"><spring:message code="review.submit"/></span>
+                </button>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-modal" data-bs-toggle="modal">
-                <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
-              </button>
-            </div>
-          </div>
+          </form:form>
         </div>
       </div>
     </c:forEach>
