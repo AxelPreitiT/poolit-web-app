@@ -207,7 +207,7 @@ public class UserController extends LoggedUserController {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
 
         if (userService.confirmRegister(verificationToken)) {
-            return new ModelAndView("redirect:/users/login");
+            return new ModelAndView("redirect:/");
         }
         final ModelAndView mav = new ModelAndView("/users/sendToken");
         mav.addObject("failToken", true);

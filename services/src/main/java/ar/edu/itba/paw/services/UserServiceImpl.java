@@ -38,6 +38,8 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
 
+    //private final UserDetailsService userDetailsService;
+
     private enum AuthRoles{
         USER("ROLE_USER"),
         DRIVER("ROLE_DRIVER");
@@ -72,6 +74,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        //this.userDetailsService = userDetailsService;
     }
 
     @Transactional
@@ -140,14 +143,29 @@ public class UserServiceImpl implements UserService {
         if (isValidToken) {
             final User user = verificationToken.getUser();
             user.setEnabled(true);
-            //authWithoutPassword(user);
+            authWithoutPassword(user);
+            /*
+            final Collection<GrantedAuthority> authorities = new HashSet<>();
+            if(Objects.equals(user.getRole(), "DRIVER")){
+                authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+            } else {
+                authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+            }
+
             tokenService.deleteToken(verificationToken);
+
+
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            */
         }
         return isValidToken;
     }
 
 
-    private void authWithoutPassword(User user) {
+
+    void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         if(Objects.equals(user.getRole(), "DRIVER")){
             authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
@@ -155,9 +173,13 @@ public class UserServiceImpl implements UserService {
             authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
         }
 
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
-        Authentication auth = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+        //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
+        //SecurityContextHolder.getContext().setAuthentication(authentication);
 
+
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                user.getEmail(), user.getPassword(), authorities);
+        Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authRequest);
+    }
 }
