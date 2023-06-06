@@ -63,14 +63,11 @@ public class TripHibernateDao implements TripDao {
     //TODO: hacer bajas logicas de los viajes
     @Override
     public boolean deleteTrip(Trip trip) {
-        LOGGER.debug("Deleting trip with id {} from the database",trip.getTripId());
-        Query query = em.createQuery("DELETE FROM Passenger p WHERE p.trip.tripId = :trip_id");
-        query.setParameter("trip_id",trip.getTripId());
-        boolean ans = query.executeUpdate()>0;
         em.merge(trip);
-        em.remove(trip);
+        trip.setDeleted(true);
+        em.persist(trip);
         LOGGER.info("Trip with id {} deleted from the database",trip.getTripId());
-        return ans;
+        return true;
     }
 
     @Override

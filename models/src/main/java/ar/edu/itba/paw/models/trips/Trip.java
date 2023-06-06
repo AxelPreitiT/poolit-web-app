@@ -253,6 +253,10 @@ public class Trip {
         return deleted;
     }
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {
         this.queryEndDateTime = queryEndDateTime;
     }
