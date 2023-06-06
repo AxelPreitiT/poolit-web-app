@@ -8,7 +8,7 @@
     align-items: flex-start;
     column-gap: 1em;
     position: relative;
-    padding: 1em 2em;
+    padding: 2em 2em 0 2em;
 }
 
 .passenger-review-form-header img {
@@ -31,6 +31,17 @@
     z-index: 1;
     border: 2px solid;
     opacity: 1;
+}
+
+.passenger-review-form {
+    padding: 1em 2em;
+}
+
+.passenger-review-form > form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+    align-items: flex-start;
 }
 
 .passenger-review-form select[disabled] {

@@ -6,8 +6,10 @@ import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.models.reviews.PassengerReviewOptions;
+import ar.edu.itba.paw.models.reviews.ReviewState;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PassengerReviewServiceImpl implements PassengerReviewService {
@@ -80,11 +82,15 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
             LOGGER.error("Driver with id {} tried to review passenger with id {}, but they are not in the same trip", reviewer.getUserId(), reviewed.getUserId(), e);
             throw e;
         }
+        return getReviewStateForDriver(trip, reviewer, reviewed) == ReviewState.PENDING;
+    }
+
+    private ReviewState getReviewStateForDriver(Trip trip, User reviewer, Passenger reviewed) {
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewed.getEndDateTime())){
-            return false;
+            return ReviewState.DISABLED;
         }
-        return passengerReviewDao.canReviewPassenger(trip, reviewer, reviewed);
+        return passengerReviewDao.canReviewPassenger(trip, reviewer, reviewed) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
     private boolean canPassengerReviewPassenger(Passenger reviewer, Passenger reviewed) {
@@ -98,19 +104,25 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
             LOGGER.error("Passenger with id {} tried to review himself", reviewer.getUserId(), e);
             throw e;
         }
+        return getReviewStateForPassenger(reviewer.getTrip(), reviewer, reviewed) == ReviewState.PENDING;
+    }
+
+    private ReviewState getReviewStateForPassenger(Trip trip, Passenger reviewer, Passenger reviewed) {
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(reviewer.getEndDateTime()) && now.isBefore(reviewed.getEndDateTime())){
-            return false;
+            return ReviewState.DISABLED;
         }
-        return passengerReviewDao.canReviewPassenger(reviewer.getTrip(), reviewer.getUser(), reviewed);
+        return passengerReviewDao.canReviewPassenger(trip, reviewer.getUser(), reviewed) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
     @Override
-    public List<Passenger> filterPassengersToReview(final Trip trip, User reviewer, List<Passenger> passengers) {
-        List<Passenger> passengersToReview = new ArrayList<>(passengers);
-        passengersToReview.removeIf(passenger -> reviewer.getUserId() == passenger.getUserId());
+    public List<ItemReview<Passenger>> getPassengersReviewState(final Trip trip, User reviewer, List<Passenger> passengers) {
         if(tripService.userIsDriver(trip.getTripId(), reviewer)) {
-            passengersToReview.removeIf(passenger -> !canDriverReviewPassenger(trip, reviewer, passenger));
+            return passengers.stream().filter(
+                    passenger -> reviewer.getUserId() != passenger.getUserId())
+            .map(
+                    passenger -> new ItemReview<>(passenger, getReviewStateForDriver(trip, reviewer, passenger)))
+            .collect(Collectors.toList());
         } else if (tripService.userIsPassenger(trip.getTripId(), reviewer)) {
             final Optional<Passenger> reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer);
             if(!reviewerPassenger.isPresent()) {
@@ -118,12 +130,15 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
                 LOGGER.error("Can't find passenger with id {} in trip with id {}", reviewer.getUserId(), trip.getTripId(), e);
                 throw e;
             }
-            passengersToReview.removeIf(passenger -> !canPassengerReviewPassenger(reviewerPassenger.get(), passenger));
+            return passengers.stream().filter(
+                    passenger -> reviewer.getUserId() != passenger.getUserId())
+            .map(
+                    passenger -> new ItemReview<>(passenger, getReviewStateForPassenger(trip, reviewerPassenger.get(), passenger)))
+            .collect(Collectors.toList());
         } else {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("User with id {} is not a passenger nor the driver in trip with id {}", reviewer.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        return passengersToReview;
     }
 }

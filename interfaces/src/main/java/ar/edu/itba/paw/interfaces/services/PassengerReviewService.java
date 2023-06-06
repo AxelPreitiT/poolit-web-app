@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.models.reviews.PassengerReviewOptions;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -18,5 +19,5 @@ public interface PassengerReviewService {
 
     boolean canReviewPassenger(final Trip trip, final User reviewer, final Passenger reviewed);
 
-    List<Passenger> filterPassengersToReview(final Trip trip, final User reviewer, final List<Passenger> passengers);
+    List<ItemReview<Passenger>> getPassengersReviewState(final Trip trip, final User reviewer, final List<Passenger> passengers);
 }

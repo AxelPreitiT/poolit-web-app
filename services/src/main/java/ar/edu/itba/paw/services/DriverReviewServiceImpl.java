@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
+import ar.edu.itba.paw.models.reviews.ItemReview;
+import ar.edu.itba.paw.models.reviews.ReviewState;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +71,19 @@ public class DriverReviewServiceImpl implements DriverReviewService {
             LOGGER.error("Passenger with id {} tried to review himself", reviewer.getUserId(), e);
             throw e;
         }
+        return getReviewState(trip, reviewer, driver) == ReviewState.PENDING;
+    }
+
+    private ReviewState getReviewState(Trip trip, Passenger reviewer, User driver) {
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
-            return false;
+            return ReviewState.DISABLED;
         }
-        return driverReviewDao.canReviewDriver(trip, reviewer, driver);
+        return driverReviewDao.canReviewDriver(trip, reviewer, driver) ? ReviewState.PENDING : ReviewState.DONE;
+    }
+
+    @Override
+    public ItemReview<User> getDriverReviewState(Trip trip, Passenger reviewer, User driver) {
+        return new ItemReview<>(driver, getReviewState(trip, reviewer, driver));
     }
 }

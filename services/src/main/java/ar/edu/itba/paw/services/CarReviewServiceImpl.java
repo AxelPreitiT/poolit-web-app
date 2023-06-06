@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
+import ar.edu.itba.paw.models.reviews.ItemReview;
+import ar.edu.itba.paw.models.reviews.ReviewState;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +71,19 @@ public class CarReviewServiceImpl implements CarReviewService {
             LOGGER.error("User with id {} tried to review car with id {}, but he's the owner of the car", reviewer.getUserId(), car.getCarId(), e);
             throw e;
         }
+        return getReviewState(trip, reviewer, car) == ReviewState.PENDING;
+    }
+
+    private ReviewState getReviewState(Trip trip, Passenger reviewer, Car car) {
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
-            return false;
+            return ReviewState.DISABLED;
         }
-        return carReviewDao.canReviewCar(trip, reviewer, car);
+        return carReviewDao.canReviewCar(trip, reviewer, car) ? ReviewState.PENDING : ReviewState.DONE;
+    }
+
+    @Override
+    public ItemReview<Car> getCarReviewState(Trip trip, Passenger reviewer, Car car) {
+        return new ItemReview<>(car, getReviewState(trip, reviewer, car));
     }
 }

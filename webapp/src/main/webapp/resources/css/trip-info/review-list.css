@@ -12,6 +12,10 @@
     margin: 1em 0;
 }
 
+.review-list-item {
+    position: relative;
+}
+
 .review-list-item > button {
     width: 100%;
     display: flex;
@@ -43,4 +47,9 @@
     border-radius: 50%;
     object-fit: cover;
     aspect-ratio: 1/1;
+}
+
+.disabled-text {
+    position: absolute;
+    right: 0;
 }

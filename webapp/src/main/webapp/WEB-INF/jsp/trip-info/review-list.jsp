@@ -17,14 +17,22 @@
   </c:if>
   <c:if test="${tripReviewCollection.canReviewPassengers}">
     <div class="review-list-header">
-      <i class="bi bi-people-fill italic-text h3"></i>
-      <h3 class="italic-text"><spring:message code="tripDetails.passengers"/></h3>
+      <i class="bi bi-people-fill text h3"></i>
+      <h3 class="text"><spring:message code="tripDetails.passengers"/></h3>
     </div>
     <div class="review-list-content">
-      <c:forEach items="${tripReviewCollection.passengers}" var="passenger">
+      <c:forEach items="${tripReviewCollection.passengers}" var="passengerReviewItem">
+        <c:set var="passenger" value="${passengerReviewItem.item}"/>
+        <c:set var="reviewState" value="${passengerReviewItem.state}"/>
         <div class="review-list-item">
           <c:url value="/image/${passenger.userImageId}" var="passengerImageUrl"/>
-          <button class="btn shadow-btn button-style button-color" data-bs-target="#review-passenger-${passenger.userId}" data-bs-toggle="modal">
+          <button
+                  class="btn shadow-btn button-style <c:choose><c:when test="${passengerReviewItem.pending}">button-color</c:when><c:when test="${passengerReviewItem.done}">success-bg-color</c:when><c:when test="${passengerReviewItem.disabled}">danger-bg-color</c:when></c:choose>"
+                  data-bs-target="#review-passenger-${passenger.userId}"
+                  data-bs-toggle="modal"
+                  <c:if test="${!passengerReviewItem.pending}">
+                    disabled
+                  </c:if>>
             <img src="${passengerImageUrl}" alt="passenger image" class="passenger-image">
             <div class="review-list-item-text">
               <spring:message code="user.nameFormat" var="passengerName" arguments="${passenger.name}, ${passenger.surname}"/>
@@ -40,6 +48,11 @@
               </c:if>
             </div>
           </button>
+          <c:if test="${!passengerReviewItem.pending}">
+            <span class="italic-text disabled-text">
+              <spring:message code="passenger.review.state.${reviewState}"/>
+            </span>
+          </c:if>
         </div>
       </c:forEach>
     </div>

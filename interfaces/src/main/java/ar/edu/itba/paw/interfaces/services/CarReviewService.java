@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
+import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface CarReviewService {
     List<CarReview> getCarReviews(final Car car);
 
     boolean canReviewCar(final Trip trip, final Passenger reviewer, final Car car);
+
+    ItemReview<Car> getCarReviewState(final Trip trip, final Passenger reviewer, final Car car);
 }

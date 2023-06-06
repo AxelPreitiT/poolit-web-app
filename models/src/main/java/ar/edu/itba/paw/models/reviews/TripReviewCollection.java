@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 
 public class TripReviewCollection {
 
-    final private User driver;
+    final private ItemReview<User> driver;
 
-    final private Car car;
+    final private ItemReview<Car> car;
 
-    final private List<Passenger> passengers;
+    final private List<ItemReview<Passenger>> passengers;
 
-    public TripReviewCollection(final User driver, final Car car, final List<Passenger> passengers) {
+    public TripReviewCollection(final ItemReview<User> driver, final ItemReview<Car> car, final List<ItemReview<Passenger>> passengers) {
         this.driver = driver;
         this.car = car;
         this.passengers = passengers;
@@ -41,28 +41,28 @@ public class TripReviewCollection {
                 .collect(Collectors.toList());
     }
 
-    public User getDriver() {
+    public ItemReview<User> getDriver() {
         return driver;
     }
 
-    public Car getCar() {
+    public ItemReview<Car> getCar() {
         return car;
     }
 
-    public List<Passenger> getPassengers() {
+    public List<ItemReview<Passenger>> getPassengers() {
         return passengers;
     }
 
     public boolean getCanReviewDriver() {
-        return driver != null;
+        return driver != null && driver.isPending();
     }
 
     public boolean getCanReviewCar() {
-        return car != null;
+        return car != null && car.isPending();
     }
 
     public boolean getCanReviewPassengers() {
-        return passengers != null && !passengers.isEmpty();
+        return passengers != null && !passengers.isEmpty() && passengers.stream().anyMatch(ItemReview::isPending);
     }
 
     public boolean getCanReview() {

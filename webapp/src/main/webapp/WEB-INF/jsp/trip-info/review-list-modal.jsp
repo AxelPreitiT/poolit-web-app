@@ -31,7 +31,8 @@
     </div>
   </div>
   <div id="review-form-modals">
-    <c:forEach items="${tripReviewCollection.passengers}" var="passenger">
+    <c:forEach items="${tripReviewCollection.passengers}" var="passengerReviewItem">
+      <c:set var="passenger" value="${passengerReviewItem.item}"/>
       <div class="modal fade" id="review-passenger-${passenger.userId}">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -41,7 +42,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-modal" data-bs-toggle="modal">
-                <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
+                <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
               </button>
             </div>
           </div>

@@ -22,42 +22,63 @@
   <c:url value="/reviews/trip/${passenger.trip.tripId}/passengers/${passenger.user.userId}" var="passengerReviewUrl"/>
   <div class="passenger-review-form">
     <form:form modelAttribute="passengerReviewForm" method="post" action="${passengerReviewUrl}">
-      <form:select path="rating" class="passenger-review-rating" id="${passenger.userId}">
-        <c:forEach items="${tripReviewCollection.ratingOptions}" var="ratingOption">
-          <c:choose>
-            <c:when test="${ratingOption == 3}">
-              <form:option
-                      value="${ratingOption}"
-                      label="${tripReviewCollection.getRatingOptionLabel(ratingOption)}"
-                      selected="selected"
+      <div>
+        <label for="passenger-${passenger.userId}" class="passenger-review-rating-label">
+          ¿Cómo calificarías a este pasajero?
+        </label>
+        <form:select path="rating" cssClass="passenger-review-rating form-select" id="passenger-${passenger.userId}">
+          <c:forEach items="${tripReviewCollection.ratingOptions}" var="ratingOption">
+            <c:choose>
+              <c:when test="${ratingOption == 3}">
+                <form:option
+                        value="${ratingOption}"
+                        label="${tripReviewCollection.getRatingOptionLabel(ratingOption)}"
+                        selected="selected"
                 />
-            </c:when>
-            <c:otherwise>
+              </c:when>
+              <c:otherwise>
                 <form:option
                         value="${ratingOption}"
                         label="${tripReviewCollection.getRatingOptionLabel(ratingOption)}"
                 />
-            </c:otherwise>
-          </c:choose>
-        </c:forEach>
-      </form:select>
-      <c:forEach items="${tripReviewCollection.ratingOptions}" var="ratingOption">
-        <form:select
-                path="option"
-                class="passenger-review-option"
-                id="${passenger.userId}-${ratingOption}"
-                disabled="${ratingOption != 3}"
-        >
-          <c:forEach items="${tripReviewCollection.getPassengerReviewOptionsByRating(ratingOption)}" var="option">
-            <spring:message var="label" code="${option.springMessageCode}"/>
-            <form:option
-                    value="${option.name}"
-                    label="${label}"
-            />
+              </c:otherwise>
+            </c:choose>
           </c:forEach>
         </form:select>
+      </div>
+      <c:forEach items="${tripReviewCollection.ratingOptions}" var="ratingOption">
+        <div
+                id="passenger-${passenger.userId}-${ratingOption}-container"
+                class="passenger-review-option-container"
+                <c:if test="${ratingOption != 3}">
+                  hidden="hidden"
+                </c:if>
+        >
+          <label for="passenger-${passenger.userId}-${ratingOption}" class="passenger-review-option-label">
+            ¿Qué destacarías de este pasajero?
+          </label>
+          <form:select
+                  path="option"
+                  cssClass="passenger-review-option form-select"
+                  id="passenger-${passenger.userId}-${ratingOption}"
+                  disabled="${ratingOption != 3}"
+          >
+            <c:forEach items="${tripReviewCollection.getPassengerReviewOptionsByRating(ratingOption)}" var="option">
+              <spring:message var="label" code="${option.springMessageCode}"/>
+              <form:option
+                      value="${option.name}"
+                      label="${label}"
+              />
+            </c:forEach>
+          </form:select>
+        </div>
       </c:forEach>
-      <form:input path="comment"/>
+      <div>
+        <label for="passenger-${passenger.userId}-comment" class="passenger-review-comment-label">
+          Deja un comentario adicional (opcional)
+        </label>
+        <form:textarea path="comment" cssClass="form-control" id="passenger-${passenger.userId}-comment"/>
+      </div>
     </form:form>
   </div>
 </div>

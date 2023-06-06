@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.exceptions.*;
@@ -85,7 +86,7 @@ public class TripController extends LoggedUserController {
     private ModelAndView tripDetailsForDriver(final long tripId, final User user){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengers(trip);
-        final List<Passenger> passengersToReview = passengerReviewService.filterPassengersToReview(trip, user, passengers);
+        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengers);
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(null, null, passengersToReview);
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
@@ -98,9 +99,9 @@ public class TripController extends LoggedUserController {
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengersRecurrent(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
-        final List<Passenger> passengersToReview = passengerReviewService.filterPassengersToReview(trip, user, passengers);
-        final User driver = driverReviewService.canReviewDriver(trip, passenger, trip.getDriver()) ? trip.getDriver() : null;
-        final Car car = carReviewService.canReviewCar(trip, passenger, trip.getCar()) ? trip.getCar() : null;
+        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengers);
+        final ItemReview<User> driver = driverReviewService.getDriverReviewState(trip, passenger, trip.getDriver());
+        final ItemReview<Car> car = carReviewService.getCarReviewState(trip, passenger, trip.getCar());
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(driver, car, passengersToReview);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
