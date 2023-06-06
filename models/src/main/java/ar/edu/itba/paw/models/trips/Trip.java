@@ -56,6 +56,8 @@ public class Trip {
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean deleted;
     private transient int occupiedSeats = 0;
 
     protected Trip(){
@@ -245,6 +247,10 @@ public class Trip {
 
     public void setQueryStartDateTime(LocalDateTime queryStartDateTime) {
         this.queryStartDateTime = queryStartDateTime;
+    }
+
+    public boolean getDeleted(){
+        return deleted;
     }
 
     public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {
