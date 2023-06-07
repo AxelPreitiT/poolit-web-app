@@ -45,11 +45,11 @@
       </div>
     </div>
     <div id="button-container">
-      <c:if test="${tripReviewCollection.canReview}">
-        <div id="review-trip-container">
-          <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp"/>
-        </div>
-      </c:if>
+      <div id="review-trip-container">
+        <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
+          <jsp:param name="reviewed" value="${reviewed}"/>
+        </jsp:include>
+      </div>
       <c:if test="${!trip.tripHasEnded}">
         <div class="delete-trip-container">
           <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">

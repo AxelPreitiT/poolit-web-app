@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -122,6 +123,9 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
                     passenger -> reviewer.getUserId() != passenger.getUserId())
             .map(
                     passenger -> new ItemReview<>(passenger, getReviewStateForDriver(trip, reviewer, passenger)))
+            .sorted(
+                    Comparator.comparing(ItemReview::getState)
+            )
             .collect(Collectors.toList());
         } else if (tripService.userIsPassenger(trip.getTripId(), reviewer)) {
             final Optional<Passenger> reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer);
@@ -134,6 +138,9 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
                     passenger -> reviewer.getUserId() != passenger.getUserId())
             .map(
                     passenger -> new ItemReview<>(passenger, getReviewStateForPassenger(trip, reviewerPassenger.get(), passenger)))
+            .sorted(
+                    Comparator.comparing(ItemReview::getState)
+            )
             .collect(Collectors.toList());
         } else {
             IllegalStateException e = new IllegalStateException();

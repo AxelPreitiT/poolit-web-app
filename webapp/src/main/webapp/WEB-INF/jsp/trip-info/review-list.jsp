@@ -49,9 +49,9 @@
             </div>
           </button>
           <c:if test="${!passengerReviewItem.pending}">
-            <span class="italic-text disabled-text">
+            <p class="italic-text disabled-text">
               <spring:message code="passenger.review.state.${reviewState}"/>
-            </span>
+            </p>
           </c:if>
         </div>
       </c:forEach>

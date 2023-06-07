@@ -8,18 +8,22 @@
 <jsp:useBean id="tripReviewCollection" scope="request" type="ar.edu.itba.paw.models.reviews.TripReviewCollection" />
 
 <div id="review-list-modal-container">
-  <button class="btn button-color button-style shadow-btn" data-bs-target="#review-modal" data-bs-toggle="modal">
+  <button class="btn button-color button-style shadow-btn" data-bs-target="#review-list-modal" data-bs-toggle="modal">
     <i class="bi bi-pencil-square light-text h3"></i>
     <span class="light-text h3"><spring:message code="review.review"/></span>
   </button>
-  <div class="modal fade" id="review-modal">
+  <div class="modal fade <c:if test="${!(empty param.reviewed) && param.reviewed}">show-on-load</c:if>" id="review-list-modal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title secondary-color">¿Sobre quién desea opinar?</h2>
+          <h2 class="modal-title secondary-color"><spring:message code="review.modalTitle"/></h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
+          <div id="review-published-container" class="collapse <c:if test="${!(empty param.reviewed) && param.reviewed}">show</c:if>">
+            <i class="bi bi-check-circle-fill success h6"></i>
+            <span class="success h6" id="review-published-text"><spring:message code="review.toast.message"/></span>
+          </div>
           <jsp:include page="/WEB-INF/jsp/trip-info/review-list.jsp"/>
         </div>
         <div class="modal-footer">
@@ -35,7 +39,7 @@
       <c:set var="passenger" value="${passengerReviewItem.item}"/>
       <div class="modal fade" id="review-passenger-${passenger.userId}">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <c:url value="/reviews/trip/${passenger.trip.tripId}/passengers/${passenger.user.userId}" var="passengerReviewUrl"/>
+          <c:url value="/reviews/trips/${passenger.trip.tripId}/passengers/${passenger.user.userId}" var="passengerReviewUrl"/>
           <form:form modelAttribute="passengerReviewForm" method="post" action="${passengerReviewUrl}">
             <div class="modal-content">
               <div class="modal-body">
@@ -43,7 +47,7 @@
                 <jsp:include page="/WEB-INF/jsp/trip-info/passenger-review-form.jsp"/>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-modal" data-bs-toggle="modal">
+                <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
                   <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
                 </button>
                 <button type="submit" class="btn shadow-btn button-style button-color">
@@ -57,3 +61,5 @@
     </c:forEach>
   </div>
 </div>
+
+<script src="<c:url value="/resources/js/pages/trip-info/review-list-modal.js"/>"></script>

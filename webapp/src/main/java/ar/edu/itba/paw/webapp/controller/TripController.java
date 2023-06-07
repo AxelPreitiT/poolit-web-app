@@ -64,6 +64,7 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value = TRIP_DETAILS_PATH,method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
+                                       @RequestParam(value = "reviewed", required = false, defaultValue = "false") final boolean reviewed,
                                        @ModelAttribute("selectForm") final SelectionForm form,
                                        @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
@@ -75,12 +76,16 @@ public class TripController extends LoggedUserController {
             return tripDetailsForReservation(tripId,form);
         }
         final User user = userOp.get();
+        ModelAndView mav;
         if(tripService.userIsDriver(tripId,user)){
-            return tripDetailsForDriver(tripId, user);
+            mav = tripDetailsForDriver(tripId, user);
         }else if (tripService.userIsPassenger(tripId,user)){
-            return tripDetailsForPassenger(tripId,user);
+            mav = tripDetailsForPassenger(tripId,user);
+        } else {
+            return tripDetailsForReservation(tripId,form);
         }
-        return tripDetailsForReservation(tripId,form);
+        mav.addObject("reviewed", reviewed);
+        return mav;
     }
 
     private ModelAndView tripDetailsForDriver(final long tripId, final User user){

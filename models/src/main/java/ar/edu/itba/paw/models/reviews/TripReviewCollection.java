@@ -54,19 +54,15 @@ public class TripReviewCollection {
     }
 
     public boolean getCanReviewDriver() {
-        return driver != null && driver.isPending();
+        return driver != null;
     }
 
     public boolean getCanReviewCar() {
-        return car != null && car.isPending();
+        return car != null;
     }
 
     public boolean getCanReviewPassengers() {
-        return passengers != null && !passengers.isEmpty() && passengers.stream().anyMatch(ItemReview::isPending);
-    }
-
-    public boolean getCanReview() {
-        return getCanReviewDriver() || getCanReviewCar() || getCanReviewPassengers();
+        return passengers != null;
     }
 
     public List<Integer> getRatingOptions() {

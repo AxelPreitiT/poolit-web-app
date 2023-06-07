@@ -51,6 +51,6 @@
 }
 
 .disabled-text {
-    position: absolute;
-    right: 0;
+    text-align: right;
+    margin: 0;
 }
