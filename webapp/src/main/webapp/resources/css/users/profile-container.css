@@ -92,3 +92,7 @@
   border-top-right-radius: 30px;
 }
 
+.rows {
+    margin: inherit;
+}
+
