@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.models;
 
 public enum FeatureCar {
-    AIR("features.air"),
-    PET_FRIENDLY("features.petFriendly"),
-    MUSIC("features.music"),
-    TRUNK_SPACE("features.trunkSpace");
+    AIR("createCar.airConditioning"),
+    PET_FRIENDLY("createCar.petFriendly"),
+    MUSIC("createCar.music"),
+    TRUNK_SPACE("createCar.trunkSpace");
 
     private String code;
 

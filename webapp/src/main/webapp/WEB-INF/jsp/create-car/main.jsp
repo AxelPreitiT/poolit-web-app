@@ -23,20 +23,12 @@
             <div id="car-data-container">
                 <div class="car-data-row">
                     <span class="h3 secondary-color title-container"><spring:message code="createCar.carInfo"/></span>
-
-                    <select name="marcaAuto" class="form-select form-select-sm">
-                      <option value="-1"><spring:message code="createCar.brand"/></option>
-                      <option value="peugeot">Peugeot</option>
-                      <option value="renault">Renault</option>
-                      <option value="fiat">Fiat</option>
-                      <option value="volkswagen">Volkswagen</option>
-                    </select>
-                    <!-- TODO ver como en el form meter select
-                    <form:select path="${}" cssClass="form-select form-select-sm" id="${}">
-                        <form:option value="-1" label="${}"/>
-                        <form:options items="${brands}" itemValue="id" itemLabel="name"/>
+                    <form:select path="carBrand" cssClass="form-select form-select-sm" id="carBrand">
+                        <form:option value="-1"><spring:message code="createCar.brand"/></form:option>
+                        <c:forEach items="${brands}" var="brand">
+                            <form:option value="${brand}" label="${brand.toString()}"/>
+                        </c:forEach>
                     </form:select>
-                    -->
                     <spring:message code="createCar.carInfoPlaceholder" var="carInfoHolder"/>
                     <form:input path="carInfo" cssClass="form-control" id="carInfo" placeholder='${carInfoHolder}'/>
                     <div class="error-item">
@@ -84,22 +76,12 @@
             </div>
             <div class="car-features-container">
                 <div data-toggle="buttons">
-                  <label class="btn btn-custom">
-                    <input type="checkbox" id="air-conditioning" autocomplete="off">
-                    <spring:message code="createCar.airConditioning"/>
-                  </label>
-                  <label class="btn btn-custom">
-                    <input type="checkbox" id="pet-friendly" autocomplete="off">
-                    <spring:message code="createCar.petFriendly"/>
-                  </label>
-                  <label class="btn btn-custom">
-                    <input type="checkbox" id="trunk-space" autocomplete="off">
-                    <spring:message code="createCar.trunkSpace"/>
-                  </label>
-                  <label class="btn btn-custom">
-                    <input type="checkbox" id="music" autocomplete="off">
-                    <spring:message code="createCar.music"/>
-                  </label>
+                <c:forEach items="${allFeatures}" var="feature">
+                    <label class="btn btn-custom">
+                    <form:checkbox path="features" value="${feature}" />
+                    <spring:message code="${feature.toString()}"/>
+                    </label>
+                </c:forEach>
                 </div>
             </div>
         </div>

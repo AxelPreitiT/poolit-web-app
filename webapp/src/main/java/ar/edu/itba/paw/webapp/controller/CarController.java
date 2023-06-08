@@ -48,9 +48,10 @@ public class CarController extends LoggedUserController {
     @RequestMapping(value = "/cars/create", method = RequestMethod.GET)
     public ModelAndView createCarForm(@ModelAttribute("createCarForm") final CreateCarForm form) {
         LOGGER.debug("GET Request to /cars/create");
-        //Por si se necesitan las marcas para el front
-        //List<CarBrand> brands = Arrays.asList(CarBrand.values());
-        return new ModelAndView("create-car/main");
+        final ModelAndView mav = new ModelAndView("create-car/main");
+        mav.addObject("brands", CarBrand.values());
+        mav.addObject("allFeatures", FeatureCar.values());
+        return mav;
     }
 
     @RequestMapping(value = "/cars/create", method = RequestMethod.POST)
@@ -65,12 +66,7 @@ public class CarController extends LoggedUserController {
         try {
             byte[] data = form.getImageFile().getBytes();
             final Image image=imageService.createImage(data);
-            //TODO: Manejar la marca y los features con forms algo asi
-            //carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), form.getBrand(), form.getListFeatures());
-            ArrayList<FeatureCar> listFeatures = new ArrayList<>();
-            listFeatures.add(FeatureCar.AIR);
-            listFeatures.add(FeatureCar.PET_FRIENDLY);
-            carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), CarBrand.HONDA, listFeatures);
+            carService.createCar(form.getPlate(),form.getCarInfo(),user , image.getImageId(), form.getSeats(), form.getCarBrand(), form.getFeatures());
         } catch (IOException e) {
             LOGGER.error("Error while reading image file", e);
             throw e;
@@ -89,10 +85,12 @@ public class CarController extends LoggedUserController {
         final Car car = carService.findById(carId).orElseThrow(() -> new CarNotFoundException(carId));
         form.setCarInfo(car.getInfoCar());
         form.setSeats(car.getSeats());
+        form.setFeatures(car.getFeatures());
 
         final ModelAndView mav;
         if( car.getUser().getUserId()==user.getUserId()){
             mav = new ModelAndView("/create-car/car-detail-owner");
+            mav.addObject("allFeatures", FeatureCar.values());
         }else {
             mav = new ModelAndView("/create-car/car-detail");
         }
@@ -111,9 +109,7 @@ public class CarController extends LoggedUserController {
             LOGGER.warn("Errors found in updateCarForm: {}", errors.getAllErrors());
             return publicCar(carId,form);
         }
-        ArrayList<FeatureCar> listFeatures = new ArrayList<>();
-        listFeatures.add(FeatureCar.AIR);
-        carService.ModifyCar(carId,form.getCarInfo(),form.getSeats(),listFeatures);
+        carService.ModifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures());
         return publicCar(carId,form);
     }
 

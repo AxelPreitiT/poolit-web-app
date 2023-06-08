@@ -17,40 +17,46 @@
       <img class="circular--square" src="${carImageUrl}" alt="<spring:message code="updateCar.image"/>">
     </div>
   </div>
-  <h3 id="user-name">"${car.brand}"</h3>
+  <h3 id="user-name"><c:out value="${car.brand}"/></h3>
   <div class="row-info">
     <h6><spring:message code="createCar.carInfo"/></h6>
     <h4 class="no-edit"><c:out value="${car.infoCar}"/></h5>
     <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
+    <div class="error-item">
+        <i class="bi bi-exclamation-circle-fill danger"></i>
+        <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
+    </div>
   </div>
   <div class="row-info">
     <h6><spring:message code="createCar.seats"/></h6>
     <h4 class="no-edit"><c:out value="${car.seats}"/></h5>
     <form:input path="seats" cssClass="form-control hidden edit" id="seats" />
+    <div class="error-item">
+        <i class="bi bi-exclamation-circle-fill danger"></i>
+        <form:errors path="seats" cssClass="danger error-style" element="span"/>
+    </div>
   </div>
   <div class="row-info">
     <h6><spring:message code="createCar.plate"/></h6>
     <h4><c:out value="${car.plate}"/></h4>
   </div>
   <div class="row-info">
-    <h6><spring:message code="createCar.plate"/></h6>
-    <div data-toggle="buttons">
-      <label class="btn btn-custom">
-        <input type="checkbox" id="air-conditioning" autocomplete="off">
-        <spring:message code="createCar.airConditioning"/>
-      </label>
-      <label class="btn btn-custom">
-        <input type="checkbox" id="pet-friendly" autocomplete="off">
-        <spring:message code="createCar.petFriendly"/>
-      </label>
-      <label class="btn btn-custom">
-        <input type="checkbox" id="trunk-space" autocomplete="off">
-        <spring:message code="createCar.trunkSpace"/>
-      </label>
-      <label class="btn btn-custom">
-        <input type="checkbox" id="music" autocomplete="off">
-        <spring:message code="createCar.music"/>
-      </label>
+    <h6><spring:message code="updateCar.features"/></h6>
+    <div class="hidden edit" data-toggle="buttons">
+      <c:forEach items="${allFeatures}" var="feature">
+          <label class="btn btn-custom">
+          <form:checkbox path="features" value="${feature}" />
+          <spring:message code="${feature.toString()}"/>
+          </label>
+      </c:forEach>
+    </div>
+    <div class="no-edit">
+        <c:forEach items="${car.features}" var="feature">
+            <label class="btn btn-custom">
+            <checkbox value="${feature}"/>
+            <spring:message code="${feature.toString()}"/>
+            </label>
+        </c:forEach>
     </div>
   </div>
 
