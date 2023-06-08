@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.form;
 
 
 import ar.edu.itba.paw.models.FeatureCar;
+import ar.edu.itba.paw.webapp.form.annotations.MPFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -16,9 +18,16 @@ public class UpdateCarForm {
     @Min(value = 1)
     private int seats;
 
+    @MPFile
+    private MultipartFile imageFile;
+
     private List<FeatureCar> features;
 
     public List<FeatureCar> getFeatures() { return features; }
+
+    public MultipartFile getImageFile() { return imageFile; }
+
+    public void setImageFile(MultipartFile imageFile) { this.imageFile = imageFile; }
 
     public void setFeatures(List<FeatureCar> features) { this.features = features; }
 

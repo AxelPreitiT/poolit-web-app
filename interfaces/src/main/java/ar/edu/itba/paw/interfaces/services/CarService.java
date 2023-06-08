@@ -12,7 +12,7 @@ public interface CarService {
 
     Car createCar(String plate, String infoCar, final User user, final long image_id, int seats, CarBrand brand, List<FeatureCar> features);
 
-    Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features);
+    Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData);
 
     Optional<Car> findById(long carId);
 

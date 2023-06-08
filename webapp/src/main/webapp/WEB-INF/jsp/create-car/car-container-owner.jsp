@@ -10,11 +10,21 @@
 
 <div class="user-info-container">
   <c:url value="/cars/${car.carId}" var="updateCarUrl"/>
-  <form:form modelAttribute="updateCarForm" action="${updateCarUrl}" method="post" cssClass="form-style">
+  <form:form modelAttribute="updateCarForm" action="${updateCarUrl}" method="post" cssClass="form-style" enctype="multipart/form-data">
   <div class="avatar-img">
-    <div class="circular--landscape">
+    <div class="circular--landscape no-edit">
       <c:url value="/image/${car.image_id}" var="carImageUrl"/>
       <img class="circular--square" src="${carImageUrl}" alt="<spring:message code="updateCar.image"/>">
+    </div>
+    <div class="circular--landscape-container hidden edit" id="car-image-display">
+        <label for="image-file" id="image-label" class="secondary-bg-color shadow-btn button-style">
+            <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+            <div class="circular--landscape">
+            <img class="circular--square" src="${carImageUrl}" alt="<spring:message code="updateCar.image"/>">
+            </div>
+        </label>
+        <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
+        <span class="edit-icon"><i class="icon bi bi-pencil-fill secondary-color h1"></i></span>
     </div>
   </div>
   <h3 id="user-name"><c:out value="${car.brand}"/></h3>

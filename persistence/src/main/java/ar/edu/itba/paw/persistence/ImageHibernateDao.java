@@ -38,4 +38,15 @@ public class ImageHibernateDao implements ImageDao {
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
     }
+
+    @Override
+    public void replaceImage(long id, byte[] data) {
+        //TODO es mejor cambiar data o crear nueva entrada
+        Optional<Image> img = findById(id);
+        if (img.isPresent()){
+            Image imgToModify= img.get();
+            imgToModify.setData(data);
+            em.merge(imgToModify);
+        }
+    }
 }

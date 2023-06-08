@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.CarBrand;
 import ar.edu.itba.paw.models.FeatureCar;
@@ -18,9 +19,12 @@ public class CarServiceImpl implements CarService {
 
     private final CarDao carDao;
 
+    private final ImageService imageService;
+
     @Autowired
-    public CarServiceImpl(final CarDao carDao){
+    public CarServiceImpl(final CarDao carDao, final ImageService imageService1){
         this.carDao=carDao;
+        this.imageService=imageService1;
     }
 
     @Transactional
@@ -31,8 +35,14 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features) {
+    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) {
+        //TODO Fijarse si esto es facade
+        Optional<Car> car=findById(carId);
+        if (car.isPresent()){
+            imageService.replaceImage(car.get().getImage_id(),imgData);
+        }
         return carDao.ModifyCar(carId, infoCar, seats, features);
+
     }
 
     @Override

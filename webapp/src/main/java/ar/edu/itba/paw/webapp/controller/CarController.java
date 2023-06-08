@@ -109,7 +109,7 @@ public class CarController extends LoggedUserController {
             LOGGER.warn("Errors found in updateCarForm: {}", errors.getAllErrors());
             return publicCar(carId,form);
         }
-        carService.ModifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures());
+        carService.ModifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures(), form.getImageFile().getBytes());
         return publicCar(carId,form);
     }
 
