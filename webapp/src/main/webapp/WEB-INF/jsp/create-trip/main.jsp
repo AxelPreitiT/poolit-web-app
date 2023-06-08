@@ -149,9 +149,11 @@
                                         <i class="bi bi-car-front-fill text"></i>
                                     </div>
                                     <spring:message code="createTrip.selectCar" var="selectCar"/>
-                                    <form:select path="carId" cssClass="form-select form-select-sm" id="car-select" disabled="${empty cars}">
+                                    <form:select path="carId" cssClass="form-select form-select-sm" id="car-select"  disabled="${empty cars}">
                                         <form:option value="-1" label="${selectCar}"/>
-                                        <form:options items="${cars}" itemValue="carId" itemLabel="infoCar"/>
+                                        <c:forEach items="${cars}" var="car">
+                                            <form:option value="${car.carId}" label="${car.infoCar}" itemAttributes="${car.seats}"/>
+                                        </c:forEach>
                                     </form:select>
                                 </div>
                                 <c:forEach items="${cars}" var="car">
@@ -242,5 +244,7 @@
         </form:form>
     </div>
     <script src="<c:url value="/resources/js/pages/createTrip.js"/>" type="module"></script>
+    <script src="<c:url value="/resources/js/trips/maxSeats.js"/>" type="module"></script>
+
 </body>
 </html>
