@@ -160,8 +160,7 @@ public class UserController extends LoggedUserController {
         final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         final User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        final Set<User> blockedUsers = currentUser.getBlocked();
-        boolean isBlocked = blockedUsers.contains(user);
+        boolean isBlocked = userService.isBlocked(currentUser,user);
         boolean isOwnProfile = user.equals(currentUser);
         if(Objects.equals(user.getRole(), "USER")){
             List<Review> reviews = reviewService.getUsersIdReviews(user);

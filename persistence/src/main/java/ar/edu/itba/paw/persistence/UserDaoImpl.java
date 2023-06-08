@@ -105,4 +105,9 @@ public class UserDaoImpl implements UserDao {
     public void unblockUser(User blocker, User blocked) {
 
     }
+
+    @Override
+    public boolean isBlocked(User blocker, User blocked) {
+        return false;
+    }
 }

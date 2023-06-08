@@ -117,4 +117,7 @@ public class UserServiceImpl implements UserService {
         userDao.unblockUser(blocker,blocked);
     }
 
+    @Override
+    public boolean isBlocked(User blocker, User blocked) { return userDao.isBlocked(blocker,blocked); }
+
 }

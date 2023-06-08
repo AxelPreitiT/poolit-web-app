@@ -22,4 +22,5 @@ public interface UserService {
 
     void blockUser(User blocker, User blocked);
     void unblockUser(User blocker, User blocked);
+    boolean isBlocked(User blocker, User blocked);
 }
