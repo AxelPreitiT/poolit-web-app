@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.ItemReview;
@@ -15,7 +16,7 @@ public interface PassengerReviewService {
 
     double getPassengerRating(final User user);
 
-    List<PassengerReview> getPassengerReviews(final User user);
+    PagedContent<PassengerReview> getPassengerReviews(final User user, int page, int pageSize);
 
     boolean canReviewPassenger(final Trip trip, final User reviewer, final Passenger reviewed);
 

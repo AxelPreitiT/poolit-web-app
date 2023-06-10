@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.persistence;
 
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
@@ -14,7 +15,7 @@ public interface CarReviewDao {
 
     double getCarRating(final Car car);
 
-    List<CarReview> getCarReviews(final Car car);
+    PagedContent<CarReview> getCarReviews(final Car car, int page, int pageSize);
 
     boolean canReviewCar(final Trip trip, final Passenger reviewer, final Car car);
 }

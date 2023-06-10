@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistence.CarReviewDao;
 import ar.edu.itba.paw.interfaces.services.CarReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
@@ -50,8 +51,8 @@ public class CarReviewServiceImpl implements CarReviewService {
     }
 
     @Override
-    public List<CarReview> getCarReviews(Car car) {
-        return carReviewDao.getCarReviews(car);
+    public PagedContent<CarReview> getCarReviews(Car car, int page, int pageSize) {
+        return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
     @Override

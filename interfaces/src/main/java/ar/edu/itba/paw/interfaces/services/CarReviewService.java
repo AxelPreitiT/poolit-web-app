@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
@@ -15,7 +16,7 @@ public interface CarReviewService {
 
     double getCarsRating(final Car car);
 
-    List<CarReview> getCarReviews(final Car car);
+    PagedContent<CarReview> getCarReviews(final Car car, int page, int pageSize);
 
     boolean canReviewCar(final Trip trip, final Passenger reviewer, final Car car);
 

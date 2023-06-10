@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CarReviewDao;
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class CarReviewHibernateDao implements CarReviewDao {
@@ -44,13 +47,22 @@ public class CarReviewHibernateDao implements CarReviewDao {
     }
 
     @Override
-    public List<CarReview> getCarReviews(Car car) {
-        LOGGER.debug("Looking for all the car reviews of the car with id {}", car.getCarId());
-        final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.car = :car", CarReview.class);
-        carReviewsQuery.setParameter("car", car);
-        List<CarReview> result = carReviewsQuery.getResultList();
+    public PagedContent<CarReview> getCarReviews(Car car, int page, int pageSize) {
+        LOGGER.debug("Looking for all the car reviews of the car with id {} in page {} with page size {}", car.getCarId(), page, pageSize);
+        // 1+1 query
+        Query nativeQuery = em.createNativeQuery("SELECT DISTINCT review_id FROM car_reviews WHERE car_id = :car_id ORDER BY date DESC");
+        nativeQuery.setParameter("car_id", car.getCarId());
+        nativeQuery.setMaxResults(pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        @SuppressWarnings("unchecked")
+        final List<Long> reviewIdList = (List<Long>) nativeQuery.getResultList().stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
+
+        final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.reviewId IN :reviewIdList", CarReview.class);
+        carReviewsQuery.setParameter("reviewIdList", reviewIdList);
+        final List<CarReview> result = carReviewsQuery.getResultList();
+        final int totalCount = result.size();
         LOGGER.debug("Found {} in the database", result);
-        return result;
+        return new PagedContent<>(result, page, pageSize, totalCount);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.persistence;
 
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.DriverReview;
@@ -14,7 +15,7 @@ public interface DriverReviewDao {
 
     double getDriverRating(final User user);
 
-    List<DriverReview> getDriverReviews(final User user);
+    PagedContent<DriverReview> getDriverReviews(final User user, int page, int pageSize);
 
     boolean canReviewDriver(final Trip trip, final Passenger reviewer, final User driver);
 }

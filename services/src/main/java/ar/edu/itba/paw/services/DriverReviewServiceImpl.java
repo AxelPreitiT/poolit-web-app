@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistence.DriverReviewDao;
 import ar.edu.itba.paw.interfaces.services.DriverReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.DriverReview;
@@ -50,8 +51,8 @@ public class DriverReviewServiceImpl implements DriverReviewService {
     }
 
     @Override
-    public List<DriverReview> getDriverReviews(User user) {
-        return driverReviewDao.getDriverReviews(user);
+    public PagedContent<DriverReview> getDriverReviews(User user, int page, int pageSize) {
+        return driverReviewDao.getDriverReviews(user, page, pageSize);
     }
 
     @Override

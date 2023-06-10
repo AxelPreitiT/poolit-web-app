@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistence.PassengerReviewDao;
 import ar.edu.itba.paw.interfaces.services.PassengerReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.ItemReview;
@@ -54,8 +55,8 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     }
 
     @Override
-    public List<PassengerReview> getPassengerReviews(User user) {
-        return passengerReviewDao.getPassengerReviews(user);
+    public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
+        return passengerReviewDao.getPassengerReviews(user, page, pageSize);
     }
 
     @Override

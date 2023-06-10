@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.PassengerReviewDao;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PassengerReviewHibernateDao implements PassengerReviewDao {
@@ -44,13 +47,22 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
     }
 
     @Override
-    public List<PassengerReview> getPassengerReviews(User user) {
-        LOGGER.debug("Looking for all the passenger reviews of the user with id {}", user.getUserId());
-        final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewed = :user", PassengerReview.class);
-        reviewsQuery.setParameter("user", user);
+    public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
+        LOGGER.debug("Looking for passenger reviews of the user with id {} in page {} with page size {}", user.getUserId(), page, pageSize);
+        // 1+1 query
+        Query nativeQuery = em.createNativeQuery("SELECT DISTINCT review_id FROM passenger_reviews NATURAL JOIN user_reviews WHERE reviewed_id = :user_id ORDER BY date DESC");
+        nativeQuery.setParameter("user_id", user.getUserId());
+        nativeQuery.setMaxResults(pageSize);
+        nativeQuery.setFirstResult((page - 1) * pageSize);
+        @SuppressWarnings("unchecked")
+        final List<Long> reviewIdList = (List<Long>) nativeQuery.getResultList().stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
+
+        final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewId IN :reviewIdList", PassengerReview.class);
+        reviewsQuery.setParameter("reviewIdList", reviewIdList);
         List<PassengerReview> result = reviewsQuery.getResultList();
+        final int totalCount = result.size();
         LOGGER.debug("Found {} in the database", result);
-        return result;
+        return new PagedContent<>(result, page, pageSize, totalCount);
     }
 
     @Override
