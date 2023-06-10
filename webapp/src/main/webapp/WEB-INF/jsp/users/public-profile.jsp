@@ -15,17 +15,18 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
   </div>
   <div class="main-container">
-    <jsp:include page="/WEB-INF/jsp/users/public-profile-container.jsp">
-      <jsp:param name="countTrips" value="${countTrips}"/>
-    </jsp:include>
+    <jsp:include page="/WEB-INF/jsp/users/public-profile-container.jsp"/>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>
+      <c:url value="/reviews/users/${user.userId}" var="reviewsUrl"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="driver"/>
+        <jsp:param name="url" value="${reviewsUrl}"/>
       </jsp:include>
       <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="passenger"/>
+        <jsp:param name="url" value="${reviewsUrl}"/>
       </jsp:include>
     </div>
   </div>

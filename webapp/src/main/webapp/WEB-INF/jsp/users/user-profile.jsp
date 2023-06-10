@@ -18,7 +18,7 @@
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp"/>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
-      <c:url value="/reviews/user/${user.userId}" var="reviewsUrl"/>
+      <c:url value="/reviews/users/${user.userId}" var="reviewsUrl"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="passenger"/>
         <jsp:param name="url" value="${reviewsUrl}"/>

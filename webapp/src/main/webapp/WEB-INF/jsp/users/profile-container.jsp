@@ -39,6 +39,11 @@
   </div>
   <sec:authorize access="hasRole('ROLE_DRIVER')">
     <div class="row-info">
+      <jsp:useBean id="countTrips" type="java.lang.Integer" scope="request"/>
+      <h6><spring:message code="user.countTrips"/></h6>
+      <h4><c:out value="${countTrips}"/></h4>
+    </div>
+    <div class="row-info">
       <h6><spring:message code="driver.review.rating"/></h6>
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">

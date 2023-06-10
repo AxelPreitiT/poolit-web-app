@@ -18,8 +18,9 @@
   <h3 id="user-name"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
   <c:if test="${user.role eq 'DRIVER'}">
     <div class="row-info">
+      <jsp:useBean id="countTrips" type="java.lang.Integer" scope="request"/>
       <h6><spring:message code="user.countTrips"/></h6>
-      <h4><c:out value="${param.countTrips}"/></h4>
+      <h4><c:out value="${countTrips}"/></h4>
     </div>
     <div class="row-info">
       <h6><spring:message code="driver.review.rating"/></h6>

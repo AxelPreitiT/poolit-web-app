@@ -141,6 +141,7 @@ public class UserController extends LoggedUserController {
             final List<Trip> futureTripsAsDriver = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
             final List<Trip> pastTripsAsDriver = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
             final List<Car> cars = carService.findByUser(user);
+            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
             final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
             final Double driverRating = driverReviewService.getDriverRating(user);
             mav = new ModelAndView("/users/driver-profile");
@@ -149,6 +150,7 @@ public class UserController extends LoggedUserController {
             mav.addObject("cars", cars);
             mav.addObject("reviewsAsDriver", reviewsAsDriver);
             mav.addObject("driverRating", driverRating);
+            mav.addObject("countTrips", createdTrips.getTotalCount());
             mav.addObject("carAdded", carAdded);
         }
 
