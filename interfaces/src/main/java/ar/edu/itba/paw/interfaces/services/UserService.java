@@ -19,4 +19,5 @@ public interface UserService {
     void loginUser(final String email, final String password);
 
     void changeToDriver(User user);
+    void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
 }
