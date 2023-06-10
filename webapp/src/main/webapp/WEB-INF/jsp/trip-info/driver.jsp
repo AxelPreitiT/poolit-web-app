@@ -39,7 +39,7 @@
             <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
           </c:when>
           <c:otherwise>
-            <span class="h6 italic-text">Viaje único</span>
+            <span class="h6 italic-text"><spring:message code="trip.unique"/></span>
           </c:otherwise>
         </c:choose>
       </div>
@@ -53,8 +53,8 @@
       <c:if test="${!trip.tripHasEnded}">
         <div class="delete-trip-container">
           <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
-            <i class="bi bi-trash-fill light-text h5"></i>
-            <span class="light-text h3"><spring:message code="tripInfo.driver.deleteButton"/></span>
+            <i class="bi bi-trash-fill light-text h4"></i>
+            <span class="light-text h4"><spring:message code="tripInfo.driver.deleteButton"/></span>
           </button>
         </div>
         <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
@@ -89,11 +89,19 @@
       </c:if>
       <c:url value="/trips/created" var="myTripsUrl"/>
       <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
-        <i class="bi bi-car-front-fill light-text h3"></i>
-        <span class="light-text h3"><spring:message code="tripInfo.driver.button"/></span>
+        <i class="bi bi-car-front-fill light-text h4"></i>
+        <span class="light-text h4"><spring:message code="tripInfo.driver.button"/></span>
       </a>
     </div>
   </div>
 </div>
+<c:if test="${!(empty created) && created}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+      <jsp:param name="title" value="createTrip.success.toast.title"/>
+      <jsp:param name="message" value="createTrip.success.toast.message"/>
+    </jsp:include>
+  </div>
+</c:if>
 </body>
 </html>

@@ -62,7 +62,7 @@ public class TripReviewCollection {
     }
 
     public boolean getCanReviewPassengers() {
-        return passengers != null;
+        return passengers != null && !passengers.isEmpty();
     }
 
     public List<Integer> getRatingOptions() {

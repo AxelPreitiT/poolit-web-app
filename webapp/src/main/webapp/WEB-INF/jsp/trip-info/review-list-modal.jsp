@@ -6,11 +6,13 @@
 <link rel="stylesheet" href="<c:url value="/resources/css/trip-info/review-list-modal.css"/>" type="text/css">
 
 <jsp:useBean id="tripReviewCollection" scope="request" type="ar.edu.itba.paw.models.reviews.TripReviewCollection" />
+<jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.trips.Trip" />
+
 
 <div id="review-list-modal-container">
   <button class="btn button-color button-style shadow-btn" data-bs-target="#review-list-modal" data-bs-toggle="modal">
-    <i class="bi bi-pencil-square light-text h3"></i>
-    <span class="light-text h3"><spring:message code="review.review"/></span>
+    <i class="bi bi-pencil-square light-text h4"></i>
+    <span class="light-text h4"><spring:message code="review.review"/></span>
   </button>
   <div class="modal fade <c:if test="${!(empty param.reviewed) && param.reviewed}">show-on-load</c:if>" id="review-list-modal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -28,37 +30,93 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn shadow-btn button-style primary-button" data-bs-dismiss="modal">
-            <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
+            <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
           </button>
         </div>
       </div>
     </div>
   </div>
   <div id="review-form-modals">
-    <c:forEach items="${tripReviewCollection.passengers}" var="passengerReviewItem">
-      <c:set var="passenger" value="${passengerReviewItem.item}"/>
-      <div class="modal fade" id="review-passenger-${passenger.userId}">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <c:url value="/reviews/trips/${passenger.trip.tripId}/passengers/${passenger.user.userId}" var="passengerReviewUrl"/>
-          <form:form modelAttribute="passengerReviewForm" method="post" action="${passengerReviewUrl}">
-            <div class="modal-content">
-              <div class="modal-body">
-                <c:set var="passenger" value="${passenger}" scope="request"/>
-                <jsp:include page="/WEB-INF/jsp/trip-info/passenger-review-form.jsp"/>
+    <c:if test="${tripReviewCollection.canReviewDriver}">
+      <div id="driver-review-form-modal">
+        <c:set var="driverReviewItem" value="${tripReviewCollection.driver}"/>
+        <c:set var="driver" value="${driverReviewItem.item}" scope="request"/>
+        <div class="modal fade" id="review-driver">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <c:url value="/reviews/trips/${trip.tripId}/drivers/${driver.userId}" var="driverReviewUrl"/>
+            <form:form modelAttribute="driverReviewForm" method="post" action="${driverReviewUrl}">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <jsp:include page="/WEB-INF/jsp/trip-info/driver-review-form.jsp"/>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
+                    <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
+                  </button>
+                  <button type="submit" class="btn shadow-btn button-style button-color">
+                    <span class="light-text"><spring:message code="review.submit"/></span>
+                  </button>
+                </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
-                  <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
-                </button>
-                <button type="submit" class="btn shadow-btn button-style button-color">
-                  <span class="light-text"><spring:message code="review.submit"/></span>
-                </button>
-              </div>
-            </div>
-          </form:form>
+            </form:form>
+          </div>
         </div>
       </div>
-    </c:forEach>
+    </c:if>
+    <c:if test="${tripReviewCollection.canReviewCar}">
+      <div id="car-review-form-modal">
+        <c:set var="carReviewItem" value="${tripReviewCollection.car}"/>
+        <c:set var="car" value="${carReviewItem.item}" scope="request"/>
+        <div class="modal fade" id="review-car">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <c:url value="/reviews/trips/${trip.tripId}/cars/${car.carId}" var="carReviewUrl"/>
+            <form:form modelAttribute="carReviewForm" method="post" action="${carReviewUrl}">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <jsp:include page="/WEB-INF/jsp/trip-info/car-review-form.jsp"/>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
+                    <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
+                  </button>
+                  <button type="submit" class="btn shadow-btn button-style button-color">
+                    <span class="light-text"><spring:message code="review.submit"/></span>
+                  </button>
+                </div>
+              </div>
+            </form:form>
+          </div>
+        </div>
+      </div>
+    </c:if>
+    <c:if test="${tripReviewCollection.canReviewPassengers}">
+      <div id="passenger-review-form-modals">
+        <c:forEach items="${tripReviewCollection.passengers}" var="passengerReviewItem">
+          <c:set var="passenger" value="${passengerReviewItem.item}"/>
+          <div class="modal fade" id="review-passenger-${passenger.userId}">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <c:url value="/reviews/trips/${trip.tripId}/passengers/${passenger.user.userId}" var="passengerReviewUrl"/>
+              <form:form modelAttribute="passengerReviewForm" method="post" action="${passengerReviewUrl}">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <c:set var="passenger" value="${passenger}" scope="request"/>
+                    <jsp:include page="/WEB-INF/jsp/trip-info/passenger-review-form.jsp"/>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
+                      <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
+                    </button>
+                    <button type="submit" class="btn shadow-btn button-style button-color">
+                      <span class="light-text"><spring:message code="review.submit"/></span>
+                    </button>
+                  </div>
+                </div>
+              </form:form>
+            </div>
+          </div>
+        </c:forEach>
+      </div>
+    </c:if>
   </div>
 </div>
 

@@ -22,7 +22,7 @@ public enum CarReviewOptions {
     SEATBELTS(Arrays.asList(3, 4, 5)),
     VERY_GOOD_STATE(Arrays.asList(4, 5)),
     VERY_CLEAN(Arrays.asList(4)),
-    IMPECABLE(Arrays.asList(5)),
+    IMPECCABLE(Arrays.asList(5)),
     BIG_TRUNK_SPACE(Arrays.asList(5)),
     VERY_COMFORTABLE_SEATS(Arrays.asList(5)),
     AIR_CONDITIONING_WORKING_PERFECTLY(Arrays.asList(5));

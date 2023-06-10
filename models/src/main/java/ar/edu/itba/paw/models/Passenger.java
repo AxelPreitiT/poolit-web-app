@@ -123,4 +123,8 @@ public class Passenger{
     }
 
     public long getUserImageId() { return user.getUserImageId(); }
+
+    public boolean isTripEnded() {
+        return LocalDateTime.now().isAfter(endDateTime);
+    }
 }

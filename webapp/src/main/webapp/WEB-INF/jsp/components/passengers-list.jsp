@@ -2,6 +2,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<link rel="stylesheet" href="<c:url value="/resources/css/components/passengers-list.css"/>" type="text/css">
+
 <jsp:useBean id="passengers" scope="request" type="java.util.List" />
 <jsp:useBean id="trip" scope="request" type="ar.edu.itba.paw.models.trips.Trip" />
 

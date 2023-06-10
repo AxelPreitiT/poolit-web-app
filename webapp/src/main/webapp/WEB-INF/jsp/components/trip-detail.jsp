@@ -18,7 +18,7 @@
   <div id="trip-info-container">
     <div class="container">
       <div class="row">
-        <div class="col-sm-6 col-md-5 col-lg-4">
+        <div class="col-md-6 col-lg-5 col-xl-4">
           <div id="trip-info-text-container">
             <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
               <jsp:param name="showDriverInfo" value="${param.showDriverInfo}"/>
@@ -26,7 +26,7 @@
             </jsp:include>
           </div>
         </div>
-        <div class="col-sm-6 col-md-5 col-lg-5">
+        <div class="col-md-6 col-lg-5">
           <c:choose>
             <c:when test="${param.showPassengers}">
               <div id="trip-passengers">

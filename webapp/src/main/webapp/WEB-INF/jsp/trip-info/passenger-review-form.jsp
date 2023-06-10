@@ -13,7 +13,7 @@
   <c:url value="/image/${passenger.user.userImageId}" var="passengerImageUrl"/>
   <spring:message code="user.nameFormat" var="passengerName" arguments="${passenger.name}, ${passenger.surname}"/>
   <div class="passenger-review-form-header">
-    <img src="${passengerImageUrl}" alt="passenger image" class="passenger-image">
+    <img src="${passengerImageUrl}" alt="${passengerName}" class="passenger-image">
     <div class="passenger-review-form-title">
       <h3 class="secondary-color">${passengerName}</h3>
       <hr class="secondary-color">

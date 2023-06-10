@@ -36,7 +36,7 @@ public class CarReviewHibernateDao implements CarReviewDao {
     @Override
     public double getCarRating(Car car) {
         LOGGER.debug("Looking for the average car rating of the car with id {}", car.getCarId());
-        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(cr.rating), 0.0) FROM CarReview cr WHERE cr.reviewed = :car", Double.class);
+        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(cr.rating), 0.0) FROM CarReview cr WHERE cr.car = :car", Double.class);
         avgRatingQuery.setParameter("car", car);
         Double result = avgRatingQuery.getSingleResult();
         LOGGER.debug("Average car rating of the car with id {} is {}", car.getCarId(), result);
@@ -46,7 +46,7 @@ public class CarReviewHibernateDao implements CarReviewDao {
     @Override
     public List<CarReview> getCarReviews(Car car) {
         LOGGER.debug("Looking for all the car reviews of the car with id {}", car.getCarId());
-        final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.reviewed = :car", CarReview.class);
+        final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.car = :car", CarReview.class);
         carReviewsQuery.setParameter("car", car);
         List<CarReview> result = carReviewsQuery.getResultList();
         LOGGER.debug("Found {} in the database", result);
@@ -56,7 +56,7 @@ public class CarReviewHibernateDao implements CarReviewDao {
     @Override
     public boolean canReviewCar(Trip trip, Passenger reviewer, Car car) {
         LOGGER.debug("Checking if passenger with id {} can review car with id {} in the trip with id {}", reviewer.getUserId(), car.getCarId(), trip.getTripId());
-        final TypedQuery<CarReview> carReviewQuery = em.createQuery("FROM CarReview cr WHERE cr.trip = :trip AND cr.reviewer = :passenger AND cr.reviewed = :car", CarReview.class);
+        final TypedQuery<CarReview> carReviewQuery = em.createQuery("FROM CarReview cr WHERE cr.trip = :trip AND cr.reviewer = :passenger AND cr.car = :car", CarReview.class);
         carReviewQuery.setParameter("trip", trip);
         carReviewQuery.setParameter("passenger", reviewer.getUser());
         carReviewQuery.setParameter("car", car);

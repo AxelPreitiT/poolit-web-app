@@ -64,6 +64,8 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value = TRIP_DETAILS_PATH,method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
+                                       @RequestParam(value = "created", required = false, defaultValue = "false") final boolean created,
+                                       @RequestParam(value = "joined", required = false, defaultValue = "false") final boolean joined,
                                        @RequestParam(value = "reviewed", required = false, defaultValue = "false") final boolean reviewed,
                                        @ModelAttribute("selectForm") final SelectionForm form,
                                        @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
@@ -78,9 +80,9 @@ public class TripController extends LoggedUserController {
         final User user = userOp.get();
         ModelAndView mav;
         if(tripService.userIsDriver(tripId,user)){
-            mav = tripDetailsForDriver(tripId, user);
+            mav = tripDetailsForDriver(tripId, user, created);
         }else if (tripService.userIsPassenger(tripId,user)){
-            mav = tripDetailsForPassenger(tripId,user);
+            mav = tripDetailsForPassenger(tripId, user, joined);
         } else {
             return tripDetailsForReservation(tripId,form);
         }
@@ -88,7 +90,7 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForDriver(final long tripId, final User user){
+    private ModelAndView tripDetailsForDriver(final long tripId, final User user, final boolean created){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengers(trip);
         final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengers);
@@ -97,10 +99,11 @@ public class TripController extends LoggedUserController {
         mav.addObject("trip",trip);
         mav.addObject("passengers",passengers);
         mav.addObject("tripReviewCollection", tripReviewCollection);
+        mav.addObject("created", created);
         return mav;
     }
 
-    private ModelAndView tripDetailsForPassenger(final long tripId, final User user){
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined){
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getPassengersRecurrent(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
@@ -113,6 +116,7 @@ public class TripController extends LoggedUserController {
         mav.addObject("passenger",passenger);
         mav.addObject("tripReviewCollection", tripReviewCollection);
         mav.addObject("passengers",passengers);
+        mav.addObject("joined", joined);
         return mav;
     }
 
@@ -135,9 +139,7 @@ public class TripController extends LoggedUserController {
         final User passenger = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final Trip trip = tripService.findById(tripId,form.getStartDate(),form.getStartTime(),form.getEndDate()).orElseThrow(() -> new TripNotFoundException(tripId));
         tripService.addPassenger(trip,passenger,form.getStartDate(),form.getStartTime(),form.getEndDate());
-        final ModelAndView mav = tripDetailsForPassenger(tripId,passenger);
-        mav.addObject("successInscription",true);
-        return mav;
+        return new ModelAndView("redirect:/trips/" + tripId + "?joined=true");
     }
 
     @RequestMapping(value = SEARCH_TRIP_PATH, method = RequestMethod.GET)
@@ -206,10 +208,7 @@ public class TripController extends LoggedUserController {
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final Car car = carService.findById(form.getCarId()).orElseThrow(() -> new CarNotFoundException(form.getCarId()));
         final Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),user,form.getLastDate(), form.getTime());
-        final ModelAndView mav = new ModelAndView("/create-trip/success");
-        mav.addObject("trip", trip);
-
-        return mav;
+        return new ModelAndView("redirect:/trips/" + trip.getTripId() + "?created=true");
     }
 
     @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
