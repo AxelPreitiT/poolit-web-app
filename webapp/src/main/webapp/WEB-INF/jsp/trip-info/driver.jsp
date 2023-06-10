@@ -9,6 +9,8 @@
   <jsp:include page="/resources/external-resources.jsp"/>
   <jsp:include page="/WEB-INF/jsp/base/base.css.jsp"/>
   <link href="<c:url value="/resources/css/trip-info/driver.css"/>" rel="stylesheet" type="text/css"/>
+  <link href="<c:url value="/resources/css/components/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
+  <link href="<c:url value="/resources/css/components/trip-detail-card.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
 <div id="navbar-container">
@@ -16,49 +18,28 @@
 </div>
 <div class="main-container-style container-color">
   <div class="info-container">
+  <div id="trip-route-container">
     <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
-    <div class="trip-info-container">
-      <div class="trip-info">
-        <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
-          <jsp:param name="showDriverInfo" value="true"/>
-        </jsp:include>
-      </div>
-      <div class="trip-passengers">
-        <c:choose>
-          <c:when test="${passengers.size()>0}">
-            <div class="secondary-bg-color passenger-container">
-              <div class="h2 light-text"><spring:message code="tripDetails.passengers"/></div>
-              <div class="passenger-list">
-                <c:forEach items="${passengers}" var="user">
-                  <c:url value="/profile/${user.userId}" var="userUrl"/>
-                  <c:url value="/image/${user.userImageId}" var="userImageId"/>
-                  <div class="individual-profile">
-                    <a href="${userUrl}" class="show-row profile-link">
-                      <div>
-                        <img src="${userImageId}" alt="user image" class="image-photo"/>
-                      </div>
-                      <div class="show-row-content">
-                        <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
-                      </div>
-                    </a>
-                    <c:if test="${trip.recurrent}">
-                        <div class="dates light-text detail">
-                            <c:out value="${user.startDateString}"/> - <c:out value="${user.endDateString}"/>
-                        </div>
-                    </c:if>
-                  </div>
-                </c:forEach>
+  </div>
+    <div id="trip-info-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-md-5 col-lg-4">
+            <div id="trip-info-text-container">
+              <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+                <jsp:param name="showDriverInfo" value="true"/>
+              </jsp:include>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-5 col-lg-5">
+            <div id="car-info-image">
+              <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+              <div class="placeholder-image">
+                <img src="${carImageUrl}" alt="car image"/>
               </div>
             </div>
-          </c:when>
-          <c:otherwise>
-            <div class="details-container secondary-bg-color no-passengers-text passenger-container">
-              <i class="bi bi-car-front-fill light-text h1"></i>
-              <h4 class="light-text"><spring:message code="tripInfo.driver.noPassengers"/></h4>
-              <h6 class="light-text"><spring:message code="tripInfo.driver.noPassengers.message"/></h6>
-            </div>
-          </c:otherwise>
-        </c:choose>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -131,5 +112,98 @@
     </div>
   </div>
 </div>
+<div class="main-container-style container-color">
+  <div class="info-container">
+    <h3 class="secondary-color title-style"><spring:message code="driver.passangers.title"/></h3>
+    <c:url value="" var="baseStatusUrl">
+      <c:forEach var="p" items="${param}">
+        <c:if test="${!(p.key eq 'status')}">
+          <c:param name="${p.key}" value="${p.value}"/>
+        </c:if>
+      </c:forEach>
+    </c:url>
+    <jsp:include page="/WEB-INF/jsp/components/passangers-order-by.jsp">
+      <jsp:param name="baseUrl" value="${baseStatusUrl}"/>
+    </jsp:include>
+
+    <c:forEach items="${passengersContent.elements}" var="user">
+      <c:url value="/profile/${user.userId}" var="userUrl"/>
+      <c:url value="/image/${user.userImageId}" var="userImageId"/>
+      <div class="individual-profile">
+        <div>
+          <img src="${userImageId}" alt="user image" class="image-photo"/>
+        </div>
+        <div class="show-row-content-passangers">
+          <a href="${userUrl}" class="show-row profile-link">
+            <span class="detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
+          </a>
+          <div class="btn-section">
+            <c:url value="/trips/${trip.tripId}/deletePas/${user.userId}" var="deletePasUrl"/>
+            <form:form method="POST" action="${deletePasUrl}">
+              <button type="submit" class="btn btn-danger little-btn">
+                <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
+              </button>
+            </form:form>
+            <c:url value="/trips/${trip.tripId}/AceptPas/${user.userId}" var="acceptPasUrl"/>
+            <form:form method="POST" action="${acceptPasUrl}">
+              <button type="submit" class="btn btn-primary little-btn">
+                <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
+              </button>
+            </form:form>
+          </div>
+        </div>
+
+        <c:if test="${trip.recurrent}">
+          <div class="dates light-text detail">
+            <c:out value="${user.startDateString}"/> - <c:out value="${user.endDateString}"/>
+          </div>
+        </c:if>
+      </div>
+    </c:forEach>
+
+
+    <c:if test="${passengersContent.moreThanOnePage}">
+      <c:url value="" var="basePaginationUrl">
+        <c:forEach var="p" items="${param}">
+          <c:if test="${!(p.key eq 'page')}">
+            <c:param name="${p.key}" value="${p.value}"/>
+          </c:if>
+        </c:forEach>
+      </c:url>
+      <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+        <jsp:param name="totalPages" value="${passengersContent.totalPages}"/>
+        <jsp:param name="currentPage" value="${passengersContent.currentPage+1}"/>
+        <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
+      </jsp:include>
+    </c:if>
+
+  </div>
+</div>
+<c:if test="${!(empty deletePass) && deletePass}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+      <jsp:param name="title" value="driver.passangers.delete.toast.title"/>
+      <jsp:param name="message" value="driver.passangers.delete.toast.text"/>
+    </jsp:include>
+  </div>
+</c:if>
+
+<c:if test="${!(empty notAvailableSeats) && notAvailableSeats}">
+    <div id="toast-container">
+        <jsp:include page="/WEB-INF/jsp/components/failure-toast.jsp">
+            <jsp:param name="title" value="driver.passangers.delete.toastFail.title"/>
+            <jsp:param name="message" value="driver.passangers.delete.toastFail.text"/>
+        </jsp:include>
+    </div>
+</c:if>
+
+<c:if test="${!(empty acceptPass) && acceptPass}">
+  <div id="toast-container">
+    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+      <jsp:param name="title" value="driver.passangers.accept.toast.title"/>
+      <jsp:param name="message" value="driver.passangers.accept.toast.text"/>
+    </jsp:include>
+  </div>
+</c:if>
 </body>
 </html>

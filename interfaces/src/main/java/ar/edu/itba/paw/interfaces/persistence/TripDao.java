@@ -17,11 +17,13 @@ public interface TripDao {
     boolean removePassenger(final Trip trip, final Passenger passenger);
     List<Passenger> getPassengers(final TripInstance tripInstance);
     List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime);
-    List<Passenger> getPassengers(final Trip trip, final LocalDateTime startDateTime, final LocalDateTime endDateTime);
+    List<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,int page, int pageSize);
     Optional<Passenger> getPassenger(final Trip trip, final User user);
     Optional<Passenger> getPassenger(final long tripId, final User user);
     PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize);
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
+    int getTripSeatCount(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime);
     PagedContent<Trip> getTripsCreatedByUser(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime,int page, int pageSize);
     PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize);
     Optional<Trip> findById(long id);
@@ -40,4 +42,13 @@ public interface TripDao {
 
     PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize);
 
+    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime dateTime);
+
+    public List<Passenger> getAcceptedPassengers(TripInstance tripInstance);
+
+    public boolean acceptPassenger(Passenger passenger);
+
+    public boolean removePassenger(Passenger passenger);
 }

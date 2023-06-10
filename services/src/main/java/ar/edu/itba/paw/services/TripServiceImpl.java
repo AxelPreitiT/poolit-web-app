@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.NotAvailableSeatsException;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
@@ -30,10 +32,13 @@ public class TripServiceImpl implements TripService {
 
     private final TripDao tripDao;
 
+    private final UserService userService;
+
     @Autowired
-    public TripServiceImpl(final TripDao tripDao, EmailService emailService1){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService1, UserService userService){
         this.tripDao = tripDao;
         this.emailService = emailService1;
+        this.userService = userService;
     }
 
     @Transactional
@@ -332,6 +337,23 @@ public class TripServiceImpl implements TripService {
         }
         return tripDao.getPassengers(trip,startDate,endDate);
     }
+    private Optional<Passenger.PassengerState> getPassengersState(String status){
+        if(status.equals("accept")){
+            return Optional.of(Passenger.PassengerState.ACCEPTED);
+        }
+        if(status.equals("waiting")){
+            return Optional.of(Passenger.PassengerState.PENDING);
+        }
+        if(status.equals("reject")){
+            return Optional.of(Passenger.PassengerState.REJECTED);
+        }
+        return Optional.empty();
+    }
+    @Override
+    public PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),getPassengersState(passengerState),page,pageSize);
+    }
     @Override
     public List<Passenger> getPassengers(Trip trip){
         return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
@@ -408,6 +430,26 @@ public class TripServiceImpl implements TripService {
         LocalDateTime startDateTime = startDate.atTime(startTime);
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
         return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException {
+        User user = userService.findById(userId).orElseThrow(()->new IllegalArgumentException("User not found"));
+        Passenger pass = tripDao.getPassenger(tripId, user).orElseThrow(()->new IllegalArgumentException("Passenger not found"));
+        if(tripDao.getTripSeatCount(tripId,pass.getStartDateTime(),pass.getEndDateTime())>=pass.getTrip().getMaxSeats()){
+            //No hay asientos disponibles
+            throw new NotAvailableSeatsException();
+        }
+        return tripDao.acceptPassenger(pass);
+    }
+
+    @Transactional
+    @Override
+    public boolean rejectPassenger(final long tripId, final long userId){
+        User user = userService.findById(userId).orElseThrow(()-> new IllegalArgumentException("User not found"));
+        Passenger passenger = tripDao.getPassenger(tripId, user).orElseThrow(()-> new IllegalArgumentException("Passanger not found"));
+        return tripDao.removePassenger(passenger);
     }
 
 }
