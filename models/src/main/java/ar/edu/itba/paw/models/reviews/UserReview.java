@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.models.reviews;
 
+import ar.edu.itba.paw.models.Format;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
@@ -87,5 +90,13 @@ public class UserReview {
 
     public String getComment() {
         return comment;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public String getFormattedDate() {
+        return date.format(Format.getDateTimeFormatter());
     }
 }

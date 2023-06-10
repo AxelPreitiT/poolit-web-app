@@ -29,7 +29,7 @@ a {
 }
 
 
-.List-properties-container{
+.list-properties-container{
     flex-grow: 2;
     max-width:65%;
 }

@@ -16,41 +16,31 @@
     </div>
   </div>
   <h3 id="user-name"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
-  <div class="row-info">
-    <h6><spring:message code="user.email"/></h6>
-    <h4><c:out value="${user.email}"/></h4>
-  </div>
-  <div class="row-info">
-    <h6><spring:message code="user.district"/></h6>
-    <h4><c:out value="${user.bornCity.name}"/></h4>
-  </div>
-  <c:if test="${(user.role eq 'DRIVER')}">
+  <c:if test="${user.role eq 'DRIVER'}">
     <div class="row-info">
       <h6><spring:message code="user.countTrips"/></h6>
       <h4><c:out value="${param.countTrips}"/></h4>
     </div>
-    <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
-      <h6><spring:message code="user.rating"/></h6>
+      <h6><spring:message code="driver.review.rating"/></h6>
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
-          <c:forEach var="i" begin="1" end="${rating}">
-            <i class="bi bi-star-fill secondary-color h4"></i>
-          </c:forEach>
-          <c:if test="${rating % 1 >= 0.5}">
-            <i class="bi bi-star-half secondary-color h4"></i>
-            <c:forEach var="i" begin="${rating + 2}" end="5">
-              <i class="bi bi-star secondary-color h4"></i>
-            </c:forEach>
-          </c:if>
-          <c:if test="${rating % 1 < 0.5}">
-            <c:forEach var="i" begin="${rating + 1}" end="5">
-              <i class="bi bi-star secondary-color h4"></i>
-            </c:forEach>
-          </c:if>
+          <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
+          <c:set var="rating" value="${driverRating}" scope="request"/>
+          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
         </div>
       </div>
     </div>
   </c:if>
+  <div class="row-info">
+    <h6><spring:message code="passenger.review.rating"/></h6>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="ratings">
+        <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
+        <c:set var="rating" value="${passengerRating}" scope="request"/>
+        <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+      </div>
+    </div>
+  </div>
 </div>
 

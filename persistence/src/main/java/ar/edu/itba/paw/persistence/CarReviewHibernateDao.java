@@ -50,12 +50,16 @@ public class CarReviewHibernateDao implements CarReviewDao {
     public PagedContent<CarReview> getCarReviews(Car car, int page, int pageSize) {
         LOGGER.debug("Looking for all the car reviews of the car with id {} in page {} with page size {}", car.getCarId(), page, pageSize);
         // 1+1 query
-        Query nativeQuery = em.createNativeQuery("SELECT DISTINCT review_id FROM car_reviews WHERE car_id = :car_id ORDER BY date DESC");
+        Query nativeQuery = em.createNativeQuery("SELECT review_id FROM car_reviews WHERE car_id = :car_id ORDER BY date DESC");
         nativeQuery.setParameter("car_id", car.getCarId());
         nativeQuery.setMaxResults(pageSize);
         nativeQuery.setFirstResult((page - 1) * pageSize);
-        @SuppressWarnings("unchecked")
-        final List<Long> reviewIdList = (List<Long>) nativeQuery.getResultList().stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
+        final List<?> maybeReviewIdList = nativeQuery.getResultList();
+        if (maybeReviewIdList.isEmpty()) {
+            LOGGER.debug("No car reviews found for the car with id {}", car.getCarId());
+            return PagedContent.emptyPagedContent();
+        }
+        final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
         final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.reviewId IN :reviewIdList", CarReview.class);
         carReviewsQuery.setParameter("reviewIdList", reviewIdList);

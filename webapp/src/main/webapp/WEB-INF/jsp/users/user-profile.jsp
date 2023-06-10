@@ -11,36 +11,35 @@
   <link href="<c:url value="/resources/css/users/profile.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
-<jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
-<div class="main-container">
-  <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
-    <jsp:param name="user" value="${user}"/>
-  </jsp:include>
-  <div class="List-properties-container">
-    <c:set var="reviews" value="${reviewsAsUser}" scope="request"/>
-      <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
-        <jsp:param name="reviews" value="${reviewsAsUser}"/>
-        <jsp:param name="role" value="USER"/>
-      </jsp:include>
-    <c:url value="/trips/reserved" var="reservedTripsUrl"/>
-    <c:set var="trips" value="${futureTripsPassanger}" scope="request"/>
-    <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
-      <jsp:param name="title" value="nextTrips.reserved.title"/>
-      <jsp:param name="btndesc" value="profile.nextTrips.btn"/>
-      <jsp:param name="trips" value="${futureTripsPassanger}"/>
-      <jsp:param name="url" value="${reservedTripsUrl}"/>
-    </jsp:include>
-    <c:url value="/trips/reserved" var="reservedTripsHistoryUrl">
-      <c:param name="time" value="past"/>
-    </c:url>
-    <c:set var="trips" value="${pastTripsPassanger}" scope="request"/>
-    <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
-      <jsp:param name="title" value="historyTrips.reserved.title"/>
-      <jsp:param name="btndesc" value="profile.historyTrips.btn"/>
-      <jsp:param name="trips" value="${pastTripsPassanger}"/>
-      <jsp:param name="url" value="${reservedTripsHistoryUrl}"/>
-    </jsp:include>
+  <div id="navbar-container">
+    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
   </div>
-</div>
+  <div class="main-container">
+    <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp"/>
+    <div class="list-properties-container">
+      <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
+      <c:url value="/reviews/user/${user.userId}" var="reviewsUrl"/>
+      <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+        <jsp:param name="type" value="passenger"/>
+        <jsp:param name="url" value="${reviewsUrl}"/>
+      </jsp:include>
+      <c:url value="/trips/reserved" var="reservedTripsUrl"/>
+      <c:set var="trips" value="${futureTripsAsPassenger}" scope="request"/>
+      <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
+        <jsp:param name="title" value="nextTrips.reserved.title"/>
+        <jsp:param name="btndesc" value="profile.nextTrips.btn"/>
+        <jsp:param name="url" value="${reservedTripsUrl}"/>
+      </jsp:include>
+      <c:url value="/trips/reserved" var="reservedTripsHistoryUrl">
+        <c:param name="time" value="past"/>
+      </c:url>
+      <c:set var="trips" value="${pastTripsAsPassenger}" scope="request"/>
+      <jsp:include page="/WEB-INF/jsp/users/info-container.jsp">
+        <jsp:param name="title" value="historyTrips.reserved.title"/>
+        <jsp:param name="btndesc" value="profile.historyTrips.btn"/>
+        <jsp:param name="url" value="${reservedTripsHistoryUrl}"/>
+      </jsp:include>
+    </div>
+  </div>
 </body>
 </html>

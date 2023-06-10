@@ -11,21 +11,21 @@
   <link href="<c:url value="/resources/css/users/profile.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
-  <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+  <div id="navbar-container">
+    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+  </div>
   <div class="main-container">
-    <c:url value="/users/profile" var="userProfileUrl"/>
     <jsp:include page="/WEB-INF/jsp/users/public-profile-container.jsp">
-      <jsp:param name="user" value="${user}"/>
-      <jsp:param name="role" value="DRIVER"/>
-      <jsp:param name="path" value="${userProfileUrl}"/>
-      <jsp:param name="rating" value="${rating}"/>
       <jsp:param name="countTrips" value="${countTrips}"/>
     </jsp:include>
-    <div class="List-properties-container">
-      <c:set var="reviews" value="${reviews}" scope="request"/>
+    <div class="list-properties-container">
+      <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
-        <jsp:param name="reviews" value="${reviews}"/>
-        <jsp:param name="role" value="${user.role}"/>
+        <jsp:param name="type" value="driver"/>
+      </jsp:include>
+      <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
+      <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+        <jsp:param name="type" value="passenger"/>
       </jsp:include>
     </div>
   </div>

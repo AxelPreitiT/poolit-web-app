@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.reviews;
 
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.Format;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 
@@ -96,5 +97,13 @@ public class CarReview {
 
     public CarReviewOptions getOption() {
         return option;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public String getFormattedDate() {
+        return date.format(Format.getDateTimeFormatter());
     }
 }

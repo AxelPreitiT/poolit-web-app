@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:useBean id="user" type="ar.edu.itba.paw.models.User"  scope="request"/>
+<jsp:useBean id="user" type="ar.edu.itba.paw.models.User" scope="request"/>
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
@@ -37,29 +37,27 @@
       <h4><spring:message code="user.locale.en"/></h4>
     </c:if>
   </div>
-  <c:if test="${(user.role eq 'DRIVER')}">
-    <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
+  <sec:authorize access="hasRole('ROLE_DRIVER')">
     <div class="row-info">
-      <h6><spring:message code="user.rating"/></h6>
+      <h6><spring:message code="driver.review.rating"/></h6>
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
-          <c:forEach var="i" begin="1" end="${rating}">
-            <i class="bi bi-star-fill secondary-color h4"></i>
-          </c:forEach>
-          <c:if test="${rating % 1 >= 0.5}">
-            <i class="bi bi-star-half secondary-color h4"></i>
-            <c:forEach var="i" begin="${rating + 2}" end="5">
-              <i class="bi bi-star secondary-color h4"></i>
-            </c:forEach>
-          </c:if>
-          <c:if test="${rating % 1 < 0.5}">
-            <c:forEach var="i" begin="${rating + 1}" end="5">
-              <i class="bi bi-star secondary-color h4"></i>
-            </c:forEach>
-          </c:if>
+          <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
+          <c:set var="rating" value="${driverRating}" scope="request"/>
+          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
         </div>
       </div>
     </div>
-  </c:if>
+  </sec:authorize>
+  <div class="row-info">
+    <h6><spring:message code="passenger.review.rating"/></h6>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="ratings">
+        <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
+        <c:set var="rating" value="${passengerRating}" scope="request"/>
+        <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+      </div>
+    </div>
+  </div>
 </div>
 
