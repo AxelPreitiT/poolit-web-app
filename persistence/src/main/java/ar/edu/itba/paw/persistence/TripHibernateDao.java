@@ -257,15 +257,15 @@ public class TripHibernateDao implements TripDao {
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-            int page, int pageSize){
-        return getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek.get(),endDateTime.get(),minutes,minPrice,maxPrice,sortType,descending,page,pageSize);
+            long searchUserId, int page, int pageSize){
+        return getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek.get(),endDateTime.get(),minutes,minPrice,maxPrice,sortType,descending,searchUserId,page,pageSize);
     }
 
     @Override
     public PagedContent<Trip> getTripsWithFilters(long origin_city_id, long destination_city_id,
                                                   LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
                                                   Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-                                                  int page, int pageSize) {
+                                                  long searchUserId, int page, int pageSize) {
         LOGGER.debug("Looking for the trips with originCity with id {}, destinationCity with id {}, startDateTime '{}',dayOfWeek {}, endDateTime {} range of {} minutes,{}{} sortType '{}' ({}) page {} and size {} in the database",
                 origin_city_id, destination_city_id, startDateTime, dayOfWeek,
                 endDateTime, minutes,
@@ -288,8 +288,11 @@ public class TripHibernateDao implements TripDao {
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
                 "GROUP BY days.days,passengers.trip_id) aux "+
+                "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
+                "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
                 "WHERE aux.days >= :startDateTime AND end_date_time >= :startDateTime AND  origin_city_id = :originCityId AND cast(trips.start_date_time as time) >= :minTime " +
                 "AND cast(trips.start_date_time as time) <= :maxTime AND destination_city_id = :destinationCityId AND aux.days <= :endDateTimePlus AND end_date_time >= :endDateTimeMinus "+
+                "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
                 "AND trips.day_of_week = :dayOfWeek ";
         arguments.put("startDateTime",Timestamp.valueOf(startDateTime.minusMinutes(minutes)));
         arguments.put("originCityId",origin_city_id);
@@ -299,6 +302,7 @@ public class TripHibernateDao implements TripDao {
         arguments.put("endDateTimePlus",Timestamp.valueOf(endDateTime.plusMinutes(minutes)));
         arguments.put("endDateTimeMinus", Timestamp.valueOf(endDateTime.minusMinutes(minutes)));
         arguments.put("dayOfWeek",dayOfWeek.getValue());
+        arguments.put("searchUserId", searchUserId);
         if(startDateTime.toLocalDate().equals(LocalDate.now())){
             queryString += "AND cast (trips.start_date_time as time) >= :auxTime ";
             arguments.put("auxTime",Timestamp.valueOf(LocalDateTime.now()));
@@ -349,13 +353,16 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, int page, int pageSize) {
+    public PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, long searchUserId, int page, int pageSize) {
         LOGGER.debug("Looking for the trips with originCity with id {} and startDateTime '{}' in page {} with size {} in the database",origin_city_id,startDateTime,page,pageSize);
         String queryString = " FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(  "+
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
                 "GROUP BY days.days,passengers.trip_id) aux "+
+                "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
+                "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
                 "WHERE origin_city_id = :originCityId AND day_of_week = :dayOfWeek AND end_date_time >= :startDateTime " +
+                "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
                 "GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers " +
                 "ORDER BY cast(trips.start_date_time as time) ASC";
@@ -364,9 +371,11 @@ public class TripHibernateDao implements TripDao {
         countQuery.setParameter("originCityId",origin_city_id);
         countQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         countQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
+        countQuery.setParameter("searchUserId", searchUserId);
         idQuery.setParameter("originCityId",origin_city_id);
         idQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         idQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
+        idQuery.setParameter("searchUserId", searchUserId);
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
         PagedContent<Trip> ans =  getTripPagedContent(page, pageSize, countQuery, idQuery);
