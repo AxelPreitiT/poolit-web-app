@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "car_reviews")
@@ -38,17 +39,25 @@ public class CarReview {
     @Enumerated(EnumType.STRING)
     private CarReviewOptions option;
 
+    @Column(name = "date", nullable = false)
+    private LocalDateTime date;
+
     protected CarReview() {
         // Just for Hibernate
     }
 
-    public CarReview(Trip trip, User reviewer, Car car, int rating, String comment, CarReviewOptions option) {
+    public CarReview(Trip trip, User reviewer, Car car, int rating, String comment, CarReviewOptions option, LocalDateTime date) {
         this.trip = trip;
         this.car = car;
         this.reviewer = reviewer;
         this.rating = rating;
         this.comment = comment;
         this.option = option;
+        this.date = date;
+    }
+
+    public CarReview(Trip trip, User reviewer, Car car, int rating, String comment, CarReviewOptions option) {
+        this(trip, reviewer, car, rating, comment, option, LocalDateTime.now());
     }
 
     @Override

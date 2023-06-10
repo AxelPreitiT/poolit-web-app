@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
@@ -34,16 +35,24 @@ public class UserReview {
     @Column(name = "comment")
     protected String comment;
 
+    @Column(name = "date", nullable = false)
+    protected LocalDateTime date;
+
     protected UserReview() {
         // Just for Hibernate
     }
 
-    public UserReview(Trip trip, User reviewer, User reviewed, int rating, String extraInfo) {
+    public UserReview(Trip trip, User reviewer, User reviewed, int rating, String extraInfo, LocalDateTime date) {
         this.reviewer = reviewer;
         this.reviewed = reviewed;
         this.trip = trip;
         this.rating = rating;
         this.comment = extraInfo;
+        this.date = date;
+    }
+
+    public UserReview(Trip trip, User reviewer, User reviewed, int rating, String extraInfo) {
+        this(trip, reviewer, reviewed, rating, extraInfo, LocalDateTime.now());
     }
 
     @Override
