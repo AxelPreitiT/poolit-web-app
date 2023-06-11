@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.Passenger;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +88,22 @@ public class EmailServiceImpl implements EmailService {
         LOGGER.info("Sending email to '{}' with subject '{}' and Locale '{}'", to, subject, mailLocale);
         mailSender.send(message);
     }
+
+    @Async
+    @Override
+    public void sendVerificationEmail(User user, String token) throws MessagingException, IOException {
+        String subject = messageSource.getMessage("emails.sendToken.subject",null,user.getMailLocale());
+
+        // Variables para el html
+        final Context ctx = new Context();
+        ctx.setVariable("user", user);
+        ctx.setVariable("token", token);
+        ctx.setLocale(user.getMailLocale());
+
+        //enviamos el mail
+        sendEmail(user.getEmail(),subject,"verification-email",ctx, user.getMailLocale());
+    }
+
 
     @Async
     @Override
