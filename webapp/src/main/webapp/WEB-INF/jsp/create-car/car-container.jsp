@@ -1,10 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<jsp:useBean id="car" type="ar.edu.itba.paw.models.Car"  scope="request"/>
+<jsp:useBean id="car" type="ar.edu.itba.paw.models.Car" scope="request"/>
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
@@ -33,7 +32,7 @@
         <h6><spring:message code="updateCar.features"/></h6>
         <c:forEach items="${car.features}" var="feature">
             <label class="btn btn-custom">
-            <checkbox value="${feature}"/>
+              <checkbox value="${feature}"></checkbox>
             <spring:message code="${feature.toString()}"/>
             </label>
         </c:forEach>
@@ -45,10 +44,8 @@
       <h6><spring:message code="user.rating"/></h6>
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
-          <c:forEach var="i" begin="1" end="${5}">
-            <i class="bi bi-star-fill secondary-color h4"></i>
-          </c:forEach>
-
+          <c:set var="rating" value="${rating}" scope="request"/>
+          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
         </div>
       </div>
     </div>

@@ -19,8 +19,8 @@
   <div id="trip-detail-container">
     <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
       <jsp:param name="showDriverInfo" value="true"/>
-      <jsp:param name="status" value="${passenger.passengerState}"/>
-      <jsp:param name="showPassengers" value="${passenger.accepted}"/>
+      <jsp:param name="status" value="${currentPassenger.passengerState}"/>
+      <jsp:param name="showPassengers" value="${currentPassenger.accepted}"/>
     </jsp:include>
   </div>
   <div id="footer-container">
@@ -46,13 +46,13 @@
     </div>
     <div id="button-container">
       <div id="review-trip-container">
-        <c:if test="${passenger.accepted && tripReviewCollection.canReview}">
+        <c:if test="${currentPassenger.accepted && tripReviewCollection.canReview}">
           <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
             <jsp:param name="reviewed" value="${reviewed}"/>
           </jsp:include>
         </c:if>
       </div>
-      <c:if test="${!passenger.tripEnded}">
+      <c:if test="${!(currentPassenger.tripEnded)}">
         <div class="delete-trip-container">
           <button type="submit" class="btn button-style danger-button shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
             <i class="bi bi-x light-text h4"></i>

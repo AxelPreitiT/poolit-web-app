@@ -13,12 +13,27 @@
 <body class="background-color">
   <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
   <div class="main-container">
-    <c:url value="/cars/1" var="carUrl"/>
-    <jsp:include page="/WEB-INF/jsp/create-car/car-container.jsp">
-      <jsp:param name="car" value="${car}"/>
-      <jsp:param name="path" value="${carUrl}"/>
-      <jsp:param name="rating" value="${rating}"/>
-    </jsp:include>
+    <jsp:include page="/WEB-INF/jsp/create-car/car-container.jsp"/>
+    <div class="list-properties-container">
+      <c:set var="reviews" value="${carReviewsPaged.elements}" scope="request"/>
+      <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+        <jsp:param name="type" value="car"/>
+      </jsp:include>
+      <c:if test="${carReviewsPaged.moreThanOnePage}">
+        <c:url value="" var="baseUrl">
+          <c:forEach var="p" items="${param}">
+            <c:if test="${!(p.key eq 'page')}">
+              <c:param name="${p.key}" value="${p.value}"/>
+            </c:if>
+          </c:forEach>
+        </c:url>
+        <jsp:include page="/WEB-INF/jsp/components/pagination.jsp">
+          <jsp:param name="currentPage" value="${carReviewsPaged.currentPage+1}"/>
+          <jsp:param name="totalPages" value="${carReviewsPaged.totalPages}"/>
+          <jsp:param name="baseUrl" value="${baseUrl}"/>
+        </jsp:include>
+      </c:if>
+    </div>
   </div>
 </body>
 </html>

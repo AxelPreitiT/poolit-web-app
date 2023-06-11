@@ -20,25 +20,43 @@
               <c:url value="/profile/${user.userId}" var="userUrl"/>
               <c:url value="/image/${user.userImageId}" var="userImageId"/>
               <div class="individual-profile">
-                <a href="${userUrl}" class="show-row profile-link">
+                <div class="individual-profile-text">
+                  <a href="${userUrl}" class="show-row profile-link">
+                    <div>
+                      <img src="${userImageId}" alt="user image" class="image-photo"/>
+                    </div>
+                  </a>
                   <div>
-                    <img src="${userImageId}" alt="user image" class="image-photo"/>
-                  </div>
-                </a>
-                <div>
-                  <div class="passenger-name-container">
-                    <a href="${userUrl}">
-                      <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
-                    </a>
-                  </div>
-                  <c:if test="${trip.recurrent}">
-                    <div class="passenger-dates-container">
-                      <i class="bi bi-calendar light-text"></i>
-                      <span class="light-text">
+                    <div class="passenger-name-container">
+                      <a href="${userUrl}">
+                        <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
+                      </a>
+                    </div>
+                    <c:if test="${trip.recurrent}">
+                      <div class="passenger-dates-container">
+                        <i class="bi bi-calendar light-text"></i>
+                        <span class="light-text">
                       <spring:message code="format.dates" var="passengerDate" arguments="${user.startDateString}, ${user.endDateString}"/>
                       <c:out value="${passengerDate}"/>
                     </span>
-                    </div>
+                      </div>
+                    </c:if>
+                  </div>
+                </div>
+                <div>
+                  <c:forEach var="i" begin="1" end="${user.user.passengerRating}">
+                    <i class="bi bi-star-fill light-text h4"></i>
+                  </c:forEach>
+                  <c:if test="${user.user.passengerRating % 1 >= 0.5}">
+                    <i class="bi bi-star-half light-text h4"></i>
+                    <c:forEach var="i" begin="${user.user.passengerRating + 2}" end="5">
+                      <i class="bi bi-star secondary-color h4"></i>
+                    </c:forEach>
+                  </c:if>
+                  <c:if test="${user.user.passengerRating % 1 < 0.5}">
+                    <c:forEach var="i" begin="${user.user.passengerRating + 1}" end="5">
+                      <i class="bi bi-star light-text h4"></i>
+                    </c:forEach>
                   </c:if>
                 </div>
               </div>

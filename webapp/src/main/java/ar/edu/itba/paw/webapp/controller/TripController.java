@@ -128,7 +128,7 @@ public class TripController extends LoggedUserController {
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(driver, car, passengersToReview);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
-        mav.addObject("passenger",passenger);
+        mav.addObject("currentPassenger",passenger);
         mav.addObject("tripReviewCollection", tripReviewCollection);
         mav.addObject("passengers",passengers);
         mav.addObject("joined", joined);

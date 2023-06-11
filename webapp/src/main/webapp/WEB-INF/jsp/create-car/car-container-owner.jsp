@@ -30,7 +30,7 @@
   <h3 id="user-name"><c:out value="${car.brand}"/></h3>
   <div class="row-info rows">
     <h6><spring:message code="createCar.carInfo"/></h6>
-    <h4 class="no-edit"><c:out value="${car.infoCar}"/></h5>
+    <h4 class="no-edit"><c:out value="${car.infoCar}"/></h4>
     <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
     <div class="error-item">
         <i class="bi bi-exclamation-circle-fill danger"></i>
@@ -39,7 +39,7 @@
   </div>
   <div class="row-info rows">
     <h6><spring:message code="createCar.seats"/></h6>
-    <h4 class="no-edit"><c:out value="${car.seats}"/></h5>
+    <h4 class="no-edit"><c:out value="${car.seats}"/></h4>
     <form:input path="seats" cssClass="form-control hidden edit" id="seats" />
     <div class="error-item">
         <i class="bi bi-exclamation-circle-fill danger"></i>
@@ -63,8 +63,8 @@
     <div class="no-edit row-info rows">
         <c:forEach items="${car.features}" var="feature">
             <label class="btn btn-custom">
-            <checkbox value="${feature}"/>
-            <spring:message code="${feature.toString()}"/>
+                <checkbox value="${feature}"></checkbox>
+                <spring:message code="${feature.toString()}"/>
             </label>
         </c:forEach>
     </div>
@@ -75,10 +75,8 @@
       <h6><spring:message code="user.rating"/></h6>
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
-          <c:forEach var="i" begin="1" end="${5}">
-            <i class="bi bi-star-fill secondary-color h4"></i>
-          </c:forEach>
-
+            <c:set var="rating" value="${rating}" scope="request"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
         </div>
       </div>
     </div>

@@ -42,7 +42,10 @@
                 </c:otherwise>
             </c:choose>
             <div class="show-row-content">
-                <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
+                <c:url value="/cars/${trip.car.carId}" var="carUrl"/>
+                <a href="${carUrl}" class="show-row profile-link">
+                    <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
+                </a>
                 <span class="light-text"><spring:message code="profile.plate" arguments="${trip.car.plate}"/></span>
             </div>
         </div>

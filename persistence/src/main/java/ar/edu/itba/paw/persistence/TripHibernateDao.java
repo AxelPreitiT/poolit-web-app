@@ -408,9 +408,9 @@ public class TripHibernateDao implements TripDao {
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers ";
         //Esto puede explotar si no arregla el orden despues
         if(sortType.equals(Trip.SortType.PRICE)){
-            queryString += "ORDER BY trips.price " + (descending?"DESC":"ASC");
+            queryString += "ORDER BY trips.price " + (descending?"DESC":"ASC") +", cast(trips.start_date_time as time) ASC ";
         }else if(sortType.equals(Trip.SortType.TIME)){
-            queryString += "ORDER BY cast(trips.start_date_time as time) " + (descending?"DESC":"ASC");
+            queryString += "ORDER BY cast(trips.start_date_time as time) " + (descending?"DESC":"ASC") + ", trips.price ASC";
         }
         Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux ");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
@@ -450,19 +450,21 @@ public class TripHibernateDao implements TripDao {
                 "GROUP BY days.days,passengers.trip_id) aux "+
                 "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
                 "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
-                "WHERE origin_city_id = :originCityId AND day_of_week = :dayOfWeek AND end_date_time >= :startDateTime " +
+                "WHERE origin_city_id = :originCityId AND day_of_week = :dayOfWeek AND end_date_time >= :startDateTime AND cast(trips.start_date_time as time) >= :startTime  " +
                 "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
                 "GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers " +
-                "ORDER BY cast(trips.start_date_time as time) ASC";
+                "ORDER BY cast(trips.start_date_time as time) ASC, trips.price ASC ";
         Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux" );
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         countQuery.setParameter("originCityId",origin_city_id);
         countQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
+        countQuery.setParameter("startTime",startDateTime.toLocalTime());
         countQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
         countQuery.setParameter("searchUserId", searchUserId);
         idQuery.setParameter("originCityId",origin_city_id);
         idQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
+        idQuery.setParameter("startTime",startDateTime.toLocalTime());
         idQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
         idQuery.setParameter("searchUserId", searchUserId);
         idQuery.setMaxResults(pageSize);//Offset
