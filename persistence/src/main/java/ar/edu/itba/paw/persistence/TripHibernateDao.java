@@ -60,9 +60,16 @@ public class TripHibernateDao implements TripDao {
         return true;
     }
 
-    //TODO: hacer bajas logicas de los viajes
     @Override
-    public boolean deleteTrip(Trip trip) {
+    public boolean deleteTrip(Trip trip){
+        em.merge(trip);
+        em.remove(trip);
+        LOGGER.info("Trip with id {} deleted from the database",trip.getTripId());
+        return true;
+    }
+
+    @Override
+    public boolean markTripAsDeleted(Trip trip) {
         em.merge(trip);
         trip.setDeleted(true);
         em.persist(trip);
@@ -106,6 +113,16 @@ public class TripHibernateDao implements TripDao {
         Optional<Passenger> result = query.getResultList().stream().findFirst();
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
+    }
+
+    @Override
+    public void truncatePassengerEndDateTime(Passenger passenger, LocalDateTime newLastDateTime){
+        if(!passenger.getEndDateTime().isBefore(newLastDateTime)){
+            throw new IllegalArgumentException();
+        }
+        em.merge(passenger);
+        passenger.setEndDateTime(newLastDateTime);
+        return;
     }
 
     @Override
