@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.reviews.DriverReview;
+import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.webapp.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
@@ -37,12 +39,13 @@ public class UserController extends LoggedUserController {
 
     private final CityService cityService;
 
-    private final ReviewService reviewService;
     private final CarService carService;
 
     private final TripService tripService;
 
     private final ImageService imageService;
+    private final PassengerReviewService passengerReviewService;
+    private final DriverReviewService driverReviewService;
 
     private final TokenService tokenService;
 
@@ -53,6 +56,8 @@ public class UserController extends LoggedUserController {
 
     private final UserService userService;
     private final static long DEFAULT_PROVINCE_ID = 1;
+    private final static int REVIEW_PAGE_SIZE = 3;
+    private final static int FIRST_PAGE = 0;
     private final static String BASE_RELATED_PATH = "/users/";
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
@@ -61,18 +66,21 @@ public class UserController extends LoggedUserController {
     private final static int PAGE_SIZE = 3;
 
     @Autowired
-    public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
+    public UserController(final CityService cityService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
                           final CarService carService, final ImageService imageService,
-                          final TokenService tokenService, final EmailService emailService) {
+                          final TokenService tokenService, final EmailService emailService,
+                          final PassengerReviewService passengerReviewService,
+                          final DriverReviewService driverReviewService) {
         super(userService);
         this.cityService = cityService;
-        this.reviewService = reviewService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
+        this.passengerReviewService = passengerReviewService;
+        this.driverReviewService = driverReviewService;
         this.tokenService = tokenService; //TODO: sacar
         this.emailService = emailService; //TODO: sacar
     }
@@ -139,10 +147,12 @@ public class UserController extends LoggedUserController {
                                     @ModelAttribute("updateUserForm") final UpdateUserForm form){
         LOGGER.debug("GET Request to /users/profile");
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final ModelAndView mav;
 
-        final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-        final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
+        final List<Trip> futureTripsAsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
+        final List<Trip> pastTripsAsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
+        final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+        final Double passengerRating = passengerReviewService.getPassengerRating(user);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
         form.setBornCityId(user.getBornCity().getId());
@@ -150,35 +160,31 @@ public class UserController extends LoggedUserController {
         form.setPhone(user.getPhone());
         form.setSurname(user.getSurname());
         form.setUsername(user.getName());
-
+        //TODO: ver el if
         if(Objects.equals(user.getRole(), "USER")){
-
-            final ModelAndView mav = new ModelAndView("/users/user-profile");
-            mav.addObject("cities", cities);
-            mav.addObject("user", user);
-            mav.addObject("futureTripsPassanger", futureTripsPassenger);
-            mav.addObject("pastTripsPassanger", pastTripsPassenger);
-            mav.addObject("reviewsAsUser", reviewsAsUser);
-            return mav;
+            mav = new ModelAndView("/users/user-profile");
+        } else {
+            final List<Trip> futureTripsAsDriver = tripService.getTripsCreatedByUserFuture(user, FIRST_PAGE, PAGE_SIZE).getElements();
+            final List<Trip> pastTripsAsDriver = tripService.getTripsCreatedByUserPast(user, FIRST_PAGE, PAGE_SIZE).getElements();
+            final List<Car> cars = carService.findByUser(user);
+            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
+            final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+            final Double driverRating = driverReviewService.getDriverRating(user);
+            mav = new ModelAndView("/users/driver-profile");
+            mav.addObject("futureTripsAsDriver", futureTripsAsDriver);
+            mav.addObject("pastTripsAsDriver", pastTripsAsDriver);
+            mav.addObject("cars", cars);
+            mav.addObject("reviewsAsDriver", reviewsAsDriver);
+            mav.addObject("driverRating", driverRating);
+            mav.addObject("countTrips", createdTrips.getTotalCount());
+            mav.addObject("carAdded", carAdded);
         }
-        final List<Review> reviews = reviewService.getDriverReviews(user);
-        final List<Trip> futureTrips = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
-        final List<Trip> pastTrips = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
-        final List<Car> cars = carService.findByUser(user);
-        final Double rating = reviewService.getDriverRating(user);
-
-        final ModelAndView mav = new ModelAndView("/users/driver-profile");
-        mav.addObject("user", user);
-        mav.addObject("rating", rating);
-        mav.addObject("futureTrips", futureTrips);
-        mav.addObject("pastTrips",pastTrips);
-        mav.addObject("futureTripsPassanger", futureTripsPassenger);
-        mav.addObject("pastTripsPassanger",pastTripsPassenger);
-        mav.addObject("cars", cars);
-        mav.addObject("carAdded", carAdded);
-        mav.addObject("reviews", reviews);
-        mav.addObject("reviewsAsUser", reviewsAsUser);
         mav.addObject("cities", cities);
+        mav.addObject("user", user);
+        mav.addObject("passengerRating", passengerRating);
+        mav.addObject("futureTripsAsPassenger", futureTripsAsPassenger);
+        mav.addObject("pastTripsAsPassenger", pastTripsAsPassenger);
+        mav.addObject("reviewsAsPassenger", reviewsAsPassenger);
         return mav;
     }
 
@@ -202,31 +208,27 @@ public class UserController extends LoggedUserController {
     {
         LOGGER.debug("GET Request to /profile/{}", userId);
         final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        final Double passengerRating = passengerReviewService.getPassengerRating(user);
+        final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
         //TODO: hacer un redirect al perfil privado?
         final User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         boolean isBlocked = userService.isBlocked(currentUser,user);
         boolean isOwnProfile = user.equals(currentUser);
-        if(Objects.equals(user.getRole(), "USER")){
-            List<Review> reviews = reviewService.getUsersIdReviews(user);
-
-            final ModelAndView mav = new ModelAndView("/users/public-profile");
-            mav.addObject("isBlocked", isBlocked);
-            mav.addObject("isOwnProfile",isOwnProfile);
-            mav.addObject("user", user);
-            mav.addObject("reviews", reviews);
-            return mav;
-        }
-        final List<Review> reviews = reviewService.getDriverReviews(user);
-        final Double rating = reviewService.getDriverRating(user);
-        final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
-
         final ModelAndView mav = new ModelAndView("/users/public-profile");
+
+        if(Objects.equals(user.getRole(), "DRIVER")){
+            final Double driverRating = driverReviewService.getDriverRating(user);
+            final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
+            mav.addObject("driverRating", driverRating);
+            mav.addObject("reviewsAsDriver", reviewsAsDriver);
+            mav.addObject("countTrips",createdTrips.getTotalCount());
+        }
         mav.addObject("isBlocked", isBlocked);
         mav.addObject("isOwnProfile",isOwnProfile);
         mav.addObject("user", user);
-        mav.addObject("rating", rating);
-        mav.addObject("countTrips",createdTrips.getTotalCount());
-        mav.addObject("reviews", reviews);
+        mav.addObject("passengerRating", passengerRating);
+        mav.addObject("reviewsAsPassenger", reviewsAsPassenger);
         return mav;
     }
     //TODO: que reciban solo el id los metodos y hagan la logica atras

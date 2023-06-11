@@ -16,66 +16,68 @@
     </div>
   </div>
   <h3 id="user-name"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
-  <div class="row-info">
-    <h6><spring:message code="user.email"/></h6>
-    <h4><c:out value="${user.email}"/></h4>
-  </div>
-  <div class="row-info">
-    <h6><spring:message code="user.district"/></h6>
-    <h4><c:out value="${user.bornCity.name}"/></h4>
-  </div>
-  <c:if test="${(user.role eq 'DRIVER')}">
+  <c:if test="${user.role eq 'DRIVER'}">
     <div class="row-info">
+      <jsp:useBean id="countTrips" type="java.lang.Integer" scope="request"/>
       <h6><spring:message code="user.countTrips"/></h6>
-      <h4><c:out value="${param.countTrips}"/></h4>
+      <h4><c:out value="${countTrips}"/></h4>
     </div>
-    <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
-      <h6><spring:message code="user.rating"/></h6>
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="ratings">
-          <c:forEach var="i" begin="1" end="${rating}">
-            <i class="bi bi-star-fill secondary-color h4"></i>
-          </c:forEach>
-          <c:if test="${rating % 1 >= 0.5}">
-            <i class="bi bi-star-half secondary-color h4"></i>
-            <c:forEach var="i" begin="${rating + 2}" end="5">
-              <i class="bi bi-star secondary-color h4"></i>
-            </c:forEach>
-          </c:if>
-          <c:if test="${rating % 1 < 0.5}">
-            <c:forEach var="i" begin="${rating + 1}" end="5">
-              <i class="bi bi-star secondary-color h4"></i>
-            </c:forEach>
-          </c:if>
-        </div>
-      </div>
+      <h6><spring:message code="driver.review.rating"/></h6>
+      <c:choose>
+        <c:when test="${param.hasBeenRatedAsDriver}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="ratings">
+              <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
+              <c:set var="rating" value="${driverRating}" scope="request"/>
+              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            </div>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <h4><spring:message code="review.none"/></h4>
+        </c:otherwise>
+      </c:choose>
     </div>
   </c:if>
-  <a class="nav-link" href="<c:url value="/trips/created"/>">
-      <h4 class="light-text"><spring:message code="navbar.created"/></h4>
-  </a>
-  <c:if test="${!isOwnProfile}">
-  <div class="row-info avatar-img">
-  <c:choose>
-      <c:when test="${!isBlocked}">
-          <form action="<c:url value="/profile/${user.userId}/block"/>" method="post">
-          <button id="block" type="submit" class="btn button-style danger-button shadow-btn no-edit">
-              <i class="bi bi-lock-fill light-text h3"></i>
-              <span class="button-text-style light-text h3" id="blockButton">Bloquear</span>
-          </button>
-          </form>
+  <div class="row-info">
+    <h6><spring:message code="passenger.review.rating"/></h6>
+    <c:choose>
+      <c:when test="${param.hasBeenRatedAsPassenger}">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="ratings">
+            <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
+            <c:set var="rating" value="${passengerRating}" scope="request"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+          </div>
+        </div>
       </c:when>
       <c:otherwise>
+        <h4><spring:message code="review.none"/></h4>
+      </c:otherwise>
+    </c:choose>
+  </div>
+  <c:if test="${!isOwnProfile}">
+    <div class="row-info avatar-img">
+      <c:choose>
+        <c:when test="${!isBlocked}">
+          <form action="<c:url value="/profile/${user.userId}/block"/>" method="post">
+            <button id="block" type="submit" class="btn button-style danger-button shadow-btn no-edit">
+              <i class="bi bi-lock-fill light-text h3"></i>
+              <span class="button-text-style light-text h3" id="blockButton">Bloquear</span>
+            </button>
+          </form>
+        </c:when>
+        <c:otherwise>
           <form action="<c:url value="/profile/${user.userId}/unblock"/>" method="post">
-          <button id="unblock" type="submit" class="btn button-style button-color shadow-btn no-edit">
+            <button id="unblock" type="submit" class="btn button-style button-color shadow-btn no-edit">
               <i class="bi bi-unlock-fill light-text h3"></i>
               <span class="button-text-style light-text h3" id="unblockButton">Desbloquear</span>
-          </button>
+            </button>
           </form>
-      </c:otherwise>
-  </c:choose>
-  </div>
+        </c:otherwise>
+      </c:choose>
+    </div>
   </c:if>
 </div>
 

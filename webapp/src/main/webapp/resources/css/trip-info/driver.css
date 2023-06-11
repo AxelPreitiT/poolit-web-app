@@ -4,7 +4,7 @@
 #button-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: stretch;
     justify-content: end;
     column-gap: 1em;
 }

@@ -142,6 +142,10 @@ public class Passenger{
 
     public long getUserImageId() { return user.getUserImageId(); }
 
+    public boolean isTripEnded() {
+        return LocalDateTime.now().isAfter(endDateTime);
+    }
+
 
     public int getQueryTotalTrips(){
         return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;

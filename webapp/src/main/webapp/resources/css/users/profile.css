@@ -11,6 +11,26 @@ a {
     gap: 2%;
 }
 
+#profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 1em;
+    width: 30%;
+}
+
+#profile-container > * {
+    width: 100%;
+}
+
+#driver-reviews-button > * {
+    width: 100%;
+}
+
+#driver-reviews-button button {
+    justify-content: center;
+}
+
 .list-container{
     margin-bottom: 2%;
     padding: 1% 2% 1% 2%;
@@ -29,7 +49,7 @@ a {
 }
 
 
-.List-properties-container{
+.list-properties-container{
     flex-grow: 2;
     max-width:65%;
 }

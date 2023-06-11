@@ -19,6 +19,7 @@
                 <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
                     <jsp:param name="showDriverInfo" value="false"/>
                     <jsp:param name="status" value="driver"/>
+                    <jsp:param name="showPassengers" value="false"/>
                 </jsp:include>
             </div>
             <div id="footer-container">

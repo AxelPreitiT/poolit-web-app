@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <html>
@@ -11,22 +10,31 @@
   <link href="<c:url value="/resources/css/users/profile.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
-  <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+  <div id="navbar-container">
+    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+  </div>
   <div class="main-container">
-    <c:url value="/users/profile" var="userProfileUrl"/>
     <jsp:include page="/WEB-INF/jsp/users/public-profile-container.jsp">
-      <jsp:param name="user" value="${user}"/>
-      <jsp:param name="role" value="DRIVER"/>
-      <jsp:param name="path" value="${userProfileUrl}"/>
-      <jsp:param name="rating" value="${rating}"/>
-      <jsp:param name="countTrips" value="${countTrips}"/>
+      <jsp:param name="hasBeenRatedAsDriver" value="${!(empty reviewsAsDriver)}"/>
+      <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
       <jsp:param name="isBlocked" value="${isBlocked}"/>
     </jsp:include>
-    <div class="List-properties-container">
-      <c:set var="reviews" value="${reviews}" scope="request"/>
+    <div class="list-properties-container">
+      <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>
+      <c:url value="/reviews/drivers/${user.userId}" var="driverReviewsUrl">
+        <c:param name="page" value="1"/>
+      </c:url>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
-        <jsp:param name="reviews" value="${reviews}"/>
-        <jsp:param name="role" value="${user.role}"/>
+        <jsp:param name="type" value="driver"/>
+        <jsp:param name="url" value="${driverReviewsUrl}"/>
+      </jsp:include>
+      <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
+      <c:url value="/reviews/passengers/${user.userId}" var="passengerReviewsUrl">
+        <c:param name="page" value="1"/>
+      </c:url>
+      <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
+        <jsp:param name="type" value="passenger"/>
+        <jsp:param name="url" value="${passengerReviewsUrl}"/>
       </jsp:include>
     </div>
   </div>

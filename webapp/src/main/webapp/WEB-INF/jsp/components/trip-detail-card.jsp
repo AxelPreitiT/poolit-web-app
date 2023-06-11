@@ -31,8 +31,16 @@
                 </span>
             </div>
         </div>
-        <div class="show-row" >
-            <i class="bi bi-car-front-fill light-text h5"></i>
+        <div class="show-row">
+            <c:choose>
+                <c:when test="${param.showCarImage}">
+                    <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                    <img src="${carImageUrl}" alt="car image" class="image-photo car-image"/>
+                </c:when>
+                <c:otherwise>
+                    <i class="bi bi-car-front-fill light-text h5"></i>
+                </c:otherwise>
+            </c:choose>
             <div class="show-row-content">
                 <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
                 <span class="light-text"><spring:message code="profile.plate" arguments="${trip.car.plate}"/></span>

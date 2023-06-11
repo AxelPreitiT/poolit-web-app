@@ -1,30 +1,32 @@
-
-#review-info-container{
+.review-info-container {
     border-top: 2px solid #8b8b8b ;
-    display: flex;
-    min-height: 70px;
     padding: 1.5% 1% 1% 1%;
-    flex-direction: row;
-    align-items: center;
-    gap: 3%;
 }
 
-#rating-container{
+.review-info-content {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    min-width: 150px;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1em;
+    width: 100%;
 }
 
-#review-container .review-text {
-    word-break: break-all;
+.rating-container {
+    max-width: fit-content;
 }
 
-#go-to-trip-container {
-    margin-left: auto;
+.review-info-content .review-info-comment {
+    word-break: break-word;
+    font-size: 1.2rem;
 }
 
-#go-to-trip-container button{
-    min-width: max-content;
+.date-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.date-container > span {
+    font-size: 0.8rem;
 }

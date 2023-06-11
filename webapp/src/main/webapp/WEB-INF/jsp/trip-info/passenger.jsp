@@ -20,6 +20,7 @@
     <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
       <jsp:param name="showDriverInfo" value="true"/>
       <jsp:param name="status" value="${passenger.passengerState}"/>
+      <jsp:param name="showPassengers" value="true"/>
     </jsp:include>
   </div>
   <div id="footer-container">
@@ -30,26 +31,32 @@
         </div>
         <div>
           <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
+          <div class="trip-price-row items-to-end">
+            <c:choose>
+              <c:when test="${trip.queryIsRecurrent}">
+                <span class="h6 italic-text"><spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/><c:out value="${totalTripsString}"/></span>
+              </c:when>
+              <c:otherwise>
+                <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
+              </c:otherwise>
+            </c:choose>
+          </div>
         </div>
-      </div>
-      <div class="trip-price-row items-to-end">
-        <c:choose>
-          <c:when test="${trip.queryIsRecurrent}">
-            <spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/>
-            <c:out value="${totalTripsString}"/>
-          </c:when>
-          <c:otherwise>
-            <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
-          </c:otherwise>
-        </c:choose>
       </div>
     </div>
     <div id="button-container">
-      <c:if test="${!done}">
+      <div id="review-trip-container">
+        <c:if test="${tripReviewCollection.canReview}">
+          <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
+            <jsp:param name="reviewed" value="${reviewed}"/>
+          </jsp:include>
+        </c:if>
+      </div>
+      <c:if test="${!passenger.tripEnded}">
         <div class="delete-trip-container">
           <button type="submit" class="btn button-style danger-button shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
-            <i class="bi bi-x light-text h3"></i>
-            <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.deleteButton"/></span>
+            <i class="bi bi-x light-text h4"></i>
+            <span class="button-text-style light-text h4"><spring:message code="tripInfo.passenger.deleteButton"/></span>
           </button>
         </div>
         <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
@@ -82,92 +89,15 @@
           </div>
         </div>
       </c:if>
-      <c:if test="${done}">
-        <div class="delete-trip-container">
-          <c:if test="${!reviewed}">
-            <button type="submit" class="btn button-style  secondary-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
-              <i class="bi bi-plus-lg light-text h3"></i>
-              <span class="button-text-style light-text h3"><spring:message code="review.btn"/></span>
-            </button>
-          </c:if>
-          <c:if test="${reviewed}">
-            <button type="submit" disabled class="btn button-style success-bg-color shadow-btn" data-bs-toggle="modal" data-bs-target="#modal-review">
-              <i class="bi bi-check-lg light-text h3"></i>
-              <span class="button-text-style light-text h3"><spring:message code="review.btnDisable"/></span>
-            </button>
-          </c:if>
-        </div>
-        <div class="modal fade <c:if test="${failedReview}">show-on-load</c:if>" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title secondary-color"><spring:message code="review.title"/></h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
-                <c:url value="/trips/${trip.tripId}/review" var="reviewTripUrl"/>
-                <form:form modelAttribute="reviewForm" method="POST" action="${reviewTripUrl}">
-                <div class="review-form">
-                  <div class="rating-container">
-                    <h3><spring:message code="review.rating"/></h3>
-                    <div class="rating">
-                      <form:select path="rating" cssClass="form-select form-select-sm">
-                        <form:option value="1" label="☆"/>
-                        <form:option value="2" label="☆☆"/>
-                        <form:option value="3" label="☆☆☆"/>
-                        <form:option value="4" label="☆☆☆☆"/>
-                        <form:option value="5" label="☆☆☆☆☆"/>
-                      </form:select>
-                    </div>
-                    <div class="error-item">
-                      <i class="bi bi-exclamation-circle-fill danger"></i>
-                      <form:errors path="rating" cssClass="danger" element="span"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <h3><spring:message code="review.review"/></h3>
-                    <spring:message code="review.placeholder" var="reviewPlaceholder"/>
-                    <form:input path="review" cssClass="form-control" id="date" name="date" placeholder="${reviewPlaceholder}"/>
-                    <div class="error-item">
-                      <i class="bi bi-exclamation-circle-fill danger"></i>
-                      <form:errors path="review" cssClass="danger" element="span"/>
-                    </div>
-                  </div>
-                  <div id="warning-message">
-                    <h6 class="italic-text"><spring:message code="review.textInfo"/></h6>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn danger-button" data-bs-dismiss="modal">
-                  <span class="light-text"><spring:message code="review.cancel"/></span>
-                </button>
-                <button type="submit" class="btn primary-button">
-                  <span class="light-text"><spring:message code="review.submit"/></span>
-                </button>
-                </form:form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </c:if>
       <c:url value="/trips/reserved" var="reservedUrl"/>
       <a class="btn button-style primary-button shadow-btn" href="${reservedUrl}">
-        <i class="bi bi-car-front-fill light-text h3"></i>
-        <span class="button-text-style light-text h3"><spring:message code="tripInfo.passenger.button"/></span>
+        <i class="bi bi-car-front-fill light-text h4"></i>
+        <span class="button-text-style light-text h4"><spring:message code="tripInfo.passenger.button"/></span>
       </a>
     </div>
   </div>
 </div>
-<c:if test="${!(empty tripReviewed) && tripReviewed}">
-  <div id="toast-container">
-    <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
-      <jsp:param name="title" value="review.toast.title"/>
-      <jsp:param name="message" value="review.toast.message"/>
-    </jsp:include>
-  </div>
-</c:if>
-<c:if test="${!(empty successInscription) && successInscription}">
+<c:if test="${!(empty joined) && joined}">
   <div id="toast-container">
     <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
       <jsp:param name="title" value="selectTrip.success.toast.title"/>
@@ -175,6 +105,5 @@
     </jsp:include>
   </div>
 </c:if>
-<script src="<c:url value="/resources/js/pages/trip-info/passenger.js"/>" type="text/javascript"></script>
 </body>
 </html>
