@@ -2,6 +2,8 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
+import ar.edu.itba.paw.interfaces.services.CityService;
+import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.interfaces.services.TokenService;
 import ar.edu.itba.paw.models.City;
@@ -29,6 +31,10 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    private final ImageService imageService;
+
+    private final CityService cityService;
 
     private final UserDao userDao;
 
@@ -70,12 +76,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
-                           final TokenService tokenService){
+                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         //this.userDetailsService = userDetailsService;
+        this.imageService=imageService1;
+        this.cityService=cityService1;
     }
 
     @Transactional
@@ -199,4 +207,14 @@ public class UserServiceImpl implements UserService {
         Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authRequest);
     }
+    @Transactional
+    @Override
+    public void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData) {
+        Optional<User> user = findById(userId);
+        if(user.isPresent()){
+            imageService.replaceImage(user.get().getUserImageId(),imgData);
+        }
+        userDao.modifyUser(userId,username,surname,phone,cityService.findCityById(bornCityId).get(),mailLocale);
+    }
+
 }

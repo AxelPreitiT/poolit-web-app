@@ -89,6 +89,21 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
+    public void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale) {
+        Optional<User> maybeUser = findById(userId);
+        LOGGER.debug("Modifying user with id '{}' in the database", userId);
+        if (maybeUser.isPresent()){
+            final User user = maybeUser.get();
+            user.setName(username);
+            user.setSurname(surname);
+            user.setPhone(phone);
+            user.setBornCity(bornCity);
+            user.setMailLocale(mailLocale);
+            em.persist(user);
+        }
+    }
+
+    @Override
     public void blockUser(User blocker, User blocked) {
         String sql = "INSERT INTO blocks (blockedById, blockedId) VALUES (:blockerId, :blockedId)";
         em.createNativeQuery(sql)

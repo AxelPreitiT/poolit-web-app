@@ -16,7 +16,7 @@ public class MultiPartFileValidator implements ConstraintValidator<MPFile, Multi
 
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext constraintValidatorContext){
-        return !multipartFile.isEmpty() && multipartFile.getSize()<=SIZE;
+        return  multipartFile.getSize()<=SIZE;
     }
 }
 

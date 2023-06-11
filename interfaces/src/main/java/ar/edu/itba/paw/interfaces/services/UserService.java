@@ -26,4 +26,5 @@ public interface UserService {
     void blockUser(User blocker, User blocked);
     void unblockUser(User blocker, User blocked);
     boolean isBlocked(User blocker, User blocked);
+    void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
 }

@@ -8,6 +8,9 @@ import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
+import ar.edu.itba.paw.webapp.form.CreateUserForm;
+import ar.edu.itba.paw.webapp.form.UpdateUserForm;
+import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,16 +135,26 @@ public class UserController extends LoggedUserController {
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
-    public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded){
+    public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded,
+                                    @ModelAttribute("updateUserForm") final UpdateUserForm form){
         LOGGER.debug("GET Request to /users/profile");
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
         final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
         final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
+        final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+
+        form.setBornCityId(user.getBornCity().getId());
+        form.setMailLocale(user.getMailLocale().getLanguage());
+        form.setPhone(user.getPhone());
+        form.setSurname(user.getSurname());
+        form.setUsername(user.getName());
+
         if(Objects.equals(user.getRole(), "USER")){
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
+            mav.addObject("cities", cities);
             mav.addObject("user", user);
             mav.addObject("futureTripsPassanger", futureTripsPassenger);
             mav.addObject("pastTripsPassanger", pastTripsPassenger);
@@ -165,7 +178,23 @@ public class UserController extends LoggedUserController {
         mav.addObject("carAdded", carAdded);
         mav.addObject("reviews", reviews);
         mav.addObject("reviewsAsUser", reviewsAsUser);
+        mav.addObject("cities", cities);
         return mav;
+    }
+
+    @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
+    public ModelAndView profileViewUpdate(@Valid @ModelAttribute("updateUserForm") final UpdateUserForm form,
+                                          final BindingResult errors) throws IOException{
+        LOGGER.debug("POST Request to /users/profile");
+        if(errors.hasErrors()){
+            LOGGER.warn("Errors found in updateUserForm: {}", errors.getAllErrors());
+            return profileView(false,form);
+        }
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+
+        userService.modifyUser(user.getUserId(), form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),new Locale(form.getMailLocale()), form.getImageFile().getBytes());
+
+        return profileView(false,form);
     }
 
     @RequestMapping(value = "/profile/{id:\\d+$}", method = RequestMethod.GET)

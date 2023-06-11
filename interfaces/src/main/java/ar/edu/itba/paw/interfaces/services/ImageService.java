@@ -10,5 +10,7 @@ public interface ImageService {
 
     Optional<Image> findById(long id);
 
+    void replaceImage(long id, byte[] data);
+
 }
 
