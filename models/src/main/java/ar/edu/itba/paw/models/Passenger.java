@@ -81,6 +81,7 @@ public class Passenger{
         return !startDateTime.equals(endDateTime);
     }
 
+
     public Trip getTrip() {
         return trip;
     }
