@@ -13,7 +13,7 @@ public class Car {
     @Column(name = "car_id")
     private long carId;
 
-    @Column(name = "seats")
+    @Column(name = "seats", nullable = false, columnDefinition = "INT DEFAULT 4")
     private int seats;
 
 
@@ -23,7 +23,7 @@ public class Car {
     private List<FeatureCar> features;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "brand")
+    @Column(name = "brand", nullable = false, columnDefinition = "TEXT DEFAULT 'UNKNOWN'")
     private CarBrand brand;
 
     @Column(name = "plate")
@@ -32,8 +32,7 @@ public class Car {
     @Column(name = "info_car")
     private String infoCar;
 
-    //@ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @ManyToOne(fetch = FetchType.EAGER,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 

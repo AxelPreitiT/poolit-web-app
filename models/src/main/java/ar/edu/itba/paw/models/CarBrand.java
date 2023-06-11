@@ -20,8 +20,8 @@ public enum CarBrand {
     SUZUKI("Suzuki"),
     JEEP("Jeep"),
     LAND_ROVER("Land Rover"),
-    VOLVO("Volvo");
-
+    VOLVO("Volvo"),
+    UNKNOWN("----");
     private final String formattedName;
 
     private CarBrand(String formattedName) {

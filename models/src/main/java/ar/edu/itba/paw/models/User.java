@@ -24,7 +24,7 @@ public class User {
     private String phone;
     @Column(name = "password")
     private String password;
-    @Column(nullable = false, name = "enabled")
+    @Column(nullable = false, name = "enabled", columnDefinition = "BOOLEAN DEFAULT true")
     private boolean enabled;
 
     //TODO Revisar Eager, si solo trae una ciudad y una imagen.
