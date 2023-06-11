@@ -5,21 +5,20 @@
 <link href="<c:url value="/resources/css/components/success-toast.css"/>" rel="stylesheet" type="text/css"/>
 
 <!-- Params:
-- title: The title of the toast
-- message: The text of the toast
+        - title: The title of the toast
+        - message: The text of the toast
 -->
 
 <div id="toast">
-  <div id="success-toast" class="toast fade danger-bg-color" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header danger-bg-color">
-      <strong class="light-text h3"><spring:message code="${param.title}"/></strong>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div id="success-toast" class="toast fade danger-bg-color" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header danger-bg-color">
+            <strong class="light-text h3"><spring:message code="${param.title}"/></strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <span class="light-text h5"><spring:message code="${param.message}"/></span>
+        </div>
     </div>
-    <div class="toast-body">
-      <span class="light-text h5"><spring:message code="${param.message}"/></span>
-    </div>
-  </div>
 </div>
 
 <script src="<c:url value="/resources/js/components/successToast.js"/>" type="text/javascript"></script>
-</html>

@@ -40,6 +40,8 @@ public interface TripService {
 
     boolean userIsPassenger(final long tripId, final User user);
 
+    double getTotalTripEarnings(List<Passenger> passengers);
+
     Optional<Passenger> getPassenger(final long tripId, final User user);
 
     Optional<Passenger> getPassenger(final Trip trip, final User user);

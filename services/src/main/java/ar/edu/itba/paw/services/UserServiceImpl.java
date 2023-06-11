@@ -3,15 +3,22 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.interfaces.services.TokenService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.VerificationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +32,26 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
+    private final TokenService tokenService;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
+
+    //private final UserDetailsService userDetailsService;
+
+    private enum AuthRoles{
+        USER("ROLE_USER"),
+        DRIVER("ROLE_DRIVER");
+        private final String role;
+        private AuthRoles(String role){
+            this.role = role;
+        }
+
+        public String getRole() {
+            return role;
+        }
+    }
 
     private enum Roles{
         USER("USER"),
@@ -43,10 +67,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,final AuthenticationManager authenticationManager){
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
+                           final AuthenticationManager authenticationManager,
+                           final TokenService tokenService){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+        //this.userDetailsService = userDetailsService;
     }
 
     @Transactional
@@ -105,4 +133,53 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
     }
 
+    @Transactional
+    @Override
+    public boolean confirmRegister(VerificationToken verificationToken) {
+        if(verificationToken == null){
+            return false;
+        }
+        boolean isValidToken = tokenService.isValidToken(verificationToken);
+        if (isValidToken) {
+            final User user = verificationToken.getUser();
+            user.setEnabled(true);
+            authWithoutPassword(user);
+            /*
+            final Collection<GrantedAuthority> authorities = new HashSet<>();
+            if(Objects.equals(user.getRole(), "DRIVER")){
+                authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+            } else {
+                authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+            }
+
+            tokenService.deleteToken(verificationToken);
+
+
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            */
+        }
+        return isValidToken;
+    }
+
+
+
+    void authWithoutPassword(User user) {
+        final Collection<GrantedAuthority> authorities = new HashSet<>();
+        if(Objects.equals(user.getRole(), "DRIVER")){
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+        } else {
+            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+        }
+
+        //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
+        //SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                user.getEmail(), user.getPassword(), authorities);
+        Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authRequest);
+    }
 }

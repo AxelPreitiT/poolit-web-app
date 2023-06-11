@@ -14,6 +14,7 @@ import ar.edu.itba.paw.webapp.utils.DefaultBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -86,9 +87,11 @@ public class TripController extends LoggedUserController {
     private ModelAndView tripDetailsForDriver(final long tripId,final boolean passengerAccepted,final boolean passengerRejected,final boolean notAvailableSeats,final String passengersState, final int passengersPage){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
         final PagedContent<Passenger> passengers = tripService.getPassengersPaged(trip,passengersState,passengersPage-1,PAGE_SIZE);
+        final double totalPrice = tripService.getTotalTripEarnings(passengers.getElements()); //TODO: arreglar
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
         mav.addObject("passengersContent",passengers);
+        mav.addObject("totalIncome",String.format(LocaleContextHolder.getLocale(),"%.2f",totalPrice));
         mav.addObject("acceptPass",passengerAccepted);
         mav.addObject("deletePass",passengerRejected);
         mav.addObject("notAvailableSeats",notAvailableSeats);
