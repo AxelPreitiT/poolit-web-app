@@ -20,4 +20,8 @@ public interface UserDao {
     public User updateProfile(final String username, final String surname, final String email,
                               final String password, final City bornCity, final String mailLocale, final String role, long user_image_id);
     void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale);
+
+    void blockUser(User blocker, User blocked);
+    void unblockUser(User blocker, User blocked);
+    boolean isBlocked(User blocker, User blocked);
 }

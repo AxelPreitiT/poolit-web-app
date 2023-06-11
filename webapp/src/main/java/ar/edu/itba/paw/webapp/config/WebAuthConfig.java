@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.AuthValidator;
+import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.InputStreamReader;
@@ -49,7 +52,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .invalidSessionUrl("/users/login")
                 .and().authorizeRequests()
-                    .antMatchers("/users/login", "/users/create").anonymous()
+                    .antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
                     .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
                     .antMatchers("/cars/{id:\\d+$}").authenticated()
                     .antMatchers("/changeRole").hasRole("USER")

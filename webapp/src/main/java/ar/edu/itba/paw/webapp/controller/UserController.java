@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.webapp.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -9,10 +10,10 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
+import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UserController extends LoggedUserController {
@@ -40,6 +43,10 @@ public class UserController extends LoggedUserController {
 
     private final ImageService imageService;
 
+    private final TokenService tokenService;
+
+    //TODO: sacar de aca, llevarlo al service
+    private final EmailService emailService;
 
     private final PawUserDetailsService pawUserDetailsService;
 
@@ -55,7 +62,8 @@ public class UserController extends LoggedUserController {
     @Autowired
     public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                          final CarService carService, final ImageService imageService) {
+                          final CarService carService, final ImageService imageService,
+                          final TokenService tokenService, final EmailService emailService) {
         super(userService);
         this.cityService = cityService;
         this.reviewService = reviewService;
@@ -64,6 +72,8 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
+        this.tokenService = tokenService; //TODO: sacar
+        this.emailService = emailService; //TODO: sacar
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -92,15 +102,22 @@ public class UserController extends LoggedUserController {
         final Image image=imageService.createImage(data);
         final City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
         try {
-            userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
+            User user = userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
-            userService.loginUser(form.getEmail(), form.getPassword());
+            VerificationToken token = tokenService.createToken(user);
+            emailService.sendVerificationEmail(user, token.getToken());
+
+            //userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             LOGGER.warn("Email already exists: {}", form.getEmail());
             return createUserGet(form);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return new ModelAndView("redirect:/" );
+        final ModelAndView mav = new ModelAndView("/users/login");
+        mav.addObject("sentToken", true);
+        return mav;
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
@@ -184,11 +201,16 @@ public class UserController extends LoggedUserController {
     {
         LOGGER.debug("GET Request to /profile/{}", userId);
         final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-
+        //TODO: hacer un redirect al perfil privado?
+        final User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        boolean isBlocked = userService.isBlocked(currentUser,user);
+        boolean isOwnProfile = user.equals(currentUser);
         if(Objects.equals(user.getRole(), "USER")){
             List<Review> reviews = reviewService.getUsersIdReviews(user);
 
             final ModelAndView mav = new ModelAndView("/users/public-profile");
+            mav.addObject("isBlocked", isBlocked);
+            mav.addObject("isOwnProfile",isOwnProfile);
             mav.addObject("user", user);
             mav.addObject("reviews", reviews);
             return mav;
@@ -198,11 +220,36 @@ public class UserController extends LoggedUserController {
         final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
 
         final ModelAndView mav = new ModelAndView("/users/public-profile");
+        mav.addObject("isBlocked", isBlocked);
+        mav.addObject("isOwnProfile",isOwnProfile);
         mav.addObject("user", user);
         mav.addObject("rating", rating);
         mav.addObject("countTrips",createdTrips.getTotalCount());
         mav.addObject("reviews", reviews);
         return mav;
+    }
+    //TODO: que reciban solo el id los metodos y hagan la logica atras
+    @RequestMapping(value="/profile/{id:\\d+$}/block", method = RequestMethod.POST)
+    public ModelAndView profileBlock(@PathVariable("id") final long userId){
+        LOGGER.debug("Blocking /profile/{}", userId);
+        final User userBlocked = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        final User userBlocker = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+
+        userService.blockUser(userBlocker, userBlocked);
+
+        return new ModelAndView("redirect:/profile/" + userId);
+
+    }
+    @RequestMapping(value="/profile/{id:\\d+$}/unblock", method = RequestMethod.POST)
+    public ModelAndView profileUnblock(@PathVariable("id") final long userId){
+        LOGGER.debug("Unblocking /profile/{}", userId);
+        final User userBlocked = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        final User userBlocker = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+
+        userService.unblockUser(userBlocker, userBlocked);
+
+        return new ModelAndView("redirect:/profile/" + userId);
+
     }
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
     public ModelAndView changeRoleToDriver(){
@@ -212,5 +259,45 @@ public class UserController extends LoggedUserController {
         userService.changeToDriver(user);
         return new ModelAndView("redirect:/trips/create");
     }
+
+    @RequestMapping(value = "/register/confirm")
+    public ModelAndView confirmRegistration(@RequestParam("token") final String token) {
+        VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
+
+        if (userService.confirmRegister(verificationToken)) {
+            return new ModelAndView("redirect:/");
+        }
+        final ModelAndView mav = new ModelAndView("/users/sendToken");
+        mav.addObject("failToken", true);
+        mav.addObject("emailForm", new EmailForm());
+        return mav;
+    }
+
+    @RequestMapping(value = "/users/sendToken", method = RequestMethod.GET)
+    public ModelAndView sendToken(@ModelAttribute("emailForm") final EmailForm form) {
+         return new ModelAndView("/users/sendToken");
+    }
+
+    @RequestMapping(value = "/users/sendToken", method = RequestMethod.POST)
+    public ModelAndView postCar(@Valid @ModelAttribute("emailForm") final EmailForm form,
+                                final BindingResult errors) throws Exception {
+        if(errors.hasErrors()){
+            return sendToken(form);
+        }
+        final ModelAndView mav = new ModelAndView("/users/login");
+        //TODO: Revisar reducir la logica en controller
+        Optional<User> user = userService.findByEmail(form.getEmail());
+        if(user.isPresent()){
+            if(user.get().isEnabled()){
+                mav.addObject("alreadyValidation", true);
+                return mav;
+            }
+            String token = tokenService.updateToken(user.get());
+            emailService.sendVerificationEmail(user.get(), token);
+        }
+        mav.addObject("sentToken", true);
+        return mav;
+    }
+
 
 }

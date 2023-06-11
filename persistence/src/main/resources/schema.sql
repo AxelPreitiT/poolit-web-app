@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS users(
     mail_locale TEXT NOT NULL,
     user_role TEXT,
     user_image_id INT,
+    enabled BOOLEAN NOT NULL,
     UNIQUE(email),
     CONSTRAINT users_to_images FOREIGN KEY (user_image_id) REFERENCES images (image_id) ON DELETE SET NULL,
     CONSTRAINT users_to_cities FOREIGN KEY (city_id) REFERENCES cities(city_id) ON DELETE SET NULL
@@ -100,6 +101,14 @@ CREATE TABLE IF NOT EXISTS reviews(
   UNIQUE(trip_id,user_id),
   CONSTRAINT reviews_to_trips FOREIGN KEY(trip_id) REFERENCES trips(trip_id) ON DELETE CASCADE,
   CONSTRAINT reviews_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE IF NOT EXISTS tokens(
+    token_id SERIAL PRIMARY KEY,
+    token    TEXT NOT NULL,
+    user_id  INT  NOT NULL,
+    date TIMESTAMP NOT NULL,
+    CONSTRAINT tokens_to_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 
