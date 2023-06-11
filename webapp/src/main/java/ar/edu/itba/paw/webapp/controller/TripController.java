@@ -151,6 +151,7 @@ public class TripController extends LoggedUserController {
 
         LOGGER.debug("GET Request to {}", SEARCH_TRIP_PATH);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        final Optional<User> user = userService.getCurrentUser();
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
         if(errors.hasErrors()){
@@ -158,8 +159,14 @@ public class TripController extends LoggedUserController {
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
-        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,page-1,PAGE_SIZE);
+        final PagedContent<Trip> tripsContent;
+        if(user.isPresent()){
+            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,user.get(),page-1,PAGE_SIZE);
+        }else{
+            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,null,page-1,PAGE_SIZE);
+        }
         mav.addObject("tripsContent", tripsContent);
+
         return mav;
     }
 

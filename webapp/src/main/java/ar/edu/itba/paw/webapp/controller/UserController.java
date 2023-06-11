@@ -9,7 +9,6 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.*;
-import jdk.nashorn.internal.runtime.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UserController extends LoggedUserController {
@@ -43,6 +43,7 @@ public class UserController extends LoggedUserController {
 
     private final TokenService tokenService;
 
+    //TODO: sacar de aca, llevarlo al service
     private final EmailService emailService;
 
     private final PawUserDetailsService pawUserDetailsService;
@@ -69,8 +70,8 @@ public class UserController extends LoggedUserController {
         this.tripService = tripService;
         this.carService = carService;
         this.imageService = imageService;
-        this.tokenService = tokenService;
-        this.emailService = emailService;
+        this.tokenService = tokenService; //TODO: sacar
+        this.emailService = emailService; //TODO: sacar
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -138,7 +139,6 @@ public class UserController extends LoggedUserController {
         final List<Trip> futureTripsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
         final List<Review> reviewsAsUser = reviewService.getUsersIdReviews(user);
-
         if(Objects.equals(user.getRole(), "USER")){
 
             final ModelAndView mav = new ModelAndView("/users/user-profile");
@@ -173,11 +173,16 @@ public class UserController extends LoggedUserController {
     {
         LOGGER.debug("GET Request to /profile/{}", userId);
         final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-
+        //TODO: hacer un redirect al perfil privado?
+        final User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        boolean isBlocked = userService.isBlocked(currentUser,user);
+        boolean isOwnProfile = user.equals(currentUser);
         if(Objects.equals(user.getRole(), "USER")){
             List<Review> reviews = reviewService.getUsersIdReviews(user);
 
             final ModelAndView mav = new ModelAndView("/users/public-profile");
+            mav.addObject("isBlocked", isBlocked);
+            mav.addObject("isOwnProfile",isOwnProfile);
             mav.addObject("user", user);
             mav.addObject("reviews", reviews);
             return mav;
@@ -187,11 +192,36 @@ public class UserController extends LoggedUserController {
         final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
 
         final ModelAndView mav = new ModelAndView("/users/public-profile");
+        mav.addObject("isBlocked", isBlocked);
+        mav.addObject("isOwnProfile",isOwnProfile);
         mav.addObject("user", user);
         mav.addObject("rating", rating);
         mav.addObject("countTrips",createdTrips.getTotalCount());
         mav.addObject("reviews", reviews);
         return mav;
+    }
+    //TODO: que reciban solo el id los metodos y hagan la logica atras
+    @RequestMapping(value="/profile/{id:\\d+$}/block", method = RequestMethod.POST)
+    public ModelAndView profileBlock(@PathVariable("id") final long userId){
+        LOGGER.debug("Blocking /profile/{}", userId);
+        final User userBlocked = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        final User userBlocker = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+
+        userService.blockUser(userBlocker, userBlocked);
+
+        return new ModelAndView("redirect:/profile/" + userId);
+
+    }
+    @RequestMapping(value="/profile/{id:\\d+$}/unblock", method = RequestMethod.POST)
+    public ModelAndView profileUnblock(@PathVariable("id") final long userId){
+        LOGGER.debug("Unblocking /profile/{}", userId);
+        final User userBlocked = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        final User userBlocker = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+
+        userService.unblockUser(userBlocker, userBlocked);
+
+        return new ModelAndView("redirect:/profile/" + userId);
+
     }
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
     public ModelAndView changeRoleToDriver(){

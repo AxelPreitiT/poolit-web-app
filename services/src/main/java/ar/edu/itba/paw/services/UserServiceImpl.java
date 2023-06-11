@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
 
     //private final UserDetailsService userDetailsService;
 
+    //TODO: revisar si se usa
     private enum AuthRoles{
         USER("ROLE_USER"),
         DRIVER("ROLE_DRIVER");
@@ -133,6 +134,22 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
     }
 
+    @Transactional
+    @Override
+    public void blockUser(User blocker, User blocked) {
+        userDao.blockUser(blocker,blocked);
+    }
+
+    @Transactional
+    @Override
+    public void unblockUser(User blocker, User blocked) {
+        userDao.unblockUser(blocker,blocked);
+    }
+
+    @Override
+    public boolean isBlocked(User blocker, User blocked) { return userDao.isBlocked(blocker,blocked); }
+
+    //TODO: usar el otro enum
     @Transactional
     @Override
     public boolean confirmRegister(VerificationToken verificationToken) {

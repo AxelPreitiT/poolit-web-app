@@ -415,7 +415,7 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getRecommendedTripsForUser(User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         LocalDateTime start = LocalDateTime.now();
-        return tripDao.getTripsByOriginAndStart(user.getBornCity().getId(),start,page,pageSize);
+        return tripDao.getTripsByOriginAndStart(user.getBornCity().getId(),start,user.getUserId(),page,pageSize);
     }
     private Trip.SortType getTripSortType(final String sortType){
         try{
@@ -430,11 +430,17 @@ public class TripServiceImpl implements TripService {
             long origin_city_id, long destination_city_id, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final Optional<BigDecimal> minPrice, final Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
-            final int page, final int pageSize){
+            final User searchUser, final int page, final int pageSize){
         validatePageAndSize(page,pageSize);
         LocalDateTime startDateTime = startDate.atTime(startTime);
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,page,pageSize);
+        long userId;
+        if(searchUser==null){
+            userId=-1;
+        }else{
+            userId=searchUser.getUserId();
+        }
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,page,pageSize);
     }
 
     @Transactional
