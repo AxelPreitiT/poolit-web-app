@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces.services;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.VerificationToken;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -19,6 +20,8 @@ public interface UserService {
     void loginUser(final String email, final String password);
 
     void changeToDriver(User user);
+
+    boolean confirmRegister(VerificationToken verificationToken);
 
     void blockUser(User blocker, User blocked);
     void unblockUser(User blocker, User blocked);
