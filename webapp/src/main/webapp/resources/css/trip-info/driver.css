@@ -52,17 +52,44 @@
 }
 
 .image-photo{
-    max-height: 40px;
-    max-width: 40px;
+    max-height: 80px;
+    max-width: 80px;
     border-radius: 50%;
     aspect-ratio: 1;
 }
+
+.container-flex{
+    display: flex;
+    justify-content: center;
+}
+
+.list-container{
+    width: 65%;
+}
+
+.row-data-pass{
+    display: flex;
+    flex-direction: row;
+}
+
+.form-bn-class{
+    margin-bottom: 0;
+}
+
+.row-info{
+    display: flex;
+    flex-direction: row;
+    min-width: fit-content;
+    margin-right: 5px;
+}
+
 .show-row {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     column-gap: 1em;
+    margin-right: 3px;
 }
 .passenger-list{
     overflow-y: auto;
