@@ -184,8 +184,7 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        Trip aux = tripDao.findById(trip.getTripId(),startDateTime,endDateTime).orElseThrow(IllegalArgumentException::new);
-        if(aux.getOccupiedSeats()>=trip.getMaxSeats()){
+        if(tripDao.getTripSeatCount(trip.getTripId(),trip.getStartDateTime(),trip.getEndDateTime())>=trip.getMaxSeats()){
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
             throw e;
@@ -205,13 +204,13 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         try{
-            emailService.sendMailNewPassenger(trip, passenger);
+            emailService.sendMailNewPassengerRequest(trip, passenger);
         }
         catch( Exception e){
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
         }
         try {
-            emailService.sendMailTripConfirmation(trip, passenger);
+            emailService.sendMailTripRequest(trip, passenger);
         }
         catch (Exception e) {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
@@ -437,9 +436,18 @@ public class TripServiceImpl implements TripService {
     public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException {
         User user = userService.findById(userId).orElseThrow(()->new IllegalArgumentException("User not found"));
         Passenger pass = tripDao.getPassenger(tripId, user).orElseThrow(()->new IllegalArgumentException("Passenger not found"));
+        if(LocalDateTime.now().compareTo(pass.getStartDateTime())>=0){
+            throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
+        }
         if(tripDao.getTripSeatCount(tripId,pass.getStartDateTime(),pass.getEndDateTime())>=pass.getTrip().getMaxSeats()){
             //No hay asientos disponibles
             throw new NotAvailableSeatsException();
+        }
+        try{
+            emailService.sendMailTripConfirmed(pass.getTrip(), pass);
+        }
+        catch( Exception e){
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", pass.getUserId(), pass.getTrip().getTripId(), e);
         }
         return tripDao.acceptPassenger(pass);
     }
@@ -449,6 +457,15 @@ public class TripServiceImpl implements TripService {
     public boolean rejectPassenger(final long tripId, final long userId){
         User user = userService.findById(userId).orElseThrow(()-> new IllegalArgumentException("User not found"));
         Passenger passenger = tripDao.getPassenger(tripId, user).orElseThrow(()-> new IllegalArgumentException("Passanger not found"));
+        if(LocalDateTime.now().compareTo(passenger.getStartDateTime())>=0){
+            throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
+        }
+        try{
+            emailService.sendMailTripRejected(passenger.getTrip(), passenger);
+        }
+        catch( Exception e){
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", passenger.getUserId(), passenger.getTrip().getTripId(), e);
+        }
         return tripDao.removePassenger(passenger);
     }
 

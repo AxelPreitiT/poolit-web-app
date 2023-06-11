@@ -137,8 +137,16 @@ public class Passenger{
     public long getUserImageId() { return user.getUserImageId(); }
 
     public enum PassengerState{
-        ACCEPTED,
-        REJECTED,
-        PENDING
+        ACCEPTED("passengerState.accepted"),
+        REJECTED("passengerState.rejected"),
+        PENDING("passengerState.pending");
+
+        private final String messageCode;
+        PassengerState(String messageCode){
+            this.messageCode = messageCode;
+        }
+        public String getMessageCode(){
+            return messageCode;
+        }
     }
 }

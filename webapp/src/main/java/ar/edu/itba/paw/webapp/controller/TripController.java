@@ -37,7 +37,7 @@ public class TripController extends LoggedUserController {
     private final CarService carService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
-    private final static int PAGE_SIZE = 1;
+    private final static int PAGE_SIZE = 10;
     private final static int DEFAULT_PAGE = 1;
     private final static String DEFAULT_PASSENGERS_SATE = "";
     private final static String BASE_RELATED_PATH = "/";
