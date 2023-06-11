@@ -66,21 +66,25 @@
     <div id="trip-price-container">
       <div class="trip-price-row">
         <div>
-          <span class="h3 text"><spring:message code="selectTrip.price"/></span>
+          <span class="h3 text"><spring:message code="tripInfo.driver.price"/></span>
         </div>
         <div>
           <span class="h2 secondary-color">
-            <spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/>
+            <spring:message code="tripInfo.driver.priceFormat" arguments="${totalIncome}" var="priceString" argumentSeparator=";"/>
+            <c:out value="${priceString}"/>
           </span>
         </div>
       </div>
       <div class="trip-price-row items-to-end">
         <c:choose>
           <c:when test="${trip.recurrent}">
-            <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
+            <span class="h6 italic-text">
+              <spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/>
+              <c:out value="${totalTripsString}"/>
+            </span>
           </c:when>
           <c:otherwise>
-            <span class="h6 italic-text">Viaje único</span>
+            <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
           </c:otherwise>
         </c:choose>
       </div>

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
@@ -69,8 +70,13 @@ public class Passenger{
         return !startDateTime.equals(endDateTime);
     }
 
+    //OJO con usar esto y que ya se haya buscado el mismo trip en la sesion
+    //  si hago cambios en el trip, entonces me va a hacer los cambios en la unica instancia que me da Hibernate
     public Trip getTrip() {
-        return trip;
+        final Trip ans =  trip;
+        trip.setQueryStartDateTime(startDateTime);
+        trip.setQueryEndDateTime(endDateTime);
+        return ans;
     }
 
     public User getUser() {
@@ -123,4 +129,12 @@ public class Passenger{
     }
 
     public long getUserImageId() { return user.getUserImageId(); }
+
+    public int getQueryTotalTrips(){
+        return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
+    }
+
+    public double getTotalPrice(){
+        return getQueryTotalTrips() * trip.getPrice();
+    }
 }

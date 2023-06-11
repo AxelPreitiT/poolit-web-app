@@ -147,6 +147,16 @@ public class TripHibernateDao implements TripDao {
         query.setParameter("ids",tripsIds);
         return query.getResultList();
     }
+    private List<Trip> getTripsWithIds(List<Long> tripsIds,User passenger){
+        if(tripsIds.isEmpty()){
+            return new ArrayList<>();
+        }
+        TypedQuery<Passenger> query = em.createQuery("from Passenger WHERE trip.tripId IN :ids and user = :passenger",Passenger.class);
+        query.setParameter("ids",tripsIds);
+        query.setParameter("passenger",passenger);
+        //Obtenemos el viaje pero con los limites seteados para el pasajero
+        return query.getResultList().stream().map(Passenger::getTrip).collect(Collectors.toList());
+    }
     private PagedContent<Trip> getTripPagedContent(int page, int pageSize, Query countQuery, Query idQuery) {
         @SuppressWarnings("unchecked")
         Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
@@ -214,19 +224,10 @@ public class TripHibernateDao implements TripDao {
         Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
-        if(ids.isEmpty()){
-            return new PagedContent<>(new ArrayList<>(),page,pageSize,total);
-        }
-        TypedQuery<Passenger> query = em.createQuery("from Passenger WHERE trip.tripId IN :ids and user.userId = :userId",Passenger.class);
-        query.setParameter("ids",ids);
-        query.setParameter("userId",user.getUserId());
-        List<Trip> ans = query.getResultList().stream().map(passenger ->{
-            Trip aux = passenger.getTrip();
-            aux.setQueryStartDateTime(passenger.getStartDateTime());
-            aux.setQueryEndDateTime(passenger.getEndDateTime());
-            return aux;
-        }).collect(Collectors.toList());
-        return new PagedContent<>(ans,page,pageSize,total);
+        List<Trip> result = getTripsWithIds(ids,user);
+        LOGGER.debug("Found {} in the database", result);
+        return new PagedContent<>(result,page,pageSize,total);
+//        return getTripPagedContent(page, pageSize, countQuery, idQuery);
     }
 
     private int getTripCountSeats(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime){

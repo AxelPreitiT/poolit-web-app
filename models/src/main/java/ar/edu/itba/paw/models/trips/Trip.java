@@ -227,6 +227,9 @@ public class Trip {
         return (Period.between(queryStartDateTime.toLocalDate(),queryEndDateTime.toLocalDate()).getDays())/7+1;
     }
 
+    public double getQueryPrice(){
+        return price * getQueryTotalTrips();
+    }
     public String getQueryTotalPrice() {
         return String.format("%.2f",price * getQueryTotalTrips());
     }
