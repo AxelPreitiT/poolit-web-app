@@ -116,115 +116,126 @@
   <div class="info-container">
     <h3 class="secondary-color title-style"><spring:message code="driver.passangers.title"/></h3>
     <hr class="text">
-    <c:url value="" var="baseStatusUrl">
-      <c:forEach var="p" items="${param}">
-        <c:if test="${!(p.key eq 'status')}">
-          <c:param name="${p.key}" value="${p.value}"/>
-        </c:if>
-      </c:forEach>
-    </c:url>
-    <jsp:include page="/WEB-INF/jsp/components/passangers-order-by.jsp">
-      <jsp:param name="baseUrl" value="${baseStatusUrl}"/>
-    </jsp:include>
-    <div class="container-flex">
-      <div class="list-container">
-        <c:forEach items="${passengersContent.elements}" var="user">
-          <c:url value="/profile/${user.userId}" var="userUrl"/>
-          <c:url value="/image/${user.userImageId}" var="userImageId"/>
-          <div class="individual-profile">
-            <div>
-              <img src="${userImageId}" alt="user image" class="image-photo-list"/>
-            </div>
-            <div class="show-row-content-passangers">
-              <div class="row-data-pass">
-                <a href="${userUrl}" class="show-row profile-link">
-                  <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/> </span>
-                </a>
-                <c:if test="${user.recurrent}">
-                  <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${user.startDateString}, ${user.endDateString}"/></h6>
-                </c:if>
-              </div>
 
-
-
-              <div class="btn-section">
-                <c:set value='2' var="rating"/>
-                <div class="row-info">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="ratings">
-                      <c:forEach var="i" begin="1" end="${rating}">
-                        <i class="bi bi-star-fill secondary-color h4"></i>
-                      </c:forEach>
-                      <c:if test="${rating % 1 >= 0.5}">
-                        <i class="bi bi-star-half secondary-color h4"></i>
-                        <c:forEach var="i" begin="${rating + 2}" end="5">
-                          <i class="bi bi-star secondary-color h4"></i>
-                        </c:forEach>
-                      </c:if>
-                      <c:if test="${rating % 1 < 0.5}">
-                        <c:forEach var="i" begin="${rating + 1}" end="5">
-                          <i class="bi bi-star secondary-color h4"></i>
-                        </c:forEach>
-                      </c:if>
-                    </div>
-                  </div>
-                </div>
-
-                <c:url value="/trips/${trip.tripId}/deletePas/${user.userId}" var="deletePasUrl"/>
-                <form:form method="POST" action="${deletePasUrl}" cssClass="form-bn-class">
-                  <c:if test="${user.passengerState eq 'REJECTED'}">
-                    <button type="submit" class="btn disabled success-bg-color btn-sm">
-                      <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
-                    </button>
-                  </c:if>
-                  <c:if test="${!(user.passengerState eq 'REJECTED')}">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                      <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
-                    </button>
-                  </c:if>
-                </form:form>
-                <c:url value="/trips/${trip.tripId}/AceptPas/${user.userId}" var="acceptPasUrl"/>
-                <form:form method="POST" action="${acceptPasUrl}" cssClass="form-bn-class">
-                  <c:if test="${user.passengerState eq 'ACCEPTED'}">
-                    <button type="submit" class="btn disabled success-bg-color btn-sm">
-                      <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
-                    </button>
-                  </c:if>
-                  <c:if test="${!(user.passengerState eq 'ACCEPTED')}">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                      <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
-                    </button>
-                  </c:if>
-                </form:form>
-              </div>
-            </div>
-
-            <c:if test="${trip.recurrent}">
-              <div class="dates light-text detail">
-                <c:out value="${user.startDateString}"/> - <c:out value="${user.endDateString}"/>
-              </div>
-            </c:if>
-          </div>
-        </c:forEach>
-      </div>
-    </div>
-
-
-
-    <c:if test="${passengersContent.moreThanOnePage}">
-      <c:url value="" var="basePaginationUrl">
+    <c:if test="${passengersContent.totalCount>0}">
+      <c:url value="" var="baseStatusUrl">
         <c:forEach var="p" items="${param}">
-          <c:if test="${!(p.key eq 'page')}">
+          <c:if test="${!(p.key eq 'status')}">
             <c:param name="${p.key}" value="${p.value}"/>
           </c:if>
         </c:forEach>
       </c:url>
-      <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
-        <jsp:param name="totalPages" value="${passengersContent.totalPages}"/>
-        <jsp:param name="currentPage" value="${passengersContent.currentPage+1}"/>
-        <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
+      <jsp:include page="/WEB-INF/jsp/components/passangers-order-by.jsp">
+        <jsp:param name="baseUrl" value="${baseStatusUrl}"/>
       </jsp:include>
+      <div class="container-flex">
+        <div class="list-container">
+          <c:forEach items="${passengersContent.elements}" var="user">
+            <c:url value="/profile/${user.userId}" var="userUrl"/>
+            <c:url value="/image/${user.userImageId}" var="userImageId"/>
+            <div class="individual-profile">
+              <div>
+                <img src="${userImageId}" alt="user image" class="image-photo-list"/>
+              </div>
+              <div class="show-row-content-passangers">
+                <div class="row-data-pass">
+                  <a href="${userUrl}" class="show-row profile-link">
+                    <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/> </span>
+                  </a>
+                  <c:if test="${user.recurrent}">
+                    <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${user.startDateString}, ${user.endDateString}"/></h6>
+                  </c:if>
+                </div>
+
+
+
+                <div class="btn-section">
+                  <c:set value='2' var="rating"/>
+                  <div class="row-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="ratings">
+                        <c:forEach var="i" begin="1" end="${rating}">
+                          <i class="bi bi-star-fill secondary-color h4"></i>
+                        </c:forEach>
+                        <c:if test="${rating % 1 >= 0.5}">
+                          <i class="bi bi-star-half secondary-color h4"></i>
+                          <c:forEach var="i" begin="${rating + 2}" end="5">
+                            <i class="bi bi-star secondary-color h4"></i>
+                          </c:forEach>
+                        </c:if>
+                        <c:if test="${rating % 1 < 0.5}">
+                          <c:forEach var="i" begin="${rating + 1}" end="5">
+                            <i class="bi bi-star secondary-color h4"></i>
+                          </c:forEach>
+                        </c:if>
+                      </div>
+                    </div>
+                  </div>
+
+                  <c:url value="/trips/${trip.tripId}/deletePas/${user.userId}" var="deletePasUrl"/>
+                  <form:form method="POST" action="${deletePasUrl}" cssClass="form-bn-class">
+                    <c:if test="${user.passengerState eq 'REJECTED'}">
+                      <button type="submit" class="btn disabled success-bg-color btn-sm">
+                        <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
+                      </button>
+                    </c:if>
+                    <c:if test="${!(user.passengerState eq 'REJECTED')}">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
+                      </button>
+                    </c:if>
+                  </form:form>
+                  <c:url value="/trips/${trip.tripId}/AceptPas/${user.userId}" var="acceptPasUrl"/>
+                  <form:form method="POST" action="${acceptPasUrl}" cssClass="form-bn-class">
+                    <c:if test="${user.passengerState eq 'ACCEPTED'}">
+                      <button type="submit" class="btn disabled success-bg-color btn-sm">
+                        <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
+                      </button>
+                    </c:if>
+                    <c:if test="${!(user.passengerState eq 'ACCEPTED')}">
+                      <button type="submit" class="btn btn-primary btn-sm">
+                        <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
+                      </button>
+                    </c:if>
+                  </form:form>
+                </div>
+              </div>
+
+              <c:if test="${trip.recurrent}">
+                <div class="dates light-text detail">
+                  <c:out value="${user.startDateString}"/> - <c:out value="${user.endDateString}"/>
+                </div>
+              </c:if>
+            </div>
+          </c:forEach>
+        </div>
+      </div>
+
+
+
+      <c:if test="${passengersContent.moreThanOnePage}">
+        <c:url value="" var="basePaginationUrl">
+          <c:forEach var="p" items="${param}">
+            <c:if test="${!(p.key eq 'page')}">
+              <c:param name="${p.key}" value="${p.value}"/>
+            </c:if>
+          </c:forEach>
+        </c:url>
+        <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+          <jsp:param name="totalPages" value="${passengersContent.totalPages}"/>
+          <jsp:param name="currentPage" value="${passengersContent.currentPage+1}"/>
+          <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
+        </jsp:include>
+      </c:if>
     </c:if>
+
+    <c:if test="${passengersContent.totalCount == 0}">
+      <div class="review-empty-container">
+        <i class="bi bi-people-fill secondary-color h2"></i>
+        <h3 class="italic-text placeholder-text"><spring:message code="driver.passangers.none"/></h3>
+      </div>
+    </c:if>
+
 
   </div>
 </div>

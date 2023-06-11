@@ -72,6 +72,16 @@
     flex-direction: row;
 }
 
+.review-empty-container{
+    display: flex;
+    min-height: 70px;
+    padding: 1.5% 1% 1% 1%;
+    flex-direction: row;
+    align-items: center;
+    gap: 3%;
+    justify-content: center;
+}
+
 .form-bn-class{
     margin-bottom: 0;
 }
