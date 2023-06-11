@@ -80,7 +80,7 @@
           <spring:message code="review.optional"/>
         </span>
       </label>
-      <form:textarea path="comment" cssClass="form-control" id="passenger-${passenger.userId}-comment"/>
+      <form:textarea path="comment" cssClass="form-control passenger-review-comment" id="passenger-${passenger.userId}-comment"/>
     </div>
   </div>
 </div>

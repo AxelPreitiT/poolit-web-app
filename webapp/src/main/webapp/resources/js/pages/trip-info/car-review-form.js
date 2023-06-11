@@ -5,6 +5,7 @@ const carDefaultRatingSelectorValue = 3;
 const carRatingSelectorElement = document.getElementById("car-review-rating");
 const carOptionSelectorElements = document.getElementsByClassName(carOptionSelectorClass);
 const carOptionSelectorContainer = document.getElementsByClassName(carOptionSelectorContainerClass);
+const carCommentTextAreaElement = document.getElementById("car-review-comment");
 
 const getCarOptionSelectorElement = (value) => {
     return Array.from(carOptionSelectorElements).find(optionSelectorElement =>
@@ -24,6 +25,7 @@ const currentCarRatingSelectorValueMap = {
 };
 
 carRatingSelectorElement.addEventListener("change", () => {
+    carCommentTextAreaElement.value = "";
     currentCarRatingSelectorValueMap.value = carRatingSelectorElement.value;
     currentCarRatingSelectorValueMap.optionSelectorElement.setAttribute("disabled", "disabled");
     currentCarRatingSelectorValueMap.optionSelectorContainerElement.setAttribute("hidden", "hidden");
