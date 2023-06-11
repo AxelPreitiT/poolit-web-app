@@ -24,24 +24,38 @@
     </div>
     <div class="row-info">
       <h6><spring:message code="driver.review.rating"/></h6>
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="ratings">
-          <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
-          <c:set var="rating" value="${driverRating}" scope="request"/>
-          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
-        </div>
-      </div>
+      <c:choose>
+        <c:when test="${param.hasBeenRatedAsDriver}">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="ratings">
+              <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
+              <c:set var="rating" value="${driverRating}" scope="request"/>
+              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            </div>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <h4><spring:message code="review.none"/></h4>
+        </c:otherwise>
+      </c:choose>
     </div>
   </c:if>
   <div class="row-info">
     <h6><spring:message code="passenger.review.rating"/></h6>
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="ratings">
-        <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
-        <c:set var="rating" value="${passengerRating}" scope="request"/>
-        <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
-      </div>
-    </div>
+    <c:choose>
+      <c:when test="${param.hasBeenRatedAsPassenger}">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="ratings">
+            <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
+            <c:set var="rating" value="${passengerRating}" scope="request"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+          </div>
+        </div>
+      </c:when>
+      <c:otherwise>
+        <h4><spring:message code="review.none"/></h4>
+      </c:otherwise>
+    </c:choose>
   </div>
 </div>
 

@@ -15,7 +15,10 @@
         <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
     </div>
     <div class="main-container">
-        <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp"/>
+        <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
+            <jsp:param name="hasBeenRatedAsDriver" value="${!(empty reviewsAsDriver)}"/>
+            <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
+        </jsp:include>
         <div class="list-properties-container">
             <ul class="nav nav-justified-pills mb-3" id="pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
@@ -28,7 +31,9 @@
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-driver" role="tabpanel" aria-labelledby="pills-driver-tab" tabindex="0">
                 <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>
-                <c:url value="/reviews/users/${user.userId}" var="reviewsUrl"/>
+                <c:url value="/reviews/drivers/${user.userId}" var="reviewsUrl">
+                   <c:param name="page" value="1"/>
+                </c:url>
                 <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
                     <jsp:param name="url" value="${reviewsUrl}"/>
                     <jsp:param name="type" value="driver"/>
@@ -69,7 +74,9 @@
               </div>
                 <div class="tab-pane fade" id="pills-passenger" role="tabpanel" aria-labelledby="pills-passenger-tab" tabindex="0">
                     <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
-                    <c:url value="/reviews/users/${user.userId}" var="reviewsUrl"/>
+                    <c:url value="/reviews/passengers/${user.userId}" var="reviewsUrl">
+                        <c:param name="page" value="1"/>
+                    </c:url>
                     <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
                         <jsp:param name="url" value="${reviewsUrl}"/>
                         <jsp:param name="type" value="passenger"/>

@@ -15,10 +15,15 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
   </div>
   <div class="main-container">
-    <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp"/>
+    <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
+      <jsp:param name="hasBeenRatedAsDriver" value="${false}"/>
+      <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
+    </jsp:include>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
-      <c:url value="/reviews/users/${user.userId}" var="reviewsUrl"/>
+      <c:url value="/reviews/passengers/${user.userId}" var="reviewsUrl">
+        <c:param name="page" value="1"/>
+      </c:url>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="passenger"/>
         <jsp:param name="url" value="${reviewsUrl}"/>

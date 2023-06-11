@@ -49,23 +49,25 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
     @Override
     public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
         LOGGER.debug("Looking for passenger reviews of the user with id {} in page {} with page size {}", user.getUserId(), page, pageSize);
+        Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(review_id) FROM passenger_reviews NATURAL JOIN user_reviews WHERE reviewed_id = :user_id");
+        nativeCountQuery.setParameter("user_id", user.getUserId());
+        final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
+        if(totalCount == 0) {
+            LOGGER.debug("No passenger reviews found for the user with id {}", user.getUserId());
+            return PagedContent.emptyPagedContent();
+        }
         // 1+1 query
         Query nativeQuery = em.createNativeQuery("SELECT review_id FROM passenger_reviews NATURAL JOIN user_reviews WHERE reviewed_id = :user_id ORDER BY date DESC");
         nativeQuery.setParameter("user_id", user.getUserId());
         nativeQuery.setMaxResults(pageSize);
-        nativeQuery.setFirstResult((page - 1) * pageSize);
+        nativeQuery.setFirstResult(page * pageSize);
 
         final List<?> maybeReviewIdList = nativeQuery.getResultList();
-        if(maybeReviewIdList.isEmpty()) {
-            LOGGER.debug("No passenger reviews found for the user with id {}", user.getUserId());
-            return PagedContent.emptyPagedContent();
-        }
         final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
         final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewId IN :reviewIdList", PassengerReview.class);
         reviewsQuery.setParameter("reviewIdList", reviewIdList);
         List<PassengerReview> result = reviewsQuery.getResultList();
-        final int totalCount = result.size();
         LOGGER.debug("Found {} in the database", result);
         return new PagedContent<>(result, page, pageSize, totalCount);
     }

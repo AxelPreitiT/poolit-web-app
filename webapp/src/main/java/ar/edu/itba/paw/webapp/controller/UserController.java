@@ -34,7 +34,6 @@ public class UserController extends LoggedUserController {
 
     private final CityService cityService;
 
-    private final ReviewService reviewService;
     private final CarService carService;
 
     private final TripService tripService;
@@ -49,7 +48,7 @@ public class UserController extends LoggedUserController {
     private final UserService userService;
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static int REVIEW_PAGE_SIZE = 3;
-    private final static int FIRST_PAGE = 1;
+    private final static int FIRST_PAGE = 0;
     private final static String BASE_RELATED_PATH = "/users/";
     private final static String CREATE_USER_PATH = BASE_RELATED_PATH + "create";
     private final static String LOGIN_USER_PATH = BASE_RELATED_PATH + "login";
@@ -58,13 +57,12 @@ public class UserController extends LoggedUserController {
     private final static int PAGE_SIZE = 3;
 
     @Autowired
-    public UserController(final CityService cityService, ReviewService reviewService, final  UserService userService,
+    public UserController(final CityService cityService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
                           final CarService carService, final ImageService imageService, final PassengerReviewService passengerReviewService,
                           final DriverReviewService driverReviewService) {
         super(userService);
         this.cityService = cityService;
-        this.reviewService = reviewService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
@@ -138,10 +136,10 @@ public class UserController extends LoggedUserController {
         if(Objects.equals(user.getRole(), "USER")){
             mav = new ModelAndView("/users/user-profile");
         } else {
-            final List<Trip> futureTripsAsDriver = tripService.getTripsCreatedByUserFuture(user, 0, PAGE_SIZE).getElements();
-            final List<Trip> pastTripsAsDriver = tripService.getTripsCreatedByUserPast(user, 0, PAGE_SIZE).getElements();
+            final List<Trip> futureTripsAsDriver = tripService.getTripsCreatedByUserFuture(user, FIRST_PAGE, PAGE_SIZE).getElements();
+            final List<Trip> pastTripsAsDriver = tripService.getTripsCreatedByUserPast(user, FIRST_PAGE, PAGE_SIZE).getElements();
             final List<Car> cars = carService.findByUser(user);
-            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
+            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
             final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
             final Double driverRating = driverReviewService.getDriverRating(user);
             mav = new ModelAndView("/users/driver-profile");
@@ -174,7 +172,7 @@ public class UserController extends LoggedUserController {
         if(Objects.equals(user.getRole(), "DRIVER")){
             final Double driverRating = driverReviewService.getDriverRating(user);
             final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
-            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,0,0);
+            final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
             mav.addObject("driverRating", driverRating);
             mav.addObject("reviewsAsDriver", reviewsAsDriver);
             mav.addObject("countTrips",createdTrips.getTotalCount());

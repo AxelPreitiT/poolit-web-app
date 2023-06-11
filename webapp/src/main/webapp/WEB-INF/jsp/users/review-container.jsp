@@ -37,11 +37,13 @@
               </jsp:include>
             </div>
           </c:forEach>
-          <a href="${param.url}">
-            <div class="plus-btn">
-              <h3 class="text"><spring:message code="review.more"/></h3>
-            </div>
-          </a>
+          <c:if test="${!(empty param.url)}">
+            <a href="${param.url}">
+              <div class="plus-btn">
+                <h3 class="text"><spring:message code="review.more"/></h3>
+              </div>
+            </a>
+          </c:if>
         </div>
       </c:otherwise>
     </c:choose>
