@@ -61,16 +61,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-    //    @Bean
-    //    public DataSource dataSource() {
-    //        LOGGER.info("Connecting to Postgres DB");
-    //        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-    //        ds.setDriverClass(org.postgresql.Driver.class);
-    //        ds.setUrl(String.format("jdbc:postgresql://localhost/%s",environment.getProperty("DB_NAME")));
-    //        ds.setUsername(environment.getProperty("DB_USER"));
-    //        ds.setPassword(environment.getProperty("DB_PASSWORD"));
-    //        return ds;
-    //    }
+    /*
+    @Bean
+    public DataSource dataSource() {
+        LOGGER.info("Connecting to Postgres DB");
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl(String.format("jdbc:postgresql://localhost/%s",environment.getProperty("DB_NAME")));
+        ds.setUsername(environment.getProperty("DB_USER"));
+        ds.setPassword(environment.getProperty("DB_PASSWORD"));
+        return ds;
+    }
+
+     */
+
     @Bean
     public DataSource dataSource() {
         LOGGER.info("Connecting to Postgres DB");
@@ -116,7 +120,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-        //TODO: sacar para la entrega
+        //TODO: sacar
         // Si ponen esto en prod, hay tabla!!!
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("format_sql", "true");
