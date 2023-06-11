@@ -27,7 +27,6 @@ public class TripController extends LoggedUserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
 
     private final TripService tripService;
-    private final ReviewService reviewService;
     private final CityService cityService;
     private final UserService userService;
     private final CarService carService;
@@ -50,10 +49,9 @@ public class TripController extends LoggedUserController {
     private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
-    public TripController(final TripService tripService, ReviewService reviewService, final CityService cityService, final UserService userService, final CarService carService, final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService) {
+    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService) {
         super(userService);
         this.tripService = tripService;
-        this.reviewService = reviewService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
