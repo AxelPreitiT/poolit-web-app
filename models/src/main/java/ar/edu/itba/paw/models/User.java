@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Locale;
@@ -27,7 +29,8 @@ public class User {
     @Column(nullable = false, name = "enabled", columnDefinition = "BOOLEAN DEFAULT true")
     private boolean enabled;
 
-    //TODO Revisar Eager, si solo trae una ciudad y una imagen.
+    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = user_id AND user_reviews.review_id IN (SELECT passenger_reviews.review_id FROM passenger_reviews))")
+    private double passengerRating;
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn( name = "city_id")
     private City bornCity;
@@ -37,10 +40,6 @@ public class User {
     private Locale mailLocale;
     @Column(name = "user_role")
     private String role;
-
-//    @OneToOne(fetch=FetchType.EAGER,optional=false)
-//    @JoinColumn( name = "user_image_id")
-//    private Image userImage;
 
     @Column(name="user_image_id")
     private long userImageId;
@@ -203,6 +202,10 @@ public class User {
     }
 
     public void removeBlockedBy(User blockedBy) { this.blockedBy.remove(blockedBy); }
+
+    public double getPassengerRating() {
+        return passengerRating;
+    }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

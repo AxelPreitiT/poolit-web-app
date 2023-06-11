@@ -121,7 +121,7 @@ public class TripController extends LoggedUserController {
     private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined){
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
-        final List<Passenger> passengers = tripService.getPassengersRecurrent(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
+        final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
         final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengers);
         final ItemReview<User> driver = driverReviewService.getDriverReviewState(trip, passenger, trip.getDriver());
         final ItemReview<Car> car = carReviewService.getCarReviewState(trip, passenger, trip.getCar());

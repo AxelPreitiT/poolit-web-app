@@ -46,6 +46,7 @@
 .info-container{
     padding-top: 2%;
 }
+
 .profile-link {
     text-decoration-line: underline;
     text-decoration-color: white;
@@ -64,7 +65,10 @@
 }
 
 .list-container{
-    width: 65%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+    width: 85%;
 }
 
 .row-data-pass{
@@ -105,8 +109,8 @@
     overflow-y: auto;
     max-height: 260px;
 }
+
 .individual-profile{
-    padding: 2%;
     display:flex;
     justify-content: space-between;
     align-items: center;
@@ -142,4 +146,11 @@
 
 .dates {
     margin: 0;
+}
+
+.end-line{
+    display: flex;
+    margin-top: -1.5em;
+    justify-content: end;
+    flex-direction: row;
 }

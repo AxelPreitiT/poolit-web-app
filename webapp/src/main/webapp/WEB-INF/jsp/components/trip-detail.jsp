@@ -42,23 +42,23 @@
             <jsp:param name="showDriverInfo" value="${param.showDriverInfo}"/>
           </jsp:include>
         </div>
-        <div class="col-md-6 col-lg-5">
-          <c:choose>
-            <c:when test="${param.showPassengers}">
-              <div id="trip-passengers">
-                <jsp:include page="/WEB-INF/jsp/components/passengers-list.jsp"/>
+      </div>
+      <div class="col-md-6 col-lg-5">
+        <c:choose>
+          <c:when test="${param.showPassengers}">
+            <div id="trip-passengers">
+              <jsp:include page="/WEB-INF/jsp/components/passengers-list.jsp"/>
+            </div>
+          </c:when>
+          <c:otherwise>
+            <div id="car-info-image">
+              <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+              <div class="placeholder-image">
+                <img src="${carImageUrl}" alt="car image"/>
               </div>
-            </c:when>
-            <c:otherwise>
-              <div id="car-info-image">
-                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
-                <div class="placeholder-image">
-                  <img src="${carImageUrl}" alt="car image"/>
-                </div>
-              </div>
-            </c:otherwise>
-          </c:choose>
-        </div>
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
     </div>
   </div>

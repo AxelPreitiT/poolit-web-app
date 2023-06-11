@@ -8,9 +8,10 @@
     padding-right: 12px;
     margin-bottom: 1em;
 }
+
 .dropdown-sort {
     top: 0 !important;
-    width: 80%;
+    width: 100%;
     padding: 4%;
     transform: inherit; !important;
 }

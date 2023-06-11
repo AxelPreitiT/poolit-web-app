@@ -8,6 +8,11 @@
     display: none;
 }
 
+#origin-city-selector, #destination-city-selector {
+    width: 100%;
+}
+
+
 .error-container:not(:has(span)) {
     display: none;
 }

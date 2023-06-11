@@ -330,6 +330,11 @@ public class TripServiceImpl implements TripService {
         }
         return tripDao.getPassengers(trip,dateTime);
     }
+
+    @Override
+    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
+        return tripDao.getAcceptedPassengers(trip,startDate,endDate);
+    }
     @Override
     public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
         if( trip.getStartDateTime().isAfter(startDate)

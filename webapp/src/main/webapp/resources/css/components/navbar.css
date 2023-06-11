@@ -100,7 +100,7 @@
     border-color: transparent !important;
 }
 
-.dropdown-menu {
+#main-navbar .dropdown-menu {
     top: 150% !important;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     border: 1px solid white;

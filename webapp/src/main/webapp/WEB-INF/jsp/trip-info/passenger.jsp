@@ -20,7 +20,7 @@
     <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
       <jsp:param name="showDriverInfo" value="true"/>
       <jsp:param name="status" value="${passenger.passengerState}"/>
-      <jsp:param name="showPassengers" value="true"/>
+      <jsp:param name="showPassengers" value="${passenger.accepted}"/>
     </jsp:include>
   </div>
   <div id="footer-container">
@@ -46,7 +46,7 @@
     </div>
     <div id="button-container">
       <div id="review-trip-container">
-        <c:if test="${tripReviewCollection.canReview}">
+        <c:if test="${passenger.accepted && tripReviewCollection.canReview}">
           <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
             <jsp:param name="reviewed" value="${reviewed}"/>
           </jsp:include>

@@ -25,7 +25,7 @@ public class Passenger{
     private LocalDateTime startDateTime;
     @Column(name = "end_date")
     private LocalDateTime endDateTime;
-    @Column(name = "passenger_state")
+    @Column(name = "passenger_state",columnDefinition = "TEXT DEFAULT 'ACCEPTED'")
     @Enumerated(EnumType.STRING)
     private PassengerState passengerState;
 
@@ -144,6 +144,21 @@ public class Passenger{
 
     public boolean isTripEnded() {
         return LocalDateTime.now().isAfter(endDateTime);
+    }
+
+    public boolean getTripStarted(){
+        return !LocalDateTime.now().isBefore(startDateTime);
+    }
+
+    public boolean getAccepted(){
+        return passengerState.equals(PassengerState.ACCEPTED);
+    }
+
+    public boolean getRejected(){
+        return passengerState.equals(PassengerState.REJECTED);
+    }
+    public boolean getWaiting(){
+        return passengerState.equals(PassengerState.PENDING);
     }
 
 

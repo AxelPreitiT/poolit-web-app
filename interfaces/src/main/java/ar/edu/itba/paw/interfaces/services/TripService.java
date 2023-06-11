@@ -51,6 +51,7 @@ public interface TripService {
     List<Passenger> getPassengers(TripInstance tripInstance);
 
     List<Passenger> getPassengers(Trip trip);
+    List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
 
     PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize);
 

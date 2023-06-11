@@ -17,31 +17,31 @@
         </div>
         <div class="passenger-list">
           <c:forEach items="${passengers}" var="user">
-            <c:url value="/profile/${user.userId}" var="userUrl"/>
-            <c:url value="/image/${user.userImageId}" var="userImageId"/>
-            <div class="individual-profile">
-              <a href="${userUrl}" class="show-row profile-link">
+              <c:url value="/profile/${user.userId}" var="userUrl"/>
+              <c:url value="/image/${user.userImageId}" var="userImageId"/>
+              <div class="individual-profile">
+                <a href="${userUrl}" class="show-row profile-link">
+                  <div>
+                    <img src="${userImageId}" alt="user image" class="image-photo"/>
+                  </div>
+                </a>
                 <div>
-                  <img src="${userImageId}" alt="user image" class="image-photo"/>
-                </div>
-              </a>
-              <div>
-                <div class="passenger-name-container">
-                  <a href="${userUrl}">
-                    <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
-                  </a>
-                </div>
-                <c:if test="${trip.recurrent}">
-                  <div class="passenger-dates-container">
-                    <i class="bi bi-calendar light-text"></i>
-                    <span class="light-text">
+                  <div class="passenger-name-container">
+                    <a href="${userUrl}">
+                      <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
+                    </a>
+                  </div>
+                  <c:if test="${trip.recurrent}">
+                    <div class="passenger-dates-container">
+                      <i class="bi bi-calendar light-text"></i>
+                      <span class="light-text">
                       <spring:message code="format.dates" var="passengerDate" arguments="${user.startDateString}, ${user.endDateString}"/>
                       <c:out value="${passengerDate}"/>
                     </span>
-                  </div>
-                </c:if>
+                    </div>
+                  </c:if>
+                </div>
               </div>
-            </div>
           </c:forEach>
         </div>
       </div>
