@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.NotAvailableSeatsException;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
@@ -8,13 +9,16 @@ import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.utils.DefaultBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -36,6 +40,8 @@ public class TripController extends LoggedUserController {
 
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static int PAGE_SIZE = 10;
+    private final static int DEFAULT_PAGE = 1;
+    private final static String DEFAULT_PASSENGERS_SATE = "";
     private final static String BASE_RELATED_PATH = "/";
     private final static String LANDING_PAGE_PATH = BASE_RELATED_PATH;
     private final static String TRIP_PATH = BASE_RELATED_PATH + "trips/";
@@ -62,10 +68,15 @@ public class TripController extends LoggedUserController {
 
     @RequestMapping(value = TRIP_DETAILS_PATH,method = RequestMethod.GET)
     public ModelAndView getTripDetails(@PathVariable("id") final long tripId,
+                                       @ModelAttribute("selectForm") final SelectionForm form,
+                                       @RequestParam(name = "page", required = false, defaultValue = "1") final int passengersPage,
+                                       @RequestParam(name = "status",required = false, defaultValue = "") final String passengersState,
+                                       @ModelAttribute("acceptPass") final DefaultBoolean passengerAccepted,
+                                       @ModelAttribute("deletePass") final DefaultBoolean passengerRejected,
+                                       @ModelAttribute("notAvailableSeats") final DefaultBoolean notAvailableSeats,
                                        @RequestParam(value = "created", required = false, defaultValue = "false") final boolean created,
                                        @RequestParam(value = "joined", required = false, defaultValue = "false") final boolean joined,
                                        @RequestParam(value = "reviewed", required = false, defaultValue = "false") final boolean reviewed,
-                                       @ModelAttribute("selectForm") final SelectionForm form,
                                        @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
                                        @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
@@ -78,7 +89,7 @@ public class TripController extends LoggedUserController {
         final User user = userOp.get();
         ModelAndView mav;
         if(tripService.userIsDriver(tripId,user)){
-            mav = tripDetailsForDriver(tripId, user, created);
+            return tripDetailsForDriver(tripId, user, created,passengerAccepted.getValue(),passengerRejected.getValue(),notAvailableSeats.getValue(),passengersState,passengersPage);
         }else if (tripService.userIsPassenger(tripId,user)){
             mav = tripDetailsForPassenger(tripId, user, joined);
         } else {
@@ -88,14 +99,20 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForDriver(final long tripId, final User user, final boolean created){
+    private ModelAndView tripDetailsForDriver(final long tripId,final User user, final boolean created,final boolean passengerAccepted,final boolean passengerRejected,final boolean notAvailableSeats,final String passengersState, final int passengersPage){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
-        final List<Passenger> passengers = tripService.getPassengers(trip);
-        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengers);
-        final TripReviewCollection tripReviewCollection = new TripReviewCollection(null, null, passengersToReview);
+        final List<Passenger> passengersComplete = tripService.getPassengers(trip);
+        final PagedContent<Passenger> passengers = tripService.getPassengersPaged(trip,passengersState,passengersPage-1,PAGE_SIZE);
+        final double totalPrice = tripService.getTotalTripEarnings(passengersComplete); //TODO: arreglar
+        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengersComplete);
+        final TripReviewCollection tripReviewCollection = new TripReviewCollection(null, null, passengersToReview); //TODO: ver que lo haga un service
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
-        mav.addObject("passengers",passengers);
+        mav.addObject("passengersContent",passengers);
+        mav.addObject("totalIncome",String.format(LocaleContextHolder.getLocale(),"%.2f",totalPrice));
+        mav.addObject("acceptPass",passengerAccepted);
+        mav.addObject("deletePass",passengerRejected);
+        mav.addObject("notAvailableSeats",notAvailableSeats);
         mav.addObject("tripReviewCollection", tripReviewCollection);
         mav.addObject("created", created);
         return mav;
@@ -150,6 +167,7 @@ public class TripController extends LoggedUserController {
 
         LOGGER.debug("GET Request to {}", SEARCH_TRIP_PATH);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
+        final Optional<User> user = userService.getCurrentUser();
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
         if(errors.hasErrors()){
@@ -157,8 +175,14 @@ public class TripController extends LoggedUserController {
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
             return mav;
         }
-        final PagedContent<Trip> tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,page-1,PAGE_SIZE);
+        final PagedContent<Trip> tripsContent;
+        if(user.isPresent()){//TODO: esto lo tiene que hacer el servicio
+            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,user.get(),page-1,PAGE_SIZE);
+        }else{
+            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,null,page-1,PAGE_SIZE);
+        }
         mav.addObject("tripsContent", tripsContent);
+
         return mav;
     }
 
@@ -259,21 +283,35 @@ public class TripController extends LoggedUserController {
         return mav;
     }
 
-//    @RequestMapping(value ="/trips/{id:\\d+$}/review", method = RequestMethod.POST)
-//    public ModelAndView reviewTrip(@PathVariable("id") final int tripId,
-//                                   @Valid @ModelAttribute("reviewForm") final ReviewForm form,
-//                                   final BindingResult errors){
-//        LOGGER.debug("POST Request to /trips/{}/review", tripId);
-//        if(errors.hasErrors()) {
-//            LOGGER.warn("Errors found in ReviewForm: {}", errors.getAllErrors());
-//            return tripDetailsForPassenger(tripId, userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new), form);
-//        }
-//        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-//        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
-//        final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
-//        reviewService.createReview(trip, passenger, form.getRating(), form.getReview(), trip.getDriver());
-//        final ModelAndView mav = tripDetailsForPassenger(tripId, user, form);
-//        mav.addObject("tripReviewed", true);
-//        return mav;
-//    }
+    @RequestMapping(value ="/trips/{id:\\d+$}/deletePas/{user_id:\\d+$}", method = RequestMethod.POST)
+    public ModelAndView rejectPassanger(@PathVariable("id") final int tripId,
+                                   @PathVariable("user_id") final int userId,
+                                        RedirectAttributes redirectAttributes){
+        LOGGER.debug("POST DELETE passanger {}", userId);
+        tripService.rejectPassenger(tripId,userId);
+        redirectAttributes.addFlashAttribute("deletePass", new DefaultBoolean(true));
+        return new ModelAndView(String.format("redirect:/trips/%d", tripId));
+
+        //final ModelAndView mav = tripDetailsForDriver(tripId,DEFAULT_PASSENGERS_SATE,DEFAULT_PAGE);
+        //mav.addObject("deletePass", true);
+        //return mav;
+    }
+
+    @RequestMapping(value ="/trips/{id:\\d+$}/AceptPas/{user_id:\\d+$}", method = RequestMethod.POST)
+    public ModelAndView acceptPassanger(@PathVariable("id") final int tripId,
+                                   @PathVariable("user_id") final int userId,
+                                        RedirectAttributes redirectAttributes){
+        LOGGER.debug("POST DELETE passanger {}", userId);
+        try{
+            tripService.acceptPassenger(tripId,userId);
+        }catch (NotAvailableSeatsException e){
+            redirectAttributes.addFlashAttribute("notAvailableSeats", new DefaultBoolean(true));
+            return new ModelAndView(String.format("redirect:/trips/%d", tripId));
+        }
+        redirectAttributes.addFlashAttribute("acceptPass", new DefaultBoolean(true));
+        return new ModelAndView(String.format("redirect:/trips/%d", tripId));
+        //final ModelAndView mav = tripDetailsForDriver(tripId,DEFAULT_PASSENGERS_SATE,DEFAULT_PAGE);
+        //mav.addObject("acceptPass", true);
+        //return mav;
+    }
 }

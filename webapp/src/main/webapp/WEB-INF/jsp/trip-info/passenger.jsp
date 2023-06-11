@@ -19,6 +19,7 @@
   <div id="trip-detail-container">
     <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
       <jsp:param name="showDriverInfo" value="true"/>
+      <jsp:param name="status" value="${passenger.passengerState}"/>
       <jsp:param name="showPassengers" value="true"/>
     </jsp:include>
   </div>
@@ -33,10 +34,10 @@
           <div class="trip-price-row items-to-end">
             <c:choose>
               <c:when test="${trip.queryIsRecurrent}">
-                <span class="h6 italic-text"><c:out value="${trip.queryTotalTrips}"/> viajes</span>
+                <span class="h6 italic-text"><spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/><c:out value="${totalTripsString}"/></span>
               </c:when>
               <c:otherwise>
-                <span class="h6 italic-text"><spring:message code="trip.unique"/></span>
+                <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
               </c:otherwise>
             </c:choose>
           </div>

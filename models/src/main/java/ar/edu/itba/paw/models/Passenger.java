@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
@@ -12,7 +13,6 @@ import java.util.Objects;
 @Table(name = "passengers")
 @IdClass(PassengerKey.class)
 public class Passenger{
-
     @Id
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id")
@@ -25,6 +25,9 @@ public class Passenger{
     private LocalDateTime startDateTime;
     @Column(name = "end_date")
     private LocalDateTime endDateTime;
+    @Column(name = "passenger_state")
+    @Enumerated(EnumType.STRING)
+    private PassengerState passengerState;
 
     public Passenger(){}
     public Passenger(User user,Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
@@ -32,17 +35,27 @@ public class Passenger{
         this.trip = trip;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.passengerState = PassengerState.PENDING;
     }
     public Passenger(User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
         this.user = user;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.passengerState = PassengerState.PENDING;
     }
 
     @Override
     public String toString() {
         return String.format("Passenger { userId: %d, startDateTime: '%s', endDateTime: '%s' }",
                 user.getUserId(), startDateTime, endDateTime);
+    }
+
+    public PassengerState getPassengerState() {
+        return passengerState;
+    }
+
+    public void setPassengerState(PassengerState passengerState) {
+        this.passengerState = passengerState;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -69,8 +82,13 @@ public class Passenger{
         return !startDateTime.equals(endDateTime);
     }
 
+    //OJO con usar esto y que ya se haya buscado el mismo trip en la sesion
+    //  si hago cambios en el trip, entonces me va a hacer los cambios en la unica instancia que me da Hibernate
     public Trip getTrip() {
-        return trip;
+        final Trip ans =  trip;
+        trip.setQueryStartDateTime(startDateTime);
+        trip.setQueryEndDateTime(endDateTime);
+        return ans;
     }
 
     public User getUser() {
@@ -126,5 +144,28 @@ public class Passenger{
 
     public boolean isTripEnded() {
         return LocalDateTime.now().isAfter(endDateTime);
+    }
+
+
+    public int getQueryTotalTrips(){
+        return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
+    }
+
+    public double getTotalPrice(){
+        return getQueryTotalTrips() * trip.getPrice();
+    }
+
+    public enum PassengerState{
+        ACCEPTED("passengerState.accepted"),
+        REJECTED("passengerState.rejected"),
+        PENDING("passengerState.pending");
+
+        private final String messageCode;
+        PassengerState(String messageCode){
+            this.messageCode = messageCode;
+        }
+        public String getMessageCode(){
+            return messageCode;
+        }
     }
 }

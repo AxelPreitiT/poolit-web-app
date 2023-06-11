@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +24,8 @@ public class User {
     private String phone;
     @Column(name = "password")
     private String password;
+    @Column(nullable = false, name = "enabled")
+    private boolean enabled;
 
     //TODO Revisar Eager, si solo trae una ciudad y una imagen.
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
@@ -41,11 +45,26 @@ public class User {
     @Column(name="user_image_id")
     private long userImageId;
 
+    //TODO: ver de eliminar
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="blocks",
+            joinColumns=@JoinColumn(name="blockedById"),
+            inverseJoinColumns=@JoinColumn(name="blockedId")
+    )
+    private Set<User> blocked;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="blocks",
+            joinColumns=@JoinColumn(name="blockedId"),
+            inverseJoinColumns=@JoinColumn(name="blockedById")
+    )
+    private Set<User> blockedBy;
+
     protected User(){
 
     }
 
-    public User( final String name, final String surname, final String email,
+    public User(final String name, final String surname, final String email,
                 final String phone, String password, final City bornCity, final Locale mailLocale, final String role,long userImageId) {
         this.name = name;
         this.surname = surname;
@@ -56,6 +75,9 @@ public class User {
         this.mailLocale = mailLocale;
         this.role = role;
         this.userImageId = userImageId;
+        this.enabled = false;
+        this.blocked = new HashSet<>();
+        this.blockedBy = new HashSet<>();
     }
 
     public User(long userId, final String name, final String surname, final String email,
@@ -70,6 +92,9 @@ public class User {
         this.mailLocale = mailLocale;
         this.role = role;
         this.userImageId = userImageId;
+        this.blocked = new HashSet<>();
+        this.blockedBy = new HashSet<>();
+        this.enabled = false;
     }
 
     @Override
@@ -157,5 +182,32 @@ public class User {
 
     public void setMailLocale(Locale mailLocale) {
         this.mailLocale = mailLocale;
+    }
+
+    public Set<User> getBlocked() {
+        return blocked;
+    }
+
+    public void insertBlocked(User blocked) {
+        this.blocked.add(blocked);
+    }
+
+    public void removeBlocked(User blocked) { this.blocked.remove(blocked); }
+
+    public Set<User> getBlockedBy() {
+        return blockedBy;
+    }
+
+    public void insertBlockedBy(User blockedBy) {
+        this.blockedBy.add(blockedBy);
+    }
+
+    public void removeBlockedBy(User blockedBy) { this.blockedBy.remove(blockedBy); }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    public boolean isEnabled() {
+        return enabled;
     }
 }

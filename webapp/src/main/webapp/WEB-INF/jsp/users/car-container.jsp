@@ -8,7 +8,10 @@
 
 <div class="car-card">
   <c:url value="/image/${car.image_id}" var="carImageUrl"/>
-  <img class="img-car" src="${carImageUrl}">
+  <c:url value="/cars/${car.carId}" var="carUrl"/>
+  <a href="${carUrl}">
+    <img class="img-car" src="${carImageUrl}">
+  </a>
   <div class="car-desc">
     <h5><c:out value="${car.infoCar}"/></h5>
     <h5><spring:message code="profile.plate" arguments="${car.plate}"/></h5>

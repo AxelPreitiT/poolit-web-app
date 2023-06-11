@@ -6,25 +6,41 @@
 
 <link href="<c:url value="/resources/css/components/trip-detail.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/resources/css/components/trip-detail-card.css"/>" rel="stylesheet" type="text/css"/>
-
 <div id="trip-detail-card">
-  <div id="main-header-row">
+<div id="main-header-row">
+  <div class="row-heading">
     <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
-    <hr class="secondary-color">
+    <div class="status-row">
+    <c:choose>
+      <c:when test="${param.status eq 'ACCEPTED'}">
+          <i class="bi bi-check-lg success h2"></i>
+          <h2 class="success"><spring:message code="passengerState.accepted"/></h2>
+      </c:when>
+      <c:when test="${param.status eq 'REJECTED'}">
+        <i class="bi bi-x-lg danger h2"></i>
+        <h2 class="danger"><spring:message code="passengerState.rejected"/></h2>
+      </c:when>
+      <c:when test="${param.status eq 'PENDING'}">
+        <i class="bi bi-clock primary-color h2"></i>
+        <h2 class="primary-color"><spring:message code="passengerState.pending"/></h2>
+      </c:when>
+    </c:choose>
+    </div>
   </div>
-  <div id="trip-route-container">
-    <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
-  </div>
-  <div id="trip-info-container">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 col-lg-5 col-xl-4">
-          <div id="trip-info-text-container">
-            <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
-              <jsp:param name="showDriverInfo" value="${param.showDriverInfo}"/>
-              <jsp:param name="showCarImage" value="${param.showPassengers}"/>
-            </jsp:include>
-          </div>
+  <hr class="secondary-color">
+</div>
+<div id="trip-route-container">
+  <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
+</div>
+<div id="trip-info-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-md-5 col-lg-4">
+        <div id="trip-info-text-container">
+          <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+            <jsp:param name="showCarImage" value="${param.showPassengers}"/>
+            <jsp:param name="showDriverInfo" value="${param.showDriverInfo}"/>
+          </jsp:include>
         </div>
         <div class="col-md-6 col-lg-5">
           <c:choose>
@@ -46,6 +62,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 

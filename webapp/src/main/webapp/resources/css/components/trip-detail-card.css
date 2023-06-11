@@ -55,6 +55,13 @@
     width: 100%;
 }
 
+.show-row-content-passangers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .show-row-content > .detail, .show-row > i {
     font-size: 0.9rem;
 }

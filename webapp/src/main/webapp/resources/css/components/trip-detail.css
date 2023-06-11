@@ -13,9 +13,20 @@
     margin-bottom: 1em;
 }
 
+.status-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 #trip-info-container > .container {
     padding-left: 0;
     padding-right: 0;
+}
+
+.row-heading{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 #trip-info-container .row {
