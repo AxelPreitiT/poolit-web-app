@@ -92,7 +92,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendVerificationEmail(User user, String token) throws MessagingException, IOException {
-        String subject = messageSource.getMessage("emails.subject.newPassengerDriver",null,user.getMailLocale());
+        String subject = messageSource.getMessage("emails.sendToken.subject",null,user.getMailLocale());
 
         // Variables para el html
         final Context ctx = new Context();
