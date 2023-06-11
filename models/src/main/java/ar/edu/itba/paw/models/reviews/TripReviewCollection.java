@@ -65,6 +65,10 @@ public class TripReviewCollection {
         return passengers != null && !passengers.isEmpty();
     }
 
+    public boolean getCanReview() {
+        return getCanReviewDriver() || getCanReviewCar() || getCanReviewPassengers();
+    }
+
     public List<Integer> getRatingOptions() {
         return Arrays.asList(1, 2, 3, 4, 5);
     }

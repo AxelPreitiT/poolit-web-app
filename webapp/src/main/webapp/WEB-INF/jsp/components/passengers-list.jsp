@@ -49,8 +49,15 @@
     <c:otherwise>
       <div class="details-container secondary-bg-color no-passengers-text passenger-container">
         <i class="bi bi-car-front-fill light-text h1"></i>
-        <h4 class="light-text"><spring:message code="tripInfo.driver.noPassengers"/></h4>
-        <h6 class="light-text"><spring:message code="tripInfo.driver.noPassengers.message"/></h6>
+        <c:choose>
+          <c:when test="${trip.tripHasEnded}">
+            <h4 class="light-text"><spring:message code="tripInfo.driver.noPassengers.ended"/></h4>
+          </c:when>
+          <c:otherwise>
+            <h4 class="light-text"><spring:message code="tripInfo.driver.noPassengers"/></h4>
+            <h6 class="light-text"><spring:message code="tripInfo.driver.noPassengers.message"/></h6>
+          </c:otherwise>
+        </c:choose>
       </div>
     </c:otherwise>
   </c:choose>

@@ -45,9 +45,11 @@
     </div>
     <div id="button-container">
       <div id="review-trip-container">
-        <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
-          <jsp:param name="reviewed" value="${reviewed}"/>
-        </jsp:include>
+        <c:if test="${tripReviewCollection.canReview}">
+          <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
+            <jsp:param name="reviewed" value="${reviewed}"/>
+          </jsp:include>
+        </c:if>
       </div>
       <c:if test="${!passenger.tripEnded}">
         <div class="delete-trip-container">
