@@ -13,7 +13,6 @@ import java.util.Objects;
 @Table(name = "passengers")
 @IdClass(PassengerKey.class)
 public class Passenger{
-
     @Id
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "user_id")
@@ -26,6 +25,9 @@ public class Passenger{
     private LocalDateTime startDateTime;
     @Column(name = "end_date")
     private LocalDateTime endDateTime;
+    @Column(name = "passenger_state")
+    @Enumerated(EnumType.STRING)
+    private PassengerState passengerState;
 
     public Passenger(){}
     public Passenger(User user,Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
@@ -33,17 +35,27 @@ public class Passenger{
         this.trip = trip;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.passengerState = PassengerState.PENDING;
     }
     public Passenger(User user, LocalDateTime startDateTime, LocalDateTime endDateTime){
         this.user = user;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.passengerState = PassengerState.PENDING;
     }
 
     @Override
     public String toString() {
         return String.format("Passenger { userId: %d, startDateTime: '%s', endDateTime: '%s' }",
                 user.getUserId(), startDateTime, endDateTime);
+    }
+
+    public PassengerState getPassengerState() {
+        return passengerState;
+    }
+
+    public void setPassengerState(PassengerState passengerState) {
+        this.passengerState = passengerState;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -130,11 +142,26 @@ public class Passenger{
 
     public long getUserImageId() { return user.getUserImageId(); }
 
+
     public int getQueryTotalTrips(){
         return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
     }
 
     public double getTotalPrice(){
         return getQueryTotalTrips() * trip.getPrice();
+    }
+
+    public enum PassengerState{
+        ACCEPTED("passengerState.accepted"),
+        REJECTED("passengerState.rejected"),
+        PENDING("passengerState.pending");
+
+        private final String messageCode;
+        PassengerState(String messageCode){
+            this.messageCode = messageCode;
+        }
+        public String getMessageCode(){
+            return messageCode;
+        }
     }
 }

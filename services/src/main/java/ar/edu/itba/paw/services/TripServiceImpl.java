@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.NotAvailableSeatsException;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
@@ -32,10 +34,13 @@ public class TripServiceImpl implements TripService {
 
     private final TripDao tripDao;
 
+    private final UserService userService;
+
     @Autowired
-    public TripServiceImpl(final TripDao tripDao, EmailService emailService1){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService1, UserService userService){
         this.tripDao = tripDao;
         this.emailService = emailService1;
+        this.userService = userService;
     }
 
     @Transactional
@@ -181,8 +186,7 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        Trip aux = tripDao.findById(trip.getTripId(),startDateTime,endDateTime).orElseThrow(IllegalArgumentException::new);
-        if(aux.getOccupiedSeats()>=trip.getMaxSeats()){
+        if(tripDao.getTripSeatCount(trip.getTripId(),trip.getStartDateTime(),trip.getEndDateTime())>=trip.getMaxSeats()){
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
             throw e;
@@ -202,13 +206,13 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         try{
-            emailService.sendMailNewPassenger(trip, passenger);
+            emailService.sendMailNewPassengerRequest(trip, passenger);
         }
         catch( Exception e){
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
         }
         try {
-            emailService.sendMailTripConfirmation(trip, passenger);
+            emailService.sendMailTripRequest(trip, passenger);
         }
         catch (Exception e) {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
@@ -338,6 +342,23 @@ public class TripServiceImpl implements TripService {
         }
         return tripDao.getPassengers(trip,startDate,endDate);
     }
+    private Optional<Passenger.PassengerState> getPassengersState(String status){
+        if(status.equals("accept")){
+            return Optional.of(Passenger.PassengerState.ACCEPTED);
+        }
+        if(status.equals("waiting")){
+            return Optional.of(Passenger.PassengerState.PENDING);
+        }
+        if(status.equals("reject")){
+            return Optional.of(Passenger.PassengerState.REJECTED);
+        }
+        return Optional.empty();
+    }
+    @Override
+    public PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),getPassengersState(passengerState),page,pageSize);
+    }
     @Override
     public List<Passenger> getPassengers(Trip trip){
         return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
@@ -414,6 +435,44 @@ public class TripServiceImpl implements TripService {
         LocalDateTime startDateTime = startDate.atTime(startTime);
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
         return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException {
+        User user = userService.findById(userId).orElseThrow(()->new IllegalArgumentException("User not found"));
+        Passenger pass = tripDao.getPassenger(tripId, user).orElseThrow(()->new IllegalArgumentException("Passenger not found"));
+        if(LocalDateTime.now().compareTo(pass.getStartDateTime())>=0){
+            throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
+        }
+        if(tripDao.getTripSeatCount(tripId,pass.getStartDateTime(),pass.getEndDateTime())>=pass.getTrip().getMaxSeats()){
+            //No hay asientos disponibles
+            throw new NotAvailableSeatsException();
+        }
+        try{
+            emailService.sendMailTripConfirmed(pass.getTrip(), pass);
+        }
+        catch( Exception e){
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", pass.getUserId(), pass.getTrip().getTripId(), e);
+        }
+        return tripDao.acceptPassenger(pass);
+    }
+
+    @Transactional
+    @Override
+    public boolean rejectPassenger(final long tripId, final long userId){
+        User user = userService.findById(userId).orElseThrow(()-> new IllegalArgumentException("User not found"));
+        Passenger passenger = tripDao.getPassenger(tripId, user).orElseThrow(()-> new IllegalArgumentException("Passanger not found"));
+        if(LocalDateTime.now().compareTo(passenger.getStartDateTime())>=0){
+            throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
+        }
+        try{
+            emailService.sendMailTripRejected(passenger.getTrip(), passenger);
+        }
+        catch( Exception e){
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", passenger.getUserId(), passenger.getTrip().getTripId(), e);
+        }
+        return tripDao.removePassenger(passenger);
     }
 
 }

@@ -22,4 +22,12 @@ public interface EmailService {
 
     void sendVerificationEmail(User user, String token) throws Exception;
 
+    //Se manda al driver indicando que alguien quiere ser pasajero
+    void sendMailNewPassengerRequest(Trip trip, Passenger passenger) throws Exception;
+    //Se manda al pasajero indicando que se recibio su solicitud
+    void sendMailTripRequest(Trip trip, Passenger passenger) throws Exception;
+    //Se manda al pasajero indicando que fue aceptado en el viaje
+    void sendMailTripConfirmed(Trip trip, Passenger passenger) throws  Exception;
+    //Se manda al pasajero indicando que fue rechazado en el viaje
+    void sendMailTripRejected(Trip trip, Passenger passenger) throws Exception;
 }
