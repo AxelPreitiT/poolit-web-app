@@ -190,12 +190,14 @@
                     <c:url value="/trips/${trip.tripId}/deletePas/${user.userId}" var="deletePasUrl"/>
                     <form:form method="POST" action="${deletePasUrl}" cssClass="form-bn-class">
                       <c:if test="${user.passengerState eq 'REJECTED'}">
-                        <button type="submit" class="btn disabled success-bg-color btn-sm">
+                        <button type="submit" class="btn disabled btn-danger btn-sm">
                           <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
                         </button>
                       </c:if>
                       <c:if test="${!(user.passengerState eq 'REJECTED')}">
-                        <button type="submit" class="btn btn-danger btn-sm" disabled="${user.tripStarted}">
+                        <button type="submit" class="btn btn-danger btn-sm" <c:if test="${user.tripStarted}">
+                          <c:out value="disabled"/>
+                        </c:if>>
                           <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
                         </button>
                       </c:if>
@@ -208,7 +210,9 @@
                         </button>
                       </c:if>
                       <c:if test="${!(user.passengerState eq 'ACCEPTED')}">
-                        <button type="submit" class="btn btn-primary btn-sm" disabled="${user.tripStarted}">
+                        <button type="submit" class="btn btn-primary success-bg-color btn-sm" <c:if test="${user.tripStarted}">
+                          <c:out value="disabled"/>
+                        </c:if>>
                           <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
                         </button>
                       </c:if>

@@ -101,7 +101,7 @@ public class TripController extends LoggedUserController {
 
     private ModelAndView tripDetailsForDriver(final long tripId,final User user, final boolean created,final boolean passengerAccepted,final boolean passengerRejected,final boolean notAvailableSeats,final String passengersState, final int passengersPage){
         final Trip trip = tripService.findById(tripId).orElseThrow(() -> new TripNotFoundException(tripId));
-        final List<Passenger> passengersComplete = tripService.getPassengers(trip);
+        final List<Passenger> passengersComplete = tripService.getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         final PagedContent<Passenger> passengers = tripService.getPassengersPaged(trip,passengersState,passengersPage-1,PAGE_SIZE);
         final double totalPrice = tripService.getTotalTripEarnings(passengersComplete); //TODO: arreglar
         final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengersComplete);

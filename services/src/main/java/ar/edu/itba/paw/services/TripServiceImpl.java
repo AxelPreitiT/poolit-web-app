@@ -236,7 +236,7 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
-        if(tripDao.getTripSeatCount(trip.getTripId(),trip.getStartDateTime(),trip.getEndDateTime())>=trip.getMaxSeats()){
+        if(tripDao.getTripSeatCount(trip.getTripId(),startDateTime,endDateTime)>=trip.getMaxSeats()){
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
             throw e;

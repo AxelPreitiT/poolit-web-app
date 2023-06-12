@@ -319,7 +319,10 @@ public class TripHibernateDao implements TripDao {
     @Override
     public int getTripSeatCount(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime){
         int ans = 0;
-        for(LocalDateTime dateTime = startDateTime; !dateTime.isAfter(endDateTime);dateTime = dateTime.plusDays(7)){
+        if(startDateTime.compareTo(endDateTime)>0){
+            return ans;
+        }
+        for(LocalDateTime dateTime = startDateTime; dateTime.compareTo(endDateTime)<=0;dateTime = dateTime.plusDays(7)){
             Query countQuery = em.createNativeQuery("SELECT coalesce(count(user_id),0) as passenger_count FROM passengers WHERE trip_id= :tripId AND start_date <= :dateTime AND end_date>= :dateTime AND passenger_state = 'ACCEPTED'");
             countQuery.setParameter("tripId",tripId);
             countQuery.setParameter("dateTime",Timestamp.valueOf(dateTime));
