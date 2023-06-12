@@ -1,0 +1,54 @@
+.passenger-review-form-container {
+    position: relative;
+}
+
+.passenger-review-form-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    column-gap: 1em;
+    position: relative;
+    padding: 2em 2em 0 2em;
+}
+
+.passenger-review-form-header img {
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+    z-index: 10;
+}
+
+.passenger-review-form-title {
+    width: 100%;
+}
+
+.passenger-review-form-title > hr {
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    z-index: 1;
+    border: 2px solid;
+    opacity: 1;
+}
+
+.passenger-review-form {
+    padding: 1em 2em;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+    align-items: flex-start;
+}
+
+.passenger-review-form > div {
+    width: 100%;
+}
+
+.passenger-review-form > div > * {
+    width: 100%;
+}
+
+#form-container select[disabled] {
+    display: none;
+}

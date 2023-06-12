@@ -4,7 +4,7 @@
 #button-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: stretch;
     justify-content: end;
     column-gap: 1em;
 }
@@ -46,33 +46,95 @@
 .info-container{
     padding-top: 2%;
 }
+
 .profile-link {
     text-decoration-line: underline;
     text-decoration-color: white;
 }
 
 .image-photo{
-    max-height: 40px;
-    max-width: 40px;
+    max-height: 80px;
+    max-width: 80px;
     border-radius: 50%;
     aspect-ratio: 1;
 }
+
+.container-flex{
+    display: flex;
+    justify-content: center;
+}
+
+.list-container{
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+    width: 85%;
+}
+
+.row-data-pass{
+    display: flex;
+    flex-direction: row;
+}
+
+.review-empty-container{
+    display: flex;
+    min-height: 70px;
+    padding: 1.5% 1% 1% 1%;
+    flex-direction: row;
+    align-items: center;
+    gap: 3%;
+    justify-content: center;
+}
+
+.form-bn-class{
+    margin-bottom: 0;
+}
+
+.row-info{
+    display: flex;
+    flex-direction: row;
+    min-width: fit-content;
+    margin-right: 5px;
+}
+
 .show-row {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     column-gap: 1em;
+    margin-right: 3px;
 }
 .passenger-list{
     overflow-y: auto;
     max-height: 260px;
 }
+
 .individual-profile{
-    padding: 2%;
     display:flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2%;
+}
+
+.placeholder-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.btn-section{
+    display: flex;
+    gap: 3%;
+}
+
+.little-btn{
+    --bs-btn-padding-y: .25rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .75rem;
 }
 .no-passengers-text{
     text-align: center;
@@ -84,4 +146,11 @@
 
 .dates {
     margin: 0;
+}
+
+.end-line{
+    display: flex;
+    margin-top: -1.5em;
+    justify-content: end;
+    flex-direction: row;
 }

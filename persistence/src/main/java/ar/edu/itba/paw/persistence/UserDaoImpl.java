@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-
+/*
 public class UserDaoImpl implements UserDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
@@ -95,4 +95,21 @@ public class UserDaoImpl implements UserDao {
                 username, surname, password, bornCity.getId(), mailLocale, role, user_image_id, email);
         return findByEmail(email).orElseThrow(IllegalStateException::new);
     }
+
+    @Override
+    public void blockUser(User blocker, User blocked) {
+
+    }
+
+    @Override
+    public void unblockUser(User blocker, User blocked) {
+
+    }
+
+    @Override
+    public boolean isBlocked(User blocker, User blocked) {
+        return false;
+    }
 }
+
+ */

@@ -12,7 +12,6 @@ import java.util.Optional;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final ImageDao imageDao;
-
     @Autowired
     public ImageServiceImpl(final ImageDao imageDao){
         this.imageDao = imageDao;
@@ -28,4 +27,8 @@ public class ImageServiceImpl implements ImageService {
     public Optional<Image> findById(long imageId){
         return imageDao.findById(imageId);
     }
+
+    @Transactional
+    @Override
+    public void replaceImage(long id, byte[] data) { imageDao.replaceImage(id,data); }
 }

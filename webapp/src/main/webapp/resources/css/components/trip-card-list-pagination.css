@@ -41,6 +41,14 @@
     opacity: 50%;
 }
 
-.active{
+.page-item {
+    --bs-pagination-active-border-color: #1C4C96;
+}
+
+.active {
+    --bs-pagination-border-width: 2px;
+}
+
+.active span {
     font-weight: bold;
 }

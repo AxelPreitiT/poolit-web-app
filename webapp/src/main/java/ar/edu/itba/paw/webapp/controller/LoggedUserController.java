@@ -30,7 +30,7 @@ public class LoggedUserController {
         if(auth == null || auth instanceof AnonymousAuthenticationToken) {
             return null;
         }
-        final AuthUser authUser = (AuthUser) auth.getPrincipal();
+        final org.springframework.security.core.userdetails.User authUser = (org.springframework.security.core.userdetails.User) auth.getPrincipal();
         return userService.findByEmail(authUser.getUsername()).orElseThrow(() -> new UserNotFoundException(authUser.getUsername()));
     }
 

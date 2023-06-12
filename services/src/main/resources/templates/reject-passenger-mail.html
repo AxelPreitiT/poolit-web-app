@@ -1,0 +1,116 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rechazo de reserva de viaje</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #d6f5ff;
+            border-radius: 10px;
+        }
+
+        .logo {
+            text-align: center;
+        }
+
+        .logo img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .btn-container {
+            text-align: center;
+            display: flex;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #0c6fc0;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background-color: #0d65ad;
+        }
+        .logo-svg{
+            width: 50%;
+            height: 50%;
+        }
+        .info-container {
+            display: flex;
+            gap: 0.25em;
+        }
+        .dotted-line{
+            margin-bottom: 5px;
+            margin-top: 5px;
+            min-height: 20px;
+            margin-left: 7px;
+            display: block;
+            border-left: 3px dotted black;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="logo">
+        <a th:href="@{{baseUrl}(baseUrl=${baseUrl})}">
+            <img style="scale: 1.5" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102380392222298142/poolit.png" alt="Poolit logo"/>
+        </a>
+    </div>
+    <h1 class="text-center mb-4" th:text="#{emails.tripReject.title}"></h1>
+    <p th:text="#{emails.helloMessage (${passenger.name})}"></p>
+    <p th:text="#{emails.tripReject.message (${trip.originCity.name},${trip.destinationCity.name})}"></p>
+    <div>
+        <div class="info-container">
+            <img style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102388830704775269/geo-alt.png" alt="startLocation"/>
+            <span style="margin: 4px">
+                    <spam th:text="#{emails.startLocation (${trip.originAddress},${trip.originCity.name})}"/>
+           </span>
+        </div>
+        <div style="margin: 4px">
+            <div class="dotted-line"></div>
+        </div>
+        <div class="info-container">
+            <img style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102389955977818182/geo-alt-fill.png" alt="endLocation"/>
+            <span style="margin: 4px">
+                     <span th:text="#{emails.endLocation (${trip.destinationAddress},${trip.destinationCity.name})}"/>
+           </span>
+        </div>
+        <div class="info-container">
+            <img style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102390829227712614/calendar.png" alt="dateAndTime"/>
+            <span style="margin: 4px">
+                    <span th:text="#{${trip.dayOfWeekString}}"/> <span th:if="${passenger.recurrent}" th:text="#{emails.fromDate}"/> <span th:text="${passenger.startDateString}"/>
+                <span th:if="${passenger.recurrent}" th:text="#{emails.toDate (${passenger.endDateString})}"/> <span th:text="#{emails.time (${trip.startTimeString})}"/>
+           </span>
+        </div>
+        <div class="info-container">
+            <img style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102393206974447627/person-fill.png" alt="user"/>
+            <span style="margin: 4px">
+               <span th:text="${trip.driver.name}"/> <span th:text="${trip.driver.surname}"/> (<span th:text="${trip.driver.email}"/>)
+           </span>
+        </div>
+        <div class="info-container">
+            <img style="display: inline; margin: 4px" src="https://cdn.discordapp.com/attachments/1090791209095659590/1102394070019620884/car-front-fill.png" alt="car"/>
+            <span style="margin: 4px">
+               <span th:text="${trip.car.infoCar}"/>(<span th:text="${trip.car.plate}"/>)
+           </span>
+        </div>
+
+    </div>
+    <div class="btn-container">
+        <a style="color: white !important;" th:href="@{{baseUrl}/trips/reserved(baseUrl=${baseUrl})}" class="btn" th:text="#{emails.tripReject.button}"></a>
+    </div>
+</div>
+</body>
+</html>

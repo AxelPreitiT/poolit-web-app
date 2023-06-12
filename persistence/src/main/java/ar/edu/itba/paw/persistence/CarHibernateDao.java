@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.models.Car;
+import ar.edu.itba.paw.models.CarBrand;
+import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +24,9 @@ public class CarHibernateDao implements CarDao {
     private EntityManager em;
 
     @Override
-    public Car create(String plate, String infoCar, User user, long image_id) {
+    public Car create(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, List<FeatureCar> features) {
         LOGGER.debug("Adding new car with plate '{}' from user with id {} to the database", plate, user.getUserId());
-        final Car car = new Car(plate,infoCar,user,image_id);
+        final Car car = new Car(plate,infoCar,user,image_id, seats, brand, features);
         em.persist(car);
         LOGGER.info("Car with plate '{}' added to the database with id {}", plate, car.getCarId());
         LOGGER.debug("New {}", car);
@@ -36,6 +38,12 @@ public class CarHibernateDao implements CarDao {
         LOGGER.debug("Looking for car with id {} in the database", carId);
         final Optional<Car> result = Optional.ofNullable(em.find(Car.class,carId));
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        return result;
+    }
+
+    @Override
+    public Optional<Car> findByPlate(String plate) {
+        final Optional<Car> result = Optional.ofNullable(em.find(Car.class,plate));
         return result;
     }
 
@@ -60,5 +68,20 @@ public class CarHibernateDao implements CarDao {
         List<Car> result = query.getResultList();
         LOGGER.debug("Found {} in the database", result);
         return result;
+    }
+
+
+    @Override
+    public Car ModifyCar(long carId, String infoCar, int seats,  List<FeatureCar> features){
+        Optional<Car> car = findById(carId);
+        if(car.isPresent()){
+            Car carToModify = car.get();
+            carToModify.setInfoCar(infoCar);
+            carToModify.setSeats(seats);
+            carToModify.setFeatures(features);
+            em.merge(carToModify);
+            return carToModify;
+        }
+        return null;
     }
 }

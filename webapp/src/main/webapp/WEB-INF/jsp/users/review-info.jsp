@@ -2,39 +2,28 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:useBean id="review" type="ar.edu.itba.paw.models.Review" scope="request"/>
 <link href="<c:url value="/resources/css/users/review-info.css"/>" rel="stylesheet" type="text/css"/>
 
-<div id="review-info-container">
-    <div id="rating-container">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="ratings">
-                <c:forEach var="i" begin="1" end="${review.rating}">
-                    <i class="bi bi-star-fill secondary-color h4"></i>
-                </c:forEach>
-                <c:if test="${review.rating % 1 >= 0.5}">
-                    <i class="bi bi-star-half secondary-color h4"></i>
-                    <c:forEach var="i" begin="${review.rating + 2}" end="5">
-                        <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${review.rating % 1 < 0.5}">
-                    <c:forEach var="i" begin="${review.rating + 1}" end="5">
-                        <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                </c:if>
+<div class="review-info-container">
+    <div class="review-info-content">
+        <div class="review-info-text">
+            <div class="review-info-title">
+                <h4 class="secondary-color"><spring:message code="${param.type}.review.option.${review.option}"/></h4>
+            </div>
+            <div class="review-info-body">
+                <span class="text review-info-comment"><c:out value="${review.comment}"/></span>
+            </div>
+        </div>
+        <div class="rating-container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="rating-container">
+                    <c:set var="rating" value="${review.rating}" scope="request"/>
+                    <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+                </div>
             </div>
         </div>
     </div>
-    <div id="review-container">
-        <h4 class="review-text">${review.review}</h4>
-    </div>
-    <div id="go-to-trip-container">
-        <a href="<c:url value="/trips/${review.tripId}"/>">
-            <button class="btn button-style button-color shadow-btn">
-                <i class="bi bi-chevron-right light-text"></i>
-                <span class="light-text h5"><spring:message code="review.checkTrip"/></span>
-            </button>
-        </a>
+    <div class="date-container">
+        <span class="italic-text"><c:out value="${review.formattedDate}"/></span>
     </div>
 </div>

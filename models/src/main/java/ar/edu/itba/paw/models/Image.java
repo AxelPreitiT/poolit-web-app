@@ -12,15 +12,15 @@ public class Image {
     @Column(name = "image_id")
     private Long imageId;
 
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
     @Column(name = "bytea")
     private byte[] data;
 
     protected Image() {
 
-    }
-
-    public Image(byte[] data) {
-        this.data = data;
     }
 
     public Image(Long id, byte[] data) {
@@ -42,5 +42,8 @@ public class Image {
         return data;
     }
 
+    public Image(byte[] data) {
+        this.data = data;
+    }
 }
 
