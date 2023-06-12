@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.form.annotations.MPFile;
+import ar.edu.itba.paw.webapp.form.annotations.MPFileNotNull;
 import ar.edu.itba.paw.webapp.form.annotations.PasswordMatches;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +37,7 @@ public class CreateUserForm {
     private String mailLocale;
 
     @MPFile
+    @MPFileNotNull
     private MultipartFile imageFile;
 
     public String getUsername() {

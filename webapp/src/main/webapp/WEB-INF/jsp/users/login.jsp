@@ -68,9 +68,9 @@
             </div>
         </div>
         <div class="sent-email">
-            <h7><spring:message code="login.sentToken"/></h7>
+            <h6><spring:message code="login.sentToken"/></h6>
             <a href="<c:url value="/users/sendToken"/>">
-                <h7 class="secondary-color"><spring:message code="login.SentToken.btn"/></h7>
+                <h6 class="secondary-color"><spring:message code="login.SentToken.btn"/></h6>
             </a>
         </div>
     </div>

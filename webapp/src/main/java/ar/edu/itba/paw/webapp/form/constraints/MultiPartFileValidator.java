@@ -11,10 +11,6 @@ public class MultiPartFileValidator implements ConstraintValidator<MPFile, Multi
     private static final long SIZE = 10485760; // Tamaño máximo de archivo en bytes, 1024*1024*10
 
     @Override
-    public void initialize(MPFile mpfile) {
-    }
-
-    @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext constraintValidatorContext){
         return  multipartFile.getSize()<=SIZE;
     }

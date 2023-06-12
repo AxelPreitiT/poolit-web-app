@@ -127,9 +127,9 @@
       </button>
     </div>
     <div class="row-info rows no-edit">
-      <button id="edit-car" type="button" class="btn button-style button-color shadow-btn">
+      <button id="edit-car" type="button" onclick="toggleEdit()" class="btn button-style button-color shadow-btn">
         <i class="bi bi-pencil-square light-text h3"></i>
-        <span class="button-text-style light-text h3" id="editButton" onclick="toggleEdit()"><spring:message code="profile.edit"/></span>
+        <span class="button-text-style light-text h3" id="editButton" ><spring:message code="profile.edit"/></span>
       </button>
     </div>
   </form:form>

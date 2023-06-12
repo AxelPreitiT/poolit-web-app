@@ -7,7 +7,7 @@
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
-<div class="user-info-container">
+<div class="user-info-container-car">
   <div class="avatar-img">
     <div class="circular--landscape">
       <c:url value="/image/${car.image_id}" var="carImageUrl"/>

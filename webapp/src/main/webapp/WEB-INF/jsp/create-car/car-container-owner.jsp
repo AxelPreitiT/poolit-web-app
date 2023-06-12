@@ -8,7 +8,7 @@
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
-<div class="user-info-container">
+<div class="user-info-container-car">
   <c:url value="/cars/${car.carId}" var="updateCarUrl"/>
   <form:form modelAttribute="updateCarForm" action="${updateCarUrl}" method="post" cssClass="form-style" enctype="multipart/form-data">
   <div class="avatar-img">
@@ -88,10 +88,10 @@
 
 
     </div>
-    <div class="row-info">
-        <button id="edit-car" type="button" class="btn button-style button-color shadow-btn no-edit">
+    <div class="row-info no-edit">
+        <button id="edit-car" type="button" class="btn button-style button-color shadow-btn no-edit" onclick="toggleEdit()">
               <i class="bi bi-pencil-square light-text h3"></i>
-              <span class="button-text-style light-text h3" id="editButton" onclick="toggleEdit()">Editar</span>
+              <span class="button-text-style light-text h3" id="editButton"><spring:message code="profile.edit"/></span>
           </button>
     </div>
   </form:form>
