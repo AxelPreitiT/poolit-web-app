@@ -31,9 +31,9 @@ public class TripServiceImpl implements TripService {
     private final TripDao tripDao;
 
     @Autowired
-    public TripServiceImpl(final TripDao tripDao, EmailService emailService1){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService){
         this.tripDao = tripDao;
-        this.emailService = emailService1;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -151,17 +151,19 @@ public class TripServiceImpl implements TripService {
         //Notificamos a los pasajeros que siguen en el viaje despues de eliminarse
         LocalDateTime lastOccurrence = LocalDate.now().atTime(trip.getStartDateTime().toLocalTime());
         //Voy a la ultima ocurrencia del viaje
-        while (!lastOccurrence.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek())){
+        int i = 0; //seguridad, no deberia ser necesario
+        while (!lastOccurrence.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek()) && i<8){
             lastOccurrence = lastOccurrence.minusDays(1);
+            i++;
         }
         for(Passenger passenger : tripPassengers){
             //Solo notifico a los pasajeros que siguen en el viaje despues de esa ultima fecha donde ocurrio
             if(passenger.getEndDateTime().isAfter(lastOccurrence)) {
+                //Si ya empezo su periodo en el viaje
                 if(!passenger.getStartDateTime().isAfter(lastOccurrence)){
                     //El pasajero ya habia empezado su periodo -> el viaje tiene que quedar en el historial
                     try {
-                        //TODO: cambiar template para que diga que solo se eliminaron las ultimas fechas
-                        emailService.sendMailTripDeletedToPassenger(trip, passenger);
+                        emailService.sendMailTripTruncatedToPassenger(trip, passenger, lastOccurrence.plusDays(7));
                     } catch (Exception e) {
                         LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
                         throw new IllegalStateException();
@@ -182,15 +184,13 @@ public class TripServiceImpl implements TripService {
 
             }
         }
-        //TODO: ver si cambiamos las fechas del viaje como para que quede hasta la ultima que ocurrio
         try{
             emailService.sendMailTripDeletedToDriver(trip);
         }catch (Exception e){
             LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
             throw new IllegalStateException();
         }
-        //TODO: tiene sentido solo truncar el final si no?
-        return tripDao.markTripAsDeleted(trip);
+        return tripDao.markTripAsDeleted(trip, lastOccurrence);
     }
     @Transactional
     public boolean deleteTrip(int tripId){

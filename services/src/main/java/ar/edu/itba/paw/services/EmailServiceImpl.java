@@ -21,6 +21,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -141,6 +143,19 @@ public class EmailServiceImpl implements EmailService {
         ctx.setLocale(trip.getDriver().getMailLocale());
 
         sendEmail(trip.getDriver().getEmail(),subject,"delete-trip-driver-mail",ctx, trip.getDriver().getMailLocale());
+    }
+
+    @Override
+    public void sendMailTripTruncatedToPassenger(Trip trip, Passenger passenger, LocalDateTime nextOccurrence) throws MessagingException, IOException  {
+        String subject = messageSource.getMessage("emails.subject.tripCancelledPassenger",null,passenger.getMailLocale());
+
+        final Context ctx = new Context();
+        ctx.setVariable("trip", trip);
+        ctx.setVariable("passenger", passenger);
+        ctx.setVariable("nextOccurrenceDate",nextOccurrence.toLocalDate());
+        ctx.setLocale(passenger.getMailLocale());
+
+        sendEmail(passenger.getEmail(),subject,"trip-truncated-passenger",ctx, passenger.getMailLocale());
     }
 
     @Async

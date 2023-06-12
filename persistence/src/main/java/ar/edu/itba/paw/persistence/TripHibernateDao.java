@@ -69,9 +69,10 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public boolean markTripAsDeleted(Trip trip) {
+    public boolean markTripAsDeleted(Trip trip, LocalDateTime lastOccurrence) {
         em.merge(trip);
         trip.setDeleted(true);
+        trip.setLastOccurrence(lastOccurrence);
         em.persist(trip);
         LOGGER.info("Trip with id {} deleted from the database",trip.getTripId());
         return true;
@@ -117,7 +118,7 @@ public class TripHibernateDao implements TripDao {
 
     @Override
     public void truncatePassengerEndDateTime(Passenger passenger, LocalDateTime newLastDateTime){
-        if(!passenger.getEndDateTime().isBefore(newLastDateTime)){
+        if(passenger.getEndDateTime().isBefore(newLastDateTime)){
             throw new IllegalArgumentException();
         }
         em.merge(passenger);
@@ -302,9 +303,10 @@ public class TripHibernateDao implements TripDao {
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
                 "GROUP BY days.days,passengers.trip_id) aux "+
-                "WHERE aux.days >= :startDateTime AND end_date_time >= :startDateTime AND  origin_city_id = :originCityId AND cast(trips.start_date_time as time) >= :minTime AND trips.deleted = false " +
+                "WHERE aux.days >= :startDateTime AND end_date_time >= :startDateTime AND origin_city_id = :originCityId AND cast(trips.start_date_time as time) >= :minTime AND trips.deleted = false AND start_date_time <= :startMaximum " +
                 "AND cast(trips.start_date_time as time) <= :maxTime AND destination_city_id = :destinationCityId AND aux.days <= :endDateTimePlus AND end_date_time >= :endDateTimeMinus "+
                 "AND trips.day_of_week = :dayOfWeek ";
+        arguments.put("startMaximum",Timestamp.valueOf(startDateTime.plusMinutes(minutes)));
         arguments.put("startDateTime",Timestamp.valueOf(startDateTime.minusMinutes(minutes)));
         arguments.put("originCityId",origin_city_id);
         arguments.put("minTime",minTime);
@@ -369,23 +371,28 @@ public class TripHibernateDao implements TripDao {
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days "+
                 "GROUP BY days.days,passengers.trip_id) aux "+
-                "WHERE origin_city_id = :originCityId AND day_of_week = :dayOfWeek AND end_date_time >= :startDateTime AND trips.deleted = false " +
+                "WHERE origin_city_id = :originCityId AND day_of_week = :dayOfWeek AND end_date_time >= :startDateTime AND trips.deleted = false AND cast(start_date_time as date) <= :startDate AND cast(start_date_time as time) >= :startTime " +
                 "GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers " +
                 "ORDER BY cast(trips.start_date_time as time) ASC";
         Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux" );
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
+        countQuery.setParameter("startTime",startDateTime.toLocalTime());
+        countQuery.setParameter("startDate",startDateTime.toLocalDate());
         countQuery.setParameter("originCityId",origin_city_id);
         countQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         countQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
         idQuery.setParameter("originCityId",origin_city_id);
         idQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         idQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
+        idQuery.setParameter("startTime",startDateTime.toLocalTime());
+        idQuery.setParameter("startDate",startDateTime.toLocalDate());
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
         PagedContent<Trip> ans =  getTripPagedContent(page, pageSize, countQuery, idQuery);
         for(Trip trip : ans.getElements()){
             trip.setQueryStartDateTime(startDateTime.toLocalDate().atTime(trip.getStartDateTime().toLocalTime()));
+            trip.setQueryEndDateTime(startDateTime.toLocalDate().atTime(trip.getStartDateTime().toLocalTime()));
         }
         return ans;
     }
