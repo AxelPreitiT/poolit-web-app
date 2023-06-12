@@ -142,6 +142,10 @@ public class Passenger{
 
     public long getUserImageId() { return user.getUserImageId(); }
 
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+
     public boolean isTripEnded() {
         return LocalDateTime.now().isAfter(endDateTime);
     }

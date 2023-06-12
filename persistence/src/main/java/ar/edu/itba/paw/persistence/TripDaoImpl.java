@@ -203,6 +203,17 @@ public class TripDaoImpl implements TripDao {
         }
         return result;
     }
+
+    @Override
+    public boolean markTripAsDeleted(Trip trip) {
+        return false;
+    }
+
+    @Override
+    public void truncatePassengerEndDateTime(Passenger passenger, LocalDateTime newLastDateTime) {
+
+    }
+
     @Override
     public boolean removePassenger(final Trip trip, final Passenger passenger){
         LOGGER.debug("Removing passenger with id {} from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());

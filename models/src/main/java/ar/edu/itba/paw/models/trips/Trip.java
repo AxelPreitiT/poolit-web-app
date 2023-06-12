@@ -56,6 +56,12 @@ public class Trip {
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
 
+    @Column(name = "deleted", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean deleted;
+
+    @Column(name = "last_occurrence", nullable = true)
+    private LocalDateTime lastOccurrence;
+
     private transient int occupiedSeats = 0;
 
     protected Trip(){
@@ -248,6 +254,22 @@ public class Trip {
 
     public void setQueryStartDateTime(LocalDateTime queryStartDateTime) {
         this.queryStartDateTime = queryStartDateTime;
+    }
+
+    public LocalDateTime getLastOccurrence() {
+        return lastOccurrence;
+    }
+
+    public void setLastOccurrence(LocalDateTime lastOccurrence) {
+        this.lastOccurrence = lastOccurrence;
+    }
+
+    public boolean getDeleted(){
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {

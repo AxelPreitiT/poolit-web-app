@@ -132,13 +132,63 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        //Notify passengers that trip was deleted
-        for(Passenger passenger : tripPassengers){
+        //Si el viaje todavia no empezo
+        if(!LocalDateTime.now().isAfter(trip.getStartDateTime())){
+            for(Passenger passenger : tripPassengers){
+                //Solo notifico a los pasajeros que siguen en el viaje despues de esa ultima fecha donde ocurrio
+                try {
+                    emailService.sendMailTripDeletedToPassenger(trip, passenger);
+                } catch (Exception e) {
+                    LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
+                    throw new IllegalStateException();
+                }
+                //Lo sacamos del historial del pasajero, el viaje nunca ocurrio
+                tripDao.removePassenger(trip,passenger);
+            }
             try{
-                emailService.sendMailTripDeletedToPassenger(trip,passenger);
+                emailService.sendMailTripDeletedToDriver(trip);
             }catch (Exception e){
-                LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
+                LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
                 throw new IllegalStateException();
+            }
+            //Directamente eliminamos al viaje de la BD, no va a tener reseñas asociadas
+            return tripDao.deleteTrip(trip);
+        }
+        //El viaje ya empezo
+        //Notificamos a los pasajeros que siguen en el viaje despues de eliminarse
+        LocalDateTime lastOccurrence = LocalDate.now().atTime(trip.getStartDateTime().toLocalTime());
+        //Voy a la ultima ocurrencia del viaje
+        int i = 0; //seguridad, no deberia ser necesario
+        while (!lastOccurrence.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek()) && i<8){
+            lastOccurrence = lastOccurrence.minusDays(1);
+            i++;
+        }
+        for(Passenger passenger : tripPassengers){
+            //Solo notifico a los pasajeros que siguen en el viaje despues de esa ultima fecha donde ocurrio
+            if(passenger.getEndDateTime().isAfter(lastOccurrence)) {
+                //Si ya empezo su periodo en el viaje
+                if(!passenger.getStartDateTime().isAfter(lastOccurrence)){
+                    //El pasajero ya habia empezado su periodo -> el viaje tiene que quedar en el historial
+                    try {
+                        emailService.sendMailTripTruncatedToPassenger(trip, passenger, lastOccurrence.plusDays(7));
+                    } catch (Exception e) {
+                        LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
+                        throw new IllegalStateException();
+                    }
+                    tripDao.truncatePassengerEndDateTime(passenger,lastOccurrence);
+                }else{
+                    //El pasajero no habia empezado su periodo -> el viaje se elemina del historial
+                    try {
+                        //Se cancelo la totalidad del viaje que ocupaba
+                        emailService.sendMailTripDeletedToPassenger(trip, passenger);
+                    } catch (Exception e) {
+                        LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
+                        throw new IllegalStateException();
+                    }
+                    //Lo sacamos de los pasajeros para
+                    tripDao.removePassenger(trip,passenger);
+                }
+
             }
         }
         try{
@@ -147,7 +197,7 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
             throw new IllegalStateException();
         }
-        return tripDao.deleteTrip(trip);
+        return tripDao.markTripAsDeleted(trip, lastOccurrence);
     }
     @Transactional
     public boolean deleteTrip(int tripId){

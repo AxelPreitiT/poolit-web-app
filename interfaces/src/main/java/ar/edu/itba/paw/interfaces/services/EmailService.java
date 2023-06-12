@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public interface EmailService {
 
@@ -19,6 +20,8 @@ public interface EmailService {
     void sendMailTripDeletedToPassenger(Trip trip, Passenger passenger) throws Exception;
 
     void sendMailTripDeletedToDriver(Trip trip) throws Exception;
+
+    void sendMailTripTruncatedToPassenger(Trip trip, Passenger passenger, LocalDateTime nextOccurrence)  throws Exception ;
 
     void sendVerificationEmail(User user, String token) throws Exception;
 
