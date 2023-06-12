@@ -42,7 +42,7 @@ public class User {
     private String role;
 
     @Column(name="user_image_id")
-    private long userImageId;
+    private Long userImageId;
 
     //TODO: ver de eliminar
     @ManyToMany(fetch = FetchType.LAZY)
