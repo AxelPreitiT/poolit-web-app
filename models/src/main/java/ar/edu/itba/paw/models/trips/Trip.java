@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Format;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.converters.DayOfWeekConverter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
@@ -61,6 +62,14 @@ public class Trip {
 
     @Column(name = "last_occurrence", nullable = true)
     private LocalDateTime lastOccurrence;
+
+    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
+    private double driverRating;
+
+
+    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
+    private double carRating;
+
 
     private transient int occupiedSeats = 0;
 
@@ -278,6 +287,10 @@ public class Trip {
 
     public void setOccupiedSeats(int occupiedSeats) {
         this.occupiedSeats = occupiedSeats;
+    }
+
+    public double getDriverRating() {
+        return driverRating;
     }
 
     public enum SortType{
