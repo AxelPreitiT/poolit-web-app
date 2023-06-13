@@ -89,7 +89,7 @@ public class TripHibernateDao implements TripDao {
     @Override
     public List<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
-        TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime>= :endDate))",Passenger.class);
+        TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime>= :endDate) AND (p.startDateTime >= :startDate AND p.endDateTime <= :endDate) )",Passenger.class);
         query.setParameter("trip",trip);
         query.setParameter("startDate", startDateTime);
         query.setParameter("endDate",endDateTime);
@@ -102,7 +102,7 @@ public class TripHibernateDao implements TripDao {
     public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,int page, int pageSize) {
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         String queryString = "FROM passengers p " +
-                "WHERE p.trip_id = :tripId  AND ((p.start_date<=:startDate AND p.end_date>=:startDate) OR (p.start_date<= :endDate AND p.end_date>= :endDate)) ";
+                "WHERE p.trip_id = :tripId  AND ((p.start_date<=:startDate AND p.end_date>=:startDate) OR (p.start_date<= :endDate AND p.end_date>= :endDate) OR (p.start_date >= :startDate AND p.end_date <= :endDate)) "; //la ultima condicion es por si el pasajero esta adentro del intervalo buscado
         if(passengerState.isPresent()){
             queryString += "AND p.passenger_state = :passengerStateString";
         }
@@ -162,7 +162,7 @@ public class TripHibernateDao implements TripDao {
     public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         //TODO: nose si sera "true"
-        TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.passengerState = 'ACCEPTED' AND p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime= :endDate))",Passenger.class);
+        TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.passengerState = 'ACCEPTED' AND p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime= :endDate) AND (p.startDateTime >= :startDate AND p.endDateTime <= :endDate))",Passenger.class);
         query.setParameter("trip",trip);
         query.setParameter("startDate", startDateTime);
         query.setParameter("endDate",endDateTime);
