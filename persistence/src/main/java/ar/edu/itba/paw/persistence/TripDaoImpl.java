@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
+/*
 
 //@Repository
 public class TripDaoImpl implements TripDao {
@@ -110,6 +111,9 @@ public class TripDaoImpl implements TripDao {
                     trip,
                     resultSet.getInt("trip_passenger_count")
             );
+    }
+    public int getTripSeatCount(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        return 0;
     }
     private RowMapper<Trip> getTripRowMapper(final Optional<LocalDateTime> queryStartDateTime, final Optional<LocalDateTime> queryEndDateTime){
         return (resultSet, rowNum)->{
@@ -199,6 +203,17 @@ public class TripDaoImpl implements TripDao {
         }
         return result;
     }
+
+    @Override
+    public boolean markTripAsDeleted(Trip trip) {
+        return false;
+    }
+
+    @Override
+    public void truncatePassengerEndDateTime(Passenger passenger, LocalDateTime newLastDateTime) {
+
+    }
+
     @Override
     public boolean removePassenger(final Trip trip, final Passenger passenger){
         LOGGER.debug("Removing passenger with id {} from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
@@ -227,6 +242,12 @@ public class TripDaoImpl implements TripDao {
         LOGGER.debug("Found {} in the database", result);
         return result;
     }
+
+    @Override
+    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState, int page, int pageSize) {
+        return null;
+    }
+
     @Override
     public Optional<Passenger> getPassenger(final Trip trip, final User user){
         return getPassenger(trip.getTripId(),user);
@@ -339,6 +360,32 @@ public class TripDaoImpl implements TripDao {
         LOGGER.debug("Found {} in the database", result);
         return result;
     }
+
+    @Override
+    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return null;
+    }
+
+    @Override
+    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime dateTime) {
+        return null;
+    }
+
+    @Override
+    public List<Passenger> getAcceptedPassengers(TripInstance tripInstance) {
+        return null;
+    }
+
+    @Override
+    public boolean acceptPassenger(Passenger passenger) {
+        return false;
+    }
+
+    @Override
+    public boolean removePassenger(Passenger passenger) {
+        return false;
+    }
+
     @Override
     public PagedContent<Trip> getTripsWithFilters(
             long origin_city_id, long destination_city_id,
@@ -606,3 +653,6 @@ public class TripDaoImpl implements TripDao {
         }
     }
 }
+
+
+ */

@@ -67,7 +67,7 @@
       </c:forEach>
     </c:url>
     <div id="list-pagination">
-      <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+      <jsp:include page="/WEB-INF/jsp/components/pagination.jsp">
         <jsp:param name="currentPage" value="${trips.currentPage+1}"/>
         <jsp:param name="totalPages" value="${trips.totalPages}"/>
         <jsp:param name="baseUrl" value="${baseUrl}"/>

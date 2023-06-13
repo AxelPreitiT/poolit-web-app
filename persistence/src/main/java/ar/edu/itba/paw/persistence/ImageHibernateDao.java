@@ -22,6 +22,7 @@ public class ImageHibernateDao implements ImageDao {
 
     @Override
     public Image create(byte[] data) {
+        //TODO crear imagen default si data.length<=0
         LOGGER.debug("Adding new image to the database");
         final Image image = new Image(data);
         em.persist(image);
@@ -37,5 +38,18 @@ public class ImageHibernateDao implements ImageDao {
         final Optional<Image> result = Optional.ofNullable(em.find(Image.class, imageId));
         LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
+    }
+
+    @Override
+    public void replaceImage(long id, byte[] data) {
+        if(data.length<=0){
+            return;
+        }
+        Optional<Image> img = findById(id);
+        if (img.isPresent()){
+            Image imgToModify= img.get();
+            imgToModify.setData(data);
+            em.merge(imgToModify);
+        }
     }
 }

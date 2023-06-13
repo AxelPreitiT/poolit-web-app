@@ -87,4 +87,49 @@ public class UserHibernateDao implements UserDao {
         }
         return null;
     }
+
+    @Override
+    public void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale) {
+        Optional<User> maybeUser = findById(userId);
+        LOGGER.debug("Modifying user with id '{}' in the database", userId);
+        if (maybeUser.isPresent()){
+            final User user = maybeUser.get();
+            user.setName(username);
+            user.setSurname(surname);
+            user.setPhone(phone);
+            user.setBornCity(bornCity);
+            user.setMailLocale(mailLocale);
+            em.persist(user);
+        }
+    }
+
+    @Override
+    public void blockUser(User blocker, User blocked) {
+        String sql = "INSERT INTO blocks (blockedById, blockedId) VALUES (:blockerId, :blockedId)";
+        em.createNativeQuery(sql)
+                .setParameter("blockerId", blocker.getUserId())
+                .setParameter("blockedId", blocked.getUserId())
+                .executeUpdate();
+    }
+
+    @Override
+    public void unblockUser(User blocker, User blocked) {
+        String sql = "DELETE FROM blocks WHERE blockedById = :blockerId AND blockedId = :blockedId";
+        em.createNativeQuery(sql)
+                .setParameter("blockerId", blocker.getUserId())
+                .setParameter("blockedId", blocked.getUserId())
+                .executeUpdate();
+    }
+
+    @Override
+    public boolean isBlocked(User blocker, User blocked) {
+        String sql = "SELECT COUNT(*) FROM blocks WHERE blockedById = :blockerId AND blockedId = :blockedId";
+        int count = ((Number) em.createNativeQuery(sql)
+                .setParameter("blockerId", blocker.getUserId())
+                .setParameter("blockedId", blocked.getUserId())
+                .getSingleResult()).intValue();
+        return count > 0;
+    }
+
+
 }

@@ -67,6 +67,28 @@
                 </a>
             </div>
         </div>
+        <div class="sent-email">
+            <h6><spring:message code="login.sentToken"/></h6>
+            <a href="<c:url value="/users/sendToken"/>">
+                <h6 class="secondary-color"><spring:message code="login.SentToken.btn"/></h6>
+            </a>
+        </div>
     </div>
+    <c:if test="${!(empty sentToken) && sentToken}">
+        <div id="toast-container">
+            <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                <jsp:param name="title" value="sendToken.success.title"/>
+                <jsp:param name="message" value="sendToken.success.message"/>
+            </jsp:include>
+        </div>
+    </c:if>
+    <c:if test="${!(empty alreadyValidation) && alreadyValidation}">
+        <div id="toast-container">
+            <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                <jsp:param name="title" value="sendToken.alReadyValidation.title"/>
+                <jsp:param name="message" value="sendToken.alReadyValidation.message"/>
+            </jsp:include>
+        </div>
+    </c:if>
 </body>
 </html>

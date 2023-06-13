@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.NotAvailableSeatsException;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -39,6 +40,8 @@ public interface TripService {
 
     boolean userIsPassenger(final long tripId, final User user);
 
+    double getTotalTripEarnings(List<Passenger> passengers);
+
     Optional<Passenger> getPassenger(final long tripId, final User user);
 
     Optional<Passenger> getPassenger(final Trip trip, final User user);
@@ -48,6 +51,9 @@ public interface TripService {
     List<Passenger> getPassengers(TripInstance tripInstance);
 
     List<Passenger> getPassengers(Trip trip);
+    List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
+
+    PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize);
 
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
 
@@ -77,6 +83,11 @@ public interface TripService {
             long origin_city_id, long destination_city_id, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final Optional<BigDecimal> minPrice, final Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
-            final int page, final int pageSize);
+            final User searchUser, final int page, final int pageSize);
+
+
+    public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
+
+    public boolean rejectPassenger(final long tripId, final long userId);
 
 }

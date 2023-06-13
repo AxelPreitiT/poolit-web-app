@@ -33,7 +33,8 @@
                         <li class="page-item active">
                             <a class="page-link button-color" href="<c:url value="${param.baseUrl}">
                             <c:param name="page" value="${page}"/>
-                            </c:url>"><c:out value="${page}"/>
+                            </c:url>">
+                                <span class="light-text"><c:out value="${page}"/></span>
                             </a>
                         </li>
                     </c:when>
@@ -41,7 +42,8 @@
                         <li class="page-item">
                             <a class="page-link button-color" href="<c:url value="${param.baseUrl}">
                             <c:param name="page" value="${page}"/>
-                            </c:url>"><c:out value="${page}"/>
+                            </c:url>">
+                                <span class="light-text"><c:out value="${page}"/></span>
                             </a>
                         </li>
                     </c:otherwise>

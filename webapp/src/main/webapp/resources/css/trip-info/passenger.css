@@ -1,23 +1,14 @@
+@import "../base/elements.css";
+@import "../trip-detail/trip-detail.css";
 
-.review-form{
+#button-container {
     display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    row-gap: 1em;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: end;
+    column-gap: 1em;
 }
 
-.modal-body form {
+#button-container > form {
     margin-bottom: 0;
-}
-
-.error-item {
-    margin: 0.2em 0;
-}
-
-.error-item:not(:has(span)) {
-    display: none;
-}
-
-.error-item > i {
-    margin-right: 0.2em;
 }
