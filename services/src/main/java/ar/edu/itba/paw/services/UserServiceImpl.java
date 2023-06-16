@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.interfaces.services.TokenService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.models.VerificationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,33 +47,6 @@ public class UserServiceImpl implements UserService {
 
     //private final UserDetailsService userDetailsService;
 
-    //TODO: revisar si se usa
-    private enum AuthRoles{
-        USER("ROLE_USER"),
-        DRIVER("ROLE_DRIVER");
-        private final String role;
-        private AuthRoles(String role){
-            this.role = role;
-        }
-
-        public String getRole() {
-            return role;
-        }
-    }
-
-    private enum Roles{
-        USER("USER"),
-        DRIVER("DRIVER");
-        private final String role;
-        private Roles(String role){
-            this.role = role;
-        }
-
-        public String getRole() {
-            return role;
-        }
-    }
-
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
@@ -91,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public User createUser(final String username, final String surname, final String email,
                            final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) throws EmailAlreadyExistsException{
 
-        String finalRole = (role == null) ? Roles.USER.role : role;
+        String finalRole = (role == null) ? UserRole.USER.getText() : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
             LOGGER.debug("Email '{}' already exists in the database", email);
@@ -139,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void changeToDriver(User user) {
-        userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
+        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
     }
 
     @Transactional
@@ -193,9 +167,9 @@ public class UserServiceImpl implements UserService {
     void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         if(Objects.equals(user.getRole(), "DRIVER")){
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+            authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
         } else {
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+            authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
         }
 
         //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.webapp.auth.AuthValidator;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -44,6 +47,17 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        String hierarchy = String.format("%s > %s and %s > %s",
+                UserRole.ADMIN_ROLE.getText(),
+                UserRole.DRIVER_ROLE.getText(),
+                UserRole.ADMIN_ROLE.getText(),
+                UserRole.USER_ROLE.getText());
+        roleHierarchy.setHierarchy(hierarchy);
+        return roleHierarchy;
+    }
 
     @Value("classpath:rememberMeKey.pem")
     private Resource rememberMeKey;
@@ -52,12 +66,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .invalidSessionUrl("/users/login")
                 .and().authorizeRequests()
+                    .antMatchers("/admin").hasRole("ADMIN")
                     .antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
                     .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
                     .antMatchers("/cars/{id:\\d+$}").authenticated()
                     .antMatchers("/changeRole").hasRole("USER")
-                    .antMatchers("/trips/create", "/cars/**", "/users/created").hasRole("DRIVER")
-                    .antMatchers("/trips/created/**").hasRole("DRIVER")
+                    .antMatchers("/trips/create", "/cars/**", "/users/created, /trips/created/**").hasRole("DRIVER")
                     .antMatchers("/trips/reserved/**").authenticated()
                     .antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
                     .antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()

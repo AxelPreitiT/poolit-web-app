@@ -20,17 +20,24 @@
                             <h4 class="light-text"><spring:message code="navbar.reservados"/></h4>
                         </a>
                     </li>
-                    <sec:authorize access="hasRole('ROLE_DRIVER')">
+                    <sec:authorize access="hasRole('ROLE_DRIVER') or hasRole('ROLE_ADMIN')">
                         <li class="nav-item">
                             <a class="nav-link" href="<c:url value="/trips/created"/>">
                                 <h4 class="light-text"><spring:message code="navbar.created"/></h4>
                             </a>
                         </li>
                     </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<c:url value="/admin"/>">
+                                <h4 class="light-text"><spring:message code="navbar.admin"/></h4>
+                            </a>
+                        </li>
+                    </sec:authorize>
                 </sec:authorize>
             </ul>
             <sec:authorize access="isAuthenticated()">
-                <sec:authorize access="hasRole('ROLE_DRIVER')">
+                <sec:authorize access="hasRole('ROLE_DRIVER') or hasRole('ROLE_ADMIN')">
                     <div class="create-trip-btn">
                         <a href="<c:url value="/trips/create"/>">
                             <button class="btn button-style button-color shadow-btn">
