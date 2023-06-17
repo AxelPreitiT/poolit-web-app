@@ -19,7 +19,7 @@
         </div>
         <div class="show-row" >
             <i class="bi bi-calendar light-text h5"></i>
-            <div class="show-row-content">
+            <div class="show-content">
                 <span class="light-text detail detail-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
                 <span class="light-text">
                 <c:if test="${!trip.queryIsRecurrent}">
@@ -33,28 +33,27 @@
         </div>
         <div class="show-row">
             <c:url value="/cars/${trip.car.carId}" var="carUrl"/>
-            <a href="${carUrl}" class="show-row profile-link">
-            <c:choose>
-                <c:when test="${trip.car.image_id>1}">
-                    <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
-                    <img src="${carImageUrl}" alt="car image" class="image-photo car-image"/>
-                </c:when>
-                <c:otherwise>
-                    <i class="bi bi-car-front-fill light-text h5"></i>
-                </c:otherwise>
-            </c:choose>
-            <div class="show-row-content">
-                <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
-
-                <span class="light-text"><spring:message code="profile.plate" arguments="${trip.car.plate}"/></span>
-            </div>
+            <a href="${carUrl}">
+                <c:choose>
+                    <c:when test="${trip.car.image_id>1}">
+                        <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                        <img src="${carImageUrl}" alt="car image" class="image-photo car-image"/>
+                    </c:when>
+                    <c:otherwise>
+                        <i class="bi bi-car-front-fill light-text h5"></i>
+                    </c:otherwise>
+                </c:choose>
             </a>
-            <div class="ratings">
-                <c:set var="rating" value="${carRating}" scope="request"/>
-                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                    <jsp:param name="fontSize" value="h6"/>
-                    <jsp:param name="fontColor" value="light-text"/>
-                </jsp:include>
+            <div class="car-content">
+                <a href="${carUrl}" class="show-row profile-link">
+                    <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
+                </a>
+                <div class="ratings">
+                    <c:set var="rating" value="${carRating}" scope="request"/>
+                    <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                        <jsp:param name="fontColor" value="light-text"/>
+                    </jsp:include>
+                </div>
             </div>
         </div>
         <c:if test="${!trip.tripHasEnded}">
@@ -74,21 +73,22 @@
         <hr/>
         <div class="show-row">
             <div class="show-row-content">
-            <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
-            <c:url value="/profile/${trip.driver.userId}" var="userUrl"/>
-            <a href="${userUrl}" class="show-row profile-link">
-                <img src="${userImageId}" alt="user image" class="image-photo"/>
-                <div class="show-row-content">
-                    <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
+                <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
+                <c:url value="/profile/${trip.driver.userId}" var="userUrl"/>
+                <a href="${userUrl}">
+                    <img src="${userImageId}" alt="user image" class="image-photo"/>
+                </a>
+                <div class="driver-content">
+                    <a href="${userUrl}" class="show-row profile-link">
+                        <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
+                    </a>
+                    <div class="ratings">
+                        <c:set var="rating" value="${driverRating}" scope="request"/>
+                        <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                            <jsp:param name="fontColor" value="light-text"/>
+                        </jsp:include>
+                    </div>
                 </div>
-            </a>
-            </div>
-            <div class="ratings">
-                <c:set var="rating" value="${driverRating}" scope="request"/>
-                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                    <jsp:param name="fontSize" value="h6"/>
-                    <jsp:param name="fontColor" value="light-text"/>
-                </jsp:include>
             </div>
         </div>
         <c:if test="${param.showDriverInfo}">

@@ -48,11 +48,30 @@
     width: 100%;
 }
 
-.show-row-content {
-    display: inline-block;
+.show-content {
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+}
+
+.show-row-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    column-gap: 1em;
+}
+
+.driver-content, .car-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.show-row .ratings i, .show-row .ratings span {
+    font-size: 0.8rem;
 }
 
 .show-row-content-passangers {
@@ -69,12 +88,12 @@
     row-gap: 0.2em;
 }
 
-.show-row-content > .detail, .show-row > i {
+.show-content > .detail, .show-row > i {
     font-size: 0.9rem;
     display: flex;
 }
 
-.show-row-content > span:not(.detail) {
+.show-content > span:not(.detail) {
     margin-top: -0.2em;
     font-size: 0.7rem;
 }
@@ -102,12 +121,6 @@
 
 .car-image {
     border-radius: 4px;
-}
-
-.ratings{
-    display: flex;
-    justify-items: flex-end;
-    margin-left: auto;
 }
 
 
