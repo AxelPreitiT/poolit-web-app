@@ -25,6 +25,13 @@
         </c:url>
         <a href="${tripUrl2}">
             <div class="row g-0">
+                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                <div class="col-4 mycontainer">
+                    <div class="placeholder-image">
+                        <img src="${carImageUrl}" alt="car image"/>
+                    </div>
+
+                </div>
                 <div class="col-8">
                     <div class="card-body">
                         <div class="route-info">
@@ -45,33 +52,53 @@
                             </div>
                         </div>
                         <div class="footer-info">
+                            <div class="footer-time-container show-row-content">
+                                <div>
+                                    <div class="date-info-column show-row">
+                                        <i class="bi bi-calendar text"></i>
+                                        <div class="show-row-content">
+                                        <c:choose>
+                                            <c:when test="${trip.queryIsRecurrent}">
+                                                <span class="text text-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text"><c:out value="${trip.queryStartDateString}"/></span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <span class="text"><c:out value="${trip.startTimeString}"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                             <div class="footer-date-container">
-                                <i class="bi bi-calendar text"></i>
-                                <div class="date-info-column">
-                                    <c:choose>
-                                        <c:when test="${trip.queryIsRecurrent}">
-                                            <span class="text text-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span class="text"><c:out value="${trip.queryStartDateString}"/></span>
-                                        </c:otherwise>
-                                    </c:choose>
+                                <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
+                                <div class="ratings">
+                                    <img src="${userImageId}" alt="user image" class="image-photo"/>
+                                    <c:forEach var="i" begin="1" end="${trip.driverRating}">
+                                        <i class="bi bi-star-fill secondary-color h5"></i>
+                                    </c:forEach>
+                                    <c:if test="${trip.driverRating % 1 >= 0.5}">
+                                        <i class="bi bi-star-half secondary-color h5"></i>
+                                        <c:forEach var="i" begin="${trip.driverRating + 2}" end="5">
+                                            <i class="bi bi-star secondary-color h5"></i>
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${trip.driverRating % 1 < 0.5}">
+                                        <c:forEach var="i" begin="${trip.driverRating + 1}" end="5">
+                                            <i class="bi bi-star secondary-color h5"></i>
+                                        </c:forEach>
+                                    </c:if>
                                 </div>
                             </div>
-                            <div class="footer-time-container">
-                                <i class="bi bi-clock text"></i>
-                                <span class="text"><c:out value="${trip.startTimeString}"/></span>
-                            </div>
                             <div class="footer-price-container">
-                                <h2 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h2>
+                                <h3 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
-                <div class="col-4 placeholder-image">
-                    <img src="${carImageUrl}" alt="car image"/>
-                </div>
+
+
             </div>
         </a>
     </div>

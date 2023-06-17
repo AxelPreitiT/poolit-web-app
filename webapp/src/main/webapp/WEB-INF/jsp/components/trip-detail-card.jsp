@@ -32,8 +32,10 @@
             </div>
         </div>
         <div class="show-row">
+            <c:url value="/cars/${trip.car.carId}" var="carUrl"/>
+            <a href="${carUrl}" class="show-row profile-link">
             <c:choose>
-                <c:when test="${param.showCarImage}">
+                <c:when test="${trip.car.image_id>1}">
                     <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
                     <img src="${carImageUrl}" alt="car image" class="image-photo car-image"/>
                 </c:when>
@@ -42,13 +44,29 @@
                 </c:otherwise>
             </c:choose>
             <div class="show-row-content">
-                <c:url value="/cars/${trip.car.carId}" var="carUrl"/>
-                <a href="${carUrl}" class="show-row profile-link">
-                    <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
-                </a>
+                <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
+
                 <span class="light-text"><spring:message code="profile.plate" arguments="${trip.car.plate}"/></span>
             </div>
+            </a>
+            <div class="ratings">
+                <c:forEach var="i" begin="1" end="${carRating}">
+                    <i class="bi bi-star-fill secondary-color h4"></i>
+                </c:forEach>
+                <c:if test="${carRating % 1 >= 0.5}">
+                    <i class="bi bi-star-half secondary-color h4"></i>
+                    <c:forEach var="i" begin="${carRating + 2}" end="5">
+                        <i class="bi bi-star secondary-color h4"></i>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${carRating % 1 < 0.5}">
+                    <c:forEach var="i" begin="${carRating + 1}" end="5">
+                        <i class="bi bi-star secondary-color h4"></i>
+                    </c:forEach>
+                </c:if>
+            </div>
         </div>
+        <c:if test="${!trip.tripHasEnded}">
         <div class="show-row" >
             <i class="bi bi-people light-text h5"></i>
             <div class="show-row-content">
@@ -61,8 +79,10 @@
                 </span>
             </div>
         </div>
+        </c:if>
         <hr/>
         <div class="show-row">
+            <div class="show-row-content">
             <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
             <c:url value="/profile/${trip.driver.userId}" var="userUrl"/>
             <a href="${userUrl}" class="show-row profile-link">
@@ -71,6 +91,23 @@
                     <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
                 </div>
             </a>
+            </div>
+            <div class="ratings">
+                <c:forEach var="i" begin="1" end="${driverRating}">
+                    <i class="bi bi-star-fill secondary-color h4"></i>
+                </c:forEach>
+                <c:if test="${driverRating % 1 >= 0.5}">
+                    <i class="bi bi-star-half secondary-color h4"></i>
+                    <c:forEach var="i" begin="${driverRating + 2}" end="5">
+                        <i class="bi bi-star secondary-color h4"></i>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${driverRating % 1 < 0.5}">
+                    <c:forEach var="i" begin="${driverRating + 1}" end="5">
+                        <i class="bi bi-star secondary-color h4"></i>
+                    </c:forEach>
+                </c:if>
+            </div>
         </div>
         <c:if test="${param.showDriverInfo}">
         <div class="show-row">

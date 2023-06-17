@@ -49,7 +49,7 @@
 }
 
 .show-row-content {
-    display: flex;
+    display: inline-block;
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
@@ -71,6 +71,7 @@
 
 .show-row-content > .detail, .show-row > i {
     font-size: 0.9rem;
+    display: flex;
 }
 
 .show-row-content > span:not(.detail) {
@@ -102,5 +103,12 @@
 .car-image {
     border-radius: 4px;
 }
+
+.ratings{
+    display: flex;
+    justify-items: flex-end;
+    margin-left: auto;
+}
+
 
 

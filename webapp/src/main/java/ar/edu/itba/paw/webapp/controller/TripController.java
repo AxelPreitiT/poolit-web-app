@@ -106,6 +106,8 @@ public class TripController extends LoggedUserController {
         final double totalPrice = tripService.getTotalTripEarnings(passengersComplete); //TODO: arreglar
         final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengersComplete);
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(null, null, passengersToReview); //TODO: ver que lo haga un service
+        final Double driverRating = driverReviewService.getDriverRating(trip.getDriver());
+        final Double carRating = carReviewService.getCarsRating(trip.getCar());
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
         mav.addObject("passengersContent",passengers);
@@ -115,6 +117,8 @@ public class TripController extends LoggedUserController {
         mav.addObject("notAvailableSeats",notAvailableSeats);
         mav.addObject("tripReviewCollection", tripReviewCollection);
         mav.addObject("created", created);
+        mav.addObject("driverRating", driverRating);
+        mav.addObject("carRating", carRating);
         return mav;
     }
 
@@ -126,12 +130,16 @@ public class TripController extends LoggedUserController {
         final ItemReview<User> driver = driverReviewService.getDriverReviewState(trip, passenger, trip.getDriver());
         final ItemReview<Car> car = carReviewService.getCarReviewState(trip, passenger, trip.getCar());
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(driver, car, passengersToReview);
+        final Double driverRating = driverReviewService.getDriverRating(trip.getDriver());
+        final Double carRating = carReviewService.getCarsRating(trip.getCar());
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
         mav.addObject("currentPassenger",passenger);
         mav.addObject("tripReviewCollection", tripReviewCollection);
         mav.addObject("passengers",passengers);
         mav.addObject("joined", joined);
+        mav.addObject("driverRating", driverRating);
+        mav.addObject("carRating", carRating);
         return mav;
     }
 
