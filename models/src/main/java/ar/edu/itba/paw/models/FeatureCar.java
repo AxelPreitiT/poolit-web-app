@@ -6,13 +6,13 @@ public enum FeatureCar {
     MUSIC("createCar.music"),
     TRUNK_SPACE("createCar.trunkSpace");
 
-    private String code;
+    private final String code;
 
     private FeatureCar(String code){
         this.code = code;
     }
-    @Override
-    public String toString(){
+
+    public String getCode(){
         return code;
     }
 }

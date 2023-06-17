@@ -170,6 +170,7 @@ public class TripController extends LoggedUserController {
         final Optional<User> user = userService.getCurrentUser();
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
+        mav.addObject("carFeatures", FeatureCar.values());
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in SearchTripForm: {}", errors.getAllErrors());
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
@@ -182,7 +183,6 @@ public class TripController extends LoggedUserController {
             tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,null,page-1,PAGE_SIZE);
         }
         mav.addObject("tripsContent", tripsContent);
-
         return mav;
     }
 
@@ -198,6 +198,7 @@ public class TripController extends LoggedUserController {
             mav.addObject("trips", trips);
         }
         mav.addObject("cities", cities);
+        mav.addObject("carFeatures", FeatureCar.values());
         return mav;
     }
 
