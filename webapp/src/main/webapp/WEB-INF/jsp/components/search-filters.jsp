@@ -159,7 +159,7 @@
             <div class="car-features-filter">
                 <div class="title-row">
                     <i class="bi bi-car-front-fill light-text h5"></i>
-                    <h5 class="light-text">Características del auto</h5>
+                    <h5 class="light-text"><spring:message code="searchFilters.carFeatures"/></h5>
                 </div>
                 <div class="input-container">
                     <div class="input-row">
