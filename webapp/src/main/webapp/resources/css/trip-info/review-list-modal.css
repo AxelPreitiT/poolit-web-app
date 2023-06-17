@@ -1,5 +1,6 @@
-.modal-content {
+.modal-dialog-scrollable .modal-content {
     width: 35em;
+    max-height: 85%;
 }
 
 #review-form-modals .modal-body {

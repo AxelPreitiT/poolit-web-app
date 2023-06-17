@@ -89,7 +89,7 @@ public class TripController extends LoggedUserController {
         final User user = userOp.get();
         ModelAndView mav;
         if(tripService.userIsDriver(tripId,user)){
-            return tripDetailsForDriver(tripId, user, created,passengerAccepted.getValue(),passengerRejected.getValue(),notAvailableSeats.getValue(),passengersState,passengersPage);
+            mav = tripDetailsForDriver(tripId, user, created,passengerAccepted.getValue(),passengerRejected.getValue(),notAvailableSeats.getValue(),passengersState,passengersPage);
         }else if (tripService.userIsPassenger(tripId,user)){
             mav = tripDetailsForPassenger(tripId, user, joined);
         } else {
