@@ -6,6 +6,7 @@
 <jsp:useBean id="car" type="ar.edu.itba.paw.models.Car" scope="request"/>
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
+<link href="<c:url value="/resources/css/create-car/car-container.css"/>" rel="stylesheet" type="text/css"/>
 
 <div class="user-info-container-car">
   <div class="avatar-img">
@@ -28,15 +29,14 @@
     <h4><c:out value="${car.plate}"/></h4>
   </div>
   <c:if test="${!(empty car.features)}">
-    <div class="row-info">
-      <div class="no-edit">
-          <h6><spring:message code="updateCar.features"/></h6>
-          <c:forEach items="${car.features}" var="feature">
-              <label class="btn btn-custom">
-                <checkbox value="${feature}"></checkbox>
-              <spring:message code="${feature.toString()}"/>
-              </label>
-          </c:forEach>
+    <div class="no-edit row-info rows">
+      <h6><spring:message code="updateCar.features"/></h6>
+      <div id="feature-options-container edit">
+        <c:forEach items="${car.features}" var="feature">
+          <label class="btn-custom active">
+            <spring:message code="${feature.code}"/>
+          </label>
+        </c:forEach>
       </div>
     </div>
   </c:if>

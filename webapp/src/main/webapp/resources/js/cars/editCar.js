@@ -1,16 +1,27 @@
+let editing = false;
+
 function toggleEdit() {
   const noEditElements = document.querySelectorAll(".no-edit");
   const editElements = document.querySelectorAll(".edit");
 
   // Ocultar elementos con id="no-edit"
   for (let i = 0; i < noEditElements.length; i++) {
-    noEditElements[i].classList.add("hidden");
+    if (!editing) {
+      noEditElements[i].classList.add("hidden");
+    } else {
+      noEditElements[i].classList.remove("hidden");
+    }
   }
 
   // Mostrar elementos con id="edit"
   for (let i = 0; i < editElements.length; i++) {
-    editElements[i].classList.remove("hidden");
+    if (!editing) {
+      editElements[i].classList.remove("hidden");
+    } else {
+      editElements[i].classList.add("hidden");
+    }
   }
+  editing = !editing;
 }
 
 const imageFileElement = document.getElementById('image-file');
@@ -49,3 +60,25 @@ function updateImageDisplay() {
     imageLabelElement.appendChild(iconOverlay);
   }
 }
+
+const featureOptions = document.querySelectorAll('.feature-option');
+const features = {};
+
+featureOptions.forEach(featureOption => {
+  features[featureOption.id] = {
+    id: featureOption.id,
+    feature: featureOption.id.split('-')[1],
+  };
+  features[featureOption.id].inputElement = document.getElementById('input-' + features[featureOption.id].feature);
+
+
+  featureOption.addEventListener('click', () => {
+    if(featureOption.classList.contains('active')) {
+        featureOption.classList.remove('active');
+        features[featureOption.id].inputElement.setAttribute('disabled', 'disabled');
+    } else {
+        featureOption.classList.add('active');
+        features[featureOption.id].inputElement.removeAttribute('disabled');
+    }
+  });
+});
