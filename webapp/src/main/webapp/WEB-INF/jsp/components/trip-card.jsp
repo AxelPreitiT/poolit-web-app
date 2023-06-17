@@ -74,7 +74,7 @@
                             <div class="footer-date-container">
                                 <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
                                 <div class="ratings">
-                                    <img src="${userImageId}" alt="user image" class="image-photo"/>
+                                    <img src="${userImageId}" alt="user image" class="driver-image-photo"/>
                                     <c:forEach var="i" begin="1" end="${trip.driverRating}">
                                         <i class="bi bi-star-fill secondary-color h5"></i>
                                     </c:forEach>
