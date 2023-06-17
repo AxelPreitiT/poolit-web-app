@@ -27,17 +27,19 @@
     <h6><spring:message code="createCar.plate"/></h6>
     <h4><c:out value="${car.plate}"/></h4>
   </div>
-  <div class="row-info">
-    <div class="no-edit">
-        <h6><spring:message code="updateCar.features"/></h6>
-        <c:forEach items="${car.features}" var="feature">
-            <label class="btn btn-custom">
-              <checkbox value="${feature}"></checkbox>
-            <spring:message code="${feature.toString()}"/>
-            </label>
-        </c:forEach>
+  <c:if test="${!(empty car.features)}">
+    <div class="row-info">
+      <div class="no-edit">
+          <h6><spring:message code="updateCar.features"/></h6>
+          <c:forEach items="${car.features}" var="feature">
+              <label class="btn btn-custom">
+                <checkbox value="${feature}"></checkbox>
+              <spring:message code="${feature.toString()}"/>
+              </label>
+          </c:forEach>
+      </div>
     </div>
-  </div>
+  </c:if>
 
     <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
