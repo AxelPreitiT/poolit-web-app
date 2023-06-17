@@ -50,20 +50,11 @@
             </div>
             </a>
             <div class="ratings">
-                <c:forEach var="i" begin="1" end="${carRating}">
-                    <i class="bi bi-star-fill secondary-color h4"></i>
-                </c:forEach>
-                <c:if test="${carRating % 1 >= 0.5}">
-                    <i class="bi bi-star-half secondary-color h4"></i>
-                    <c:forEach var="i" begin="${carRating + 2}" end="5">
-                        <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${carRating % 1 < 0.5}">
-                    <c:forEach var="i" begin="${carRating + 1}" end="5">
-                        <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                </c:if>
+                <c:set var="rating" value="${carRating}" scope="request"/>
+                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                    <jsp:param name="fontSize" value="h6"/>
+                    <jsp:param name="fontColor" value="light-text"/>
+                </jsp:include>
             </div>
         </div>
         <c:if test="${!trip.tripHasEnded}">
@@ -93,20 +84,11 @@
             </a>
             </div>
             <div class="ratings">
-                <c:forEach var="i" begin="1" end="${driverRating}">
-                    <i class="bi bi-star-fill secondary-color h4"></i>
-                </c:forEach>
-                <c:if test="${driverRating % 1 >= 0.5}">
-                    <i class="bi bi-star-half secondary-color h4"></i>
-                    <c:forEach var="i" begin="${driverRating + 2}" end="5">
-                        <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${driverRating % 1 < 0.5}">
-                    <c:forEach var="i" begin="${driverRating + 1}" end="5">
-                        <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                </c:if>
+                <c:set var="rating" value="${driverRating}" scope="request"/>
+                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                    <jsp:param name="fontSize" value="h6"/>
+                    <jsp:param name="fontColor" value="light-text"/>
+                </jsp:include>
             </div>
         </div>
         <c:if test="${param.showDriverInfo}">

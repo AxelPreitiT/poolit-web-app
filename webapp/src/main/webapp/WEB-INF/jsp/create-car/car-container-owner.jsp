@@ -83,7 +83,10 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
             <c:set var="rating" value="${rating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                <jsp:param name="fontSize" value="h4"/>
+                <jsp:param name="fontColor" value="secondary-color"/>
+            </jsp:include>
         </div>
       </div>
     </div>

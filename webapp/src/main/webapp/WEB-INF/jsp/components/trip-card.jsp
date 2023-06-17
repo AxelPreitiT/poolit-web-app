@@ -75,20 +75,11 @@
                                 <c:url value="/image/${trip.driver.userImageId}" var="userImageId"/>
                                 <div class="ratings">
                                     <img src="${userImageId}" alt="user image" class="driver-image-photo"/>
-                                    <c:forEach var="i" begin="1" end="${trip.driverRating}">
-                                        <i class="bi bi-star-fill secondary-color h5"></i>
-                                    </c:forEach>
-                                    <c:if test="${trip.driverRating % 1 >= 0.5}">
-                                        <i class="bi bi-star-half secondary-color h5"></i>
-                                        <c:forEach var="i" begin="${trip.driverRating + 2}" end="5">
-                                            <i class="bi bi-star secondary-color h5"></i>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${trip.driverRating % 1 < 0.5}">
-                                        <c:forEach var="i" begin="${trip.driverRating + 1}" end="5">
-                                            <i class="bi bi-star secondary-color h5"></i>
-                                        </c:forEach>
-                                    </c:if>
+                                    <c:set var="rating" value="${trip.driverRating}" scope="request"/>
+                                    <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                        <jsp:param name="fontSize" value="h5"/>
+                                        <jsp:param name="fontColor" value="secondary-color"/>
+                                    </jsp:include>
                                 </div>
                             </div>
                             <div class="footer-price-container">

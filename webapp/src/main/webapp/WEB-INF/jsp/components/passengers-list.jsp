@@ -44,20 +44,11 @@
                   </div>
                 </div>
                 <div>
-                  <c:forEach var="i" begin="1" end="${user.user.passengerRating}">
-                    <i class="bi bi-star-fill light-text h4"></i>
-                  </c:forEach>
-                  <c:if test="${user.user.passengerRating % 1 >= 0.5}">
-                    <i class="bi bi-star-half light-text h4"></i>
-                    <c:forEach var="i" begin="${user.user.passengerRating + 2}" end="5">
-                      <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                  </c:if>
-                  <c:if test="${user.user.passengerRating % 1 < 0.5}">
-                    <c:forEach var="i" begin="${user.user.passengerRating + 1}" end="5">
-                      <i class="bi bi-star light-text h4"></i>
-                    </c:forEach>
-                  </c:if>
+                  <c:set var="rating" value="${user.user.passengerRating}" scope="request"/>
+                  <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                    <jsp:param name="fontSize" value="h5"/>
+                    <jsp:param name="fontColor" value="light-text"/>
+                  </jsp:include>
                 </div>
               </div>
           </c:forEach>
