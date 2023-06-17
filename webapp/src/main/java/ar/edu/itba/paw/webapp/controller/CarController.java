@@ -7,8 +7,6 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.webapp.exceptions.CarNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateCarForm;
 import ar.edu.itba.paw.webapp.form.UpdateCarForm;
@@ -22,13 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class CarController extends LoggedUserController {
+public class CarController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CarController.class);
     private static final int DEFAULT_PAGE_SIZE = 10;
@@ -41,7 +36,6 @@ public class CarController extends LoggedUserController {
 
     @Autowired
     public CarController(UserService userService, ImageService imageService,CarService carService, CarReviewService carReviewService) {
-            super(userService);
             this.carService = carService;
             this.userService = userService;
             this.imageService = imageService;
