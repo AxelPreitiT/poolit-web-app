@@ -136,8 +136,8 @@ public class UserController extends LoggedUserController {
 
         final List<Trip> futureTripsAsPassenger = tripService.getTripsWhereUserIsPassengerFuture(user, 0, PAGE_SIZE).getElements();
         final List<Trip> pastTripsAsPassenger = tripService.getTripsWhereUserIsPassengerPast(user, 0, PAGE_SIZE).getElements();
-        final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
-        final Double passengerRating = passengerReviewService.getPassengerRating(user);
+        final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviewsOwnUser( FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+        final Double passengerRating = passengerReviewService.getPassengerRatingOwnUser();
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
 
         form.setBornCityId(user.getBornCity().getId());
@@ -153,8 +153,8 @@ public class UserController extends LoggedUserController {
             final List<Trip> pastTripsAsDriver = tripService.getTripsCreatedByUserPast(user, FIRST_PAGE, PAGE_SIZE).getElements();
             final List<Car> cars = carService.findByUser();
             final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
-            final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
-            final Double driverRating = driverReviewService.getDriverRating(user);
+            final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviewsOwnUser( FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+            final Double driverRating = driverReviewService.getDriverRatingOwnUser();
             mav = new ModelAndView("/users/driver-profile");
             mav.addObject("futureTripsAsDriver", futureTripsAsDriver);
             mav.addObject("pastTripsAsDriver", pastTripsAsDriver);
@@ -192,16 +192,16 @@ public class UserController extends LoggedUserController {
     {
         LOGGER.debug("GET Request to /profile/{}", userId);
         final User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        final Double passengerRating = passengerReviewService.getPassengerRating(user);
-        final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+        final Double passengerRating = passengerReviewService.getPassengerRating(userId);
+        final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviews(userId, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
         //TODO: hacer un redirect al perfil privado?
         boolean isBlocked = userService.isBlocked(userId);
         boolean isOwnProfile = userService.isOwnUser(userId);
         final ModelAndView mav = new ModelAndView("/users/public-profile");
 
         if(Objects.equals(user.getRole(), "DRIVER")){
-            final Double driverRating = driverReviewService.getDriverRating(user);
-            final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
+            final Double driverRating = driverReviewService.getDriverRating(userId);
+            final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(userId, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
             final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
             mav.addObject("driverRating", driverRating);
             mav.addObject("reviewsAsDriver", reviewsAsDriver);

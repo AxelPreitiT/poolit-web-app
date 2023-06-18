@@ -3,9 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.exceptions.NotAvailableSeatsException;
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.persistence.TripDao;
-import ar.edu.itba.paw.interfaces.services.TripService;
-import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.trips.TripInstance;
@@ -36,16 +34,28 @@ public class TripServiceImpl implements TripService {
 
     private final UserService userService;
 
+    private final CityService cityService;
+
+    private final CarService carService;
+
     @Autowired
-    public TripServiceImpl(final TripDao tripDao, EmailService emailService1, UserService userService){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService1, UserService userService,
+                           CityService cityService1, CarService carService1){
         this.tripDao = tripDao;
         this.emailService = emailService1;
         this.userService = userService;
+        this.cityService = cityService1;
+        this.carService = carService1;
     }
 
     @Transactional
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, User driver, final LocalDate endDate, final LocalTime endTime) {
+    public Trip createTrip(final long originCityId, final String originAddress, final long destinationCityId, final String destinationAddress, final long carId, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, final LocalDate endDate, final LocalTime endTime) {
+        //TODO VER COMO TIRAR EXCEPCIONES
+        final City originCity = cityService.findCityById(originCityId).get();
+        final City destinationCity = cityService.findCityById(destinationCityId).get();
+        final Car car = carService.findById(carId).get();
+        final User driver = userService.getCurrentUser().get();
         LocalDateTime startDateTime = startDate.atTime(startTime);
         //If Trip is not recurrent, then endDateTime is the same as startDateTime
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
@@ -82,8 +92,8 @@ public class TripServiceImpl implements TripService {
     }
     @Transactional
     @Override
-    public Trip createTrip(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDate date, final LocalTime time,final BigDecimal price, final int maxSeats, User driver){
-        return createTrip(originCity,originAddress,destinationCity,destinationAddress,car,date,time,price,maxSeats,driver,date,time);
+    public Trip createTrip(final long originCityId, final String originAddress, final long destinationCityId, final String destinationAddress, final long carId, final LocalDate date, final LocalTime time,final BigDecimal price, final int maxSeats){
+        return createTrip(originCityId,originAddress,destinationCityId,destinationAddress,carId,date,time,price,maxSeats,date,time);
     }
     private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
         if(date == null || time == null || date.length()==0 || time.length()==0){

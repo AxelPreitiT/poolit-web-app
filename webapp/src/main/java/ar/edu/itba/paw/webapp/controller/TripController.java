@@ -104,7 +104,7 @@ public class TripController extends LoggedUserController {
         final List<Passenger> passengersComplete = tripService.getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         final PagedContent<Passenger> passengers = tripService.getPassengersPaged(trip,passengersState,passengersPage-1,PAGE_SIZE);
         final double totalPrice = tripService.getTotalTripEarnings(passengersComplete); //TODO: arreglar
-        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengersComplete);
+        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(tripId, passengersComplete);
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(null, null, passengersToReview); //TODO: ver que lo haga un service
         final ModelAndView mav = new ModelAndView("/trip-info/driver");
         mav.addObject("trip",trip);
@@ -122,9 +122,10 @@ public class TripController extends LoggedUserController {
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(() -> new TripNotFoundException(tripId));
         final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
-        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(trip, user, passengers);
-        final ItemReview<User> driver = driverReviewService.getDriverReviewState(trip, passenger, trip.getDriver());
-        final ItemReview<Car> car = carReviewService.getCarReviewState(trip, passenger, trip.getCar());
+        final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(tripId, passengers);
+        //Cambiar cuando se pase userId en vez de user
+        final ItemReview<User> driver = driverReviewService.getDriverReviewState(tripId);
+        final ItemReview<Car> car = carReviewService.getCarReviewState(tripId);
         final TripReviewCollection tripReviewCollection = new TripReviewCollection(driver, car, passengersToReview);
         final ModelAndView mav = new ModelAndView("/trip-info/passenger");
         mav.addObject("trip",trip);
@@ -225,11 +226,7 @@ public class TripController extends LoggedUserController {
             LOGGER.warn("Errors found in CreateTripForm: {}", errors.getAllErrors());
             return createTripForm(form);
         }
-        final City originCity = cityService.findCityById(form.getOriginCityId()).orElseThrow(() -> new CityNotFoundException(form.getOriginCityId()));
-        final City destinationCity = cityService.findCityById(form.getDestinationCityId()).orElseThrow(() -> new CityNotFoundException(form.getDestinationCityId()));
-        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        final Car car = carService.findById(form.getCarId()).orElseThrow(() -> new CarNotFoundException(form.getCarId()));
-        final Trip trip = tripService.createTrip(originCity, form.getOriginAddress(), destinationCity, form.getDestinationAddress(), car, form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),user,form.getLastDate(), form.getTime());
+        final Trip trip = tripService.createTrip(form.getOriginCityId(), form.getOriginAddress(), form.getDestinationCityId(), form.getDestinationAddress(), form.getCarId(), form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),form.getLastDate(), form.getTime());
         return new ModelAndView("redirect:/trips/" + trip.getTripId() + "?created=true");
     }
 

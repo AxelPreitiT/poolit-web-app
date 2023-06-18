@@ -38,10 +38,16 @@ public class TripServiceImplTest {
 
     private static final User user = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "USER", 1L);
     private static final City originCity = new City(1, "Agronomía", 1);
+
+    private static final long originCityId = 1;
     private static final City destinationCity = new City(1, "Agronomía", 1);
+
+    private static final long destinationCityId = 1;
     private static final String originAddress = "ORIGIN ADDRESS";
     private static final String destinationAddress = "DESTINATION ADDRESS";
     private static final Car car = new Car(1, "ABC123", "INFO", user, 1L);
+
+    private static final long carId = 1;
     private static final LocalDate startDate = LocalDate.parse("02/05/2023", DATE_FORMAT);
     private static final LocalTime startTime = LocalTime.parse("10:00", TIME_FORMAT);
     private static final BigDecimal price = BigDecimal.valueOf(10.0);
@@ -73,7 +79,8 @@ public class TripServiceImplTest {
         doNothing().when(emailService).sendMailNewTrip(any());
 
         // ejercitar la clase
-        Trip newTrip = tripService.createTrip(originCity, originAddress, destinationCity, destinationAddress, car, startDate, startTime, price, maxSeats, driver, endDate, endTime);
+        //TODO VER SI SE ROMPE, USA EL CURRENT USER
+        Trip newTrip = tripService.createTrip(originCityId, originAddress, destinationCityId, destinationAddress, carId, startDate, startTime, price, maxSeats, endDate, endTime);
 
         // assertions
         Assert.assertNotNull(newTrip);
@@ -88,7 +95,8 @@ public class TripServiceImplTest {
         doNothing().when(emailService).sendMailNewTrip(any());
 
         // ejercitar la clase
-        tripService.createTrip(originCity, originAddress, destinationCity, destinationAddress, car, startDate, startTime, price, maxSeats, driver, endDate, endTime);
+        //TODO VER SI SE ROMPE, USA EL CURRENT USER
+        tripService.createTrip(originCityId, originAddress, destinationCityId, destinationAddress, carId, startDate, startTime, price, maxSeats, endDate, endTime);
 
         Assert.fail();
     }

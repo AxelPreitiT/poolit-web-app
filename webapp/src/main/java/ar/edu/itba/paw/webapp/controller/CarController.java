@@ -80,8 +80,8 @@ public class CarController extends LoggedUserController {
         final Car car = carService.findById(carId).orElseThrow(() -> new CarNotFoundException(carId));
 
 
-        final Double carReviewRating = carReviewService.getCarsRating(car);
-        final PagedContent<CarReview> carReviews = carReviewService.getCarReviews(car, page-1, DEFAULT_PAGE_SIZE);
+        final Double carReviewRating = carReviewService.getCarsRating(carId);
+        final PagedContent<CarReview> carReviews = carReviewService.getCarReviews(carId, page-1, DEFAULT_PAGE_SIZE);
 
 
         form.setCarInfo(car.getInfoCar());
