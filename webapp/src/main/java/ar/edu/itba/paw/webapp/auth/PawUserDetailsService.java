@@ -56,7 +56,7 @@ public class PawUserDetailsService implements UserDetailsService {
             }
         }
 
-        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, true, authorities);
+        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, !user.isBanned(), authorities);
     }
 
 

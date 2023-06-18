@@ -29,6 +29,9 @@ public class User {
     @Column(nullable = false, name = "enabled", columnDefinition = "BOOLEAN DEFAULT true")
     private boolean enabled;
 
+    @Column(nullable = false, name = "banned", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean banned;
+
     @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = user_id AND user_reviews.review_id IN (SELECT passenger_reviews.review_id FROM passenger_reviews))")
     private double passengerRating;
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
@@ -94,12 +97,21 @@ public class User {
         this.blocked = new HashSet<>();
         this.blockedBy = new HashSet<>();
         this.enabled = false;
+        this.banned = false;
     }
 
     @Override
     public String toString() {
         return String.format("User { id: %d, name: '%s', surname: '%s', email: '%s', phone: '%s', bornCity: '%s', mailLocale: '%s', role: '%s', userImageId: %d }",
                 userId, name, surname, email, phone, bornCity, mailLocale, role, userImageId);
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 
     public String getRole() {
