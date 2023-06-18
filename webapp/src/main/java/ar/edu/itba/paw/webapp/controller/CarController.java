@@ -1,15 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.CarReviewService;
 import ar.edu.itba.paw.interfaces.services.CarService;
-import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.reviews.CarReview;
-import ar.edu.itba.paw.webapp.exceptions.CarNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
+import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.webapp.form.CreateCarForm;
 import ar.edu.itba.paw.webapp.form.UpdateCarForm;
 import org.slf4j.Logger;
@@ -22,10 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class CarController extends LoggedUserController {
@@ -55,7 +48,7 @@ public class CarController extends LoggedUserController {
 
     @RequestMapping(value = "/cars/create", method = RequestMethod.POST)
     public ModelAndView postCar(@Valid @ModelAttribute("createCarForm") final CreateCarForm form,
-                                final BindingResult errors) throws IOException {
+                                final BindingResult errors) throws IOException, UserNotFoundException {
         LOGGER.debug("POST Request to /cars/create");
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in CreateCarForm: {}", errors.getAllErrors());
@@ -75,21 +68,17 @@ public class CarController extends LoggedUserController {
             @PathVariable("id") final long carId,
             @RequestParam(value = "page", required = false, defaultValue = "1") final int page,
             @ModelAttribute("updateCarForm") final UpdateCarForm form
-    ){
+    ) throws CarNotFoundException{
         LOGGER.debug("GET Request to /cars/{}", carId);
-        final Car car = carService.findById(carId).orElseThrow(() -> new CarNotFoundException(carId));
-
-
+        final Car car = carService.findById(carId).orElseThrow(() -> new CarNotFoundException());
         final Double carReviewRating = carReviewService.getCarsRating(carId);
         final PagedContent<CarReview> carReviews = carReviewService.getCarReviews(carId, page-1, DEFAULT_PAGE_SIZE);
 
-
-        form.setCarInfo(car.getInfoCar());
-        form.setSeats(car.getSeats());
-        form.setFeatures(car.getFeatures());
-
         final ModelAndView mav;
-        if( carService.isCarOwner(car)){
+        if( carService.currentUserIsCarOwner(car)){
+            form.setCarInfo(car.getInfoCar());
+            form.setSeats(car.getSeats());
+            form.setFeatures(car.getFeatures());
             mav = new ModelAndView("/create-car/car-detail-owner");
             mav.addObject("allFeatures", FeatureCar.values());
         }else {
@@ -105,13 +94,17 @@ public class CarController extends LoggedUserController {
 
     @RequestMapping(value = "/cars/{id:\\d+$}", method = RequestMethod.POST)
     public ModelAndView carUpdate(@PathVariable("id") final long carId,@Valid @ModelAttribute("updateCarForm") final UpdateCarForm form,
-                                  final BindingResult errors) throws IOException{
+                                  final BindingResult errors) throws IOException, CarNotFoundException{
         LOGGER.debug("Update Request to /cars/{}", carId);
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in updateCarForm: {}", errors.getAllErrors());
             return publicCar(carId, FIRST_PAGE, form);
         }
-        carService.ModifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures(), form.getImageFile().getBytes());
+        try {
+            carService.ModifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures(), form.getImageFile().getBytes());
+        } catch (CarNotFoundException e){
+            throw e;
+        }
         return publicCar(carId, FIRST_PAGE, form);
     }
 

@@ -1,17 +1,15 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.VerificationToken;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Optional;
 
 public interface UserService {
     User createUser(final String username, final String surname, final String email,
-                    final String phone, final String password, final long bornCityId, final Locale mailLocale, String role, byte[] imgData) throws EmailAlreadyExistsException;
+                    final String phone, final String password, final long bornCityId, final String mailLocaleString, String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException;
 
     Optional<User> getCurrentUser();
     Optional<User> findById(long userId);
@@ -19,16 +17,20 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     void loginUser(final String email, final String password);
 
-    void changeToDriver();
+    void changeToDriver() throws UserNotFoundException;
 
     boolean confirmRegister(String token);
 
-    void blockUser( long blockedId);
-    void unblockUser( long blockedId);
-    boolean isBlocked( long blockedId);
-    void modifyUser(String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
+    void blockUser( long blockedId) throws UserNotFoundException;
+    void unblockUser( long blockedId) throws UserNotFoundException;
+    boolean isBlocked( long blockedId) throws UserNotFoundException;
+    void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException;
 
-    boolean isOwnUser(long userId);
+    boolean isCurrentUser(long userId) throws UserNotFoundException;
 
     boolean sendVerificationEmail(String email);
+
+    public boolean isDriver(User user);
+
+    public boolean isUser(User user);
 }

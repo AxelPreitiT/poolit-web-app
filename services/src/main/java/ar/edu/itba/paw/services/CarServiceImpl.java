@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
@@ -33,21 +35,21 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public Car createCar(String plate, String infoCar, byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features){
-        User user = userService.getCurrentUser().get();
+    public Car createCar(String plate, String infoCar, byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features) throws UserNotFoundException {
+        User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         final long image_id = imageService.createImage(imgData).getImageId();
         return carDao.create(plate, infoCar, user, image_id, seats, brand, features);
     }
 
     @Transactional
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) {
+    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
         //TODO Fijarse si esto es facade
-        Optional<Car> car=findById(carId);
-        if (car.isPresent()){
-            imageService.replaceImage(car.get().getImage_id(),imgData);
-        }
+        Car car=findById(carId).orElseThrow(CarNotFoundException::new);
+
+        imageService.replaceImage(car.getImage_id(),imgData);
         return carDao.ModifyCar(carId, infoCar, seats, features);
+
 
     }
 
@@ -57,9 +59,9 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<Car> findByUser() {
+    public List<Car> findCurrentUserCars() throws UserNotFoundException {
         //TODO Chequear si esta funcion esta hecha para solo ser usada por el usuario principal
-        User user = userService.getCurrentUser().get();
+        User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         return carDao.findByUser(user);
     }
 
@@ -69,8 +71,11 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public boolean isCarOwner(Car car){
-        User user = userService.getCurrentUser().get();
-        return car.getUser().getUserId() == user.getUserId();
+    public boolean currentUserIsCarOwner(Car car){
+        Optional<User> user = userService.getCurrentUser();
+        if(user.isPresent()){
+            return car.getUser().getUserId() == user.get().getUserId();
+        }
+        return false;
     }
 }

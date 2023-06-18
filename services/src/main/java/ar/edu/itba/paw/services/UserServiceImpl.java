@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.City;
@@ -90,10 +92,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final long bornCityId, final Locale mailLocale, final String role, byte[] imgData) throws EmailAlreadyExistsException{
+                           final String phone, final String password, final long bornCityId, final String mailLocaleString, final String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException {
 
-        //TODO Locale en facade? pasarle imagen como array de bytes o como MPFile? Forma correcta de agregar excepciones de city no encontrada?
-        final City bornCity = cityService.findCityById(bornCityId).get();
+        final City bornCity = cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new);
         final long user_image_id = imageService.createImage(imgData).getImageId();
         String finalRole = (role == null) ? Roles.USER.role : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
@@ -105,12 +106,12 @@ public class UserServiceImpl implements UserService {
                 throw exception;
             }else{
                 LOGGER.debug("Email '{}' already exists in the database but has not registered yet, updating user", email);
-                User ans = userDao.updateProfile(username, surname, email, passwordEncoder.encode(password), bornCity, mailLocale.toString(), finalRole, user_image_id);
+                User ans = userDao.updateProfile(username, surname, email, passwordEncoder.encode(password), bornCity, mailLocaleString, finalRole, user_image_id);
                 LOGGER.info("User with email '{}' updated in the database", email);
                 return ans;
             }
         }
-        User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
+        User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, new Locale(mailLocaleString), finalRole, user_image_id);
         VerificationToken token = tokenService.createToken(finalUser);
         try {
             emailService.sendVerificationEmail(finalUser, token.getToken());
@@ -120,6 +121,16 @@ public class UserServiceImpl implements UserService {
         return finalUser;
     }
 
+
+    @Override
+    public boolean isDriver(User user){
+        return user.getRole().equals(Roles.DRIVER.getRole());
+    }
+
+    @Override
+    public boolean isUser(User user){
+        return user.getRole().equals(Roles.USER.getRole());
+    }
     @Override
     public void loginUser(final String email, final String password){
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
@@ -149,35 +160,38 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeToDriver() {
-        User user = getCurrentUser().get();
+    public void changeToDriver() throws UserNotFoundException {
+        User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
     }
 
     @Transactional
     @Override
-    public void blockUser( long blockedId) {
-        User blocker = getCurrentUser().get();
+    public void blockUser( long blockedId) throws UserNotFoundException{
+        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
         userDao.blockUser(blocker.getUserId(),blockedId);
     }
 
     @Transactional
     @Override
-    public void unblockUser( long blockedId) {
-        User blocker = getCurrentUser().get();
+    public void unblockUser( long blockedId) throws UserNotFoundException{
+        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
         userDao.unblockUser(blocker.getUserId(),blockedId);
     }
 
     @Override
-    public boolean isBlocked( long blockedId) {
-        User blocker = getCurrentUser().get();
+    public boolean isBlocked( long blockedId) throws UserNotFoundException {
+        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
         return userDao.isBlocked(blocker.getUserId(),blockedId);
     }
 
     @Override
-    public boolean isOwnUser(long userId){
-        User user = getCurrentUser().get();
-        return user.getUserId() == userId;
+    public boolean isCurrentUser(long userId) throws UserNotFoundException {
+        Optional<User> user = getCurrentUser();
+        if(user.isPresent()){
+            return user.orElseThrow(UserNotFoundException::new).getUserId() == userId;
+        }
+        return false;
     }
 
     @Override
@@ -250,12 +264,12 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    public void modifyUser(String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData) {
+    public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
         Optional<User> user = getCurrentUser();
         if(user.isPresent()){
             imageService.replaceImage(user.get().getUserImageId(),imgData);
+            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString));
         }
-        userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).get(),mailLocale);
     }
 
 }
