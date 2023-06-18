@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models.reports;
 
+import ar.edu.itba.paw.models.Format;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 
@@ -145,4 +146,9 @@ public class Report {
     public void setAdminReason(String adminReason) {
         this.adminReason = adminReason;
     }
+
+    public String getDateString(){
+        return date.format(Format.getDateFormatter());
+    }
+
 }
