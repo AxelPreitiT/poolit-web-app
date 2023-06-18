@@ -293,8 +293,15 @@ public class Trip {
         return driverRating;
     }
 
+    public double getCarRating() {
+        return carRating;
+    }
+
     public enum SortType{
         PRICE(),
         TIME(),
+
+        DRIVER_RATING(),
+        CAR_RATING(),
     }
 }

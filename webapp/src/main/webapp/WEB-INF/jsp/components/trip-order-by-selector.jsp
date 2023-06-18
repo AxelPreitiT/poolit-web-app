@@ -9,6 +9,8 @@
   <c:set value="${param.sortType eq 'price' && param.descending eq true}" var="priceDesc"/>
   <c:set value="${param.sortType eq 'time' && param.descending eq false}" var="timeAsc"/>
   <c:set value="${param.sortType eq 'time' && param.descending eq true}" var="timeDesc"/>
+  <c:set value="${param.sortType eq 'driver_rating'}" var="driverRatingDesc"/>
+  <c:set value="${param.sortType eq 'car_rating'}" var="carRatingDesc"/>
   <div id="order-by-select" class="dropdown">
     <button class="btn btn-secondary dropdown-toggle secondary-bg-color" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       <spring:message code="component.orderFilter.title"/> <span>
@@ -21,6 +23,12 @@
         </c:when>
         <c:when test="${timeDesc}">
           <spring:message code="component.orderFilter.dateDesc"/>
+        </c:when>
+        <c:when test="${driverRatingDesc}">
+          <spring:message code="component.orderFilter.driverRatingDesc"/>
+        </c:when>
+        <c:when test="${carRatingDesc}">
+          <spring:message code="component.orderFilter.carRatingDesc"/>
         </c:when>
         <c:otherwise>
           <spring:message code="component.orderFilter.priceAsc"/>
@@ -44,6 +52,14 @@
         <c:param name="descending" value="false"/>
       </c:url>
       <li><a class="sort-item <c:if test="${timeAsc}">active</c:if>" href="${timeAscUrl}"><spring:message code="component.orderFilter.dateAsc"/></a></li>
+      <c:url value="${param.baseUrl}" var="driverRatingDescUrl">
+        <c:param name="sortType" value="driver_rating"/>
+      </c:url>
+      <li><a class="sort-item <c:if test="${timeDesc}">active</c:if>" href="${driverRatingDescUrl}"><spring:message code="component.orderFilter.dateDesc"/></a></li>
+      <c:url value="${param.baseUrl}" var="carRatingDescUrl">
+        <c:param name="sortType" value="car_rating"/>
+      </c:url>
+      <li><a class="sort-item <c:if test="${timeDesc}">active</c:if>" href="${carRatingDescUrl}"><spring:message code="component.orderFilter.dateDesc"/></a></li>
       <c:url value="${param.baseUrl}" var="timeDescUrl">
         <c:param name="sortType" value="time"/>
         <c:param name="descending" value="true"/>
