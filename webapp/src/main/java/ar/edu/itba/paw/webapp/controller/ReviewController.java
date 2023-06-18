@@ -145,7 +145,7 @@ public class ReviewController extends LoggedUserController {
         final Double driverRating = driverReviewService.getDriverRating(user);
         final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user, FIRST_PAGE, MIN_PAGE_SIZE);
         final User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        boolean isBlocked = userService.isBlocked(currentUser,user);
+        boolean isBlocked = userService.isBlocked(user.getUserId());
         boolean isOwnProfile = user.equals(currentUser);
         mav.addObject("passengerRating", passengerRating);
         mav.addObject("driverRating", driverRating);

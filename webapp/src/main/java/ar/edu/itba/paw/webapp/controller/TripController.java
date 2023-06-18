@@ -206,7 +206,7 @@ public class TripController extends LoggedUserController {
         LOGGER.debug("GET Request to {}", CREATE_TRIP_PATH);
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
-        final List<Car> userCars = carService.findByUser(user);
+        final List<Car> userCars = carService.findByUser();
 
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);

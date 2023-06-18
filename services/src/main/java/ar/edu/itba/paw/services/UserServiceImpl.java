@@ -2,10 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
-import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.ImageService;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.interfaces.services.TokenService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.VerificationToken;
@@ -35,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
 
     private final CityService cityService;
+
+    private final EmailService emailService;
 
     private final UserDao userDao;
 
@@ -76,21 +75,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
-                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1){
+                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1,
+                           final EmailService emailService1){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         //this.userDetailsService = userDetailsService;
-        this.imageService=imageService1;
-        this.cityService=cityService1;
+        this.imageService = imageService1;
+        this.cityService = cityService1;
+        this.emailService = emailService1;
     }
 
     @Transactional
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) throws EmailAlreadyExistsException{
+                           final String phone, final String password, final long bornCityId, final Locale mailLocale, final String role, byte[] imgData) throws EmailAlreadyExistsException{
 
+        //TODO Locale en facade? pasarle imagen como array de bytes o como MPFile? Forma correcta de agregar excepciones de city no encontrada?
+        final City bornCity = cityService.findCityById(bornCityId).get();
+        final long user_image_id = imageService.createImage(imgData).getImageId();
         String finalRole = (role == null) ? Roles.USER.role : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
@@ -106,7 +110,14 @@ public class UserServiceImpl implements UserService {
                 return ans;
             }
         }
-        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
+        User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
+        VerificationToken token = tokenService.createToken(finalUser);
+        try {
+            emailService.sendVerificationEmail(finalUser, token.getToken());
+        } catch (Exception e) {
+            LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.getUserId(), e);
+        }
+        return finalUser;
     }
 
     @Override
@@ -138,29 +149,59 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeToDriver(User user) {
+    public void changeToDriver() {
+        User user = getCurrentUser().get();
         userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
     }
 
     @Transactional
     @Override
-    public void blockUser(User blocker, User blocked) {
-        userDao.blockUser(blocker,blocked);
+    public void blockUser( long blockedId) {
+        User blocker = getCurrentUser().get();
+        userDao.blockUser(blocker.getUserId(),blockedId);
     }
 
     @Transactional
     @Override
-    public void unblockUser(User blocker, User blocked) {
-        userDao.unblockUser(blocker,blocked);
+    public void unblockUser( long blockedId) {
+        User blocker = getCurrentUser().get();
+        userDao.unblockUser(blocker.getUserId(),blockedId);
     }
 
     @Override
-    public boolean isBlocked(User blocker, User blocked) { return userDao.isBlocked(blocker,blocked); }
+    public boolean isBlocked( long blockedId) {
+        User blocker = getCurrentUser().get();
+        return userDao.isBlocked(blocker.getUserId(),blockedId);
+    }
+
+    @Override
+    public boolean isOwnUser(long userId){
+        User user = getCurrentUser().get();
+        return user.getUserId() == userId;
+    }
+
+    @Override
+    public boolean sendVerificationEmail(String email){
+        Optional<User> finalUser = findByEmail(email);
+        if(finalUser.isPresent()){
+            if (finalUser.get().isEnabled()){
+                return false;
+            }
+            String token = tokenService.updateToken(finalUser.get());
+            try {
+                emailService.sendVerificationEmail(finalUser.get(), token);
+            } catch (Exception e) {
+                LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.get().getUserId(), e);
+            }
+        }
+        return true;
+    }
 
     //TODO: usar el otro enum
     @Transactional
     @Override
-    public boolean confirmRegister(VerificationToken verificationToken) {
+    public boolean confirmRegister(String token) {
+        VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
         if(verificationToken == null){
             return false;
         }
@@ -209,12 +250,12 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    public void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData) {
-        Optional<User> user = findById(userId);
+    public void modifyUser(String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData) {
+        Optional<User> user = getCurrentUser();
         if(user.isPresent()){
             imageService.replaceImage(user.get().getUserImageId(),imgData);
         }
-        userDao.modifyUser(userId,username,surname,phone,cityService.findCityById(bornCityId).get(),mailLocale);
+        userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).get(),mailLocale);
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UserService {
     User createUser(final String username, final String surname, final String email,
-                    final String phone, final String password, final City bornCity, final Locale mailLocale, String role, long user_image_id) throws EmailAlreadyExistsException;
+                    final String phone, final String password, final long bornCityId, final Locale mailLocale, String role, byte[] imgData) throws EmailAlreadyExistsException;
 
     Optional<User> getCurrentUser();
     Optional<User> findById(long userId);
@@ -19,12 +19,16 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     void loginUser(final String email, final String password);
 
-    void changeToDriver(User user);
+    void changeToDriver();
 
-    boolean confirmRegister(VerificationToken verificationToken);
+    boolean confirmRegister(String token);
 
-    void blockUser(User blocker, User blocked);
-    void unblockUser(User blocker, User blocked);
-    boolean isBlocked(User blocker, User blocked);
-    void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
+    void blockUser( long blockedId);
+    void unblockUser( long blockedId);
+    boolean isBlocked( long blockedId);
+    void modifyUser(String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
+
+    boolean isOwnUser(long userId);
+
+    boolean sendVerificationEmail(String email);
 }

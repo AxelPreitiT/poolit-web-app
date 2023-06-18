@@ -30,6 +30,7 @@ public class UserServiceImplTest {
     private static final String phone = "3424394741";
     private static final String password = "password";
     private static final City bornCity = new City(1, "Agronomía", 1);
+    private static final long bornCityId = 1;
     private static final Locale mailLocale = new Locale("es");
     private static final String role = "USER";
     private static final long userImageId = 1;
@@ -50,7 +51,8 @@ public class UserServiceImplTest {
         when(passwordEncoder.encode(Mockito.anyString())).thenReturn(password);
 
         // ejercitar la clase
-        User newUSer = us.createUser(name, surname, email, phone, password, bornCity, mailLocale, role, userImageId);
+        //TODO cambiar imagen a no null
+        User newUSer = us.createUser(name, surname, email, phone, password, bornCityId, mailLocale, role, null);
 
         // assertions
         Assert.assertNotNull(newUSer);

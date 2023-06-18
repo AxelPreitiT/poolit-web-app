@@ -43,14 +43,8 @@ public class UserController extends LoggedUserController {
 
     private final TripService tripService;
 
-    private final ImageService imageService;
     private final PassengerReviewService passengerReviewService;
     private final DriverReviewService driverReviewService;
-
-    private final TokenService tokenService;
-
-    //TODO: sacar de aca, llevarlo al service
-    private final EmailService emailService;
 
     private final PawUserDetailsService pawUserDetailsService;
 
@@ -68,8 +62,7 @@ public class UserController extends LoggedUserController {
     @Autowired
     public UserController(final CityService cityService, final  UserService userService,
                           final PawUserDetailsService pawUserDetailsService, final TripService tripService,
-                          final CarService carService, final ImageService imageService,
-                          final TokenService tokenService, final EmailService emailService,
+                          final CarService carService,
                           final PassengerReviewService passengerReviewService,
                           final DriverReviewService driverReviewService) {
         super(userService);
@@ -78,11 +71,8 @@ public class UserController extends LoggedUserController {
         this.pawUserDetailsService = pawUserDetailsService;
         this.tripService = tripService;
         this.carService = carService;
-        this.imageService = imageService;
         this.passengerReviewService = passengerReviewService;
         this.driverReviewService = driverReviewService;
-        this.tokenService = tokenService; //TODO: sacar
-        this.emailService = emailService; //TODO: sacar
     }
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.GET)
@@ -107,14 +97,9 @@ public class UserController extends LoggedUserController {
             LOGGER.warn("Errors found in CreateUserForm: {}", errors.getAllErrors());
             return createUserGet(form);
         }
-        final byte[] data = form.getImageFile().getBytes();
-        final Image image=imageService.createImage(data);
-        final City originCity = cityService.findCityById(form.getBornCityId()).orElseThrow(() -> new CityNotFoundException(form.getBornCityId()));
         try {
             User user = userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
-                    form.getPassword(), originCity, new Locale(form.getMailLocale()), null, image.getImageId());
-            VerificationToken token = tokenService.createToken(user);
-            emailService.sendVerificationEmail(user, token.getToken());
+                    form.getPassword(), form.getBornCityId(), new Locale(form.getMailLocale()), null, form.getImageFile().getBytes());
 
             //userService.loginUser(form.getEmail(), form.getPassword());
         }catch (EmailAlreadyExistsException e){
@@ -166,7 +151,7 @@ public class UserController extends LoggedUserController {
         } else {
             final List<Trip> futureTripsAsDriver = tripService.getTripsCreatedByUserFuture(user, FIRST_PAGE, PAGE_SIZE).getElements();
             final List<Trip> pastTripsAsDriver = tripService.getTripsCreatedByUserPast(user, FIRST_PAGE, PAGE_SIZE).getElements();
-            final List<Car> cars = carService.findByUser(user);
+            final List<Car> cars = carService.findByUser();
             final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user,FIRST_PAGE,0);
             final List<DriverReview> reviewsAsDriver = driverReviewService.getDriverReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
             final Double driverRating = driverReviewService.getDriverRating(user);
@@ -196,9 +181,8 @@ public class UserController extends LoggedUserController {
             LOGGER.warn("Errors found in updateUserForm: {}", errors.getAllErrors());
             return profileView(false,form);
         }
-        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
-        userService.modifyUser(user.getUserId(), form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),new Locale(form.getMailLocale()), form.getImageFile().getBytes());
+        userService.modifyUser( form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),new Locale(form.getMailLocale()), form.getImageFile().getBytes());
 
         return profileView(false,form);
     }
@@ -211,9 +195,8 @@ public class UserController extends LoggedUserController {
         final Double passengerRating = passengerReviewService.getPassengerRating(user);
         final List<PassengerReview> reviewsAsPassenger = passengerReviewService.getPassengerReviews(user, FIRST_PAGE, REVIEW_PAGE_SIZE).getElements();
         //TODO: hacer un redirect al perfil privado?
-        final User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        boolean isBlocked = userService.isBlocked(currentUser,user);
-        boolean isOwnProfile = user.equals(currentUser);
+        boolean isBlocked = userService.isBlocked(userId);
+        boolean isOwnProfile = userService.isOwnUser(userId);
         final ModelAndView mav = new ModelAndView("/users/public-profile");
 
         if(Objects.equals(user.getRole(), "DRIVER")){
@@ -235,10 +218,8 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value="/profile/{id:\\d+$}/block", method = RequestMethod.POST)
     public ModelAndView profileBlock(@PathVariable("id") final long userId){
         LOGGER.debug("Blocking /profile/{}", userId);
-        final User userBlocked = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        final User userBlocker = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
-        userService.blockUser(userBlocker, userBlocked);
+        userService.blockUser(userId);
 
         return new ModelAndView("redirect:/profile/" + userId);
 
@@ -246,10 +227,8 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value="/profile/{id:\\d+$}/unblock", method = RequestMethod.POST)
     public ModelAndView profileUnblock(@PathVariable("id") final long userId){
         LOGGER.debug("Unblocking /profile/{}", userId);
-        final User userBlocked = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        final User userBlocker = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
 
-        userService.unblockUser(userBlocker, userBlocked);
+        userService.unblockUser(userId);
 
         return new ModelAndView("redirect:/profile/" + userId);
 
@@ -257,17 +236,17 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
     public ModelAndView changeRoleToDriver(){
         LOGGER.debug("POST Request to /changeRole");
+        //TODO no estoy seguro que hacer aca para facade
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         pawUserDetailsService.update(user);
-        userService.changeToDriver(user);
+        userService.changeToDriver();
         return new ModelAndView("redirect:/trips/create");
     }
 
     @RequestMapping(value = "/register/confirm")
     public ModelAndView confirmRegistration(@RequestParam("token") final String token) {
-        VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
 
-        if (userService.confirmRegister(verificationToken)) {
+        if (userService.confirmRegister(token)) {
             return new ModelAndView("redirect:/");
         }
         final ModelAndView mav = new ModelAndView("/users/sendToken");
@@ -284,19 +263,15 @@ public class UserController extends LoggedUserController {
     @RequestMapping(value = "/users/sendToken", method = RequestMethod.POST)
     public ModelAndView postCar(@Valid @ModelAttribute("emailForm") final EmailForm form,
                                 final BindingResult errors) throws Exception {
+
         if(errors.hasErrors()){
             return sendToken(form);
         }
         final ModelAndView mav = new ModelAndView("/users/login");
-        //TODO: Revisar reducir la logica en controller
-        Optional<User> user = userService.findByEmail(form.getEmail());
-        if(user.isPresent()){
-            if(user.get().isEnabled()){
-                mav.addObject("alreadyValidation", true);
-                return mav;
-            }
-            String token = tokenService.updateToken(user.get());
-            emailService.sendVerificationEmail(user.get(), token);
+        //sendVerification devuelve falso si ya esta verificado
+        if(!userService.sendVerificationEmail(form.getEmail())){
+            mav.addObject("alreadyValidation", true);
+            return mav;
         }
         mav.addObject("sentToken", true);
         return mav;
