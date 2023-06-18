@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -24,4 +25,5 @@ public interface UserDao {
     void blockUser(User blocker, User blocked);
     void unblockUser(User blocker, User blocked);
     boolean isBlocked(User blocker, User blocked);
+    public List<User> getAdmins();
 }

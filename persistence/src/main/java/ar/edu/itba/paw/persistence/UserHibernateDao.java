@@ -131,5 +131,15 @@ public class UserHibernateDao implements UserDao {
         return count > 0;
     }
 
+    @Override
+    public List<User> getAdmins() {
+        LOGGER.debug("Getting all admins from the database");
+        final TypedQuery<User> query = (em.createQuery("from User as u where u.role= :role", User.class));
+        query.setParameter("role", "ADMIN");
+        final List<User> result = query.getResultList();
+        LOGGER.debug("Found {} admins in the database", result.size());
+        return result;
+    }
+
 
 }

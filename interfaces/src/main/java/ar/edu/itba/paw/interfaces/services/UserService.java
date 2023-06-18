@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.VerificationToken;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -27,4 +28,6 @@ public interface UserService {
     void unblockUser(User blocker, User blocked);
     boolean isBlocked(User blocker, User blocked);
     void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
+
+    public List<User> getAdmins();
 }

@@ -191,4 +191,9 @@ public class UserServiceImpl implements UserService {
         userDao.modifyUser(userId,username,surname,phone,cityService.findCityById(bornCityId).get(),mailLocale);
     }
 
+    @Transactional
+    @Override
+    public List<User> getAdmins(){
+        return userDao.getAdmins();
+    }
 }

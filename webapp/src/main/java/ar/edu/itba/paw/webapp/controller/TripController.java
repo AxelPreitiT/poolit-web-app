@@ -37,6 +37,7 @@ public class TripController extends LoggedUserController {
     private final PassengerReviewService passengerReviewService;
     private final DriverReviewService driverReviewService;
     private final CarReviewService carReviewService;
+    private final ReportService reportService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static int PAGE_SIZE = 10;
@@ -55,7 +56,7 @@ public class TripController extends LoggedUserController {
     private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
-    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService) {
+    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService, final ReportService reportService) {
         super(userService);
         this.tripService = tripService;
         this.cityService = cityService;
@@ -64,6 +65,7 @@ public class TripController extends LoggedUserController {
         this.passengerReviewService = passengerReviewService;
         this.driverReviewService = driverReviewService;
         this.carReviewService = carReviewService;
+        this.reportService = reportService;
     }
 
     @RequestMapping(value = TRIP_DETAILS_PATH,method = RequestMethod.GET)
@@ -77,6 +79,7 @@ public class TripController extends LoggedUserController {
                                        @RequestParam(value = "created", required = false, defaultValue = "false") final boolean created,
                                        @RequestParam(value = "joined", required = false, defaultValue = "false") final boolean joined,
                                        @RequestParam(value = "reviewed", required = false, defaultValue = "false") final boolean reviewed,
+                                       @RequestParam(value = "reported", required = false, defaultValue = "false") final boolean reported,
                                        @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
                                        @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
@@ -89,13 +92,15 @@ public class TripController extends LoggedUserController {
         final User user = userOp.get();
         ModelAndView mav;
         if(tripService.userIsDriver(tripId,user)){
-            return tripDetailsForDriver(tripId, user, created,passengerAccepted.getValue(),passengerRejected.getValue(),notAvailableSeats.getValue(),passengersState,passengersPage);
+            mav = tripDetailsForDriver(tripId, user, created,passengerAccepted.getValue(),passengerRejected.getValue(),notAvailableSeats.getValue(),passengersState,passengersPage);
         }else if (tripService.userIsPassenger(tripId,user)){
             mav = tripDetailsForPassenger(tripId, user, joined);
         } else {
             return tripDetailsForReservation(tripId,form);
         }
+        mav.addObject("tripReportCollection", reportService.getTripReportCollection(tripId));
         mav.addObject("reviewed", reviewed);
+        mav.addObject("reported", reported);
         return mav;
     }
 
