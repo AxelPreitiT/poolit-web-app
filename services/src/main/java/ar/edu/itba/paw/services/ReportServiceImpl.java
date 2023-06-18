@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ReportService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reports.*;
@@ -41,18 +42,20 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Report create(User reporter, User reported, Trip trip, String description, LocalDateTime date, ReportRelations relation, ReportOptions reason) {
+    public Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason){
+        User reported = userService.findById(reportedId).orElseThrow(IllegalArgumentException::new);
+        Trip trip = tripService.findById(tripId).orElseThrow(IllegalArgumentException::new);
+        User reporter = userService.getCurrentUser().orElseThrow(IllegalArgumentException::new);
+        LocalDateTime date = LocalDateTime.now();
         Report resp = reportDao.create(reporter, reported, trip, description, date, relation, reason);
         List<User> admins = userService.getAdmins();
-        for ( : ) {
-
-        }
-
-        try {
-            emailService.sendMailNewReport(resp, );
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
+        for ( User admin:  admins) {
+            try {
+                emailService.sendMailNewReport(resp, admin);
+            }
+            catch( Exception e){
+                LOGGER.error("There was an error sending the email", e);
+            }
         }
         return resp;
     }
@@ -95,6 +98,24 @@ public class ReportServiceImpl implements ReportService {
         catch( Exception e){
             LOGGER.error("There was an error sending the email", e);
         }
+        PagedContent<Trip> pgTripDriver = tripService.getTripsCreatedByUserFuture(report.getReported(), 0, 10);
+        for(int i = 0; i < pgTripDriver.getTotalPages(); i++){
+            List<Trip> trips = pgTripDriver.getElements();
+            for(Trip trip : trips){
+                tripService.deleteTrip(trip);
+            }
+            pgTripDriver = tripService.getTripsCreatedByUserFuture(report.getReported(), i+1, 10);
+        }
+
+        PagedContent<Trip> pgTripUser = tripService.getTripsWhereUserIsPassengerFuture(report.getReported(), 0, 10);
+        for(int i = 0; i < pgTripUser.getTotalPages(); i++){
+            List<Trip> trips = pgTripUser.getElements();
+            for(Trip trip : trips){
+                tripService.rejectPassenger(trip.getTripId(), report.getReported().getUserId());
+            }
+            pgTripUser = tripService.getTripsWhereUserIsPassengerFuture(report.getReported(), i+1, 10);
+        }
+        //Falta elimar el pasajero de los viajes
     }
 
     public Optional<Report> getReportByTripAndUsers(long tripId, long reporterId, long reportedId){

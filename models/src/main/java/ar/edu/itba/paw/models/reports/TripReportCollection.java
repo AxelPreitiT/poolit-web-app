@@ -23,15 +23,15 @@ public class TripReportCollection {
         return passengers;
     }
 
-    public boolean getCanReviewDriver() {
+    public boolean getCanReportDriver() {
         return driver != null;
     }
 
-    public boolean getCanReviewPassengers() {
+    public boolean getCanReportPassengers() {
         return passengers != null && !passengers.isEmpty();
     }
 
-    public boolean getCanReview() {
-        return getCanReviewDriver() || getCanReviewPassengers();
+    public boolean getCanReport() {
+        return getCanReportDriver() || getCanReportPassengers();
     }
 }

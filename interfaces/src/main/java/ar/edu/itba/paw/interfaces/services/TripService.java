@@ -86,8 +86,8 @@ public interface TripService {
             final User searchUser, final int page, final int pageSize);
 
 
-    public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
+    boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
 
-    public boolean rejectPassenger(final long tripId, final long userId);
+    boolean rejectPassenger(final long tripId, final long userId);
 
 }

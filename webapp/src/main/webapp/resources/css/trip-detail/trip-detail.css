@@ -35,6 +35,13 @@
     margin-top: -0.2em;
 }
 
+#trip-operations-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    row-gap: 1em;
+}
+
 #button-container {
     display: flex;
     flex-direction: row;

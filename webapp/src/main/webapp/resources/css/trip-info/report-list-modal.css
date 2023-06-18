@@ -1,0 +1,9 @@
+@import "review-list-modal.css";
+
+#report-form-modals .modal-body {
+    padding: 0;
+}
+
+#report-published-container {
+    margin-bottom: 1em;
+}

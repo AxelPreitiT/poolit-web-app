@@ -118,6 +118,6 @@
       </div>
     </c:if>
   </div>
+  <script src="<c:url value="/resources/js/pages/trip-info/review-list-modal.js"/>"></script>
 </div>
 
-<script src="<c:url value="/resources/js/pages/trip-info/review-list-modal.js"/>"></script>

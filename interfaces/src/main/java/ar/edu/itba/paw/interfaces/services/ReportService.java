@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface ReportService {
 
-    Report create(User reporter, User reported, Trip trip, String description, LocalDateTime date, ReportRelations relation, ReportOptions reason);
+    Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason);
 
     Optional<Report> findById(long reportId);
 

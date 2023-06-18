@@ -15,7 +15,30 @@
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
 </div>
 <div class="main-container-style container-color">
-    <h1>administrador</h1>
+    <div id="main-header-row">
+        <h1 class="secondary-color"><spring:message code="admin.titleView"/></h1>
+        <hr class="secondary-color">
+    </div>
+    <c:forEach var="report" items="${reports}">
+        <c:set var="report" value="${report}" scope="request"/>
+        <jsp:include page="short-info-report.jsp"/>
+    </c:forEach>
 </div>
+<c:if test="${!(empty acceptReport) && acceptReport}">
+    <div id="toast-container">
+        <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+            <jsp:param name="title" value="admin.acceptReport.Title"/>
+            <jsp:param name="message" value="admin.acceptReport.mnsj"/>
+        </jsp:include>
+    </div>
+</c:if>
+<c:if test="${!(empty rejectReport) && rejectReport}">
+    <div id="toast-container">
+        <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+            <jsp:param name="title" value="admin.rejectReport.Title"/>
+            <jsp:param name="message" value="admin.rejectReport.mnsj"/>
+        </jsp:include>
+    </div>
+</c:if>
 </body>
 </html>

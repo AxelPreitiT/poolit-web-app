@@ -70,56 +70,65 @@
         </c:choose>
       </div>
     </div>
-    <div id="button-container">
-      <div id="review-trip-container">
-        <c:if test="${tripReviewCollection.canReview}">
-          <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
-            <jsp:param name="reviewed" value="${reviewed}"/>
-          </jsp:include>
-        </c:if>
-      </div>
-      <c:if test="${!trip.tripHasEnded}">
-        <div class="delete-trip-container">
-          <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
-            <i class="bi bi-trash-fill light-text h4"></i>
-            <span class="light-text h4"><spring:message code="tripInfo.driver.deleteButton"/></span>
-          </button>
+    <div id="trip-operations-container">
+      <div id="button-container">
+        <div id="review-trip-container">
+          <c:if test="${tripReviewCollection.canReview}">
+            <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
+              <jsp:param name="reviewed" value="${reviewed}"/>
+            </jsp:include>
+          </c:if>
         </div>
-        <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h3 class="modal-title danger"><spring:message code="tripCard.delete"/></h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-              <div class="modal-body">
+        <c:if test="${!trip.tripHasEnded}">
+          <div class="delete-trip-container">
+            <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
+              <i class="bi bi-trash-fill light-text h4"></i>
+              <span class="light-text h4"><spring:message code="tripInfo.driver.deleteButton"/></span>
+            </button>
+          </div>
+          <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title danger"><spring:message code="tripCard.delete"/></h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
                 <span class="text"><spring:message code="tripCard.warning.title"/>
                   <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
                   <strong class="secondary-color">-</strong>
                   <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
                 </span>
-                <span class="text"><spring:message code="tripCard.warning.messege"/></span>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn primary-button" data-bs-dismiss="modal">
-                  <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
-                </button>
-                <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
-                <form:form method="DELETE" action="${deleteTripUrl}">
-                  <button type="submit" class="btn danger-button">
-                    <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
+                  <span class="text"><spring:message code="tripCard.warning.messege"/></span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn primary-button" data-bs-dismiss="modal">
+                    <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
                   </button>
-                </form:form>
+                  <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
+                  <form:form method="DELETE" action="${deleteTripUrl}">
+                    <button type="submit" class="btn danger-button">
+                      <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
+                    </button>
+                  </form:form>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </c:if>
-      <c:url value="/trips/created" var="myTripsUrl"/>
-      <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
-        <i class="bi bi-car-front-fill light-text h4"></i>
-        <span class="light-text h4"><spring:message code="tripInfo.driver.button"/></span>
-      </a>
+        </c:if>
+        <c:url value="/trips/created" var="myTripsUrl"/>
+        <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
+          <i class="bi bi-car-front-fill light-text h4"></i>
+          <span class="light-text h4"><spring:message code="tripInfo.driver.button"/></span>
+        </a>
+      </div>
+      <div id="report-container">
+        <c:if test="${tripReportCollection.canReport}">
+          <jsp:include page="/WEB-INF/jsp/trip-info/report-list-modal.jsp">
+            <jsp:param name="reported" value="${reported}"/>
+          </jsp:include>
+        </c:if>
+      </div>
     </div>
   </div>
 </div>
