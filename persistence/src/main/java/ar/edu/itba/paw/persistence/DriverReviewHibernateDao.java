@@ -49,6 +49,10 @@ public class DriverReviewHibernateDao implements DriverReviewDao {
     @Override
     public PagedContent<DriverReview> getDriverReviews(User user, int page, int pageSize) {
         LOGGER.debug("Looking for all the driver reviews of the user with id {} in page {} with page size {}", user.getUserId(), page, pageSize);
+        if (page < 0 || pageSize <= 0) {
+            LOGGER.debug("Invalid page or page size");
+            return PagedContent.emptyPagedContent();
+        }
         Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(review_id) FROM driver_reviews NATURAL JOIN user_reviews WHERE reviewed_id = :user_id");
         nativeCountQuery.setParameter("user_id", user.getUserId());
         final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
@@ -64,6 +68,10 @@ public class DriverReviewHibernateDao implements DriverReviewDao {
         nativeQuery.setFirstResult(page * pageSize);
 
         final List<?> maybeReviewIdList = nativeQuery.getResultList();
+        if (maybeReviewIdList.isEmpty()) {
+            LOGGER.debug("No driver reviews found for the user with id {} in page {} with page size {}", user.getUserId(), page, pageSize);
+            return PagedContent.emptyPagedContent();
+        }
         final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
         final TypedQuery<DriverReview> driverReviewsQuery = em.createQuery("FROM DriverReview dr WHERE dr.reviewId IN :reviewIdList", DriverReview.class);
