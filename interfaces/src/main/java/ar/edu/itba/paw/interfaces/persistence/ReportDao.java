@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface ReportDao {
 
-    Report create(User reporter, User reported, Trip trip, String description, LocalDateTime date, ReportRelations relation, ReportOptions reason);
+    Report createReport(User reporter, User reported, Trip trip, String description, LocalDateTime date, ReportRelations relation, ReportOptions reason);
 
     Optional<Report> findById(long reportId);
 

@@ -27,10 +27,11 @@ public class ReportHibernateDao implements ReportDao {
 
 
     @Override
-    public Report create(User reporter, User reported, Trip trip, String description, LocalDateTime date, ReportRelations relation, ReportOptions reason) {
+    public Report createReport(User reporter, User reported, Trip trip, String description, LocalDateTime date, ReportRelations relation, ReportOptions reason) {
         LOGGER.debug("Adding new Report to the database");
-        Report report = new Report(reporter, reported, trip, description, date, relation, reason);
+        final Report report = new Report(reporter, reported, trip, description, date, relation, reason);
         em.persist(report);
+        LOGGER.info("Report with id {} added to the database", report.getReportId());
         LOGGER.debug("New {}", report);
         return report;
     }

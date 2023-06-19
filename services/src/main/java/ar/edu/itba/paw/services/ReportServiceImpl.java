@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -41,13 +42,14 @@ public class ReportServiceImpl implements ReportService {
         this.emailService = emailService;
     }
 
+    @Transactional
     @Override
     public Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason){
         User reported = userService.findById(reportedId).orElseThrow(IllegalArgumentException::new);
         Trip trip = tripService.findById(tripId).orElseThrow(IllegalArgumentException::new);
         User reporter = userService.getCurrentUser().orElseThrow(IllegalArgumentException::new);
         LocalDateTime date = LocalDateTime.now();
-        Report resp = reportDao.create(reporter, reported, trip, description, date, relation, reason);
+        Report resp = reportDao.createReport(reporter, reported, trip, description, date, relation, reason);
         List<User> admins = userService.getAdmins();
         for ( User admin:  admins) {
             try {
@@ -143,9 +145,11 @@ public class ReportServiceImpl implements ReportService {
         if(tripService.userIsDriver(tripId, currentUser)) {
             driverToReport = null;
             List<Passenger> passengers = tripService.getPassengers(trip);
-            passengersToReport = passengers.stream().map(passenger -> {
-                return new ItemReport<>(passenger, ReportRelations.DRIVER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger));
-            }).sorted(
+            passengersToReport = passengers.stream().filter(
+                    passenger -> !passenger.getUser().equals(currentUser)
+            ).map(
+                    passenger -> new ItemReport<>(passenger, ReportRelations.DRIVER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
+            ).sorted(
                     Comparator.comparing(ItemReport::getState)
             ).collect(Collectors.toList());
         }
@@ -159,9 +163,11 @@ public class ReportServiceImpl implements ReportService {
             Passenger currentPassenger = maybeCurrentPassenger.get();
             driverToReport = new ItemReport<>(trip.getDriver(), ReportRelations.PASSENGER_2_DRIVER, getDriverReportState(trip, currentPassenger));
             List<Passenger> passengers = tripService.getPassengersRecurrent(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
-            passengersToReport = passengers.stream().map(passenger -> {
-                return new ItemReport<>(passenger, ReportRelations.PASSENGER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger));
-            }).sorted(
+            passengersToReport = passengers.stream().filter(
+                    passenger -> !passenger.getUser().equals(currentUser)
+            ).map(
+                    passenger -> new ItemReport<>(passenger, ReportRelations.PASSENGER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
+            ).sorted(
                     Comparator.comparing(ItemReport::getState)
             ).collect(Collectors.toList());
         }
@@ -180,7 +186,7 @@ public class ReportServiceImpl implements ReportService {
         }
         Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), trip.getDriver().getUserId());
         if(!maybeReport.isPresent()) {
-            return ReportState.APPROVED;
+            return ReportState.AVAILABLE;
         }
         return maybeReport.get().getStatus();
     }
@@ -192,7 +198,7 @@ public class ReportServiceImpl implements ReportService {
         }
         Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), reported.getUserId());
         if (!maybeReport.isPresent()) {
-            return ReportState.APPROVED;
+            return ReportState.AVAILABLE;
         }
         return maybeReport.get().getStatus();
     }

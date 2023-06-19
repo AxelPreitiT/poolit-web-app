@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ReportService;
+import ar.edu.itba.paw.models.reports.Report;
+import ar.edu.itba.paw.webapp.exceptions.ReportNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReportAdminForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,32 +31,35 @@ public class AdminController {
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public ModelAndView adminView(@RequestParam(value = "acceptReport", required = false, defaultValue = "false") final Boolean acceptReport,
                                   @RequestParam(value = "rejectReport", required = false, defaultValue = "false") final Boolean rejectReport) {
-        LOGGER.debug("GET admin view");
+        LOGGER.debug("GET request to /admin");
         final ModelAndView mav = new ModelAndView("admin/main");
         mav.addObject("reports", reportService.getAllReports());
+        mav.addObject("acceptReport", acceptReport);
+        mav.addObject("rejectReport", rejectReport);
         return mav;
     }
 
 
-    @RequestMapping(value = "/admin/{id:\\d+$}", method = RequestMethod.GET)
-    public ModelAndView detailsReport(@ModelAttribute("id") final long id) {
-        LOGGER.debug("GET request to /admin/{}", id);
+    @RequestMapping(value = "/admin/reports/{reportId:\\d+$}", method = RequestMethod.GET)
+    public ModelAndView detailsReport(@ModelAttribute("reportId") final long reportId) {
+        LOGGER.debug("GET request to /admin/reports/{}", reportId);
         final ModelAndView mav = new ModelAndView("admin/details");
-        mav.addObject("report", reportService.findById(id));
+        Report report = reportService.findById(reportId).orElseThrow(() -> new ReportNotFoundException(reportId));
+        mav.addObject("report", report);
         return mav;
     }
 
-    @RequestMapping(value = "/admin/{id:\\d+$}/accept", method = RequestMethod.POST)
-    public ModelAndView acceptReport(@ModelAttribute("id") final long id, @ModelAttribute("reportAdminForm") final ReportAdminForm form) {
-        LOGGER.debug("POST request to /admin/{}/accept", id);
-        reportService.acceptReport(id, form.getComment());
+    @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.POST)
+    public ModelAndView acceptReport(@ModelAttribute("reportId") final long reportId, @ModelAttribute("reportAdminForm") final ReportAdminForm form) {
+        LOGGER.debug("POST request to /admin/{}/accept", reportId);
+        reportService.acceptReport(reportId, form.getComment());
         return new ModelAndView("redirect:/admin?acceptReport=true");
     }
 
-    @RequestMapping(value = "/admin/{id:\\d+$}/reject", method = RequestMethod.POST)
-    public ModelAndView rejectReport(@ModelAttribute("id") final long id, @ModelAttribute("reportAdminForm") final ReportAdminForm form) {
-        LOGGER.debug("POST request to /admin/{}/reject", id);
-        reportService.rejectReport(id, form.getComment());
+    @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/reject", method = RequestMethod.POST)
+    public ModelAndView rejectReport(@ModelAttribute("reportId") final long reportId, @ModelAttribute("reportAdminForm") final ReportAdminForm form) {
+        LOGGER.debug("POST request to /admin/{}/reject", reportId);
+        reportService.rejectReport(reportId, form.getComment());
         return new ModelAndView("redirect:/admin?rejectReport=true");
     }
 }

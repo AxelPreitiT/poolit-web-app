@@ -1,4 +1,9 @@
 @import "../base/elements.css";
+@import "../base/elements.css";
+
+#main-header-row > hr {
+    margin: 0;
+}
 
 a {
     text-decoration: none !important;
