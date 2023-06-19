@@ -15,7 +15,7 @@
     padding: 4%;
     transform: inherit; !important;
 }
-.active{
+#order-by-select .active{
     color: #FFA216 !important;
 }
 .sort-item {

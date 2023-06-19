@@ -49,7 +49,7 @@
                     <span class="light-text detail"><c:out value="${trip.car.infoCar}"/></span>
                 </a>
                 <div class="ratings">
-                    <c:set var="rating" value="${carRating}" scope="request"/>
+                    <c:set var="rating" value="${trip.carRating}" scope="request"/>
                     <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                         <jsp:param name="fontColor" value="light-text"/>
                     </jsp:include>
@@ -83,7 +83,7 @@
                         <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
                     </a>
                     <div class="ratings">
-                        <c:set var="rating" value="${driverRating}" scope="request"/>
+                        <c:set var="rating" value="${trip.driverRating}" scope="request"/>
                         <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                             <jsp:param name="fontColor" value="light-text"/>
                         </jsp:include>

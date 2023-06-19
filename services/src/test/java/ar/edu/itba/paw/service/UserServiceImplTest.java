@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.User;
@@ -30,7 +31,8 @@ public class UserServiceImplTest {
     private static final String phone = "3424394741";
     private static final String password = "password";
     private static final City bornCity = new City(1, "Agronomía", 1);
-    private static final Locale mailLocale = new Locale("es");
+    private static final long bornCityId = 1;
+    private static final String mailLocale = "es";
     private static final String role = "USER";
     private static final long userImageId = 1;
     private static final long userId = 8;
@@ -43,14 +45,15 @@ public class UserServiceImplTest {
     private UserServiceImpl us;
 
     @Test
-    public void testCreateUser() throws EmailAlreadyExistsException {
+    public void testCreateUser() throws EmailAlreadyExistsException, CityNotFoundException {
         // precondiciones
-        when(userDao.create(eq(name), eq(surname), eq(email), eq(phone), eq(password), any(), eq(mailLocale), eq(role), anyLong()))
-                .thenReturn(new User(userId, name, surname, email, phone, password, bornCity, mailLocale, role, userImageId));
+        when(userDao.create(eq(name), eq(surname), eq(email), eq(phone), eq(password), any(), eq(new Locale(mailLocale)), eq(role), anyLong()))
+                .thenReturn(new User(userId, name, surname, email, phone, password, bornCity, new Locale(mailLocale), role, userImageId));
         when(passwordEncoder.encode(Mockito.anyString())).thenReturn(password);
 
         // ejercitar la clase
-        User newUSer = us.createUser(name, surname, email, phone, password, bornCity, mailLocale, role, userImageId);
+        //TODO cambiar imagen a no null
+        User newUSer = us.createUser(name, surname, email, phone, password, bornCityId, mailLocale, role, null);
 
         // assertions
         Assert.assertNotNull(newUSer);

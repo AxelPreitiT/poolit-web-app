@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistence.DriverReviewDao;
 import ar.edu.itba.paw.interfaces.services.DriverReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
@@ -27,16 +28,23 @@ public class DriverReviewServiceImpl implements DriverReviewService {
 
     private final DriverReviewDao driverReviewDao;
     private final TripService tripService;
+    private final UserService userService;
 
     @Autowired
-    public DriverReviewServiceImpl(DriverReviewDao driverReviewDao, TripService tripService) {
+    public DriverReviewServiceImpl(DriverReviewDao driverReviewDao, TripService tripService, UserService userService1) {
         this.driverReviewDao = driverReviewDao;
         this.tripService = tripService;
+        this.userService = userService1;
     }
 
     @Transactional
     @Override
-    public DriverReview createDriverReview(Trip trip, Passenger reviewer, User driver, int rating, String comment, DriverReviewOptions option) {
+    public DriverReview createDriverReview(final long tripId, final long driverId, int rating, String comment, DriverReviewOptions option) {
+        //Ver como tirar excepciones
+        Trip trip = tripService.findById(tripId).get();
+        User user = userService.getCurrentUser().get();
+        Passenger reviewer = tripService.getPassenger(trip,user).get();
+        User driver = userService.findById(driverId).get();
         if(!canReviewDriver(trip, reviewer, driver)) {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} tried to review driver with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), driver.getUserId(), e);
@@ -46,12 +54,26 @@ public class DriverReviewServiceImpl implements DriverReviewService {
     }
 
     @Override
-    public double getDriverRating(User user) {
+    public double getDriverRating(long userId) {
+        User user = userService.findById(userId).get();
         return driverReviewDao.getDriverRating(user);
     }
 
     @Override
-    public PagedContent<DriverReview> getDriverReviews(User user, int page, int pageSize) {
+    public double getDriverRatingOwnUser() {
+        User user = userService.getCurrentUser().get();;
+        return driverReviewDao.getDriverRating(user);
+    }
+
+    @Override
+    public PagedContent<DriverReview> getDriverReviews(long userId, int page, int pageSize) {
+        User user = userService.findById(userId).get();
+        return driverReviewDao.getDriverReviews(user, page, pageSize);
+    }
+
+    @Override
+    public PagedContent<DriverReview> getDriverReviewsOwnUser(int page, int pageSize) {
+        User user = userService.getCurrentUser().get();
         return driverReviewDao.getDriverReviews(user, page, pageSize);
     }
 
@@ -84,7 +106,11 @@ public class DriverReviewServiceImpl implements DriverReviewService {
     }
 
     @Override
-    public ItemReview<User> getDriverReviewState(Trip trip, Passenger reviewer, User driver) {
+    public ItemReview<User> getDriverReviewState(long tripId) {
+        Trip trip = tripService.findById(tripId).get();
+        User user = userService.getCurrentUser().get();
+        Passenger reviewer = tripService.getPassenger(tripId, user).get();
+        User driver = trip.getDriver();
         return new ItemReview<>(driver, getReviewState(trip, reviewer, driver));
     }
 }

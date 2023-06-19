@@ -12,13 +12,18 @@ import java.util.List;
 
 public interface PassengerReviewService {
 
-    PassengerReview createPassengerReview(final Trip trip, final User reviewer, final Passenger reviewed, final int rating, final String comment, final PassengerReviewOptions option);
+    PassengerReview createPassengerReview(final long tripId, final long reviewedId, final int rating, final String comment, final PassengerReviewOptions option);
 
-    double getPassengerRating(final User user);
+    double getPassengerRating(final long userId);
 
-    PagedContent<PassengerReview> getPassengerReviews(final User user, int page, int pageSize);
+    double getPassengerRatingOwnUser();
 
-    boolean canReviewPassenger(final Trip trip, final User reviewer, final Passenger reviewed);
+    PagedContent<PassengerReview> getPassengerReviews(final long userId, int page, int pageSize);
 
-    List<ItemReview<Passenger>> getPassengersReviewState(final Trip trip, final User reviewer, final List<Passenger> passengers);
+    PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize);
+
+    boolean canReviewPassenger(final Trip trip, final Passenger reviewed);
+
+    //TODO Cambiar passengers a datos para obtenerlos aca?
+    List<ItemReview<Passenger>> getPassengersReviewState(final long tripId, final List<Passenger> passengers);
 }
