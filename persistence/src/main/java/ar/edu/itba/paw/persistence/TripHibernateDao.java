@@ -445,27 +445,32 @@ public class TripHibernateDao implements TripDao {
         }
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
-        PagedContent<Trip> ans =  getTripPagedContent(page, pageSize, countQuery, idQuery);
+        @SuppressWarnings("unchecked")
+        Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
+        @SuppressWarnings("unchecked")
+        List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
+        List<Trip> result = new ArrayList<>();
+        if(!ids.isEmpty()){
+            String JPLQuery = "from Trip WHERE tripId IN :ids ";
+            if(sortType.equals(Trip.SortType.PRICE)){
+                JPLQuery += "order by price " + (descending?"DESC":"ASC") +", time ASC ";
+            }else if(sortType.equals(Trip.SortType.TIME)){
+                JPLQuery += "ORDER BY time " + (descending?"DESC":"ASC") + ", price ASC";
+            }else if(sortType.equals(Trip.SortType.DRIVER_RATING)){
+                JPLQuery += "order by driverRating DESC, price ASC";
+            }else if(sortType.equals(Trip.SortType.CAR_RATING)){
+                JPLQuery += "order by carRating DESC, price ASC";
+            }
+            TypedQuery<Trip> query = em.createQuery(JPLQuery,Trip.class);
+            query.setParameter("ids",ids);
+            result = query.getResultList();
+        }
+        LOGGER.debug("Found {} in the database", result);
+        PagedContent<Trip> ans = new PagedContent<>(result,page,pageSize,total);
         for(Trip trip : ans.getElements()){
             trip.setQueryStartDateTime(startDateTime.toLocalDate().atTime(trip.getStartDateTime().toLocalTime()));
             trip.setQueryEndDateTime(endDateTime.toLocalDate().atTime(trip.getEndDateTime().toLocalTime()));
         }
-
-        Comparator<Trip> comparator = null;
-        //TODO: revisar
-        if(sortType.equals(Trip.SortType.PRICE)){
-            comparator = Comparator.comparingDouble(Trip::getPrice).thenComparing(t -> t.getStartDateTime().toLocalTime());
-            if(descending){comparator = comparator.reversed();}
-        }else if(sortType.equals(Trip.SortType.TIME)){
-            comparator = Comparator.comparing(t -> t.getStartDateTime().toLocalTime());
-            if(descending){ comparator = comparator.reversed();}
-            comparator = comparator.thenComparing(Trip::getPrice);
-        }else if(sortType.equals(Trip.SortType.DRIVER_RATING)){
-            comparator = Comparator.comparing(Trip::getDriverRating).reversed().thenComparing(Trip::getPrice);
-        }else if(sortType.equals(Trip.SortType.CAR_RATING)){
-            comparator = Comparator.comparing(Trip::getCarRating).reversed().thenComparing(Trip::getPrice);
-        }
-        ans.getElements().sort(comparator);
         return ans;
     }
 

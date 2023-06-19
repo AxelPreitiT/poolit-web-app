@@ -10,6 +10,7 @@ import org.hibernate.annotations.Formula;
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -70,6 +71,8 @@ public class Trip {
     @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
     private double carRating;
 
+    @Formula("cast(start_date_time as time)")
+    private LocalTime time;
 
     private transient int occupiedSeats = 0;
 
