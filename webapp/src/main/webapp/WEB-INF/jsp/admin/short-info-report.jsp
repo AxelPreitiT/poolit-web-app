@@ -8,7 +8,7 @@
 
 
 <div>
-  <a class="text-black" href="<c:url value="/admin/${report.reportId}"/>">
+  <a class="text-black" href="<c:url value="/admin/reports/${report.reportId}"/>">
     <div class="row-report">
       <div class="profiles-info">
         <div class="info-profile-img">

@@ -5,11 +5,15 @@ a {
 }
 
 .card-info{
-    border-top: 2px solid #8b8b8b ;
+    border: 2px solid #8b8b8b;
+    border-radius: 16px;
     display: flex;
     height: 170px;
     padding: 1.5% 1% 1% 1%;
     flex-direction: row;
+    box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .card-info:hover{

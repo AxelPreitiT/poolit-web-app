@@ -1,13 +1,17 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class ReportAdminForm {
 
+    @Size(min = 10)
     private String reason;
 
-    public String getComment() {
+    public String getReason() {
         return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

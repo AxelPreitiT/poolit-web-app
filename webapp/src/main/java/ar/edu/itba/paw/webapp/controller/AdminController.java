@@ -14,7 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -46,25 +50,40 @@ public class AdminController {
 
 
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}", method = RequestMethod.GET)
-    public ModelAndView detailsReport(@ModelAttribute("reportId") final long reportId) {
+    public ModelAndView detailsReport(
+            @PathVariable("reportId") final long reportId,
+            @ModelAttribute("reportAdminForm") final ReportAdminForm form,
+            @RequestParam(value = "acceptReportFailed", required = false, defaultValue = "false") final Boolean acceptReportFailed,
+            @RequestParam(value = "rejectReportFailed", required = false, defaultValue = "false") final Boolean rejectReportFailed
+    ) {
         LOGGER.debug("GET request to /admin/reports/{}", reportId);
-        final ModelAndView mav = new ModelAndView("admin/details");
+        final ModelAndView mav = new ModelAndView("admin/report-details");
         Report report = reportService.findById(reportId).orElseThrow(() -> new ReportNotFoundException(reportId));
         mav.addObject("report", report);
+        mav.addObject("acceptReportFailed", acceptReportFailed);
+        mav.addObject("rejectReportFailed", rejectReportFailed);
         return mav;
     }
 
-    @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.GET)
-    public ModelAndView acceptReport(@ModelAttribute("reportId") final long reportId, @ModelAttribute("reportAdminForm") final ReportAdminForm form) {
+    @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.POST)
+    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) {
         LOGGER.debug("POST request to /admin/{}/accept", reportId);
-        reportService.acceptReport(reportId, form.getComment());
+        if(errors.hasErrors()) {
+            LOGGER.warn("Errors found in ReportAdminForm: {}", errors.getAllErrors());
+            return detailsReport(reportId, form, true, false);
+        }
+        reportService.acceptReport(reportId, form.getReason());
         return new ModelAndView("redirect:/admin?acceptReport=true");
     }
 
-        @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/reject", method = RequestMethod.GET)
-    public ModelAndView rejectReport(@ModelAttribute("reportId") final long reportId, @ModelAttribute("reportAdminForm") final ReportAdminForm form) {
+    @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/reject", method = RequestMethod.POST)
+    public ModelAndView rejectReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) {
         LOGGER.debug("POST request to /admin/{}/reject", reportId);
-        reportService.rejectReport(reportId, form.getComment());
+        if(errors.hasErrors()) {
+            LOGGER.warn("Errors found in ReportAdminForm: {}", errors.getAllErrors());
+            return detailsReport(reportId, form, false, true);
+        }
+        reportService.rejectReport(reportId, form.getReason());
         return new ModelAndView("redirect:/admin?rejectReport=true");
     }
 }

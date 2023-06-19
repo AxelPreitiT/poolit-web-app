@@ -151,4 +151,7 @@ public class Report {
         return date.format(Format.getDateFormatter());
     }
 
+    public String getDateTimeString(){
+        return date.format(Format.getDateTimeFormatter());
+    }
 }
