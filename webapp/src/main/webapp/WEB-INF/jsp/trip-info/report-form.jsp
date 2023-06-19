@@ -11,7 +11,7 @@
 
 <div class="report-form-container">
     <c:url value="/image/${userReported.userImageId}" var="userReportedImageUrl"/>
-    <spring:message code="user.nameFormat" var="userReportedName" arguments="${passenger.name}, ${passenger.surname}"/>
+    <spring:message code="user.nameFormat" var="userReportedName" arguments="${userReported.name}, ${userReported.surname}"/>
     <div class="report-form-header">
         <img src="${userReportedImageUrl}" alt="${userReportedName}" class="passenger-image">
         <div class="report-form-title">

@@ -82,7 +82,8 @@ public class TripController extends LoggedUserController {
                                        @RequestParam(value = "reported", required = false, defaultValue = "false") final boolean reported,
                                        @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
-                                       @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
+                                       @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm,
+                                       @ModelAttribute("reportForm") final ReportForm reportForm
                                        ){
         LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();

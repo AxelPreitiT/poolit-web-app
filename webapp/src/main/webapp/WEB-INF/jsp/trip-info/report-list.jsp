@@ -54,7 +54,7 @@
                 <div class="list-item">
                     <c:url value="/image/${passenger.userImageId}" var="passengerImageUrl"/>
                     <button
-                            class="btn shadow-btn button-style <c:choose><c:when test="${driverReportItem.available}">button-color</c:when><c:when test="${driverReportItem.inRevision}">primary-button</c:when><c:when test="${driverReportItem.approved}">success-bg-color</c:when><c:when test="${driverReportItem.rejected}">placeholder-image-color</c:when><c:when test="${driverReportItem.disabled}">danger-bg-color</c:when></c:choose>"
+                            class="btn shadow-btn button-style <c:choose><c:when test="${passengerReportItem.available}">button-color</c:when><c:when test="${passengerReportItem.inRevision}">primary-button</c:when><c:when test="${passengerReportItem.approved}">success-bg-color</c:when><c:when test="${passengerReportItem.rejected}">placeholder-image-color</c:when><c:when test="${passengerReportItem.disabled}">danger-bg-color</c:when></c:choose>"
                             data-bs-target="#report-passenger-${passenger.userId}"
                             data-bs-toggle="modal"
                             <c:if test="${!passengerReportItem.available}">
