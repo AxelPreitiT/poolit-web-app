@@ -12,13 +12,17 @@ import java.util.List;
 
 public interface DriverReviewService {
 
-    DriverReview createDriverReview(final Trip trip, final Passenger reviewer, final User driver,  final int rating, final String comment, final DriverReviewOptions option);
+    DriverReview createDriverReview(final long tripId, final long driverId,  final int rating, final String comment, final DriverReviewOptions option);
 
-    double getDriverRating(final User user);
+    double getDriverRating(final long userId);
 
-    PagedContent<DriverReview> getDriverReviews(final User user, int page, int pageSize);
+    double getDriverRatingOwnUser();
+
+    PagedContent<DriverReview> getDriverReviews(final long userId, int page, int pageSize);
+
+    PagedContent<DriverReview> getDriverReviewsOwnUser( int page, int pageSize);
 
     boolean canReviewDriver(final Trip trip, final Passenger reviewer, final User driver);
 
-    ItemReview<User> getDriverReviewState(final Trip trip, final Passenger reviewer, final User driver);
+    ItemReview<User> getDriverReviewState(final long tripId);
 }
