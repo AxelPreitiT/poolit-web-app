@@ -17,6 +17,10 @@
   <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
 </div>
 <div class="main-container-style container-color">
+  <div id="main-header-row">
+    <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
+    <hr class="secondary-color">
+  </div>
   <div class="info-container">
   <div id="trip-route-container">
     <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>

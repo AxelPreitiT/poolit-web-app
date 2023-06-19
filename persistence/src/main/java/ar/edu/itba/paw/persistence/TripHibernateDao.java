@@ -364,15 +364,15 @@ public class TripHibernateDao implements TripDao {
             long origin_city_id, long destination_city_id,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-            long searchUserId, int page, int pageSize){
-        return getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek.get(),endDateTime.get(),minutes,minPrice,maxPrice,sortType,descending,searchUserId,page,pageSize);
+            long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize){
+        return getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek.get(),endDateTime.get(),minutes,minPrice,maxPrice,sortType,descending,searchUserId,carFeatures,page,pageSize);
     }
 
     @Override
     public PagedContent<Trip> getTripsWithFilters(long origin_city_id, long destination_city_id,
                                                   LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
                                                   Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-                                                  long searchUserId, int page, int pageSize) {
+                                                  long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize) {
         LOGGER.debug("Looking for the trips with originCity with id {}, destinationCity with id {}, startDateTime '{}',dayOfWeek {}, endDateTime {} range of {} minutes,{}{} sortType '{}' ({}) page {} and size {} in the database",
                 origin_city_id, destination_city_id, startDateTime, dayOfWeek,
                 endDateTime, minutes,
@@ -422,6 +422,12 @@ public class TripHibernateDao implements TripDao {
         if(maxPrice.isPresent()){
             queryString += "AND trips.price <= :maxPrice ";
             arguments.put("maxPrice",maxPrice.get().doubleValue());
+        }
+        if(carFeatures != null && !carFeatures.isEmpty()) {
+            for (int i = 0; i < carFeatures.size(); i++) {
+                queryString += "AND trips.car_id IN (SELECT car_car_id FROM car_features WHERE features = :carFeature" + i + ") ";
+                arguments.put("carFeature" + i, carFeatures.get(i).name());
+            }
         }
         queryString += " GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers ";

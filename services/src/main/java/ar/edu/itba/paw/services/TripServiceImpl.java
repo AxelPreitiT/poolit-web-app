@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -486,6 +487,15 @@ public class TripServiceImpl implements TripService {
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final Optional<BigDecimal> minPrice, final Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
             final User searchUser, final int page, final int pageSize){
+        return getTripsByDateTimeAndOriginAndDestinationAndPriceAndCarFeatures(origin_city_id, destination_city_id, startDate, startTime, endDate, endTime, minPrice, maxPrice, sortType, descending, searchUser, Collections.emptyList(),page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPriceAndCarFeatures(
+            long origin_city_id, long destination_city_id, final LocalDate startDate,
+            final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
+            final Optional<BigDecimal> minPrice, final Optional<BigDecimal> maxPrice, final String sortType, final boolean descending,
+            final User searchUser, final List<FeatureCar> carFeatures, final int page, final int pageSize) {
         validatePageAndSize(page,pageSize);
         LocalDateTime startDateTime = startDate.atTime(startTime);
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
@@ -495,7 +505,7 @@ public class TripServiceImpl implements TripService {
         }else{
             userId=searchUser.getUserId();
         }
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,page,pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,carFeatures,page,pageSize);
     }
 
     @Transactional

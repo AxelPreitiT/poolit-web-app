@@ -169,6 +169,7 @@ public class TripController {
         final Optional<User> user = userService.getCurrentUser();
         final ModelAndView mav = new ModelAndView("/search/main");
         mav.addObject("cities", cities);
+        mav.addObject("carFeatures", FeatureCar.values());
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in SearchTripForm: {}", errors.getAllErrors());
             mav.addObject("tripsContent", new PagedContent<>(new ArrayList<>(),0,0,0));
@@ -176,12 +177,11 @@ public class TripController {
         }
         final PagedContent<Trip> tripsContent;
         if(user.isPresent()){//TODO: esto lo tiene que hacer el servicio
-            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,user.get(),page-1,PAGE_SIZE);
+            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPriceAndCarFeatures(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,user.get(),form.getCarFeatures(),page-1,PAGE_SIZE);
         }else{
-            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPrice(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,null,page-1,PAGE_SIZE);
+            tripsContent = tripService.getTripsByDateTimeAndOriginAndDestinationAndPriceAndCarFeatures(form.getOriginCityId(),form.getDestinationCityId(), form.getDate(),form.getTime(), form.getLastDate(), form.getTime(), Optional.ofNullable(form.getMinPrice()), Optional.ofNullable(form.getMaxPrice()),sortType,descending,null,form.getCarFeatures(),page-1,PAGE_SIZE);
         }
         mav.addObject("tripsContent", tripsContent);
-
         return mav;
     }
 
@@ -197,6 +197,7 @@ public class TripController {
             mav.addObject("trips", trips);
         }
         mav.addObject("cities", cities);
+        mav.addObject("carFeatures", FeatureCar.values());
         return mav;
     }
 
