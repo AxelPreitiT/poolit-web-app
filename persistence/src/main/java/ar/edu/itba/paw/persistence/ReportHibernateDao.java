@@ -7,7 +7,6 @@ import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.reports.ReportOptions;
 import ar.edu.itba.paw.models.reports.ReportRelations;
 import ar.edu.itba.paw.models.reports.ReportState;
-import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,14 +81,14 @@ public class ReportHibernateDao implements ReportDao {
         }
 
         // 1+1 query
-        Query nativeQuery = em.createNativeQuery("SELECT report_id FROM reports  WHERE status='IN_REVISION' ORDER BY date DESC");
+        Query nativeQuery = em.createNativeQuery("SELECT report_id FROM reports  WHERE status='IN_REVISION' ORDER BY date ASC");
         nativeQuery.setMaxResults(pageSize);
         nativeQuery.setFirstResult(page * pageSize);
 
         final List<?> maybeReportIdList = nativeQuery.getResultList();
         final List<Long> reportIdList = maybeReportIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<Report> reportQuery = em.createQuery("FROM Report rp WHERE rp.reportId IN :reportIdList AND rp.status='IN_REVISION'", Report.class);
+        final TypedQuery<Report> reportQuery = em.createQuery("FROM Report rp WHERE rp.reportId IN :reportIdList", Report.class);
         reportQuery.setParameter("reportIdList", reportIdList);
         List<Report> result = reportQuery.getResultList();
         LOGGER.debug("Found {} in the database", result);
@@ -103,6 +102,7 @@ public class ReportHibernateDao implements ReportDao {
                 .setParameter("tripId", tripId)
                 .setParameter("reporterId", reporterId)
                 .setParameter("reportedId", reportedId).getResultList().stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
     }
 }
