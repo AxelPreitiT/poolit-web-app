@@ -1,29 +1,19 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
-import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Locale;
-
 @ControllerAdvice
-public class ExceptionController extends LoggedUserController {
+public class ExceptionController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionController.class);
 
 
-    @Autowired
-    public ExceptionController(final UserService userService){
-        super(userService);
-    }
     @ExceptionHandler(TripNotFoundException.class)
     public ModelAndView tripNotFound(){
         LOGGER.warn("Raised TripNotFoundException in controller");

@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
-public class TripController extends LoggedUserController {
+public class TripController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
 
     private final TripService tripService;
@@ -56,7 +56,6 @@ public class TripController extends LoggedUserController {
 
     @Autowired
     public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService) {
-        super(userService);
         this.tripService = tripService;
         this.cityService = cityService;
         this.userService = userService;
