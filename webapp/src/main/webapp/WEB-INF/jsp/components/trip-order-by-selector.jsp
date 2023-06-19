@@ -52,19 +52,19 @@
         <c:param name="descending" value="false"/>
       </c:url>
       <li><a class="sort-item <c:if test="${timeAsc}">active</c:if>" href="${timeAscUrl}"><spring:message code="component.orderFilter.dateAsc"/></a></li>
-      <c:url value="${param.baseUrl}" var="driverRatingDescUrl">
-        <c:param name="sortType" value="driver_rating"/>
-      </c:url>
-      <li><a class="sort-item <c:if test="${timeDesc}">active</c:if>" href="${driverRatingDescUrl}"><spring:message code="component.orderFilter.dateDesc"/></a></li>
-      <c:url value="${param.baseUrl}" var="carRatingDescUrl">
-        <c:param name="sortType" value="car_rating"/>
-      </c:url>
-      <li><a class="sort-item <c:if test="${timeDesc}">active</c:if>" href="${carRatingDescUrl}"><spring:message code="component.orderFilter.dateDesc"/></a></li>
       <c:url value="${param.baseUrl}" var="timeDescUrl">
         <c:param name="sortType" value="time"/>
         <c:param name="descending" value="true"/>
       </c:url>
       <li><a class="sort-item <c:if test="${timeDesc}">active</c:if>" href="${timeDescUrl}"><spring:message code="component.orderFilter.dateDesc"/></a></li>
+      <c:url value="${param.baseUrl}" var="driverRatingDescUrl">
+        <c:param name="sortType" value="driver_rating"/>
+      </c:url>
+      <li><a class="sort-item <c:if test="${driverRatingDesc}">active</c:if>" href="${driverRatingDescUrl}"><spring:message code="component.orderFilter.driverRatingDesc"/></a></li>
+      <c:url value="${param.baseUrl}" var="carRatingDescUrl">
+        <c:param name="sortType" value="car_rating"/>
+      </c:url>
+      <li><a class="sort-item <c:if test="${carRatingDesc}">active</c:if>" href="${carRatingDescUrl}"><spring:message code="component.orderFilter.carRatingDesc"/></a></li>
     </ul>
   </div>
 </div>

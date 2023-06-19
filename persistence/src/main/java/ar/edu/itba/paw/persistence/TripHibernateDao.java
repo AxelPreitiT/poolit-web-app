@@ -395,8 +395,8 @@ public class TripHibernateDao implements TripDao {
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.passenger_state = 'ACCEPTED' "+
                 "GROUP BY days.days,passengers.trip_id) aux "+
-                "LEFT JOIN (SELECT coalesce(avg(user_reviews.rating),0) as driver_rating, reviewed_id as driver_id FROM user_reviews JOIN driver_reviews ON user_reviews.review_id = driver_reviews.review_id) driver_rating ON driver_rating.driver_id = trips.driver_id "+
-                "LEFT JOIN (SELECT coalesce(avg(car_reviews.rating),0) as car_rating, car_id as car_id FROM car_reviews) car_rating ON car_rating.car_id = trips.car_id "+
+                "LEFT JOIN (SELECT coalesce(avg(user_reviews.rating),0) as driver_rating, reviewed_id as driver_id FROM user_reviews JOIN driver_reviews ON user_reviews.review_id = driver_reviews.review_id GROUP BY user_reviews.reviewed_id ) driver_rating ON driver_rating.driver_id = trips.driver_id "+
+                "LEFT JOIN (SELECT coalesce(avg(car_reviews.rating),0) as car_rating, car_id as car_id FROM car_reviews GROUP BY car_id) car_rating ON car_rating.car_id = trips.car_id "+
                 "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
                 "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
                 "WHERE aux.days >= :startDateTime AND end_date_time >= :startDateTime AND  origin_city_id = :originCityId AND cast(trips.start_date_time as time) >= :minTime AND trips.deleted = false AND start_date_time <= :startMaximum " +
@@ -425,7 +425,7 @@ public class TripHibernateDao implements TripDao {
             queryString += "AND trips.price <= :maxPrice ";
             arguments.put("maxPrice",maxPrice.get().doubleValue());
         }
-        queryString += " GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
+        queryString += " GROUP BY trips.trip_id, trips.max_passengers, trips.price, driver_rating.driver_rating, car_rating.car_rating "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers ";
         //Esto puede explotar si no arregla el orden despues
         if(sortType.equals(Trip.SortType.PRICE)){
@@ -433,9 +433,9 @@ public class TripHibernateDao implements TripDao {
         }else if(sortType.equals(Trip.SortType.TIME)){
             queryString += "ORDER BY cast(trips.start_date_time as time) " + (descending?"DESC":"ASC") + ", trips.price ASC";
         }else if(sortType.equals(Trip.SortType.DRIVER_RATING)){
-            queryString += "ORDER BY coalesce(driver_rating.driver_rating,0) DESC, trips.price ASC";
+            queryString += "ORDER BY coalesce(driver_rating.driver_rating,0) DESC, trips.price DESC";
         }else if(sortType.equals(Trip.SortType.CAR_RATING)){
-            queryString += "ORDER BY coalesce(car_rating.car_rating,0) DESC, trips.price ASC";
+            queryString += "ORDER BY coalesce(car_rating.car_rating,0) DESC, trips.price DESC";
         }
         Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux ");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
@@ -454,15 +454,16 @@ public class TripHibernateDao implements TripDao {
         Comparator<Trip> comparator = null;
         //TODO: revisar
         if(sortType.equals(Trip.SortType.PRICE)){
-            comparator = Comparator.comparingDouble(Trip::getPrice);
+            comparator = Comparator.comparingDouble(Trip::getPrice).thenComparing(t -> t.getStartDateTime().toLocalTime());
             if(descending){comparator = comparator.reversed();}
         }else if(sortType.equals(Trip.SortType.TIME)){
             comparator = Comparator.comparing(t -> t.getStartDateTime().toLocalTime());
             if(descending){ comparator = comparator.reversed();}
+            comparator = comparator.thenComparing(Trip::getPrice);
         }else if(sortType.equals(Trip.SortType.DRIVER_RATING)){
-            comparator = Comparator.comparing(Trip::getDriverRating);
+            comparator = Comparator.comparing(Trip::getDriverRating).reversed().thenComparing(Trip::getPrice);
         }else if(sortType.equals(Trip.SortType.CAR_RATING)){
-            comparator = Comparator.comparing(Trip::getCarRating);
+            comparator = Comparator.comparing(Trip::getCarRating).reversed().thenComparing(Trip::getPrice);
         }
         ans.getElements().sort(comparator);
         return ans;
