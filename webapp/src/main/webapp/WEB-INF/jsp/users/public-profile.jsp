@@ -21,17 +21,13 @@
     </jsp:include>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>
-      <c:url value="/reviews/drivers/${user.userId}" var="driverReviewsUrl">
-        <c:param name="page" value="1"/>
-      </c:url>
+      <c:url value="/reviews/drivers/${user.userId}" var="driverReviewsUrl"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="driver"/>
         <jsp:param name="url" value="${driverReviewsUrl}"/>
       </jsp:include>
       <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
-      <c:url value="/reviews/passengers/${user.userId}" var="passengerReviewsUrl">
-        <c:param name="page" value="1"/>
-      </c:url>
+      <c:url value="/reviews/passengers/${user.userId}" var="passengerReviewsUrl"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="passenger"/>
         <jsp:param name="url" value="${passengerReviewsUrl}"/>

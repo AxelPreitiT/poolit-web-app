@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
-import ar.edu.itba.paw.webapp.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -12,7 +11,6 @@ import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
-import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.form.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +28,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
-public class UserController extends LoggedUserController {
+public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -72,7 +69,6 @@ public class UserController extends LoggedUserController {
                           final TokenService tokenService, final EmailService emailService,
                           final PassengerReviewService passengerReviewService,
                           final DriverReviewService driverReviewService) {
-        super(userService);
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;

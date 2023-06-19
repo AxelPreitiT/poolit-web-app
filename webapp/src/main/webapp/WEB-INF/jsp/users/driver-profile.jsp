@@ -31,9 +31,7 @@
             <div class="tab-content" id="pills-tabContent">
               <div class="tab-pane fade show active" id="pills-driver" role="tabpanel" aria-labelledby="pills-driver-tab" tabindex="0">
                 <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>
-                <c:url value="/reviews/drivers/${user.userId}" var="reviewsUrl">
-                   <c:param name="page" value="1"/>
-                </c:url>
+                <c:url value="/reviews/drivers/${user.userId}" var="reviewsUrl"/>
                 <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
                     <jsp:param name="url" value="${reviewsUrl}"/>
                     <jsp:param name="type" value="driver"/>
@@ -74,9 +72,7 @@
               </div>
                 <div class="tab-pane fade" id="pills-passenger" role="tabpanel" aria-labelledby="pills-passenger-tab" tabindex="0">
                     <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
-                    <c:url value="/reviews/passengers/${user.userId}" var="reviewsUrl">
-                        <c:param name="page" value="1"/>
-                    </c:url>
+                    <c:url value="/reviews/passengers/${user.userId}" var="reviewsUrl"/>
                     <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
                         <jsp:param name="url" value="${reviewsUrl}"/>
                         <jsp:param name="type" value="passenger"/>

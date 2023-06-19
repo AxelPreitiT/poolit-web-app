@@ -7,6 +7,7 @@
 
 <!-- Beans:
         - searchTripForm: form backing object
+        - carFeatures: list of car features
 -->
 
 <!-- Params:
@@ -14,6 +15,7 @@
 -->
 
 <jsp:useBean id="searchTripForm" type="ar.edu.itba.paw.webapp.form.SearchTripForm" scope="request"/>
+<jsp:useBean id="carFeatures" type="ar.edu.itba.paw.models.FeatureCar[]" scope="request"/>
 
 <form:form modelAttribute="searchTripForm" method="get" action="${param.url}" id="form-style" cssClass="primary-bg-color">
     <div id="search-filters-container">
@@ -150,6 +152,24 @@
                         <div class="error-item right-item">
                             <i class="bi bi-exclamation-circle-fill warning"></i>
                             <form:errors path="maxPrice" cssClass="warning" element="span"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="car-features-filter">
+                <div class="title-row">
+                    <i class="bi bi-car-front-fill light-text h5"></i>
+                    <h5 class="light-text"><spring:message code="searchFilters.carFeatures"/></h5>
+                </div>
+                <div class="input-container">
+                    <div class="input-row">
+                        <div class="car-feature-options-container">
+                            <c:forEach items="${carFeatures}" var="carFeature">
+                                <div class="car-feature-container">
+                                    <form:hidden path="carFeatures" value="${carFeature}" cssClass="car-feature-input" id="car-feature-input-${carFeature}" disabled="${!searchTripForm.hasCarFeature(carFeature)}"/>
+                                    <label class="car-feature-label light-text shadow-btn <c:if test="${searchTripForm.hasCarFeature(carFeature)}">active</c:if>" id="car-feature-label-${carFeature}"><spring:message code="${carFeature.code}"/></label>
+                                </div>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>

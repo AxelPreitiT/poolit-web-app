@@ -2,6 +2,10 @@ import {timeConfig} from "../modules/timeConfig.js";
 import {calendarConfig, getDaysOfWeekDisabled, today} from "../modules/calendarConfig.js";
 
 let currentTab = 'unique-trip-tab';
+const carFeatureLabel = 'car-feature-label';
+const carFeatureInput = 'car-feature-input';
+
+const carFeatureLabelElements = document.querySelectorAll('.' + carFeatureLabel);
 const uniqueTripTabElement = document.getElementById('unique-trip-tab');
 const multitripTabElement = document.getElementById('multitrip-tab');
 
@@ -192,4 +196,24 @@ dateElement.addEventListener(tempusDominus.Namespace.events.change, (e) => {
             isDayRepeat = !isDayRepeat;
         }
     }
+});
+
+
+const carFeaturesAvailable = {};
+carFeatureLabelElements.forEach((carFeatureLabelElement) => {
+    carFeaturesAvailable[carFeatureLabelElement.id] = {
+        id: carFeatureLabelElement.id,
+        feature: carFeatureLabelElement.id.slice(carFeatureLabel.length + 1),
+    };
+    carFeaturesAvailable[carFeatureLabelElement.id].inputElement = document.getElementById(carFeatureInput + '-' + carFeaturesAvailable[carFeatureLabelElement.id].feature);
+
+    carFeatureLabelElement.addEventListener('click', () => {
+        if (carFeatureLabelElement.classList.contains('active')) {
+            carFeatureLabelElement.classList.remove('active');
+            carFeaturesAvailable[carFeatureLabelElement.id].inputElement.setAttribute('disabled', 'disabled');
+        } else {
+            carFeatureLabelElement.classList.add('active');
+            carFeaturesAvailable[carFeatureLabelElement.id].inputElement.removeAttribute('disabled');
+        }
+    });
 });
