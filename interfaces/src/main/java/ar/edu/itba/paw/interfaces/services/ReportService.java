@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.reports.ReportOptions;
@@ -24,4 +25,7 @@ public interface ReportService {
     void rejectReport(long reportId, String reason);
 
     TripReportCollection getTripReportCollection(long tripId);
+
+    PagedContent<Report> getReports(int page, int pageSize);
+
 }

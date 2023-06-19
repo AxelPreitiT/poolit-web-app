@@ -5,7 +5,6 @@ import javax.validation.constraints.Pattern;
 
 public class ReportAdminForm {
 
-    @Pattern(regexp = ".+")
     private String reason;
 
     public String getComment() {

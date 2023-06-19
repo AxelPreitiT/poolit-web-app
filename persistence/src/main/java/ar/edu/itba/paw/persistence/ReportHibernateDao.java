@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.reports.ReportOptions;
 import ar.edu.itba.paw.models.reports.ReportRelations;
 import ar.edu.itba.paw.models.reports.ReportState;
+import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +15,14 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static ar.edu.itba.paw.models.reports.ReportState.IN_REVISION;
 
 @Repository
 public class ReportHibernateDao implements ReportDao {
@@ -62,6 +69,31 @@ public class ReportHibernateDao implements ReportDao {
         final List<Report> result = em.createQuery("from Report", Report.class).getResultList();
         LOGGER.debug("Found {} in the database", result.size());
         return result;
+    }
+
+
+    @Override
+    public PagedContent<Report> getReports(int page, int pageSize) {
+        Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(report_id) FROM reports WHERE status='IN_REVISION'");
+        final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
+        if (totalCount == 0) {
+            LOGGER.debug("No reports");
+            return PagedContent.emptyPagedContent();
+        }
+
+        // 1+1 query
+        Query nativeQuery = em.createNativeQuery("SELECT report_id FROM reports  WHERE status='IN_REVISION' ORDER BY date DESC");
+        nativeQuery.setMaxResults(pageSize);
+        nativeQuery.setFirstResult(page * pageSize);
+
+        final List<?> maybeReportIdList = nativeQuery.getResultList();
+        final List<Long> reportIdList = maybeReportIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
+
+        final TypedQuery<Report> reportQuery = em.createQuery("FROM Report rp WHERE rp.reportId IN :reportIdList AND rp.status='IN_REVISION'", Report.class);
+        reportQuery.setParameter("reportIdList", reportIdList);
+        List<Report> result = reportQuery.getResultList();
+        LOGGER.debug("Found {} in the database", result);
+        return new PagedContent<>(result, page, pageSize, totalCount);
     }
 
     @Override

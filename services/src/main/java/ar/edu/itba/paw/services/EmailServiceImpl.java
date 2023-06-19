@@ -291,13 +291,13 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendMailBanReport(Report report) throws Exception{
-        String subject = messageSource.getMessage("emails.subject.BandReport", null, report.getReporter().getMailLocale());
+        String subject = messageSource.getMessage("emails.subject.BandReport", null, report.getReported().getMailLocale());
 
         final Context ctx = new Context();
         ctx.setVariable("report", report);
-        ctx.setLocale(report.getReporter().getMailLocale());
+        ctx.setLocale(report.getReported().getMailLocale());
 
-        sendEmail(report.getReporter().getEmail(), subject, "band-report-mail", ctx, report.getReporter().getMailLocale());
+        sendEmail(report.getReported().getEmail(), subject, "band-report-mail", ctx, report.getReported().getMailLocale());
     }
 
     //Mail al admin para decirle que existe un nuevo reporte

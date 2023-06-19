@@ -19,7 +19,7 @@
         <h1 class="secondary-color"><spring:message code="admin.titleView"/></h1>
         <hr class="secondary-color">
     </div>
-    <c:forEach var="report" items="${reports}">
+    <c:forEach var="report" items="${reports.elements}">
         <c:set var="report" value="${report}" scope="request"/>
         <c:if test="${report.relation eq 'DRIVER_2_PASSENGER'}">
             <jsp:include page="short-info-report.jsp">
@@ -46,6 +46,20 @@
             </jsp:include>
         </c:if>
     </c:forEach>
+    <c:if test="${reports.moreThanOnePage}">
+        <c:url value="" var="baseUrl">
+            <c:forEach var="p" items="${param}">
+                <c:if test="${!(p.key eq 'page')}">
+                    <c:param name="${p.key}" value="${p.value}"/>
+                </c:if>
+            </c:forEach>
+        </c:url>
+        <jsp:include page="/WEB-INF/jsp/components/pagination.jsp">
+            <jsp:param name="currentPage" value="${reports.currentPage+1}"/>
+            <jsp:param name="totalPages" value="${reports.totalPages}"/>
+            <jsp:param name="baseUrl" value="${baseUrl}"/>
+        </jsp:include>
+    </c:if>
 </div>
 <c:if test="${!(empty acceptReport) && acceptReport}">
     <div id="toast-container">

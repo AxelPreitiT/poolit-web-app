@@ -69,10 +69,10 @@
                 <img src="https://cdn.discordapp.com/attachments/1090791209095659590/1102380392222298142/poolit.png" alt="Poolit logo"/>
             </a>
         </div>
-        <h1 class="text-center mb-4" th:text="#{emails.rejectReport.title}"></h1>
-        <p th:text="#{emails.rejectReport.message (${report.trip.originCity.name}, ${report.trip.destinationCity.name}, ${report.reason.name})}"></p>
-        <p th:text="#{emails.rejectReport.message2 (${report.adminReason})}"></p>
-        <p th:text="#{emails.rejectReport.message3}"></p>
+        <h1 class="text-center mb-4" th:text="#{emails.banReport.title}"></h1>
+        <p th:text="#{emails.banReport.message (${report.trip.originCity.name}, ${report.trip.destinationCity.name}, ${report.dateString}, ${report.reason.springMessageCode})}"></p>
+        <p th:text="#{emails.banReport.message2 (${report.adminReason})}"></p>
+        <p th:text="#{emails.banReport.message3}"></p>
     </div>
 </div>
 </body>

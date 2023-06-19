@@ -72,6 +72,7 @@ public class ReportServiceImpl implements ReportService {
         return reportDao.getAllReports();
     }
 
+    @Transactional
     @Override
     public void rejectReport(long reportId, String reason){
         reportDao.resolveReport(reportId, reason, ReportState.REJECTED);
@@ -84,6 +85,7 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
+    @Transactional
     @Override
     public void acceptReport(long reportId, String reason) {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
@@ -177,6 +179,11 @@ public class ReportServiceImpl implements ReportService {
             throw e;
         }
         return new TripReportCollection(driverToReport, passengersToReport);
+    }
+
+    @Override
+    public PagedContent<Report> getReports(int page, int pageSize) {
+        return reportDao.getReports(page, pageSize);
     }
 
     private ReportState getDriverReportState(Trip trip, Passenger reporter) {

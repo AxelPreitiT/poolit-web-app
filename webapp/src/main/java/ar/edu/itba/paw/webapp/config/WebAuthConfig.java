@@ -66,7 +66,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .invalidSessionUrl("/users/login")
                 .and().authorizeRequests()
-                    .antMatchers("/admin").hasRole("ADMIN")
+                    .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
                     .antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
                     .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
                     .antMatchers("/cars/{id:\\d+$}").authenticated()

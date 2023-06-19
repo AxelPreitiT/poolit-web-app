@@ -70,7 +70,7 @@
             </a>
         </div>
         <h1 class="text-center mb-4" th:text="#{emails.rejectReport.title}"></h1>
-        <p th:text="#{emails.rejectReport.message (${report.reporter.name}, ${report.reporter.surname}, ${report.reason.name})}"></p>
+        <p th:text="#{emails.rejectReport.message (${report.reporter.name}, ${report.reporter.surname}, ${report.reason.springMessageCode})}"></p>
         <p th:text="#{emails.rejectReport.message2 (${report.adminReason})}"></p>
     </div>
 </div>
