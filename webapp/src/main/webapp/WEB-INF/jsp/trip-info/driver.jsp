@@ -44,33 +44,33 @@
     </div>
   </div>
   <div id="footer-container">
-    <div id="trip-price-container">
-      <div class="trip-price-row">
-        <div>
-          <span class="h3 text"><spring:message code="tripInfo.driver.price"/></span>
-        </div>
-        <div>
+    <div class="footer-row">
+      <div id="trip-price-container">
+        <div class="trip-price-row">
+          <div>
+            <span class="h3 text"><spring:message code="tripInfo.driver.price"/></span>
+          </div>
+          <div>
           <span class="h2 secondary-color">
             <spring:message code="tripInfo.driver.priceFormat" arguments="${totalIncome}" var="priceString" argumentSeparator=";"/>
             <c:out value="${priceString}"/>
           </span>
+          </div>
         </div>
-      </div>
-      <div class="trip-price-row items-to-end">
-        <c:choose>
-          <c:when test="${trip.recurrent}">
+        <div class="trip-price-row items-to-end">
+          <c:choose>
+            <c:when test="${trip.recurrent}">
             <span class="h6 italic-text">
               <spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/>
               <c:out value="${totalTripsString}"/>
             </span>
-          </c:when>
-          <c:otherwise>
-            <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
-          </c:otherwise>
-        </c:choose>
+            </c:when>
+            <c:otherwise>
+              <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
+            </c:otherwise>
+          </c:choose>
+        </div>
       </div>
-    </div>
-    <div id="trip-operations-container">
       <div id="button-container">
         <div id="review-trip-container">
           <c:if test="${tripReviewCollection.canReview}">
@@ -122,13 +122,13 @@
           <span class="light-text h4"><spring:message code="tripInfo.driver.button"/></span>
         </a>
       </div>
-      <div id="report-container">
-        <c:if test="${tripReportCollection.canReport}">
-          <jsp:include page="/WEB-INF/jsp/trip-info/report-list-modal.jsp">
-            <jsp:param name="reported" value="${reported}"/>
-          </jsp:include>
-        </c:if>
-      </div>
+    </div>
+    <div id="report-container">
+      <c:if test="${tripReportCollection.canReport}">
+        <jsp:include page="/WEB-INF/jsp/trip-info/report-list-modal.jsp">
+          <jsp:param name="reported" value="${reported}"/>
+        </jsp:include>
+      </c:if>
     </div>
   </div>
 </div>

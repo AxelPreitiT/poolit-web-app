@@ -2,11 +2,24 @@
 
 #footer-container {
     display: flex;
+    flex-direction: column;
+    padding: 0 1em;
+    row-gap: 0.5em;
+}
+
+.footer-row {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-end;
-    padding: 0 1em;
+    align-items: center;
     column-gap: 2em;
+}
+
+#report-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 #trip-price-container {
@@ -35,13 +48,6 @@
     margin-top: -0.2em;
 }
 
-#trip-operations-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    row-gap: 1em;
-}
-
 #button-container {
     display: flex;
     flex-direction: row;
@@ -49,7 +55,7 @@
 }
 
 @media (max-width: 1350px) {
-    #footer-container {
+    .footer-row {
         display: block;
     }
 

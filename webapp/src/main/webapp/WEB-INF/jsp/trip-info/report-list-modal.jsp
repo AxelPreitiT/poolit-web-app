@@ -11,7 +11,7 @@
 
 <div id="report-list-modal-container">
     <span class="h6 italic-text"><spring:message code="report.didYouHaveAnyProblem"/></span>
-    <a class="btn" data-bs-targer="#report-list-modal" data-bs-toggle="modal">
+    <a data-bs-target="#report-list-modal" data-bs-toggle="modal">
         <i class="bi bi-megaphone-fill primary-color h6"></i>
         <span class="h6 primary-color"><spring:message code="report.report"/></span>
     </a>
@@ -25,7 +25,7 @@
                 <div class="modal-body">
                     <div id="report-published-container" class="collapse <c:if test="${!(empty param.reported) && param.reported}">show</c:if>">
                         <i class="bi bi-check-circle-fill success h6"></i>
-                        <span class="success h6" id="review-published-text"><spring:message code="review.toast.message"/></span>
+                        <span class="success h6" id="published-text"><spring:message code="review.toast.message"/></span>
                     </div>
                     <jsp:include page="/WEB-INF/jsp/trip-info/report-list.jsp"/>
                 </div>
@@ -53,7 +53,7 @@
                                     <jsp:include page="/WEB-INF/jsp/trip-info/report-form.jsp"/>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
+                                    <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#report-list-modal" data-bs-toggle="modal">
                                         <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
                                     </button>
                                     <button type="submit" class="btn shadow-btn button-style button-color">
@@ -81,7 +81,7 @@
                                         <jsp:include page="/WEB-INF/jsp/trip-info/report-form.jsp"/>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#review-list-modal" data-bs-toggle="modal">
+                                        <button type="button" class="btn shadow-btn button-style primary-button" data-bs-target="#report-list-modal" data-bs-toggle="modal">
                                             <span class="light-text"><spring:message code="tripCard.btn.back"/></span>
                                         </button>
                                         <button type="submit" class="btn shadow-btn button-style button-color">
