@@ -1,3 +1,8 @@
+@import "../base/elements.css";
+
+#main-header-row > hr {
+    margin: 0;
+}
 
 .row-report{
     display: flex;
