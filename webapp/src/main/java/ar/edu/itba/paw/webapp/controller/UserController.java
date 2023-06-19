@@ -25,9 +25,12 @@ import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 
 @Controller
-public class UserController extends LoggedUserController {
+public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -59,7 +62,6 @@ public class UserController extends LoggedUserController {
                           final CarService carService,
                           final PassengerReviewService passengerReviewService,
                           final DriverReviewService driverReviewService) {
-        super(userService);
         this.cityService = cityService;
         this.userService = userService;
         this.pawUserDetailsService = pawUserDetailsService;

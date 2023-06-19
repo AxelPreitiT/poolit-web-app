@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.exceptions.*;
@@ -11,15 +12,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
-public class ExceptionControllerAdvice extends LoggedUserController {
+public class ExceptionControllerAdvice {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
 
 
-    @Autowired
-    public ExceptionControllerAdvice(final UserService userService){
-        super(userService);
-    }
     @ExceptionHandler(TripNotFoundException.class)
     public ModelAndView tripNotFound(){
         LOGGER.error("Raised TripNotFoundException in controller");

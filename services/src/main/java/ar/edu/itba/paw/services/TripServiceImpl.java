@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -494,18 +496,19 @@ public class TripServiceImpl implements TripService {
             long origin_city_id, long destination_city_id, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final BigDecimal minPriceValue, final BigDecimal maxPriceValue, final String sortType, final boolean descending,
-            final int page, final int pageSize){
+            List<FeatureCar> carFeatures,final int page, final int pageSize){
         Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
         Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
         validatePageAndSize(page,pageSize);
         LocalDateTime startDateTime = startDate.atTime(startTime);
         LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
         Optional<User> user = userService.getCurrentUser();
+        carFeatures = carFeatures == null ? new ArrayList<>() : carFeatures;
         long userId = -1;
         if(user.isPresent()){
             userId=user.get().getUserId();
         }
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,page,pageSize);
+        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,carFeatures,page,pageSize);
     }
 
     @Transactional

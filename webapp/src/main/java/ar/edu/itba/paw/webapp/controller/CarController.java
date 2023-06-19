@@ -19,9 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
-public class CarController extends LoggedUserController {
+public class CarController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CarController.class);
     private static final int DEFAULT_PAGE_SIZE = 10;
@@ -30,9 +31,7 @@ public class CarController extends LoggedUserController {
     private final CarReviewService carReviewService;
 
     @Autowired
-    public CarController(UserService userService,CarService carService, CarReviewService carReviewService) {
-            //TODO revisar esto, ya no usamos userService aca
-            super(userService);
+    public CarController(CarService carService, CarReviewService carReviewService) {
             this.carService = carService;
             this.carReviewService = carReviewService;
     }

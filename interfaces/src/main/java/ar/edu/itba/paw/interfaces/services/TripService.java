@@ -71,7 +71,8 @@ public interface TripService {
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long origin_city_id, long destination_city_id, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
-            final BigDecimal minPriceValue, final BigDecimal maxPriceValue, final String sortType, final boolean descending, final int page, final int pageSize);
+            final BigDecimal minPrice, final BigDecimal maxPrice, final String sortType, final boolean descending,
+            final List<FeatureCar> carFeatures, final int page, final int pageSize);
 
 
     public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;

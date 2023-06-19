@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @Controller
-public class ReviewController extends LoggedUserController {
+public class ReviewController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewController.class);
 
@@ -46,7 +46,6 @@ public class ReviewController extends LoggedUserController {
 
     @Autowired
     public ReviewController(final PassengerReviewService passengerReviewService, final DriverReviewService driverReviewService, final CarReviewService carReviewService, final TripService tripService, final UserService userService) {
-        super(userService);
         this.passengerReviewService = passengerReviewService;
         this.driverReviewService = driverReviewService;
         this.carReviewService = carReviewService;
