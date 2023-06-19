@@ -30,7 +30,10 @@
             <div class="ratings">
               <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
               <c:set var="rating" value="${driverRating}" scope="request"/>
-              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                <jsp:param name="fontSize" value="h4"/>
+                <jsp:param name="fontColor" value="secondary-color"/>
+              </jsp:include>
             </div>
           </div>
         </c:when>
@@ -48,7 +51,10 @@
           <div class="ratings">
             <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
             <c:set var="rating" value="${passengerRating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+              <jsp:param name="fontSize" value="h4"/>
+              <jsp:param name="fontColor" value="secondary-color"/>
+            </jsp:include>
           </div>
         </div>
       </c:when>

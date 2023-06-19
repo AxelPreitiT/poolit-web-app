@@ -146,9 +146,9 @@
     <c:if test="${passengersContent.totalCount>0}">
       <div class="container-flex">
         <div class="list-container">
-          <c:forEach items="${passengersContent.elements}" var="user">
-            <c:url value="/profile/${user.userId}" var="userUrl"/>
-            <c:url value="/image/${user.userImageId}" var="userImageId"/>
+          <c:forEach items="${passengersContent.elements}" var="passenger">
+            <c:url value="/profile/${passenger.userId}" var="userUrl"/>
+            <c:url value="/image/${passenger.userImageId}" var="userImageId"/>
             <div>
               <div class="individual-profile">
                 <div>
@@ -157,64 +157,54 @@
                 <div class="show-row-content-passangers">
                   <div class="column-data-pass">
                     <a href="${userUrl}" class="show-row profile-link">
-                      <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/> </span>
+                      <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}"/> </span>
                     </a>
                     <c:if test="${trip.recurrent}">
-                      <c:if test="${user.recurrent}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${user.startDateString}, ${user.endDateString}"/></h6>
+                      <c:if test="${passenger.recurrent}">
+                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${user.endDateString}"/></h6>
                       </c:if>
-                      <c:if test="${!(user.recurrent)}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.unique" arguments="${user.startDateString}"/></h6>
+                      <c:if test="${!(passenger.recurrent)}">
+                        <h6 class="show-row italic-text"><spring:message code="dates.unique" arguments="${passenger.startDateString}"/></h6>
                       </c:if>
                     </c:if>
                   </div>
                   <div class="btn-section">
-                    <c:set value='${user.user.passengerRating}' var="rating"/>
                     <div class="row-info">
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="ratings">
-                          <c:forEach var="i" begin="1" end="${rating}">
-                            <i class="bi bi-star-fill secondary-color h4"></i>
-                          </c:forEach>
-                          <c:if test="${rating % 1 >= 0.5}">
-                            <i class="bi bi-star-half secondary-color h4"></i>
-                            <c:forEach var="i" begin="${rating + 2}" end="5">
-                              <i class="bi bi-star secondary-color h4"></i>
-                            </c:forEach>
-                          </c:if>
-                          <c:if test="${rating % 1 < 0.5}">
-                            <c:forEach var="i" begin="${rating + 1}" end="5">
-                              <i class="bi bi-star secondary-color h4"></i>
-                            </c:forEach>
-                          </c:if>
+                          <c:set value='${passenger.user.passengerRating}' var="rating" scope="request"/>
+                          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                            <jsp:param name="fontSize" value="h5"/>
+                            <jsp:param name="fontColor" value="secondary-color"/>
+                          </jsp:include>
                         </div>
                       </div>
                     </div>
 
-                    <c:url value="/trips/${trip.tripId}/deletePas/${user.userId}" var="deletePasUrl"/>
+                    <c:url value="/trips/${trip.tripId}/deletePas/${passenger.userId}" var="deletePasUrl"/>
                     <form:form method="POST" action="${deletePasUrl}" cssClass="form-bn-class">
-                      <c:if test="${user.passengerState eq 'REJECTED'}">
+                      <c:if test="${passenger.passengerState eq 'REJECTED'}">
                         <button type="submit" class="btn disabled btn-danger btn-sm">
                           <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
                         </button>
                       </c:if>
-                      <c:if test="${!(user.passengerState eq 'REJECTED')}">
-                        <button type="submit" class="btn btn-danger btn-sm" <c:if test="${user.tripStarted}">
+                      <c:if test="${!(passenger.passengerState eq 'REJECTED')}">
+                        <button type="submit" class="btn btn-danger btn-sm" <c:if test="${passenger.tripStarted}">
                           <c:out value="disabled"/>
                         </c:if>>
                           <span class="light-text"><spring:message code="driver.passangers.delete"/></span>
                         </button>
                       </c:if>
                     </form:form>
-                    <c:url value="/trips/${trip.tripId}/AceptPas/${user.userId}" var="acceptPasUrl"/>
+                    <c:url value="/trips/${trip.tripId}/AceptPas/${passenger.userId}" var="acceptPasUrl"/>
                     <form:form method="POST" action="${acceptPasUrl}" cssClass="form-bn-class">
-                      <c:if test="${user.passengerState eq 'ACCEPTED'}">
+                      <c:if test="${passenger.passengerState eq 'ACCEPTED'}">
                         <button type="submit" class="btn disabled success-bg-color btn-sm">
                           <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
                         </button>
                       </c:if>
-                      <c:if test="${!(user.passengerState eq 'ACCEPTED')}">
-                        <button type="submit" class="btn btn-primary success-bg-color btn-sm" <c:if test="${user.tripStarted}">
+                      <c:if test="${!(passenger.passengerState eq 'ACCEPTED')}">
+                        <button type="submit" class="btn btn-primary success-bg-color btn-sm" <c:if test="${passenger.tripStarted}">
                           <c:out value="disabled"/>
                         </c:if>>
                           <span class="light-text"><spring:message code="driver.passangers.accept"/></span>
@@ -224,7 +214,7 @@
                   </div>
                 </div>
               </div>
-              <c:if test="${user.tripStarted}">
+              <c:if test="${passenger.tripStarted}">
                 <div class="end-line">
                   <h6><spring:message code="driver.passangers.tripStarted"/></h6>
                 </div>

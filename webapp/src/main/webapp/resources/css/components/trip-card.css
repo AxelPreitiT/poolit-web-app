@@ -32,6 +32,7 @@ a {
     align-items: center;
     justify-content: center;
     border-radius: 0 0.2rem 0.2rem 0;
+    flex: 1;
     /*object-fit: cover;*/
 }
 
@@ -88,14 +89,23 @@ a {
     margin-left: 9px;
     margin-right: 5px;
     column-gap: 0.2em;
+    margin-top: 15px;
 }
 
 .footer-date-container, .footer-time-container, .footer-price-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: flex-end;
     column-gap: 0.5em;
+    margin-top: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.footer-date-container{
+    flex-shrink: 0;
+    margin-right: 1em;
 }
 
 .footer-date-container i, .footer-time-container i, .footer-price-container i {
@@ -114,7 +124,7 @@ a {
 
 .date-info-column {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
 }
@@ -158,4 +168,29 @@ a {
 
 .modal-dialog {
     max-width: fit-content !important;
+}
+.mycontainer{
+    display: flex;
+    flex-direction: column;
+}
+.ratings{
+    width: 100%;
+}
+
+.show-row-content {
+    flex-direction: column;
+}
+
+.show-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+}
+
+.driver-image-photo {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
 }

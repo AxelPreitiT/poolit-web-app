@@ -18,21 +18,23 @@
     </div>
     <div class="circular--landscape-container hidden edit" id="user-image-display">
         <label for="image-file" id="image-label" class="secondary-bg-color shadow-btn button-style">
+            <div class="edit-icon"><i class="icon bi bi-pencil-fill secondary-color h1"></i></div>
             <c:url value="/image/${user.userImageId}" var="profileImageUrl"/>
             <div class="circular--landscape">
             <img class="circular--square" src="${profileImageUrl}" alt="<spring:message code="register.profileImage"/>">
             </div>
         </label>
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
-        <span class="edit-icon"><i class="icon bi bi-pencil-fill secondary-color h1"></i></span>
     </div>
   </div>
   <h3 id="user-name" class="no-edit"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
   <div class="row-info rows edit hidden">
     <h6><spring:message code="user.name"/></h6>
     <form:input path="username" cssClass="form-control " id="username" />
-    <h6><spring:message code="user.surname"/></h6>
-    <form:input path="surname" cssClass="form-control " id="surname" />
+  </div>
+  <div class="row-info rows edit hidden">
+      <h6><spring:message code="user.surname"/></h6>
+      <form:input path="surname" cssClass="form-control " id="surname" />
   </div>
   <div class="row-info rows">
     <h6><spring:message code="user.email"/></h6>
@@ -93,7 +95,10 @@
             <div class="ratings">
               <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
               <c:set var="rating" value="${driverRating}" scope="request"/>
-              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                    <jsp:param name="fontSize" value="h4"/>
+                    <jsp:param name="fontColor" value="secondary-color"/>
+                </jsp:include>
             </div>
           </div>
         </c:when>
@@ -111,7 +116,10 @@
           <div class="ratings">
             <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
             <c:set var="rating" value="${passengerRating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                  <jsp:param name="fontSize" value="h4"/>
+                  <jsp:param name="fontColor" value="secondary-color"/>
+              </jsp:include>
           </div>
         </div>
       </c:when>
@@ -121,16 +129,24 @@
     </c:choose>
   </div>
     <div class="row-info rows hidden edit">
-      <button id="update-car" type="submit" class="btn button-style button-color shadow-btn hidden edit">
-        <i class="bi bi-check2 light-text h3"></i>
-        <span class="button-text-style light-text h3"><spring:message code="updateCar.save"/></span>
-      </button>
+        <div class="edit-button-container">
+            <button type="button" onclick="toggleEdit()" class="btn button-style primary-button shadow-btn">
+                <i class="bi bi-pencil-square light-text h5"></i>
+                <span class="button-text-style light-text h5"><spring:message code="review.cancel"/></span>
+            </button>
+            <button id="update-car" type="submit" class="btn button-style button-color shadow-btn hidden edit">
+                <i class="bi bi-check2 light-text h5"></i>
+                <span class="button-text-style light-text h5"><spring:message code="updateCar.save"/></span>
+            </button>
+        </div>
     </div>
     <div class="row-info rows no-edit">
-      <button id="edit-car" type="button" onclick="toggleEdit()" class="btn button-style button-color shadow-btn">
-        <i class="bi bi-pencil-square light-text h3"></i>
-        <span class="button-text-style light-text h3" id="editButton" ><spring:message code="profile.edit"/></span>
-      </button>
+        <div class="edit-button-container">
+            <button id="edit-car" type="button" onclick="toggleEdit()" class="btn button-style button-color shadow-btn">
+                <i class="bi bi-pencil-square light-text h5"></i>
+                <span class="button-text-style light-text h5" id="editButton" ><spring:message code="profile.edit"/></span>
+            </button>
+        </div>
     </div>
   </form:form>
   <script src="<c:url value="/resources/js/cars/editCar.js"/>" type="application/javascript"></script>
