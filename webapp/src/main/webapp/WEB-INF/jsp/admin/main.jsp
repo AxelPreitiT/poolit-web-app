@@ -21,7 +21,30 @@
     </div>
     <c:forEach var="report" items="${reports}">
         <c:set var="report" value="${report}" scope="request"/>
-        <jsp:include page="short-info-report.jsp"/>
+        <c:if test="${report.relation eq 'DRIVER_2_PASSENGER'}">
+            <jsp:include page="short-info-report.jsp">
+                <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
+                <jsp:param name="reporterRole" value="report.role.driver"/>
+                <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
+                <jsp:param name="reportedRole" value="report.role.passenger"/>
+            </jsp:include>
+        </c:if>
+        <c:if test="${report.relation eq 'PASSENGER_2_DRIVER'}">
+            <jsp:include page="short-info-report.jsp">
+                <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
+                <jsp:param name="reporterRole" value="report.role.passenger"/>
+                <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
+                <jsp:param name="reportedRole" value="report.role.driver"/>
+            </jsp:include>
+        </c:if>
+        <c:if test="${report.relation eq 'PASSENGER_2_PASSENGER'}">
+            <jsp:include page="short-info-report.jsp">
+                <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
+                <jsp:param name="reporterRole" value="report.role.passenger"/>
+                <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
+                <jsp:param name="reportedRole" value="report.role.passenger"/>
+            </jsp:include>
+        </c:if>
     </c:forEach>
 </div>
 <c:if test="${!(empty acceptReport) && acceptReport}">
