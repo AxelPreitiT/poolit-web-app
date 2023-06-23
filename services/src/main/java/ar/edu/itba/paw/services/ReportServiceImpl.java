@@ -119,6 +119,7 @@ public class ReportServiceImpl implements ReportService {
             }
             pgTripUser = tripService.getTripsWhereUserIsPassengerFuture(report.getReported(), i+1, 10);
         }
+        userService.banUser(report.getReported());
         //Falta elimar el pasajero de los viajes
     }
 

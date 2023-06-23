@@ -30,4 +30,5 @@ public interface UserService {
     void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData);
 
     public List<User> getAdmins();
+    void banUser(User user);
 }

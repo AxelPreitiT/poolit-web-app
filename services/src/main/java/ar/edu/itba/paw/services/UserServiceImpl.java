@@ -196,4 +196,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getAdmins(){
         return userDao.getAdmins();
     }
+
+    @Override
+    public void banUser(User user) {
+        userDao.banUser(user.getUserId());
+    }
 }

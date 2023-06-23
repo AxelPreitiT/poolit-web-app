@@ -141,5 +141,16 @@ public class UserHibernateDao implements UserDao {
         return result;
     }
 
+    @Override
+    public void banUser(long userId) {
+        Optional<User> maybeUser = findById(userId);
+        LOGGER.debug("Modifying user banned with id '{}' in the database", userId);
+        if (maybeUser.isPresent()) {
+            final User user = maybeUser.get();
+            user.setBanned(true);
+            em.persist(user);
+        }
+    }
+
 
 }

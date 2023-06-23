@@ -25,5 +25,6 @@ public interface UserDao {
     void blockUser(User blocker, User blocked);
     void unblockUser(User blocker, User blocked);
     boolean isBlocked(User blocker, User blocked);
-    public List<User> getAdmins();
+    List<User> getAdmins();
+    void banUser(long userId);
 }

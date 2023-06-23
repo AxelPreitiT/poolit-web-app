@@ -19,33 +19,43 @@
         <h1 class="secondary-color"><spring:message code="admin.titleView"/></h1>
         <hr class="secondary-color">
     </div>
-    <c:forEach var="report" items="${reports.elements}">
-        <c:set var="report" value="${report}" scope="request"/>
-        <c:if test="${report.relation eq 'DRIVER_2_PASSENGER'}">
-            <jsp:include page="short-info-report.jsp">
-                <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
-                <jsp:param name="reporterRole" value="report.role.driver"/>
-                <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
-                <jsp:param name="reportedRole" value="report.role.passenger"/>
-            </jsp:include>
-        </c:if>
-        <c:if test="${report.relation eq 'PASSENGER_2_DRIVER'}">
-            <jsp:include page="short-info-report.jsp">
-                <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
-                <jsp:param name="reporterRole" value="report.role.passenger"/>
-                <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
-                <jsp:param name="reportedRole" value="report.role.driver"/>
-            </jsp:include>
-        </c:if>
-        <c:if test="${report.relation eq 'PASSENGER_2_PASSENGER'}">
-            <jsp:include page="short-info-report.jsp">
-                <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
-                <jsp:param name="reporterRole" value="report.role.passenger"/>
-                <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
-                <jsp:param name="reportedRole" value="report.role.passenger"/>
-            </jsp:include>
-        </c:if>
-    </c:forEach>
+    <c:choose>
+    <c:when test="${empty reports.elements}">
+        <div class="report_empty">
+            <i class="bi-solid bi-book secondary-color h2"></i>
+            <h3 class="italic-text placeholder-text"><spring:message code="admin.noneReport"/></h3>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <c:forEach var="report" items="${reports.elements}">
+            <c:set var="report" value="${report}" scope="request"/>
+            <c:if test="${report.relation eq 'DRIVER_2_PASSENGER'}">
+                <jsp:include page="short-info-report.jsp">
+                    <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
+                    <jsp:param name="reporterRole" value="report.role.driver"/>
+                    <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
+                    <jsp:param name="reportedRole" value="report.role.passenger"/>
+                </jsp:include>
+            </c:if>
+            <c:if test="${report.relation eq 'PASSENGER_2_DRIVER'}">
+                <jsp:include page="short-info-report.jsp">
+                    <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
+                    <jsp:param name="reporterRole" value="report.role.passenger"/>
+                    <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
+                    <jsp:param name="reportedRole" value="report.role.driver"/>
+                </jsp:include>
+            </c:if>
+            <c:if test="${report.relation eq 'PASSENGER_2_PASSENGER'}">
+                <jsp:include page="short-info-report.jsp">
+                    <jsp:param name="reporterStars" value="${report.reporter.passengerRating}"/>
+                    <jsp:param name="reporterRole" value="report.role.passenger"/>
+                    <jsp:param name="reportedStars" value="${report.reported.passengerRating}"/>
+                    <jsp:param name="reportedRole" value="report.role.passenger"/>
+                </jsp:include>
+            </c:if>
+        </c:forEach>
+    </c:otherwise>
+    </c:choose>
     <c:if test="${reports.moreThanOnePage}">
         <c:url value="" var="baseUrl">
             <c:forEach var="p" items="${param}">
