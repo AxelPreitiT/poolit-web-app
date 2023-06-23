@@ -2,7 +2,9 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.persistence.CarReviewDao;
 import ar.edu.itba.paw.interfaces.services.CarReviewService;
+import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
@@ -28,15 +30,25 @@ public class CarReviewServiceImpl implements CarReviewService {
     private final CarReviewDao carReviewDao;
     private final TripService tripService;
 
+    private final UserService userService;
+
+    private final CarService carService;
+
     @Autowired
-    public CarReviewServiceImpl(CarReviewDao carReviewDao, TripService tripService) {
+    public CarReviewServiceImpl(CarReviewDao carReviewDao, TripService tripService, UserService userService1,
+                                CarService carService1) {
         this.carReviewDao = carReviewDao;
         this.tripService = tripService;
+        this.userService = userService1;
+        this.carService = carService1;
     }
 
     @Transactional
     @Override
-    public CarReview createCarReview(Trip trip, Passenger reviewer, Car car, int rating, String comment, CarReviewOptions option) {
+    public CarReview createCarReview(long tripId, long carId, int rating, String comment, CarReviewOptions option) {
+        Trip trip = tripService.findById(tripId).get();
+        Passenger reviewer = tripService.getPassenger(trip, userService.getCurrentUser().get()).get();
+        Car car = carService.findById(carId).get();
         if(!canReviewCar(trip, reviewer, car)) {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} tried to review car with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), car.getCarId(), e);
@@ -46,12 +58,14 @@ public class CarReviewServiceImpl implements CarReviewService {
     }
 
     @Override
-    public double getCarsRating(Car car) {
+    public double getCarsRating(long carId) {
+        Car car = carService.findById(carId).get();
         return carReviewDao.getCarRating(car);
     }
 
     @Override
-    public PagedContent<CarReview> getCarReviews(Car car, int page, int pageSize) {
+    public PagedContent<CarReview> getCarReviews(long carId, int page, int pageSize) {
+        Car car = carService.findById(carId).get();
         return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
@@ -84,7 +98,10 @@ public class CarReviewServiceImpl implements CarReviewService {
     }
 
     @Override
-    public ItemReview<Car> getCarReviewState(Trip trip, Passenger reviewer, Car car) {
+    public ItemReview<Car> getCarReviewState(final long tripId) {
+        Trip trip = tripService.findById(tripId).get();
+        Passenger reviewer = tripService.getPassenger(trip, userService.getCurrentUser().get()).get();
+        Car car = carService.findById(trip.getCar().getCarId()).get();
         return new ItemReview<>(car, getReviewState(trip, reviewer, car));
     }
 }

@@ -79,7 +79,7 @@
                 <c:forEach items="${allFeatures}" var="feature">
                     <label class="btn btn-custom">
                     <form:checkbox path="features" value="${feature}" />
-                    <spring:message code="${feature.toString()}"/>
+                    <spring:message code="${feature.code}"/>
                     </label>
                 </c:forEach>
                 </div>

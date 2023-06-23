@@ -17,6 +17,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -86,8 +87,10 @@ public class ReportHibernateDao implements ReportDao {
         nativeQuery.setFirstResult(page * pageSize);
 
         final List<?> maybeReportIdList = nativeQuery.getResultList();
+        if(maybeReportIdList.isEmpty()){
+            return new PagedContent<>(new ArrayList<>(),page,pageSize, totalCount);
+        }
         final List<Long> reportIdList = maybeReportIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
-
         final TypedQuery<Report> reportQuery = em.createQuery("FROM Report rp WHERE rp.reportId IN :reportIdList", Report.class);
         reportQuery.setParameter("reportIdList", reportIdList);
         List<Report> result = reportQuery.getResultList();

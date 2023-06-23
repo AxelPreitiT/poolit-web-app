@@ -18,6 +18,9 @@ a {
     text-decoration: none;
 }
 
+form {
+    margin-bottom: 0;
+}
 
 .sent-email{
     display: flex;

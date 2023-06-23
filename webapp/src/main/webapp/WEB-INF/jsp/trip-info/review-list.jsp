@@ -94,15 +94,23 @@
             <div class="list-item-text">
               <spring:message code="user.nameFormat" var="passengerName" arguments="${passenger.name}, ${passenger.surname}"/>
               <span class="light-text h4"><c:out value="${passengerName}"/></span>
-              <c:if test="${trip.recurrent}">
-                <div class="list-item-date">
-                  <i class="bi bi-calendar light-text"></i>
-                  <span class="light-text">
-                    <spring:message code="format.dates" var="passengerDate" arguments="${passenger.startDateString}, ${passenger.endDateString}"/>
-                    <c:out value="${passengerDate}"/>
-                  </span>
-                </div>
-              </c:if>
+              <c:choose>
+                <c:when test="${passenger.recurrent}">
+                  <div class="passenger-dates-container">
+                    <i class="bi bi-calendar light-text"></i>
+                    <span class="light-text">
+                      <spring:message code="format.dates" var="passengerDate" arguments="${passenger.startDateString}, ${passenger.endDateString}"/>
+                      <c:out value="${passengerDate}"/>
+                    </span>
+                  </div>
+                </c:when>
+                <c:otherwise>
+                  <div class="passenger-dates-container">
+                    <i class="bi bi-calendar light-text"></i>
+                    <span class="light-text"><c:out value="${passenger.startDateString}"/></span>
+                  </div>
+                </c:otherwise>
+              </c:choose>
             </div>
           </button>
           <c:if test="${!passengerReviewItem.pending}">

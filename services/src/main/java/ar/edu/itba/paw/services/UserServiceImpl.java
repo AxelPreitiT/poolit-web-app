@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
-import ar.edu.itba.paw.interfaces.services.CityService;
-import ar.edu.itba.paw.interfaces.services.ImageService;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.interfaces.services.TokenService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.UserRole;
@@ -37,6 +36,8 @@ public class UserServiceImpl implements UserService {
 
     private final CityService cityService;
 
+    private final EmailService emailService;
+
     private final UserDao userDao;
 
     private final TokenService tokenService;
@@ -50,21 +51,24 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
-                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1){
+                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1,
+                           final EmailService emailService1){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         //this.userDetailsService = userDetailsService;
-        this.imageService=imageService1;
-        this.cityService=cityService1;
+        this.imageService = imageService1;
+        this.cityService = cityService1;
+        this.emailService = emailService1;
     }
 
     @Transactional
     @Override
     public User createUser(final String username, final String surname, final String email,
-                           final String phone, final String password, final City bornCity, final Locale mailLocale, final String role, long user_image_id) throws EmailAlreadyExistsException{
-
+                           final String phone, final String password, final long bornCityId, final String mailLocaleString, final String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException {
+        final City bornCity = cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new);
+        final long user_image_id = imageService.createImage(imgData).getImageId();
         String finalRole = (role == null) ? UserRole.USER.getText() : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
@@ -75,14 +79,31 @@ public class UserServiceImpl implements UserService {
                 throw exception;
             }else{
                 LOGGER.debug("Email '{}' already exists in the database but has not registered yet, updating user", email);
-                User ans = userDao.updateProfile(username, surname, email, passwordEncoder.encode(password), bornCity, mailLocale.toString(), finalRole, user_image_id);
+                User ans = userDao.updateProfile(username, surname, email, passwordEncoder.encode(password), bornCity, mailLocaleString, finalRole, user_image_id);
                 LOGGER.info("User with email '{}' updated in the database", email);
                 return ans;
             }
         }
-        return userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, mailLocale, finalRole, user_image_id);
+        User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, new Locale(mailLocaleString), finalRole, user_image_id);
+        VerificationToken token = tokenService.createToken(finalUser);
+        try {
+            emailService.sendVerificationEmail(finalUser, token.getToken());
+        } catch (Exception e) {
+            LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.getUserId(), e);
+        }
+        return finalUser;
     }
 
+
+    @Override
+    public boolean isDriver(User user){
+        return user.getRole().equals(UserRole.DRIVER.getText());
+    }
+
+    @Override
+    public boolean isUser(User user){
+        return user.getRole().equals(UserRole.USER.getText());
+    }
     @Override
     public void loginUser(final String email, final String password){
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
@@ -112,29 +133,62 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeToDriver(User user) {
+    public void changeToDriver() throws UserNotFoundException {
+        User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
         userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
     }
 
     @Transactional
     @Override
-    public void blockUser(User blocker, User blocked) {
-        userDao.blockUser(blocker,blocked);
+    public void blockUser( long blockedId) throws UserNotFoundException{
+        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
+        userDao.blockUser(blocker.getUserId(),blockedId);
     }
 
     @Transactional
     @Override
-    public void unblockUser(User blocker, User blocked) {
-        userDao.unblockUser(blocker,blocked);
+    public void unblockUser( long blockedId) throws UserNotFoundException{
+        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
+        userDao.unblockUser(blocker.getUserId(),blockedId);
     }
 
     @Override
-    public boolean isBlocked(User blocker, User blocked) { return userDao.isBlocked(blocker,blocked); }
+    public boolean isBlocked( long blockedId) throws UserNotFoundException {
+        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
+        return userDao.isBlocked(blocker.getUserId(),blockedId);
+    }
+
+    @Override
+    public boolean isCurrentUser(long userId) throws UserNotFoundException {
+        Optional<User> user = getCurrentUser();
+        if(user.isPresent()){
+            return user.orElseThrow(UserNotFoundException::new).getUserId() == userId;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean sendVerificationEmail(String email){
+        Optional<User> finalUser = findByEmail(email);
+        if(finalUser.isPresent()){
+            if (finalUser.get().isEnabled()){
+                return false;
+            }
+            String token = tokenService.updateToken(finalUser.get());
+            try {
+                emailService.sendVerificationEmail(finalUser.get(), token);
+            } catch (Exception e) {
+                LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.get().getUserId(), e);
+            }
+        }
+        return true;
+    }
 
     //TODO: usar el otro enum
     @Transactional
     @Override
-    public boolean confirmRegister(VerificationToken verificationToken) {
+    public boolean confirmRegister(String token) {
+        VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
         if(verificationToken == null){
             return false;
         }
@@ -183,12 +237,12 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    public void modifyUser(long userId, String username, String surname, String phone, long bornCityId, Locale mailLocale, byte[] imgData) {
-        Optional<User> user = findById(userId);
+    public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
+        Optional<User> user = getCurrentUser();
         if(user.isPresent()){
             imageService.replaceImage(user.get().getUserImageId(),imgData);
+            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString));
         }
-        userDao.modifyUser(userId,username,surname,phone,cityService.findCityById(bornCityId).get(),mailLocale);
     }
 
     @Transactional

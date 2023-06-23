@@ -32,16 +32,24 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     private final PassengerReviewDao passengerReviewDao;
     private final TripService tripService;
 
+    private final UserService userService;
+
     @Autowired
-    public PassengerReviewServiceImpl(PassengerReviewDao passengerReviewDao, TripService tripService) {
+    public PassengerReviewServiceImpl(PassengerReviewDao passengerReviewDao, TripService tripService, UserService userService1) {
         this.passengerReviewDao = passengerReviewDao;
         this.tripService = tripService;
+        this.userService = userService1;
     }
 
     @Transactional
     @Override
-    public PassengerReview createPassengerReview(Trip trip, User reviewer, Passenger reviewed, int rating, String comment, PassengerReviewOptions option) {
-        if(!canReviewPassenger(trip, reviewer, reviewed)) {
+    public PassengerReview createPassengerReview(long tripId, long reviewedId, int rating, String comment, PassengerReviewOptions option) {
+        User reviewer = userService.getCurrentUser().get();
+        //TODO ver como tirar excepcion
+        Trip trip = tripService.findById(tripId).get();
+        User userReviewed = userService.findById(reviewedId).get();
+        Passenger reviewed = tripService.getPassenger(trip,userReviewed).orElseThrow(RuntimeException::new);
+        if(!canReviewPassenger(trip, reviewed)) {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} tried to review passenger with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), reviewed.getUserId(), e);
             throw e;
@@ -50,17 +58,31 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     }
 
     @Override
-    public double getPassengerRating(User user) {
+    public double getPassengerRating(long userId) {
+        User user = userService.findById(userId).get();
+        return passengerReviewDao.getPassengerRating(user);
+    }
+    @Override
+    public double getPassengerRatingOwnUser(){
+        User user = userService.getCurrentUser().get();
         return passengerReviewDao.getPassengerRating(user);
     }
 
     @Override
-    public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
+    public PagedContent<PassengerReview> getPassengerReviews(long userId, int page, int pageSize) {
+        User user = userService.findById(userId).get();
         return passengerReviewDao.getPassengerReviews(user, page, pageSize);
     }
 
     @Override
-    public boolean canReviewPassenger(final Trip trip, User reviewer, Passenger reviewed) {
+    public PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) {
+        User user = userService.getCurrentUser().get();
+        return passengerReviewDao.getPassengerReviews(user, page, pageSize);
+    }
+
+    @Override
+    public boolean canReviewPassenger(final Trip trip, Passenger reviewed) {
+        User reviewer = userService.getCurrentUser().get();
         if(tripService.userIsDriver(trip.getTripId(), reviewer)) {
             return canDriverReviewPassenger(trip, reviewer, reviewed);
         } else if (tripService.userIsPassenger(trip.getTripId(), reviewer)) {
@@ -118,7 +140,9 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     }
 
     @Override
-    public List<ItemReview<Passenger>> getPassengersReviewState(final Trip trip, User reviewer, List<Passenger> passengers) {
+    public List<ItemReview<Passenger>> getPassengersReviewState(final long tripId, List<Passenger> passengers) {
+        User reviewer = userService.getCurrentUser().get();
+        Trip trip = tripService.findById(tripId).get();
         if(tripService.userIsDriver(trip.getTripId(), reviewer)) {
             return passengers.stream().filter(
                     passenger -> reviewer.getUserId() != passenger.getUserId())

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.services.ReportService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
@@ -7,7 +8,7 @@ import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.webapp.exceptions.ReportNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.form.ReportAdminForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +67,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.POST)
-    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) {
+    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws TripNotFoundException {
         LOGGER.debug("POST request to /admin/{}/accept", reportId);
         if(errors.hasErrors()) {
             LOGGER.warn("Errors found in ReportAdminForm: {}", errors.getAllErrors());

@@ -12,6 +12,7 @@
         <a class="navbar-brand" href="<c:url value="/"/>">
             <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="<spring:message code="navbar.poolit"/>" class="brand-logo">
         </a>
+        <c:if test="${(empty param.showOnlyLogo) || !param.showOnlyLogo}">
         <div class="collapse navbar-collapse navbar-link-items">
             <ul class="navbar-nav nav-items">
                 <sec:authorize access="isAuthenticated()">
@@ -153,6 +154,7 @@
                 </a>
             </div>
         </sec:authorize>
+        </c:if>
     </div>
 </nav>
 

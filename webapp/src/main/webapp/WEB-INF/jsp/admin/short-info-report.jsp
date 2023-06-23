@@ -21,7 +21,10 @@
             </div>
             <h6 class="italic-text"><spring:message code="${param.reporterRole}"/></h6>
             <c:set var="rating" value="${report.reporter.passengerRating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+              <jsp:param name="fontSize" value="h4"/>
+              <jsp:param name="fontColor" value="secondary-color"/>
+            </jsp:include>
           </div>
         </div>
         <div class="location-line">
@@ -37,7 +40,10 @@
             </div>
             <h6 class="italic-text"><spring:message code="${param.reportedRole}"/></h6>
             <c:set var="rating" value="${report.reporter.passengerRating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+              <jsp:param name="fontSize" value="h4"/>
+              <jsp:param name="fontColor" value="secondary-color"/>
+            </jsp:include>
           </div>
           <div>
             <img src="/image/${report.trip.driver.userImageId}" alt="user image" class="image-photo-admin"/>

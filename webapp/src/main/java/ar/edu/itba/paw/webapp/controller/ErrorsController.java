@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
-public class ErrorsController extends LoggedUserController {
+public class ErrorsController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ErrorsController.class);
 
     private final MessageSource messageSource;
     private final Map<Integer,ErrorMessage> errorMessages;
     @Autowired
-    public ErrorsController(final UserService userService, final MessageSource messageSource){
-        super(userService);
+    public ErrorsController(final MessageSource messageSource){
         this.messageSource = messageSource;
         this.errorMessages = new HashMap<>();
         errorMessages.put(404, new ErrorMessage("errors.404","errors.404.description"));

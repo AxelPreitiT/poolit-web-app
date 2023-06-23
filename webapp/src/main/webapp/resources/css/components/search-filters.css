@@ -231,6 +231,43 @@ label.form-check-label {
     margin-bottom: 0;
 }
 
+.car-feature-options-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 0.5em 0 0 0;
+    width: 100%;
+}
+
+.car-feature-container .car-feature-label {
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #FFFFFF;
+    padding: 0.5rem;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    font-weight: 500;
+    font-size: 0.8rem;
+    opacity: 1;
+}
+
+.car-feature-container .car-feature-label.shadow-btn {
+    box-shadow: 0 0 0 2px rgb(255 255 255), 0 4px 4px rgba(0,0,0,0.25);
+}
+
+.car-feature-container .car-feature-label:hover {
+    opacity: 0.8;
+}
+
+.car-feature-container .car-feature-label.active {
+    background-color: #FFA216;
+    color: #FFFFFF;
+    border: 1px solid #FFA216;
+}
+
 /* Remove arrows from number input */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

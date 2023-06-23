@@ -6,6 +6,7 @@
 <jsp:useBean id="car" type="ar.edu.itba.paw.models.Car" scope="request"/>
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
+<link href="<c:url value="/resources/css/create-car/car-container.css"/>" rel="stylesheet" type="text/css"/>
 
 <div class="user-info-container-car">
   <div class="avatar-img">
@@ -27,17 +28,18 @@
     <h6><spring:message code="createCar.plate"/></h6>
     <h4><c:out value="${car.plate}"/></h4>
   </div>
-  <div class="row-info">
-    <div class="no-edit">
-        <h6><spring:message code="updateCar.features"/></h6>
+  <c:if test="${!(empty car.features)}">
+    <div class="no-edit row-info rows">
+      <h6><spring:message code="updateCar.features"/></h6>
+      <div id="feature-options-container edit">
         <c:forEach items="${car.features}" var="feature">
-            <label class="btn btn-custom">
-              <checkbox value="${feature}"></checkbox>
-            <spring:message code="${feature.toString()}"/>
-            </label>
+          <label class="btn-custom active">
+            <spring:message code="${feature.code}"/>
+          </label>
         </c:forEach>
+      </div>
     </div>
-  </div>
+  </c:if>
 
     <jsp:useBean id="rating" type="java.lang.Double" scope="request"/>
     <div class="row-info">
@@ -45,7 +47,10 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
           <c:set var="rating" value="${rating}" scope="request"/>
-          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+            <jsp:param name="fontSize" value="h4"/>
+            <jsp:param name="fontColor" value="secondary-color"/>
+          </jsp:include>
         </div>
       </div>
     </div>

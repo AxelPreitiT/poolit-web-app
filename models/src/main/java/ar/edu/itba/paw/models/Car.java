@@ -116,4 +116,8 @@ public class Car {
     }
 
     public long getImage_id() { return image_id; }
+
+    public boolean hasFeature(FeatureCar feature) {
+        return features != null && features.contains(feature);
+    }
 }

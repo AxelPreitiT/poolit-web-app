@@ -65,13 +65,19 @@
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
                                 <c:set value="${report.reporter.driverRating}" var="rating"/>
-                                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+                                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                    <jsp:param name="fontSize" value="h4"/>
+                                    <jsp:param name="fontColor" value="secondary-color"/>
+                                </jsp:include>
                             </div>
                         </c:if>
                         <div class="user-container-item">
                             <strong><spring:message code="report.role.passenger.rating"/></strong>
                             <c:set value="${report.reporter.passengerRating}" var="rating"/>
-                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                <jsp:param name="fontSize" value="h4"/>
+                                <jsp:param name="fontColor" value="secondary-color"/>
+                            </jsp:include>
                         </div>
                         <div class="user-container-item user-container-row">
                             <strong><spring:message code="report.reportsPublished" arguments=":"/></strong>
@@ -101,7 +107,10 @@
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
                                 <c:set value="${report.reported.driverRating}" var="rating"/>
-                                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+                                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                    <jsp:param name="fontSize" value="h4"/>
+                                    <jsp:param name="fontColor" value="secondary-color"/>
+                                </jsp:include>
                             </div>
                         </c:if>
                         <div class="user-container-item">

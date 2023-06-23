@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reports.Report;
@@ -20,7 +21,7 @@ public interface ReportService {
 
     List<Report> getAllReports();
 
-    void acceptReport(long reportId, String reason);
+    void acceptReport(long reportId, String reason) throws TripNotFoundException;
 
     void rejectReport(long reportId, String reason);
 

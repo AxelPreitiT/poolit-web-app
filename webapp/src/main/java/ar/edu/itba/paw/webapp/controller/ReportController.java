@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 @Controller
-public class ReportController extends LoggedUserController {
+public class ReportController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportController.class);
 
@@ -31,8 +31,7 @@ public class ReportController extends LoggedUserController {
     private final ReportService reportService;
 
     @Autowired
-    public ReportController(final UserService userService, final ReportService reportService) {
-        super(userService);
+    public ReportController(final ReportService reportService) {
         this.reportService = reportService;
     }
 

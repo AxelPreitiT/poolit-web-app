@@ -30,7 +30,10 @@
             <div class="ratings">
               <jsp:useBean id="driverRating" type="java.lang.Double" scope="request"/>
               <c:set var="rating" value="${driverRating}" scope="request"/>
-              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                <jsp:param name="fontSize" value="h4"/>
+                <jsp:param name="fontColor" value="secondary-color"/>
+              </jsp:include>
             </div>
           </div>
         </c:when>
@@ -48,7 +51,10 @@
           <div class="ratings">
             <jsp:useBean id="passengerRating" type="java.lang.Double" scope="request"/>
             <c:set var="rating" value="${passengerRating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+              <jsp:param name="fontSize" value="h4"/>
+              <jsp:param name="fontColor" value="secondary-color"/>
+            </jsp:include>
           </div>
         </div>
       </c:when>
@@ -57,27 +63,25 @@
       </c:otherwise>
     </c:choose>
   </div>
-  <c:if test="${!isOwnProfile}">
-    <div class="row-info avatar-img">
-      <c:choose>
-        <c:when test="${!isBlocked}">
-          <form action="<c:url value="/profile/${user.userId}/block"/>" method="post">
-            <button id="block" type="submit" class="btn button-style danger-button shadow-btn no-edit">
-              <i class="bi bi-lock-fill light-text h3"></i>
-              <span class="button-text-style light-text h3" id="blockButton"><spring:message code="profile.block"/></span>
-            </button>
-          </form>
-        </c:when>
-        <c:otherwise>
-          <form action="<c:url value="/profile/${user.userId}/unblock"/>" method="post">
-            <button id="unblock" type="submit" class="btn button-style button-color shadow-btn no-edit">
-              <i class="bi bi-unlock-fill light-text h3"></i>
-              <span class="button-text-style light-text h3" id="unblockButton"><spring:message code="profile.unblock"/></span>
-            </button>
-          </form>
-        </c:otherwise>
-      </c:choose>
-    </div>
-  </c:if>
+<%--    <div class="row-info avatar-img">--%>
+<%--      <c:choose>--%>
+<%--        <c:when test="${!isBlocked}">--%>
+<%--          <form action="<c:url value="/profile/${user.userId}/block"/>" method="post">--%>
+<%--            <button id="block" type="submit" class="btn button-style danger-button shadow-btn no-edit">--%>
+<%--              <i class="bi bi-lock-fill light-text h3"></i>--%>
+<%--              <span class="button-text-style light-text h3" id="blockButton"><spring:message code="profile.block"/></span>--%>
+<%--            </button>--%>
+<%--          </form>--%>
+<%--        </c:when>--%>
+<%--        <c:otherwise>--%>
+<%--          <form action="<c:url value="/profile/${user.userId}/unblock"/>" method="post">--%>
+<%--            <button id="unblock" type="submit" class="btn button-style button-color shadow-btn no-edit">--%>
+<%--              <i class="bi bi-unlock-fill light-text h3"></i>--%>
+<%--              <span class="button-text-style light-text h3" id="unblockButton"><spring:message code="profile.unblock"/></span>--%>
+<%--            </button>--%>
+<%--          </form>--%>
+<%--        </c:otherwise>--%>
+<%--      </c:choose>--%>
+<%--    </div>--%>
 </div>
 

@@ -69,7 +69,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/admin", "/admin/*").hasRole("ADMIN")
                     .antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
                     .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
-                    .antMatchers("/cars/{id:\\d+$}").authenticated()
+                    .antMatchers("/cars/{id:\\d+$}").permitAll()
                     .antMatchers("/changeRole").hasRole("USER")
                     .antMatchers("/trips/create", "/cars/**", "/users/created, /trips/created/**").hasRole("DRIVER")
                     .antMatchers("/trips/reserved/**").authenticated()
