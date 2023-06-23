@@ -52,6 +52,7 @@
                     <c:set var="rating" value="${trip.carRating}" scope="request"/>
                     <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                         <jsp:param name="fontColor" value="light-text"/>
+                        <jsp:param name="fontSize" value="h4"/>
                     </jsp:include>
                 </div>
             </div>
@@ -86,6 +87,7 @@
                         <c:set var="rating" value="${trip.driverRating}" scope="request"/>
                         <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                             <jsp:param name="fontColor" value="light-text"/>
+                            <jsp:param name="fontSize" value="h4"/>
                         </jsp:include>
                     </div>
                 </div>

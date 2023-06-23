@@ -10,7 +10,7 @@
   <div class="row-data">
     <h2><spring:message code="${param.title}"/></h2>
   </div>
-  <div>
+  <div class="travel-info-list">
     <c:forEach items="${trips}" var="trip">
       <c:set var="trip" value="${trip}" scope="request"/>
       <jsp:include page="/WEB-INF/jsp/users/travel-info.jsp"/>

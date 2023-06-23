@@ -1,23 +1,23 @@
-.review-list-header {
+#footer-container .list-header {
     display: flex;
     flex-direction: row;
     align-items: center;
     column-gap: 1em;
 }
 
-.review-list-content {
+#footer-container .list-content {
     display: flex;
     flex-direction: column;
     row-gap: 0.5em;
     margin: 1em 0;
 }
 
-.review-list-item {
+#footer-container .list-item {
     position: relative;
     padding: 0 1em;
 }
 
-.review-list-item > button {
+#footer-container .list-item > button {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -25,39 +25,39 @@
     column-gap: 1em;
 }
 
-.review-list-item-text {
+#footer-container .list-item-text {
     display: flex;
     flex-direction: column;
     width: 100%;
     align-items: flex-start;
 }
 
-.review-list-item-date {
+#footer-container .list-item-date {
     display: flex;
     flex-direction: row;
     align-items: center;
     column-gap: 0.3em;
 }
 
-.review-list-item-date > * {
+#footer-container .list-item-date > * {
     font-size: 0.7rem;
 }
 
-.image {
+#footer-container .image {
     height: 50px;
     object-fit: cover;
     aspect-ratio: 1/1;
 }
 
-.passenger-image, .driver-image {
+#footer-container .passenger-image, .driver-image {
     border-radius: 50%;
 }
 
-.car-image {
+#footer-container .car-image {
     border-radius: 4px;
 }
 
-.disabled-text {
+#footer-container .disabled-text {
     text-align: right;
     margin: 0;
 }

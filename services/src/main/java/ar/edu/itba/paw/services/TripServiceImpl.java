@@ -467,8 +467,19 @@ public class TripServiceImpl implements TripService {
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
     }
     @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassengerFuture(User user, int page, int pageSize){
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+    }
+    @Override
     public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerPast(int page, int pageSize) throws UserNotFoundException{
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        validatePageAndSize(page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+    }
+
+    @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassengerPast(User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
     }

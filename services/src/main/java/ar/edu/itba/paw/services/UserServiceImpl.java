@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.models.VerificationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,33 +48,6 @@ public class UserServiceImpl implements UserService {
 
     //private final UserDetailsService userDetailsService;
 
-    //TODO: revisar si se usa
-    private enum AuthRoles{
-        USER("ROLE_USER"),
-        DRIVER("ROLE_DRIVER");
-        private final String role;
-        private AuthRoles(String role){
-            this.role = role;
-        }
-
-        public String getRole() {
-            return role;
-        }
-    }
-
-    private enum Roles{
-        USER("USER"),
-        DRIVER("DRIVER");
-        private final String role;
-        private Roles(String role){
-            this.role = role;
-        }
-
-        public String getRole() {
-            return role;
-        }
-    }
-
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
@@ -93,10 +67,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(final String username, final String surname, final String email,
                            final String phone, final String password, final long bornCityId, final String mailLocaleString, final String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException {
-
         final City bornCity = cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new);
         final long user_image_id = imageService.createImage(imgData).getImageId();
-        String finalRole = (role == null) ? Roles.USER.role : role;
+        String finalRole = (role == null) ? UserRole.USER.getText() : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
             LOGGER.debug("Email '{}' already exists in the database", email);
@@ -124,12 +97,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isDriver(User user){
-        return user.getRole().equals(Roles.DRIVER.getRole());
+        return user.getRole().equals(UserRole.DRIVER.getText());
     }
 
     @Override
     public boolean isUser(User user){
-        return user.getRole().equals(Roles.USER.getRole());
+        return user.getRole().equals(UserRole.USER.getText());
     }
     @Override
     public void loginUser(final String email, final String password){
@@ -162,7 +135,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeToDriver() throws UserNotFoundException {
         User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.changeRole(user.getUserId(), Roles.DRIVER.role);
+        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
     }
 
     @Transactional
@@ -248,9 +221,9 @@ public class UserServiceImpl implements UserService {
     void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         if(Objects.equals(user.getRole(), "DRIVER")){
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+            authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
         } else {
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+            authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
         }
 
         //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
@@ -272,4 +245,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
+    @Override
+    public List<User> getAdmins(){
+        return userDao.getAdmins();
+    }
+
+    @Override
+    public void banUser(User user) {
+        userDao.banUser(user.getUserId());
+    }
 }

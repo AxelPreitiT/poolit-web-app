@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.models.Passenger;
+import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -33,4 +34,10 @@ public interface EmailService {
     void sendMailTripConfirmed(Trip trip, Passenger passenger) throws  Exception;
     //Se manda al pasajero indicando que fue rechazado en el viaje
     void sendMailTripRejected(Trip trip, Passenger passenger) throws Exception;
+
+    public void sendMailRejectReport(Report report) throws Exception;
+    public void sendMailAcceptReport(Report report) throws Exception;
+    public void sendMailBanReport(Report report) throws Exception;
+    public void sendMailNewReport(Report report, User admin) throws Exception;
+
 }

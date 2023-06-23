@@ -33,6 +33,7 @@ public class TripController {
     private final UserService userService;
     private final CarService carService;
     private final TripReviewService tripReviewService;
+    private final ReportService reportService;
 
     private final static long DEFAULT_PROVINCE_ID = 1;
     private final static int PAGE_SIZE = 10;
@@ -51,12 +52,13 @@ public class TripController {
     private static final String TIME_QUERY_PARAM_DEFAULT = "future";
 
     @Autowired
-    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final TripReviewService tripReviewService) {
+    public TripController(final TripService tripService, final CityService cityService, final UserService userService, final CarService carService, final TripReviewService tripReviewService,final ReportService reportService) {
         this.tripService = tripService;
         this.cityService = cityService;
         this.userService = userService;
         this.carService = carService;
         this.tripReviewService = tripReviewService;
+        this.reportService = reportService;
     }
 
     @RequestMapping(value = TRIP_DETAILS_PATH,method = RequestMethod.GET)
@@ -70,9 +72,11 @@ public class TripController {
                                        @RequestParam(value = "created", required = false, defaultValue = "false") final boolean created,
                                        @RequestParam(value = "joined", required = false, defaultValue = "false") final boolean joined,
                                        @RequestParam(value = "reviewed", required = false, defaultValue = "false") final boolean reviewed,
+                                       @RequestParam(value = "reported", required = false, defaultValue = "false") final boolean reported,
                                        @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
-                                       @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
+                                       @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm,
+                                       @ModelAttribute("reportForm") final ReportForm reportForm
                                        )throws TripNotFoundException, UserNotFoundException{
         LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();
@@ -88,7 +92,9 @@ public class TripController {
         } else {
             return tripDetailsForReservation(tripId,form);
         }
+        mav.addObject("tripReportCollection", reportService.getTripReportCollection(tripId));
         mav.addObject("reviewed", reviewed);
+        mav.addObject("reported", reported);
         return mav;
     }
 

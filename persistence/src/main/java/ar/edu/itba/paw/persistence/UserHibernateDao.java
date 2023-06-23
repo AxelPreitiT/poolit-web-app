@@ -31,7 +31,7 @@ public class UserHibernateDao implements UserDao {
         LOGGER.debug("Adding new user with email '{}' to the database", savedEmail);
         LOGGER.debug("need help '{}' to the database", user_image_id);
 //        em.merge(bornCity);
-        final User user= new User(username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, user_image_id);
+        final User user = new User(username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, user_image_id);
         em.persist(user);
         LOGGER.debug("New {}", user);
         return user;
@@ -49,10 +49,10 @@ public class UserHibernateDao implements UserDao {
     public Optional<User> findByEmail(String email) {
         LOGGER.debug("Looking for user with email '{}' in the database", email);
         String searchEmail = email.toLowerCase().replaceAll("\\s", "");
-        final TypedQuery<User> query= (em.createQuery("from User as u where u.email= :email",User.class));
+        final TypedQuery<User> query = (em.createQuery("from User as u where u.email= :email", User.class));
         query.setParameter("email", searchEmail);
-        final Optional<User> result= query.getResultList().stream().findFirst();
-        LOGGER.debug("Found {} in the database", result.isPresent()? result.get() : "nothing");
+        final Optional<User> result = query.getResultList().stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
     }
 
@@ -61,7 +61,7 @@ public class UserHibernateDao implements UserDao {
         LOGGER.debug("Changing role of user with id {} to '{}'", userId, role);
 
         Optional<User> maybeUser = findById(userId);
-        if (maybeUser.isPresent()){
+        if (maybeUser.isPresent()) {
             final User user = maybeUser.get();
             user.setRole(role);
             em.persist(user);
@@ -72,7 +72,7 @@ public class UserHibernateDao implements UserDao {
     public User updateProfile(String username, String surname, String email, String password, City bornCity, String mailLocale, String role, long user_image_id) {
         Optional<User> maybeUser = findByEmail(email);
         LOGGER.debug("Updating user with email '{}' in the database", email);
-        if (maybeUser.isPresent()){
+        if (maybeUser.isPresent()) {
             final User user = maybeUser.get();
             user.setRole(role);
             user.setBornCity(bornCity);
@@ -92,7 +92,7 @@ public class UserHibernateDao implements UserDao {
     public void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale) {
         Optional<User> maybeUser = findById(userId);
         LOGGER.debug("Modifying user with id '{}' in the database", userId);
-        if (maybeUser.isPresent()){
+        if (maybeUser.isPresent()) {
             final User user = maybeUser.get();
             user.setName(username);
             user.setSurname(surname);
@@ -129,6 +129,27 @@ public class UserHibernateDao implements UserDao {
                 .setParameter("blockedId", blockedId)
                 .getSingleResult()).intValue();
         return count > 0;
+    }
+
+    @Override
+    public List<User> getAdmins() {
+        LOGGER.debug("Getting all admins from the database");
+        final TypedQuery<User> query = (em.createQuery("from User as u where u.role= :role", User.class));
+        query.setParameter("role", "ADMIN");
+        final List<User> result = query.getResultList();
+        LOGGER.debug("Found {} admins in the database", result.size());
+        return result;
+    }
+
+    @Override
+    public void banUser(long userId) {
+        Optional<User> maybeUser = findById(userId);
+        LOGGER.debug("Modifying user banned with id '{}' in the database", userId);
+        if (maybeUser.isPresent()) {
+            final User user = maybeUser.get();
+            user.setBanned(true);
+            em.persist(user);
+        }
     }
 
 

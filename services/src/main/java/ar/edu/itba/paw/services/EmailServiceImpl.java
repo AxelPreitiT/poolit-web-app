@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -258,6 +259,59 @@ public class EmailServiceImpl implements EmailService {
         sendEmail(passenger.getEmail(), subject, "reject-passenger-mail", ctx, passenger.getMailLocale());
     }
 
+    //Mail al usuario que hizo el reporte para indicarle que fue rechazado
+    @Async
+    @Override
+    public void sendMailRejectReport(Report report) throws Exception{
+        String subject = messageSource.getMessage("emails.subject.reportReponse", null, report.getReporter().getMailLocale());
+
+        final Context ctx = new Context();
+        ctx.setVariable("report", report);
+        ctx.setLocale(report.getReporter().getMailLocale());
+
+        sendEmail(report.getReporter().getEmail(), subject, "reject-report-mail", ctx, report.getReporter().getMailLocale());
+    }
+
+
+    //Mail al usuario que hizo el reporte para indicarle que fue aeptado
+    @Async
+    @Override
+    public void sendMailAcceptReport(Report report) throws Exception{
+        String subject = messageSource.getMessage("emails.subject.reportReponse", null, report.getReporter().getMailLocale());
+
+        final Context ctx = new Context();
+        ctx.setVariable("report", report);
+        ctx.setLocale(report.getReporter().getMailLocale());
+
+        sendEmail(report.getReporter().getEmail(), subject, "accept-report-mail", ctx, report.getReporter().getMailLocale());
+    }
+
+
+    //Mail al usuario que recibio el reporte para decirle que fue banneado
+    @Async
+    @Override
+    public void sendMailBanReport(Report report) throws Exception{
+        String subject = messageSource.getMessage("emails.subject.BandReport", null, report.getReported().getMailLocale());
+
+        final Context ctx = new Context();
+        ctx.setVariable("report", report);
+        ctx.setLocale(report.getReported().getMailLocale());
+
+        sendEmail(report.getReported().getEmail(), subject, "band-report-mail", ctx, report.getReported().getMailLocale());
+    }
+
+    //Mail al admin para decirle que existe un nuevo reporte
+    @Async
+    @Override
+    public void sendMailNewReport(Report report, User admin) throws Exception{
+        String subject = messageSource.getMessage("emails.subject.NewReport", null, admin.getMailLocale());
+
+        final Context ctx = new Context();
+        ctx.setVariable("report", report);
+        ctx.setLocale(admin.getMailLocale());
+
+        sendEmail(admin.getEmail(), subject, "new-report-mail", ctx, admin.getMailLocale());
+    }
 }
 
 

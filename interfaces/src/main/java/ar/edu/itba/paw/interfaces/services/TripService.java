@@ -61,7 +61,11 @@ public interface TripService {
 
     PagedContent<Trip> getTripsWhereCurrentUserIsPassengerFuture(int page, int pageSize) throws UserNotFoundException;
 
+    PagedContent<Trip> getTripsWhereUserIsPassengerFuture(User user, int page, int pageSize);
+
     PagedContent<Trip> getTripsWhereCurrentUserIsPassengerPast(int page, int pageSize) throws UserNotFoundException;
+
+    PagedContent<Trip> getTripsWhereUserIsPassengerPast(User user, int page, int pageSize);
     boolean deleteTrip(final long tripId) throws TripNotFoundException;
 
     List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
@@ -75,8 +79,8 @@ public interface TripService {
             final List<FeatureCar> carFeatures, final int page, final int pageSize);
 
 
-    public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
+    boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
 
-    public boolean rejectPassenger(final long tripId, final long userId);
+    boolean rejectPassenger(final long tripId, final long userId);
 
 }

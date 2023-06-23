@@ -29,8 +29,27 @@ public class User {
     @Column(nullable = false, name = "enabled", columnDefinition = "BOOLEAN DEFAULT true")
     private boolean enabled;
 
+    @Column(nullable = false, name = "banned", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean banned;
+
     @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = user_id AND user_reviews.review_id IN (SELECT passenger_reviews.review_id FROM passenger_reviews))")
     private double passengerRating;
+
+    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = user_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
+    private double driverRating;
+
+    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reporter_id = user_id)")
+    private int reportsPublished;
+
+    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reported_id = user_id)")
+    private int reportsReceived;
+
+    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reported_id = user_id AND reports.status = 'APPROVED')")
+    private int reportsApproved;
+
+    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reported_id = user_id AND reports.status = 'REJECTED')")
+    private int reportsRejected;
+
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn( name = "city_id")
     private City bornCity;
@@ -94,12 +113,21 @@ public class User {
         this.blocked = new HashSet<>();
         this.blockedBy = new HashSet<>();
         this.enabled = false;
+        this.banned = false;
     }
 
     @Override
     public String toString() {
         return String.format("User { id: %d, name: '%s', surname: '%s', email: '%s', phone: '%s', bornCity: '%s', mailLocale: '%s', role: '%s', userImageId: %d }",
                 userId, name, surname, email, phone, bornCity, mailLocale, role, userImageId);
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 
     public String getRole() {
@@ -205,6 +233,26 @@ public class User {
 
     public double getPassengerRating() {
         return passengerRating;
+    }
+
+    public double getDriverRating() {
+        return driverRating;
+    }
+
+    public int getReportsPublished() {
+        return reportsPublished;
+    }
+
+    public int getReportsReceived() {
+        return reportsReceived;
+    }
+
+    public int getReportsApproved() {
+        return reportsApproved;
+    }
+
+    public int getReportsRejected() {
+        return reportsRejected;
     }
 
     public void setEnabled(boolean enabled) {
