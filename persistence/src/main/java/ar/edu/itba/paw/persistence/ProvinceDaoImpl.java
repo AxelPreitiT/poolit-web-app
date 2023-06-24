@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.interfaces.persistence.ProvinceDao;
 import ar.edu.itba.paw.models.Province;
 import org.slf4j.Logger;
@@ -45,3 +45,6 @@ public class ProvinceDaoImpl implements ProvinceDao {
         return result;
     }
 }
+
+
+ */

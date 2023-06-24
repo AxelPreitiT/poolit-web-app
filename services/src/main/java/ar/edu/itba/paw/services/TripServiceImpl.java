@@ -17,7 +17,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -263,8 +262,15 @@ public class TripServiceImpl implements TripService {
     @Transactional
     @Override
     public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException{
-        Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        return removePassenger(tripId, user.getUserId());
+    }
+
+    @Transactional
+    @Override
+    public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException {
+        Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
+        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         if(trip == null || user == null){
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Trip {} or User {} cannot be null", trip, user, e);
@@ -560,7 +566,7 @@ public class TripServiceImpl implements TripService {
         catch( Exception e){
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", passenger.getUserId(), passenger.getTrip().getTripId(), e);
         }
-        return tripDao.removePassenger(passenger);
+        return tripDao.rejectPassenger(passenger);
     }
 
 }

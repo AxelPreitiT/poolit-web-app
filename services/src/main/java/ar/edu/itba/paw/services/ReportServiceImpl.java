@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
@@ -88,7 +89,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public void acceptReport(long reportId, String reason) throws TripNotFoundException {
+    public void acceptReport(long reportId, String reason) throws TripNotFoundException, UserNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
         Report report = reportDao.findById(reportId).orElseThrow(IllegalArgumentException::new);
         try {
@@ -116,7 +117,7 @@ public class ReportServiceImpl implements ReportService {
         for(int i = 0; i < pgTripUser.getTotalPages(); i++){
             List<Trip> trips = pgTripUser.getElements();
             for(Trip trip : trips){
-                tripService.rejectPassenger(trip.getTripId(), report.getReported().getUserId());
+                tripService.removePassenger(trip.getTripId(), report.getReported().getUserId());
             }
             pgTripUser = tripService.getTripsWhereUserIsPassengerFuture(report.getReported(), i+1, 10);
         }

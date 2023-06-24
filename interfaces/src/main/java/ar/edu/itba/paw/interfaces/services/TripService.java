@@ -18,6 +18,8 @@ public interface TripService {
 
     boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException;
 
+    boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException;
+
     Optional<Trip> findById(long id);
 
     Optional<Trip> findById(long id, LocalDateTime start, LocalDateTime end);

@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.POST)
-    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws TripNotFoundException {
+    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws TripNotFoundException, UserNotFoundException {
         LOGGER.debug("POST request to /admin/{}/accept", reportId);
         if(errors.hasErrors()) {
             LOGGER.warn("Errors found in ReportAdminForm: {}", errors.getAllErrors());
