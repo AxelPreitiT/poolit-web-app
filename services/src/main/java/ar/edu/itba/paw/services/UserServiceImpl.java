@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
 
     void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        if(Objects.equals(user.getRole(), "DRIVER")){
+        if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
             authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
