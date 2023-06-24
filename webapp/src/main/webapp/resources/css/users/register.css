@@ -177,6 +177,10 @@ div.main-container-style {
     column-gap: 1em;
 }
 
+.full-error-row > .error-item {
+    width: 100%;
+}
+
 .error-row:not(:has(.error-style)) {
     display: none;
 }

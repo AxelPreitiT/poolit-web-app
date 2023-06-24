@@ -5,8 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
-//TODO VER ERROR, no puedo pasarle codigo i18n
-@FieldMatches(first = "password", second = "repeatPassword", message = "Passwords do not match")
+@FieldMatches(first = "password", second = "repeatPassword")
 public class CreateUserForm {
 
     @Pattern(regexp = ".+")
