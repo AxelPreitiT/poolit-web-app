@@ -261,8 +261,15 @@ public class TripServiceImpl implements TripService {
     @Transactional
     @Override
     public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException{
-        Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        return removePassenger(tripId, user.getUserId());
+    }
+
+    @Transactional
+    @Override
+    public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException {
+        Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
+        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         if(trip == null || user == null){
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Trip {} or User {} cannot be null", trip, user, e);
