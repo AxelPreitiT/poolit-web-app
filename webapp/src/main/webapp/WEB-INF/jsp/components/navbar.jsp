@@ -49,36 +49,15 @@
                     </div>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    <div class="create-trip-btn" data-bs-toggle="modal" data-bs-target="#modal-create">
-                        <button class="btn button-style button-color shadow-btn">
-                            <i class="bi bi-plus light-text h4"></i>
-                            <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
-                        </button>
+                    <div class="create-trip-btn">
+                        <c:url value="/changeRole" var="changeRole"/>
+                        <form:form method="POST" action="${changeRole}">
+                            <button class="btn button-style button-color shadow-btn">
+                                <i class="bi bi-plus light-text h4"></i>
+                                <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
+                            </button>
+                        </form:form>
                     </div>
-                    <div class="modal fade" id="modal-create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div>
-                                        <span class="text"><spring:message code="navbar.modal.info"/></span>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <c:url value="/changeRole" var="changeRole"/>
-                                    <form:form method="POST" action="${changeRole}">
-                                        <button type="submit" class="btn secondary-bg-color">
-                                            <span class="light-text"><spring:message code="navbar.modal.btnContinue"/></span>
-                                        </button>
-                                    </form:form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </sec:authorize>
             </sec:authorize>
         </div>
