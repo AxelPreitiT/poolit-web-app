@@ -12,6 +12,7 @@ import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,6 +38,8 @@ public class TripReviewServiceImpl implements TripReviewService {
     }
 
 
+    @Transactional
+    @Override
     public TripReviewCollection getReviewsForDriver(final long tripId) throws TripNotFoundException{
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengersComplete = tripService.getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
@@ -44,6 +47,7 @@ public class TripReviewServiceImpl implements TripReviewService {
         return new TripReviewCollection(null, null, passengersToReview);
     }
 
+    @Transactional
     @Override
     public TripReviewCollection getReviewsForPassenger(long tripId, long userId) throws TripNotFoundException, UserNotFoundException {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);

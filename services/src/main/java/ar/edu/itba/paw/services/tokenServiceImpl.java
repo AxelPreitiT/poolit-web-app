@@ -40,22 +40,27 @@ public class tokenServiceImpl implements TokenService {
         return new Date(calendar.getTime().getTime());
     }
 
+
+    @Transactional
     @Override
     public Optional<VerificationToken> getToken(String token) {
         return tokenDao.getToken(token);
     }
 
+    @Transactional
     @Override
     public void deleteToken(VerificationToken token) {
         tokenDao.deleteToken(token);
     }
 
+    @Transactional
     @Override
     public boolean isValidToken(VerificationToken token) {
         Calendar calendar = Calendar.getInstance();
         return token.getDate().getTime() >= calendar.getTime().getTime();
     }
 
+    @Transactional
     @Override
     public void renewToken(VerificationToken token) {
         token.setExpiryDate(calculateExpiryDate(EXPIRATION));

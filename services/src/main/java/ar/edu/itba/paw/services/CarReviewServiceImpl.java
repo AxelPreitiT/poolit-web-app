@@ -57,18 +57,21 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.createCarReview(trip, reviewer, car, rating, comment, option);
     }
 
+    @Transactional
     @Override
     public double getCarsRating(long carId) {
         Car car = carService.findById(carId).get();
         return carReviewDao.getCarRating(car);
     }
 
+    @Transactional
     @Override
     public PagedContent<CarReview> getCarReviews(long carId, int page, int pageSize) {
         Car car = carService.findById(carId).get();
         return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
+    @Transactional
     @Override
     public boolean canReviewCar(Trip trip, Passenger reviewer, Car car) {
         if(trip.getCar().getCarId() != car.getCarId()) {
@@ -97,6 +100,7 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.canReviewCar(trip, reviewer, car) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
+    @Transactional
     @Override
     public ItemReview<Car> getCarReviewState(final long tripId) {
         Trip trip = tripService.findById(tripId).get();
