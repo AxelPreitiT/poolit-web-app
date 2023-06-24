@@ -28,7 +28,13 @@
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
     </div>
   </div>
-  <h3 id="user-name"><c:out value="${car.brand}"/></h3>
+  <h3 id="user-name">
+      <c:choose>
+          <c:when test="${car.brand ne 'UNKNOWN'}">
+              <c:out value="${car.brand}"/>
+          </c:when>
+      </c:choose>
+  </h3>
   <div class="row-info rows">
     <h6><spring:message code="createCar.carInfo"/></h6>
     <h4 class="no-edit"><c:out value="${car.infoCar}"/></h4>
