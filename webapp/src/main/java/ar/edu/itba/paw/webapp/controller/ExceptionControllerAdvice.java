@@ -2,11 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripAlreadyStartedException;
 import ar.edu.itba.paw.interfaces.exceptions.*;
-import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.webapp.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
@@ -78,9 +75,28 @@ public class ExceptionControllerAdvice {
         LOGGER.error("Raised TripAlreadyStartedException in controller");
         final ModelAndView mav = new ModelAndView("/exceptions/default");
         mav.addObject("errorMessage","exceptions.tripAlreadyStarted");
-        mav.addObject("errorDescription","exceptions.tripAlreadyStarted.message");
+        mav.addObject("errorDescription","exceptions.tripAlreadyStarted.description");
         return mav;
     }
+
+    @ExceptionHandler(NotAvailableSeatsException.class)
+    public ModelAndView notAvailableSeats(){
+        LOGGER.error("Raised NotAvailableSeatsException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.notAvailableSeats");
+        mav.addObject("errorDescription","exceptions.notAvailableSeats.description");
+        return mav;
+    }
+
+    @ExceptionHandler(ReportNotFoundException.class)
+    public ModelAndView reportNotFound(){
+        LOGGER.error("Raised ReportNotFoundException in controller");
+        final ModelAndView mav = new ModelAndView("/exceptions/default");
+        mav.addObject("errorMessage","exceptions.reportNotFound");
+        mav.addObject("errorDescription","exceptions.reportNotFound.description");
+        return mav;
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView illegalArgument(){
         LOGGER.error("Raised IllegalArgumentException in controller");
