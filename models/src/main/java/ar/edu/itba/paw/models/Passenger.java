@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -167,7 +168,7 @@ public class Passenger{
 
 
     public int getQueryTotalTrips(){
-        return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
+        return (int) startDateTime.until(endDateTime, ChronoUnit.DAYS) / 7 + 1;
     }
 
     public double getTotalPrice(){
