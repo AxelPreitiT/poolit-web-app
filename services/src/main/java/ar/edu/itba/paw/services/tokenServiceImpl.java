@@ -35,11 +35,12 @@ public class tokenServiceImpl implements TokenService {
     }
 
     private LocalDate calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        //TODO: revisar para que hagan lo mismo
-        return  LocalDate.ofEpochDay(Duration.ofMillis(calendar.getTime().getTime()).toDays());
+        return LocalDate.now().plusDays(1);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
+//        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
+//        TODO: revisar para que hagan lo mismo
+//        return  LocalDate.ofEpochDay(Duration.ofMillis(calendar.getTime().getTime()).toDays());
     }
 
     @Override
@@ -54,10 +55,11 @@ public class tokenServiceImpl implements TokenService {
 
     @Override
     public boolean isValidToken(VerificationToken token) {
-        Calendar calendar = Calendar.getInstance();
-        //TODO: revisar
-        long epoch = LocalDateTime.of(token.getDate(), LocalTime.of(0,0)).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return epoch >= calendar.getTime().getTime();
+        return token.getDate().compareTo(LocalDate.now())>=0;
+//        Calendar calendar = Calendar.getInstance();
+//        TODO: revisar
+//        long epoch = LocalDateTime.of(token.getDate(), LocalTime.of(0,0)).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+//        return epoch >= calendar.getTime().getTime();
     }
 
     @Override

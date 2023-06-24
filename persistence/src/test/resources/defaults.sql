@@ -20,3 +20,16 @@ INSERT INTO trips(trip_id, max_passengers, origin_address, destination_address, 
             VALUES (2,3,'Av Callao 1348','ITBA',1200.0,timestamp '2023-07-03 23:30:00.000000',timestamp '2023-07-17 23:30:00.000000',1,1,1,1,1);
 INSERT INTO passengers(trip_id, user_id, start_date, end_date) VALUES (2,1,timestamp '2023-07-03 23:30:00.000000',timestamp '2023-07-03 23:30:00.000000');
 INSERT INTO passengers(trip_id, user_id, start_date, end_date) VALUES (2,2,timestamp '2023-07-03 23:30:00.000000',timestamp '2023-07-10 23:30:00.000000');
+INSERT INTO car_reviews(review_id, comment, date, option, rating, car_id, reviewer_id, trip_id)
+            VALUES(1,'The space was very good',current_timestamp,'BIG_TRUNK_SPACE',4,1,2,2);
+-- review de user2 para user1 por trip2 (como driver)
+INSERT INTO user_reviews(review_id, comment, date, rating, reviewed_id, reviewer_id, trip_id)
+            VALUES (1,'The driver was very kind',current_timestamp,4,1,2,2);
+INSERT INTO driver_reviews(option, review_id) VALUES ('VERY_FRIENDLY',1);
+-- review de user2 para user1 por trip2 (como pasajero)
+INSERT INTO user_reviews(review_id, comment, date, rating, reviewed_id, reviewer_id, trip_id)
+                VALUES (2,'The passenger was very friendly',current_timestamp,4,1,2,2);
+INSERT INTO passenger_reviews(option, review_id) VALUES ('VERY_FRIENDLY',2);
+-- reporte de user2 para user1 por trip2 (como driver)
+INSERT INTO reports(report_id, admin_reason, date, description, reason, relation, status, reported_id, reporter_id, trip_id)
+                    VALUES (1,null,current_timestamp,'He did not do the trip','MISCONDUCT','PASSENGER_2_DRIVER','IN_REVISION',1,2,2);

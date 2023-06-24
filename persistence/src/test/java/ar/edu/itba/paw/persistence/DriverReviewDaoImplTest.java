@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
+import ar.edu.itba.paw.models.reviews.DriverReview;
+import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Assert;
@@ -22,13 +23,10 @@ import java.util.Locale;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
-public class CarReviewDaoImplTest {
-
-    @PersistenceContext
-    private EntityManager em;
+public class DriverReviewDaoImplTest {
 
     @Autowired
-    private CarReviewHibernateDao carReviewDao;
+    private DriverReviewHibernateDao driverReviewDao;
 
     private static final long PROVINCE_ID = 1;
     private static final long CITY_ID = 1;
@@ -56,60 +54,60 @@ public class CarReviewDaoImplTest {
     private static final Passenger PASSENGER_1 = new Passenger(USER_1,TRIP_2,START,START);
     private static final Passenger PASSENGER_2 = new Passenger(USER_2,TRIP_2,START,END);
 
-    private static final String COMMENT = "The space was very good";
+    private static final String COMMENT = "The driver was very kind";
     private static final int RATING = 4;
-    private static final CarReviewOptions CAR_REVIEW_OPTION = CarReviewOptions.BIG_TRUNK_SPACE;
-
+    private static final DriverReviewOptions DRIVER_REVIEW_OPTION = DriverReviewOptions.VERY_FRIENDLY;
     private static final int PAGE_SIZE = 10;
 
     @Test
     @Rollback
-    public void testCreateCarReview(){
-        //Setup
-        Trip auxTrip = em.merge(TRIP_2);
-        Passenger auxPassenger = em.merge(PASSENGER_1);
+    public void testCreateDriverReview(){
+
         //Execute
-        CarReview ans = carReviewDao.createCarReview(auxTrip,auxPassenger,CAR_1,RATING,COMMENT,CAR_REVIEW_OPTION);
+        DriverReview ans = driverReviewDao.createDriverReview(TRIP_2,PASSENGER_1,USER_1,RATING,COMMENT,DRIVER_REVIEW_OPTION);
         //Assert
-        Assert.assertEquals(CAR_1.getCarId(),ans.getCar().getCarId());
-        Assert.assertEquals(RATING,ans.getRating());
+        Assert.assertEquals(TRIP_2.getTripId(),ans.getTrip().getTripId());
+        Assert.assertEquals(PASSENGER_1.getUser().getUserId(),ans.getReviewer().getUserId());
+        Assert.assertEquals(USER_1.getUserId(),ans.getReviewed().getUserId());
         Assert.assertEquals(COMMENT,ans.getComment());
-        Assert.assertEquals(CAR_REVIEW_OPTION,ans.getOption());
+        Assert.assertEquals(RATING,ans.getRating());
+        Assert.assertEquals(DRIVER_REVIEW_OPTION,ans.getOption());
     }
 
     @Test
-    public void testGetCarRating(){
+    public void testGetDriverRating(){
         //Execute
-        double ans = carReviewDao.getCarRating(CAR_1);
+        double ans = driverReviewDao.getDriverRating(USER_1);
         //Assert
-        Assert.assertEquals(0, Double.compare(RATING, ans));
+        Assert.assertEquals(0,Double.compare(RATING,ans));
     }
 
     @Test
-    public void testGetCarReviews(){
+    public void testGetDriverReviews(){
         //Execute
-        PagedContent<CarReview> ans = carReviewDao.getCarReviews(CAR_1,0,PAGE_SIZE);
+        PagedContent<DriverReview> ans = driverReviewDao.getDriverReviews(USER_1,0,PAGE_SIZE);
         //Assert
         Assert.assertEquals(1,ans.getTotalCount());
+        Assert.assertEquals(USER_2.getUserId(),ans.getElements().get(0).getReviewer().getUserId());
         Assert.assertEquals(RATING,ans.getElements().get(0).getRating());
         Assert.assertEquals(COMMENT,ans.getElements().get(0).getComment());
-        Assert.assertEquals(CAR_REVIEW_OPTION,ans.getElements().get(0).getOption());
+        Assert.assertEquals(DRIVER_REVIEW_OPTION,ans.getElements().get(0).getOption());
     }
 
     @Test
-    public void testCanReviewCarTrue(){
+    public void testCanReviewDriverFalse(){
         //Execute
-        boolean ans = carReviewDao.canReviewCar(TRIP_2,PASSENGER_1,CAR_1);
-        //Assert
-        Assert.assertTrue(ans);
-    }
-
-    @Test
-    public void testCanReviewCarFalse(){
-        //Execute
-        boolean ans = carReviewDao.canReviewCar(TRIP_2,PASSENGER_2,CAR_1);
+        boolean ans = driverReviewDao.canReviewDriver(TRIP_2,PASSENGER_2,USER_1);
         //Assert
         Assert.assertFalse(ans);
+    }
+
+    @Test
+    public void testCanReviewDriverTrue(){
+        //Execute
+        boolean ans = driverReviewDao.canReviewDriver(TRIP_2,PASSENGER_1,USER_1);
+        //Assert
+        Assert.assertTrue(ans);
     }
 
 
