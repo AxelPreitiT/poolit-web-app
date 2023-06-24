@@ -40,7 +40,6 @@ public class ProvinceDaoImplTest {
         Assert.assertFalse(province.isPresent());
     }
 
-    @Rollback
     @Test
     public void testFindByIdPresent(){
         //Execute
@@ -52,7 +51,6 @@ public class ProvinceDaoImplTest {
         Assert.assertEquals(PROVINCE_NAME,province.get().getName());
     }
 
-    @Rollback
     @Test
     public void testFindAllProvinces(){
         //SetUp

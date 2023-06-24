@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -48,7 +49,7 @@ public class CarDaoImplTest {
     private static final String UNKNOWN_PLATE = "CC000CC";
     private static final String INFO_CAR = "Fit azul";
 
-    private User user = new User(1,"John","Doe","johndoe@mail.com","1234567800","1234",new City(1,"Recoleta",new Province(1,"CABA")),new Locale("en"),"USER",KNOWN_IMAGE_ID);
+    private final User user = new User(1,"John","Doe","johndoe@mail.com","1234567800","1234",new City(1,"Recoleta",new Province(1,"CABA")),new Locale("en"),"USER",KNOWN_IMAGE_ID);
 
 
     @Rollback
@@ -62,7 +63,6 @@ public class CarDaoImplTest {
         Assert.assertEquals(KNOWN_IMAGE_ID,car.getImage_id());
     }
 
-    @Rollback
     @Test
     public void testFindByIdPresent(){
 
@@ -78,7 +78,6 @@ public class CarDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testFindByIdEmpty(){
         //No setup
 
@@ -90,7 +89,6 @@ public class CarDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testFindByPlateAndUserPresent(){
         //test
         Optional<Car> car = carDaoImpl.findByPlateAndUser(PLATE,user);
@@ -104,7 +102,6 @@ public class CarDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testFindByPlateAndUserEmpty(){
         //No setup
 
@@ -116,7 +113,6 @@ public class CarDaoImplTest {
     }
 
     @Test
-    @Rollback
     public void testFindByUserEmpty(){
         //Setup
         User aux = new User(user.getUserId() + 1, user.getName(), user.getSurname(), user.getEmail(), user.getPhone(), user.getPassword(), user.getBornCity(),user.getMailLocale(),user.getRole(),user.getUserImageId());
@@ -127,7 +123,6 @@ public class CarDaoImplTest {
         Assert.assertTrue(cars.isEmpty());
     }
 
-    @Rollback
     @Test
     public void testFindByUserPresent(){
 
@@ -145,6 +140,27 @@ public class CarDaoImplTest {
         Assert.assertEquals(INFO_CAR, cars.get(1).getInfoCar());
         Assert.assertEquals(KNOWN_USER_ID, cars.get(1).getUser().getUserId());
         Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(1).getImage_id());
+    }
+
+    @Rollback
+    @Test
+    public void testModifyCar(){
+        //Setup
+        final String testInfo = "SW4";
+        final int testSeats = 6;
+        final List<FeatureCar> testFeatures = new ArrayList<>();
+        testFeatures.add(FeatureCar.AIR);
+        testFeatures.add(FeatureCar.PET_FRIENDLY);
+        //Execute
+        carDaoImpl.modifyCar(CAR_ID,testInfo,testSeats,testFeatures);
+        //Assert
+        TypedQuery<Car> query = em.createQuery("from Car where carId = :carId",Car.class);
+        query.setParameter("carId",CAR_ID);
+        Optional<Car> car = query.getResultList().stream().findFirst();
+        Assert.assertTrue(car.isPresent());
+        Assert.assertEquals(testInfo,car.get().getInfoCar());
+        Assert.assertEquals(testSeats,car.get().getSeats());
+        Assert.assertEquals(testFeatures,car.get().getFeatures());
     }
 
 }

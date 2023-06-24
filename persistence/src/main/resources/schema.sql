@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS trips(
     destination_city_id INT NOT NULL,
     driver_id INT NOT NULL,
     car_id INT NOT NULL,
+    deleted BOOLEAN DEFAULT false,
+    last_occurrence TIMESTAMP DEFAULT NULL,
     CONSTRAINT trips_to_drivers FOREIGN KEY (driver_id) REFERENCES users(user_id),
     CONSTRAINT trips_to_cars FOREIGN KEY (car_id) REFERENCES cars(car_id),
     CONSTRAINT trips_to_origin FOREIGN KEY(origin_city_id) REFERENCES cities(city_id),
@@ -76,6 +78,7 @@ create TABLE IF NOT EXISTS passengers(
     user_id INT NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
+    passenger_state text default 'ACCEPTED',
     PRIMARY KEY (trip_id,user_id),
     CONSTRAINT passengers_to_trip FOREIGN KEY(trip_id) REFERENCES trips(trip_id),
     CONSTRAINT passengers_to_users FOREIGN KEY(user_id) REFERENCES users(user_id)

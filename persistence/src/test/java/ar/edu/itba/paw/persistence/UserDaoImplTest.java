@@ -74,7 +74,6 @@ public class UserDaoImplTest {
         Assert.assertTrue(user.getUserId()>0);
     }
 
-    @Rollback
     @Test
     public void testFindById(){
 
@@ -95,7 +94,6 @@ public class UserDaoImplTest {
         Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
 
-    @Rollback
     @Test
     public void testFindByEmail(){
         final Optional<User> user = userDao.findByEmail(EMAIL);
@@ -113,7 +111,6 @@ public class UserDaoImplTest {
         Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
 
-    @Rollback
     @Test
     public void testChangeRole(){
         //SetUp
@@ -139,7 +136,6 @@ public class UserDaoImplTest {
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
         Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
-    @Rollback
     @Test
     public void testUpdateUser(){
         //SetUp

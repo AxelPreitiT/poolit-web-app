@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.TokenDao;
+import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.models.Province;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.VerificationToken;
 import org.springframework.context.annotation.Primary;
@@ -9,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +25,10 @@ public class TokenHibernateDao implements TokenDao {
     @PersistenceContext
     private EntityManager em;
 
-    // TODO: Agregar loggers
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenHibernateDao.class);
 
     @Override
-    public VerificationToken createToken(User user, String token, Date date) {
+    public VerificationToken createToken(User user, String token, LocalDate date) {
         final VerificationToken tokenPersist =  new VerificationToken(user, token, date);
         em.persist(tokenPersist);
         return tokenPersist;
@@ -44,7 +47,7 @@ public class TokenHibernateDao implements TokenDao {
     }
 
     @Override
-    public void updateToken(String token, User user, Date date) {
+    public void updateToken(String token, User user, LocalDate date) {
         final TypedQuery<VerificationToken> query = em.createQuery("from VerificationToken where user = :user", VerificationToken.class);
         query.setParameter("user", user);
         query.getResultList().stream().findFirst().ifPresent(t -> {

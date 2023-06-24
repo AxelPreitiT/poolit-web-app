@@ -33,7 +33,6 @@ public class CityDaoImplTest {
     private static final String CITY_NAME = "Recoleta";
 
     @Test
-    @Rollback
     public void testFindByIdEmpty(){
         //No setup
 
@@ -44,7 +43,6 @@ public class CityDaoImplTest {
         Assert.assertFalse(city.isPresent());
     }
 
-    @Rollback
     @Test
     public void testFindByIdPresent(){
 
@@ -58,7 +56,6 @@ public class CityDaoImplTest {
         Assert.assertEquals(PROVINCE_ID,city.get().getProvinceId());
     }
 
-    @Rollback
     @Test
     public void testFindByProvinceId(){
         //SetUp

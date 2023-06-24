@@ -46,7 +46,6 @@ public class ImageDaoImplTest {
         Assert.assertTrue(image.getImageId()>0);
     }
 
-    @Rollback
     @Test
     public void testFindByIdPresent(){
 
@@ -70,7 +69,6 @@ public class ImageDaoImplTest {
         Assert.assertFalse(image.isPresent());
     }
 
-    @Rollback
     @Test
     public void testFindByIdOfOther(){
 
