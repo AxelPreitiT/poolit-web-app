@@ -1,13 +1,12 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.form.annotations.MPFile;
-import ar.edu.itba.paw.webapp.form.annotations.MPFileNotNull;
-import ar.edu.itba.paw.webapp.form.annotations.PasswordMatches;
+import ar.edu.itba.paw.webapp.form.annotations.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
-@PasswordMatches
+//TODO VER ERROR, no puedo pasarle codigo i18n
+@FieldMatches(first = "password", second = "repeatPassword", message = "Passwords do not match")
 public class CreateUserForm {
 
     @Pattern(regexp = ".+")
@@ -37,7 +36,6 @@ public class CreateUserForm {
     private String mailLocale;
 
     @MPFile
-    @MPFileNotNull
     private MultipartFile imageFile;
 
     public String getUsername() {
