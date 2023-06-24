@@ -196,7 +196,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-container">
+                    <div id="seatsInput" class="input-container hidden">
                         <div class="input-row">
                             <div class="input-group input-group-sm">
                                 <div class="input-group-text">
