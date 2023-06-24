@@ -49,8 +49,6 @@ public class CarServiceImpl implements CarService {
 
         imageService.replaceImage(car.getImage_id(),imgData);
         return carDao.ModifyCar(carId, infoCar, seats, features);
-
-
     }
 
     @Override
