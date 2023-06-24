@@ -135,16 +135,16 @@ public class TripHibernateDao implements TripDao {
     @Override
     public boolean acceptPassenger(Passenger passenger) {
         LOGGER.debug("Accepting passenger with id {}",passenger.getUserId());
-        em.merge(passenger);
         passenger.setPassengerState(Passenger.PassengerState.ACCEPTED);
+        em.merge(passenger);
         return true;
     }
 
     @Override
     public boolean removePassenger(Passenger passenger) {
         LOGGER.debug("Accepting passenger with id {}",passenger.getUserId());
-        em.merge(passenger);
         passenger.setPassengerState(Passenger.PassengerState.REJECTED);
+        em.merge(passenger);
         return true;
     }
 
