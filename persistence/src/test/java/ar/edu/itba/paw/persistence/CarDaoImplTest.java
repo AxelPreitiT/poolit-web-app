@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,23 +23,16 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-    /*
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class CarDaoImplTest {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    @Autowired
-    private DataSource dataSource;
-
     @Autowired
     private CarHibernateDao carDaoImpl;
 
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert jdbcInsert;
+    @PersistenceContext
+    private EntityManager em;
 
     private static final long KNOWN_USER_ID = 1;
     private static final long KNOWN_IMAGE_ID=1;
@@ -49,51 +40,31 @@ public class CarDaoImplTest {
     private static final long KNOWN_CITY_ID = 1;
 
     private static final long CAR_ID = 1;
-    private static final String PLATE = "AE062TP";
-    private static final String PLATE_2 = "AE026TE";
-    private static final String INFO_CAR = "Honda Fit azul";
+    private static final String PLATE = "AA000AA";
 
-    private User user;
+    private static final CarBrand BRAND = CarBrand.UNKNOWN;
+    private static final String PLATE_2 = "BB000BB";
 
+    private static final String UNKNOWN_PLATE = "CC000CC";
+    private static final String INFO_CAR = "Fit azul";
 
-    @Before
-    public void setUp(){
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("cars")
-                .usingGeneratedKeyColumns("car_id");
-        jdbcTemplate.update("INSERT INTO provinces VALUES(?,?)",1,"CABA");
-        jdbcTemplate.update("INSERT INTO cities values (?,?,?)",KNOWN_CITY_ID,"Recoleta",1);
-        jdbcTemplate.update("INSERT INTO images values (?,?)",KNOWN_IMAGE_ID,null);
-        Locale locale = Locale.US;
-        jdbcTemplate.update("INSERT INTO users VALUES (?,?,?,?,?,?,?,?,?,?)",KNOWN_USER_ID,"Poolit","Trips","poolit@gmail.com","1139150686","",KNOWN_CITY_ID,locale.toString(),"DRIVER",KNOWN_IMAGE_ID);
-        user = new User(KNOWN_USER_ID,"Poolit","Trips","poolit@gmail.com","1139150686","",new City(KNOWN_CITY_ID,"",1),locale,"USER",KNOWN_IMAGE_ID);
-    }
+    private User user = new User(1,"John","Doe","johndoe@mail.com","1234567800","1234",new City(1,"Recoleta",new Province(1,"CABA")),new Locale("en"),"USER",KNOWN_IMAGE_ID);
+
 
     @Rollback
     @Test
     public void testCreate(){
-        final Car car = carDaoImpl.create(PLATE,INFO_CAR,user,KNOWN_IMAGE_ID);
+        final Car car = carDaoImpl.create(PLATE_2,INFO_CAR,user,KNOWN_IMAGE_ID,3,BRAND,new ArrayList<>());
 
-        Assert.assertEquals(PLATE,car.getPlate());
+        Assert.assertEquals(PLATE_2,car.getPlate());
         Assert.assertEquals(INFO_CAR,car.getInfoCar());
         Assert.assertEquals(user.getUserId(),car.getUser().getUserId());
         Assert.assertEquals(KNOWN_IMAGE_ID,car.getImage_id());
-        Assert.assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate,"cars"));
     }
 
     @Rollback
     @Test
     public void testFindByIdPresent(){
-        //setup
-        final Map<String,Object> data = new HashMap<>();
-        data.put("plate",PLATE);
-        data.put("info_car",INFO_CAR);
-        data.put("user_id",KNOWN_USER_ID);
-        data.put("image_id",KNOWN_IMAGE_ID);
-        data.put("car_id", CAR_ID);
-        jdbcInsert.execute(data);
-        long key = CAR_ID;
 
         //test
         Optional<Car> car = carDaoImpl.findById(CAR_ID);
@@ -107,11 +78,12 @@ public class CarDaoImplTest {
     }
 
     @Test
+    @Rollback
     public void testFindByIdEmpty(){
         //No setup
 
         //test
-        Optional<Car> car = carDaoImpl.findById(CAR_ID);
+        Optional<Car> car = carDaoImpl.findById(200);
 
         //assert
         Assert.assertFalse(car.isPresent());
@@ -120,15 +92,6 @@ public class CarDaoImplTest {
     @Test
     @Rollback
     public void testFindByPlateAndUserPresent(){
-        //setup
-        final Map<String,Object> data = new HashMap<>();
-        data.put("car_id",CAR_ID);
-        data.put("plate",PLATE);
-        data.put("info_car",INFO_CAR);
-        data.put("user_id",KNOWN_USER_ID);
-        data.put("image_id",KNOWN_IMAGE_ID);
-        jdbcInsert.execute(data);
-
         //test
         Optional<Car> car = carDaoImpl.findByPlateAndUser(PLATE,user);
 
@@ -141,22 +104,24 @@ public class CarDaoImplTest {
     }
 
     @Test
+    @Rollback
     public void testFindByPlateAndUserEmpty(){
         //No setup
 
         //test
-        Optional<Car> car = carDaoImpl.findByPlateAndUser(PLATE,user);
+        Optional<Car> car = carDaoImpl.findByPlateAndUser(UNKNOWN_PLATE,user);
 
         //assert
         Assert.assertFalse(car.isPresent());
     }
 
     @Test
+    @Rollback
     public void testFindByUserEmpty(){
-        //No setup
-
+        //Setup
+        User aux = new User(user.getUserId() + 1, user.getName(), user.getSurname(), user.getEmail(), user.getPhone(), user.getPassword(), user.getBornCity(),user.getMailLocale(),user.getRole(),user.getUserImageId());
         //test
-        List<Car> cars = carDaoImpl.findByUser(user);
+        List<Car> cars = carDaoImpl.findByUser(aux);
 
         //assert
         Assert.assertTrue(cars.isEmpty());
@@ -165,27 +130,21 @@ public class CarDaoImplTest {
     @Rollback
     @Test
     public void testFindByUserPresent(){
-        //Setup
-        final Map<String,Object> data = new HashMap<>();
-        data.put("car_id",CAR_ID);
-        data.put("plate",PLATE);
-        data.put("info_car",INFO_CAR);
-        data.put("user_id",KNOWN_USER_ID);
-        data.put("image_id",KNOWN_IMAGE_ID);
-        jdbcInsert.execute(data);
 
         //test
         List<Car> cars= carDaoImpl.findByUser(user);
 
         //assert
         Assert.assertFalse(cars.isEmpty());
-        Assert.assertEquals(1,cars.size());
+        Assert.assertEquals(2,cars.size());
         Assert.assertEquals(PLATE,cars.get(0).getPlate());
         Assert.assertEquals(INFO_CAR, cars.get(0).getInfoCar());
         Assert.assertEquals(KNOWN_USER_ID, cars.get(0).getUser().getUserId());
         Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(0).getImage_id());
+        Assert.assertEquals(PLATE_2,cars.get(1).getPlate());
+        Assert.assertEquals(INFO_CAR, cars.get(1).getInfoCar());
+        Assert.assertEquals(KNOWN_USER_ID, cars.get(1).getUser().getUserId());
+        Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(1).getImage_id());
     }
 
 }
-
-     */

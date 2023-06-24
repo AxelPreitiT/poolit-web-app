@@ -17,6 +17,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -24,68 +27,32 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-
-/*
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class UserDaoImplTest {
-    @Autowired
-    private DataSource dataSource;
 
+    @PersistenceContext
+    private EntityManager em;
     @Autowired
     private UserHibernateDao userDao;
-
-    private SimpleJdbcInsert jdbcInsert;
-
-    private JdbcTemplate jdbcTemplate;
 
 
     private static final long KNOWN_IMAGE_ID = 1;
     private static final long KNOWN_CITY_ID = 1;
     private static final long KNOWN_PROVINCE_ID = 1;
 
-    private static final String USERNAME = "POOLIT";
-    private static final String SURNAME = "Trips";
-    private static final String EMAIL = "poolit.noreply@gmail.com";
-    private static final String PHONE = "1139150686";
-    private static final String PASSWORD = "PASS";
-    private static final Locale LOCALE = Locale.US;
-    private static final City city = new City(KNOWN_CITY_ID,"",KNOWN_PROVINCE_ID);
+    private static final String USERNAME = "John";
+    private static final String SURNAME = "Doe";
+    private static final String EMAIL = "jonhdoe@mail.com";
+    private static final String PHONE = "1234567800";
+    private static final String PASSWORD = "1234";
+    private static final Locale LOCALE = Locale.ENGLISH;
 
+    private static final long KNOWN_USER_ID = 1;
+    private static final City city = new City(KNOWN_CITY_ID,"CABA",KNOWN_PROVINCE_ID);
     private static final String ROLE = "USER";
 
-    @Test
-    public void a(){
-
-    }
-
-    @Before
-    public void setUp(){
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("users")
-                .usingGeneratedKeyColumns("user_id");
-        jdbcTemplate.update("INSERT INTO provinces VALUES(?,?)",1,"CABA");
-        jdbcTemplate.update("INSERT INTO cities values (?,?,?)",KNOWN_CITY_ID,"Recoleta",1);
-        jdbcTemplate.update("INSERT INTO images values (?,?)",KNOWN_IMAGE_ID,null);
-    }
-
-    private User addUser(final String username, final String surname, final String email,
-                         final String phone, final String password, final Locale locale, final City bornCity, String role, long user_image_id){
-        Map<String, Object> data = new HashMap<>();
-        data.put("username", username);
-        data.put("surname", surname);
-        data.put("email", email);
-        data.put("phone", phone);
-        data.put("password", password);
-        data.put("city_id", bornCity.getId());
-        data.put("mail_locale",locale.toString());
-        data.put("user_role", role);
-        data.put("user_image_id", user_image_id);
-        Number key = jdbcInsert.executeAndReturnKey(data);
-        return new User(key.longValue(),username,surname,email,phone,password,city,locale,role,user_image_id);
-    }
 
     @Rollback
     @Test
@@ -110,11 +77,9 @@ public class UserDaoImplTest {
     @Rollback
     @Test
     public void testFindById(){
-        //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
 
         //Execute
-        final Optional<User> user = userDao.findById(aux.getUserId());
+        final Optional<User> user = userDao.findById(KNOWN_USER_ID);
 
         //Assert
         Assert.assertTrue(user.isPresent());
@@ -127,15 +92,12 @@ public class UserDaoImplTest {
         Assert.assertEquals(LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
-        Assert.assertEquals(aux.getUserId(),user.get().getUserId());
+        Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
 
     @Rollback
     @Test
     public void testFindByEmail(){
-        //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
-
         final Optional<User> user = userDao.findByEmail(EMAIL);
 
         Assert.assertTrue(user.isPresent());
@@ -148,28 +110,22 @@ public class UserDaoImplTest {
         Assert.assertEquals(LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
-        Assert.assertEquals(aux.getUserId(),user.get().getUserId());
+        Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
 
     @Rollback
     @Test
     public void testChangeRole(){
         //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
-
         final String TEST_ROLE = "DRIVER";
         //Execute
-        userDao.changeRole(aux.getUserId(),TEST_ROLE);
+        userDao.changeRole(KNOWN_USER_ID,TEST_ROLE);
 
         //Assert
         //We do this here to avoid depending in the method of the userDAO
-        Optional<User> user = jdbcTemplate.query("SELECT * FROM users WHERE user_id=?",(rs,rn)->
-                new User(rs.getLong("user_id"), rs.getString("username"),
-                        rs.getString("surname"), rs.getString("email"),
-                        rs.getString("phone"), rs.getString("password"),
-                        new City(rs.getLong("city_id"),city.getName(),city.getProvinceId()),
-                        new Locale(rs.getString("mail_locale")),
-                        rs.getString("user_role"), rs.getLong("user_image_id")),aux.getUserId()).stream().findFirst();
+        TypedQuery<User> query = em.createQuery("from User where userId = :userId",User.class);
+        query.setParameter("userId",KNOWN_USER_ID);
+        Optional<User> user = query.getResultList().stream().findFirst();
 
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(USERNAME,user.get().getName());
@@ -181,13 +137,12 @@ public class UserDaoImplTest {
         Assert.assertEquals(LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
-        Assert.assertEquals(aux.getUserId(),user.get().getUserId());
+        Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
     @Rollback
     @Test
     public void testUpdateUser(){
         //SetUp
-        User aux = addUser(USERNAME,SURNAME,EMAIL,PHONE,PASSWORD,LOCALE,city,ROLE,KNOWN_IMAGE_ID);
         final String TEST_NAME = "TestName";
         final String TEST_SURNAME = "TestSurname";
         final String TEST_PASSWORD = "Pass";
@@ -198,13 +153,9 @@ public class UserDaoImplTest {
 
         //Assert
         //Hacemos esto para evitar depender de los metodos del userDao
-        Optional<User> user = jdbcTemplate.query("SELECT * FROM users WHERE user_id=?",(rs,rn)->
-                new User(rs.getLong("user_id"), rs.getString("username"),
-                        rs.getString("surname"), rs.getString("email"),
-                        rs.getString("phone"), rs.getString("password"),
-                        new City(rs.getLong("city_id"),city.getName(),city.getProvinceId()),
-                        new Locale(rs.getString("mail_locale")),
-                        rs.getString("user_role"), rs.getLong("user_image_id")),aux.getUserId()).stream().findFirst();
+        TypedQuery<User> query = em.createQuery("from User where userId = :userId",User.class);
+        query.setParameter("userId",KNOWN_USER_ID);
+        Optional<User> user = query.getResultList().stream().findFirst();
 
         Assert.assertTrue(user.isPresent());
         Assert.assertEquals(TEST_NAME,user.get().getName());
@@ -216,8 +167,6 @@ public class UserDaoImplTest {
         Assert.assertEquals(TEST_LOCALE.toString().toLowerCase(),user.get().getMailLocale().toString().toLowerCase());
         Assert.assertEquals(KNOWN_CITY_ID,user.get().getBornCity().getId());
         Assert.assertEquals(KNOWN_IMAGE_ID,user.get().getUserImageId());
-        Assert.assertEquals(aux.getUserId(),user.get().getUserId());
+        Assert.assertEquals(KNOWN_USER_ID,user.get().getUserId());
     }
 }
-
- */

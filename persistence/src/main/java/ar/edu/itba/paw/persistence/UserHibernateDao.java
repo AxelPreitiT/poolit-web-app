@@ -76,7 +76,7 @@ public class UserHibernateDao implements UserDao {
             final User user = maybeUser.get();
             user.setRole(role);
             user.setBornCity(bornCity);
-            user.setMailLocale(Locale.forLanguageTag(mailLocale));
+            user.setMailLocale(new Locale(mailLocale));
             user.setName(username);
             user.setPassword(password);
             user.setSurname(surname);

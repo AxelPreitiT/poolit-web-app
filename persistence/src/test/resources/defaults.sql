@@ -1,0 +1,14 @@
+INSERT INTO images values (1,null);
+INSERT INTO provinces values (1,'CABA');
+INSERT INTO provinces values (2,'Buenos Aires');
+INSERT INTO provinces values (3,'Santa Fe');
+INSERT INTO provinces values (4,'Neuquen');
+INSERT INTO provinces values (5,'Misiones');
+INSERT INTO cities values (1,'Recoleta',1);
+INSERT INTO cities values (2,'Parque Patricios',1);
+INSERT INTO cities values (3,'San Nicolas',1);
+INSERT INTO cities values (4,'Palermo',1);
+INSERT INTO cities values (5,'Puerto Madero',1);
+INSERT INTO users(user_id, username, surname, email, phone, password,city_id,user_image_id,mail_locale,user_role) values (1,'John','Doe','jonhdoe@mail.com','1234567800','1234',1,1,'en','USER');
+INSERT INTO cars(car_id, plate, info_car, user_id, image_id,seats,brand) values (1,'AA000AA','Fit azul',1,1,4,'UNKNOWN');
+INSERT INTO cars(car_id, plate, info_car, user_id, image_id,seats) values (2,'BB000BB','Fit azul',1,1,4);
