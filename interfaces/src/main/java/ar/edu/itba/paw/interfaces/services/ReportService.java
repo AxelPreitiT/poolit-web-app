@@ -19,8 +19,6 @@ public interface ReportService {
 
     Optional<Report> findById(long reportId);
 
-    List<Report> getAllReports();
-
     void acceptReport(long reportId, String reason) throws TripNotFoundException;
 
     void rejectReport(long reportId, String reason);

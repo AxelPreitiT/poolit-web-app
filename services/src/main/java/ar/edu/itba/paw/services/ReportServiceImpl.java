@@ -71,12 +71,6 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public List<Report> getAllReports() {
-        return reportDao.getAllReports();
-    }
-
-    @Transactional
-    @Override
     public void rejectReport(long reportId, String reason){
         reportDao.resolveReport(reportId, reason, ReportState.REJECTED);
         Report report = reportDao.findById(reportId).orElseThrow(IllegalArgumentException::new);

@@ -20,7 +20,6 @@ public interface ReportDao {
 
     void resolveReport(long reportId, String reason, ReportState state);
 
-    List<Report> getAllReports();
     PagedContent<Report> getReports(int page, int pageSize);
 
     Optional<Report>  getReportByTripAndUsers(long tripId, long reporterId, long reportedId);
