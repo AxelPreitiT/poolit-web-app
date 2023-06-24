@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -361,7 +362,8 @@ public class TripServiceImpl implements TripService {
     public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
         if( trip.getStartDateTime().isAfter(dateTime)
                 || trip.getEndDateTime().isBefore(dateTime)
-                || Period.between(trip.getStartDateTime().toLocalDate(),dateTime.toLocalDate()).getDays()%7!=0
+                || trip.getStartDateTime().until(dateTime, ChronoUnit.DAYS) % 7 != 0
+                || dateTime.until(trip.getEndDateTime(), ChronoUnit.DAYS) % 7 != 0
         ){
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("{} or dateTime '{}' have invalid values", trip, dateTime, e);
@@ -377,8 +379,9 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
         if( trip.getStartDateTime().isAfter(startDate)
-                || trip.getEndDateTime().isBefore(startDate)
-                || Period.between(trip.getStartDateTime().toLocalDate(),startDate.toLocalDate()).getDays()%7!=0
+                || trip.getEndDateTime().isBefore(endDate)
+                || trip.getStartDateTime().until(startDate, ChronoUnit.DAYS) % 7 != 0
+                || startDate.until(endDate, ChronoUnit.DAYS) % 7 != 0
         ){
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("{} or startDate '{}' or endDate '{}' have invalid values", trip, startDate, endDate, e);
@@ -470,24 +473,24 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerFuture(int page, int pageSize) throws UserNotFoundException{
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null, page,pageSize);
     }
     @Override
     public PagedContent<Trip> getTripsWhereUserIsPassengerFuture(User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null, page,pageSize);
     }
     @Override
     public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerPast(int page, int pageSize) throws UserNotFoundException{
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
     }
 
     @Override
     public PagedContent<Trip> getTripsWhereUserIsPassengerPast(User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
     }
 
     @Override

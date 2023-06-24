@@ -34,9 +34,7 @@ public interface TripDao {
     int getTripSeatCount(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
     PagedContent<Trip> getTripsCreatedByUser(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime,int page, int pageSize);
-    //
-    PagedContent<Trip> getTripsWhereUserIsPassenger(final User user,Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize);
-    //
+    PagedContent<Trip> getTripsWhereUserIsPassenger(final User user, Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, Passenger.PassengerState passengerState, int page, int pageSize);
     Optional<Trip> findById(long id);
     //
     Optional<Trip> findById(long tripId, LocalDateTime start, LocalDateTime end);

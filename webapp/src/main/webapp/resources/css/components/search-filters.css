@@ -96,6 +96,7 @@
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 0;
+    border-color: transparent;
 }
 
 #search-tabs > li {
