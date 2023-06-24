@@ -2,14 +2,12 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.models.Image;
-import ar.edu.itba.paw.webapp.exceptions.ImageNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @Controller
 public class ImageController {
@@ -25,9 +23,9 @@ public class ImageController {
 
     @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
     public @ResponseBody
-    byte[] getImage(@PathVariable("imageId") final int imageId) {
+    byte[] getImage(@PathVariable("imageId") final int imageId) throws ImageNotFoundException {
         LOGGER.debug("GET Request to /image/{}", imageId);
-        final Image image = imageService.findById(imageId).orElseThrow(() -> new ImageNotFoundException(imageId));
+        final Image image = imageService.findById(imageId).orElseThrow(ImageNotFoundException::new);
         return image.getData();
     }
 

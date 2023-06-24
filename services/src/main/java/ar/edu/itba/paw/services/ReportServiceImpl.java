@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
@@ -45,10 +45,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason){
-        User reported = userService.findById(reportedId).orElseThrow(IllegalArgumentException::new);
-        Trip trip = tripService.findById(tripId).orElseThrow(IllegalArgumentException::new);
-        User reporter = userService.getCurrentUser().orElseThrow(IllegalArgumentException::new);
+    public Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason) throws UserNotFoundException, TripNotFoundException {
+        User reported = userService.findById(reportedId).orElseThrow(UserNotFoundException::new);
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        User reporter = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         LocalDateTime date = LocalDateTime.now();
         Report resp = reportDao.createReport(reporter, reported, trip, description, date, relation, reason);
         List<User> admins = userService.getAdmins();
@@ -71,9 +71,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public void rejectReport(long reportId, String reason){
+    public void rejectReport(long reportId, String reason) throws ReportNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.REJECTED);
-        Report report = reportDao.findById(reportId).orElseThrow(IllegalArgumentException::new);
+        Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
         try {
             emailService.sendMailRejectReport(report);
         }
@@ -84,9 +84,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public void acceptReport(long reportId, String reason) throws TripNotFoundException {
+    public void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
-        Report report = reportDao.findById(reportId).orElseThrow(IllegalArgumentException::new);
+        Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
         try {
             emailService.sendMailAcceptReport(report);
         }
@@ -117,7 +117,6 @@ public class ReportServiceImpl implements ReportService {
             pgTripUser = tripService.getTripsWhereUserIsPassengerFuture(report.getReported(), i+1, 10);
         }
         userService.banUser(report.getReported());
-        //Falta elimar el pasajero de los viajes
     }
 
     public Optional<Report> getReportByTripAndUsers(long tripId, long reporterId, long reportedId){
@@ -126,21 +125,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public TripReportCollection getTripReportCollection(long tripId) {
-        Optional<Trip> maybeTrip = tripService.findById(tripId);
-        if(!maybeTrip.isPresent()) {
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("Trip with id {} not found", tripId, e);
-            throw e;
-        }
-        Trip trip = maybeTrip.get();
-        Optional<User> maybeCurrentUser = userService.getCurrentUser();
-        if(!maybeCurrentUser.isPresent()) {
-            IllegalStateException e = new IllegalStateException();
-            LOGGER.error("User is not logged in", e);
-            throw e;
-        }
-        User currentUser = maybeCurrentUser.get();
+    public TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         ItemReport<User> driverToReport;
         List<ItemReport<Passenger>> passengersToReport;
         if(tripService.userIsDriver(tripId, currentUser)) {
@@ -155,13 +142,7 @@ public class ReportServiceImpl implements ReportService {
             ).collect(Collectors.toList());
         }
         else if(tripService.userIsPassenger(tripId, currentUser)) {
-            Optional<Passenger> maybeCurrentPassenger = tripService.getPassenger(tripId, currentUser);
-            if(!maybeCurrentPassenger.isPresent()) {
-                IllegalStateException e = new IllegalStateException();
-                LOGGER.error("User with id {} is passenger of trip with id {} but cannot find it in the database", currentUser.getUserId(), tripId, e);
-                throw e;
-            }
-            Passenger currentPassenger = maybeCurrentPassenger.get();
+            Passenger currentPassenger = tripService.getPassenger(tripId, currentUser).orElseThrow(PassengerNotFoundException::new);
             driverToReport = new ItemReport<>(trip.getDriver(), ReportRelations.PASSENGER_2_DRIVER, getDriverReportState(trip, currentPassenger));
             List<Passenger> passengers = tripService.getPassengersRecurrent(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
             passengersToReport = passengers.stream().filter(

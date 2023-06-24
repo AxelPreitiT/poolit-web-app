@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reports.Report;
@@ -15,15 +15,15 @@ import java.util.Optional;
 
 public interface ReportService {
 
-    Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason);
+    Report createReport(long reportedId, long tripId, String description, ReportRelations relation, ReportOptions reason) throws UserNotFoundException, TripNotFoundException;
 
     Optional<Report> findById(long reportId);
 
-    void acceptReport(long reportId, String reason) throws TripNotFoundException;
+    void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException;
 
-    void rejectReport(long reportId, String reason);
+    void rejectReport(long reportId, String reason) throws ReportNotFoundException;
 
-    TripReportCollection getTripReportCollection(long tripId);
+    TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException;
 
     PagedContent<Report> getReports(int page, int pageSize);
 
