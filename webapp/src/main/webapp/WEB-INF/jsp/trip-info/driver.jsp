@@ -170,7 +170,7 @@
                     </a>
                     <c:if test="${trip.recurrent}">
                       <c:if test="${passenger.recurrent}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${user.endDateString}"/></h6>
+                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${passenger.endDateString}"/></h6>
                       </c:if>
                       <c:if test="${!(passenger.recurrent)}">
                         <h6 class="show-row italic-text"><spring:message code="dates.unique" arguments="${passenger.startDateString}"/></h6>

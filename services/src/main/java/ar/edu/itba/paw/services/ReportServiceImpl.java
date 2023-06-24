@@ -132,7 +132,7 @@ public class ReportServiceImpl implements ReportService {
         List<ItemReport<Passenger>> passengersToReport;
         if(tripService.userIsDriver(tripId, currentUser)) {
             driverToReport = null;
-            List<Passenger> passengers = tripService.getPassengers(trip);
+            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, trip.getStartDateTime(), trip.getEndDateTime());
             passengersToReport = passengers.stream().filter(
                     passenger -> !passenger.getUser().equals(currentUser)
             ).map(
@@ -143,8 +143,11 @@ public class ReportServiceImpl implements ReportService {
         }
         else if(tripService.userIsPassenger(tripId, currentUser)) {
             Passenger currentPassenger = tripService.getPassenger(tripId, currentUser).orElseThrow(PassengerNotFoundException::new);
+            if(!currentPassenger.getAccepted()) {
+                return TripReportCollection.empty();
+            }
             driverToReport = new ItemReport<>(trip.getDriver(), ReportRelations.PASSENGER_2_DRIVER, getDriverReportState(trip, currentPassenger));
-            List<Passenger> passengers = tripService.getPassengersRecurrent(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
+            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
             passengersToReport = passengers.stream().filter(
                     passenger -> !passenger.getUser().equals(currentUser)
             ).map(
