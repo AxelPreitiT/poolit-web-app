@@ -77,7 +77,7 @@ public class TripController {
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
                                        @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm,
                                        @ModelAttribute("reportForm") final ReportForm reportForm
-                                       )throws TripNotFoundException, UserNotFoundException{
+                                       )throws TripNotFoundException, UserNotFoundException,CarNotFoundException{
         LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();
         if(!userOp.isPresent()){
@@ -115,7 +115,7 @@ public class TripController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException{
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());

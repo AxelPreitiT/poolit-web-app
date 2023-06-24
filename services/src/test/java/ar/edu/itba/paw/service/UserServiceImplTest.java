@@ -105,13 +105,12 @@ public class UserServiceImplTest {
     @Test(expected = EmailAlreadyExistsException.class)
     public void testAlreadyExistUserCreateUser() throws EmailAlreadyExistsException, CityNotFoundException, MessagingException, IOException {
         // precondiciones
-        when(userDao.create(eq(NAME), eq(SURNAME), eq(MAIL), eq(PHONE), eq(PASSWORD), eq(BORN_CITY), eq(new Locale(MAIL_LOCALE)), eq(ROLE), anyLong()))
-                .thenReturn(new User(USER_ID, NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), ROLE, USER_IMAGE_ID));
-        when(passwordEncoder.encode(Mockito.anyString())).thenReturn(PASSWORD);
+        //when(userDao.create(eq(NAME), eq(SURNAME), eq(MAIL), eq(PHONE), eq(PASSWORD), eq(BORN_CITY), eq(new Locale(MAIL_LOCALE)), eq(ROLE), anyLong())).thenReturn(new User(USER_ID, NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), ROLE, USER_IMAGE_ID));
+        //when(passwordEncoder.encode(Mockito.anyString())).thenReturn(PASSWORD);
         when(cityService.findCityById(Mockito.anyLong())).thenReturn(Optional.of(BORN_CITY));
-        when(userDao.findByEmail(any())).thenReturn(Optional.ofNullable(USER));
-        when(tokenService.createToken(any())).thenReturn(new VerificationToken(USER, TOKEN, EXPIRY_DATE));
-        doNothing().when(emailService).sendVerificationEmail(any(), any());
+        when(userDao.findByEmail(any())).thenReturn(Optional.of(USER));
+        //when(tokenService.createToken(any())).thenReturn(new VerificationToken(USER, TOKEN, EXPIRY_DATE));
+        //doNothing().when(emailService).sendVerificationEmail(any(), any());
         when(imageService.createImage(any())).thenReturn(IMAGEN);
 
         // ejercitar la clase

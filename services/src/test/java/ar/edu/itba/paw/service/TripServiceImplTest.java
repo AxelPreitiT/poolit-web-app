@@ -39,15 +39,12 @@ public class TripServiceImplTest {
 
     private static final User user = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "USER", 1L);
     private static final City originCity = new City(1, "Agronomía", 1);
-
     private static final long originCityId = 1;
     private static final City destinationCity = new City(1, "Agronomía", 1);
-
     private static final long destinationCityId = 1;
     private static final String originAddress = "ORIGIN ADDRESS";
     private static final String destinationAddress = "DESTINATION ADDRESS";
     private static final Car car = new Car(1, "ABC123", "INFO", user, 1L);
-
     private static final long carId = 1;
     private static final LocalDate startDate = LocalDate.parse("02/05/2023", DATE_FORMAT);
     private static final LocalTime startTime = LocalTime.parse("10:00", TIME_FORMAT);
@@ -129,8 +126,8 @@ public class TripServiceImplTest {
     public void TestIsStartedAddCurrentUSer() throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
         when(tripDao.findById(anyLong())).thenReturn(Optional.of(trip));
         when(userService.getCurrentUser()).thenReturn(Optional.of(user));
-        when(tripDao.getPassenger(any(), any())).thenReturn(Optional.of(passenger));
-        when(tripDao.addPassenger(any(), any(), any(), any())).thenReturn(true);
+        //when(tripDao.getPassenger(any(), any())).thenReturn(Optional.of(passenger));
+        //when(tripDao.addPassenger(any(), any(), any(), any())).thenReturn(true);
 
         boolean ans = tripService.addCurrentUser(tripId, "02/05/2023", "10:00", "02/05/2023");
 
