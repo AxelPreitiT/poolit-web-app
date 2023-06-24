@@ -40,16 +40,4 @@ public class ImageHibernateDao implements ImageDao {
         return result;
     }
 
-    @Override
-    public void replaceImage(long id, byte[] data) {
-        if(data.length<=0){
-            return;
-        }
-        Optional<Image> img = findById(id);
-        if (img.isPresent()){
-            Image imgToModify= img.get();
-            imgToModify.setData(data);
-            em.merge(imgToModify);
-        }
-    }
 }

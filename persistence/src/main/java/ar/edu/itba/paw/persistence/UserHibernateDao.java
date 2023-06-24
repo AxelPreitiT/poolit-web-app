@@ -89,7 +89,7 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
-    public void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale) {
+    public void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale, long imageId) {
         Optional<User> maybeUser = findById(userId);
         LOGGER.debug("Modifying user with id '{}' in the database", userId);
         if (maybeUser.isPresent()) {
@@ -99,6 +99,7 @@ public class UserHibernateDao implements UserDao {
             user.setPhone(phone);
             user.setBornCity(bornCity);
             user.setMailLocale(mailLocale);
+            user.setUserImageId(imageId);
             em.persist(user);
         }
     }

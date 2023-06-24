@@ -21,7 +21,7 @@ public interface UserDao {
 
     public User updateProfile(final String username, final String surname, final String email,
                               final String password, final City bornCity, final String mailLocale, final String role, long user_image_id);
-    void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale);
+    void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale, long imageId);
 
     void blockUser(long blockerId, long blockedId);
     void unblockUser(long blockerId, long blockedId);

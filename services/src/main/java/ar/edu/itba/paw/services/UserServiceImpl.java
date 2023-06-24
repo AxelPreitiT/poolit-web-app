@@ -68,7 +68,13 @@ public class UserServiceImpl implements UserService {
     public User createUser(final String username, final String surname, final String email,
                            final String phone, final String password, final long bornCityId, final String mailLocaleString, final String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException {
         final City bornCity = cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new);
-        final long user_image_id = imageService.createImage(imgData).getImageId();
+        final long user_image_id;
+        if (imgData.length<=0){
+            //TODO CAMBIAR EN PRODUCCION A LA DEFAULT
+            user_image_id = 1;
+        } else {
+            user_image_id = imageService.createImage(imgData).getImageId();
+        }
         String finalRole = (role == null) ? UserRole.USER.getText() : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
@@ -240,8 +246,13 @@ public class UserServiceImpl implements UserService {
     public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
         Optional<User> user = getCurrentUser();
         if(user.isPresent()){
-            imageService.replaceImage(user.get().getUserImageId(),imgData);
-            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString));
+            if(imgData.length<=0){
+                userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.get().getUserImageId());
+                return;
+            }
+            long imageId = imageService.createImage(imgData).getImageId();
+            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
+
         }
     }
 
