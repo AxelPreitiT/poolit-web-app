@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="trip-price-row items-to-end">
-                    <span class="h6 italic-text">Por viaje</span>
+                    <span class="h6 italic-text"><spring:message code="trip.perTrip"/></span>
                 </div>
             </div>
             <div id="button-container">

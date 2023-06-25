@@ -141,6 +141,14 @@
     column-gap: 1em;
 }
 
+.title-row > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 0.3em;
+}
+
 .input-container {
     display: flex;
     flex-direction: column;
