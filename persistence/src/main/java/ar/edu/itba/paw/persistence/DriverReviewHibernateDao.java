@@ -74,7 +74,7 @@ public class DriverReviewHibernateDao implements DriverReviewDao {
         }
         final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<DriverReview> driverReviewsQuery = em.createQuery("FROM DriverReview dr WHERE dr.reviewId IN :reviewIdList", DriverReview.class);
+        final TypedQuery<DriverReview> driverReviewsQuery = em.createQuery("FROM DriverReview dr WHERE dr.reviewId IN :reviewIdList ORDER BY date DESC", DriverReview.class);
         driverReviewsQuery.setParameter("reviewIdList", reviewIdList);
         List<DriverReview> result = driverReviewsQuery.getResultList();
         LOGGER.debug("Found {} in the database", result);
