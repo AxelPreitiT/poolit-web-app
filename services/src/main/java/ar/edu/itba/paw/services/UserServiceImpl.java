@@ -96,13 +96,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean isDriver(User user){
-        return user.getRole().equals(UserRole.DRIVER.getText());
+        return user.getIsDriver();
     }
 
     @Transactional
     @Override
     public boolean isUser(User user){
-        return user.getRole().equals(UserRole.USER.getText());
+        return user.getIsUser();
     }
 
     @Transactional
@@ -226,13 +226,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
-            authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
+
+        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
+            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
+        }else{
+            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
+                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
+            } else {
+                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
+            }
         }
 
         //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
