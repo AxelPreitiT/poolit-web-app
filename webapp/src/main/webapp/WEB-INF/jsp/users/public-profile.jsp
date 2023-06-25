@@ -17,7 +17,6 @@
     <jsp:include page="/WEB-INF/jsp/users/public-profile-container.jsp">
       <jsp:param name="hasBeenRatedAsDriver" value="${!(empty reviewsAsDriver)}"/>
       <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
-      <jsp:param name="isBlocked" value="${isBlocked}"/>
     </jsp:include>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsDriver}" scope="request"/>

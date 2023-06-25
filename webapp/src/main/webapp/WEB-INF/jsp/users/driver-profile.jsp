@@ -18,6 +18,7 @@
         <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
             <jsp:param name="hasBeenRatedAsDriver" value="${!(empty reviewsAsDriver)}"/>
             <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
+            <jsp:param name="formHasErrors" value="${formHasErrors}"/>
         </jsp:include>
         <div class="list-properties-container">
             <ul class="nav nav-justified-pills mb-3" id="pills-tab" role="tablist">
