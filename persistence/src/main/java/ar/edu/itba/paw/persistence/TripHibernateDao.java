@@ -451,7 +451,7 @@ public class TripHibernateDao implements TripDao {
         }else if(sortType.equals(Trip.SortType.CAR_RATING)){
             queryString += "ORDER BY coalesce(car_rating.car_rating,0) DESC, trips.price DESC";
         }
-        Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux ");
+        Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(distinct trip_id) as trip_count "+ queryString + ")aux ");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         for(Map.Entry<String,Object> entry : arguments.entrySet()){
             countQuery.setParameter(entry.getKey(),entry.getValue());
@@ -502,7 +502,7 @@ public class TripHibernateDao implements TripDao {
                 "GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers " +
                 "ORDER BY cast(trips.start_date_time as time) ASC, trips.price ASC ";
-        Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux" );
+        Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count( distinct trip_id) as trip_count "+ queryString + ")aux" );
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         countQuery.setParameter("startTime",startDateTime.toLocalTime());
         countQuery.setParameter("startDate",startDateTime.toLocalDate());
