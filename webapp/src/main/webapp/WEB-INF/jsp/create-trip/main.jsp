@@ -242,6 +242,14 @@
                 </button>
             </div>
         </form:form>
+        <c:if test="${!(empty carAdded) && carAdded}">
+            <div id="toast-container">
+                <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                    <jsp:param name="title" value="createCar.success.toast.title"/>
+                    <jsp:param name="message" value="createCar.success.toast.message"/>
+                </jsp:include>
+            </div>
+        </c:if>
     </div>
     <script src="<c:url value="/resources/js/pages/createTrip.js"/>" type="module"></script>
     <script src="<c:url value="/resources/js/trips/maxSeats.js"/>" type="module"></script>
