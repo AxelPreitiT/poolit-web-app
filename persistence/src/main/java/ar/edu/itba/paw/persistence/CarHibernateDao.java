@@ -79,8 +79,7 @@ public class CarHibernateDao implements CarDao {
             carToModify.setInfoCar(infoCar);
             carToModify.setSeats(seats);
             carToModify.setFeatures(features);
-            em.merge(carToModify);
-            return carToModify;
+            return em.merge(carToModify);
         }
         return null;
     }

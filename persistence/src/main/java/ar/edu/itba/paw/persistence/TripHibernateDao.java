@@ -44,38 +44,38 @@ public class TripHibernateDao implements TripDao {
 
     @Override
     public boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime) {
-        em.merge(trip);
-        em.merge(user);
-        Passenger aux = new Passenger(user,trip,startDateTime,endDateTime);
-        LOGGER.debug("Adding new passenger with user id {} to the trip with id {} in the database",user.getUserId(),trip.getTripId());
+        Trip tripMerge = em.merge(trip);
+        User userMerge = em.merge(user);
+        Passenger aux = new Passenger(userMerge,tripMerge,startDateTime,endDateTime);
+        LOGGER.debug("Adding new passenger with user id {} to the trip with id {} in the database",userMerge.getUserId(), tripMerge.getTripId());
         em.persist(aux);
-        LOGGER.info("Passenger with user id {} added to the trip with id {} in the database",user.getUserId(),trip.getTripId());
+        LOGGER.info("Passenger with user id {} added to the trip with id {} in the database",userMerge.getUserId(), tripMerge.getTripId());
         return aux.getTrip()!=null;//Es un return true, revisar
     }
 
     @Override
     public boolean removePassenger(Trip trip, Passenger passenger) {
         LOGGER.debug("Removing passenger with id {} from the trip with id {} in the database",passenger.getUserId(),trip.getTripId());
-        em.merge(passenger);
-        em.remove(passenger);
+        Passenger passengerMerge = em.merge(passenger);
+        em.remove(passengerMerge);
         return true;
     }
 
     @Override
     public boolean deleteTrip(Trip trip){
-        em.merge(trip);
-        em.remove(trip);
-        LOGGER.info("Trip with id {} deleted from the database",trip.getTripId());
+        Trip tripMerge = em.merge(trip);
+        em.remove(tripMerge);
+        LOGGER.info("Trip with id {} deleted from the database",tripMerge.getTripId());
         return true;
     }
 
     @Override
     public boolean markTripAsDeleted(Trip trip, LocalDateTime lastOccurrence) {
-        em.merge(trip);
+        Trip tripMerge = em.merge(trip);
         trip.setDeleted(true);
         trip.setLastOccurrence(lastOccurrence);
-        em.persist(trip);
-        LOGGER.info("Trip with id {} deleted from the database",trip.getTripId());
+        em.persist(tripMerge);
+        LOGGER.info("Trip with id {} deleted from the database",tripMerge.getTripId());
         return true;
     }
 
