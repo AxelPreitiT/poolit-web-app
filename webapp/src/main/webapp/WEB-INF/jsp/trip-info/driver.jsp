@@ -83,7 +83,7 @@
             </jsp:include>
           </c:if>
         </div>
-        <c:if test="${!trip.tripHasEnded}">
+        <c:if test="${!trip.tripHasEnded and !trip.deleted }">
           <div class="delete-trip-container">
             <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
               <i class="bi bi-trash-fill light-text h4"></i>

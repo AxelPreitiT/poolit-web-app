@@ -260,12 +260,12 @@ public class TripHibernateDao implements TripDao {
         String queryString = "FROM trips " +
                 "WHERE driver_id = :driverId ";
         if(minDateTime.isPresent()){
-            queryString += "AND end_date_time >= :min ";
+            queryString += "AND ((deleted = false AND end_date_time >= :min) OR (deleted = true AND last_occurrence >= :min)) ";
         }
         if(maxDateTime.isPresent()){
-            queryString += "AND end_date_time <= :max";
+            queryString += "AND ((deleted = false AND end_date_time <= :max ) OR (deleted = true AND last_occurrence < :max)) ";
         }
-        Query countQuery = em.createNativeQuery( "SELECT sum(trip_count) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux ");
+        Query countQuery = em.createNativeQuery( "SELECT sum(trip_count) FROM(SELECT count(distinct trip_id) as trip_count "+ queryString + ")aux ");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         countQuery.setParameter("driverId",user.getUserId());
         idQuery.setParameter("driverId",user.getUserId());
