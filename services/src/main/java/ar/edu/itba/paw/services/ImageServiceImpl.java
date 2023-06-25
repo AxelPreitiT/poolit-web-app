@@ -23,6 +23,7 @@ public class ImageServiceImpl implements ImageService {
         return imageDao.create(data);
     }
 
+    @Transactional
     @Override
     public Optional<Image> findById(long imageId){
         return imageDao.findById(imageId);

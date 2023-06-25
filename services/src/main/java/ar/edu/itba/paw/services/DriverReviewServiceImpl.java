@@ -53,30 +53,35 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.createDriverReview(trip, reviewer, driver, rating, comment, option);
     }
 
+    @Transactional
     @Override
     public double getDriverRating(long userId) {
         User user = userService.findById(userId).get();
         return driverReviewDao.getDriverRating(user);
     }
 
+    @Transactional
     @Override
     public double getDriverRatingOwnUser() {
         User user = userService.getCurrentUser().get();;
         return driverReviewDao.getDriverRating(user);
     }
 
+    @Transactional
     @Override
     public PagedContent<DriverReview> getDriverReviews(long userId, int page, int pageSize) {
         User user = userService.findById(userId).get();
         return driverReviewDao.getDriverReviews(user, page, pageSize);
     }
 
+    @Transactional
     @Override
     public PagedContent<DriverReview> getDriverReviewsOwnUser(int page, int pageSize) {
         User user = userService.getCurrentUser().get();
         return driverReviewDao.getDriverReviews(user, page, pageSize);
     }
 
+    @Transactional
     @Override
     public boolean canReviewDriver(Trip trip, Passenger reviewer, User driver) {
         if(!tripService.userIsDriver(trip.getTripId(), driver)) {
@@ -105,6 +110,7 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.canReviewDriver(trip, reviewer, driver) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
+    @Transactional
     @Override
     public ItemReview<User> getDriverReviewState(long tripId) {
         Trip trip = tripService.findById(tripId).get();

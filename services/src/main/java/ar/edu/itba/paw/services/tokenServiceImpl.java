@@ -43,16 +43,20 @@ public class tokenServiceImpl implements TokenService {
 //        return  LocalDate.ofEpochDay(Duration.ofMillis(calendar.getTime().getTime()).toDays());
     }
 
+
+    @Transactional
     @Override
     public Optional<VerificationToken> getToken(String token) {
         return tokenDao.getToken(token);
     }
 
+    @Transactional
     @Override
     public void deleteToken(VerificationToken token) {
         tokenDao.deleteToken(token);
     }
 
+    @Transactional
     @Override
     public boolean isValidToken(VerificationToken token) {
         return token.getDate().compareTo(LocalDate.now())>=0;
@@ -62,6 +66,7 @@ public class tokenServiceImpl implements TokenService {
 //        return epoch >= calendar.getTime().getTime();
     }
 
+    @Transactional
     @Override
     public void renewToken(VerificationToken token) {
         token.setExpiryDate(calculateExpiryDate(EXPIRATION));

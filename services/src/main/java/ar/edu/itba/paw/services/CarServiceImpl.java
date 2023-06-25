@@ -53,11 +53,13 @@ public class CarServiceImpl implements CarService {
 
     }
 
+    @Transactional
     @Override
     public Optional<Car> findById(long carId) {
         return carDao.findById(carId);
     }
 
+    @Transactional
     @Override
     public List<Car> findCurrentUserCars() throws UserNotFoundException {
         //TODO Chequear si esta funcion esta hecha para solo ser usada por el usuario principal
@@ -65,11 +67,13 @@ public class CarServiceImpl implements CarService {
         return carDao.findByUser(user);
     }
 
+    @Transactional
     @Override
     public Optional<Car> findByUserAndPlate(User user, String plate){
         return carDao.findByPlateAndUser(plate,user);
     }
 
+    @Transactional
     @Override
     public boolean currentUserIsCarOwner(Car car){
         Optional<User> user = userService.getCurrentUser();

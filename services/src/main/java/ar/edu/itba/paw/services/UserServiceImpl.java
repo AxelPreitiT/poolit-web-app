@@ -93,16 +93,19 @@ public class UserServiceImpl implements UserService {
         return finalUser;
     }
 
-
+    @Transactional
     @Override
     public boolean isDriver(User user){
         return user.getRole().equals(UserRole.DRIVER.getText());
     }
 
+    @Transactional
     @Override
     public boolean isUser(User user){
         return user.getRole().equals(UserRole.USER.getText());
     }
+
+    @Transactional
     @Override
     public void loginUser(final String email, final String password){
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
@@ -110,6 +113,7 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
+    @Transactional
     @Override
     public Optional<User> getCurrentUser(){
         final Object authUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -120,15 +124,18 @@ public class UserServiceImpl implements UserService {
         return findByEmail(aux.getUsername());
     }
 
+    @Transactional
     @Override
     public Optional<User> findById(long userId){
         return userDao.findById(userId);
     }
 
+    @Transactional
     @Override
     public Optional<User> findByEmail(String email){
         return userDao.findByEmail(email);
     }
+
 
     @Transactional
     @Override
@@ -151,12 +158,14 @@ public class UserServiceImpl implements UserService {
         userDao.unblockUser(blocker.getUserId(),blockedId);
     }
 
+    @Transactional
     @Override
     public boolean isBlocked( long blockedId) throws UserNotFoundException {
         User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
         return userDao.isBlocked(blocker.getUserId(),blockedId);
     }
 
+    @Transactional
     @Override
     public boolean isCurrentUser(long userId) throws UserNotFoundException {
         Optional<User> user = getCurrentUser();
@@ -166,6 +175,7 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Transactional
     @Override
     public boolean sendVerificationEmail(String email){
         Optional<User> finalUser = findByEmail(email);
@@ -234,6 +244,7 @@ public class UserServiceImpl implements UserService {
         Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authRequest);
     }
+
     @Transactional
     @Override
     public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
@@ -250,6 +261,7 @@ public class UserServiceImpl implements UserService {
         return userDao.getAdmins();
     }
 
+    @Transactional
     @Override
     public void banUser(User user) {
         userDao.banUser(user.getUserId());

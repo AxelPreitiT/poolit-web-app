@@ -64,11 +64,13 @@ public class ReportServiceImpl implements ReportService {
         return resp;
     }
 
+    @Transactional
     @Override
     public Optional<Report> findById(long reportId) {
         return reportDao.findById(reportId);
     }
 
+    @Transactional
     @Override
     public List<Report> getAllReports() {
         return reportDao.getAllReports();
@@ -129,6 +131,7 @@ public class ReportServiceImpl implements ReportService {
         return reportDao.getReportByTripAndUsers(tripId, reporterId, reportedId);
     }
 
+    @Transactional
     @Override
     public TripReportCollection getTripReportCollection(long tripId) {
         Optional<Trip> maybeTrip = tripService.findById(tripId);
@@ -184,6 +187,7 @@ public class ReportServiceImpl implements ReportService {
         return new TripReportCollection(driverToReport, passengersToReport);
     }
 
+    @Transactional
     @Override
     public PagedContent<Report> getReports(int page, int pageSize) {
         return reportDao.getReports(page, pageSize);

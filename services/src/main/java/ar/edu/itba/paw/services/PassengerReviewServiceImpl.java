@@ -57,29 +57,34 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
         return passengerReviewDao.createPassengerReview(trip, reviewer, reviewed, rating, comment, option);
     }
 
+    @Transactional
     @Override
     public double getPassengerRating(long userId) {
         User user = userService.findById(userId).get();
         return passengerReviewDao.getPassengerRating(user);
     }
+    @Transactional
     @Override
     public double getPassengerRatingOwnUser(){
         User user = userService.getCurrentUser().get();
         return passengerReviewDao.getPassengerRating(user);
     }
 
+    @Transactional
     @Override
     public PagedContent<PassengerReview> getPassengerReviews(long userId, int page, int pageSize) {
         User user = userService.findById(userId).get();
         return passengerReviewDao.getPassengerReviews(user, page, pageSize);
     }
 
+    @Transactional
     @Override
     public PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) {
         User user = userService.getCurrentUser().get();
         return passengerReviewDao.getPassengerReviews(user, page, pageSize);
     }
 
+    @Transactional
     @Override
     public boolean canReviewPassenger(final Trip trip, Passenger reviewed) {
         User reviewer = userService.getCurrentUser().get();
@@ -139,6 +144,7 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
         return passengerReviewDao.canReviewPassenger(trip, reviewer.getUser(), reviewed) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
+    @Transactional
     @Override
     public List<ItemReview<Passenger>> getPassengersReviewState(final long tripId, List<Passenger> passengers) {
         User reviewer = userService.getCurrentUser().get();

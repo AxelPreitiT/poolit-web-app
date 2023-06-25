@@ -64,18 +64,21 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.createCarReview(trip, reviewer, car, rating, comment, option);
     }
 
+    @Transactional
     @Override
     public double getCarsRating(long carId) throws CarNotFoundException {
         Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         return carReviewDao.getCarRating(car);
     }
 
+    @Transactional
     @Override
     public PagedContent<CarReview> getCarReviews(long carId, int page, int pageSize) throws CarNotFoundException {
         Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
+    @Transactional
     @Override
     public boolean canReviewCar(Trip trip, Passenger reviewer, Car car) {
         if(trip.getCar().getCarId() != car.getCarId()) {
@@ -104,6 +107,7 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.canReviewCar(trip, reviewer, car) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
+    @Transactional
     @Override
     public ItemReview<Car> getCarReviewState(final long tripId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
         Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
