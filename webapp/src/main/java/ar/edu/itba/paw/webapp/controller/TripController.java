@@ -184,13 +184,17 @@ public class TripController {
     }
 
     @RequestMapping(value = CREATE_TRIP_PATH, method = RequestMethod.GET)
-    public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form) throws UserNotFoundException{
+    public ModelAndView createTripForm(
+            @ModelAttribute("createTripForm") final CreateTripForm form,
+            @RequestParam(value = "carAdded", required = false, defaultValue = "false") final boolean carAdded
+    ) throws UserNotFoundException{
         LOGGER.debug("GET Request to {}", CREATE_TRIP_PATH);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final List<Car> userCars = carService.findCurrentUserCars();
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
-        mav.addObject("createCarUrl", "/cars/create");
+        mav.addObject("createCarUrl", "/cars/create?firstCar=true");
+        mav.addObject("carAdded", carAdded);
         mav.addObject("cars", userCars);
         return mav;
     }
@@ -203,7 +207,7 @@ public class TripController {
         LOGGER.debug("POST Request to {}", CREATE_TRIP_PATH);
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in CreateTripForm: {}", errors.getAllErrors());
-            return createTripForm(form);
+            return createTripForm(form, false);
         }
         final Trip trip = tripService.createTrip(form.getOriginCityId(), form.getOriginAddress(), form.getDestinationCityId(), form.getDestinationAddress(), form.getCarId(), form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),form.getLastDate(), form.getTime());
         return new ModelAndView("redirect:/trips/" + trip.getTripId() + "?created=true");
