@@ -43,7 +43,7 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
+    public Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
         //TODO Fijarse si esto es facade
         Car car=findById(carId).orElseThrow(CarNotFoundException::new);
 

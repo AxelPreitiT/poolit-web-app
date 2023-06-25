@@ -81,7 +81,7 @@ public class CarServiceImplTest {
         when(carService.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
         //doNothing().when(imageService).replaceImage(anyLong(), any(byte[].class));
 
-        Car newCar = carService.ModifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
+        Car newCar = carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
 
         Assert.assertNotNull(newCar);
         Assert.assertEquals(PLATE, newCar.getPlate());
@@ -93,7 +93,7 @@ public class CarServiceImplTest {
     @Test(expected = CarNotFoundException.class)
     public void TestNotHAveCarModifyCar() throws CarNotFoundException {
         when(carService.findById(CAR_ID)).thenReturn(Optional.empty());
-        carService.ModifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
+        carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
         Assert.fail();
     }
 
