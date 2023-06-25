@@ -40,13 +40,13 @@ public class TripServiceImpl implements TripService {
     private final CarService carService;
 
     @Autowired
-    public TripServiceImpl(final TripDao tripDao, EmailService emailService1, UserService userService,
-                           CityService cityService1, CarService carService1){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService, UserService userService,
+                           CityService cityService, CarService carService){
         this.tripDao = tripDao;
-        this.emailService = emailService1;
+        this.emailService = emailService;
         this.userService = userService;
-        this.cityService = cityService1;
-        this.carService = carService1;
+        this.cityService = cityService;
+        this.carService = carService;
     }
 
     @Transactional

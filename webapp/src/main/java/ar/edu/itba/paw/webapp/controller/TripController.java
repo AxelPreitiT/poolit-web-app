@@ -97,7 +97,7 @@ public class TripController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForDriver(final long tripId, final boolean created,final boolean passengerAccepted,final boolean passengerRejected,final boolean notAvailableSeats,final String passengersState, final int passengersPage) throws TripNotFoundException{
+    private ModelAndView tripDetailsForDriver(final long tripId, final boolean created,final boolean passengerAccepted,final boolean passengerRejected,final boolean notAvailableSeats,final String passengersState, final int passengersPage) throws TripNotFoundException, PassengerNotFoundException, UserNotLoggedInException {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final PagedContent<Passenger> passengers = tripService.getPassengersPaged(trip,passengersState,passengersPage-1,PAGE_SIZE);
         final double totalPrice = tripService.getTotalTripEarnings(tripId);
@@ -114,7 +114,7 @@ public class TripController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, CarNotFoundException {
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, CarNotFoundException, UserNotLoggedInException {
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(PassengerNotFoundException::new);
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());

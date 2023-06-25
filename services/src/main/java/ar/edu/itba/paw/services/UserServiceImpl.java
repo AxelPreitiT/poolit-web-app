@@ -16,13 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.event.MouseInputAdapter;
 import java.util.*;
 
 @Service
@@ -44,21 +41,19 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
 
-    //private final UserDetailsService userDetailsService;
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
-                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1,
-                           final EmailService emailService1){
+                           final TokenService tokenService,final ImageService imageService, final CityService cityService,
+                           final EmailService emailService){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
-        //this.userDetailsService = userDetailsService;
-        this.imageService = imageService1;
-        this.cityService = cityService1;
-        this.emailService = emailService1;
+        this.imageService = imageService;
+        this.cityService = cityService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -206,21 +201,6 @@ public class UserServiceImpl implements UserService {
             final User user = verificationToken.getUser();
             user.setEnabled(true);
             authWithoutPassword(user);
-            /*
-            final Collection<GrantedAuthority> authorities = new HashSet<>();
-            if(Objects.equals(user.getRole(), "DRIVER")){
-                authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
-            } else {
-                authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
-            }
-
-            tokenService.deleteToken(verificationToken);
-
-
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            */
         }
         return isValidToken;
     }
@@ -234,9 +214,6 @@ public class UserServiceImpl implements UserService {
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
         }
-
-        //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
-        //SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(

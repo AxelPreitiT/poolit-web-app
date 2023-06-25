@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
-import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.ReportService;
 import ar.edu.itba.paw.interfaces.services.TripService;
@@ -121,7 +120,7 @@ public class ReportServiceImpl implements ReportService {
         userService.banUser(report.getReported());
     }
 
-    public Optional<Report> getReportByTripAndUsers(long tripId, long reporterId, long reportedId){
+    private Optional<Report> getReportByTripAndUsers(long tripId, long reporterId, long reportedId){
         return reportDao.getReportByTripAndUsers(tripId, reporterId, reportedId);
     }
 

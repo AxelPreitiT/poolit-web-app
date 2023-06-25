@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.interfaces.persistence.PassengerReviewDao;
 import ar.edu.itba.paw.interfaces.services.PassengerReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
@@ -21,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,19 +38,18 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     private final UserService userService;
 
     @Autowired
-    public PassengerReviewServiceImpl(PassengerReviewDao passengerReviewDao, TripService tripService, UserService userService1) {
+    public PassengerReviewServiceImpl(PassengerReviewDao passengerReviewDao, TripService tripService, UserService userService) {
         this.passengerReviewDao = passengerReviewDao;
         this.tripService = tripService;
-        this.userService = userService1;
+        this.userService = userService;
     }
 
     @Transactional
     @Override
-    public PassengerReview createPassengerReview(long tripId, long reviewedId, int rating, String comment, PassengerReviewOptions option) {
-        User reviewer = userService.getCurrentUser().get();
-        //TODO ver como tirar excepcion
-        Trip trip = tripService.findById(tripId).get();
-        User userReviewed = userService.findById(reviewedId).get();
+    public PassengerReview createPassengerReview(long tripId, long reviewedId, int rating, String comment, PassengerReviewOptions option) throws UserNotLoggedInException, TripNotFoundException, UserNotFoundException, PassengerNotFoundException {
+        User reviewer = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        User userReviewed = userService.findById(reviewedId).orElseThrow(UserNotFoundException::new);
         Passenger reviewed = tripService.getPassenger(trip,userReviewed).orElseThrow(RuntimeException::new);
         if(!canReviewPassenger(trip, reviewed)) {
             IllegalStateException e = new IllegalStateException();
@@ -59,45 +61,40 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     @Transactional
     @Override
-    public double getPassengerRating(long userId) {
-        User user = userService.findById(userId).get();
+    public double getPassengerRating(long userId) throws UserNotFoundException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return passengerReviewDao.getPassengerRating(user);
     }
     @Transactional
     @Override
-    public double getPassengerRatingOwnUser(){
-        User user = userService.getCurrentUser().get();
+    public double getPassengerRatingOwnUser() throws UserNotLoggedInException {
+        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         return passengerReviewDao.getPassengerRating(user);
     }
 
     @Transactional
     @Override
-    public PagedContent<PassengerReview> getPassengerReviews(long userId, int page, int pageSize) {
-        User user = userService.findById(userId).get();
+    public PagedContent<PassengerReview> getPassengerReviews(long userId, int page, int pageSize) throws UserNotFoundException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return passengerReviewDao.getPassengerReviews(user, page, pageSize);
     }
 
     @Transactional
     @Override
-    public PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) {
-        User user = userService.getCurrentUser().get();
+    public PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) throws UserNotLoggedInException {
+        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         return passengerReviewDao.getPassengerReviews(user, page, pageSize);
     }
 
     @Transactional
     @Override
-    public boolean canReviewPassenger(final Trip trip, Passenger reviewed) {
-        User reviewer = userService.getCurrentUser().get();
+    public boolean canReviewPassenger(final Trip trip, Passenger reviewed) throws UserNotLoggedInException, PassengerNotFoundException {
+        User reviewer = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         if(tripService.userIsDriver(trip.getTripId(), reviewer)) {
             return canDriverReviewPassenger(trip, reviewer, reviewed);
         } else if (tripService.userIsPassenger(trip.getTripId(), reviewer)) {
-            final Optional<Passenger> reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer);
-            if(!reviewerPassenger.isPresent()) {
-                IllegalStateException e = new IllegalStateException();
-                LOGGER.error("Can't find passenger with id {} in trip with id {}", reviewer.getUserId(), trip.getTripId(), e);
-                throw e;
-            }
-            return canPassengerReviewPassenger(reviewerPassenger.get(), reviewed);
+            final Passenger reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer).orElseThrow(PassengerNotFoundException::new);
+            return canPassengerReviewPassenger(reviewerPassenger, reviewed);
         } else {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("User with id {} tried to review passenger with id {}, but he is not a passenger nor the driver in the trip", reviewer.getUserId(), reviewed.getUserId(), e);
@@ -146,9 +143,9 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     @Transactional
     @Override
-    public List<ItemReview<Passenger>> getPassengersReviewState(final long tripId, List<Passenger> passengers) {
-        User reviewer = userService.getCurrentUser().get();
-        Trip trip = tripService.findById(tripId).get();
+    public List<ItemReview<Passenger>> getPassengersReviewState(final long tripId, List<Passenger> passengers) throws UserNotLoggedInException, TripNotFoundException, PassengerNotFoundException {
+        User reviewer = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         if(tripService.userIsDriver(trip.getTripId(), reviewer)) {
             return passengers.stream().filter(
                     passenger -> reviewer.getUserId() != passenger.getUserId())
@@ -159,16 +156,11 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
             )
             .collect(Collectors.toList());
         } else if (tripService.userIsPassenger(trip.getTripId(), reviewer)) {
-            final Optional<Passenger> reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer);
-            if(!reviewerPassenger.isPresent()) {
-                IllegalStateException e = new IllegalStateException();
-                LOGGER.error("Can't find passenger with id {} in trip with id {}", reviewer.getUserId(), trip.getTripId(), e);
-                throw e;
-            }
+            final Passenger reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer).orElseThrow(PassengerNotFoundException::new);
             return passengers.stream().filter(
                     passenger -> reviewer.getUserId() != passenger.getUserId())
             .map(
-                    passenger -> new ItemReview<>(passenger, getReviewStateForPassenger(trip, reviewerPassenger.get(), passenger)))
+                    passenger -> new ItemReview<>(passenger, getReviewStateForPassenger(trip, reviewerPassenger, passenger)))
             .sorted(
                     Comparator.comparing(ItemReview::getState)
             )
