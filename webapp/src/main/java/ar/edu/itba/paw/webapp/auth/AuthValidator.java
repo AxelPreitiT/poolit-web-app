@@ -30,7 +30,7 @@ public class AuthValidator {
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        if(user.getIsDriver()){
+        if(!user.getIsDriver()){
             LOGGER.debug("User with id {} tried to delete a trip without being a driver",user.getUserId());
             return false;
         }
