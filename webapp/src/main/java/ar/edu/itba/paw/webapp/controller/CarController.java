@@ -104,7 +104,7 @@ public class CarController {
         } catch (CarNotFoundException e){
             throw e;
         }
-        return publicCar(carId, FIRST_PAGE, form);
+        return new ModelAndView("redirect:/cars/" + carId);
     }
 
 }
