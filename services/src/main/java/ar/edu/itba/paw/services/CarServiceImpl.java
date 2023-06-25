@@ -48,7 +48,9 @@ public class CarServiceImpl implements CarService {
         Car car=findById(carId).orElseThrow(CarNotFoundException::new);
 
         imageService.replaceImage(car.getImage_id(),imgData);
-        return carDao.ModifyCar(carId, infoCar, seats, features);
+        return carDao.modifyCar(carId, infoCar, seats, features);
+
+
     }
 
     @Override

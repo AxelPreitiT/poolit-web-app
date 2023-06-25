@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,7 +50,7 @@ public class UserServiceImplTest {
     private static final long USER_ID = 8;
     private static User USER;
     private static final Image IMAGEN = new Image(0L, null);
-    private static final Date EXPIRY_DATE = new Date(Calendar.getInstance().getTime().getTime());
+    private static final LocalDate EXPIRY_DATE = LocalDate.now();
 
     @Mock
     private UserDao userDao;

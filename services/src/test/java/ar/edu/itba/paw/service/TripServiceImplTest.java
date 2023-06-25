@@ -134,13 +134,11 @@ public class TripServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = UserNotFoundException.class)
     public void TestRemoveCurrentUserAsPassenger() throws Exception {
         // precondiciones
         when(tripDao.findById(anyLong())).thenReturn(Optional.of(trip));
         when(userService.getCurrentUser()).thenReturn(Optional.of(user));
-        when(tripDao.getPassenger(any(), any())).thenReturn(Optional.empty());
-
         // ejercitar la clase
         tripService.removeCurrentUserAsPassenger(trip.getTripId());
 

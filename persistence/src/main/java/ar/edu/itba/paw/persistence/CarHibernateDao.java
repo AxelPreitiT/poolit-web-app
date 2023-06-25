@@ -72,7 +72,7 @@ public class CarHibernateDao implements CarDao {
 
 
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats,  List<FeatureCar> features){
+    public Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features){
         Optional<Car> car = findById(carId);
         if(car.isPresent()){
             Car carToModify = car.get();

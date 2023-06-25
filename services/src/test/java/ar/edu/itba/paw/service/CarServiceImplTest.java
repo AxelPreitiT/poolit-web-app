@@ -75,7 +75,7 @@ public class CarServiceImplTest {
 
     @Test
     public void TestModifyCar() throws CarNotFoundException {
-        when(carDao.ModifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES)))
+        when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES)))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
         //when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
         when(carService.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));

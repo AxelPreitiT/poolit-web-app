@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
@@ -105,7 +106,7 @@ public class ReportServiceImplTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void TestAcceptReportDoesntExist() throws TripNotFoundException {
+    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
 
         reportService.acceptReport(1, REASONADMIN);

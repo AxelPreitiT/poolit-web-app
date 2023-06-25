@@ -44,6 +44,8 @@ public class TripHibernateDao implements TripDao {
 
     @Override
     public boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime) {
+        em.merge(trip);
+        em.merge(user);
         Passenger aux = new Passenger(user,trip,startDateTime,endDateTime);
         LOGGER.debug("Adding new passenger with user id {} to the trip with id {} in the database",user.getUserId(),trip.getTripId());
         em.persist(aux);
@@ -104,7 +106,7 @@ public class TripHibernateDao implements TripDao {
         String queryString = "FROM passengers p " +
                 "WHERE p.trip_id = :tripId  AND ((p.start_date<=:startDate AND p.end_date>=:startDate) OR (p.start_date<= :endDate AND p.end_date>= :endDate) OR (p.start_date >= :startDate AND p.end_date <= :endDate)) "; //la ultima condicion es por si el pasajero esta adentro del intervalo buscado
         if(passengerState.isPresent()){
-            queryString += "AND p.passenger_state = :passengerStateString";
+            queryString += "AND p.passenger_state = :passengerStateString ";
         }
         Query countQuery = em.createNativeQuery( "SELECT count(distinct user_id) "+ queryString);
         Query idQuery = em.createNativeQuery("SELECT user_id " + queryString);
@@ -141,8 +143,8 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public boolean removePassenger(Passenger passenger) {
-        LOGGER.debug("Accepting passenger with id {}",passenger.getUserId());
+    public boolean rejectPassenger(Passenger passenger) {
+        LOGGER.debug("Rejecting passenger with id {}",passenger.getUserId());
         em.merge(passenger);
         passenger.setPassengerState(Passenger.PassengerState.REJECTED);
         return true;
@@ -282,7 +284,7 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassenger(User user, Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, int page, int pageSize) {
+    public PagedContent<Trip> getTripsWhereUserIsPassenger(User user, Optional<LocalDateTime> minDateTime, Optional<LocalDateTime> maxDateTime, Passenger.PassengerState passengerState, int page, int pageSize) {
         LOGGER.debug("Looking for the trips where the user with id {} is passenger, between '{}' and '{}', in page {} with size {} in the database",user.getUserId(),minDateTime,maxDateTime,page,pageSize);
         String queryString = " FROM passengers p NATURAL JOIN trips "+
                 "WHERE p.user_id = :passengerId ";
@@ -291,6 +293,9 @@ public class TripHibernateDao implements TripDao {
         }
         if(maxDateTime.isPresent()){
             queryString += "AND p.end_date <= :max ";
+        }
+        if(passengerState != null) {
+            queryString += "AND p.passenger_state = :state ";
         }
         Query countQuery = em.createNativeQuery( "SELECT count(trip_id) "+ queryString);
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
@@ -304,6 +309,10 @@ public class TripHibernateDao implements TripDao {
             countQuery.setParameter("max",dateTime);
             idQuery.setParameter("max",dateTime);
         });
+        if(passengerState != null) {
+            countQuery.setParameter("state", passengerState.name());
+            idQuery.setParameter("state", passengerState.name());
+        }
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
         @SuppressWarnings("unchecked")
