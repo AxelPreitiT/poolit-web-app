@@ -8,7 +8,7 @@ import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
-import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
 import ar.edu.itba.paw.webapp.form.*;
@@ -25,9 +25,6 @@ import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -126,7 +123,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
     public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded,
-                                    @ModelAttribute("updateUserForm") final UpdateUserForm form) throws UserNotFoundException{
+                                    @ModelAttribute("updateUserForm") final UpdateUserForm form) throws UserNotFoundException, UserNotLoggedInException {
         LOGGER.debug("GET Request to /users/profile");
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final ModelAndView mav;
@@ -172,7 +169,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.POST)
     public ModelAndView profileViewUpdate(@Valid @ModelAttribute("updateUserForm") final UpdateUserForm form,
-                                          final BindingResult errors) throws IOException, CityNotFoundException, UserNotFoundException{
+                                          final BindingResult errors) throws IOException, CityNotFoundException, UserNotFoundException, UserNotLoggedInException {
         LOGGER.debug("POST Request to /users/profile");
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in updateUserForm: {}", errors.getAllErrors());
@@ -232,7 +229,7 @@ public class UserController {
 
     }
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
-    public ModelAndView changeRoleToDriver()throws UserNotFoundException{
+    public ModelAndView changeRoleToDriver() throws UserNotFoundException, UserNotLoggedInException {
         LOGGER.debug("POST Request to /changeRole");
         //TODO no estoy seguro que hacer aca para facade
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);

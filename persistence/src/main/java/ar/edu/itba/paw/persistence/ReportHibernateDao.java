@@ -63,14 +63,6 @@ public class ReportHibernateDao implements ReportDao {
         }
     }
 
-    @Override
-    public List<Report> getAllReports() {
-        LOGGER.debug("Getting all reports");
-        final List<Report> result = em.createQuery("from Report", Report.class).getResultList();
-        LOGGER.debug("Found {} in the database", result.size());
-        return result;
-    }
-
 
     @Override
     public PagedContent<Report> getReports(int page, int pageSize) {

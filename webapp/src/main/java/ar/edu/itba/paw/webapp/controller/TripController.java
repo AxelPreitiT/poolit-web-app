@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.webapp.exceptions.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.utils.DefaultBoolean;
 import org.slf4j.Logger;
@@ -77,7 +76,7 @@ public class TripController {
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
                                        @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm,
                                        @ModelAttribute("reportForm") final ReportForm reportForm
-                                       )throws TripNotFoundException, UserNotFoundException,CarNotFoundException{
+                                       ) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException, CarNotFoundException {
         LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();
         if(!userOp.isPresent()){
@@ -115,8 +114,8 @@ public class TripController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
-        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(() -> new PassengerNotFoundException(user.getUserId(), tripId));
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, CarNotFoundException {
+        final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(PassengerNotFoundException::new);
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
         final TripReviewCollection tripReviewCollection = tripReviewService.getReviewsForPassenger(tripId,user.getUserId());

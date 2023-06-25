@@ -53,6 +53,9 @@ public class TripReviewServiceImpl implements TripReviewService {
     public TripReviewCollection getReviewsForPassenger(long tripId, long userId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final Passenger passenger = tripService.getPassenger(tripId,userId).orElseThrow(UserNotFoundException::new);
+        if(!passenger.getAccepted()) {
+            return TripReviewCollection.empty();
+        }
         final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
         final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(tripId, passengers);
         final ItemReview<User> driver = driverReviewService.getDriverReviewState(tripId);
