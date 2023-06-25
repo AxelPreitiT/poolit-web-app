@@ -166,14 +166,17 @@
                 <div class="show-row-content-passangers">
                   <div class="column-data-pass">
                     <a href="${userUrl}" class="show-row profile-link">
-                      <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}"/> </span>
+                      <spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}" var="passengerNameString"/>
+                      <span class="text detail h4"><c:out value="${passengerNameString}"/> </span>
                     </a>
                     <c:if test="${trip.recurrent}">
                       <c:if test="${passenger.recurrent}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${user.endDateString}"/></h6>
+                        <spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${user.endDateString}" var="passengerRecurrentDatesString"/>
+                        <h6 class="show-row italic-text"><c:out value="${passengerRecurrentDatesString}"/> </h6>
                       </c:if>
                       <c:if test="${!(passenger.recurrent)}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.unique" arguments="${passenger.startDateString}"/></h6>
+                        <spring:message code="dates.unique" arguments="${passenger.startDateString}" var="passengerSingleDatesString"/>
+                        <h6 class="show-row italic-text"><c:out value="${passengerSingleDatesString}"/></h6>
                       </c:if>
                     </c:if>
                   </div>

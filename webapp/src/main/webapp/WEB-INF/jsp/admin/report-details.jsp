@@ -57,7 +57,7 @@
                     <div class="user-container">
                         <div class="user-container-item">
                             <a href="${reporterProfileUrl}">
-                                <h3 class="secondary-color">${reporterName}</h3>
+                                <h3 class="secondary-color"><c:out value="${reporterName}"/></h3>
                             </a>
                             <h6 class="italic-text"><spring:message code="${report.relation.reporterSpringMessageCode}"/></h6>
                         </div>
@@ -99,7 +99,7 @@
                     <div class="user-container">
                         <div class="user-container-item">
                             <a href="${reportedProfileUrl}">
-                                <h3 class="secondary-color">${reportedName}</h3>
+                                <h3 class="secondary-color"><c:out value="${reportedName}"/></h3>
                             </a>
                             <h6 class="italic-text"><spring:message code="${report.relation.reportedSpringMessageCode}"/></h6>
                         </div>

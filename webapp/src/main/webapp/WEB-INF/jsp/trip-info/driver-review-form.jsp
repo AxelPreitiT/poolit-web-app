@@ -15,7 +15,7 @@
     <div id="driver-review-form-header">
         <img src="${driverImageUrl}" alt="${driverName}" id="driver-image"/>
         <div id="driver-review-form-title">
-            <h3 class="secondary-color">${driverName}</h3>
+            <h3 class="secondary-color"><c:out value="${driverName}"/></h3>
             <hr class="secondary-color">
         </div>
     </div>

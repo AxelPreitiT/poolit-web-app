@@ -14,6 +14,7 @@
   </a>
   <div class="car-desc">
     <h5><c:out value="${car.infoCar}"/></h5>
-    <h5><spring:message code="profile.plate" arguments="${car.plate}"/></h5>
+    <spring:message code="profile.plate" arguments="${car.plate}" var="carPlateString"/>
+    <h5><c:out value="${carPlateString}"/> </h5>
   </div>
 </div>

@@ -31,7 +31,8 @@
             <span class="h3 text"><spring:message code="selectTrip.price"/></span>
           </div>
           <div>
-            <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
+            <spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}" var="tripPriceFormatString"/>
+            <span class="h2 secondary-color"><c:out value="${tripPriceFormatString}"/> </span>
             <div class="trip-price-row items-to-end">
               <c:choose>
                 <c:when test="${trip.queryIsRecurrent}">

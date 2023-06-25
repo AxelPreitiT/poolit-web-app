@@ -39,7 +39,8 @@
                 <h2 class="secondary-color"><spring:message code="${trip.dayOfWeekString}"/></h2>
                 <c:choose>
                   <c:when test="${trip.queryIsRecurrent}">
-                    <h5 class="italic-text"><spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryStartDateString}, ${trip.queryEndDateString}"/></h5>
+                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryStartDateString}, ${trip.queryEndDateString}" var="recurrentDateString"/>
+                    <h5 class="italic-text"><c:out value="${recurrentDateString}"/> </h5>
                   </c:when>
                   <c:otherwise>
                     <h5 class="italic-text"><c:out value="${trip.queryStartDateString}"/></h5>

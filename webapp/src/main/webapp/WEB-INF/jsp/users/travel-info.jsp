@@ -37,7 +37,8 @@
                             <c:when test="${trip.queryIsRecurrent}">
                                 <div class="format_date">
                                     <span class="text"><spring:message code="${trip.dayOfWeekString}"/></span>
-                                    <span class="italic-text date-text"><spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}"/></span>
+                                    <spring:message code="profile.trevelInfo.dateFormat" arguments="${trip.startDateString}, ${trip.endDateString}" var="travelInfoDateString"/>
+                                    <span class="italic-text date-text"><c:out value="${travelInfoDateString}"/> </span>
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -53,7 +54,8 @@
                         <span class="text"><c:out value="${trip.startTimeString}"/></span>
                     </div>
                     <div>
-                        <h2 class="secondary-color"><spring:message code="format.price" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></h2>
+                        <spring:message code="format.price" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}" var="priceFormatString"/>
+                        <h2 class="secondary-color"><c:out value="${priceFormatString}"/> </h2>
                     </div>
                 </div>
             </div>
