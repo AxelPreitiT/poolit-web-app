@@ -28,8 +28,7 @@ public class ImageController {
     public @ResponseBody
     byte[] getImage(@PathVariable("imageId") final int imageId) throws ImageNotFoundException, IOException, URISyntaxException {
         LOGGER.debug("GET Request to /image/{}", imageId);
-        final Image image = imageService.findById(imageId).orElseThrow(ImageNotFoundException::new);
-        return image.getDataView();
+        return imageService.getByteaCheck(imageId);
     }
 
 }
