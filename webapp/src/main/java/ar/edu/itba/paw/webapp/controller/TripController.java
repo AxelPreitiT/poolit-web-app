@@ -76,7 +76,7 @@ public class TripController {
                                        @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
                                        @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm,
                                        @ModelAttribute("reportForm") final ReportForm reportForm
-                                       ) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException {
+                                       ) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException, CarNotFoundException {
         LOGGER.debug("GET Request to /trips/{}", tripId);
         final Optional<User> userOp = userService.getCurrentUser();
         if(!userOp.isPresent()){
@@ -114,7 +114,7 @@ public class TripController {
         return mav;
     }
 
-    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException {
+    private ModelAndView tripDetailsForPassenger(final long tripId, final User user, final boolean joined) throws TripNotFoundException, UserNotFoundException, PassengerNotFoundException, CarNotFoundException {
         final Passenger passenger = tripService.getPassenger(tripId,user).orElseThrow(PassengerNotFoundException::new);
         final Trip trip = tripService.findById(tripId,passenger.getStartDateTime(),passenger.getEndDateTime()).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengers = tripService.getAcceptedPassengers(trip, passenger.getStartDateTime(), passenger.getEndDateTime());
@@ -257,7 +257,7 @@ public class TripController {
     public ModelAndView rejectPassanger(@PathVariable("id") final int tripId,
                                    @PathVariable("user_id") final int userId,
                                         RedirectAttributes redirectAttributes){
-        LOGGER.debug("POST DELETE passanger {}", userId);
+        LOGGER.debug("POST Request to /trips/{}/deletePas/{}", tripId, userId);
         tripService.rejectPassenger(tripId,userId);
         redirectAttributes.addFlashAttribute("deletePass", new DefaultBoolean(true));
         return new ModelAndView(String.format("redirect:/trips/%d", tripId));
@@ -267,7 +267,7 @@ public class TripController {
     public ModelAndView acceptPassanger(@PathVariable("id") final int tripId,
                                    @PathVariable("user_id") final int userId,
                                         RedirectAttributes redirectAttributes){
-        LOGGER.debug("POST DELETE passanger {}", userId);
+        LOGGER.debug("POST Request to /trips/{}/AceptPas/{}", tripId, userId);
         try{
             tripService.acceptPassenger(tripId,userId);
         }catch (NotAvailableSeatsException e){

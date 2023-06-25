@@ -5,10 +5,7 @@ import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.UserRole;
-import ar.edu.itba.paw.models.VerificationToken;
+import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.event.MouseInputAdapter;
 import java.util.*;
 
 @Service
@@ -68,7 +66,8 @@ public class UserServiceImpl implements UserService {
     public User createUser(final String username, final String surname, final String email,
                            final String phone, final String password, final long bornCityId, final String mailLocaleString, final String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException {
         final City bornCity = cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new);
-        final long user_image_id = imageService.createImage(imgData).getImageId();
+        final Image image = imageService.createImage(imgData);
+        final long user_image_id = image.getImageId();
         String finalRole = (role == null) ? UserRole.USER.getText() : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
@@ -230,7 +229,7 @@ public class UserServiceImpl implements UserService {
 
     void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        if(Objects.equals(user.getRole(), "DRIVER")){
+        if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
             authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
@@ -29,7 +30,7 @@ public class AuthValidator {
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        if(!user.getRole().equals("DRIVER")){
+        if(!user.getRole().equals(UserRole.DRIVER.getText())){
             LOGGER.debug("User with id {} tried to delete a trip without being a driver",user.getUserId());
             return false;
         }

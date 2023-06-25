@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.ReportService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.reports.Report;
@@ -62,7 +63,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.POST)
-    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws TripNotFoundException, ReportNotFoundException {
+    public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException {
         LOGGER.debug("POST request to /admin/{}/accept", reportId);
         if(errors.hasErrors()) {
             LOGGER.warn("Errors found in ReportAdminForm: {}", errors.getAllErrors());

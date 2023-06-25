@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.PagedContent;
@@ -86,7 +88,7 @@ public class ReviewController {
             @PathVariable("tripId") final long tripId,
             @PathVariable("carId") final long carId,
             @Valid @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
-    ) {
+    ) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
         LOGGER.debug("POST request to /reviews/trips/{}/cars/{}", tripId, carId);
         carReviewService.createCarReview(tripId, carId, carReviewForm.getRating(), carReviewForm.getComment(), carReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));

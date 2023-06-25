@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -76,7 +77,7 @@ public class UserHibernateDao implements UserDao {
             final User user = maybeUser.get();
             user.setRole(role);
             user.setBornCity(bornCity);
-            user.setMailLocale(Locale.forLanguageTag(mailLocale));
+            user.setMailLocale(new Locale(mailLocale));
             user.setName(username);
             user.setPassword(password);
             user.setSurname(surname);
@@ -135,7 +136,7 @@ public class UserHibernateDao implements UserDao {
     public List<User> getAdmins() {
         LOGGER.debug("Getting all admins from the database");
         final TypedQuery<User> query = (em.createQuery("from User as u where u.role= :role", User.class));
-        query.setParameter("role", "ADMIN");
+        query.setParameter("role", UserRole.ADMIN.getText());
         final List<User> result = query.getResultList();
         LOGGER.debug("Found {} admins in the database", result.size());
         return result;

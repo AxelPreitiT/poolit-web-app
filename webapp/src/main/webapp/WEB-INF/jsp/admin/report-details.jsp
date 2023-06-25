@@ -106,7 +106,7 @@
                         <c:if test="${report.relation.reportedADriver}">
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
-                                <c:set value="${report.reported.driverRating}" var="rating"/>
+                                <c:set value="${report.reported.driverRating}" var="rating" scope="request"/>
                                 <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                                     <jsp:param name="fontSize" value="h4"/>
                                     <jsp:param name="fontColor" value="secondary-color"/>

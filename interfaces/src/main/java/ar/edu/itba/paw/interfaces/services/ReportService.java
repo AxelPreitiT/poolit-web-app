@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.*;
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reports.Report;
@@ -19,7 +21,7 @@ public interface ReportService {
 
     Optional<Report> findById(long reportId);
 
-    void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException;
+    void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException;
 
     void rejectReport(long reportId, String reason) throws ReportNotFoundException;
 
