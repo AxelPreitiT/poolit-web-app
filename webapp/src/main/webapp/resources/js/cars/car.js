@@ -27,3 +27,27 @@ function updateImageDisplay() {
     imageLabelElement.appendChild(iconOverlay);
   }
 }
+
+const carFeatureOptionClass = 'feature-option';
+const carFeatureLabel = 'label';
+const carFeatureInput = 'input';
+
+const carFeatureLabelElements = document.querySelectorAll('.' + carFeatureOptionClass);
+const carFeaturesAvailable = {};
+carFeatureLabelElements.forEach((carFeatureLabelElement) => {
+  carFeaturesAvailable[carFeatureLabelElement.id] = {
+    id: carFeatureLabelElement.id,
+    feature: carFeatureLabelElement.id.slice(carFeatureLabel.length + 1),
+  };
+  carFeaturesAvailable[carFeatureLabelElement.id].inputElement = document.getElementById(carFeatureInput + '-' + carFeaturesAvailable[carFeatureLabelElement.id].feature);
+
+  carFeatureLabelElement.addEventListener('click', () => {
+    if (carFeatureLabelElement.classList.contains('active')) {
+      carFeatureLabelElement.classList.remove('active');
+      carFeaturesAvailable[carFeatureLabelElement.id].inputElement.setAttribute('disabled', 'disabled');
+    } else {
+      carFeatureLabelElement.classList.add('active');
+      carFeaturesAvailable[carFeatureLabelElement.id].inputElement.removeAttribute('disabled');
+    }
+  });
+})

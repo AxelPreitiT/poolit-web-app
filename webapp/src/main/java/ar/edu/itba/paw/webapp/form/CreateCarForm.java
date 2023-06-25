@@ -68,5 +68,8 @@ public class CreateCarForm {
 
     public void setImageFile(MultipartFile imageFile) { this.imageFile = imageFile; }
 
+    public boolean hasCarFeature(FeatureCar featureCar) {
+        return features != null && features.contains(featureCar);
+    }
 
 }
