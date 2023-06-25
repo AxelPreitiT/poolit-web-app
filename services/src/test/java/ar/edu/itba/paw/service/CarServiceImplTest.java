@@ -51,7 +51,7 @@ public class CarServiceImplTest {
     public void TestCreateCar() throws UserNotFoundException {
         when(carDao.create(eq(PLATE), eq(INFO_CAR), eq(USER), anyLong(), anyInt(), eq(BRAND_ID), eq(FEATURES)))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
-        when(imageService.createImage(any())).thenReturn(IMAGEN);
+//        when(imageService.createImage(any())).thenReturn(IMAGEN);
         when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
 
         Car newCar = carService.createCar(PLATE, INFO_CAR, null, SEATS, BRAND_ID, FEATURES);
@@ -74,7 +74,7 @@ public class CarServiceImplTest {
 
     @Test
     public void TestModifyCar() throws CarNotFoundException {
-        when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES)))
+        when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES),anyLong()))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
         //when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
         when(carService.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
