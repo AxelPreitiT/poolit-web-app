@@ -93,7 +93,6 @@ public class UserController {
         try {
             userService.createUser(form.getUsername(), form.getSurname(), form.getEmail(), form.getPhone(),
                     form.getPassword(), form.getBornCityId(), form.getMailLocale(), null, form.getImageFile().getBytes());
-
         }catch (EmailAlreadyExistsException e){
             errors.rejectValue("email", "validation.email.alreadyExists");
             LOGGER.warn("Email already exists: {}", form.getEmail());

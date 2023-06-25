@@ -20,6 +20,9 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     @Override
     public Image createImage(byte[] data) {
+        if(data.length<=0){
+            return imageDao.create(null);
+        }
         return imageDao.create(data);
     }
 
