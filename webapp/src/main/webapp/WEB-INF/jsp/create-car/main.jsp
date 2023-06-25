@@ -76,14 +76,17 @@
                     <form:errors path="imageFile" cssClass="danger error-style" element="span"/>
                 </div>
             </div>
-            <div class="car-features-container">
-                <div data-toggle="buttons">
-                <c:forEach items="${allFeatures}" var="feature">
-                    <label class="btn btn-custom">
-                    <form:checkbox path="features" value="${feature}" />
-                    <spring:message code="${feature.code}"/>
-                    </label>
-                </c:forEach>
+            <div class="feature-options-container">
+                <div class="feature-options-title">
+                    <span class="h3 secondary-color title-container"><spring:message code="searchFilters.carFeatures"/></span>
+                </div>
+                <div class="feature-options-input">
+                    <c:forEach items="${allFeatures}" var="feature">
+                        <label class="btn-custom feature-option <c:if test="${createCarForm.hasCarFeature(feature)}">active</c:if>" id="label-${feature}">
+                            <form:hidden path="features" value="${feature}" id="input-${feature}" disabled="${!createCarForm.hasCarFeature(feature)}"/>
+                            <spring:message code="${feature.code}"/>
+                        </label>
+                    </c:forEach>
                 </div>
             </div>
         </div>

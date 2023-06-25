@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.form.annotations.MPFile;
-import ar.edu.itba.paw.webapp.form.annotations.MPFileNotNull;
-import ar.edu.itba.paw.webapp.form.annotations.PasswordMatches;
+import ar.edu.itba.paw.webapp.form.annotations.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
-@PasswordMatches
+@FieldMatches(first = "password", second = "repeatPassword")
 public class CreateUserForm {
 
     @Pattern(regexp = ".+")

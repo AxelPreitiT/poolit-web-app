@@ -13,7 +13,6 @@ public interface ImageService {
 
     Optional<Image> findById(long id);
 
-    void replaceImage(long id, byte[] data);
 
     byte[] getByteaCheck(long imageId) throws IOException, ImageNotFoundException;
 

@@ -40,9 +40,6 @@ public class ImageServiceImpl implements ImageService {
         return imageDao.findById(imageId);
     }
 
-    @Transactional
-    @Override
-    public void replaceImage(long id, byte[] data) { imageDao.replaceImage(id,data); }
 
     @Transactional
     @Override

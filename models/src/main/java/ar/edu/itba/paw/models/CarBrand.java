@@ -21,7 +21,7 @@ public enum CarBrand {
     JEEP("Jeep"),
     LAND_ROVER("Land Rover"),
     VOLVO("Volvo"),
-    UNKNOWN("UNKNOWN");
+    UNKNOWN(null);
     private final String formattedName;
 
     private CarBrand(String formattedName) {
@@ -31,5 +31,9 @@ public enum CarBrand {
     @Override
     public String toString() {
         return formattedName;
+    }
+
+    public boolean hasBrand() {
+        return formattedName != null;
     }
 }

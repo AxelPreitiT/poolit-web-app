@@ -159,6 +159,14 @@
                                 <c:forEach items="${cars}" var="car">
                                     <div class="collapse" id="car-info-details-<c:out value="${car.carId}"/>">
                                         <div class="primary-bg-color" id="car-info-details-container">
+                                            <c:if test="${car.hasBrand()}">
+                                                <div class="car-info-details-row">
+                                                    <i class="bi bi-caret-right-fill light-text"></i>
+                                                    <spring:message code="profile.brand" arguments="${car.brand}" var="brandString"/>
+                                                    <span class="light-text"><c:out value="${brandString}"/></span>
+                                                </div>
+                                                <hr class="light-text"/>
+                                            </c:if>
                                             <div class="car-info-details-row">
                                                 <i class="bi bi-caret-right-fill light-text"></i>
                                                 <spring:message code="profile.plate" arguments="${car.plate}" var="carPlateString"/>
@@ -197,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-container">
+                    <div id="seatsInput" class="input-container hidden">
                         <div class="input-row">
                             <div class="input-group input-group-sm">
                                 <div class="input-group-text">

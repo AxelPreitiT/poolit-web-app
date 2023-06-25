@@ -18,7 +18,7 @@
 <div class="main-container-style container-color">
   <div id="trip-detail-container">
     <jsp:include page="/WEB-INF/jsp/components/trip-detail.jsp">
-      <jsp:param name="showDriverInfo" value="true"/>
+      <jsp:param name="showDriverInfo" value="${currentPassenger.accepted}"/>
       <jsp:param name="status" value="${currentPassenger.passengerState}"/>
       <jsp:param name="showPassengers" value="${currentPassenger.accepted}"/>
     </jsp:include>

@@ -12,7 +12,7 @@ public interface CarDao {
 
     Car create(String plate, String infoCar, final User user, final long imageId, int seats, CarBrand brand, List<FeatureCar> features);
 
-    Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features);
+    Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, long imageId);
 
     Optional<Car> findByPlate(String plate);
 
