@@ -36,7 +36,7 @@
             <h6 class="italic-text"><spring:message code="${param.reportedRole}"/></h6>
           </div>
           <div>
-            <c:url value="/image/${report.reporter.userImageId}" var="imageUrlReported"/>
+            <c:url value="/image/${report.reported.userImageId}" var="imageUrlReported"/>
             <img src="${imageUrlReported}" alt="user image" class="image-photo-admin"/>
           </div>
         </div>
