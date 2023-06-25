@@ -47,13 +47,6 @@ public class Image {
         return data;
     }
 
-    public byte[] getDataView() throws IOException, URISyntaxException {
-        if(data == null){
-            return Files.readAllBytes(Paths.get(Objects.requireNonNull(this.getClass().getClassLoader().getResource("/images/profile.jpeg")).toURI()));
-        }
-        return data;
-    }
-
     public Image(byte[] data) {
         this.data = data;
     }
