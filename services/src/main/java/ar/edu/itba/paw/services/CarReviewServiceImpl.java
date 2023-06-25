@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.CarReviewDao;
 import ar.edu.itba.paw.interfaces.services.CarReviewService;
 import ar.edu.itba.paw.interfaces.services.CarService;
@@ -8,6 +11,7 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
 import ar.edu.itba.paw.models.reviews.ItemReview;
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarReviewServiceImpl implements CarReviewService {
@@ -35,20 +40,22 @@ public class CarReviewServiceImpl implements CarReviewService {
     private final CarService carService;
 
     @Autowired
-    public CarReviewServiceImpl(CarReviewDao carReviewDao, TripService tripService, UserService userService1,
-                                CarService carService1) {
+    public CarReviewServiceImpl(CarReviewDao carReviewDao, TripService tripService, UserService userService,
+                                CarService carService) {
         this.carReviewDao = carReviewDao;
         this.tripService = tripService;
-        this.userService = userService1;
-        this.carService = carService1;
+        this.userService = userService;
+        this.carService = carService;
     }
 
     @Transactional
     @Override
-    public CarReview createCarReview(long tripId, long carId, int rating, String comment, CarReviewOptions option) {
-        Trip trip = tripService.findById(tripId).get();
-        Passenger reviewer = tripService.getPassenger(trip, userService.getCurrentUser().get()).get();
-        Car car = carService.findById(carId).get();
+    public CarReview createCarReview(long tripId, long carId, int rating, String comment, CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
+        Trip trip = tripService.findById(tripId).orElseThrow (TripNotFoundException::new);
+        User currentUser = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        Optional<Passenger> reviewer_op = tripService.getPassenger(trip, currentUser);
+        Passenger reviewer = reviewer_op.get();
+        Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         if(!canReviewCar(trip, reviewer, car)) {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} tried to review car with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), car.getCarId(), e);
@@ -58,14 +65,14 @@ public class CarReviewServiceImpl implements CarReviewService {
     }
 
     @Override
-    public double getCarsRating(long carId) {
-        Car car = carService.findById(carId).get();
+    public double getCarsRating(long carId) throws CarNotFoundException {
+        Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         return carReviewDao.getCarRating(car);
     }
 
     @Override
-    public PagedContent<CarReview> getCarReviews(long carId, int page, int pageSize) {
-        Car car = carService.findById(carId).get();
+    public PagedContent<CarReview> getCarReviews(long carId, int page, int pageSize) throws CarNotFoundException {
+        Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
@@ -98,10 +105,11 @@ public class CarReviewServiceImpl implements CarReviewService {
     }
 
     @Override
-    public ItemReview<Car> getCarReviewState(final long tripId) {
-        Trip trip = tripService.findById(tripId).get();
-        Passenger reviewer = tripService.getPassenger(trip, userService.getCurrentUser().get()).get();
-        Car car = carService.findById(trip.getCar().getCarId()).get();
+    public ItemReview<Car> getCarReviewState(final long tripId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        User currentUser = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        Passenger reviewer = tripService.getPassenger(trip, currentUser).get();
+        Car car = carService.findById(trip.getCar().getCarId()).orElseThrow(CarNotFoundException::new);
         return new ItemReview<>(car, getReviewState(trip, reviewer, car));
     }
 }
