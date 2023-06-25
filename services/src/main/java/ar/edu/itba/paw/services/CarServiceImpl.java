@@ -77,9 +77,6 @@ public class CarServiceImpl implements CarService {
     @Override
     public boolean currentUserIsCarOwner(Car car){
         Optional<User> user = userService.getCurrentUser();
-        if(user.isPresent()){
-            return car.getUser().getUserId() == user.get().getUserId();
-        }
-        return false;
+        return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
     }
 }

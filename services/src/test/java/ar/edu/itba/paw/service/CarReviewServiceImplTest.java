@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.CarReviewDao;
@@ -73,7 +74,7 @@ public class CarReviewServiceImplTest {
     private CarReviewServiceImpl carReviewService;
 
     @Test
-    public void CarReviewCreateTest() throws UserNotFoundException, CarNotFoundException, TripNotFoundException {
+    public void CarReviewCreateTest() throws UserNotFoundException, CarNotFoundException, TripNotFoundException, PassengerNotFoundException {
         when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));
         when(userService.getCurrentUser()).thenReturn(Optional.of(REVIEWER));
         when(tripService.getPassenger(any(), any())).thenReturn(Optional.of(CURRENT_PASSENGER));
