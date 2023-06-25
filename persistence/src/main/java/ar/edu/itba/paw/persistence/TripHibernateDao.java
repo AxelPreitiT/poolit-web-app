@@ -230,15 +230,15 @@ public class TripHibernateDao implements TripDao {
         if(tripsIds.isEmpty()){
             return new ArrayList<>();
         }
-        TypedQuery<Trip> query = em.createQuery("from Trip WHERE tripId IN :ids",Trip.class);
+        TypedQuery<Trip> query = em.createQuery("from Trip WHERE tripId IN :ids ORDER BY endDateTime DESC, time ASC ",Trip.class);
         query.setParameter("ids",tripsIds);
         return query.getResultList();
     }
-    private List<Trip> getTripsWithIds(List<Long> tripsIds,User passenger){
+    private List<Trip> getTripsForPassengerWithIds(List<Long> tripsIds, User passenger){
         if(tripsIds.isEmpty()){
             return new ArrayList<>();
         }
-        TypedQuery<Passenger> query = em.createQuery("from Passenger WHERE trip.tripId IN :ids and user = :passenger",Passenger.class);
+        TypedQuery<Passenger> query = em.createQuery("from Passenger WHERE trip.tripId IN :ids and user = :passenger ORDER BY endDateTime desc , trip.time ASC ",Passenger.class);
         query.setParameter("ids",tripsIds);
         query.setParameter("passenger",passenger);
         //Obtenemos el viaje pero con los limites seteados para el pasajero
@@ -260,12 +260,13 @@ public class TripHibernateDao implements TripDao {
         String queryString = "FROM trips " +
                 "WHERE driver_id = :driverId ";
         if(minDateTime.isPresent()){
-            queryString += "AND end_date_time >= :min ";
+            queryString += "AND ((deleted = false AND end_date_time >= :min) OR (deleted = true AND last_occurrence >= :min)) ";
         }
         if(maxDateTime.isPresent()){
-            queryString += "AND end_date_time <= :max";
+            queryString += "AND ((deleted = false AND end_date_time <= :max ) OR (deleted = true AND last_occurrence < :max)) ";
         }
-        Query countQuery = em.createNativeQuery( "SELECT sum(trip_count) FROM(SELECT count(trip_id) as trip_count "+ queryString + ")aux ");
+        queryString+= "ORDER BY end_date_time DESC, cast(start_date_time as time) ASC ";
+        Query countQuery = em.createNativeQuery( "SELECT count(distinct trip_id) FROM(SELECT trip_id "+ queryString + ")aux ");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         countQuery.setParameter("driverId",user.getUserId());
         idQuery.setParameter("driverId",user.getUserId());
@@ -296,7 +297,8 @@ public class TripHibernateDao implements TripDao {
         if(passengerState != null) {
             queryString += "AND p.passenger_state = :state ";
         }
-        Query countQuery = em.createNativeQuery( "SELECT count(trip_id) "+ queryString);
+        queryString += "ORDER BY p.end_date DESC, cast(trips.start_date_time as time) ASC ";
+        Query countQuery = em.createNativeQuery( "SELECT count(distinct trip_id) FROM (SELECT trip_id "+ queryString+ ")aux");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         countQuery.setParameter("passengerId",user.getUserId());
         idQuery.setParameter("passengerId",user.getUserId());
@@ -318,10 +320,9 @@ public class TripHibernateDao implements TripDao {
         Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
-        List<Trip> result = getTripsWithIds(ids,user);
+        List<Trip> result = getTripsForPassengerWithIds(ids,user);
         LOGGER.debug("Found {} in the database", result);
         return new PagedContent<>(result,page,pageSize,total);
-//        return getTripPagedContent(page, pageSize, countQuery, idQuery);
     }
 
     @Override
@@ -441,7 +442,7 @@ public class TripHibernateDao implements TripDao {
         }
         queryString += " GROUP BY trips.trip_id, trips.max_passengers, trips.price, driver_rating.driver_rating, car_rating.car_rating "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers ";
-        //Esto puede explotar si no arregla el orden despues
+
         if(sortType.equals(Trip.SortType.PRICE)){
             queryString += "ORDER BY trips.price " + (descending?"DESC":"ASC") +", cast(trips.start_date_time as time) ASC ";
         }else if(sortType.equals(Trip.SortType.TIME)){
@@ -518,7 +519,18 @@ public class TripHibernateDao implements TripDao {
         idQuery.setParameter("searchUserId", searchUserId);
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
-        PagedContent<Trip> ans =  getTripPagedContent(page, pageSize, countQuery, idQuery);
+        @SuppressWarnings("unchecked")
+        Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
+        @SuppressWarnings("unchecked")
+        List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
+        List<Trip> aux = new ArrayList<>();
+        if(!ids.isEmpty()){
+            TypedQuery<Trip> query = em.createQuery("from Trip WHERE tripId IN :ids ORDER BY time ASC, price ASC",Trip.class);
+            query.setParameter("ids",ids);
+            aux =  query.getResultList();
+        }
+        LOGGER.debug("Found {} in the database", aux);
+        PagedContent<Trip> ans =  new PagedContent<>(aux,page,pageSize,total);
         for(Trip trip : ans.getElements()){
             trip.setQueryStartDateTime(startDateTime.toLocalDate().atTime(trip.getStartDateTime().toLocalTime()));
             trip.setQueryEndDateTime(startDateTime.toLocalDate().atTime(trip.getStartDateTime().toLocalTime()));
