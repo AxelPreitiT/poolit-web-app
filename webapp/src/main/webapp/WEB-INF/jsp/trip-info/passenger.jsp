@@ -45,6 +45,23 @@
             </div>
           </div>
         </div>
+        <div class="trip-state-container">
+          <h3>Estado: </h3>
+          <c:choose>
+            <c:when test="${currentPassenger.tripEnded}">
+              <i class="bi bi-check h3 success"></i>
+              <h3 class="success"><spring:message code="tripStatus.finished"/></h3>
+            </c:when>
+            <c:when test="${!currentPassenger.tripStarted}">
+              <i class="bi bi-clock-history h3 secondary-color"></i>
+              <h3 class="secondary-color"><spring:message code="tripStatus.notStarted"/></h3>
+            </c:when>
+            <c:otherwise>
+              <i class="fa-solid fa-car-side primary-color h3"></i>
+              <h3 class="primary-color"><spring:message code="tripStatus.inProgress"/></h3>
+            </c:otherwise>
+          </c:choose>
+        </div>
       </div>
       <div id="button-container">
         <div id="review-trip-container">

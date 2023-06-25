@@ -403,7 +403,6 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
         if( trip.getStartDateTime().isAfter(startDate)
-                || trip.getEndDateTime().isBefore(endDate)
                 || trip.getStartDateTime().until(startDate, ChronoUnit.DAYS) % 7 != 0
                 || startDate.until(endDate, ChronoUnit.DAYS) % 7 != 0
         ){

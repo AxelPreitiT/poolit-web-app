@@ -11,7 +11,6 @@
   <div class="row-heading">
     <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
     <div class="status-row">
-    <c:if test="${!trip.tripHasEnded}">
     <c:choose>
       <c:when test="${param.status eq 'ACCEPTED'}">
           <i class="bi bi-check-lg success h2"></i>
@@ -26,7 +25,6 @@
         <h2 class="primary-color"><spring:message code="passengerState.pending"/></h2>
       </c:when>
     </c:choose>
-    </c:if>
     </div>
   </div>
   <hr class="secondary-color">
