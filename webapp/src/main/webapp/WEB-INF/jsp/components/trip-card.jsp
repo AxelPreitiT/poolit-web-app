@@ -25,7 +25,7 @@
         </c:url>
         <a href="${tripUrl}">
             <div class="row g-0">
-                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
                 <div class="col-5">
                     <div id="car-image">
                         <img src="${carImageUrl}" alt="car image"/>

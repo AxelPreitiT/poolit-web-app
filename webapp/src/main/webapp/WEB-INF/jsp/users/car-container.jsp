@@ -7,7 +7,7 @@
 <link href="<c:url value="/resources/css/users/car-container.css"/>" rel="stylesheet" type="text/css"/>
 
 <div class="car-card">
-  <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+  <c:url value="/image/${car.imageId}" var="carImageUrl"/>
   <c:url value="/cars/${car.carId}" var="carUrl"/>
   <a href="${carUrl}">
     <img class="img-car" src="${carImageUrl}">

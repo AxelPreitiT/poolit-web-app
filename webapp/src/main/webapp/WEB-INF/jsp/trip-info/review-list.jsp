@@ -51,7 +51,7 @@
       <c:set var="car" value="${carReviewItem.item}"/>
       <c:set var="reviewState" value="${carReviewItem.state}"/>
       <div class="list-item">
-        <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+        <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
         <button
                 class="btn shadow-btn button-style <c:choose><c:when test="${carReviewItem.pending}">button-color</c:when><c:when test="${carReviewItem.done}">success-bg-color</c:when><c:when test="${carReviewItem.disabled}">danger-bg-color</c:when></c:choose>"
                 data-bs-target="#review-car"

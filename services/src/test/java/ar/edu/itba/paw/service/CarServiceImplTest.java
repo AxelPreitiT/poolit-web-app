@@ -22,7 +22,6 @@ import java.util.Optional;
 import static ar.edu.itba.paw.models.CarBrand.VOLKSWAGEN;
 import static ar.edu.itba.paw.models.FeatureCar.AIR;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,7 +60,7 @@ public class CarServiceImplTest {
         Assert.assertEquals(PLATE, newCar.getPlate());
         Assert.assertEquals(INFO_CAR, newCar.getInfoCar());
         Assert.assertEquals(USER, newCar.getUser());
-        Assert.assertEquals(IMAGE_ID, newCar.getImage_id());
+        Assert.assertEquals(IMAGE_ID, newCar.getImageId());
         Assert.assertEquals(SEATS, newCar.getSeats());
         Assert.assertEquals(FEATURES, newCar.getFeatures());
     }
@@ -87,7 +86,7 @@ public class CarServiceImplTest {
         Assert.assertEquals(PLATE, newCar.getPlate());
         Assert.assertEquals(INFO_CAR, newCar.getInfoCar());
         Assert.assertEquals(USER, newCar.getUser());
-        Assert.assertEquals(IMAGE_ID, newCar.getImage_id());
+        Assert.assertEquals(IMAGE_ID, newCar.getImageId());
     }
 
     @Test(expected = CarNotFoundException.class)

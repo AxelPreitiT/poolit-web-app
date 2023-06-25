@@ -33,8 +33,8 @@ public class TripHibernateDao implements TripDao {
     @PersistenceContext
     private EntityManager em;
     @Override
-    public Trip create(City originCity, String originAddress, City destinationCity, String destinationAddress, Car car, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isRecurrent, double price, int max_passengers, User driver) {
-        Trip trip = new Trip(originCity, originAddress, destinationCity, destinationAddress, startDateTime, endDateTime, max_passengers, driver, car, price);
+    public Trip create(City originCity, String originAddress, City destinationCity, String destinationAddress, Car car, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean isRecurrent, double price, int maxPassengers, User driver) {
+        Trip trip = new Trip(originCity, originAddress, destinationCity, destinationAddress, startDateTime, endDateTime, maxPassengers, driver, car, price);
         LOGGER.debug("Adding new trip from '{}' to '{}', with startDate '{}' and endDate '{}', and created by driver with id {} to the database", originCity, destinationCity, startDateTime, endDateTime, driver.getUserId());
         em.persist(trip);
         LOGGER.info("Trip added to the database with id {}", trip.getTripId());
@@ -369,20 +369,20 @@ public class TripHibernateDao implements TripDao {
 
     @Override
     public PagedContent<Trip> getTripsWithFilters(
-            long origin_city_id, long destination_city_id,
+            long originCityId, long destinationCityId,
             LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
             long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize){
-        return getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,dayOfWeek.get(),endDateTime.get(),minutes,minPrice,maxPrice,sortType,descending,searchUserId,carFeatures,page,pageSize);
+        return getTripsWithFilters(originCityId,destinationCityId,startDateTime,dayOfWeek.get(),endDateTime.get(),minutes,minPrice,maxPrice,sortType,descending,searchUserId,carFeatures,page,pageSize);
     }
 
     @Override
-    public PagedContent<Trip> getTripsWithFilters(long origin_city_id, long destination_city_id,
+    public PagedContent<Trip> getTripsWithFilters(long originCityId, long destinationCityId,
                                                   LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
                                                   Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
                                                   long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize) {
         LOGGER.debug("Looking for the trips with originCity with id {}, destinationCity with id {}, startDateTime '{}',dayOfWeek {}, endDateTime {} range of {} minutes,{}{} sortType '{}' ({}) page {} and size {} in the database",
-                origin_city_id, destination_city_id, startDateTime, dayOfWeek,
+                originCityId, destinationCityId, startDateTime, dayOfWeek,
                 endDateTime, minutes,
                 minPrice.map(price -> " minPrice $" + price + ",").orElse(""), maxPrice.map(price -> " maxPrice $" + price + ","),
                 sortType, descending ? "descending" : "ascending", page, pageSize);
@@ -413,10 +413,10 @@ public class TripHibernateDao implements TripDao {
                 "AND trips.day_of_week = :dayOfWeek ";
         arguments.put("startMaximum",Timestamp.valueOf(startDateTime.plusMinutes(minutes)));
         arguments.put("startDateTime",Timestamp.valueOf(startDateTime.minusMinutes(minutes)));
-        arguments.put("originCityId",origin_city_id);
+        arguments.put("originCityId",originCityId);
         arguments.put("minTime",minTime);
         arguments.put("maxTime",maxTime);
-        arguments.put("destinationCityId",destination_city_id);
+        arguments.put("destinationCityId",destinationCityId);
         arguments.put("endDateTimePlus",Timestamp.valueOf(endDateTime.plusMinutes(minutes)));
         arguments.put("endDateTimeMinus", Timestamp.valueOf(endDateTime.minusMinutes(minutes)));
         arguments.put("dayOfWeek",dayOfWeek.getValue());
@@ -489,8 +489,8 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public PagedContent<Trip> getTripsByOriginAndStart(long origin_city_id, LocalDateTime startDateTime, long searchUserId, int page, int pageSize) {
-        LOGGER.debug("Looking for the trips with originCity with id {} and startDateTime '{}' in page {} with size {} in the database",origin_city_id,startDateTime,page,pageSize);
+    public PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime, long searchUserId, int page, int pageSize) {
+        LOGGER.debug("Looking for the trips with originCity with id {} and startDateTime '{}' in page {} with size {} in the database",originCityId,startDateTime,page,pageSize);
         String queryString = " FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(  "+
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.passenger_state = 'ACCEPTED' "+
@@ -506,11 +506,11 @@ public class TripHibernateDao implements TripDao {
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);
         countQuery.setParameter("startTime",startDateTime.toLocalTime());
         countQuery.setParameter("startDate",startDateTime.toLocalDate());
-        countQuery.setParameter("originCityId",origin_city_id);
+        countQuery.setParameter("originCityId",originCityId);
         countQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         countQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
         countQuery.setParameter("searchUserId", searchUserId);
-        idQuery.setParameter("originCityId",origin_city_id);
+        idQuery.setParameter("originCityId",originCityId);
         idQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         idQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
         idQuery.setParameter("startTime",startDateTime.toLocalTime());
