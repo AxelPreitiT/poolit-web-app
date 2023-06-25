@@ -25,14 +25,12 @@ public class UserHibernateDao implements UserDao {
 
 
     @Override
-    public User create(String username, String surname, String email, String phone, String password, City bornCity, Locale mailLocale, String role, long user_image_id) {
+    public User create(String username, String surname, String email, String phone, String password, City bornCity, Locale mailLocale, String role, long userImageId) {
         String savedEmail = email.toLowerCase().replaceAll("\\s", "");
         String savedPhone = phone.replaceAll("\\s", "");
         String savedPassword = password.replaceAll("\\s", "");
         LOGGER.debug("Adding new user with email '{}' to the database", savedEmail);
-        LOGGER.debug("need help '{}' to the database", user_image_id);
-//        em.merge(bornCity);
-        final User user = new User(username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, user_image_id);
+        final User user = new User(username, surname, savedEmail, savedPhone, savedPassword, bornCity, mailLocale, role, userImageId);
         em.persist(user);
         LOGGER.debug("New {}", user);
         return user;
@@ -70,7 +68,7 @@ public class UserHibernateDao implements UserDao {
     }
 
     @Override
-    public User updateProfile(String username, String surname, String email, String password, City bornCity, String mailLocale, String role, long user_image_id) {
+    public User updateProfile(String username, String surname, String email, String password, City bornCity, String mailLocale, String role, long userImageId) {
         Optional<User> maybeUser = findByEmail(email);
         LOGGER.debug("Updating user with email '{}' in the database", email);
         if (maybeUser.isPresent()) {
@@ -81,7 +79,7 @@ public class UserHibernateDao implements UserDao {
             user.setName(username);
             user.setPassword(password);
             user.setSurname(surname);
-            user.setUserImageId(user_image_id);
+            user.setUserImageId(userImageId);
 
             em.persist(user);
             return user;

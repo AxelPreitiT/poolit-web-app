@@ -1,27 +1,19 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Transactional
@@ -60,7 +52,7 @@ public class CarDaoImplTest {
         Assert.assertEquals(PLATE_2,car.getPlate());
         Assert.assertEquals(INFO_CAR,car.getInfoCar());
         Assert.assertEquals(user.getUserId(),car.getUser().getUserId());
-        Assert.assertEquals(KNOWN_IMAGE_ID,car.getImage_id());
+        Assert.assertEquals(KNOWN_IMAGE_ID,car.getImageId());
     }
 
     @Test
@@ -74,7 +66,7 @@ public class CarDaoImplTest {
         Assert.assertEquals(PLATE,car.get().getPlate());
         Assert.assertEquals(INFO_CAR, car.get().getInfoCar());
         Assert.assertEquals(KNOWN_USER_ID, car.get().getUser().getUserId());
-        Assert.assertEquals(KNOWN_IMAGE_ID,car.get().getImage_id());
+        Assert.assertEquals(KNOWN_IMAGE_ID,car.get().getImageId());
     }
 
     @Test
@@ -98,7 +90,7 @@ public class CarDaoImplTest {
         Assert.assertEquals(PLATE,car.get().getPlate());
         Assert.assertEquals(INFO_CAR, car.get().getInfoCar());
         Assert.assertEquals(KNOWN_USER_ID, car.get().getUser().getUserId());
-        Assert.assertEquals(KNOWN_IMAGE_ID,car.get().getImage_id());
+        Assert.assertEquals(KNOWN_IMAGE_ID,car.get().getImageId());
     }
 
     @Test
@@ -135,11 +127,11 @@ public class CarDaoImplTest {
         Assert.assertEquals(PLATE,cars.get(0).getPlate());
         Assert.assertEquals(INFO_CAR, cars.get(0).getInfoCar());
         Assert.assertEquals(KNOWN_USER_ID, cars.get(0).getUser().getUserId());
-        Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(0).getImage_id());
+        Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(0).getImageId());
         Assert.assertEquals(PLATE_2,cars.get(1).getPlate());
         Assert.assertEquals(INFO_CAR, cars.get(1).getInfoCar());
         Assert.assertEquals(KNOWN_USER_ID, cars.get(1).getUser().getUserId());
-        Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(1).getImage_id());
+        Assert.assertEquals(KNOWN_IMAGE_ID,cars.get(1).getImageId());
     }
 
     @Rollback

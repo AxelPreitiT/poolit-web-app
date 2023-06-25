@@ -42,9 +42,11 @@ public class PawUserDetailsService implements UserDetailsService {
             throw e;
         }
 
-        final User user = userOptional.get();
+
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
+
+        final User user = userOptional.get();
 
         if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
             authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));

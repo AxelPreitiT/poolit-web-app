@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ar.edu.itba.paw.models.reports.ReportState.IN_REVISION;
 
 @Repository
 public class ReportHibernateDao implements ReportDao {
@@ -61,14 +60,6 @@ public class ReportHibernateDao implements ReportDao {
             report.setAdminReason(reason);
             em.persist(report);
         }
-    }
-
-    @Override
-    public List<Report> getAllReports() {
-        LOGGER.debug("Getting all reports");
-        final List<Report> result = em.createQuery("from Report", Report.class).getResultList();
-        LOGGER.debug("Found {} in the database", result.size());
-        return result;
     }
 
 

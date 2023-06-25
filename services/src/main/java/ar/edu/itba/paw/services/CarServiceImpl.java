@@ -37,17 +37,17 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car createCar(String plate, String infoCar, byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features) throws UserNotFoundException {
         User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        final long image_id = imageService.createImage(imgData).getImageId();
-        return carDao.create(plate, infoCar, user, image_id, seats, brand, features);
+        final long imageId = imageService.createImage(imgData).getImageId();
+        return carDao.create(plate, infoCar, user, imageId, seats, brand, features);
     }
 
     @Transactional
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
+    public Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
         //TODO Fijarse si esto es facade
         Car car=findById(carId).orElseThrow(CarNotFoundException::new);
 
-        imageService.replaceImage(car.getImage_id(),imgData);
+        imageService.replaceImage(car.getImageId(),imgData);
         return carDao.modifyCar(carId, infoCar, seats, features);
 
 
@@ -77,9 +77,6 @@ public class CarServiceImpl implements CarService {
     @Override
     public boolean currentUserIsCarOwner(Car car){
         Optional<User> user = userService.getCurrentUser();
-        if(user.isPresent()){
-            return car.getUser().getUserId() == user.get().getUserId();
-        }
-        return false;
+        return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
     }
 }

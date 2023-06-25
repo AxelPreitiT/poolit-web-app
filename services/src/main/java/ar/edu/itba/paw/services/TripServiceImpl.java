@@ -40,13 +40,13 @@ public class TripServiceImpl implements TripService {
     private final CarService carService;
 
     @Autowired
-    public TripServiceImpl(final TripDao tripDao, EmailService emailService1, UserService userService,
-                           CityService cityService1, CarService carService1){
+    public TripServiceImpl(final TripDao tripDao, EmailService emailService, UserService userService,
+                           CityService cityService, CarService carService){
         this.tripDao = tripDao;
-        this.emailService = emailService1;
+        this.emailService = emailService;
         this.userService = userService;
-        this.cityService = cityService1;
-        this.carService = carService1;
+        this.cityService = cityService;
+        this.carService = carService;
     }
 
     @Transactional
@@ -130,6 +130,8 @@ public class TripServiceImpl implements TripService {
         }
     }
 
+    @Transactional
+    @Override
     public boolean deleteTrip(final long tripId) throws TripNotFoundException{
         final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         //Si el viaje ya termino
@@ -560,10 +562,10 @@ public class TripServiceImpl implements TripService {
     @Transactional
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
-            long origin_city_id, long destination_city_id, final LocalDate startDate,
+            long originCityId, long destinationCityId, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final BigDecimal minPriceValue, final BigDecimal maxPriceValue, final String sortType, final boolean descending,
-            List<FeatureCar> carFeatures,final int page, final int pageSize){
+            List<FeatureCar> carFeatures, final int page, final int pageSize){
         Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
         Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
         validatePageAndSize(page,pageSize);
@@ -575,7 +577,7 @@ public class TripServiceImpl implements TripService {
         if(user.isPresent()){
             userId=user.get().getUserId();
         }
-        return tripDao.getTripsWithFilters(origin_city_id,destination_city_id,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,carFeatures,page,pageSize);
+        return tripDao.getTripsWithFilters(originCityId, destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,carFeatures,page,pageSize);
     }
 
     @Transactional

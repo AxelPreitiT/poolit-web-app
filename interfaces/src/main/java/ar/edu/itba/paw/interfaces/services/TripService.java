@@ -75,7 +75,7 @@ public interface TripService {
     PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize);
 
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
-            long origin_city_id, long destination_city_id, final LocalDate startDate,
+            long originCityId, long destinationCityId, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final BigDecimal minPrice, final BigDecimal maxPrice, final String sortType, final boolean descending,
             final List<FeatureCar> carFeatures, final int page, final int pageSize);

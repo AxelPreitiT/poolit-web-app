@@ -11,7 +11,7 @@
 <div class="user-info-container-car">
   <div class="avatar-img">
     <div class="circular--landscape">
-      <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+      <c:url value="/image/${car.imageId}" var="carImageUrl"/>
       <img class="circular--square" src="${carImageUrl}" alt="<spring:message code="updateCar.image"/>">
     </div>
   </div>

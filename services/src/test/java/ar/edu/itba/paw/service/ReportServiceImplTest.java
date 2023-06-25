@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
@@ -68,7 +67,7 @@ public class ReportServiceImplTest {
     private ReportServiceImpl reportService;
 
     @Test
-    public void TestCreateReport(){
+    public void TestCreateReport() throws UserNotFoundException, TripNotFoundException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(REPORTED));
         when(userService.getCurrentUser()).thenReturn(Optional.of(REPORTER));
         when(tripService.findById(anyLong())).thenReturn(Optional.of(trip));
@@ -86,8 +85,8 @@ public class ReportServiceImplTest {
         Assert.assertEquals(REASON, resp.getReason());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void TestDontHaveTripCreateReport(){
+    @Test(expected = TripNotFoundException.class)
+    public void TestDontHaveTripCreateReport() throws UserNotFoundException, TripNotFoundException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(REPORTED));
         when(tripService.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -96,8 +95,8 @@ public class ReportServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void TestRejectReportDoesntExist(){
+    @Test(expected = ReportNotFoundException.class)
+    public void TestRejectReportDoesntExist() throws ReportNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
 
         reportService.rejectReport(1, REASONADMIN);
@@ -105,8 +104,8 @@ public class ReportServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException {
+    @Test(expected = ReportNotFoundException.class)
+    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException, ReportNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
 
         reportService.acceptReport(1, REASONADMIN);
@@ -115,7 +114,7 @@ public class ReportServiceImplTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void TestNotIncludeInTripGetTripReportCollection(){
+    public void TestNotIncludeInTripGetTripReportCollection() throws PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {
         when(tripService.findById(anyLong())).thenReturn(Optional.of(trip));
         when(userService.getCurrentUser()).thenReturn(Optional.of(user));
         when(tripService.userIsDriver(anyLong(), any())).thenReturn(false);

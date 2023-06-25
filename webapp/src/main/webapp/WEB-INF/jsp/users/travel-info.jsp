@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="img-container">
-                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
                 <img class="car-container" src="${carImageUrl}" alt="<spring:message code="createCar.carImage"/>"/>
             </div>
         </div>

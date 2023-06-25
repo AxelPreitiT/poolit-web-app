@@ -115,7 +115,7 @@
                         </c:if>
                         <div class="user-container-item">
                             <strong><spring:message code="report.role.passenger.rating"/></strong>
-                            <c:set value="${report.reported.passengerRating}" var="rating"/>
+                            <c:set value="${report.reported.passengerRating}" var="rating" scope="request"/>
                             <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                                 <jsp:param name="fontSize" value="h4"/>
                                 <jsp:param name="fontColor" value="secondary-color"/>

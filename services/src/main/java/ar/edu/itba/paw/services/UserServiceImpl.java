@@ -16,13 +16,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.event.MouseInputAdapter;
 import java.util.*;
 
 @Service
@@ -44,21 +41,19 @@ public class UserServiceImpl implements UserService {
 
     private final AuthenticationManager authenticationManager;
 
-    //private final UserDetailsService userDetailsService;
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder,
                            final AuthenticationManager authenticationManager,
-                           final TokenService tokenService,final ImageService imageService1, final CityService cityService1,
-                           final EmailService emailService1){
+                           final TokenService tokenService,final ImageService imageService, final CityService cityService,
+                           final EmailService emailService){
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
-        //this.userDetailsService = userDetailsService;
-        this.imageService = imageService1;
-        this.cityService = cityService1;
-        this.emailService = emailService1;
+        this.imageService = imageService;
+        this.cityService = cityService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -67,7 +62,7 @@ public class UserServiceImpl implements UserService {
                            final String phone, final String password, final long bornCityId, final String mailLocaleString, final String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException {
         final City bornCity = cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new);
         final Image image = imageService.createImage(imgData);
-        final long user_image_id = image.getImageId();
+        final long userImageId = image.getImageId();
         String finalRole = (role == null) ? UserRole.USER.getText() : role;
         Optional<User> possibleUser = userDao.findByEmail(email);
         if(possibleUser.isPresent()){
@@ -78,12 +73,12 @@ public class UserServiceImpl implements UserService {
                 throw exception;
             }else{
                 LOGGER.debug("Email '{}' already exists in the database but has not registered yet, updating user", email);
-                User ans = userDao.updateProfile(username, surname, email, passwordEncoder.encode(password), bornCity, mailLocaleString, finalRole, user_image_id);
+                User ans = userDao.updateProfile(username, surname, email, passwordEncoder.encode(password), bornCity, mailLocaleString, finalRole, userImageId);
                 LOGGER.info("User with email '{}' updated in the database", email);
                 return ans;
             }
         }
-        User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, new Locale(mailLocaleString), finalRole, user_image_id);
+        User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, new Locale(mailLocaleString), finalRole, userImageId);
         VerificationToken token = tokenService.createToken(finalUser);
         try {
             emailService.sendVerificationEmail(finalUser, token.getToken());
@@ -96,13 +91,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean isDriver(User user){
-        return user.getRole().equals(UserRole.DRIVER.getText());
+        return user.getIsDriver();
     }
 
     @Transactional
     @Override
     public boolean isUser(User user){
-        return user.getRole().equals(UserRole.USER.getText());
+        return user.getIsUser();
     }
 
     @Transactional
@@ -206,37 +201,23 @@ public class UserServiceImpl implements UserService {
             final User user = verificationToken.getUser();
             user.setEnabled(true);
             authWithoutPassword(user);
-            /*
-            final Collection<GrantedAuthority> authorities = new HashSet<>();
-            if(Objects.equals(user.getRole(), "DRIVER")){
-                authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
-            } else {
-                authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
-            }
-
-            tokenService.deleteToken(verificationToken);
-
-
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            */
         }
         return isValidToken;
     }
 
 
-
     void authWithoutPassword(User user) {
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
-            authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
-        }
 
-        //Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsService.loadUserByUsername(user.getEmail()), null, authorities);
-        //SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
+            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
+        }else{
+            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
+                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
+            } else {
+                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
+            }
+        }
 
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.ReportService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.form.ReportForm;
@@ -45,7 +47,7 @@ public class ReportController {
             @PathVariable("tripId") final long tripId,
             @PathVariable("passengerId") final long passengerId,
             @Valid @ModelAttribute("reportForm") final ReportForm reportForm
-            ) {
+            ) throws UserNotFoundException, TripNotFoundException {
         LOGGER.debug("POST request to /reports/trips/{}/passengers/{}", tripId, passengerId);
         reportService.createReport(passengerId, tripId, reportForm.getComment(), reportForm.getRelation(), reportForm.getReason());
         return new ModelAndView(getTripRedirectPath(tripId));
@@ -56,7 +58,7 @@ public class ReportController {
             @PathVariable("tripId") final long tripId,
             @PathVariable("driverId") final long driverId,
             @Valid @ModelAttribute("reportForm") final ReportForm reportForm
-    ) {
+    ) throws UserNotFoundException, TripNotFoundException {
         LOGGER.debug("POST request to /reports/trips/{}/drivers/{}", tripId, driverId);
         reportService.createReport(driverId, tripId, reportForm.getComment(), reportForm.getRelation(), reportForm.getReason());
         return new ModelAndView(getTripRedirectPath(tripId));

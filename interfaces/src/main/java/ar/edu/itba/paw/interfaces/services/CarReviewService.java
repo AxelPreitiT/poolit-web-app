@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Car;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public interface CarReviewService {
 
-    CarReview createCarReview(final long tripId, final long carId, final int rating, final String comment, CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException;
+    CarReview createCarReview(final long tripId, final long carId, final int rating, final String comment, CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException, PassengerNotFoundException;
 
     double getCarsRating(final long carId) throws CarNotFoundException;
 

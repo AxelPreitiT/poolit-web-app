@@ -37,7 +37,7 @@
           </div>
           <div class="col-sm-6 col-md-5 col-lg-5">
             <div id="car-info-image">
-              <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+              <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
               <div class="placeholder-image">
                 <img src="${carImageUrl}" alt="car image"/>
               </div>
@@ -188,7 +188,7 @@
                     </a>
                     <c:if test="${trip.recurrent}">
                       <c:if test="${passenger.recurrent}">
-                        <spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${user.endDateString}" var="passengerRecurrentDatesString"/>
+                        <spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${passenger.endDateString}" var="passengerRecurrentDatesString"/>
                         <h6 class="show-row italic-text"><c:out value="${passengerRecurrentDatesString}"/> </h6>
                       </c:if>
                       <c:if test="${!(passenger.recurrent)}">
