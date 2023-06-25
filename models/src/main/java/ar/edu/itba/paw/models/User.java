@@ -261,4 +261,16 @@ public class User {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public boolean getIsDriver() {
+        return this.role.equals(UserRole.DRIVER.getText());
+    }
+
+    public boolean getIsUser() {
+        return this.role.equals(UserRole.USER.getText());
+    }
+
+    public boolean getIsAdmin() {
+        return this.role.equals(UserRole.ADMIN.getText());
+    }
 }

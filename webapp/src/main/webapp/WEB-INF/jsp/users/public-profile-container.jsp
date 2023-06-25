@@ -16,7 +16,7 @@
     </div>
   </div>
   <h3 id="user-name"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
-  <c:if test="${user.role eq 'DRIVER'}">
+  <c:if test="${user.isDriver}">
     <div class="row-info">
       <jsp:useBean id="countTrips" type="java.lang.Integer" scope="request"/>
       <h6><spring:message code="user.countTrips"/></h6>
