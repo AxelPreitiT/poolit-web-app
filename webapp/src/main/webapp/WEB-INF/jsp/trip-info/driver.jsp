@@ -74,6 +74,23 @@
             </c:otherwise>
           </c:choose>
         </div>
+        <div class="trip-state-container">
+          <h3>Estado: </h3>
+          <c:choose>
+            <c:when test="${trip.tripHasEnded}">
+              <i class="bi bi-check h3 success"></i>
+              <h3 class="success"><spring:message code="tripStatus.finished"/></h3>
+            </c:when>
+            <c:when test="${!trip.tripHasStarted}">
+              <i class="bi bi-clock-history h3 secondary-color"></i>
+              <h3 class="secondary-color"><spring:message code="tripStatus.notStarted"/></h3>
+            </c:when>
+            <c:otherwise>
+              <i class="fa-solid fa-car-side primary-color h3"></i>
+              <h3 class="primary-color"><spring:message code="tripStatus.inProgress"/></h3>
+            </c:otherwise>
+          </c:choose>
+        </div>
       </div>
       <div id="button-container">
         <div id="review-trip-container">
@@ -166,14 +183,17 @@
                 <div class="show-row-content-passangers">
                   <div class="column-data-pass">
                     <a href="${userUrl}" class="show-row profile-link">
-                      <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}"/> </span>
+                      <spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}" var="passengerNameString"/>
+                      <span class="text detail h4"><c:out value="${passengerNameString}"/> </span>
                     </a>
                     <c:if test="${trip.recurrent}">
                       <c:if test="${passenger.recurrent}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${passenger.endDateString}"/></h6>
+                        <spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${passenger.endDateString}" var="passengerRecurrentDatesString"/>
+                        <h6 class="show-row italic-text"><c:out value="${passengerRecurrentDatesString}"/> </h6>
                       </c:if>
                       <c:if test="${!(passenger.recurrent)}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.unique" arguments="${passenger.startDateString}"/></h6>
+                        <spring:message code="dates.unique" arguments="${passenger.startDateString}" var="passengerSingleDatesString"/>
+                        <h6 class="show-row italic-text"><c:out value="${passengerSingleDatesString}"/></h6>
                       </c:if>
                     </c:if>
                   </div>

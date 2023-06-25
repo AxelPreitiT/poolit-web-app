@@ -161,7 +161,8 @@
                                         <div class="primary-bg-color" id="car-info-details-container">
                                             <div class="car-info-details-row">
                                                 <i class="bi bi-caret-right-fill light-text"></i>
-                                                <span class="light-text"><spring:message code="profile.plate" arguments="${car.plate}"/></span>
+                                                <spring:message code="profile.plate" arguments="${car.plate}" var="carPlateString"/>
+                                                <span class="light-text"><c:out value="${carPlateString}"/> </span>
                                             </div>
                                         </div>
                                     </div>

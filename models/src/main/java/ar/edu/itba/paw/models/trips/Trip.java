@@ -223,6 +223,9 @@ public class Trip {
         return endDateTime.isBefore(LocalDateTime.now());
     }
 
+    public boolean getTripHasStarted(){
+        return LocalDateTime.now().compareTo(startDateTime)>=0;
+    }
     public LocalDateTime getQueryStartDateTime() {
         return queryStartDateTime;
     }

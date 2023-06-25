@@ -15,7 +15,7 @@
   <div class="passenger-review-form-header">
     <img src="${passengerImageUrl}" alt="${passengerName}" class="passenger-image">
     <div class="passenger-review-form-title">
-      <h3 class="secondary-color">${passengerName}</h3>
+      <h3 class="secondary-color"><c:out value="${passengerName}"/></h3>
       <hr class="secondary-color">
     </div>
   </div>
