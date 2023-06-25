@@ -130,6 +130,8 @@ public class TripServiceImpl implements TripService {
         }
     }
 
+    @Transactional
+    @Override
     public boolean deleteTrip(final long tripId) throws TripNotFoundException{
         final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         //Si el viaje ya termino
