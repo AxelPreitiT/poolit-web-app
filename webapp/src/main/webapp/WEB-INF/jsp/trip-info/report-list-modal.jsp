@@ -25,7 +25,7 @@
                 <div class="modal-body">
                     <div id="report-published-container" class="collapse <c:if test="${!(empty param.reported) && param.reported}">show</c:if>">
                         <i class="bi bi-check-circle-fill success h6"></i>
-                        <span class="success h6" id="published-text"><spring:message code="review.toast.message"/></span>
+                        <span class="success h6" id="published-text"><spring:message code="report.toast.message"/></span>
                     </div>
                     <jsp:include page="/WEB-INF/jsp/trip-info/report-list.jsp"/>
                 </div>

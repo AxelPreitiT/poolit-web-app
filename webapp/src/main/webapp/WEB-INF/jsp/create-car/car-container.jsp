@@ -53,10 +53,17 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
           <c:set var="rating" value="${rating}" scope="request"/>
-          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-            <jsp:param name="fontSize" value="h4"/>
-            <jsp:param name="fontColor" value="secondary-color"/>
-          </jsp:include>
+          <c:choose>
+            <c:when test="${rating == 0}">
+              <h4 class="text"><spring:message code="review.none"/></h4>
+            </c:when>
+            <c:otherwise>
+              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                <jsp:param name="fontSize" value="h4"/>
+                <jsp:param name="fontColor" value="secondary-color"/>
+              </jsp:include>
+            </c:otherwise>
+          </c:choose>
         </div>
       </div>
     </div>

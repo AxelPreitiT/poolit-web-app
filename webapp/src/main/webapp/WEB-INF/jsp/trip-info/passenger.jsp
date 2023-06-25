@@ -49,7 +49,7 @@
           <h3>Estado: </h3>
           <c:choose>
             <c:when test="${currentPassenger.tripEnded}">
-              <i class="bi bi-check h3 success"></i>
+              <i class="bi bi-check h1 success"></i>
               <h3 class="success"><spring:message code="tripStatus.finished"/></h3>
             </c:when>
             <c:when test="${!currentPassenger.tripStarted}">

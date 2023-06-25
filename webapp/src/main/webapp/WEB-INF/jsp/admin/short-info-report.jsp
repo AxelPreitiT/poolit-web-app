@@ -13,7 +13,8 @@
       <div class="profiles-info">
         <div class="info-profile-img">
           <div>
-            <img src="/image/${report.reporter.userImageId}" alt="user image" class="image-photo-admin"/>
+            <c:url value="/image/${report.reporter.userImageId}" var="imageUrlReporter"/>
+            <img src="${imageUrlReporter}" alt="user image" class="image-photo-admin"/>
           </div>
           <div class="short-info-profile">
             <div class="inline-text">
@@ -35,7 +36,8 @@
             <h6 class="italic-text"><spring:message code="${param.reportedRole}"/></h6>
           </div>
           <div>
-            <img src="/image/${report.reported.userImageId}" alt="user image" class="image-photo-admin"/>
+            <c:url value="/image/${report.reporter.userImageId}" var="imageUrlReported"/>
+            <img src="${imageUrlReported}" alt="user image" class="image-photo-admin"/>
           </div>
         </div>
       </div>

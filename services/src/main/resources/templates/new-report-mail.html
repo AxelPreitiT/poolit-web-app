@@ -70,10 +70,11 @@
             </a>
         </div>
         <h1 class="text-center mb-4" th:text="#{emails.newReport.title}"></h1>
-        <p th:text="#{emails.newReport.message (${report.reporter.name}, ${report.reporter.surname})}"></p>
-        <p th:text="#{emails.newReport.message2 (${report.reason.name})}"></p>
+        <p th:text="#{emails.newReport.message (${report.reporter.name}, ${report.reporter.surname},${report.description})}"></p>
+        <p style="display: inline" th:text="#{emails.newReport.message2}"></p>
+        <span style="display: inline" th:text="#{${report.reason.springMessageCode}}"></span>
         <div class="btn-container">
-            <a style="color: white !important;" th:href="@{{baseUrl}/admin}" class="btn" th:text="#{emails.newReport.btn}"></a>
+            <a style="color: white !important;" th:href="@{{baseUrl}/admin(baseUrl=${baseUrl})}" class="btn" th:text="#{emails.newReport.btn}"></a>
         </div>
     </div>
 </div>

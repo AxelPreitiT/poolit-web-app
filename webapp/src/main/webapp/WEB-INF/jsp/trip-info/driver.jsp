@@ -78,7 +78,7 @@
           <h3>Estado: </h3>
           <c:choose>
             <c:when test="${trip.tripHasEnded}">
-              <i class="bi bi-check h3 success"></i>
+              <i class="bi bi-check h1 success"></i>
               <h3 class="success"><spring:message code="tripStatus.finished"/></h3>
             </c:when>
             <c:when test="${!trip.tripHasStarted}">
@@ -202,10 +202,17 @@
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="ratings">
                           <c:set value='${passenger.user.passengerRating}' var="rating" scope="request"/>
-                          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                            <jsp:param name="fontSize" value="h5"/>
-                            <jsp:param name="fontColor" value="secondary-color"/>
-                          </jsp:include>
+                          <c:choose>
+                            <c:when test="${rating == 0}">
+                              <strong class="text"><spring:message code="review.none"/></strong>
+                            </c:when>
+                            <c:otherwise>
+                              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                <jsp:param name="fontSize" value="h5"/>
+                                <jsp:param name="fontColor" value="secondary-color"/>
+                              </jsp:include>
+                            </c:otherwise>
+                          </c:choose>
                         </div>
                       </div>
                     </div>
