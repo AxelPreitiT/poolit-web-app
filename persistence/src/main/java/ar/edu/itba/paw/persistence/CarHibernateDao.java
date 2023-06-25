@@ -24,9 +24,9 @@ public class CarHibernateDao implements CarDao {
     private EntityManager em;
 
     @Override
-    public Car create(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, List<FeatureCar> features) {
+    public Car create(String plate, String infoCar, User user, long imageId, int seats, CarBrand brand, List<FeatureCar> features) {
         LOGGER.debug("Adding new car with plate '{}' from user with id {} to the database", plate, user.getUserId());
-        final Car car = new Car(plate,infoCar,user,image_id, seats, brand, features);
+        final Car car = new Car(plate,infoCar,user,imageId, seats, brand, features);
         em.persist(car);
         LOGGER.info("Car with plate '{}' added to the database with id {}", plate, car.getCarId());
         LOGGER.debug("New {}", car);
@@ -72,16 +72,15 @@ public class CarHibernateDao implements CarDao {
 
 
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats,  List<FeatureCar> features, long imageId){
+    public Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, long imageId){
         Optional<Car> car = findById(carId);
         if(car.isPresent()){
             Car carToModify = car.get();
             carToModify.setInfoCar(infoCar);
             carToModify.setSeats(seats);
             carToModify.setFeatures(features);
-            carToModify.setImage_id(imageId);
-            em.merge(carToModify);
-            return carToModify;
+            carToModify.setImageId(imageId);
+            return em.merge(carToModify);
         }
         return null;
     }

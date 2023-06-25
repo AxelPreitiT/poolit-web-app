@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @Entity
@@ -212,7 +213,7 @@ public class Trip {
     }
 
     public int getTotalTrips(){
-        return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
+        return (int) startDateTime.until(endDateTime, ChronoUnit.DAYS) / 7 + 1;
     }
     public double getTotalPrice(){
         return price*getTotalTrips();
@@ -222,6 +223,9 @@ public class Trip {
         return endDateTime.isBefore(LocalDateTime.now());
     }
 
+    public boolean getTripHasStarted(){
+        return LocalDateTime.now().compareTo(startDateTime)>=0;
+    }
     public LocalDateTime getQueryStartDateTime() {
         return queryStartDateTime;
     }
@@ -242,7 +246,7 @@ public class Trip {
         return queryEndDateTime.format(Format.getTimeFormatter());
     }
     public int getQueryTotalTrips(){
-        return (Period.between(queryStartDateTime.toLocalDate(),queryEndDateTime.toLocalDate()).getDays())/7+1;
+        return (int) queryStartDateTime.until(queryEndDateTime, ChronoUnit.DAYS) / 7 + 1;
     }
 
     public double getQueryPrice(){

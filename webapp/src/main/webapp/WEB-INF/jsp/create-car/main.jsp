@@ -12,7 +12,9 @@
 </head>
 <body class="background-color">
     <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
-    <c:url value="/cars/create" var="createCarUrl"/>
+    <c:url value="/cars/create" var="createCarUrl">
+        <c:param name="firstCar" value="${firstCar}"/>
+    </c:url>
     <form:form modelAttribute="createCarForm" action="${createCarUrl}" method="post" cssClass="form-style"  enctype="multipart/form-data">
     <div class="main-container-style container-color">
         <div id="main-header-row">

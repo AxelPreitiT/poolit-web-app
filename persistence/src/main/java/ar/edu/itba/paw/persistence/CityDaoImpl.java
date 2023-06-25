@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+/*
 import ar.edu.itba.paw.interfaces.persistence.CityDao;
 import ar.edu.itba.paw.models.City;
 import org.slf4j.Logger;
@@ -46,3 +47,6 @@ public class CityDaoImpl implements CityDao {
         return result;
     }
 }
+
+
+ */

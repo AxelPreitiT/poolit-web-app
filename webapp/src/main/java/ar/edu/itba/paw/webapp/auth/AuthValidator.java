@@ -3,9 +3,10 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.webapp.exceptions.UserNotLoggedInException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,10 @@ public class AuthValidator {
         this.tripService = tripService;
     }
     //TODO: ver si funciona aunque tire excepcion
-    public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException{
+    public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        if(!user.getRole().equals("DRIVER")){
+        if(!user.getIsDriver()){
             LOGGER.debug("User with id {} tried to delete a trip without being a driver",user.getUserId());
             return false;
         }

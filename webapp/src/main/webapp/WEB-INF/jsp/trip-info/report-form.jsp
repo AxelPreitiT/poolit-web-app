@@ -15,7 +15,7 @@
     <div class="report-form-header">
         <img src="${userReportedImageUrl}" alt="${userReportedName}" class="passenger-image">
         <div class="report-form-title">
-            <h3 class="secondary-color">${userReportedName}</h3>
+            <h3 class="secondary-color"><c:out value="${userReportedName}"/></h3>
             <hr class="secondary-color">
         </div>
     </div>

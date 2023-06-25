@@ -40,7 +40,8 @@
                         </jsp:include>
                         <div id="total-results-row">
                             <span class="italic-text">
-                                <spring:message code="searchTrip.foundFormat" arguments="${tripsContent.startNumber+1}, ${tripsContent.endNumber+1}, ${tripsContent.totalCount}"/>
+                                <spring:message code="searchTrip.foundFormat" arguments="${tripsContent.startNumber+1}, ${tripsContent.endNumber+1}, ${tripsContent.totalCount}" var="foundFormatString"/>
+                                <c:out value="${foundFormatString}"/>
                             </span>
                         </div>
                         <c:if test="${tripsContent.moreThanOnePage}">

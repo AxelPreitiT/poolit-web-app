@@ -37,35 +37,37 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car createCar(String plate, String infoCar, byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features) throws UserNotFoundException {
         User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        final long image_id;
+        final long imageId;
         if (imgData.length<=0){
             //TODO CAMBIAR EN PRODUCCION A LA DEFAULT
-            image_id = 2;
+            imageId = 1;
         } else {
-            image_id = imageService.createImage(imgData).getImageId();
+            imageId = imageService.createImage(imgData).getImageId();
         }
-        return carDao.create(plate, infoCar, user, image_id, seats, brand, features);
+        return carDao.create(plate, infoCar, user, imageId, seats, brand, features);
     }
 
     @Transactional
     @Override
-    public Car ModifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
+    public Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
         Car car=findById(carId).orElseThrow(CarNotFoundException::new);
 
         if(imgData.length<=0){
-            return carDao.ModifyCar(carId, infoCar, seats, features, car.getImage_id());
+            return carDao.modifyCar(carId, infoCar, seats, features, car.getImageId());
         }
         final long newImageId = imageService.createImage(imgData).getImageId();
-        return carDao.ModifyCar(carId, infoCar, seats, features, newImageId);
+        return carDao.modifyCar(carId, infoCar, seats, features, newImageId);
 
 
     }
 
+    @Transactional
     @Override
     public Optional<Car> findById(long carId) {
         return carDao.findById(carId);
     }
 
+    @Transactional
     @Override
     public List<Car> findCurrentUserCars() throws UserNotFoundException {
         //TODO Chequear si esta funcion esta hecha para solo ser usada por el usuario principal
@@ -73,17 +75,16 @@ public class CarServiceImpl implements CarService {
         return carDao.findByUser(user);
     }
 
+    @Transactional
     @Override
     public Optional<Car> findByUserAndPlate(User user, String plate){
         return carDao.findByPlateAndUser(plate,user);
     }
 
+    @Transactional
     @Override
     public boolean currentUserIsCarOwner(Car car){
         Optional<User> user = userService.getCurrentUser();
-        if(user.isPresent()){
-            return car.getUser().getUserId() == user.get().getUserId();
-        }
-        return false;
+        return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
     }
 }

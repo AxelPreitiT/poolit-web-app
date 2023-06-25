@@ -44,10 +44,10 @@ public class User {
     @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reported_id = user_id)")
     private int reportsReceived;
 
-    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reported_id = user_id AND reports.status = 'APPROVED')")
+    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reporter_id = user_id AND reports.status = 'APPROVED')")
     private int reportsApproved;
 
-    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reported_id = user_id AND reports.status = 'REJECTED')")
+    @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reporter_id = user_id AND reports.status = 'REJECTED')")
     private int reportsRejected;
 
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
@@ -260,5 +260,14 @@ public class User {
     }
     public boolean isEnabled() {
         return enabled;
+    }
+    public boolean getIsDriver() {
+        return this.role.equals(UserRole.DRIVER.getText()) || this.role.equals(UserRole.ADMIN.getText());
+    }
+    public boolean getIsUser() {
+        return this.role.equals(UserRole.USER.getText());
+    }
+    public boolean getIsAdmin() {
+        return this.role.equals(UserRole.ADMIN.getText());
     }
 }

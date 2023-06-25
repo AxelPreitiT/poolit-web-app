@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.User;
@@ -62,7 +62,7 @@ public class ReviewController {
             @PathVariable("tripId") final long tripId,
             @PathVariable("passengerId") final long passengerId,
             @Valid @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm
-    ) {
+    ) throws UserNotFoundException, UserNotLoggedInException, TripNotFoundException, PassengerNotFoundException {
         LOGGER.debug("POST request to /reviews/trips/{}/passengers/{}", tripId, passengerId);
         passengerReviewService.createPassengerReview(tripId, passengerId, passengerReviewForm.getRating(), passengerReviewForm.getComment(), passengerReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));
@@ -74,7 +74,7 @@ public class ReviewController {
             @PathVariable("tripId") final long tripId,
             @PathVariable("driverId") final long driverId,
             @Valid @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm
-    ) {
+    ) throws UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {
         LOGGER.debug("POST request to /reviews/trips/{}/drivers/{}", tripId, driverId);
         driverReviewService.createDriverReview(tripId, driverId, driverReviewForm.getRating(), driverReviewForm.getComment(), driverReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));
@@ -86,7 +86,7 @@ public class ReviewController {
             @PathVariable("tripId") final long tripId,
             @PathVariable("carId") final long carId,
             @Valid @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
-    ) {
+    ) throws CarNotFoundException, UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         LOGGER.debug("POST request to /reviews/trips/{}/cars/{}", tripId, carId);
         carReviewService.createCarReview(tripId, carId, carReviewForm.getRating(), carReviewForm.getComment(), carReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));

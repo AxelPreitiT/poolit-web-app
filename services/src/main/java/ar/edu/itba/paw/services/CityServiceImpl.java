@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.models.City;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +20,13 @@ public class CityServiceImpl implements CityService {
         this.cityDao = cityDao;
     }
 
+    @Transactional
     @Override
     public Optional<City> findCityById(final long id){
         return cityDao.findCityById(id);
     }
 
+    @Transactional
     @Override
     public List<City> getCitiesByProvinceId(final long provinceId){
         return cityDao.getCitiesByProvinceId(provinceId);

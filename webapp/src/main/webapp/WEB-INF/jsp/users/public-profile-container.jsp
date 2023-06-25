@@ -15,8 +15,9 @@
       <img class="circular--square" src="${profileImageUrl}" alt="<spring:message code="register.profileImage"/>">
     </div>
   </div>
-  <h3 id="user-name"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
-  <c:if test="${user.role eq 'DRIVER'}">
+  <spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}" var="userNameFormatString"/>
+  <h3 id="user-name"><c:out value="${userNameFormatString}"/> </h3>
+  <c:if test="${user.isDriver}">
     <div class="row-info">
       <jsp:useBean id="countTrips" type="java.lang.Integer" scope="request"/>
       <h6><spring:message code="user.countTrips"/></h6>

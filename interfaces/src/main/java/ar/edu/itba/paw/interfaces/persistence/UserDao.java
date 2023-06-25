@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UserDao {
     User create(final String username, final String surname, final String email,
-                final String phone, final String password, final City bornCityId, final Locale mailLocale, final String role, long user_image_id);
+                final String phone, final String password, final City bornCityId, final Locale mailLocale, final String role, long userImageId);
 
     Optional<User> findById(long userId);
 
@@ -19,9 +19,9 @@ public interface UserDao {
 
     void changeRole(long userId, String role);
 
-    public User updateProfile(final String username, final String surname, final String email,
-                              final String password, final City bornCity, final String mailLocale, final String role, long user_image_id);
-    void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale, long imageId);
+    User updateProfile(final String username, final String surname, final String email,
+                              final String password, final City bornCity, final String mailLocale, final String role, long userImageId);
+    void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale,long imageId);
 
     void blockUser(long blockerId, long blockedId);
     void unblockUser(long blockerId, long blockedId);

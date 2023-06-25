@@ -57,14 +57,14 @@
                     <div class="user-container">
                         <div class="user-container-item">
                             <a href="${reporterProfileUrl}">
-                                <h3 class="secondary-color">${reporterName}</h3>
+                                <h3 class="secondary-color"><c:out value="${reporterName}"/></h3>
                             </a>
                             <h6 class="italic-text"><spring:message code="${report.relation.reporterSpringMessageCode}"/></h6>
                         </div>
                         <c:if test="${report.relation.reporterADriver}">
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
-                                <c:set value="${report.reporter.driverRating}" var="rating"/>
+                                <c:set value="${report.reporter.driverRating}" var="rating" scope="request"/>
                                 <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                                     <jsp:param name="fontSize" value="h4"/>
                                     <jsp:param name="fontColor" value="secondary-color"/>
@@ -73,7 +73,7 @@
                         </c:if>
                         <div class="user-container-item">
                             <strong><spring:message code="report.role.passenger.rating"/></strong>
-                            <c:set value="${report.reporter.passengerRating}" var="rating"/>
+                            <c:set value="${report.reporter.passengerRating}" var="rating" scope="request"/>
                             <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                                 <jsp:param name="fontSize" value="h4"/>
                                 <jsp:param name="fontColor" value="secondary-color"/>
@@ -99,14 +99,14 @@
                     <div class="user-container">
                         <div class="user-container-item">
                             <a href="${reportedProfileUrl}">
-                                <h3 class="secondary-color">${reportedName}</h3>
+                                <h3 class="secondary-color"><c:out value="${reportedName}"/></h3>
                             </a>
                             <h6 class="italic-text"><spring:message code="${report.relation.reportedSpringMessageCode}"/></h6>
                         </div>
                         <c:if test="${report.relation.reportedADriver}">
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
-                                <c:set value="${report.reported.driverRating}" var="rating"/>
+                                <c:set value="${report.reported.driverRating}" var="rating" scope="request"/>
                                 <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                                     <jsp:param name="fontSize" value="h4"/>
                                     <jsp:param name="fontColor" value="secondary-color"/>
@@ -115,8 +115,11 @@
                         </c:if>
                         <div class="user-container-item">
                             <strong><spring:message code="report.role.passenger.rating"/></strong>
-                            <c:set value="${report.reported.passengerRating}" var="rating"/>
-                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp"/>
+                            <c:set value="${report.reported.passengerRating}" var="rating" scope="request"/>
+                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                <jsp:param name="fontSize" value="h4"/>
+                                <jsp:param name="fontColor" value="secondary-color"/>
+                            </jsp:include>
                         </div>
                         <div class="user-container-item user-container-row">
                             <strong><spring:message code="report.reportsPublished" arguments=":"/></strong>

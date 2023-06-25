@@ -169,8 +169,8 @@
                                             </c:if>
                                             <div class="car-info-details-row">
                                                 <i class="bi bi-caret-right-fill light-text"></i>
-                                                <spring:message code="profile.plate" arguments="${car.plate}" var="plateString"/>
-                                                <span class="light-text"><c:out value="${plateString}"/></span>
+                                                <spring:message code="profile.plate" arguments="${car.plate}" var="carPlateString"/>
+                                                <span class="light-text"><c:out value="${carPlateString}"/> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -190,7 +190,7 @@
                             <div id="car-image-container">
                                 <c:forEach items="${cars}" var="car">
                                     <div class="collapse collapse-horizontal" id="car-info-image-<c:out value="${car.carId}"/>">
-                                        <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+                                        <c:url value="/image/${car.imageId}" var="carImageUrl"/>
                                         <div class="image-container">
                                             <img src="${carImageUrl}" alt="car image"/>
                                         </div>
@@ -251,6 +251,14 @@
                 </button>
             </div>
         </form:form>
+        <c:if test="${!(empty carAdded) && carAdded}">
+            <div id="toast-container">
+                <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                    <jsp:param name="title" value="createCar.success.toast.title"/>
+                    <jsp:param name="message" value="createCar.success.toast.message"/>
+                </jsp:include>
+            </div>
+        </c:if>
     </div>
     <script src="<c:url value="/resources/js/pages/createTrip.js"/>" type="module"></script>
     <script src="<c:url value="/resources/js/trips/maxSeats.js"/>" type="module"></script>

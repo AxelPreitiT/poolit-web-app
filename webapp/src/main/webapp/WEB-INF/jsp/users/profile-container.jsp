@@ -27,7 +27,8 @@
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
     </div>
   </div>
-  <h3 id="user-name" class="no-edit"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></h3>
+      <spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}" var="userNameString"/>
+  <h3 id="user-name" class="no-edit"><c:out value="${userNameString}"/></h3>
   <div class="row-info rows edit hidden">
     <h6><spring:message code="user.name"/></h6>
     <form:input path="username" cssClass="form-control " id="username" />

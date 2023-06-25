@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.interfaces.persistence.DriverReviewDao;
 import ar.edu.itba.paw.interfaces.services.DriverReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
@@ -19,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class DriverReviewServiceImpl implements DriverReviewService {
@@ -31,20 +34,19 @@ public class DriverReviewServiceImpl implements DriverReviewService {
     private final UserService userService;
 
     @Autowired
-    public DriverReviewServiceImpl(DriverReviewDao driverReviewDao, TripService tripService, UserService userService1) {
+    public DriverReviewServiceImpl(DriverReviewDao driverReviewDao, TripService tripService, UserService userService) {
         this.driverReviewDao = driverReviewDao;
         this.tripService = tripService;
-        this.userService = userService1;
+        this.userService = userService;
     }
 
     @Transactional
     @Override
-    public DriverReview createDriverReview(final long tripId, final long driverId, int rating, String comment, DriverReviewOptions option) {
-        //Ver como tirar excepciones
-        Trip trip = tripService.findById(tripId).get();
-        User user = userService.getCurrentUser().get();
-        Passenger reviewer = tripService.getPassenger(trip,user).get();
-        User driver = userService.findById(driverId).get();
+    public DriverReview createDriverReview(final long tripId, final long driverId, int rating, String comment, DriverReviewOptions option) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException, UserNotFoundException {
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        Passenger reviewer = tripService.getPassenger(trip,user).orElseThrow(PassengerNotFoundException::new);
+        User driver = userService.findById(driverId).orElseThrow(UserNotFoundException::new);
         if(!canReviewDriver(trip, reviewer, driver)) {
             IllegalStateException e = new IllegalStateException();
             LOGGER.error("Passenger with id {} tried to review driver with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), driver.getUserId(), e);
@@ -53,30 +55,35 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.createDriverReview(trip, reviewer, driver, rating, comment, option);
     }
 
+    @Transactional
     @Override
-    public double getDriverRating(long userId) {
-        User user = userService.findById(userId).get();
+    public double getDriverRating(long userId) throws UserNotFoundException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return driverReviewDao.getDriverRating(user);
     }
 
+    @Transactional
     @Override
-    public double getDriverRatingOwnUser() {
-        User user = userService.getCurrentUser().get();;
+    public double getDriverRatingOwnUser() throws UserNotLoggedInException {
+        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         return driverReviewDao.getDriverRating(user);
     }
 
+    @Transactional
     @Override
-    public PagedContent<DriverReview> getDriverReviews(long userId, int page, int pageSize) {
-        User user = userService.findById(userId).get();
+    public PagedContent<DriverReview> getDriverReviews(long userId, int page, int pageSize) throws UserNotFoundException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return driverReviewDao.getDriverReviews(user, page, pageSize);
     }
 
+    @Transactional
     @Override
-    public PagedContent<DriverReview> getDriverReviewsOwnUser(int page, int pageSize) {
-        User user = userService.getCurrentUser().get();
+    public PagedContent<DriverReview> getDriverReviewsOwnUser(int page, int pageSize) throws UserNotLoggedInException {
+        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         return driverReviewDao.getDriverReviews(user, page, pageSize);
     }
 
+    @Transactional
     @Override
     public boolean canReviewDriver(Trip trip, Passenger reviewer, User driver) {
         if(!tripService.userIsDriver(trip.getTripId(), driver)) {
@@ -105,11 +112,12 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.canReviewDriver(trip, reviewer, driver) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
+    @Transactional
     @Override
-    public ItemReview<User> getDriverReviewState(long tripId) {
-        Trip trip = tripService.findById(tripId).get();
-        User user = userService.getCurrentUser().get();
-        Passenger reviewer = tripService.getPassenger(tripId, user).get();
+    public ItemReview<User> getDriverReviewState(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
+        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        Passenger reviewer = tripService.getPassenger(tripId, user).orElseThrow(PassengerNotFoundException::new);
         User driver = trip.getDriver();
         return new ItemReview<>(driver, getReviewState(trip, reviewer, driver));
     }

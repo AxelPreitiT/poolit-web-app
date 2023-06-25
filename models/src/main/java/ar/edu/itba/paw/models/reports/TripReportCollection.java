@@ -15,6 +15,10 @@ public class TripReportCollection {
         this.passengers = passengers;
     }
 
+    public static TripReportCollection empty() {
+        return new TripReportCollection(null, null);
+    }
+
     public ItemReport<User> getDriver() {
         return driver;
     }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
 import java.sql.CallableStatement;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,17 +22,18 @@ public class VerificationToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "date")
-    private Date date;
+    private LocalDate date;
 
-    public VerificationToken(User user, String token, Date date) {
+
+    public VerificationToken(User user, String token, LocalDate date) {
         this.user = user;
         this.token = token;
         this.date = date;
     }
 
-    VerificationToken(){
+    protected VerificationToken(){
 
     }
 
@@ -52,7 +54,7 @@ public class VerificationToken {
     }
 
 
-    public void setExpiryDate(Date date) {
+    public void setExpiryDate(LocalDate date) {
         this.date = date;
     }
 
@@ -64,11 +66,11 @@ public class VerificationToken {
         this.token = token;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

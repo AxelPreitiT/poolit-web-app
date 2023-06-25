@@ -23,10 +23,12 @@
                 <span class="light-text detail detail-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
                 <span class="light-text">
                 <c:if test="${!trip.queryIsRecurrent}">
-                    <spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.queryStartDateString}"/>
+                    <spring:message code="tripDetails.card.formatNotRecurrentDate" arguments="${trip.queryStartDateString}" var="tripNotRecurrentDateString"/>
+                    <c:out value="${tripNotRecurrentDateString}"/>
                 </c:if>
                 <c:if test="${trip.queryIsRecurrent}">
-                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryStartDateString},${trip.queryEndDateString}"/>
+                    <spring:message code="tripDetails.card.formatRecurrentDate" arguments="${trip.queryStartDateString},${trip.queryEndDateString}" var="tripRecurrentDateString"/>
+                    <c:out value="${tripRecurrentDateString}"/>
                 </c:if>
                 </span>
             </div>
@@ -35,8 +37,8 @@
             <c:url value="/cars/${trip.car.carId}" var="carUrl"/>
             <a href="${carUrl}">
                 <c:choose>
-                    <c:when test="${trip.car.image_id>1}">
-                        <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                    <c:when test="${trip.car.imageId>1}">
+                        <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
                         <img src="${carImageUrl}" alt="car image" class="image-photo car-image"/>
                     </c:when>
                     <c:otherwise>
@@ -65,7 +67,10 @@
                     <c:choose>
                         <c:when test="${trip.freeSeats==0}"><spring:message code="selectTrip.seats.cero"/></c:when>
                         <c:when test="${trip.freeSeats==1}"><spring:message code="selectTrip.seats.one"/></c:when>
-                        <c:otherwise><spring:message code="selectTrip.seats.many" arguments="${trip.freeSeats}"/></c:otherwise>
+                        <c:otherwise>
+                            <spring:message code="selectTrip.seats.many" arguments="${trip.freeSeats}" var="tripSeatsString"/>
+                            <c:out value="${tripSeatsString}"/>
+                        </c:otherwise>
                     </c:choose>
                 </span>
             </div>
@@ -81,7 +86,10 @@
                 </a>
                 <div class="driver-content">
                     <a href="${userUrl}" class="show-row profile-link">
-                        <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}"/></span>
+                        <spring:message code="user.nameFormat" arguments="${trip.driver.name}, ${trip.driver.surname}" var="userNameFormatString"/>
+                        <span class="light-text detail">
+                            <c:out value="${userNameFormatString}"/>
+                        </span>
                     </a>
                     <div class="ratings">
                         <c:set var="rating" value="${trip.driverRating}" scope="request"/>
