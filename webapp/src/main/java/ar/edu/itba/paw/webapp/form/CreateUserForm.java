@@ -37,7 +37,6 @@ public class CreateUserForm {
     private String mailLocale;
 
     @MPFile
-    @MPFileNotNull
     private MultipartFile imageFile;
 
     public String getUsername() {
