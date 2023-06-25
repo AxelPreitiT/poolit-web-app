@@ -28,22 +28,24 @@
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
     </div>
   </div>
-  <h3 id="user-name">
-      <c:choose>
-          <c:when test="${car.brand ne 'UNKNOWN'}">
-              <c:out value="${car.brand}"/>
-          </c:when>
-      </c:choose>
-  </h3>
-  <div class="row-info rows">
-    <h6><spring:message code="createCar.carInfo"/></h6>
-    <h4 class="no-edit"><c:out value="${car.infoCar}"/></h4>
-    <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
-    <div class="error-item">
-        <i class="bi bi-exclamation-circle-fill danger"></i>
-        <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
-    </div>
+  <div id="user-name">
+      <h3 class="no-edit">
+          <c:if test="${car.hasInfoCar()}">
+              <c:out value="${car.infoCar}"/>
+          </c:if>
+      </h3>
+      <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
+      <div class="error-item">
+          <i class="bi bi-exclamation-circle-fill danger"></i>
+          <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
+      </div>
   </div>
+  <c:if test="${car.hasBrand()}">
+      <div class="row-info">
+          <h6><spring:message code="createCar.brand"/></h6>
+          <h4><c:out value="${car.brand}"/></h4>
+      </div>
+  </c:if>
   <div class="row-info rows">
     <h6><spring:message code="createCar.seats"/></h6>
     <h4 class="no-edit"><c:out value="${car.seats}"/></h4>

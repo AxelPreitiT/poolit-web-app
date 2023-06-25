@@ -120,4 +120,12 @@ public class Car {
     public boolean hasFeature(FeatureCar feature) {
         return features != null && features.contains(feature);
     }
+
+    public boolean hasInfoCar() {
+        return infoCar != null && !infoCar.isEmpty();
+    }
+
+    public boolean hasBrand() {
+        return brand != null && brand.hasBrand();
+    }
 }
