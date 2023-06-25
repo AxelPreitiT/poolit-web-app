@@ -194,9 +194,8 @@ public class TripHibernateDao implements TripDao {
         if(passenger.getEndDateTime().isBefore(newLastDateTime)){
             throw new IllegalArgumentException();
         }
-        em.merge(passenger);
         passenger.setEndDateTime(newLastDateTime);
-        return;
+        em.merge(passenger);
     }
 
     @Override
