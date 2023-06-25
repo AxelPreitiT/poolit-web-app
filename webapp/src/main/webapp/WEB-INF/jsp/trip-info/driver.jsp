@@ -37,7 +37,7 @@
           </div>
           <div class="col-sm-6 col-md-5 col-lg-5">
             <div id="car-info-image">
-              <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+              <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
               <div class="placeholder-image">
                 <img src="${carImageUrl}" alt="car image"/>
               </div>

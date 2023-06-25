@@ -35,8 +35,8 @@
             <c:url value="/cars/${trip.car.carId}" var="carUrl"/>
             <a href="${carUrl}">
                 <c:choose>
-                    <c:when test="${trip.car.image_id>1}">
-                        <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
+                    <c:when test="${trip.car.imageId>1}">
+                        <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
                         <img src="${carImageUrl}" alt="car image" class="image-photo car-image"/>
                     </c:when>
                     <c:otherwise>

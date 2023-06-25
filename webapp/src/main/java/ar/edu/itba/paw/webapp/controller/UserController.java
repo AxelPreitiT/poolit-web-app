@@ -12,6 +12,7 @@ import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
 import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.utils.DefaultBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -83,7 +85,8 @@ public class UserController {
 
     @RequestMapping(value = CREATE_USER_PATH, method = RequestMethod.POST)
     public ModelAndView createUserPost(
-            @Valid @ModelAttribute("createUserForm") final CreateUserForm form, final BindingResult errors
+            @Valid @ModelAttribute("createUserForm") final CreateUserForm form, final BindingResult errors,
+            RedirectAttributes redirectAttributes
     ) throws EmailAlreadyExistsException, CityNotFoundException {
         LOGGER.debug("POST Request to {}", CREATE_USER_PATH);
         if(errors.hasErrors()){
@@ -103,22 +106,24 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-        final ModelAndView mav = new ModelAndView("/users/login");
-        mav.addObject("sentToken", true);
-        return mav;
+        redirectAttributes.addFlashAttribute("sentToken", new DefaultBoolean(true));
+        return new ModelAndView("redirect:/users/login");
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.GET)
-    public ModelAndView loginUserGet() {
+    public ModelAndView loginUserGet(RedirectAttributes redirectAttributes, @ModelAttribute("alreadyValidation") final DefaultBoolean alreadyValidation,
+                                     @ModelAttribute("sentToken") final DefaultBoolean sentToken) {
         LOGGER.debug("GET Request to {}", LOGIN_USER_PATH);
         final ModelAndView mav = new ModelAndView("users/login");
+        mav.addObject("sentToken",sentToken.getValue());
+        mav.addObject("alreadyValidation",alreadyValidation.getValue());
         return mav;
     }
 
     @RequestMapping(value = LOGIN_USER_PATH, method = RequestMethod.POST)
     public ModelAndView loginUserPost() {
         LOGGER.debug("POST Request to {}", LOGIN_USER_PATH);
-        return new ModelAndView("users/login");
+        return new ModelAndView("redirect:users/login");
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
@@ -178,10 +183,9 @@ public class UserController {
 
         userService.modifyUser( form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),form.getMailLocale(), form.getImageFile().getBytes());
 
-        return profileView(false,form);
+        return new ModelAndView("redirect:/users/profile");
     }
 
-    //TODO: cambiar para que haga un redirect al privado si es el mismo usuario
     @RequestMapping(value = "/profile/{id:\\d+$}", method = RequestMethod.GET)
     public ModelAndView publicProfile(@PathVariable("id") final long userId) throws UserNotFoundException
     {
@@ -231,7 +235,6 @@ public class UserController {
     @RequestMapping(value = "/changeRole", method = RequestMethod.POST)
     public ModelAndView changeRoleToDriver() throws UserNotFoundException, UserNotLoggedInException {
         LOGGER.debug("POST Request to /changeRole");
-        //TODO no estoy seguro que hacer aca para facade
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         pawUserDetailsService.update(user);
         userService.changeToDriver();
@@ -257,19 +260,19 @@ public class UserController {
 
     @RequestMapping(value = "/users/sendToken", method = RequestMethod.POST)
     public ModelAndView sendToken(@Valid @ModelAttribute("emailForm") final EmailForm form,
-                                  final BindingResult errors) throws Exception {
+                                  final BindingResult errors,
+                                  RedirectAttributes redirectAttributes) throws Exception {
 
         if(errors.hasErrors()){
             return getTokenView(form);
         }
-        final ModelAndView mav = new ModelAndView("/users/login");
-        //sendVerification devuelve falso si ya esta verificado
         if(!userService.sendVerificationEmail(form.getEmail())){
-            mav.addObject("alreadyValidation", true);
-            return mav;
+            redirectAttributes.addFlashAttribute("alreadyValidation", new DefaultBoolean(true));
+            return new ModelAndView("redirect:/users/login");
+            //return mav;
         }
-        mav.addObject("sentToken", true);
-        return mav;
+        redirectAttributes.addFlashAttribute("sentToken", new DefaultBoolean(true));
+        return new ModelAndView("redirect:/users/login");
     }
 
 

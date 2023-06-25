@@ -85,7 +85,7 @@ public class ReportServiceImplTest {
         Assert.assertEquals(REASON, resp.getReason());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = TripNotFoundException.class)
     public void TestDontHaveTripCreateReport() throws UserNotFoundException, TripNotFoundException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(REPORTED));
         when(tripService.findById(anyLong())).thenReturn(Optional.empty());
@@ -95,7 +95,7 @@ public class ReportServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ReportNotFoundException.class)
     public void TestRejectReportDoesntExist() throws ReportNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -104,7 +104,7 @@ public class ReportServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = ReportNotFoundException.class)
     public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException, ReportNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
 

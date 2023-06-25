@@ -105,7 +105,7 @@ public class CarController {
             return publicCar(carId, FIRST_PAGE, form);
         }
         carService.modifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures(), form.getImageFile().getBytes());
-        return publicCar(carId, FIRST_PAGE, form);
+        return new ModelAndView("redirect:/cars/" + carId);
     }
 
 }

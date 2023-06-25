@@ -14,13 +14,13 @@
   <form:form modelAttribute="updateCarForm" action="${updateCarUrl}" method="post" cssClass="form-style" enctype="multipart/form-data">
   <div class="avatar-img">
     <div class="circular--landscape no-edit">
-      <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+      <c:url value="/image/${car.imageId}" var="carImageUrl"/>
       <img class="circular--square" src="${carImageUrl}" alt="<spring:message code="updateCar.image"/>">
     </div>
     <div class="circular--landscape-container hidden edit" id="car-image-display">
         <label for="image-file" id="image-label" class="secondary-bg-color shadow-btn button-style">
             <span class="edit-icon"><i class="icon bi bi-pencil-fill secondary-color h1"></i></span>
-            <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+            <c:url value="/image/${car.imageId}" var="carImageUrl"/>
             <div class="circular--landscape">
             <img class="circular--square" src="${carImageUrl}" alt="<spring:message code="updateCar.image"/>">
             </div>

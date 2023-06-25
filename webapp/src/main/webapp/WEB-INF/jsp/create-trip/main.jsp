@@ -181,7 +181,7 @@
                             <div id="car-image-container">
                                 <c:forEach items="${cars}" var="car">
                                     <div class="collapse collapse-horizontal" id="car-info-image-<c:out value="${car.carId}"/>">
-                                        <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+                                        <c:url value="/image/${car.imageId}" var="carImageUrl"/>
                                         <div class="image-container">
                                             <img src="${carImageUrl}" alt="car image"/>
                                         </div>

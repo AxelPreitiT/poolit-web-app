@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ar.edu.itba.paw.models.reports.ReportState.IN_REVISION;
 
 @Repository
 public class ReportHibernateDao implements ReportDao {

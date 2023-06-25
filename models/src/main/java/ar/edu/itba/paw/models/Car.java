@@ -37,25 +37,25 @@ public class Car {
     private User user;
 
     @Column(name = "image_id")
-    private long image_id;
+    private long imageId;
 
     protected Car(){
 
     }
 
-    public Car(final long carId, String plate, String infoCar, final User user, final long image_id){
+    public Car(final long carId, String plate, String infoCar, final User user, final long imageId){
         this.carId=carId;
         this.plate=plate;
         this.infoCar=infoCar;
         this.user=user;
-        this.image_id=image_id;
+        this.imageId = imageId;
     }
 
-    public Car(String plate, String infoCar, User user, long image_id, int seats, CarBrand brand, List<FeatureCar> features) {
+    public Car(String plate, String infoCar, User user, long imageId, int seats, CarBrand brand, List<FeatureCar> features) {
         this.plate = plate;
         this.infoCar = infoCar;
         this.user = user;
-        this.image_id = image_id;
+        this.imageId = imageId;
         this.seats = seats;
         this.brand = brand;
         this.features = features;
@@ -64,15 +64,15 @@ public class Car {
     @Override
     public String toString() {
         return String.format("Car { id: %d, plate: '%s', infoCar: '%s', userId: %d, imageId: %d }",
-                carId, plate, infoCar, user.getUserId(), image_id);
+                carId, plate, infoCar, user.getUserId(), imageId);
     }
 
     public void setInfoCar(String infoCar) {
         this.infoCar = infoCar;
     }
 
-    public void setImage_id(long image_id) {
-        this.image_id = image_id;
+    public void setImageId(long imageId) {
+        this.imageId = imageId;
     }
 
     public int getSeats() {
@@ -115,7 +115,7 @@ public class Car {
         return infoCar;
     }
 
-    public long getImage_id() { return image_id; }
+    public long getImageId() { return imageId; }
 
     public boolean hasFeature(FeatureCar feature) {
         return features != null && features.contains(feature);

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.services;
 
 
-import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.Passenger;
@@ -41,7 +39,7 @@ public class TripReviewServiceImpl implements TripReviewService {
 
     @Transactional
     @Override
-    public TripReviewCollection getReviewsForDriver(final long tripId) throws TripNotFoundException{
+    public TripReviewCollection getReviewsForDriver(final long tripId) throws TripNotFoundException, PassengerNotFoundException, UserNotLoggedInException {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final List<Passenger> passengersComplete = tripService.getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         final List<ItemReview<Passenger>> passengersToReview = passengerReviewService.getPassengersReviewState(tripId, passengersComplete);
@@ -50,7 +48,7 @@ public class TripReviewServiceImpl implements TripReviewService {
 
     @Transactional
     @Override
-    public TripReviewCollection getReviewsForPassenger(long tripId, long userId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
+    public TripReviewCollection getReviewsForPassenger(long tripId, long userId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException, PassengerNotFoundException, UserNotLoggedInException {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         final Passenger passenger = tripService.getPassenger(tripId,userId).orElseThrow(UserNotFoundException::new);
         if(!passenger.getAccepted()) {

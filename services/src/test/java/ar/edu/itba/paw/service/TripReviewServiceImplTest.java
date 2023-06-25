@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.PassengerReviewService;
 import ar.edu.itba.paw.interfaces.services.TripService;
@@ -64,14 +62,14 @@ public class TripReviewServiceImplTest {
 
 
     @Test(expected = TripNotFoundException.class)
-    public void TestNotTripGetReviewsForPassenger() throws UserNotFoundException, TripNotFoundException, CarNotFoundException {
+    public void TestNotTripGetReviewsForPassenger() throws UserNotFoundException, TripNotFoundException, CarNotFoundException, PassengerNotFoundException, UserNotLoggedInException {
         when(tripService.findById(TRIP_ID)).thenReturn(Optional.empty());
         tripReviewService.getReviewsForPassenger(TRIP_ID, 1L);
         Assert.fail();
     }
 
     @Test(expected = UserNotFoundException.class)
-    public void TestNotUserGetReviewsForPassenger2() throws UserNotFoundException, TripNotFoundException, CarNotFoundException {
+    public void TestNotUserGetReviewsForPassenger2() throws UserNotFoundException, TripNotFoundException, CarNotFoundException, PassengerNotFoundException, UserNotLoggedInException {
         when(tripService.findById(TRIP_ID)).thenReturn(Optional.of(trip));
         when(tripService.getPassenger(TRIP_ID, 1L)).thenReturn(Optional.empty());
         tripReviewService.getReviewsForPassenger(TRIP_ID, 1L);

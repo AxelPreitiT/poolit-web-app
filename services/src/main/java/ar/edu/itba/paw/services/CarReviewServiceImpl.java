@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.CarReviewDao;
@@ -50,11 +51,10 @@ public class CarReviewServiceImpl implements CarReviewService {
 
     @Transactional
     @Override
-    public CarReview createCarReview(long tripId, long carId, int rating, String comment, CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
+    public CarReview createCarReview(long tripId, long carId, int rating, String comment, CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException, PassengerNotFoundException {
         Trip trip = tripService.findById(tripId).orElseThrow (TripNotFoundException::new);
         User currentUser = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        Optional<Passenger> reviewer_op = tripService.getPassenger(trip, currentUser);
-        Passenger reviewer = reviewer_op.get();
+        Passenger reviewer = tripService.getPassenger(trip, currentUser).orElseThrow(PassengerNotFoundException::new);
         Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         if(!canReviewCar(trip, reviewer, car)) {
             IllegalStateException e = new IllegalStateException();
