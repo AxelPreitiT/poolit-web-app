@@ -285,7 +285,7 @@
             </c:if>
           </c:forEach>
         </c:url>
-        <jsp:include page="/WEB-INF/jsp/components/trip-card-list-pagination.jsp">
+        <jsp:include page="/WEB-INF/jsp/components/pagination.jsp">
           <jsp:param name="totalPages" value="${passengersContent.totalPages}"/>
           <jsp:param name="currentPage" value="${passengersContent.currentPage+1}"/>
           <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
