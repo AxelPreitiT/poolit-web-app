@@ -447,9 +447,9 @@ public class TripHibernateDao implements TripDao {
         }else if(sortType.equals(Trip.SortType.TIME)){
             queryString += "ORDER BY cast(trips.start_date_time as time) " + (descending?"DESC":"ASC") + ", trips.price ASC";
         }else if(sortType.equals(Trip.SortType.DRIVER_RATING)){
-            queryString += "ORDER BY coalesce(driver_rating.driver_rating,0) DESC, trips.price DESC";
+            queryString += "ORDER BY coalesce(driver_rating.driver_rating,0) DESC, trips.price ASC ";
         }else if(sortType.equals(Trip.SortType.CAR_RATING)){
-            queryString += "ORDER BY coalesce(car_rating.car_rating,0) DESC, trips.price DESC";
+            queryString += "ORDER BY coalesce(car_rating.car_rating,0) DESC, trips.price ASC ";
         }
         Query countQuery = em.createNativeQuery( "SELECT coalesce(sum(trip_count),0) FROM(SELECT count(distinct trip_id) as trip_count "+ queryString + ")aux ");
         Query idQuery = em.createNativeQuery("SELECT trip_id " + queryString);

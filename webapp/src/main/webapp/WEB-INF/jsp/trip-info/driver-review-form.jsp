@@ -76,9 +76,9 @@
                 <strong class="text">
                     <spring:message code="driver.review.comment.label"/>
                 </strong>
-                <span class="italic-text">
-                  <spring:message code="review.optional"/>
-                </span>
+<%--                <span class="italic-text">--%>
+<%--                  <spring:message code="review.optional"/>--%>
+<%--                </span>--%>
             </label>
             <form:textarea path="comment" cssClass="form-control" id="driver-review-comment"/>
         </div>
