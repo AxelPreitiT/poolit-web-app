@@ -126,8 +126,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/users/profile", method = RequestMethod.GET)
-    public ModelAndView profileView(@RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded,
-                                    @ModelAttribute("updateUserForm") final UpdateUserForm form) throws UserNotFoundException, UserNotLoggedInException {
+    public ModelAndView profileView(
+            @RequestParam(value = "carAdded", required = false, defaultValue = "false") final Boolean carAdded,
+            @RequestParam(value = "formHasErrors", required = false, defaultValue = "false") final Boolean formHasErrors,
+            @ModelAttribute("updateUserForm") final UpdateUserForm form
+    ) throws UserNotFoundException, UserNotLoggedInException {
         LOGGER.debug("GET Request to /users/profile");
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         final ModelAndView mav;
@@ -168,6 +171,7 @@ public class UserController {
         mav.addObject("futureTripsAsPassenger", futureTripsAsPassenger);
         mav.addObject("pastTripsAsPassenger", pastTripsAsPassenger);
         mav.addObject("reviewsAsPassenger", reviewsAsPassenger);
+        mav.addObject("formHasErrors", formHasErrors);
         return mav;
     }
 
@@ -177,7 +181,7 @@ public class UserController {
         LOGGER.debug("POST Request to /users/profile");
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in updateUserForm: {}", errors.getAllErrors());
-            return profileView(false,form);
+            return profileView(false,true, form);
         }
 
         userService.modifyUser( form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),form.getMailLocale(), form.getImageFile().getBytes());

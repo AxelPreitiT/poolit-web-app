@@ -8,7 +8,7 @@
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
-<div class="user-info-container">
+<div id="form-container" class="user-info-container <c:if test="${!(empty param.formHasErrors) && param.formHasErrors}">show-form</c:if>">
   <c:url value="/users/profile" var="updateUserUrl"/>
   <form:form modelAttribute="updateUserForm" action="${updateUserUrl}" method="post" cssClass="form-style" enctype="multipart/form-data">
   <div class="avatar-img">

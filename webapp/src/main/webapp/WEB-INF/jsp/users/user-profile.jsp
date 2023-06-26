@@ -18,6 +18,7 @@
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
       <jsp:param name="hasBeenRatedAsDriver" value="${false}"/>
       <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
+      <jsp:param name="formHasErrors" value="${formHasErrors}"/>
     </jsp:include>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
