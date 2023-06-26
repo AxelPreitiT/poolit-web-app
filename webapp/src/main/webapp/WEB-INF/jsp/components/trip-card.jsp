@@ -18,14 +18,39 @@
 
 <div class="card-container">
     <div class="card">
-        <c:url value="/trips/${trip.tripId}" var="tripUrl2">
+        <c:url value="/trips/${trip.tripId}" var="tripUrl">
             <c:param name="startDate" value="${trip.queryStartDateString}"/>
             <c:param name="startTime" value="${trip.startTimeString}"/>
             <c:param name="endDate" value="${trip.queryEndDateString}"/>
         </c:url>
-        <a href="${tripUrl2}">
+        <a href="${tripUrl}">
             <div class="row g-0">
-                <div class="col-8">
+                <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
+                <div class="col-5">
+                    <div id="car-image">
+                        <img src="${carImageUrl}" alt="car image"/>
+                    </div>
+                    <div id="rating-container" class="secondary-bg-color">
+                        <div class="rating-row" id="car-rating">
+                            <i class="bi bi-car-front-fill light-text h6" id="car-rating-icon"></i>
+                            <c:set var="rating" value="${trip.carRating}" scope="request"/>
+                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                <jsp:param name="fontSize" value="h6"/>
+                                <jsp:param name="fontColor" value="light-text"/>
+                            </jsp:include>
+                        </div>
+                        <div class="rating-row" id="driver-rating">
+                            <c:url value="/image/${trip.driver.userImageId}" var="driverImageUrl"/>
+                            <img src="${driverImageUrl}" alt="user image" class="driver-image-photo"/>
+                            <c:set var="rating" value="${trip.driverRating}" scope="request"/>
+                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                <jsp:param name="fontSize" value="h6"/>
+                                <jsp:param name="fontColor" value="light-text"/>
+                            </jsp:include>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-7">
                     <div class="card-body">
                         <div class="route-info">
                             <div class="route-info-row">
@@ -45,9 +70,9 @@
                             </div>
                         </div>
                         <div class="footer-info">
-                            <div class="footer-date-container">
+                            <div id="footer-date-container" class="footer-container">
                                 <i class="bi bi-calendar text"></i>
-                                <div class="date-info-column">
+                                <div class="show-row-content">
                                     <c:choose>
                                         <c:when test="${trip.queryIsRecurrent}">
                                             <span class="text text-capitalize"><spring:message code="${trip.dayOfWeekString}"/></span>
@@ -58,19 +83,17 @@
                                     </c:choose>
                                 </div>
                             </div>
-                            <div class="footer-time-container">
+                            <div id="footer-time-container" class="footer-container">
                                 <i class="bi bi-clock text"></i>
-                                <span class="text"><c:out value="${trip.startTimeString}"/></span>
+                                <div class="show-row-content">
+                                    <span class="text"><c:out value="${trip.startTimeString}"/></span>
+                                </div>
                             </div>
-                            <div class="footer-price-container">
-                                <h2 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h2>
+                            <div id="footer-price-container" class="footer-container">
+                                <h3 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h3>
                             </div>
                         </div>
                     </div>
-                </div>
-                <c:url value="/image/${trip.car.image_id}" var="carImageUrl"/>
-                <div class="col-4 placeholder-image">
-                    <img src="${carImageUrl}" alt="car image"/>
                 </div>
             </div>
         </a>

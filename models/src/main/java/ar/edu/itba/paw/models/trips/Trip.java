@@ -5,13 +5,16 @@ import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Format;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.converters.DayOfWeekConverter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @Entity
@@ -61,6 +64,16 @@ public class Trip {
 
     @Column(name = "last_occurrence", nullable = true)
     private LocalDateTime lastOccurrence;
+
+    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
+    private double driverRating;
+
+
+    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
+    private double carRating;
+
+    @Formula("cast(start_date_time as time)")
+    private LocalTime time;
 
     private transient int occupiedSeats = 0;
 
@@ -200,7 +213,7 @@ public class Trip {
     }
 
     public int getTotalTrips(){
-        return (Period.between(startDateTime.toLocalDate(),endDateTime.toLocalDate()).getDays())/7+1;
+        return (int) startDateTime.until(endDateTime, ChronoUnit.DAYS) / 7 + 1;
     }
     public double getTotalPrice(){
         return price*getTotalTrips();
@@ -210,6 +223,9 @@ public class Trip {
         return endDateTime.isBefore(LocalDateTime.now());
     }
 
+    public boolean getTripHasStarted(){
+        return LocalDateTime.now().compareTo(startDateTime)>=0;
+    }
     public LocalDateTime getQueryStartDateTime() {
         return queryStartDateTime;
     }
@@ -230,7 +246,7 @@ public class Trip {
         return queryEndDateTime.format(Format.getTimeFormatter());
     }
     public int getQueryTotalTrips(){
-        return (Period.between(queryStartDateTime.toLocalDate(),queryEndDateTime.toLocalDate()).getDays())/7+1;
+        return (int) queryStartDateTime.until(queryEndDateTime, ChronoUnit.DAYS) / 7 + 1;
     }
 
     public double getQueryPrice(){
@@ -260,6 +276,10 @@ public class Trip {
         return lastOccurrence;
     }
 
+    public String getLastOccurrenceString(){
+        return lastOccurrence.format(Format.getDateFormatter());
+    }
+
     public void setLastOccurrence(LocalDateTime lastOccurrence) {
         this.lastOccurrence = lastOccurrence;
     }
@@ -280,8 +300,19 @@ public class Trip {
         this.occupiedSeats = occupiedSeats;
     }
 
+    public double getDriverRating() {
+        return driverRating;
+    }
+
+    public double getCarRating() {
+        return carRating;
+    }
+
     public enum SortType{
         PRICE(),
         TIME(),
+
+        DRIVER_RATING(),
+        CAR_RATING(),
     }
 }

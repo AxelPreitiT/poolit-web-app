@@ -24,9 +24,6 @@ import java.util.Optional;
 public class CityDaoImplTest {
 
     @Autowired
-    private DataSource dataSource;
-
-    @Autowired
     private CityHibernateDao cityDao;
 
     private static final long PROVINCE_ID = 1;
@@ -35,31 +32,19 @@ public class CityDaoImplTest {
 
     private static final String CITY_NAME = "Recoleta";
 
-    private JdbcTemplate jdbcTemplate;
-
-    @Before
-    public void setUp(){
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update("INSERT INTO provinces VALUES(?,?)",PROVINCE_ID,"CABA");
-    }
-
     @Test
-    @Rollback
     public void testFindByIdEmpty(){
         //No setup
 
         //Execute
-        Optional<City> city = cityDao.findCityById(1);
+        Optional<City> city = cityDao.findCityById(200);
 
         //Assert
         Assert.assertFalse(city.isPresent());
     }
 
-    @Rollback
     @Test
     public void testFindByIdPresent(){
-        //SetUp
-        jdbcTemplate.update("INSERT INTO cities values (?,?,?)",CITY_ID,CITY_NAME,PROVINCE_ID);
 
         //Execute
         Optional<City> city = cityDao.findCityById(CITY_ID);
@@ -71,7 +56,6 @@ public class CityDaoImplTest {
         Assert.assertEquals(PROVINCE_ID,city.get().getProvinceId());
     }
 
-    @Rollback
     @Test
     public void testFindByProvinceId(){
         //SetUp
@@ -82,10 +66,6 @@ public class CityDaoImplTest {
                 new City(4,"Palermo",PROVINCE_ID),
                 new City(5,"Puerto Madero",PROVINCE_ID)
         };
-        for(City city: cities){
-            jdbcTemplate.update("INSERT INTO cities values (?,?,?)",city.getId(),city.getName(),city.getProvinceId());
-        }
-        final int count = JdbcTestUtils.countRowsInTable(jdbcTemplate,"cities");
 
         //Execute
         List<City> ans = cityDao.getCitiesByProvinceId(PROVINCE_ID);
@@ -95,7 +75,6 @@ public class CityDaoImplTest {
             Assert.assertTrue(ans.stream().anyMatch(c -> c.getId() == city.getId() && c.getName().equals(city.getName()) && c.getProvinceId()==city.getProvinceId()));
         }
         Assert.assertEquals(cities.length,ans.size());
-        Assert.assertEquals(count,JdbcTestUtils.countRowsInTable(jdbcTemplate,"cities"));
     }
 
 }

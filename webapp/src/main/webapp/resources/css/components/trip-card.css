@@ -16,6 +16,10 @@
 
 .card-body {
     padding-bottom: 0.3em;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .card:hover {
@@ -27,18 +31,56 @@ a {
     text-decoration: none !important;
 }
 
-.placeholder-image {
+#car-image {
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 0 0.2rem 0.2rem 0;
-    /*object-fit: cover;*/
+    flex: 1;
+    position: relative;
+    height: 100%;
 }
 
-.placeholder-image img {
+#car-image img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    border-radius: 0.2rem 0 0 0;
     aspect-ratio: 16/9;
+}
+
+#rating-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 0 10px 0 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#rating-container .rating-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 0.7em;
+    padding: 0 0.5em;
+}
+
+#rating-container #car-rating {
+    align-items: baseline;
+}
+
+#rating-container #car-rating #car-rating-icon {
+    margin-left: 2px;
+}
+
+#rating-container #car-rating > div:has(span) {
+    padding-top: 0.3em;
+}
+
+#rating-container .rating-row i, #rating-container .rating-row span {
+    font-size: 0.7rem;
 }
 
 .route-info {
@@ -83,28 +125,37 @@ a {
     display: flex;
     flex-direction: row;
     align-items: baseline;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
-    margin-left: 9px;
-    margin-right: 5px;
+    margin-left: 6px;
     column-gap: 0.2em;
+    flex-wrap: wrap;
 }
 
-.footer-date-container, .footer-time-container, .footer-price-container {
+.footer-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
-    column-gap: 0.5em;
+    column-gap: 0.3em;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
-.footer-date-container i, .footer-time-container i, .footer-price-container i {
-    margin-top: 2px;
+#footer-time-container {
+    justify-content: center;
+}
+
+#footer-price-container {
+    justify-content: flex-end;
+}
+
+.footer-container i {
     margin-bottom: 0;
     font-size: 0.7rem;
 }
 
-.footer-date-container span, .footer-time-container span, .footer-price-container span {
+.footer-container span {
     font-size: 0.7rem;
 }
 
@@ -114,7 +165,7 @@ a {
 
 .date-info-column {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
 }
@@ -158,4 +209,26 @@ a {
 
 .modal-dialog {
     max-width: fit-content !important;
+}
+
+.ratings{
+    width: 100%;
+}
+
+.show-row-content {
+    flex-direction: column;
+}
+
+.show-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 1em;
+}
+
+.driver-image-photo {
+    height: 15px;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
 }

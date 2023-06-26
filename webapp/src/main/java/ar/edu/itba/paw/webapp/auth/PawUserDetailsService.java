@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +33,6 @@ public class PawUserDetailsService implements UserDetailsService {
         this.us=us;
     }
 
-    private enum AuthRoles{
-        USER("ROLE_USER"),
-        DRIVER("ROLE_DRIVER");
-        private final String role;
-        private AuthRoles(String role){
-            this.role = role;
-        }
-
-        public String getRole() {
-            return role;
-        }
-    }
-
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         final Optional<User> userOptional = us.findByEmail(email);
@@ -54,16 +42,23 @@ public class PawUserDetailsService implements UserDetailsService {
             throw e;
         }
 
-        final User user = userOptional.get();
+
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        if(Objects.equals(user.getRole(), "DRIVER")){
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+
+        final User user = userOptional.get();
+
+        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
+            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
+        }else{
+            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
+                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
+            } else {
+                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
+            }
         }
 
-        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, true, authorities);
+        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, !user.isBanned(), authorities);
     }
 
 
@@ -71,10 +66,10 @@ public class PawUserDetailsService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        if(Objects.equals(user.getRole(), "USER")){
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.DRIVER.role));
+        if(Objects.equals(user.getRole(), UserRole.USER.getText())){
+            authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
         }else {
-            authorities.add(new SimpleGrantedAuthority(AuthRoles.USER.role));
+            authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
         }
 
         Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), authorities);

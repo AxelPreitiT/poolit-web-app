@@ -30,6 +30,9 @@ public class TestConfig {
 
     @Value("classpath:schema.sql")
     private Resource schema;
+
+    @Value("classpath:defaults.sql")
+    private Resource defaults;
     @Bean
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -50,6 +53,7 @@ public class TestConfig {
         final ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
         databasePopulator.addScript(hsqldb);
         databasePopulator.addScript(schema);
+        databasePopulator.addScript(defaults);
         return databasePopulator;
     }
 
@@ -65,8 +69,8 @@ public class TestConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
         //TODO: sacar
         // Si ponen esto en prod, hay tabla!!!
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("format_sql", "true");
+//        properties.setProperty("hibernate.show_sql", "true");
+//        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

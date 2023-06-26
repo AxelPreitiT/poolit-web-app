@@ -1,5 +1,11 @@
 @import "../base/elements.css";
 
+.form-style {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.7em;
+}
+
 .avatar-img{
     display: flex;
     justify-content: center;
@@ -8,7 +14,7 @@
 .user-info-container{
     padding: 1em 1.5em;
     height: fit-content;
-    min-width: 30%;
+    width: 30%;
     background-color: white;
     border: 2px solid gray;
     border-radius: 20px;
@@ -61,43 +67,6 @@
     display:none
 }
 
-.btn-custom {
-  background-color: #fff;
-  color: #FFA216;
-  border: 1px solid #FFA216;
-  padding: 0.5rem 1rem;
-  border-radius: 30px;
-  transition: background-color 0.3s ease;
-  margin-top:0.5rem;
-}
-
-.btn-custom:selected {
-  background-color: #FFA216;
-  color: #fff;
-}
-
-.btn-custom > input[type="checkbox"]:checked + label {
-  background-color: #FFA216;
-  color: #fff;
-}
-
-.btn-custom:checked{
- background-color: #FFA216;
- color: #fff;
-}
-
-.btn-custom:hover {
-  background-color: #fff;
-  color: #FFA216;
-  border: 1px solid #FFA216;
-  opacity: 0.8;
-}
-
-.btn-custom:active {
-  background-color: #FFA216;
-  color: #fff;
-}
-
 .btn-group-vertical .btn + .btn {
   margin-top: 5px;
 }
@@ -114,7 +83,7 @@
 }
 
 #image-label {
-    border-radius: 12px;
+    border-radius: 50%;
     width: 100%;
     height: 100%;
     position: relative;
@@ -125,6 +94,7 @@
     justify-content: center;
     align-items: center;
     margin:auto;
+    z-index: 2;
 }
 
 #image-label:hover {
@@ -179,14 +149,20 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  height: 100%;
+  width: 100%;
   transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1;
   border-radius: 50%;
-  padding: 10px;
-  pointer-events: none;
+}
+
+.edit-icon:hover {
+  opacity: 1;
 }
 
 .edit-icon i {
-  color: gray;
   font-size: 48px;
 }
 
@@ -196,5 +172,13 @@
 
 .hidden {
     display:none;
+}
+
+.edit-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    column-gap: 0.5em;
 }
 

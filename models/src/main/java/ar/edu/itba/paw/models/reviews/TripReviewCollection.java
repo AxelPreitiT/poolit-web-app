@@ -23,6 +23,10 @@ public class TripReviewCollection {
         this.passengers = passengers;
     }
 
+    public static TripReviewCollection empty() {
+        return new TripReviewCollection(null, null, null);
+    }
+
     public List<PassengerReviewOptions> getPassengerReviewOptionsByRating(int rating) {
         return Arrays.stream(PassengerReviewOptions.values())
                 .filter(option -> option.getRatings().contains(rating))

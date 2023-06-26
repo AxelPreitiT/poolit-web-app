@@ -18,12 +18,11 @@
     <jsp:include page="/WEB-INF/jsp/users/profile-container.jsp">
       <jsp:param name="hasBeenRatedAsDriver" value="${false}"/>
       <jsp:param name="hasBeenRatedAsPassenger" value="${!(empty reviewsAsPassenger)}"/>
+      <jsp:param name="formHasErrors" value="${formHasErrors}"/>
     </jsp:include>
     <div class="list-properties-container">
       <c:set var="reviews" value="${reviewsAsPassenger}" scope="request"/>
-      <c:url value="/reviews/passengers/${user.userId}" var="reviewsUrl">
-        <c:param name="page" value="1"/>
-      </c:url>
+      <c:url value="/reviews/passengers/${user.userId}" var="reviewsUrl"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">
         <jsp:param name="type" value="passenger"/>
         <jsp:param name="url" value="${reviewsUrl}"/>

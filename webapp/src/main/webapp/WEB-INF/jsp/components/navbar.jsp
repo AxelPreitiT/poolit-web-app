@@ -12,6 +12,7 @@
         <a class="navbar-brand" href="<c:url value="/"/>">
             <img src="<c:url value="/resources/images/poolit/poolit.svg"/>" alt="<spring:message code="navbar.poolit"/>" class="brand-logo">
         </a>
+        <c:if test="${(empty param.showOnlyLogo) || !param.showOnlyLogo}">
         <div class="collapse navbar-collapse navbar-link-items">
             <ul class="navbar-nav nav-items">
                 <sec:authorize access="isAuthenticated()">
@@ -20,17 +21,24 @@
                             <h4 class="light-text"><spring:message code="navbar.reservados"/></h4>
                         </a>
                     </li>
-                    <sec:authorize access="hasRole('ROLE_DRIVER')">
+                    <sec:authorize access="hasRole('ROLE_DRIVER') or hasRole('ROLE_ADMIN')">
                         <li class="nav-item">
                             <a class="nav-link" href="<c:url value="/trips/created"/>">
                                 <h4 class="light-text"><spring:message code="navbar.created"/></h4>
                             </a>
                         </li>
                     </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<c:url value="/admin"/>">
+                                <h4 class="light-text"><spring:message code="navbar.admin"/></h4>
+                            </a>
+                        </li>
+                    </sec:authorize>
                 </sec:authorize>
             </ul>
             <sec:authorize access="isAuthenticated()">
-                <sec:authorize access="hasRole('ROLE_DRIVER')">
+                <sec:authorize access="hasRole('ROLE_DRIVER') or hasRole('ROLE_ADMIN')">
                     <div class="create-trip-btn">
                         <a href="<c:url value="/trips/create"/>">
                             <button class="btn button-style button-color shadow-btn">
@@ -41,36 +49,15 @@
                     </div>
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    <div class="create-trip-btn" data-bs-toggle="modal" data-bs-target="#modal-create">
-                        <button class="btn button-style button-color shadow-btn">
-                            <i class="bi bi-plus light-text h4"></i>
-                            <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
-                        </button>
+                    <div class="create-trip-btn">
+                        <c:url value="/changeRole" var="changeRole"/>
+                        <form:form method="POST" action="${changeRole}">
+                            <button class="btn button-style button-color shadow-btn">
+                                <i class="bi bi-plus light-text h4"></i>
+                                <span class="button-text-style light-text h4"><spring:message code="navbar.btnCreated"/></span>
+                            </button>
+                        </form:form>
                     </div>
-                    <div class="modal fade" id="modal-create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title secondary-color"><spring:message code="navbar.modal.title"/></h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div>
-                                        <span class="text"><spring:message code="navbar.modal.info"/></span>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <c:url value="/changeRole" var="changeRole"/>
-                                    <form:form method="POST" action="${changeRole}">
-                                        <button type="submit" class="btn secondary-bg-color">
-                                            <span class="light-text"><spring:message code="navbar.modal.btnContinue"/></span>
-                                        </button>
-                                    </form:form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </sec:authorize>
             </sec:authorize>
         </div>
@@ -96,7 +83,8 @@
                                                     <spring:message code="navbar.profile"/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${loggedUser.name} ${loggedUser.surname}
+                                                    <c:out value="${loggedUser.name}"/>
+                                                    <c:out value="${loggedUser.surname}"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </span>
@@ -146,6 +134,7 @@
                 </a>
             </div>
         </sec:authorize>
+        </c:if>
     </div>
 </nav>
 

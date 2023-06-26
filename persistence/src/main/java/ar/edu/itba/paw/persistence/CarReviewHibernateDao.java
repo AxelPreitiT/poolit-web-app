@@ -49,6 +49,10 @@ public class CarReviewHibernateDao implements CarReviewDao {
     @Override
     public PagedContent<CarReview> getCarReviews(Car car, int page, int pageSize) {
         LOGGER.debug("Looking for all the car reviews of the car with id {} in page {} with page size {}", car.getCarId(), page, pageSize);
+        if (page < 0 || pageSize <= 0) {
+            LOGGER.debug("Invalid page or page size");
+            return PagedContent.emptyPagedContent();
+        }
         Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(review_id) FROM car_reviews WHERE car_id = :car_id");
         nativeCountQuery.setParameter("car_id", car.getCarId());
         final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
@@ -63,9 +67,13 @@ public class CarReviewHibernateDao implements CarReviewDao {
         nativeQuery.setMaxResults(pageSize);
         nativeQuery.setFirstResult(page * pageSize);
         final List<?> maybeReviewIdList = nativeQuery.getResultList();
+        if (maybeReviewIdList.isEmpty()) {
+            LOGGER.debug("No car reviews found for the car with id {} in page {} with page size {}", car.getCarId(), page, pageSize);
+            return PagedContent.emptyPagedContent();
+        }
         final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.reviewId IN :reviewIdList", CarReview.class);
+        final TypedQuery<CarReview> carReviewsQuery = em.createQuery("FROM CarReview cr WHERE cr.reviewId IN :reviewIdList ORDER BY date DESC", CarReview.class);
         carReviewsQuery.setParameter("reviewIdList", reviewIdList);
         final List<CarReview> result = carReviewsQuery.getResultList();
         LOGGER.debug("Found {} in the database", result);

@@ -49,6 +49,10 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
     @Override
     public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
         LOGGER.debug("Looking for passenger reviews of the user with id {} in page {} with page size {}", user.getUserId(), page, pageSize);
+        if(page < 0 || pageSize <= 0) {
+            LOGGER.debug("Invalid page or page size");
+            return PagedContent.emptyPagedContent();
+        }
         Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(review_id) FROM passenger_reviews NATURAL JOIN user_reviews WHERE reviewed_id = :user_id");
         nativeCountQuery.setParameter("user_id", user.getUserId());
         final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
@@ -63,9 +67,13 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
         nativeQuery.setFirstResult(page * pageSize);
 
         final List<?> maybeReviewIdList = nativeQuery.getResultList();
+        if(maybeReviewIdList.isEmpty()) {
+            LOGGER.debug("No passenger reviews found for the user with id {} in page {} with page size {}", user.getUserId(), page, pageSize);
+            return PagedContent.emptyPagedContent();
+        }
         final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewId IN :reviewIdList", PassengerReview.class);
+        final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewId IN :reviewIdList ORDER BY date DESC", PassengerReview.class);
         reviewsQuery.setParameter("reviewIdList", reviewIdList);
         List<PassengerReview> result = reviewsQuery.getResultList();
         LOGGER.debug("Found {} in the database", result);

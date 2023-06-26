@@ -16,9 +16,9 @@
           <h2 class="light-text"><spring:message code="tripDetails.passengers"/></h2>
         </div>
         <div class="passenger-list">
-          <c:forEach items="${passengers}" var="user">
-              <c:url value="/profile/${user.userId}" var="userUrl"/>
-              <c:url value="/image/${user.userImageId}" var="userImageId"/>
+          <c:forEach items="${passengers}" var="passenger">
+              <c:url value="/profile/${passenger.userId}" var="userUrl"/>
+              <c:url value="/image/${passenger.userImageId}" var="userImageId"/>
               <div class="individual-profile">
                 <div class="individual-profile-text">
                   <a href="${userUrl}" class="show-row profile-link">
@@ -29,35 +29,35 @@
                   <div>
                     <div class="passenger-name-container">
                       <a href="${userUrl}">
-                        <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}"/></span>
+                        <spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}" var="passengerNameString"/>
+                        <span class="light-text detail"><c:out value="${passengerNameString}"/></span>
                       </a>
                     </div>
-                    <c:if test="${trip.recurrent}">
-                      <div class="passenger-dates-container">
-                        <i class="bi bi-calendar light-text"></i>
-                        <span class="light-text">
-                      <spring:message code="format.dates" var="passengerDate" arguments="${user.startDateString}, ${user.endDateString}"/>
-                      <c:out value="${passengerDate}"/>
-                    </span>
-                      </div>
-                    </c:if>
+                    <c:choose>
+                      <c:when test="${passenger.recurrent}">
+                        <div class="passenger-dates-container">
+                          <i class="bi bi-calendar light-text"></i>
+                          <span class="light-text">
+                            <spring:message code="format.dates" var="passengerDate" arguments="${passenger.startDateString}, ${passenger.endDateString}"/>
+                            <c:out value="${passengerDate}"/>
+                          </span>
+                        </div>
+                      </c:when>
+                      <c:otherwise>
+                        <div class="passenger-dates-container">
+                          <i class="bi bi-calendar light-text"></i>
+                          <span class="light-text"><c:out value="${passenger.startDateString}"/></span>
+                        </div>
+                      </c:otherwise>
+                    </c:choose>
                   </div>
                 </div>
                 <div>
-                  <c:forEach var="i" begin="1" end="${user.user.passengerRating}">
-                    <i class="bi bi-star-fill light-text h4"></i>
-                  </c:forEach>
-                  <c:if test="${user.user.passengerRating % 1 >= 0.5}">
-                    <i class="bi bi-star-half light-text h4"></i>
-                    <c:forEach var="i" begin="${user.user.passengerRating + 2}" end="5">
-                      <i class="bi bi-star secondary-color h4"></i>
-                    </c:forEach>
-                  </c:if>
-                  <c:if test="${user.user.passengerRating % 1 < 0.5}">
-                    <c:forEach var="i" begin="${user.user.passengerRating + 1}" end="5">
-                      <i class="bi bi-star light-text h4"></i>
-                    </c:forEach>
-                  </c:if>
+                  <c:set var="rating" value="${passenger.user.passengerRating}" scope="request"/>
+                  <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                    <jsp:param name="fontSize" value="h6"/>
+                    <jsp:param name="fontColor" value="light-text"/>
+                  </jsp:include>
                 </div>
               </div>
           </c:forEach>

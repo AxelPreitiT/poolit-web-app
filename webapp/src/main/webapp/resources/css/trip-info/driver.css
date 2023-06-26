@@ -1,6 +1,35 @@
 @import "../base/elements.css";
 @import "../trip-detail/trip-detail.css";
 
+body {
+    position: relative;
+}
+
+#passengers-list-container hr {
+    margin-top: 0;
+}
+
+#show-passengers-list-button {
+    position: fixed;
+    bottom: 2%;
+    right: 2%;
+    display: block;
+    transition: display 0.5s ease-in-out;
+}
+
+#show-passengers-list-button.hidden {
+    display: none;
+}
+
+#show-passengers-list-button > button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1em;
+    padding: 0.7em 1.5em;
+}
+
 #button-container {
     display: flex;
     flex-direction: row;
@@ -153,4 +182,20 @@
     margin-top: -1.5em;
     justify-content: end;
     flex-direction: row;
+}
+
+.trip-state-container{
+    display: flex;
+    flex-direction: row;
+    gap: 4%;
+    align-items: center;
+    padding-top: 2%;
+}
+
+.trip-state-container > h3{
+    min-width: max-content;
+}
+
+.deleted-info-container{
+    flex-direction: column;
 }

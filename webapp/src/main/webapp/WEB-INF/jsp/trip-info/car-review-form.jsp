@@ -10,11 +10,11 @@
 <jsp:useBean id="carReviewForm" scope="request" type="ar.edu.itba.paw.webapp.form.CarReviewForm" />
 
 <div id="car-review-form-container">
-    <c:url value="/image/${car.image_id}" var="carImageUrl"/>
+    <c:url value="/image/${car.imageId}" var="carImageUrl"/>
     <div id="car-review-form-header">
         <img src="${carImageUrl}" alt="${car.plate}" id="car-image"/>
         <div id="car-review-form-title">
-            <h3 class="secondary-color">${car.infoCar}</h3>
+            <h3 class="secondary-color"><c:out value="${car.infoCar}"/></h3>
             <hr class="secondary-color">
         </div>
     </div>

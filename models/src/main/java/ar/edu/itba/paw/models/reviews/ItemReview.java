@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.models.reviews;
 
+import ar.edu.itba.paw.models.reports.ReportRelations;
+
 public class ItemReview<T> {
 
-    T item;
-    ReviewState state;
+    private final T item;
+    private final ReviewState state;
 
     public ItemReview(T item, ReviewState state) {
         this.item = item;

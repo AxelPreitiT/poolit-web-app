@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
@@ -33,29 +34,30 @@ public class tokenServiceImpl implements TokenService {
         return tokenDao.createToken(user, token, calculateExpiryDate(EXPIRATION));
     }
 
-    private Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(calendar.getTime().getTime());
+    private LocalDate calculateExpiryDate(int expiryTimeInMinutes) {
+        return LocalDate.now().plusDays(1);
     }
 
+
+    @Transactional
     @Override
     public Optional<VerificationToken> getToken(String token) {
         return tokenDao.getToken(token);
     }
 
+    @Transactional
     @Override
     public void deleteToken(VerificationToken token) {
         tokenDao.deleteToken(token);
     }
 
+    @Transactional
     @Override
     public boolean isValidToken(VerificationToken token) {
-        Calendar calendar = Calendar.getInstance();
-        return token.getDate().getTime() >= calendar.getTime().getTime();
+        return token.getDate().compareTo(LocalDate.now())>=0;
     }
 
+    @Transactional
     @Override
     public void renewToken(VerificationToken token) {
         token.setExpiryDate(calculateExpiryDate(EXPIRATION));
