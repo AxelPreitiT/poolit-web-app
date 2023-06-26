@@ -83,7 +83,8 @@
                                                     <spring:message code="navbar.profile"/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    ${loggedUser.name} ${loggedUser.surname}
+                                                    <c:out value="${loggedUser.name}"/>
+                                                    <c:out value="${loggedUser.surname}"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </span>

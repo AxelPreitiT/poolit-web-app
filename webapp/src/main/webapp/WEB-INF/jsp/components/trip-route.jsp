@@ -25,8 +25,8 @@
   <div class="location-container">
     <i class="bi bi-geo-alt-fill secondary-color icon-style"></i>
     <div class="location-data">
-      <h3 class="secondary-color title-style"><c:out value="${trip.destinationCity.name}" escapeXml="true"/></h3>
-      <h5 class="text description-style"><c:out value="${trip.destinationAddress}" escapeXml="true "/></h5>
+      <h3 class="secondary-color title-style"><c:out value="${trip.destinationCity.name}"/></h3>
+      <h5 class="text description-style"><c:out value="${trip.destinationAddress}"/></h5>
     </div>
   </div>
 </div>
