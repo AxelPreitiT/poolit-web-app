@@ -75,7 +75,7 @@
           </c:choose>
         </div>
         <div class="trip-state-container">
-          <h3>Estado: </h3>
+          <h3><spring:message code="tripStatus.title"/></h3>
           <c:choose>
             <c:when test="${trip.tripHasEnded}">
               <i class="bi bi-check h1 success"></i>
