@@ -3,12 +3,15 @@ package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.models.reports.ReportOptions;
 import ar.edu.itba.paw.models.reports.ReportRelations;
 
+import javax.validation.constraints.Size;
+
 public class ReportForm {
 
     private ReportRelations relation;
 
     private ReportOptions reason;
 
+    @Size(min = 10, max = 200)
     private String comment;
 
     public ReportOptions getReason() {

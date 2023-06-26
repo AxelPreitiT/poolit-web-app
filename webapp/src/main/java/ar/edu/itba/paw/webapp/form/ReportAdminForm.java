@@ -4,7 +4,7 @@ import javax.validation.constraints.Size;
 
 public class ReportAdminForm {
 
-    @Size(min = 10)
+    @Size(min = 10,max = 200)
     private String reason;
 
     public String getReason() {

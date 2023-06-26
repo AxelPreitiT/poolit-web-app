@@ -15,7 +15,7 @@
         <i class="bi bi-megaphone-fill primary-color h6"></i>
         <span class="h6 primary-color"><spring:message code="report.report"/></span>
     </a>
-    <div class="modal fade <c:if test="${!(empty param.reported) && param.reported}">show-on-load</c:if>" id="report-list-modal">
+    <div class="modal fade <c:if test="${(!(empty param.reported) && param.reported) || (!(empty param.report_error) && param.report_error)}">show-on-load</c:if>" id="report-list-modal">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -26,6 +26,10 @@
                     <div id="report-published-container" class="collapse <c:if test="${!(empty param.reported) && param.reported}">show</c:if>">
                         <i class="bi bi-check-circle-fill success h6"></i>
                         <span class="success h6" id="published-text"><spring:message code="report.toast.message"/></span>
+                    </div>
+                    <div id="report-published-container-error" class="collapse <c:if test="${!(empty param.report_error) && param.report_error}">show</c:if>">
+                        <i class="bi bi-x-circle-fill danger h6"></i>
+                        <span class="danger h6" id="report-published-container-text"><spring:message code="report.toast.error"/></span>
                     </div>
                     <jsp:include page="/WEB-INF/jsp/trip-info/report-list.jsp"/>
                 </div>
