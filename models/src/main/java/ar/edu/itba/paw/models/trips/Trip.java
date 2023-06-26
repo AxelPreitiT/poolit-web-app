@@ -276,6 +276,10 @@ public class Trip {
         return lastOccurrence;
     }
 
+    public String getLastOccurrenceString(){
+        return lastOccurrence.format(Format.getDateFormatter());
+    }
+
     public void setLastOccurrence(LocalDateTime lastOccurrence) {
         this.lastOccurrence = lastOccurrence;
     }

@@ -70,7 +70,8 @@
             </a>
         </div>
         <h1 class="text-center mb-4" th:text="#{emails.banReport.title}"></h1>
-        <p th:text="#{emails.banReport.message (${report.trip.originCity.name}, ${report.trip.destinationCity.name}, ${report.dateString}, ${report.reason.springMessageCode})}"></p>
+        <p style="display: inline" th:text="#{emails.banReport.message (${report.trip.originCity.name}, ${report.trip.destinationCity.name}, ${report.dateString})}"></p>
+        <span style="display: inline" th:text="#{${report.reason.springMessageCode}}"></span>
         <p th:text="#{emails.banReport.message2 (${report.adminReason})}"></p>
         <p th:text="#{emails.banReport.message3}"></p>
     </div>
