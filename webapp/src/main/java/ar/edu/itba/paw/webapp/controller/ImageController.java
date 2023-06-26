@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 @Controller
 public class ImageController {
 
@@ -23,10 +26,9 @@ public class ImageController {
 
     @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
     public @ResponseBody
-    byte[] getImage(@PathVariable("imageId") final int imageId) throws ImageNotFoundException {
+    byte[] getImage(@PathVariable("imageId") final int imageId) throws ImageNotFoundException, IOException, URISyntaxException {
         LOGGER.debug("GET Request to /image/{}", imageId);
-        final Image image = imageService.findById(imageId).orElseThrow(ImageNotFoundException::new);
-        return image.getData();
+        return imageService.getByteaCheck(imageId);
     }
 
 }

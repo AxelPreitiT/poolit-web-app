@@ -38,6 +38,7 @@ a {
     border-radius: 0 0.2rem 0.2rem 0;
     flex: 1;
     position: relative;
+    height: 100%;
 }
 
 #car-image img {
@@ -45,6 +46,7 @@ a {
     height: 100%;
     object-fit: cover;
     border-radius: 0.2rem 0 0 0;
+    aspect-ratio: 16/9;
 }
 
 #rating-container {

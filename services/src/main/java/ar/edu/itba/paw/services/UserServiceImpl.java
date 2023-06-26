@@ -231,8 +231,13 @@ public class UserServiceImpl implements UserService {
     public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
         Optional<User> user = getCurrentUser();
         if(user.isPresent()){
-            imageService.replaceImage(user.get().getUserImageId(),imgData);
-            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString));
+            if(imgData.length<=0){
+                userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.get().getUserImageId());
+                return;
+            }
+            long imageId = imageService.createImage(imgData).getImageId();
+            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
+
         }
     }
 

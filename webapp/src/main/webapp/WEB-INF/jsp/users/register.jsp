@@ -100,6 +100,8 @@
                                 <i class="bi bi-exclamation-circle-fill warning"></i>
                                 <form:errors path="password" cssClass="error-style warning" element="span"/>
                             </div>
+                        </div>
+                        <div class="error-row full-error-row">
                             <div class="error-item">
                                 <i class="bi bi-exclamation-circle-fill warning"></i>
                                 <form:errors cssClass="error-style warning" element="span"/>

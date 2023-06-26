@@ -131,7 +131,10 @@
             <div class="price-filter">
                 <div class="title-row">
                     <i class="bi bi-currency-dollar light-text h5"></i>
-                    <h5 class="light-text"><spring:message code="searchFilters.price"/></h5>
+                    <div>
+                        <h5 class="light-text"><spring:message code="searchFilters.price"/></h5>
+                        <h5 class="light-text"><spring:message code="trip.perTrip"/></h5>
+                    </div>
                 </div>
                 <div class="input-container">
                     <div class="input-row">

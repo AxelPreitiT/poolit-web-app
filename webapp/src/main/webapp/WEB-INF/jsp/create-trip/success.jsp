@@ -34,7 +34,8 @@
                         <span class="h3 text no-bold"><spring:message code="createTrip.success.price"/></span>
                     </div>
                     <div>
-                        <span class="h2 secondary-color"><spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}"/></span>
+                        <spring:message code="selectTrip.priceFormat" arguments="${trip.integerQueryTotalPrice},${trip.decimalQueryTotalPrice}" var="tripPriceString"/>
+                        <span class="h2 secondary-color"><c:out value="${tripPriceString}"/> </span>
                     </div>
                 </div>
             </div>

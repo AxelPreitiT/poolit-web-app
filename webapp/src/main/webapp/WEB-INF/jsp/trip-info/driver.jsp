@@ -74,6 +74,23 @@
             </c:otherwise>
           </c:choose>
         </div>
+        <div class="trip-state-container">
+          <h3>Estado: </h3>
+          <c:choose>
+            <c:when test="${trip.tripHasEnded}">
+              <i class="bi bi-check h1 success"></i>
+              <h3 class="success"><spring:message code="tripStatus.finished"/></h3>
+            </c:when>
+            <c:when test="${!trip.tripHasStarted}">
+              <i class="bi bi-clock-history h3 secondary-color"></i>
+              <h3 class="secondary-color"><spring:message code="tripStatus.notStarted"/></h3>
+            </c:when>
+            <c:otherwise>
+              <i class="fa-solid fa-car-side primary-color h3"></i>
+              <h3 class="primary-color"><spring:message code="tripStatus.inProgress"/></h3>
+            </c:otherwise>
+          </c:choose>
+        </div>
       </div>
       <div id="button-container">
         <div id="review-trip-container">
@@ -83,7 +100,7 @@
             </jsp:include>
           </c:if>
         </div>
-        <c:if test="${!trip.tripHasEnded}">
+        <c:if test="${!trip.tripHasEnded and !trip.deleted }">
           <div class="delete-trip-container">
             <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
               <i class="bi bi-trash-fill light-text h4"></i>
@@ -166,14 +183,17 @@
                 <div class="show-row-content-passangers">
                   <div class="column-data-pass">
                     <a href="${userUrl}" class="show-row profile-link">
-                      <span class="text detail h4"><spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}"/> </span>
+                      <spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}" var="passengerNameString"/>
+                      <span class="text detail h4"><c:out value="${passengerNameString}"/> </span>
                     </a>
                     <c:if test="${trip.recurrent}">
                       <c:if test="${passenger.recurrent}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${passenger.endDateString}"/></h6>
+                        <spring:message code="dates.recurrentDates" arguments="${passenger.startDateString}, ${passenger.endDateString}" var="passengerRecurrentDatesString"/>
+                        <h6 class="show-row italic-text"><c:out value="${passengerRecurrentDatesString}"/> </h6>
                       </c:if>
                       <c:if test="${!(passenger.recurrent)}">
-                        <h6 class="show-row italic-text"><spring:message code="dates.unique" arguments="${passenger.startDateString}"/></h6>
+                        <spring:message code="dates.unique" arguments="${passenger.startDateString}" var="passengerSingleDatesString"/>
+                        <h6 class="show-row italic-text"><c:out value="${passengerSingleDatesString}"/></h6>
                       </c:if>
                     </c:if>
                   </div>
@@ -182,10 +202,17 @@
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="ratings">
                           <c:set value='${passenger.user.passengerRating}' var="rating" scope="request"/>
-                          <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                            <jsp:param name="fontSize" value="h5"/>
-                            <jsp:param name="fontColor" value="secondary-color"/>
-                          </jsp:include>
+                          <c:choose>
+                            <c:when test="${rating == 0}">
+                              <strong class="text"><spring:message code="review.none"/></strong>
+                            </c:when>
+                            <c:otherwise>
+                              <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                <jsp:param name="fontSize" value="h5"/>
+                                <jsp:param name="fontColor" value="secondary-color"/>
+                              </jsp:include>
+                            </c:otherwise>
+                          </c:choose>
                         </div>
                       </div>
                     </div>

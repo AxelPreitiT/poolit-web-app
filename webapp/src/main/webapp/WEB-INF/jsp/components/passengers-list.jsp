@@ -29,7 +29,8 @@
                   <div>
                     <div class="passenger-name-container">
                       <a href="${userUrl}">
-                        <span class="light-text detail"><spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}"/></span>
+                        <spring:message code="user.nameFormat" arguments="${passenger.name}, ${passenger.surname}" var="passengerNameString"/>
+                        <span class="light-text detail"><c:out value="${passengerNameString}"/></span>
                       </a>
                     </div>
                     <c:choose>

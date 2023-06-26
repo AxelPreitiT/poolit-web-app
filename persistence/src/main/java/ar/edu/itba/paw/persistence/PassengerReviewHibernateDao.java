@@ -73,7 +73,7 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
         }
         final List<Long> reviewIdList = maybeReviewIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
 
-        final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewId IN :reviewIdList", PassengerReview.class);
+        final TypedQuery<PassengerReview> reviewsQuery = em.createQuery("FROM PassengerReview pr WHERE pr.reviewId IN :reviewIdList ORDER BY date DESC", PassengerReview.class);
         reviewsQuery.setParameter("reviewIdList", reviewIdList);
         List<PassengerReview> result = reviewsQuery.getResultList();
         LOGGER.debug("Found {} in the database", result);

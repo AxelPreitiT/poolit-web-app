@@ -28,16 +28,24 @@
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
     </div>
   </div>
-  <h3 id="user-name"><c:out value="${car.brand}"/></h3>
-  <div class="row-info rows">
-    <h6><spring:message code="createCar.carInfo"/></h6>
-    <h4 class="no-edit"><c:out value="${car.infoCar}"/></h4>
-    <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
-    <div class="error-item">
-        <i class="bi bi-exclamation-circle-fill danger"></i>
-        <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
-    </div>
+  <div id="user-name">
+      <h3 class="no-edit">
+          <c:if test="${car.hasInfoCar()}">
+              <c:out value="${car.infoCar}"/>
+          </c:if>
+      </h3>
+      <form:input path="carInfo" id="carInfo" cssClass="form-control hidden edit"  />
+      <div class="error-item">
+          <i class="bi bi-exclamation-circle-fill danger"></i>
+          <form:errors path="carInfo" cssClass="danger error-style" element="span"/>
+      </div>
   </div>
+  <c:if test="${car.hasBrand()}">
+      <div class="row-info">
+          <h6><spring:message code="createCar.brand"/></h6>
+          <h4><c:out value="${car.brand}"/></h4>
+      </div>
+  </c:if>
   <div class="row-info rows">
     <h6><spring:message code="createCar.seats"/></h6>
     <h4 class="no-edit"><c:out value="${car.seats}"/></h4>
@@ -83,10 +91,17 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="ratings">
             <c:set var="rating" value="${rating}" scope="request"/>
-            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                <jsp:param name="fontSize" value="h4"/>
-                <jsp:param name="fontColor" value="secondary-color"/>
-            </jsp:include>
+            <c:choose>
+                <c:when test="${rating == 0}">
+                    <h4 class="text"><spring:message code="review.none"/></h4>
+                </c:when>
+                <c:otherwise>
+                    <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                        <jsp:param name="fontSize" value="h4"/>
+                        <jsp:param name="fontColor" value="secondary-color"/>
+                    </jsp:include>
+                </c:otherwise>
+            </c:choose>
         </div>
       </div>
     </div>

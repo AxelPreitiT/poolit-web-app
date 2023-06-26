@@ -57,7 +57,7 @@
                     <div class="user-container">
                         <div class="user-container-item">
                             <a href="${reporterProfileUrl}">
-                                <h3 class="secondary-color">${reporterName}</h3>
+                                <h3 class="secondary-color"><c:out value="${reporterName}"/></h3>
                             </a>
                             <h6 class="italic-text"><spring:message code="${report.relation.reporterSpringMessageCode}"/></h6>
                         </div>
@@ -65,19 +65,33 @@
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
                                 <c:set value="${report.reporter.driverRating}" var="rating" scope="request"/>
-                                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                                    <jsp:param name="fontSize" value="h4"/>
-                                    <jsp:param name="fontColor" value="secondary-color"/>
-                                </jsp:include>
+                                <c:choose>
+                                    <c:when test="${rating == 0}">
+                                        <strong class="text"><spring:message code="review.none"/></strong>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                            <jsp:param name="fontSize" value="h4"/>
+                                            <jsp:param name="fontColor" value="secondary-color"/>
+                                        </jsp:include>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </c:if>
                         <div class="user-container-item">
                             <strong><spring:message code="report.role.passenger.rating"/></strong>
                             <c:set value="${report.reporter.passengerRating}" var="rating" scope="request"/>
-                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                                <jsp:param name="fontSize" value="h4"/>
-                                <jsp:param name="fontColor" value="secondary-color"/>
-                            </jsp:include>
+                            <c:choose>
+                                <c:when test="${rating == 0}">
+                                    <strong class="text"><spring:message code="review.none"/></strong>
+                                </c:when>
+                                <c:otherwise>
+                                    <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                        <jsp:param name="fontSize" value="h4"/>
+                                        <jsp:param name="fontColor" value="secondary-color"/>
+                                    </jsp:include>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         <div class="user-container-item user-container-row">
                             <strong><spring:message code="report.reportsPublished" arguments=":"/></strong>
@@ -99,7 +113,7 @@
                     <div class="user-container">
                         <div class="user-container-item">
                             <a href="${reportedProfileUrl}">
-                                <h3 class="secondary-color">${reportedName}</h3>
+                                <h3 class="secondary-color"><c:out value="${reportedName}"/></h3>
                             </a>
                             <h6 class="italic-text"><spring:message code="${report.relation.reportedSpringMessageCode}"/></h6>
                         </div>
@@ -107,19 +121,33 @@
                             <div class="user-container-item">
                                 <strong><spring:message code="report.role.driver.rating"/></strong>
                                 <c:set value="${report.reported.driverRating}" var="rating" scope="request"/>
-                                <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                                    <jsp:param name="fontSize" value="h4"/>
-                                    <jsp:param name="fontColor" value="secondary-color"/>
-                                </jsp:include>
+                                <c:choose>
+                                    <c:when test="${rating == 0}">
+                                        <strong class="text"><spring:message code="review.none"/></strong>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                            <jsp:param name="fontSize" value="h4"/>
+                                            <jsp:param name="fontColor" value="secondary-color"/>
+                                        </jsp:include>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </c:if>
                         <div class="user-container-item">
                             <strong><spring:message code="report.role.passenger.rating"/></strong>
                             <c:set value="${report.reported.passengerRating}" var="rating" scope="request"/>
-                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
-                                <jsp:param name="fontSize" value="h4"/>
-                                <jsp:param name="fontColor" value="secondary-color"/>
-                            </jsp:include>
+                            <c:choose>
+                                <c:when test="${rating == 0}">
+                                    <strong class="text"><spring:message code="review.none"/></strong>
+                                </c:when>
+                                <c:otherwise>
+                                    <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
+                                        <jsp:param name="fontSize" value="h4"/>
+                                        <jsp:param name="fontColor" value="secondary-color"/>
+                                    </jsp:include>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         <div class="user-container-item user-container-row">
                             <strong><spring:message code="report.reportsPublished" arguments=":"/></strong>

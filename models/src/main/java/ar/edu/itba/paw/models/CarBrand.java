@@ -32,4 +32,8 @@ public enum CarBrand {
     public String toString() {
         return formattedName;
     }
+
+    public boolean hasBrand() {
+        return formattedName != null;
+    }
 }

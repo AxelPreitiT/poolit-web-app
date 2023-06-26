@@ -144,7 +144,7 @@ public class CarDaoImplTest {
         testFeatures.add(FeatureCar.AIR);
         testFeatures.add(FeatureCar.PET_FRIENDLY);
         //Execute
-        carDaoImpl.modifyCar(CAR_ID,testInfo,testSeats,testFeatures);
+        carDaoImpl.modifyCar(CAR_ID,testInfo,testSeats,testFeatures,KNOWN_IMAGE_ID);
         //Assert
         TypedQuery<Car> query = em.createQuery("from Car where carId = :carId",Car.class);
         query.setParameter("carId",CAR_ID);

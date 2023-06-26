@@ -6,7 +6,7 @@
     justify-content: space-between;
     align-items: flex-start;
     column-gap: 2em;
-    width: 80%;
+    width: 90%;
     margin-top: 1em;
 }
 
@@ -27,7 +27,6 @@
     row-gap: 2em;
     width: 100%;
     margin-top: 3rem;
-    column-gay: 2em;
 }
 
 .car-data-row {
@@ -127,60 +126,44 @@
     justify-content: flex-end;
 }
 
+.feature-options-title {
+    min-width: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 0.5em;
+}
+
+.feature-options-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    row-gap: 0.5em;
+}
+
 
 .btn-custom {
-  background-color: #fff;
-  color: #FFA216;
-  border: 1px solid #FFA216;
-  padding: 0.5rem 1rem;
-  border-radius: 30px;
-  transition: background-color 0.3s ease;
-  margin-top:0.5rem;
+    background-color: #FFFFFF;
+    color: #707070;
+    border: 1px solid #707070;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    opacity: 1;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
 }
 
-.btn-custom:selected {
-  background-color: #FFA216;
-  color: #fff;
-}
-
-.btn-custom > input[type="checkbox"]:checked + label {
-  background-color: #FFA216;
-  color: #fff;
-}
-
-.btn-custom:checked{
- background-color: #FFA216;
- color: #fff;
+.btn-custom.active {
+    background-color: #FFA216;
+    color: #FFFFFF;
+    border: 1px solid #FFA216;
 }
 
 .btn-custom:hover {
-  background-color: #fff;
-  color: #FFA216;
-  border: 1px solid #FFA216;
-  opacity: 0.8;
+    opacity: 0.8;
 }
-
-.btn-custom:active {
-  background-color: #FFA216;
-  color: #fff;
-}
-
-.btn-group-vertical .btn + .btn {
-  margin-top: 5px;
-}
-
-.btn-group-vertical .btn {
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
-}
-
-
-
-
-
-
-
 
 

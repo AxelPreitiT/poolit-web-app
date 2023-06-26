@@ -13,11 +13,13 @@
       <div class="profiles-info">
         <div class="info-profile-img">
           <div>
-            <img src="/image/${report.reporter.userImageId}" alt="user image" class="image-photo-admin"/>
+            <c:url value="/image/${report.reporter.userImageId}" var="imageUrlReporter"/>
+            <img src="${imageUrlReporter}" alt="user image" class="image-photo-admin"/>
           </div>
           <div class="short-info-profile">
             <div class="inline-text">
-              <h4><spring:message code="user.nameFormat" arguments="${report.reporter.name}, ${report.reporter.surname}"/></h4>
+              <spring:message code="user.nameFormat" arguments="${report.reporter.name}, ${report.reporter.surname}" var="reporterNameString"/>
+              <h4><c:out value="${reporterNameString}"/></h4>
             </div>
             <h6 class="italic-text"><spring:message code="${param.reporterRole}"/></h6>
           </div>
@@ -28,18 +30,21 @@
         <div class="info-profile-img">
           <div class="short-info-profile-right">
             <div class="inline-text">
-              <h4><spring:message code="user.nameFormat" arguments="${report.reported.name}, ${report.reported.surname}"/></h4>
+              <spring:message code="user.nameFormat" arguments="${report.reported.name}, ${report.reported.surname}" var="reportedNameString"/>
+              <h4><c:out value="${reportedNameString}"/></h4>
             </div>
             <h6 class="italic-text"><spring:message code="${param.reportedRole}"/></h6>
           </div>
           <div>
-            <img src="/image/${report.reported.userImageId}" alt="user image" class="image-photo-admin"/>
+            <c:url value="/image/${report.reported.userImageId}" var="imageUrlReported"/>
+            <img src="${imageUrlReported}" alt="user image" class="image-photo-admin"/>
           </div>
         </div>
       </div>
       <div class="trip-short-info">
         <h4><spring:message code="report.reason"/><span class="secondary-color italic-text"><spring:message code="${report.reason.springMessageCode}"/></span></h4>
-        <h5><spring:message code="report.date" arguments="${report.dateString}"/></h5>
+        <spring:message code="report.date" arguments="${report.dateString}" var="reportDateString"/>
+        <h5><c:out value="${reportDateString}"/></h5>
       </div>
     </div>
   </a>

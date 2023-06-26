@@ -184,13 +184,17 @@ public class TripController {
     }
 
     @RequestMapping(value = CREATE_TRIP_PATH, method = RequestMethod.GET)
-    public ModelAndView createTripForm(@ModelAttribute("createTripForm") final CreateTripForm form) throws UserNotFoundException{
+    public ModelAndView createTripForm(
+            @ModelAttribute("createTripForm") final CreateTripForm form,
+            @RequestParam(value = "carAdded", required = false, defaultValue = "false") final boolean carAdded
+    ) throws UserNotFoundException{
         LOGGER.debug("GET Request to {}", CREATE_TRIP_PATH);
         final List<City> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID);
         final List<Car> userCars = carService.findCurrentUserCars();
         final ModelAndView mav = new ModelAndView("/create-trip/main");
         mav.addObject("cities", cities);
-        mav.addObject("createCarUrl", "/cars/create");
+        mav.addObject("createCarUrl", "/cars/create?firstCar=true");
+        mav.addObject("carAdded", carAdded);
         mav.addObject("cars", userCars);
         return mav;
     }
@@ -203,7 +207,7 @@ public class TripController {
         LOGGER.debug("POST Request to {}", CREATE_TRIP_PATH);
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in CreateTripForm: {}", errors.getAllErrors());
-            return createTripForm(form);
+            return createTripForm(form, false);
         }
         final Trip trip = tripService.createTrip(form.getOriginCityId(), form.getOriginAddress(), form.getDestinationCityId(), form.getDestinationAddress(), form.getCarId(), form.getDate(), form.getTime(),form.getPrice(), form.getMaxSeats(),form.getLastDate(), form.getTime());
         return new ModelAndView("redirect:/trips/" + trip.getTripId() + "?created=true");
@@ -211,12 +215,14 @@ public class TripController {
 
     @RequestMapping(value = RESERVED_TRIPS_PATH, method = RequestMethod.GET)
     public ModelAndView getReservedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page,
-                                         @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time) throws UserNotFoundException{
+                                         @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time,
+                                         @ModelAttribute("tripCancelled") final DefaultBoolean tripCancelled) throws UserNotFoundException{
 
         LOGGER.debug("GET Request to {}", RESERVED_TRIPS_PATH);
         final PagedContent<Trip> trips = Objects.equals(time, "past") ? tripService.getTripsWhereCurrentUserIsPassengerPast(page-1, PAGE_SIZE) : tripService.getTripsWhereCurrentUserIsPassengerFuture(page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/reserved-trips/main");
+        mav.addObject("tripCancelled", tripCancelled.getValue());
         mav.addObject("trips", trips);
         mav.addObject("url", RESERVED_TRIPS_PATH);
         return mav;
@@ -224,38 +230,38 @@ public class TripController {
 
     @RequestMapping(value = CREATED_TRIPS_PATH, method = RequestMethod.GET)
     public ModelAndView getCreatedTrips(@RequestParam(value = "page",required = true,defaultValue = "1") final int page,
-                                        @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time) throws UserNotFoundException{
+                                        @RequestParam(value = TIME_QUERY_PARAM_NAME, required = false, defaultValue = TIME_QUERY_PARAM_DEFAULT) final String time,
+                                        @ModelAttribute("tripDeleted") final DefaultBoolean tripDeleted) throws UserNotFoundException{
 
         LOGGER.debug("GET Request to {}", CREATED_TRIPS_PATH);
         final PagedContent<Trip> trips = Objects.equals(time, "past") ? tripService.getTripsCreatedByCurrentUserPast(page-1, PAGE_SIZE) : tripService.getTripsCreatedByCurrentUserFuture(page-1, PAGE_SIZE);
 
         final ModelAndView mav = new ModelAndView("/created-trips/main");
         mav.addObject("trips", trips);
-        mav.addObject("tripDeleted", false);
+        mav.addObject("tripDeleted", tripDeleted.getValue());
         mav.addObject("url", CREATED_TRIPS_PATH);
         return mav;
     }
 
     @RequestMapping(value = "/trips/{id:\\d+$}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteTrip(@PathVariable("id") final int tripId) throws UserNotFoundException, TripNotFoundException{
+    public ModelAndView deleteTrip(@PathVariable("id") final int tripId, RedirectAttributes redirectAttributes) throws UserNotFoundException, TripNotFoundException{
         LOGGER.debug("POST Request to /trips/{}/delete", tripId);
         tripService.deleteTrip(tripId);
-        final ModelAndView mav = getCreatedTrips(1, TIME_QUERY_PARAM_DEFAULT);
-        mav.addObject("tripDeleted", true);
-        return mav;
+        redirectAttributes.addFlashAttribute("tripDeleted",new DefaultBoolean(true));
+        return new ModelAndView(String.format("redirect:%s",CREATED_TRIPS_PATH));
+
     }
     @RequestMapping(value ="/trips/{id:\\d+$}/cancel", method = RequestMethod.POST)
-    public ModelAndView cancelTrip(@PathVariable("id") final int tripId) throws UserNotFoundException, TripNotFoundException{
+    public ModelAndView cancelTrip(@PathVariable("id") final int tripId, RedirectAttributes redirectAttributes) throws UserNotFoundException, TripNotFoundException{
         LOGGER.debug("POST Request to /trips/{}/cancel", tripId);
         tripService.removeCurrentUserAsPassenger(tripId);
-        final ModelAndView mav = getReservedTrips(1, TIME_QUERY_PARAM_DEFAULT);
-        mav.addObject("tripCancelled", true);
-        return mav;
+        redirectAttributes.addFlashAttribute("tripCancelled",new DefaultBoolean(true));
+        return new ModelAndView(String.format("redirect:%s",RESERVED_TRIPS_PATH));
     }
 
     @RequestMapping(value ="/trips/{id:\\d+$}/deletePas/{user_id:\\d+$}", method = RequestMethod.POST)
     public ModelAndView rejectPassanger(@PathVariable("id") final int tripId,
-                                   @PathVariable("user_id") final int userId,
+                                        @PathVariable("user_id") final int userId,
                                         RedirectAttributes redirectAttributes){
         LOGGER.debug("POST Request to /trips/{}/deletePas/{}", tripId, userId);
         tripService.rejectPassenger(tripId,userId);
@@ -265,7 +271,7 @@ public class TripController {
 
     @RequestMapping(value ="/trips/{id:\\d+$}/AceptPas/{user_id:\\d+$}", method = RequestMethod.POST)
     public ModelAndView acceptPassanger(@PathVariable("id") final int tripId,
-                                   @PathVariable("user_id") final int userId,
+                                        @PathVariable("user_id") final int userId,
                                         RedirectAttributes redirectAttributes){
         LOGGER.debug("POST Request to /trips/{}/AceptPas/{}", tripId, userId);
         try{

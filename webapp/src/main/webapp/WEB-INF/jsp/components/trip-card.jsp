@@ -34,7 +34,7 @@
                         <div class="rating-row" id="car-rating">
                             <i class="bi bi-car-front-fill light-text h6" id="car-rating-icon"></i>
                             <c:set var="rating" value="${trip.carRating}" scope="request"/>
-                            <jsp:include page="rating-stars.jsp">
+                            <jsp:include page="/WEB-INF/jsp/components/rating-stars.jsp">
                                 <jsp:param name="fontSize" value="h6"/>
                                 <jsp:param name="fontColor" value="light-text"/>
                             </jsp:include>

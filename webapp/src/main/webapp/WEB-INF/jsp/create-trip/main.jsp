@@ -159,9 +159,18 @@
                                 <c:forEach items="${cars}" var="car">
                                     <div class="collapse" id="car-info-details-<c:out value="${car.carId}"/>">
                                         <div class="primary-bg-color" id="car-info-details-container">
+                                            <c:if test="${car.hasBrand()}">
+                                                <div class="car-info-details-row">
+                                                    <i class="bi bi-caret-right-fill light-text"></i>
+                                                    <spring:message code="profile.brand" arguments="${car.brand}" var="brandString"/>
+                                                    <span class="light-text"><c:out value="${brandString}"/></span>
+                                                </div>
+                                                <hr class="light-text"/>
+                                            </c:if>
                                             <div class="car-info-details-row">
                                                 <i class="bi bi-caret-right-fill light-text"></i>
-                                                <span class="light-text"><spring:message code="profile.plate" arguments="${car.plate}"/></span>
+                                                <spring:message code="profile.plate" arguments="${car.plate}" var="carPlateString"/>
+                                                <span class="light-text"><c:out value="${carPlateString}"/> </span>
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="input-container">
+                    <div id="seatsInput" class="input-container hidden">
                         <div class="input-row">
                             <div class="input-group input-group-sm">
                                 <div class="input-group-text">
@@ -242,6 +251,14 @@
                 </button>
             </div>
         </form:form>
+        <c:if test="${!(empty carAdded) && carAdded}">
+            <div id="toast-container">
+                <jsp:include page="/WEB-INF/jsp/components/success-toast.jsp">
+                    <jsp:param name="title" value="createCar.success.toast.title"/>
+                    <jsp:param name="message" value="createCar.success.toast.message"/>
+                </jsp:include>
+            </div>
+        </c:if>
     </div>
     <script src="<c:url value="/resources/js/pages/createTrip.js"/>" type="module"></script>
     <script src="<c:url value="/resources/js/trips/maxSeats.js"/>" type="module"></script>
