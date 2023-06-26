@@ -195,3 +195,7 @@ body {
 .trip-state-container > h3{
     min-width: max-content;
 }
+
+.deleted-info-container{
+    flex-direction: column;
+}

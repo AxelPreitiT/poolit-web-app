@@ -13,69 +13,70 @@
   <link href="<c:url value="/resources/css/components/trip-detail-card.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body class="background-color">
-  <div id="navbar-container">
-    <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+<div id="navbar-container">
+  <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
+</div>
+<div class="main-container-style container-color">
+  <div id="main-header-row">
+    <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
+    <hr class="secondary-color">
   </div>
-  <div class="main-container-style container-color">
-    <div id="main-header-row">
-      <h1 class="secondary-color"><spring:message code="tripDetails.title"/></h1>
-      <hr class="secondary-color">
-    </div>
-    <div class="info-container">
-    <div id="trip-route-container">
-      <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
-    </div>
-      <div id="trip-info-container">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-6 col-md-5 col-lg-4">
-              <div id="trip-info-text-container">
-                <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
-                  <jsp:param name="showDriverInfo" value="true"/>
-                </jsp:include>
-              </div>
+  <div class="info-container">
+  <div id="trip-route-container">
+    <jsp:include page="/WEB-INF/jsp/components/trip-route.jsp"/>
+  </div>
+    <div id="trip-info-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-md-5 col-lg-4">
+            <div id="trip-info-text-container">
+              <jsp:include page="/WEB-INF/jsp/components/trip-detail-card.jsp">
+                <jsp:param name="showDriverInfo" value="true"/>
+              </jsp:include>
             </div>
-            <div class="col-sm-6 col-md-5 col-lg-5">
-              <div id="car-info-image">
-                <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
-                <div class="placeholder-image">
-                  <img src="${carImageUrl}" alt="car image"/>
-                </div>
+          </div>
+          <div class="col-sm-6 col-md-5 col-lg-5">
+            <div id="car-info-image">
+              <c:url value="/image/${trip.car.imageId}" var="carImageUrl"/>
+              <div class="placeholder-image">
+                <img src="${carImageUrl}" alt="car image"/>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="footer-container">
-      <div class="footer-row">
-        <div id="trip-price-container">
-          <div class="trip-price-row">
-            <div>
-              <span class="h3 text"><spring:message code="tripInfo.driver.price"/></span>
-            </div>
-            <div>
-            <span class="h2 secondary-color">
-              <spring:message code="tripInfo.driver.priceFormat" arguments="${totalIncome}" var="priceString" argumentSeparator=";"/>
-              <c:out value="${priceString}"/>
+  </div>
+  <div id="footer-container">
+    <div class="footer-row">
+      <div id="trip-price-container">
+        <div class="trip-price-row">
+          <div>
+            <span class="h3 text"><spring:message code="tripInfo.driver.price"/></span>
+          </div>
+          <div>
+          <span class="h2 secondary-color">
+            <spring:message code="tripInfo.driver.priceFormat" arguments="${totalIncome}" var="priceString" argumentSeparator=";"/>
+            <c:out value="${priceString}"/>
+          </span>
+          </div>
+        </div>
+        <div class="trip-price-row items-to-end">
+          <c:choose>
+            <c:when test="${trip.recurrent}">
+            <span class="h6 italic-text">
+              <spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/>
+              <c:out value="${totalTripsString}"/>
             </span>
-            </div>
-          </div>
-          <div class="trip-price-row items-to-end">
-            <c:choose>
-              <c:when test="${trip.recurrent}">
-              <span class="h6 italic-text">
-                <spring:message code="tripInfo.multipleTrips" arguments="${trip.queryTotalTrips}" var="totalTripsString"/>
-                <c:out value="${totalTripsString}"/>
-              </span>
-              </c:when>
-              <c:otherwise>
-                <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
-              </c:otherwise>
-            </c:choose>
-          </div>
-          <div class="trip-state-container">
-            <h3>Estado: </h3>
+            </c:when>
+            <c:otherwise>
+              <span class="h6 italic-text"><spring:message code="tripInfo.singleTrip"/></span>
+            </c:otherwise>
+          </c:choose>
+        </div>
+        <c:if test="${!trip.deleted}">
+        <div class="trip-state-container">
+          <h3><spring:message code="tripStatus.title"/></h3>
             <c:choose>
               <c:when test="${trip.tripHasEnded}">
                 <i class="bi bi-check h1 success"></i>
@@ -90,73 +91,87 @@
                 <h3 class="primary-color"><spring:message code="tripStatus.inProgress"/></h3>
               </c:otherwise>
             </c:choose>
-          </div>
         </div>
-        <div id="button-container">
-          <div id="review-trip-container">
-            <c:if test="${tripReviewCollection.canReview}">
-              <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
-                <jsp:param name="reviewed" value="${reviewed}"/>
-              </jsp:include>
-            </c:if>
-          </div>
-          <c:if test="${!trip.tripHasEnded and !trip.deleted }">
-            <div class="delete-trip-container">
-              <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
-                <i class="bi bi-trash-fill light-text h4"></i>
-                <span class="light-text h4"><spring:message code="tripInfo.driver.deleteButton"/></span>
-              </button>
+        </c:if>
+        <c:if test="${trip.deleted}">
+          <div class="deleted-info-container">
+            <div class="trip-state-container">
+              <i class="bi bi-trash danger h3"></i>
+              <h3 class="danger"><spring:message code="tripStatus.deleted"/></h3>
             </div>
-            <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h3 class="modal-title danger"><spring:message code="tripCard.delete"/></h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                  <span class="text"><spring:message code="tripCard.warning.title"/>
-                    <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
-                    <strong class="secondary-color">-</strong>
-                    <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
-                  </span>
-                    <span class="text"><spring:message code="tripCard.warning.messege"/></span>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn primary-button" data-bs-dismiss="modal">
-                      <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
+            <div>
+              <spring:message code="tripStatus.deleted.lastOccurrence" arguments="${trip.lastOccurrenceString}" var="lastTripOccurrenceString"/>
+              <c:out value="${lastTripOccurrenceString}"/>
+            </div>
+          </div>
+
+        </c:if>
+      </div>
+      <div id="button-container">
+        <div id="review-trip-container">
+          <c:if test="${tripReviewCollection.canReview}">
+            <jsp:include page="/WEB-INF/jsp/trip-info/review-list-modal.jsp">
+              <jsp:param name="reviewed" value="${reviewed}"/>
+            </jsp:include>
+          </c:if>
+        </div>
+        <c:if test="${!trip.tripHasEnded and !trip.deleted }">
+          <div class="delete-trip-container">
+            <button class="btn button-style shadow-btn danger-button" data-bs-toggle="modal" data-bs-target="#modal-<c:out value="${trip.tripId}"/>">
+              <i class="bi bi-trash-fill light-text h4"></i>
+              <span class="light-text h4"><spring:message code="tripInfo.driver.deleteButton"/></span>
+            </button>
+          </div>
+          <div class="modal fade" id="modal-<c:out value="${trip.tripId}"/>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title danger"><spring:message code="tripCard.delete"/></h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                <span class="text"><spring:message code="tripCard.warning.title"/>
+                  <strong class="secondary-color"><c:out value="${trip.originCity.name}"/></strong>
+                  <strong class="secondary-color">-</strong>
+                  <strong class="secondary-color"><c:out value="${trip.destinationCity.name}"/></strong>?
+                </span>
+                  <span class="text"><spring:message code="tripCard.warning.messege"/></span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn primary-button" data-bs-dismiss="modal">
+                    <span class="light-text"><spring:message code="tripCard.btn.cancel"/></span>
+                  </button>
+                  <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
+                  <form:form method="DELETE" action="${deleteTripUrl}">
+                    <button type="submit" class="btn danger-button">
+                      <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
                     </button>
-                    <c:url value="/trips/${trip.tripId}/delete" var="deleteTripUrl"/>
-                    <form:form method="DELETE" action="${deleteTripUrl}">
-                      <button type="submit" class="btn danger-button">
-                        <span class="light-text"><spring:message code="tripCard.btn.delete"/></span>
-                      </button>
-                    </form:form>
-                  </div>
+                  </form:form>
                 </div>
               </div>
             </div>
-          </c:if>
-          <c:url value="/trips/created" var="myTripsUrl"/>
-          <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
-            <i class="bi bi-car-front-fill light-text h4"></i>
-            <span class="light-text h4"><spring:message code="tripInfo.driver.button"/></span>
-          </a>
-        </div>
-      </div>
-      <div id="report-container">
-        <c:if test="${tripReportCollection.canReport}">
-          <jsp:include page="/WEB-INF/jsp/trip-info/report-list-modal.jsp">
-            <jsp:param name="reported" value="${reported}"/>
-          </jsp:include>
+          </div>
         </c:if>
+        <c:url value="/trips/created" var="myTripsUrl"/>
+        <a href="${myTripsUrl}" class="btn button-style primary-button shadow-btn">
+          <i class="bi bi-car-front-fill light-text h4"></i>
+          <span class="light-text h4"><spring:message code="tripInfo.driver.button"/></span>
+        </a>
       </div>
     </div>
+    <div id="report-container">
+      <c:if test="${tripReportCollection.canReport}">
+        <jsp:include page="/WEB-INF/jsp/trip-info/report-list-modal.jsp">
+          <jsp:param name="reported" value="${reported}"/>
+        </jsp:include>
+      </c:if>
+    </div>
   </div>
-  <div id="passengers-list-container" class="main-container-style container-color">
-    <div class="info-container-passenger">
-      <h2 id="passengers-list-title" class="secondary-color"><spring:message code="driver.passangers.title"/></h2>
-      <hr class="secondary-color">
+</div>
+<div id="passengers-list-container" class="main-container-style container-color">
+  <div class="info-container-passenger">
+    <h2 id="passengers-list-title" class="secondary-color"><spring:message code="driver.passangers.title"/></h2>
+    <hr class="secondary-color">
 
       <c:url value="" var="baseStatusUrl">
         <c:forEach var="p" items="${param}">
@@ -262,21 +277,21 @@
 
 
 
-        <c:if test="${passengersContent.moreThanOnePage}">
-          <c:url value="" var="basePaginationUrl">
-            <c:forEach var="p" items="${param}">
-              <c:if test="${!(p.key eq 'page')}">
-                <c:param name="${p.key}" value="${p.value}"/>
-              </c:if>
-            </c:forEach>
-          </c:url>
-          <jsp:include page="/WEB-INF/jsp/components/pagination.jsp">
-            <jsp:param name="totalPages" value="${passengersContent.totalPages}"/>
-            <jsp:param name="currentPage" value="${passengersContent.currentPage+1}"/>
-            <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
-          </jsp:include>
-        </c:if>
+      <c:if test="${passengersContent.moreThanOnePage}">
+        <c:url value="" var="basePaginationUrl">
+          <c:forEach var="p" items="${param}">
+            <c:if test="${!(p.key eq 'page')}">
+              <c:param name="${p.key}" value="${p.value}"/>
+            </c:if>
+          </c:forEach>
+        </c:url>
+        <jsp:include page="/WEB-INF/jsp/components/pagination.jsp">
+          <jsp:param name="totalPages" value="${passengersContent.totalPages}"/>
+          <jsp:param name="currentPage" value="${passengersContent.currentPage+1}"/>
+          <jsp:param name="baseUrl" value="${basePaginationUrl}"/>
+        </jsp:include>
       </c:if>
+    </c:if>
 
       <c:if test="${passengersContent.totalCount == 0}">
         <div class="review-empty-container">

@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -9,7 +8,7 @@
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/resources/css/create-car/car-container.css"/>" rel="stylesheet" type="text/css"/>
 
-<div class="user-info-container-car">
+<div id="form-container" class="user-info-container-car <c:if test="${!(empty param.formHasErrors) && param.formHasErrors}">show-form</c:if>">
   <c:url value="/cars/${car.carId}" var="updateCarUrl"/>
   <form:form modelAttribute="updateCarForm" action="${updateCarUrl}" method="post" cssClass="form-style" enctype="multipart/form-data">
   <div class="avatar-img">
@@ -28,6 +27,12 @@
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
     </div>
   </div>
+      <div class="error-container">
+          <div class="row-info rows error-item">
+              <i class="bi bi-exclamation-circle-fill danger"></i>
+              <form:errors path="imageFile" cssClass="danger" element="span"/>
+          </div>
+      </div>
   <div id="user-name">
       <h3 class="no-edit">
           <c:if test="${car.hasInfoCar()}">

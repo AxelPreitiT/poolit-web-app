@@ -1,8 +1,11 @@
 let editing = false;
+const formContainerElement = document.getElementById('form-container');
+const showFormClass = 'show-form';
 
 function toggleEdit() {
   const noEditElements = document.querySelectorAll(".no-edit");
   const editElements = document.querySelectorAll(".edit");
+  const errorItemElements = document.querySelectorAll(".error-item");
 
   // Ocultar elementos con id="no-edit"
   for (let i = 0; i < noEditElements.length; i++) {
@@ -21,7 +24,19 @@ function toggleEdit() {
       editElements[i].classList.add("hidden");
     }
   }
+
+  for(let i = 0; i < errorItemElements.length; i++) {
+    if(!editing) {
+      errorItemElements[i].classList.remove("hidden");
+    } else {
+      errorItemElements[i].classList.add("hidden");
+    }
+  }
   editing = !editing;
+}
+
+if(formContainerElement.classList.contains(showFormClass)) {
+  toggleEdit();
 }
 
 const imageFileElement = document.getElementById('image-file');
