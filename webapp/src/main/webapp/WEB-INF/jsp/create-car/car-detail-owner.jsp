@@ -13,7 +13,9 @@
 <body class="background-color">
   <jsp:include page="/WEB-INF/jsp/components/navbar.jsp"/>
   <div class="main-container">
-    <jsp:include page="/WEB-INF/jsp/create-car/car-container-owner.jsp"/>
+    <jsp:include page="/WEB-INF/jsp/create-car/car-container-owner.jsp">
+      <jsp:param name="formHasErrors" value="${formHasErrors}"/>
+    </jsp:include>
     <div class="list-properties-container">
       <c:set var="reviews" value="${carReviewsPaged.elements}" scope="request"/>
       <jsp:include page="/WEB-INF/jsp/users/review-container.jsp">

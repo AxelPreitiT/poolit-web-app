@@ -8,7 +8,7 @@
 
 <link href="<c:url value="/resources/css/users/profile-container.css"/>" rel="stylesheet" type="text/css"/>
 
-<div class="user-info-container">
+<div id="form-container" class="user-info-container <c:if test="${!(empty param.formHasErrors) && param.formHasErrors}">show-form</c:if>">
   <c:url value="/users/profile" var="updateUserUrl"/>
   <form:form modelAttribute="updateUserForm" action="${updateUserUrl}" method="post" cssClass="form-style" enctype="multipart/form-data">
   <div class="avatar-img">
@@ -27,6 +27,10 @@
         <form:input path="imageFile" type="file" accept="image/*" id="image-file" name="image-file"/>
     </div>
   </div>
+      <div class="row-info rows error-item">
+          <i class="bi bi-exclamation-circle-fill danger"></i>
+          <form:errors path="imageFile" cssClass="danger" element="span"/>
+      </div>
       <spring:message code="user.nameFormat" arguments="${user.name}, ${user.surname}" var="userNameString"/>
   <h3 id="user-name" class="no-edit"><c:out value="${userNameString}"/></h3>
   <div class="row-info rows edit hidden">

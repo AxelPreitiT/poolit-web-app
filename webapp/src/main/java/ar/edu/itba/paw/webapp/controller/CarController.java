@@ -71,6 +71,7 @@ public class CarController {
     public ModelAndView publicCar(
             @PathVariable("id") final long carId,
             @RequestParam(value = "page", required = false, defaultValue = "1") final int page,
+            @RequestParam(value = "formHasErrors", required = false, defaultValue = "false") final boolean formHasErrors,
             @ModelAttribute("updateCarForm") final UpdateCarForm form
     ) throws CarNotFoundException{
         LOGGER.debug("GET Request to /cars/{}", carId);
@@ -92,6 +93,7 @@ public class CarController {
         mav.addObject("car",car);
         mav.addObject("rating", carReviewRating);
         mav.addObject("carReviewsPaged", carReviews);
+        mav.addObject("formHasErrors", formHasErrors);
 
         return mav;
     }
@@ -102,7 +104,7 @@ public class CarController {
         LOGGER.debug("Update Request to /cars/{}", carId);
         if(errors.hasErrors()){
             LOGGER.warn("Errors found in updateCarForm: {}", errors.getAllErrors());
-            return publicCar(carId, FIRST_PAGE, form);
+            return publicCar(carId, FIRST_PAGE, true, form);
         }
         carService.modifyCar(carId,form.getCarInfo(),form.getSeats(),form.getFeatures(), form.getImageFile().getBytes());
         return new ModelAndView("redirect:/cars/" + carId);

@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = MultiPartFileValidator.class)
 @Documented
 public @interface MPFile {
-    String message() default "{MPFile.error}";
+    String message() default "{MPFile.createUserForm.imageFile}";
 
     Class<?> [] groups() default {};
 
