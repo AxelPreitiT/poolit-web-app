@@ -27,7 +27,7 @@
         <div>
           <i class="bi bi-megaphone-fill secondary-color h1"></i>
         </div>
-        <div class="info-profile-img">
+        <div class="info-profile-img-right">
           <div class="short-info-profile-right">
             <div class="inline-text">
               <spring:message code="user.nameFormat" arguments="${report.reported.name}, ${report.reported.surname}" var="reportedNameString"/>

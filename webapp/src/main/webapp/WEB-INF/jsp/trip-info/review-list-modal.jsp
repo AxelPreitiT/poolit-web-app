@@ -14,7 +14,7 @@
     <i class="bi bi-pencil-square light-text h4"></i>
     <span class="light-text h4"><spring:message code="review.review"/></span>
   </button>
-  <div class="modal fade <c:if test="${!(empty param.reviewed) && param.reviewed}">show-on-load</c:if>" id="review-list-modal">
+  <div class="modal fade <c:if test="${(!(empty param.reviewed) && param.reviewed) || (!(empty param.error) && param.error)}">show-on-load</c:if>" id="review-list-modal">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
@@ -25,6 +25,10 @@
           <div id="review-published-container" class="collapse <c:if test="${!(empty param.reviewed) && param.reviewed}">show</c:if>">
             <i class="bi bi-check-circle-fill success h6"></i>
             <span class="success h6" id="review-published-text"><spring:message code="review.toast.message"/></span>
+          </div>
+          <div id="review-published-container-error" class="collapse <c:if test="${!(empty param.error) && param.error}">show</c:if>">
+            <i class="bi bi-x-circle-fill danger h6"></i>
+            <span class="danger h6" id="review-published-text-error"><spring:message code="review.toast.errorMessage"/></span>
           </div>
           <jsp:include page="/WEB-INF/jsp/trip-info/review-list.jsp"/>
         </div>

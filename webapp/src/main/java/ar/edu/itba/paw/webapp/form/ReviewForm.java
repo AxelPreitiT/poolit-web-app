@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 public abstract class ReviewForm {
 
@@ -9,6 +10,7 @@ public abstract class ReviewForm {
     @Max(value = 5)
     private int rating;
 
+    @Size(min = 10,max = 200)
     private String comment;
 
     public int getRating() {

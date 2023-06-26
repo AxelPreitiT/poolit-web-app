@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,6 +31,7 @@ public class ReviewController {
 
     private static final String TRIP_PATH_REDIRECT = "redirect:/trips/";
     private static final String REVIEWED_QUERY_PARAM = "?reviewed=true";
+    private static final String ERROR_QUERY_PARAM = "?error=true";
     private static final String BASE_PATH = "/reviews";
     private static final String PASSENGER_REVIEW_PATH = BASE_PATH + "/passengers/{passengerId:\\d+}";
     private static final String DRIVER_REVIEW_PATH = BASE_PATH + "/drivers/{driverId:\\d+}";
@@ -57,12 +59,20 @@ public class ReviewController {
         return TRIP_PATH_REDIRECT + tripId + REVIEWED_QUERY_PARAM;
     }
 
+    private String getTripErrorRedirectPath(final long tripId){
+        return TRIP_PATH_REDIRECT + tripId + ERROR_QUERY_PARAM;
+    }
+
     @RequestMapping(value = TRIP_PASSENGERS_REVIEW_PATH, method = RequestMethod.POST)
     public ModelAndView reviewPassenger(
             @PathVariable("tripId") final long tripId,
             @PathVariable("passengerId") final long passengerId,
-            @Valid @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm
-    ) throws UserNotFoundException, UserNotLoggedInException, TripNotFoundException, PassengerNotFoundException {
+            @Valid @ModelAttribute("passengerReviewForm") final PassengerReviewForm passengerReviewForm,
+            final BindingResult errors
+            ) throws UserNotFoundException, UserNotLoggedInException, TripNotFoundException, PassengerNotFoundException {
+        if(errors.hasErrors()){
+            return new ModelAndView(getTripErrorRedirectPath(tripId));
+        }
         LOGGER.debug("POST request to /reviews/trips/{}/passengers/{}", tripId, passengerId);
         passengerReviewService.createPassengerReview(tripId, passengerId, passengerReviewForm.getRating(), passengerReviewForm.getComment(), passengerReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));
@@ -73,8 +83,12 @@ public class ReviewController {
     public ModelAndView reviewDriver(
             @PathVariable("tripId") final long tripId,
             @PathVariable("driverId") final long driverId,
-            @Valid @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm
+            @Valid @ModelAttribute("driverReviewForm") final DriverReviewForm driverReviewForm,
+            final BindingResult errors
     ) throws UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {
+        if(errors.hasErrors()){
+            return new ModelAndView(getTripErrorRedirectPath(tripId));
+        }
         LOGGER.debug("POST request to /reviews/trips/{}/drivers/{}", tripId, driverId);
         driverReviewService.createDriverReview(tripId, driverId, driverReviewForm.getRating(), driverReviewForm.getComment(), driverReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));
@@ -85,8 +99,12 @@ public class ReviewController {
     public ModelAndView reviewCar(
             @PathVariable("tripId") final long tripId,
             @PathVariable("carId") final long carId,
-            @Valid @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm
+            @Valid @ModelAttribute("carReviewForm") final CarReviewForm carReviewForm,
+            final BindingResult errors
     ) throws CarNotFoundException, UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
+        if(errors.hasErrors()){
+            return new ModelAndView(getTripErrorRedirectPath(tripId));
+        }
         LOGGER.debug("POST request to /reviews/trips/{}/cars/{}", tripId, carId);
         carReviewService.createCarReview(tripId, carId, carReviewForm.getRating(), carReviewForm.getComment(), carReviewForm.getOption());
         return new ModelAndView(getTripRedirectPath(tripId));
@@ -128,13 +146,11 @@ public class ReviewController {
         final Double passengerRating = passengerReviewService.getPassengerRating(user.getUserId());
         final Double driverRating = driverReviewService.getDriverRating(user.getUserId());
         final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user, FIRST_PAGE, MIN_PAGE_SIZE);
-        boolean isBlocked = userService.isBlocked(user.getUserId());
         boolean isOwnProfile = userService.isCurrentUser(user.getUserId());
         mav.addObject("passengerRating", passengerRating);
         mav.addObject("driverRating", driverRating);
         mav.addObject("user", user);
         mav.addObject("countTrips", createdTrips.getTotalCount());
-        mav.addObject("isBlocked", isBlocked);
         mav.addObject("isOwnProfile",isOwnProfile);
         return mav;
     }
