@@ -124,12 +124,9 @@ public class ReviewController {
     }
 
 
-    //TODO: hacer que reciba el userId
     private ModelAndView addUserReviewProperties(final ModelAndView mav, final User user) throws UserNotFoundException{
-        //Cambiar a que reciba userId
         final Double passengerRating = passengerReviewService.getPassengerRating(user.getUserId());
         final Double driverRating = driverReviewService.getDriverRating(user.getUserId());
-        //TODO: ver si es mejor que reciban el id
         final PagedContent<Trip> createdTrips = tripService.getTripsCreatedByUser(user, FIRST_PAGE, MIN_PAGE_SIZE);
         boolean isBlocked = userService.isBlocked(user.getUserId());
         boolean isOwnProfile = userService.isCurrentUser(user.getUserId());

@@ -26,7 +26,6 @@ public class AuthValidator {
         this.userService = userService;
         this.tripService = tripService;
     }
-    //TODO: ver si funciona aunque tire excepcion
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
         final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);

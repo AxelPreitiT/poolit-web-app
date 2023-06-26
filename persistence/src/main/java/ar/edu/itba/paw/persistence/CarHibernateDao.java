@@ -51,7 +51,6 @@ public class CarHibernateDao implements CarDao {
     public Optional<Car> findByPlateAndUser(String plate, User user) {
         final String plateToSearch = plate.toUpperCase();
         LOGGER.debug("Looking for car with plate '{}' from user with id {} in the database", plate, user.getUserId());
-        //TODO: revisar si busca bien pasando el user (creo que lo compara con la Primary key)
         final TypedQuery<Car> query = em.createQuery("from Car as c where c.plate = :plate AND c.user = :user",Car.class);
         query.setParameter("plate",plateToSearch);
         query.setParameter("user",user);

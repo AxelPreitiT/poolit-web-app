@@ -73,8 +73,6 @@ public class EmailServiceImpl implements EmailService {
         return templateEngine.process(template, context);
     }
 
-    //TODO: PREGUNTAR SI ESTO ESTA BIEN
-    @Async
     public void sendEmail(final String to, final String subject, final String emailTemplate, final Context context, final Locale mailLocale) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
 

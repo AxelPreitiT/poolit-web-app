@@ -188,7 +188,6 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    //TODO: usar el otro enum
     @Transactional
     @Override
     public boolean confirmRegister(String token) {
