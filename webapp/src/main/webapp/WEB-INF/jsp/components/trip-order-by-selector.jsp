@@ -9,8 +9,8 @@
   <c:set value="${param.sortType eq 'price' && param.descending eq true}" var="priceDesc"/>
   <c:set value="${param.sortType eq 'time' && param.descending eq false}" var="timeAsc"/>
   <c:set value="${param.sortType eq 'time' && param.descending eq true}" var="timeDesc"/>
-  <c:set value="${param.sortType eq 'driverRating'}" var="driverRatingDesc"/>
-  <c:set value="${param.sortType eq 'carRating'}" var="carRatingDesc"/>
+  <c:set value="${param.sortType eq 'driver_Rating'}" var="driverRatingDesc"/>
+  <c:set value="${param.sortType eq 'car_Rating'}" var="carRatingDesc"/>
   <div id="order-by-select" class="dropdown">
     <button class="btn btn-secondary dropdown-toggle secondary-bg-color" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       <spring:message code="component.orderFilter.title"/> <span>
@@ -58,11 +58,11 @@
       </c:url>
       <li><a class="sort-item <c:if test="${timeDesc}">active</c:if>" href="${timeDescUrl}"><spring:message code="component.orderFilter.dateDesc"/></a></li>
       <c:url value="${param.baseUrl}" var="driverRatingDescUrl">
-        <c:param name="sortType" value="driverRating"/>
+        <c:param name="sortType" value="driver_Rating"/>
       </c:url>
       <li><a class="sort-item <c:if test="${driverRatingDesc}">active</c:if>" href="${driverRatingDescUrl}"><spring:message code="component.orderFilter.driverRatingDesc"/></a></li>
       <c:url value="${param.baseUrl}" var="carRatingDescUrl">
-        <c:param name="sortType" value="carRating"/>
+        <c:param name="sortType" value="car_Rating"/>
       </c:url>
       <li><a class="sort-item <c:if test="${carRatingDesc}">active</c:if>" href="${carRatingDescUrl}"><spring:message code="component.orderFilter.carRatingDesc"/></a></li>
     </ul>
