@@ -140,9 +140,14 @@
           <artifactId>maven-war-plugin</artifactId>
           <version>3.2.2</version>
 <!--          TODO: agregar para la entrega-->
-<!--          <configuration>-->
+          <configuration>
 <!--            <packagingExcludes>**/logback-test.xml</packagingExcludes>-->
-<!--          </configuration>-->
+            <webResources>
+              <resource>
+                <directory>../frontend/poolit_nextjs/out</directory>
+              </resource>
+            </webResources>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

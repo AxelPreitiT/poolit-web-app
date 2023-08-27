@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 @EnableAsync
 @EnableTransactionManagement
-@EnableWebMvc
+//@EnableWebMvc
 @PropertySource("classpath:application.properties")
 @ComponentScan({"ar.edu.itba.paw.webapp.controller","ar.edu.itba.paw.services","ar.edu.itba.paw.persistence"})
 @Configuration
@@ -52,14 +52,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private Resource schema;
 
 
-    @Bean
-    public ViewResolver viewResolver(){
-        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
+//    @Bean
+//    public ViewResolver viewResolver(){
+//        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//        viewResolver.setViewClass(JstlView.class);
+//        viewResolver.setPrefix("/WEB-INF/jsp/");
+//        viewResolver.setSuffix(".jsp");
+//        return viewResolver;
+//    }
 
 //    @Bean
 //    public DataSource dataSource() {
