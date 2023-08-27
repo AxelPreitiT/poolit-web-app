@@ -44,6 +44,7 @@
       <frontend.working.directory>${frontend.project.name}</frontend.working.directory>
       <maven.war.plugin.version>3.2.2</maven.war.plugin.version>
       <frontend.build.directory>../frontend/${frontend.project.name}/out</frontend.build.directory>
+      <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -250,6 +251,11 @@
                             </resource>
                         </webResources>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven.clean.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
