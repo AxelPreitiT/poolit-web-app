@@ -99,12 +99,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return populator;
     }
 
+    /*
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         super.addResourceHandlers(registry);
 
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
+    */
 
     //Hibernate ORM
     @Bean

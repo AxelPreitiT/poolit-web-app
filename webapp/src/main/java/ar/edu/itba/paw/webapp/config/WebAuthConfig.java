@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,31 +65,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
-                    .invalidSessionUrl("/users/login")
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                    .antMatchers("/admin", "/admin/*").hasRole(UserRole.ADMIN.getText())
-                    .antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
-                    .antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
-                    .antMatchers("/cars/{id:\\d+$}").permitAll()
-                    .antMatchers("/changeRole").hasRole(UserRole.USER.getText())
-                    .antMatchers("/trips/create", "/cars/**", "/users/created, /trips/created/**").hasRole(UserRole.DRIVER.getText())
-                    .antMatchers("/trips/reserved/**").authenticated()
-                    .antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
-                    .antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()
+                    //.antMatchers("/admin", "/admin/*").hasRole(UserRole.ADMIN.getText())
+                    //.antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
+                    //.antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
+                    //.antMatchers("/cars/{id:\\d+$}").permitAll()
+                    //.antMatchers("/changeRole").hasRole(UserRole.USER.getText())
+                    //.antMatchers("/trips/create", "/cars/**", "/users/created, /trips/created/**").hasRole(UserRole.DRIVER.getText())
+                    //.antMatchers("/trips/reserved/**").authenticated()
+                    //.antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
+                    //.antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()
                     .antMatchers("/**").permitAll()
-                .and().formLogin()
-                    .loginPage("/users/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/", false)
-                .and().rememberMe()
-                    .rememberMeParameter("rememberme")
-                    .userDetailsService(userDetailsService)
-                    .key(FileCopyUtils.copyToString(new InputStreamReader(rememberMeKey.getInputStream())))
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(300))
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/users/login")
                 .and().exceptionHandling()
                     .accessDeniedPage("/static/403")
                 .and().csrf().disable();
