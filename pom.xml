@@ -225,6 +225,7 @@
     <module>services</module>
     <module>interfaces</module>
     <module>models</module>
+    <module>frontend</module>
   </modules>
         
 
