@@ -113,6 +113,12 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ar.edu.itba.paw</groupId>
+      <artifactId>frontend</artifactId>
+      <version>${parent.version}</version>
+      <type>pom</type>
+    </dependency>
   </dependencies>
 
   <build>
@@ -138,11 +144,10 @@
         </plugin>
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.2</version>
 <!--          TODO: agregar para la entrega-->
-          <configuration>
-            <packagingExcludes>**/logback-test.xml</packagingExcludes>
-          </configuration>
+<!--          <configuration>-->
+<!--            <packagingExcludes>**/logback-test.xml</packagingExcludes>-->
+<!--          </configuration>-->
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

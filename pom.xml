@@ -37,6 +37,14 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
+      <frontend.project.name>poolit_nextjs</frontend.project.name>
+      <frontend.maven.plugin.version>1.12.1</frontend.maven.plugin.version>
+      <node.version>v18.14.0</node.version>
+      <npm.version>9.3.1</npm.version>
+      <frontend.working.directory>${frontend.project.name}</frontend.working.directory>
+      <maven.war.plugin.version>3.2.2</maven.war.plugin.version>
+      <frontend.build.directory>../frontend/${frontend.project.name}/out</frontend.build.directory>
+      <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -219,12 +227,47 @@
     </dependencies>
   </dependencyManagement>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${frontend.maven.plugin.version}</version>
+                    <configuration>
+                        <nodeVersion>${node.version}</nodeVersion>
+                        <npmVersion>${npm.version}</npmVersion>
+                        <workingDirectory>${frontend.working.directory}</workingDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war.plugin.version}</version>
+                    <configuration>
+                        <webResources>
+                            <resource>
+                                <directory>${frontend.build.directory}</directory>
+                            </resource>
+                        </webResources>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven.clean.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
   <modules>
     <module>webapp</module>
     <module>persistence</module>
     <module>services</module>
     <module>interfaces</module>
     <module>models</module>
+    <module>frontend</module>
   </modules>
         
 
