@@ -94,7 +94,7 @@
   </filter>
   <filter-mapping>
     <filter-name>jersey</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
 </web-app>
