@@ -20,12 +20,14 @@ public interface UserService {
 
     void changeToDriver() throws UserNotFoundException;
 
+    void changeRole(final long userId, final String role) throws UserNotFoundException;
+
     boolean confirmRegister(String token);
 
     void blockUser( long blockedId) throws UserNotFoundException;
     void unblockUser( long blockedId) throws UserNotFoundException;
     boolean isBlocked( long blockedId) throws UserNotFoundException;
-    void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException;
+    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException;
 
     boolean isCurrentUser(long userId) throws UserNotFoundException;
 

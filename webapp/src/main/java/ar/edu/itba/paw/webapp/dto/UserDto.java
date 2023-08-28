@@ -16,6 +16,7 @@ public class UserDto {
     private String email;
     private String phone;
     private URI self;
+    private URI role;
     public static UserDto fromUser(final UriInfo uriInfo, final User user){
        final UserDto dto = new UserDto();
        dto.name= user.getName();
@@ -23,6 +24,7 @@ public class UserDto {
        dto.email= user.getEmail();
        dto.phone=user.getPhone();
        dto.self= uriInfo.getBaseUriBuilder().path("/api/users/").path(String.valueOf(user.getUserId())).build();
+       dto.role= uriInfo.getBaseUriBuilder().path("/api/users/").path(String.valueOf(user.getUserId())).path("role/").build();
        return dto;
     }
 
@@ -64,5 +66,13 @@ public class UserDto {
 
     public void setSelf(URI self) {
         this.self = self;
+    }
+
+    public URI getRole() {
+        return role;
+    }
+
+    public void setRole(URI role) {
+        this.role = role;
     }
 }

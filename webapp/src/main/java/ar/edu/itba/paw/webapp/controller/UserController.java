@@ -7,7 +7,9 @@ import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.dto.UserRoleDto;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
+import ar.edu.itba.paw.webapp.form.UpdateUserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +55,36 @@ public class UserController {
 
     @POST
     @Produces( value = {MediaType.APPLICATION_JSON})
-    public Response createUser(final CreateUserForm userForm) throws EmailAlreadyExistsException, CityNotFoundException, IOException {
+    public Response createUser(@Valid final CreateUserForm userForm) throws EmailAlreadyExistsException, CityNotFoundException, IOException {
         final User user = userService.createUser(userForm.getUsername(), userForm.getSurname(), userForm.getEmail(), userForm.getPhone(),
                 userForm.getPassword(), userForm.getBornCityId(), userForm.getMailLocale(), null, userForm.getImageFile().getBytes());
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getUserId())).build();
         return Response.created(uri).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Produces( value = { MediaType.APPLICATION_JSON } )
+    public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserForm userForm) throws UserNotFoundException, IOException, CityNotFoundException {
+        userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale(), userForm.getImageFile().getBytes());
+        return Response.status(Response.Status.OK).build();
+    }
+
+    //TODO: revisar, lo necesitamos siempre al rol, pero como no lo cambiamos en el put lo pusimos aca
+    @GET
+    @Path("/{id}/role")
+    @Produces( value = { MediaType.APPLICATION_JSON } )
+    public Response getRole(@PathParam("id") final long id) throws UserNotFoundException{
+        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
+        return Response.ok(UserRoleDto.fromString(user.getRole())).build();
+    }
+
+    @PUT
+    @Path("/{id}/role")
+    @Produces( value = { MediaType.APPLICATION_JSON } )
+    public Response modifyRole(@PathParam("id") final long id, @Valid final UserRoleDto userRoleDto) throws UserNotFoundException{
+        userService.changeRole(id,userRoleDto.getRole());
+        return Response.status(Response.Status.OK).build();
     }
 
 }

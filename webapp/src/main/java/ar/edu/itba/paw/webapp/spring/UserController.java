@@ -184,7 +184,7 @@ public class UserController {
             return profileView(false,true, form);
         }
 
-        userService.modifyUser( form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),form.getMailLocale(), form.getImageFile().getBytes());
+//        userService.modifyUser( form.getUsername(),form.getSurname(),form.getPhone(),form.getBornCityId(),form.getMailLocale(), form.getImageFile().getBytes());
 
         return new ModelAndView("redirect:/users/profile");
     }
