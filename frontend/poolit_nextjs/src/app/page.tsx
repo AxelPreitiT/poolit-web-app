@@ -1,8 +1,8 @@
 "use client";
 
-import Image from 'next/image'
-import styles from './page.module.css'
-import Link from 'next/link'
+import styles from "./page.module.css";
+import Link from "next/link";
+import StaticImage from "@/components/StaticImage";
 
 export default function Home() {
   return (
@@ -18,9 +18,9 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/vercel.svg`}
+            By{" "}
+            <StaticImage
+              src="vercel.svg"
               alt="Vercel Logo"
               className={styles.vercelLogo}
               width={100}
@@ -32,9 +32,9 @@ export default function Home() {
       </div>
 
       <div className={styles.center}>
-        <Image
+        <StaticImage
           className={styles.logo}
-          src={`${process.env.NEXT_PUBLIC_BASE_PATH}/next.svg`}
+          src="next.svg"
           alt="Next.js Logo"
           width={180}
           height={37}
@@ -89,5 +89,5 @@ export default function Home() {
         </a>
       </div>
     </main>
-  )
+  );
 }
