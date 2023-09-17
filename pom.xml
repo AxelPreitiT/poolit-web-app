@@ -46,6 +46,7 @@
       <frontend.build.directory>../frontend/${frontend.project.name}/out</frontend.build.directory>
       <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
       <jersey.version>3.0-SNAPSHOT</jersey.version>
+      <jwt.version>4.4.0</jwt.version>
   </properties>
   <repositories>
     <repository>
@@ -315,6 +316,12 @@
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-jaxb</artifactId>
             <version>${jersey.version}</version>
+        </dependency>
+<!--        JWT-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.4.0</version>
         </dependency>
     </dependencies>
   </dependencyManagement>

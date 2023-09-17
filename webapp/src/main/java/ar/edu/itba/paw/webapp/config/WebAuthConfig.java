@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.webapp.auth.AuthValidator;
+import ar.edu.itba.paw.webapp.auth.BasicAuthFilter;
+import ar.edu.itba.paw.webapp.auth.JwtFilter;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +26,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.FileCopyUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +41,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private BasicAuthFilter basicAuthFilter;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -67,6 +78,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
+                .antMatchers("/api/users/{id}").access("@authValidator.checkIfWantedIsSelf(request,#id)")
                     //.antMatchers("/admin", "/admin/*").hasRole(UserRole.ADMIN.getText())
                     //.antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
                     //.antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
@@ -78,8 +90,21 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //.antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()
                     .antMatchers("/**").permitAll()
                 .and().exceptionHandling()
-                    .accessDeniedPage("/static/403")
-                .and().csrf().disable();
+                .accessDeniedHandler((req, res, ex) -> { //TODO: ver si vale la pena llevarlos a otro archivo
+                    res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    res.setContentType(MediaType.APPLICATION_JSON);
+                    res.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",ex.getMessage()));
+                })
+                .authenticationEntryPoint((req, res, ex) -> {
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    res.setContentType(MediaType.APPLICATION_JSON);
+                    res.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",ex.getMessage()));
+                })
+//                    .accessDeniedPage("/static/403")
+                .and().cors()
+                .and().csrf().disable()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(basicAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

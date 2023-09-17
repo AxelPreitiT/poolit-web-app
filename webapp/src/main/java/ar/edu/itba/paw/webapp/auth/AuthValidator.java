@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @Component
 public class AuthValidator {
@@ -25,6 +26,14 @@ public class AuthValidator {
     public AuthValidator(final UserService userService, final TripService tripService){
         this.userService = userService;
         this.tripService = tripService;
+    }
+
+    public boolean checkIfWantedIsSelf(HttpServletRequest request, long id){
+        final Optional<User> user = userService.getCurrentUser();
+        if(!user.isPresent()){
+            return false;
+        }
+        return user.get().getUserId() == id;
     }
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
