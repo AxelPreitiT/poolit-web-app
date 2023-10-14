@@ -8,7 +8,7 @@ const router = createBrowserRouter(
     { path: "/login", Component: LoginPage },
   ],
   {
-    basename: import.meta.env.PUBLIC_BASE_PATH,
+    basename: import.meta.env.VITE_PUBLIC_BASE_PATH,
   }
 );
 
