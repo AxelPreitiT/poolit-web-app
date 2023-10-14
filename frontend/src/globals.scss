@@ -1,0 +1,123 @@
+@use "colors.module.scss" as colors;
+
+body {
+  background-color: colors.$background-color !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0 !important;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  margin-bottom: 0 !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+form {
+  margin-bottom: 0 !important;
+}
+
+hr {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.light-text {
+  color: colors.$light-text-color !important;
+}
+
+.italic-text {
+  color: colors.$italic-text-color !important;
+  font-style: italic !important;
+}
+
+.placeholder-text {
+  color: colors.$placeholder-text-color !important;
+}
+
+.text {
+  color: colors.$text-color !important;
+}
+
+.secondary-text {
+  color: colors.$secondary-color !important;
+}
+
+.link-text {
+  color: colors.$secondary-color !important;
+  transition: color 0.3s ease-in-out !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: colors.$secondary-color-dark !important;
+  }
+}
+
+%button-style {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  column-gap: 0.5em !important;
+  border-radius: 8px !important;
+  padding: 0.5em 1em !important;
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out !important;
+}
+
+%shadow-btn {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-color: transparent !important;
+  &:active {
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
+    border-color: transparent !important;
+  }
+}
+
+.primary-btn {
+  @extend %button-style;
+  @extend %shadow-btn;
+  background-color: colors.$primary-color !important;
+  color: colors.$light-text-color !important;
+  border-color: colors.$primary-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: colors.$primary-color-dark !important;
+    color: colors.$light-text-color !important;
+    border-color: colors.$primary-color-dark !important;
+  }
+}
+
+.secondary-btn {
+  @extend %button-style;
+  @extend %shadow-btn;
+  background-color: colors.$secondary-color !important;
+  color: colors.$light-text-color !important;
+  border-color: colors.$secondary-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: colors.$secondary-color-dark !important;
+    color: colors.$light-text-color !important;
+    border-color: colors.$secondary-color-dark !important;
+  }
+}
+
+.form-check-input:checked {
+  background-color: colors.$secondary-color !important;
+  border-color: colors.$secondary-color !important;
+}

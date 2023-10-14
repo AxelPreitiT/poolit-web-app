@@ -1,0 +1,21 @@
+{
+  "poolit": {
+    "name": "POOLIT",
+    "logo": "Poolit Logo"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "remember": "Mantener la sesión iniciada",
+    "login": "Ingresar"
+  },
+  "register": {
+    "register": "Registrarse",
+    "not_registered": "¿No tenés una cuenta aún?"
+  },
+  "verify_email": {
+    "request": "Para reenviar el correo de verificación, hacé click",
+    "here": "aquí"
+  }
+}
