@@ -23,21 +23,14 @@
         <configuration>
           <filesets>
             <fileset>
-              <directory>${frontend.project.name}/.next</directory>
-              <includes>
-                <include>**</include>
-              </includes>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-            <fileset>
-                <directory>${frontend.project.name}/out</directory>
+                <directory>./dist</directory>
                 <includes>
                     <include>**</include>
                 </includes>
                 <followSymlinks>false</followSymlinks>
             </fileset>
             <fileset>
-              <directory>${frontend.project.name}/node</directory>
+              <directory>./node</directory>
               <includes>
                 <include>**</include>
               </includes>
