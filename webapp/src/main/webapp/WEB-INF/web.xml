@@ -25,8 +25,8 @@
     </listener-class>
   </listener>
 
-<!--  Add a mapping to avoid the default tomcat error pages-->
-  <error-page>
+  <!--  Add a mapping to avoid the default tomcat error pages-->
+  <!--<error-page>
     <error-code>404</error-code>
     <location>/errors</location>
   </error-page>
@@ -41,7 +41,8 @@
   <error-page>
     <error-code>405</error-code>
     <location>/errors</location>
-  </error-page>
+  </error-page>-->
+
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -74,5 +75,21 @@
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
+  <!-- Redirect all requests to index.html so Router in React works -->
+  <!-- Exclude JS, CSS, and other non-HTML files stored in /assets from forwarding -->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/assets/*</url-pattern>
+  </servlet-mapping>
+  <!-- Forward all requests to index.html -->
+  <servlet>
+    <servlet-name>index</servlet-name>
+    <jsp-file>/index.html</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>index</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
 
 </web-app>
