@@ -6,8 +6,7 @@ import PoolitLogo from "@/assets/poolit.svg";
 import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
-  const { t, i18n } = useTranslation();
-  console.log(i18n.languages);
+  const { t } = useTranslation();
 
   return (
     <div className={styles.mainContainer}>
