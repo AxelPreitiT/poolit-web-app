@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Optional;
 
 @Component
@@ -36,7 +37,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        final String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        String header = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (header == null || !header.startsWith("Bearer ")){
             filterChain.doFilter(httpServletRequest,httpServletResponse);
@@ -67,13 +68,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.createToken(user.get()));
+            header = "Bearer " +  jwtUtils.createToken(user.get());
         }
 
-        final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(),
-                userDetails.getPassword(),
-                userDetails.getAuthorities()
+//        Initialize principal with UserDetails
+        final UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(
+                userDetails,null,
+                userDetails == null ? Collections.emptyList() : userDetails.getAuthorities()
         );
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
