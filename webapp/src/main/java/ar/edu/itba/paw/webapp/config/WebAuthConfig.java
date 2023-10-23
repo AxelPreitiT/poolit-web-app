@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.models.UserRole;
-import ar.edu.itba.paw.webapp.auth.AuthValidator;
-import ar.edu.itba.paw.webapp.auth.BasicAuthFilter;
-import ar.edu.itba.paw.webapp.auth.JwtFilter;
-import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -90,16 +87,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //.antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()
                     .antMatchers("/**").permitAll()
                 .and().exceptionHandling()
-                .accessDeniedHandler((req, res, ex) -> { //TODO: ver si vale la pena llevarlos a otro archivo
-                    res.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    res.setContentType(MediaType.APPLICATION_JSON);
-                    res.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",ex.getMessage()));
-                })
-                .authenticationEntryPoint((req, res, ex) -> {
-                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    res.setContentType(MediaType.APPLICATION_JSON);
-                    res.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",ex.getMessage()));
-                })
+                    .accessDeniedHandler(new ForbiddenRequestHandler())
+                    .authenticationEntryPoint(new UnauthorizedRequestHandler())
 //                    .accessDeniedPage("/static/403")
                 .and().cors()
                 .and().csrf().disable()

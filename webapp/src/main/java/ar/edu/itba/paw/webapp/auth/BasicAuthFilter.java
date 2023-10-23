@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +38,8 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
     private static final String REFRESH_HEADER = "Authorization-refresh";
 
+    private static final String VERIFICATION_HEADER = "Account-verification";
+
     @Autowired
     public BasicAuthFilter(final JwtUtils jwtUtils, final UserService userService, final AuthenticationManager authenticationManager){
         this.jwtUtils = jwtUtils;
@@ -55,17 +59,26 @@ public class BasicAuthFilter extends OncePerRequestFilter {
             if(credentials.length!=CREDENTIALS_LENGTH){
                 return;
             }
-            final Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(credentials[EMAIL_INDEX], credentials[PASSWORD_INDEX])
-            );
-            userService.findByEmail(credentials[EMAIL_INDEX]).ifPresent(u -> {
-                httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.createToken(u));
+//            check if it's a verication token
+            if(!userService.confirmRegister(credentials[PASSWORD_INDEX])){
+                final Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(credentials[EMAIL_INDEX], credentials[PASSWORD_INDEX])
+                );
+                final User user = userService.findByEmail(credentials[EMAIL_INDEX]).orElseThrow(IllegalStateException::new);
+                httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.createToken(user));
 //                https://www.rfc-editor.org/rfc/rfc9110#name-field-extensibility
-                httpServletResponse.setHeader(REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(u));
-            });
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                httpServletResponse.setHeader(REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(user));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            //if token is confirmed, the user is logged in by service
+            //then, we only need to continue in the filter chain
+        }catch (DisabledException ex){
+            String[] credentials = decodeHeader(header.split(" ")[1]);
+            userService.sendVerificationEmail(credentials[EMAIL_INDEX]);
+            httpServletResponse.setHeader(VERIFICATION_HEADER,"true");
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }catch (Exception e){
-//            TODO: ver que hacer acá
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -79,7 +92,6 @@ public class BasicAuthFilter extends OncePerRequestFilter {
         try {
             decodedToken = Base64.getDecoder().decode(base64Token);
         }catch (IllegalArgumentException e){
-//            TODO: change for custom credentials exception
             throw new IllegalArgumentException();
         }
 

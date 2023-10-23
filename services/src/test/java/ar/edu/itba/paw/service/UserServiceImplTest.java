@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
@@ -27,9 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -61,7 +56,7 @@ public class UserServiceImplTest {
     @Mock
     private ImageServiceImpl imageService;
     @Mock
-    private tokenServiceImpl tokenService;
+    private TokenServiceImpl tokenService;
     @Mock
     private EmailServiceImpl emailService;
     //@Mock
