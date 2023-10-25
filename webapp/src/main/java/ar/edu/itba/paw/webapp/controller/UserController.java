@@ -6,14 +6,18 @@ import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.dto.UserDto;
 import ar.edu.itba.paw.webapp.dto.UserRoleDto;
+import ar.edu.itba.paw.webapp.dto.user.PrivateUserDto;
+import ar.edu.itba.paw.webapp.dto.user.PublicUserDto;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 
@@ -47,11 +51,33 @@ public class UserController {
 
     @GET
     @Path("/{id}")
-    @Produces( value = { MediaType.APPLICATION_JSON } )
-    public Response getById(@PathParam("id") final long id) throws UserNotFoundException{
+    @Produces(VndType.APPLICATION_USER_PUBLIC)
+    public Response getByIdPublic(@PathParam("id") final long id) throws UserNotFoundException{
         final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(UserDto.fromUser(uriInfo,user)).build();
+        return Response.ok(PublicUserDto.fromUser(uriInfo,user)).build();
     }
+
+
+//    TODO: ver por qué agrega "type" a la respuesta
+    @GET
+    @Path("/{id}")
+    @Produces(VndType.APPLICATION_USER_PRIVATE)
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)") //TODO: ver por que lleva a 404
+    public Response getByIdPrivate(@PathParam("id") final long id) throws UserNotFoundException{
+        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
+        return Response.ok(PrivateUserDto.fromUser(uriInfo,user)).build();
+    }
+
+//    @GET
+//    @Path("/{id}")
+//    @Produces(VndType.APPLICATION_USER_PASSENGER)
+////    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
+//    public Response getByIdPassenger(@PathParam("id") final long id) throws UserNotFoundException{
+//        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
+//        return Response.ok(UserDto.fromUser(uriInfo,user)).build();
+//    }
+
+
 
     @POST
     @Produces( value = {MediaType.APPLICATION_JSON})

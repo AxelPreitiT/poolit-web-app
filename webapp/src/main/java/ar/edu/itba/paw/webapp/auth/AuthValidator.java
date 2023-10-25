@@ -28,7 +28,7 @@ public class AuthValidator {
         this.tripService = tripService;
     }
 
-    public boolean checkIfWantedIsSelf(HttpServletRequest request, long id){
+    public boolean checkIfWantedIsSelf(long id){
         final Optional<User> user = userService.getCurrentUser();
         if(!user.isPresent()){
             return false;
