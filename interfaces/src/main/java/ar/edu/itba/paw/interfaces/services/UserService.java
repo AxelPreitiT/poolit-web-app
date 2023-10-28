@@ -2,15 +2,22 @@ package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
     User createUser(final String username, final String surname, final String email,
                     final String phone, final String password, final long bornCityId, final String mailLocaleString, String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException;
+
+    byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException;
+
+    void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException;
 
     Optional<User> getCurrentUser();
     Optional<User> findById(long userId);

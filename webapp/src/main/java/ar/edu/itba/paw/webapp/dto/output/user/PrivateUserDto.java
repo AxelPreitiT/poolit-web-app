@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto.user;
+package ar.edu.itba.paw.webapp.dto.output.user;
 
 
 import ar.edu.itba.paw.models.User;
@@ -16,11 +16,11 @@ public class PrivateUserDto extends PublicUserDto{
 
     private long cityId; //TODO: ver que hacer con esto, vale la pena un controller para /city
 
-    private URI city;
+    private URI cityUri;
 
     private String mailLocale;
 
-    private URI role;
+    private URI roleUri;
 
     public PrivateUserDto(){}
 
@@ -29,9 +29,9 @@ public class PrivateUserDto extends PublicUserDto{
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.cityId = user.getBornCity().getId();
-        this.city = uriInfo.getBaseUriBuilder().path("/api/cities/").path(String.valueOf(user.getBornCity().getId())).build();
+        this.cityUri = uriInfo.getBaseUriBuilder().path("/api/cities/").path(String.valueOf(user.getBornCity().getId())).build();
         this.mailLocale = user.getMailLocale().getLanguage();
-        this.role = uriInfo.getBaseUriBuilder().path("/api/users/").path(String.valueOf(user.getUserId())).path("role/").build();
+        this.roleUri = uriInfo.getBaseUriBuilder().path("/api/users/").path(String.valueOf(user.getUserId())).path("role/").build();
     }
     public static PrivateUserDto fromUser(final UriInfo uriInfo, final User user){
         return new PrivateUserDto(uriInfo,user);
@@ -61,12 +61,12 @@ public class PrivateUserDto extends PublicUserDto{
         this.cityId = cityId;
     }
 
-    public URI getCity() {
-        return city;
+    public URI getCityUri() {
+        return cityUri;
     }
 
-    public void setCity(URI city) {
-        this.city = city;
+    public void setCityUri(URI cityUri) {
+        this.cityUri = cityUri;
     }
 
     public String getMailLocale() {
@@ -77,11 +77,11 @@ public class PrivateUserDto extends PublicUserDto{
         this.mailLocale = mailLocale;
     }
 
-    public URI getRole() {
-        return role;
+    public URI getRoleUri() {
+        return roleUri;
     }
 
-    public void setRole(URI role) {
-        this.role = role;
+    public void setRoleUri(URI roleUri) {
+        this.roleUri = roleUri;
     }
 }

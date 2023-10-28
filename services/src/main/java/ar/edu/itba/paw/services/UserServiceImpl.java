@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -86,6 +88,21 @@ public class UserServiceImpl implements UserService {
             LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.getUserId(), e);
         }
         return finalUser;
+    }
+
+
+    @Transactional
+    @Override
+    public byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException {
+        final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        return imageService.getImageBytea(user.getUserImageId());
+    }
+
+    @Transactional
+    @Override
+    public void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException{
+        final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        imageService.updateImage(content,user.getUserImageId());
     }
 
     @Transactional
