@@ -56,15 +56,13 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
         try {
             String[] credentials = decodeHeader(header.split(" ")[1]);
-            if(credentials.length!=CREDENTIALS_LENGTH){
-                return;
-            }
 //            check if it's a verication token
-            if(!userService.confirmRegister(credentials[PASSWORD_INDEX])){
+            final User user = userService.findByEmail(credentials[EMAIL_INDEX]).orElseThrow(IllegalStateException::new);
+//            Si esta habilitado o (no esta habilitado y lo que mando no es token de verificación)
+            if(user.isEnabled() || !userService.confirmRegister(credentials[PASSWORD_INDEX])){
                 final Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(credentials[EMAIL_INDEX], credentials[PASSWORD_INDEX])
                 );
-                final User user = userService.findByEmail(credentials[EMAIL_INDEX]).orElseThrow(IllegalStateException::new);
                 httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.createToken(user));
 //                https://www.rfc-editor.org/rfc/rfc9110#name-field-extensibility
                 httpServletResponse.setHeader(REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(user));
@@ -79,6 +77,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }catch (Exception e){
+//            Si no manda las credenciales, alguna operación provoca ArrayIndexOutOfBoundsException y cae aca
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
