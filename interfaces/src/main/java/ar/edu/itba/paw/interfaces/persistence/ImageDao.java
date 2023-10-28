@@ -10,6 +10,7 @@ public interface ImageDao {
 
     Optional<Image> findById(long imageId);
 
+    Image update(Image image, byte[] data);
 
 }
 
