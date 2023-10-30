@@ -5,9 +5,7 @@ import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
-import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.dto.input.CreateUserDto;
@@ -16,9 +14,7 @@ import ar.edu.itba.paw.webapp.dto.output.user.PrivateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PublicUserDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageSize;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageType;
-import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
-import ar.edu.itba.paw.webapp.form.annotations.MPFile;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -37,7 +33,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Optional;
 
 @Path("/api/users")
 @Component
@@ -91,23 +86,39 @@ public class UserController {
     @Produces({"image/*"})
     public Response getUserImage(@PathParam("id") final long id) throws ImageNotFoundException, UserNotFoundException, IOException {
         final byte[] image = userService.getUserImage(id);
-
 //        TODO: add caching capability
         return Response.ok(image).build();
     }
 
+
+//    TODO: fix
     @PUT
     @Path("/{id}/image")
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateUserImage(@PathParam("id") final long id,
-                                    @ImageType @FormDataParam("image") final FormDataBodyPart image,
                                     @ImageSize @FormDataParam("image") final byte[] content) throws ImageNotFoundException, UserNotFoundException{
         userService.updateUserImage(id,content);
         return Response.noContent().contentLocation(uriInfo.getBaseUriBuilder().path(String.valueOf(id)).path("image/").build()).build();
     }
 
-    
+    @GET
+    @Path("/{id}/role")
+    @Produces( value = { MediaType.APPLICATION_JSON } )
+    public Response getRole(@PathParam("id") final long id) throws UserNotFoundException{
+        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
+        return Response.ok(UserRoleDto.fromString(user.getRole())).build();
+    }
+
+    @PUT
+    @Path("/{id}/role")
+    @Produces( value = { VndType.APPLICATION_USER_ROLE } )
+    public Response modifyRole(@PathParam("id") final long id, @Valid final UserRoleDto userRoleDto) throws UserNotFoundException{
+        userService.changeRole(id,userRoleDto.getRole());
+        return Response.status(Response.Status.OK).build();
+    }
+
+
 
 //    @GET
 //    @Path("/{id}")
@@ -127,23 +138,6 @@ public class UserController {
     @Produces( value = { MediaType.APPLICATION_JSON } )
     public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserForm userForm) throws UserNotFoundException, IOException, CityNotFoundException {
         userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale(), userForm.getImageFile().getBytes());
-        return Response.status(Response.Status.OK).build();
-    }
-
-    //TODO: revisar, lo necesitamos siempre al rol, pero como no lo cambiamos en el put lo pusimos aca
-    @GET
-    @Path("/{id}/role")
-    @Produces( value = { MediaType.APPLICATION_JSON } )
-    public Response getRole(@PathParam("id") final long id) throws UserNotFoundException{
-        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(UserRoleDto.fromString(user.getRole())).build();
-    }
-
-    @PUT
-    @Path("/{id}/role")
-    @Produces( value = { MediaType.APPLICATION_JSON } )
-    public Response modifyRole(@PathParam("id") final long id, @Valid final UserRoleDto userRoleDto) throws UserNotFoundException{
-        userService.changeRole(id,userRoleDto.getRole());
         return Response.status(Response.Status.OK).build();
     }
 

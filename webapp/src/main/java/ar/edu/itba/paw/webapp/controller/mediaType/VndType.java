@@ -16,6 +16,8 @@ public class VndType {
 
     public static final String APPLICATION_USER_PRIVATE = BASE + "user.output.private.v1+json";
 
+    public static final String APPLICATION_USER_ROLE = BASE + "user.role.v1+json";
+
 
 }
 

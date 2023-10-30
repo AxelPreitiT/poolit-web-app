@@ -5,7 +5,7 @@ import javax.validation.constraints.Pattern;
 
 public class UserRoleDto {
 
-    @Pattern(regexp = "DRIVER|USER")
+    @Pattern(regexp = "DRIVER|USER",message = "{dto.validation.role}")
     @NotNull
     private String role;
 
