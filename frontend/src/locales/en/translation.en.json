@@ -17,5 +17,16 @@
   "verify_email": {
     "request": "To resend the verification email, please click",
     "here": "here"
+  },
+  "error": {
+    "email": {
+      "required": "The email is required",
+      "invalid": "The email is invalid"
+    },
+    "password": {
+      "required": "The password is required",
+      "min": "The password must have at least {{min}} characters",
+      "max": "The password must have at most {{max}} characters"
+    }
   }
 }

@@ -19,7 +19,7 @@ i18next
   .init({
     resources,
     fallbackLng: "en",
-    debug: import.meta.env.VITE_I18NEXT_DEBUG_MODE,
+    debug: import.meta.env.DEV,
     detection: {
       caches: [],
     },

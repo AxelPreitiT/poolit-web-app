@@ -1,0 +1,19 @@
+@use "@/colors.module.scss" as colors;
+
+.errorContainer {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.3em;
+  align-items: center;
+}
+
+.errorContainer i {
+  color: colors.$warning-color;
+  font-size: 1rem;
+}
+
+.errorContainer span {
+  color: colors.$warning-color;
+  font-weight: 600;
+  font-size: 0.8rem;
+}

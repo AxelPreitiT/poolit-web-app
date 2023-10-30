@@ -17,5 +17,16 @@
   "verify_email": {
     "request": "Para reenviar el correo de verificación, hacé click",
     "here": "aquí"
+  },
+  "error": {
+    "email": {
+      "required": "El correo electrónico es requerido",
+      "invalid": "El correo electrónico es inválido"
+    },
+    "password": {
+      "required": "La contraseña es requerida",
+      "min": "La contraseña debe tener al menos {{min}} caracteres",
+      "max": "La contraseña debe tener como máximo {{max}} caracteres"
+    }
   }
 }
