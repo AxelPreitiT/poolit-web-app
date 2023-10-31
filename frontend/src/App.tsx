@@ -3,6 +3,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import PoolitFavicon from "@/images/favicon.svg";
 import router from "./AppRouter";
+import GlobalToastStack from "./components/toasts/GlobalToastStack";
 
 const App = () => {
   const helmetContext = {};
@@ -16,6 +17,7 @@ const App = () => {
         <link rel="icon" type="image/svg+xml" href={PoolitFavicon} />
       </Helmet>
       <RouterProvider router={router} />
+      <GlobalToastStack />
     </HelmetProvider>
   );
 };
