@@ -8,7 +8,8 @@
     "email": "Correo electrónico",
     "password": "Contraseña",
     "remember": "Mantener la sesión iniciada",
-    "login": "Ingresar"
+    "login": "Ingresar",
+    "error": "Ocurrió un error al iniciar sesión. Por favor, intentá nuevamente más tarde."
   },
   "register": {
     "register": "Registrarse",

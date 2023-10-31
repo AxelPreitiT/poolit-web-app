@@ -1,11 +1,11 @@
 import i18next from "i18next";
 import { z } from "zod";
 
-const passwordMinLength = 3;
-const passwordMaxLength = 20;
+const passwordMinLength: number = 3;
+const passwordMaxLength: number = 20;
 
 // Interpolations for i18next
-const interpolations: Record<string, Record<string, unknown>> = {
+const interpolations: Record<string, Record<string, number>> = {
   email: {},
   password: {
     min: passwordMinLength,
@@ -35,11 +35,12 @@ export const LoginFormSchema = z.object({
     .max(passwordMaxLength, {
       message: "error.password.max",
     }),
+  rememberMe: z.boolean().optional(),
 });
 
 export type LoginFormSchemaType = z.infer<typeof LoginFormSchema>;
 
 // This function is used to translate the error messages
 // and interpolate the values if needed (the key has interpolation values)
-export const tLogin = (key: string | undefined) =>
+export const tFormError = (key: string | undefined) =>
   key && i18next.t(key, interpolations[key.split(".")[1]]);

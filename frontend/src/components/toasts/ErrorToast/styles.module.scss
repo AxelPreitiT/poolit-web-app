@@ -1,0 +1,17 @@
+@use "@/colors.module.scss" as colors;
+
+.toast {
+  background-color: colors.$danger-color !important;
+}
+
+.toastBody {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 1rem;
+}
+
+.toastBody > * {
+  font-size: 0.8rem;
+}

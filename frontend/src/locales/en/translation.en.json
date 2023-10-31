@@ -8,7 +8,8 @@
     "email": "Email",
     "password": "Password",
     "remember": "Keep me logged in",
-    "login": "Log in"
+    "login": "Log in",
+    "error": "An error occurred while logging in. Please try again later."
   },
   "register": {
     "register": "Sign up",

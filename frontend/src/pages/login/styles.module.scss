@@ -84,7 +84,11 @@
   align-items: center;
 }
 
-.footerContainer {
+.loginFooterContainer > * {
+  text-align: center;
+}
+
+.footerContainer > * {
   display: flex;
   flex-direction: row;
   column-gap: 0.3rem;
