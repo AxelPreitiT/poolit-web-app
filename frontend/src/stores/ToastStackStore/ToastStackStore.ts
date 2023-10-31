@@ -3,6 +3,7 @@ import ToastType from "./ToastType";
 
 interface ToastState {
   message: string; // Message to display in the toast
+  title?: string; // Title to display in the toast
   type: ToastType; // Type of toast (error)
   timeout?: number; // Time in ms to display the toast
   show: boolean; // Whether or not to show the toast
@@ -12,10 +13,12 @@ interface ToastState {
 interface ToastStackState {
   toastStack: Record<number, ToastState>; // Object of toast states, keyed by ID
   addToast: ({
+    title,
     message,
     type,
     timeout,
   }: {
+    title?: string;
     message: string;
     type: ToastType;
     timeout?: number;
@@ -27,13 +30,14 @@ interface ToastStackState {
 const useToastStackStore = create<ToastStackState>((set) => ({
   toastStack: {},
 
-  addToast: ({ message, type, timeout }) =>
+  addToast: ({ title, message, type, timeout }) =>
     set((state) => {
       const now = Date.now();
       return {
         toastStack: {
           ...state.toastStack,
           [now]: {
+            title,
             message,
             type,
             timeout,

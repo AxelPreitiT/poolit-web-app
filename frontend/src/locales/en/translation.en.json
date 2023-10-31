@@ -9,7 +9,7 @@
     "password": "Password",
     "remember": "Keep me logged in",
     "login": "Log in",
-    "error": "An error occurred while logging in. Please try again later."
+    "error": "Please, try logging in again later"
   },
   "register": {
     "register": "Sign up",
@@ -20,6 +20,7 @@
     "here": "here"
   },
   "error": {
+    "default": "An error occurred",
     "email": {
       "required": "The email is required",
       "invalid": "The email is invalid"

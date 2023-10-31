@@ -19,6 +19,7 @@ const GlobalToastStack = () => {
         if (ToastComponent) {
           return (
             <ToastComponent
+              title={toast.title}
               message={toast.message}
               timeout={toast.timeout}
               key={toast.id}

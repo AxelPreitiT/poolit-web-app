@@ -9,7 +9,7 @@
     "password": "Contraseña",
     "remember": "Mantener la sesión iniciada",
     "login": "Ingresar",
-    "error": "Ocurrió un error al iniciar sesión. Por favor, intentá nuevamente más tarde."
+    "error": "Por favor, intentá iniciar sesión nuevamente más tarde"
   },
   "register": {
     "register": "Registrarse",
@@ -20,6 +20,7 @@
     "here": "aquí"
   },
   "error": {
+    "default": "Ocurrió un error",
     "email": {
       "required": "El correo electrónico es requerido",
       "invalid": "El correo electrónico es inválido"
