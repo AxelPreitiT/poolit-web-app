@@ -97,8 +97,9 @@ public class UserController {
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateUserImage(@PathParam("id") final long id,
-                                    @ImageSize @FormDataParam("image") final byte[] content) throws ImageNotFoundException, UserNotFoundException{
-        userService.updateUserImage(id,content);
+                                    @ImageType @FormDataParam("image") final FormDataBodyPart type,
+                                    @ImageSize @FormDataParam("image") final byte[] image) throws ImageNotFoundException, UserNotFoundException{
+        userService.updateUserImage(id,image);
         return Response.noContent().contentLocation(uriInfo.getBaseUriBuilder().path(String.valueOf(id)).path("image/").build()).build();
     }
 
