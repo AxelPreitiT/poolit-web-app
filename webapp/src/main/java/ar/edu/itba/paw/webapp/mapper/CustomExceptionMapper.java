@@ -10,7 +10,7 @@ import javax.ws.rs.ext.Provider;
 public class UserNotFoundMapper implements ExceptionMapper<UserNotFoundException> {
     @Override
     public Response toResponse(UserNotFoundException exception){
-        //TODO: add info for specific exception
+//        TODO: change for bad request?
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
