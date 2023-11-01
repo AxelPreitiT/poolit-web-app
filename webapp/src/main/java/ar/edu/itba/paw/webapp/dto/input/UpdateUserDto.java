@@ -1,13 +1,14 @@
 package ar.edu.itba.paw.webapp.dto.input;
 
 import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Email;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.Locale;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.Phone;
 
-import javax.validation.constraints.*;
-public class CreateUserDto {
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+public class UpdateUserDto {
     @Size(min = 2, max = 20)
     @NotNull
     private String username;
@@ -17,17 +18,8 @@ public class CreateUserDto {
     private String surname;
 
     @NotNull
-    @Size(max = 50)
-    @Email
-    private String email;
-
-    @NotNull
     @Phone
     private String phone;
-
-    @NotNull
-    @Size(min = 3, max = 20)
-    private String password;
 
     @Min(value = 1)
     @CityId
@@ -53,28 +45,12 @@ public class CreateUserDto {
         this.surname = surname;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getBornCityId() {
@@ -93,4 +69,3 @@ public class CreateUserDto {
         this.mailLocale = mailLocale;
     }
 }
-

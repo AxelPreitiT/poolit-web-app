@@ -19,6 +19,8 @@ public interface UserService {
 
     void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException;
 
+    void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString) throws CityNotFoundException, UserNotFoundException;
+
     Optional<User> getCurrentUser();
     Optional<User> findById(long userId);
 
@@ -34,7 +36,8 @@ public interface UserService {
     void blockUser( long blockedId) throws UserNotFoundException;
     void unblockUser( long blockedId) throws UserNotFoundException;
     boolean isBlocked( long blockedId) throws UserNotFoundException;
-    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException;
+    void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException;
+
 
     boolean isCurrentUser(long userId) throws UserNotFoundException;
 
