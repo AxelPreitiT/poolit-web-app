@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.models.UserRole;
-import ar.edu.itba.paw.webapp.auth.AuthValidator;
-import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +13,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,18 +24,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.FileCopyUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
 @EnableWebSecurity
-@ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private BasicAuthFilter basicAuthFilter;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -66,7 +76,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling()
+                    .accessDeniedHandler(new ForbiddenRequestHandler())
+                    .authenticationEntryPoint(new UnauthorizedRequestHandler())
                 .and().authorizeRequests()
+//                    .antMatchers("/api/users/{id}").authenticated()
+//                .antMatchers("/api/users/{id}").access("@authValidator.checkIfWantedIsSelf(request,#id)")
                     //.antMatchers("/admin", "/admin/*").hasRole(UserRole.ADMIN.getText())
                     //.antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
                     //.antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
@@ -77,9 +92,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     //.antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
                     //.antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()
                     .antMatchers("/**").permitAll()
-                .and().exceptionHandling()
-                    .accessDeniedPage("/static/403")
-                .and().csrf().disable();
+//                    .accessDeniedPage("/static/403")
+                .and().cors()
+                .and().csrf().disable()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(basicAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

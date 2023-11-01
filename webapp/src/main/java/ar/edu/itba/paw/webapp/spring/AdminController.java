@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.spring;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;

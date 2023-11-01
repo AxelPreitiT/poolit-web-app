@@ -8,21 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.*;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class tokenServiceImpl implements TokenService {
+public class TokenServiceImpl implements TokenService {
     static final int EXPIRATION = 60 * 24;
 
     private final TokenDao tokenDao;
 
     @Autowired
-    public tokenServiceImpl(final TokenDao tokenDao){
+    public TokenServiceImpl(final TokenDao tokenDao){
         this.tokenDao = tokenDao;
     }
 

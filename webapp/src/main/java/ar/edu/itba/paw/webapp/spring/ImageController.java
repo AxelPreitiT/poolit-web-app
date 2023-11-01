@@ -1,7 +1,6 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.spring;
 
 import ar.edu.itba.paw.interfaces.services.ImageService;
-import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

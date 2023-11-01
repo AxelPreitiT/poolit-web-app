@@ -1,9 +1,8 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.spring;
 
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.ReportService;
-import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.webapp.form.ReportForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
