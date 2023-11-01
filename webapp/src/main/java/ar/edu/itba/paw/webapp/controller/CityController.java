@@ -17,6 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Path("/api/cities")
 public class CityController {
@@ -34,12 +36,16 @@ public class CityController {
         this.cityService = cityService;
     }
 
+    private <T> Supplier<T> notFoundExceptionOf(Function<Integer,T> constructor){
+        return () -> constructor.apply(Response.Status.NOT_FOUND.getStatusCode());
+    }
+
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CITY)
     public Response getById(@PathParam("id") final int id) throws CityNotFoundException{
         LOGGER.debug("GET request for city with cityId {}",id);
-        final City ans = cityService.findCityById(id).orElseThrow(CityNotFoundException::new);
+        final City ans = cityService.findCityById(id).orElseThrow(notFoundExceptionOf(CityNotFoundException::new));
         return Response.ok(CityDto.fromCity(uriInfo,ans)).build();
     }
 }
