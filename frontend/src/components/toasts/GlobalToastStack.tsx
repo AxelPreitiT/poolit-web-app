@@ -1,5 +1,5 @@
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import ToastType from "@/stores/ToastStackStore/ToastType";
+import ToastType from "@/enums/ToastType";
 import { ToastContainer } from "react-bootstrap";
 import ErrorToast from "./ErrorToast/ErrorToast";
 import ToastProps from "./ToastProps";

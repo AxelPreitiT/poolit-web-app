@@ -4,15 +4,23 @@ import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
 import TripsPage from "./pages/trips/TripsPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
+import RegisterPage from "./pages/register/RegisterPage";
+
+export const homePath = "/";
+export const loginPath = "/login";
+export const registerPath = "/register";
+export const verifyEmailPath = "/verify-email";
+export const tripsPath = "/trips";
+export const tripDetailsPath = "/trips/:tripId";
 
 const router = createBrowserRouter(
   [
     {
-      path: "/",
+      path: homePath,
       element: <HomePage />,
     },
     {
-      path: "/login",
+      path: loginPath,
       element: (
         <RouteWithTitle title="login.title">
           <LoginPage />
@@ -20,11 +28,19 @@ const router = createBrowserRouter(
       ),
     },
     {
-      path: "/trips",
+      path: registerPath,
+      element: (
+        <RouteWithTitle title="register.title">
+          <RegisterPage />
+        </RouteWithTitle>
+      ),
+    },
+    {
+      path: tripsPath,
       element: <TripsPage />,
     },
     {
-      path: "/trips/:tripId",
+      path: tripDetailsPath,
       element: <TripDetailsPage />,
     },
   ],

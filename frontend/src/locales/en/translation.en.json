@@ -3,6 +3,11 @@
     "name": "POOLIT",
     "logo": "Poolit Logo"
   },
+  "language": {
+    "language_selector": "What language would you prefer to receive notifications in?",
+    "spanish": "Spanish",
+    "english": "English"
+  },
   "login": {
     "title": "Log in",
     "email": "Email",
@@ -12,7 +17,20 @@
     "error": "Please, try logging in again later"
   },
   "register": {
+    "title": "Sign up",
+    "banner": "Sign up banner",
+    "profile_image": "Profile image",
+    "personal_info": "Personal information",
+    "name": "Name",
+    "last_name": "Last name",
+    "email": "Email",
+    "telephone": "Phone number",
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "residence_city": "Residence neighborhood",
+    "preferences": "Preferences",
     "register": "Sign up",
+    "already_registered": "Already have an account?",
     "not_registered": "Don't have an account yet?"
   },
   "verify_email": {

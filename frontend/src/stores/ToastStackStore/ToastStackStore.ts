@@ -1,5 +1,5 @@
+import ToastType from "@/enums/ToastType";
 import { create } from "zustand";
-import ToastType from "./ToastType";
 
 interface ToastState {
   message: string; // Message to display in the toast

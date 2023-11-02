@@ -1,14 +1,15 @@
 import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
-import PoolitLogo from "@/images/poolit.svg";
 import { useTranslation } from "react-i18next";
 import { SubmitHandler } from "react-hook-form";
 import { LoginFormSchemaType } from "./loginFormSchema";
 import LoginForm from "./LoginForm";
 import { useState } from "react";
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import ToastType from "@/stores/ToastStackStore/ToastType";
+import ToastType from "@/enums/ToastType";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import { registerPath, verifyEmailPath } from "@/AppRouter";
+import RedirectHomeLogo from "@/components/links/RedirectHomeLogo/RedirectHomeLogo";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -31,16 +32,14 @@ const LoginPage = () => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.logoContainer}>
-        <Link to="/">
-          <img src={PoolitLogo} alt={t("poolit.logo")} />
-        </Link>
+        <RedirectHomeLogo />
       </div>
       <div className={styles.loginContainer}>
         <LoginForm onSubmit={onSubmit} isSubmitting={isSubmitting} />
         <div className={styles.loginFooterContainer}>
           <hr className="light-text" />
           <h4 className="light-text">{t("register.not_registered")}</h4>
-          <Link to="/register">
+          <Link to={registerPath}>
             <h5 className="link-text fw-bold">{t("register.register")}</h5>
           </Link>
         </div>
@@ -48,7 +47,7 @@ const LoginPage = () => {
       <div className={styles.footerContainer}>
         <h6>
           {t("verify_email.request")}
-          <Link to="/verify-email">
+          <Link to={verifyEmailPath}>
             <h6 className="link-text fw-bold">{t("verify_email.here")}</h6>
           </Link>
         </h6>
