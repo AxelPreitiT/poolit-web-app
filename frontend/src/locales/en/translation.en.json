@@ -31,7 +31,8 @@
     "preferences": "Preferences",
     "register": "Sign up",
     "already_registered": "Already have an account?",
-    "not_registered": "Don't have an account yet?"
+    "not_registered": "Don't have an account yet?",
+    "error": "Please, try signing up again later"
   },
   "verify_email": {
     "request": "To resend the verification email, please click",
@@ -41,12 +42,35 @@
     "default": "An error occurred",
     "email": {
       "required": "The email is required",
-      "invalid": "The email is invalid"
+      "invalid": "Invalid email"
     },
     "password": {
       "required": "The password is required",
       "min": "The password must have at least {{min}} characters",
       "max": "The password must have at most {{max}} characters"
+    },
+    "name": {
+      "required": "The name is required",
+      "min": "The name must have at least {{min}} characters",
+      "max": "The name must have at most {{max}} characters"
+    },
+    "last_name": {
+      "required": "The last name is required",
+      "min": "The last name must have at least {{min}} characters",
+      "max": "The last name must have at most {{max}} characters"
+    },
+    "telephone": {
+      "required": "The telephone is required",
+      "invalid": "Invalid telephone number"
+    },
+    "city_id": {
+      "required": "The neighborhood is required"
+    },
+    "confirm_password": {
+      "invalid": "The passwords do not match"
+    },
+    "profile_pic": {
+      "maxSize": "The image size must be at most {{maxSize}} MB"
     }
   }
 }

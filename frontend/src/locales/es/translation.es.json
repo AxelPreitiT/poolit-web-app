@@ -31,7 +31,8 @@
     "preferences": "Preferencias",
     "register": "Registrarse",
     "already_registered": "¿Ya tenés una cuenta?",
-    "not_registered": "¿No tenés una cuenta aún?"
+    "not_registered": "¿No tenés una cuenta aún?",
+    "error": "Por favor, intentá registrarte nuevamente más tarde"
   },
   "verify_email": {
     "request": "Para reenviar el correo de verificación, hacé click",
@@ -47,6 +48,29 @@
       "required": "La contraseña es requerida",
       "min": "La contraseña debe tener al menos {{min}} caracteres",
       "max": "La contraseña debe tener como máximo {{max}} caracteres"
+    },
+    "name": {
+      "required": "El nombre es requerido",
+      "min": "El nombre debe tener al menos {{min}} caracteres",
+      "max": "El nombre debe tener como máximo {{max}} caracteres"
+    },
+    "last_name": {
+      "required": "El apellido es requerido",
+      "min": "El apellido debe tener al menos {{min}} caracteres",
+      "max": "El apellido debe tener como máximo {{max}} caracteres"
+    },
+    "telephone": {
+      "required": "El teléfono es requerido",
+      "invalid": "El teléfono es inválido"
+    },
+    "city_id": {
+      "required": "El barrio es requerido"
+    },
+    "confirm_password": {
+      "invalid": "Las contraseñas no coinciden"
+    },
+    "profile_pic": {
+      "maxSize": "La imagen no puede pesar más de {{maxSize}} MB"
     }
   }
 }
