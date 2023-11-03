@@ -70,7 +70,7 @@
       "invalid": "Las contraseñas no coinciden"
     },
     "profile_pic": {
-      "maxSize": "La imagen no puede pesar más de {{maxSize}} MB"
+      "max_size": "La imagen no puede pesar más de {{max_size}} MB"
     }
   }
 }

@@ -10,12 +10,13 @@ const emailMaxLength = 50;
 const telephoneRegExp = /^(\+\d{1,3}\s?)?\d{2,4}\s?\d{4}\s?\d{4}$/;
 const passwordMinLength = 3;
 const passwordMaxLength = 20;
-const cityMinId = -1;
+const cityMinId = 1;
+const locales = [z.literal("en"), z.literal("es")] as const;
 
 // Interpolations for i18next
 const interpolations: Record<string, Record<string, number>> = {
   profile_pic: {
-    maxSize: imageMaxSize / 1024 / 1024,
+    max_size: imageMaxSize / 1024 / 1024,
   },
   name: {
     min: nameMinLength,
@@ -47,7 +48,7 @@ export const RegisterFormSchema = z
         return !file || (file instanceof File && file.size <= imageMaxSize);
       },
       {
-        message: "error.profile_pic.maxSize",
+        message: "error.profile_pic.max_size",
       }
     ),
     name: z
@@ -111,7 +112,7 @@ export const RegisterFormSchema = z
         message: "error.city_id.required",
       })
     ),
-    locale: z.union([z.literal("en"), z.literal("es")]).default("en"),
+    locale: z.union(locales).default("en"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "error.confirm_password.invalid",
