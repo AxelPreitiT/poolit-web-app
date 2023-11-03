@@ -70,7 +70,7 @@
       "invalid": "The passwords do not match"
     },
     "profile_pic": {
-      "maxSize": "The image size must be at most {{maxSize}} MB"
+      "max_size": "The image size must be at most {{max_size}} MB"
     }
   }
 }
