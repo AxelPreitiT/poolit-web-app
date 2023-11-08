@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
@@ -22,10 +23,12 @@ public class AuthValidator {
 
     final UserService userService;
     final TripService tripService;
+    final CarService carService;
     @Autowired
-    public AuthValidator(final UserService userService, final TripService tripService){
+    public AuthValidator(final UserService userService, final TripService tripService, final CarService carService){
         this.userService = userService;
         this.tripService = tripService;
+        this.carService = carService;
     }
 
     public boolean checkIfWantedIsSelf(long id){
@@ -34,6 +37,16 @@ public class AuthValidator {
             return false;
         }
         return user.get().getUserId() == id;
+    }
+
+    public boolean checkIfCarIsOwn(long carId){
+        final Optional<User> user = userService.getCurrentUser();
+        if(!user.isPresent()){
+            return false;
+        }
+        return user.get().getUserId() == carService.findById(carId).get().getUser().getUserId();
+
+
     }
     public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
         int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
