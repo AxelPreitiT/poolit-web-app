@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
-public class CarFromUserValidator implements ConstraintValidator<CarFromUser, Integer> {
+public class CarFromUserValidator implements ConstraintValidator<CarFromUser, Long> {
 
     private final CarService carService;
 
@@ -18,7 +18,7 @@ public class CarFromUserValidator implements ConstraintValidator<CarFromUser, In
         this.carService = carService;
     }
     @Override
-    public boolean isValid( Integer carId, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid( Long carId, ConstraintValidatorContext constraintValidatorContext) {
         try{
             List<Car> cars = carService.findCurrentUserCars();
             return cars.stream().anyMatch(c -> c.getCarId()==carId);
