@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.output.CityDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Path("/api/cities")
+@Path(UrlHolder.CITY_BASE)
 public class CityController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CityController.class);

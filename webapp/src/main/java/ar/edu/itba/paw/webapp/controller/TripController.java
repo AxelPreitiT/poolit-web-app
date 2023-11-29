@@ -2,10 +2,14 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.models.trips.Trip;
+import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
+import ar.edu.itba.paw.webapp.dto.output.TripDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
-@Path("/api/trips")
+@Path(UrlHolder.TRIPS_BASE)
 public class TripController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
@@ -41,6 +45,13 @@ public class TripController {
         return Response.created(uri).build();
     }
 
+    @GET
+    @Path("/{id}")
+    public Response getById(@PathParam("id") final long id) throws TripNotFoundException {
+        LOGGER.debug("GET request for trip with id {}",id);
+        final Trip trip = tripService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+        return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
+    }
 
 //    @GET
 ////    Usar los parámetros de esto para el url de las recomendadas
@@ -50,12 +61,7 @@ public class TripController {
 //    }
 //
 
-//
-//    @GET
-//    @Path("/{id}")
-//    public Response getById(@PathParam("id") final long id){
-//
-//    }
+
 //
 //    @DELETE
 //    @Path("/{id}")

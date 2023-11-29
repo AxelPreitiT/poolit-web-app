@@ -8,6 +8,8 @@ import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
+import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.CreateUserDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.UserRoleDto;
@@ -32,7 +34,7 @@ import java.net.URI;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Path("/api/users")
+@Path(UrlHolder.USER_BASE)
 @Component
 public class UserController {
 
@@ -50,16 +52,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    private <T> Supplier<T> notFoundExceptionOf(Function<Integer,T> constructor){
-        return () -> constructor.apply(Response.Status.NOT_FOUND.getStatusCode());
-    }
 
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_USER_PUBLIC)
     public Response getByIdPublic(@PathParam("id") final long id) throws UserNotFoundException{
         LOGGER.debug("GET request for public userId {}",id);
-        final User user = userService.findById(id).orElseThrow(notFoundExceptionOf(UserNotFoundException::new));
+        final User user = userService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(UserNotFoundException::new));
         return Response.ok(PublicUserDto.fromUser(uriInfo,user)).build();
     }
 
@@ -71,7 +70,7 @@ public class UserController {
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)") //TODO: ver por que lleva a 404
     public Response getByIdPrivate(@PathParam("id") final long id) throws UserNotFoundException{
         LOGGER.debug("GET request for private userId {}",id);
-        final User user = userService.findById(id).orElseThrow(notFoundExceptionOf(UserNotFoundException::new));
+        final User user = userService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(UserNotFoundException::new));
         return Response.ok(PrivateUserDto.fromUser(uriInfo,user)).build();
     }
 
