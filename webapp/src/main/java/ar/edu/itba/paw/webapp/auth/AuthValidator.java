@@ -35,18 +35,21 @@ public class AuthValidator {
         }
         return user.get().getUserId() == id;
     }
-    public boolean checkIfUserIsTripCreator(HttpServletRequest servletRequest) throws TripNotFoundException, UserNotLoggedInException {
-        int tripId = Integer.parseInt(servletRequest.getRequestURI().replaceFirst(".*/trips/","").replaceFirst("/.*",""));
-        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        if(!user.getIsDriver()){
-            LOGGER.debug("User with id {} tried to delete a trip without being a driver",user.getUserId());
+
+    public boolean checkIfUserIsTripCreator(long tripId) throws TripNotFoundException {
+        final Optional<User> optionalUser = userService.getCurrentUser();
+        if (!optionalUser.isPresent()) {
             return false;
         }
-        //User is a driver
+        final User user = optionalUser.get();
+        if (!user.getIsDriver()) {
+            return false;
+        }
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        boolean ans = trip.getDriver().equals(user);
-        if(!ans){
-            LOGGER.debug("User {} tried to delete a trip without being it's creator",user.getUserId());
+//        Compare id because of lazy loading of driver
+        final boolean ans = user.getUserId() == trip.getDriver().getUserId();
+        if (!ans) {
+            LOGGER.debug("User {} tried to delete a trip {} without being it's creator", user.getUserId(), trip.getTripId());
         }
         return ans;
     }

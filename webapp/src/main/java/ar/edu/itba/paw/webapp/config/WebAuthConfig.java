@@ -2,12 +2,14 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.webapp.auth.*;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -76,6 +78,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id)")
                 .and().exceptionHandling()
                     .accessDeniedHandler(new ForbiddenRequestHandler())
                     .authenticationEntryPoint(new UnauthorizedRequestHandler())

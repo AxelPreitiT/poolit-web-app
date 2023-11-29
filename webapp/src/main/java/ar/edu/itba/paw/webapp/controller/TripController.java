@@ -53,6 +53,15 @@ public class TripController {
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    //TODO: check creator of trip
+    public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {
+        LOGGER.debug("DELETE request for trip with id {}",id);
+        tripService.deleteTrip(id);
+        return Response.ok().build();
+    }
+
 //    @GET
 ////    Usar los parámetros de esto para el url de las recomendadas
 ////    Tambien para las creadas por un usuario o donde un usuario es participante
@@ -63,12 +72,6 @@ public class TripController {
 
 
 //
-//    @DELETE
-//    @Path("/{id}")
-//    //TODO: check creator of trip
-//    public Response deleteTrip(@PathParam("id") final long id){
-//
-//    }
 //
 //
 //    @POST
