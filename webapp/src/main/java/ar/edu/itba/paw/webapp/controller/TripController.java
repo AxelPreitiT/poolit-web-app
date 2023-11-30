@@ -8,6 +8,7 @@ import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
+import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Optional;
 
+
+//TODO: agregar media Types
 @Path(UrlHolder.TRIPS_BASE)
 public class TripController {
 
@@ -77,6 +80,8 @@ public class TripController {
     //Es como un id de la instancia de pasajero, ya que el usuario solo puede aparecer una vez como pasajero
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+//    TODO: que solo sea el usuario o el creador
+    //si no ver como limitar el estado para los otros
     public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
         LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
         final Optional<Passenger> passenger = tripService.getPassenger(id,userId);
@@ -85,6 +90,17 @@ public class TripController {
         }
         return Response.ok(PassengerDto.fromPassenger(uriInfo,passenger.get())).build();
     }
+
+//    https://www.rfc-editor.org/rfc/rfc5789
+    @PATCH
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+//    TODO: que lo pueda hacer solo el creador
+    public Response acceptOrRejectPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId, @Valid PatchPassengerDto dto) throws UserNotFoundException, PassengerAlreadyProcessedException, PassengerNotFoundException, NotAvailableSeatsException {
+        LOGGER.debug("PATCH request to passenger {} from trip {}",userId,id);
+        tripService.acceptOrRejectPassenger(id,userId,dto.getPassengerState());
+        return Response.noContent().build();
+    }
+
 
 //    @GET
 ////    Usar los parámetros de esto para el url de las recomendadas

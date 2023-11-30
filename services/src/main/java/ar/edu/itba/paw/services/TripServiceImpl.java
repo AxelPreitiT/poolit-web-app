@@ -673,4 +673,22 @@ public class TripServiceImpl implements TripService {
         return tripDao.rejectPassenger(passenger);
     }
 
+    @Transactional
+    @Override
+    public boolean acceptOrRejectPassenger(final long tripId, final long userId, Passenger.PassengerState passengerState) throws UserNotFoundException, PassengerNotFoundException, PassengerAlreadyProcessedException, NotAvailableSeatsException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        Passenger passenger = tripDao.getPassenger(tripId,user).orElseThrow(PassengerNotFoundException::new);
+        //Passenger was already accepted or rejected
+        if(!passenger.getPassengerState().equals(Passenger.PassengerState.PENDING)){
+            throw new PassengerAlreadyProcessedException();
+        }
+        switch (passengerState){
+            case PENDING: throw new IllegalArgumentException();
+            case ACCEPTED: return acceptPassenger(tripId,userId);
+            case REJECTED: return rejectPassenger(tripId,userId);
+        }
+        //Lamentablemente no podemos usar switch expressions
+        return false;
+    }
+
 }
