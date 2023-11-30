@@ -14,7 +14,7 @@ public interface TripDao {
     //
     Trip create(final City originCity, final String originAddress, final City destinationCity, final String destinationAddress, final Car car, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final boolean isRecurrent, final double price, final int maxPassengers, final User driver);
     //
-    boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime);
+    Passenger addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime);
     //
     boolean removePassenger(final Trip trip, final Passenger passenger);
     List<Passenger> getPassengers(final TripInstance tripInstance);

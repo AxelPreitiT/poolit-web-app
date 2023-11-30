@@ -211,6 +211,61 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
+    public Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
+        final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final LocalDateTime startDateTime = startDate.atTime(startTime);
+        final LocalDateTime endDateTime = endDate==null?startDateTime:endDate.atTime(startTime);
+        if(trip==null || user==null || startDateTime == null || endDateTime == null){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);
+            throw e;
+        }
+        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
+        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        if(passengers.contains(passenger)){
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
+            throw e;
+        }
+        if(tripDao.getTripSeatCount(trip.getTripId(),startDateTime,endDateTime)>=trip.getMaxSeats()){
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
+            throw e;
+        }
+        if(startDateTime.isBefore(LocalDateTime.now())){
+            TripAlreadyStartedException e = new TripAlreadyStartedException();
+            LOGGER.error("Trip with id {} already started", trip.getTripId(), e);
+            throw e;
+        }
+        if(     startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
+                || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
+                || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
+                || trip.getDriver().equals(user)
+                || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("{}, startDateTime '{}' or endDateTime '{}' have invalid values", trip, startDateTime, endDateTime, e);
+            throw e;
+        }
+        try{
+            emailService.sendMailNewPassengerRequest(trip, passenger);
+        }
+        catch( Exception e){
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
+        }
+        try {
+            emailService.sendMailTripRequest(trip, passenger);
+        }
+        catch (Exception e) {
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
+        }
+        return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
+    }
+
+
+//    TODO: delete
+    @Transactional
+    @Override
     public boolean addCurrentUser(final long tripId, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
         final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
@@ -259,7 +314,7 @@ public class TripServiceImpl implements TripService {
         catch (Exception e) {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
         }
-        return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
+        return tripDao.addPassenger(trip,user,startDateTime,endDateTime)!=null;
     }
 
     @Transactional

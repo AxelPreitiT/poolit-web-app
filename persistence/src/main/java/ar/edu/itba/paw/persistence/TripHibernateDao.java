@@ -43,14 +43,14 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public boolean addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime) {
+    public Passenger addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime) {
         Trip tripMerge = em.merge(trip);
         User userMerge = em.merge(user);
-        Passenger aux = new Passenger(userMerge,tripMerge,startDateTime,endDateTime);
+        Passenger ans = new Passenger(userMerge,tripMerge,startDateTime,endDateTime);
         LOGGER.debug("Adding new passenger with user id {} to the trip with id {} in the database",userMerge.getUserId(), tripMerge.getTripId());
-        em.persist(aux);
+        em.persist(ans);
         LOGGER.info("Passenger with user id {} added to the trip with id {} in the database",userMerge.getUserId(), tripMerge.getTripId());
-        return aux.getTrip()!=null;//Es un return true, revisar
+        return ans;
     }
 
     @Override

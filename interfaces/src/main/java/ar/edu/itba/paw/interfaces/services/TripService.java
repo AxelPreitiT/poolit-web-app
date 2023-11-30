@@ -14,6 +14,11 @@ import java.util.Optional;
 
 public interface TripService {
     Trip createTrip(final long originCityId, final String originAddress, final long destinationCityId, final String destinationAddress, final long carId, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, final LocalDate endDate, final LocalTime endTime)  throws UserNotFoundException, CityNotFoundException, CarNotFoundException;
+
+    //TODO: test
+    Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException;
+
+    //TODO: delete
     boolean addCurrentUser(final long trip, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, UserNotFoundException, TripNotFoundException;
 
     boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException;

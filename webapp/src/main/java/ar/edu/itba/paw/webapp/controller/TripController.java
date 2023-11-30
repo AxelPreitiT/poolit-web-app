@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
+import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Optional;
 
 @Path(UrlHolder.TRIPS_BASE)
 public class TripController {
@@ -55,11 +56,34 @@ public class TripController {
 
     @DELETE
     @Path("/{id}")
-    //TODO: check creator of trip
     public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
         return Response.ok().build();
+    }
+
+    @POST
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
+        LOGGER.debug("POST request to add passenger for trip {}",id);
+        //TODO: preguntar si está bien tomar el contexto de auth acá
+        Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getStartTime(),dto.getEndDate());
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(ans.getUserId())).build();
+        //Los pasajeros se acceden en /trips/{tripId}/passengers/{userId}
+        return Response.created(uri).build();
+    }
+
+    //TODO: preguntar si esta bien que el userId se use como identificador del pasajero en el viaje
+    //Es como un id de la instancia de pasajero, ya que el usuario solo puede aparecer una vez como pasajero
+    @GET
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
+        LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
+        final Optional<Passenger> passenger = tripService.getPassenger(id,userId);
+        if(!passenger.isPresent()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(PassengerDto.fromPassenger(uriInfo,passenger.get())).build();
     }
 
 //    @GET
@@ -69,16 +93,6 @@ public class TripController {
 //
 //    }
 //
-
-
-//
-//
-//
-//    @POST
-//    @Path("/{id}/passengers")
-//    public Response addPassenger(@PathParam("id") final long id){
-//        //TODO: preguntar si está bien tomar el contexto de auth acá
-//    }
 //
 ////    @Patch
 //    @Path("/{id}/passengers")
