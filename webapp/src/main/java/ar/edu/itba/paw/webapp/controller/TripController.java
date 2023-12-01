@@ -101,6 +101,15 @@ public class TripController {
         return Response.noContent().build();
     }
 
+    @DELETE
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+//    TODO: verificar que sea el mismo usuario
+    public Response cancelTrip(@PathParam("id") final long id,@PathParam("userId") final long userId) throws UserNotFoundException, TripNotFoundException {
+        LOGGER.debug("DELETE request to passenger {} from trip {}",userId,id);
+        tripService.removePassenger(id,userId);
+        return Response.noContent().build();
+    }
+
 
 //    @GET
 ////    Usar los parámetros de esto para el url de las recomendadas
@@ -109,13 +118,6 @@ public class TripController {
 //
 //    }
 //
-//
-////    @Patch
-//    @Path("/{id}/passengers")
-////    TODO: check creator of trip
-//    public Response acceptOrRejectPassenger(@PathParam("id") final long id){
-//
-//    }
 //
 //    @GET
 //    @Path("/{id}/passengers")
