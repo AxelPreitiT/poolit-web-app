@@ -28,6 +28,7 @@ public class AuthValidator {
         this.tripService = tripService;
     }
 
+    //check if wanted user is the user doing the request
     public boolean checkIfWantedIsSelf(long id){
         final Optional<User> user = userService.getCurrentUser();
         if(!user.isPresent()){
@@ -36,6 +37,7 @@ public class AuthValidator {
         return user.get().getUserId() == id;
     }
 
+    //check if user is the trip creator
     public boolean checkIfUserIsTripCreator(long tripId) throws TripNotFoundException {
         final Optional<User> optionalUser = userService.getCurrentUser();
         if (!optionalUser.isPresent()) {

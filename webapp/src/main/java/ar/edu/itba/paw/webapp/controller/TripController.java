@@ -94,7 +94,6 @@ public class TripController {
 //    https://www.rfc-editor.org/rfc/rfc5789
     @PATCH
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
-//    TODO: que lo pueda hacer solo el creador
     public Response acceptOrRejectPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId, @Valid PatchPassengerDto dto) throws UserNotFoundException, PassengerAlreadyProcessedException, PassengerNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("PATCH request to passenger {} from trip {}",userId,id);
         tripService.acceptOrRejectPassenger(id,userId,dto.getPassengerState());
@@ -103,8 +102,7 @@ public class TripController {
 
     @DELETE
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
-//    TODO: verificar que sea el mismo usuario
-    public Response cancelTrip(@PathParam("id") final long id,@PathParam("userId") final long userId) throws UserNotFoundException, TripNotFoundException {
+    public Response cancelTrip(@PathParam("id") final long id,@PathParam("userId") final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         LOGGER.debug("DELETE request to passenger {} from trip {}",userId,id);
         tripService.removePassenger(id,userId);
         return Response.noContent().build();

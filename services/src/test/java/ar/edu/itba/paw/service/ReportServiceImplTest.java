@@ -105,7 +105,7 @@ public class ReportServiceImplTest {
     }
 
     @Test(expected = ReportNotFoundException.class)
-    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException, ReportNotFoundException {
+    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException, ReportNotFoundException, PassengerNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
 
         reportService.acceptReport(1, REASONADMIN);

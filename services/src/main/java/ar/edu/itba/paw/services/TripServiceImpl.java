@@ -319,14 +319,14 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
-    public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException{
+    public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         return removePassenger(tripId, user.getUserId());
     }
 
     @Transactional
     @Override
-    public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException {
+    public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         if(trip == null || user == null){
@@ -336,7 +336,7 @@ public class TripServiceImpl implements TripService {
         }
         final Optional<Passenger> passengerOptional = tripDao.getPassenger(trip,user);
         if(!passengerOptional.isPresent()) {
-            IllegalStateException e = new IllegalStateException();
+            PassengerNotFoundException e = new PassengerNotFoundException();
             LOGGER.error("Passenger with id {} is not in trip with id {}", user.getUserId(), trip.getTripId(), e);
             throw e;
         }

@@ -79,8 +79,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
+                //--------Trips--------
+                //Delete trip
                 .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}")
                     .access("@authValidator.checkIfUserIsTripCreator(#id)")
+                //Get single passenger
+                .antMatchers(HttpMethod.GET,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id) or @authValidator.checkIfWantedIsSelf(#userId)")
+                //Accept or reject passenger
+                .antMatchers(HttpMethod.PATCH,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id)")
+                //Cancel trip as passenger
+                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                    .access("@authValidator.checkIfWantedIsSelf(#userId)")
                 .and().exceptionHandling()
                     .accessDeniedHandler(new ForbiddenRequestHandler())
                     .authenticationEntryPoint(new UnauthorizedRequestHandler())

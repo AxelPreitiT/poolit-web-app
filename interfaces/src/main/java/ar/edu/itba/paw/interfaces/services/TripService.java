@@ -21,9 +21,9 @@ public interface TripService {
     //TODO: delete
     boolean addCurrentUser(final long trip, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, UserNotFoundException, TripNotFoundException;
 
-    boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException;
+    boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException;
 
-    boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException;
+    boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException;
 
     Optional<Trip> findById(long id);
 
