@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
@@ -11,6 +12,7 @@ import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.PassengerState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,21 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 //TODO: agregar media Types
 @Path(UrlHolder.TRIPS_BASE)
 public class TripController {
 
+    private static final int PAGE_SIZE = 10;
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
 
     private final TripService tripService;
@@ -80,7 +87,6 @@ public class TripController {
     //Es como un id de la instancia de pasajero, ya que el usuario solo puede aparecer una vez como pasajero
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
-//    TODO: que solo sea el usuario o el creador
     //si no ver como limitar el estado para los otros
     public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
         LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
@@ -107,20 +113,27 @@ public class TripController {
         tripService.removePassenger(id,userId);
         return Response.noContent().build();
     }
+    @GET
+    @Path("/{id}/passengers")
+    public Response getPassengers(@PathParam("id") final long id,
+                                  @QueryParam("startDateTime") final LocalDateTime startDateTime,
+                                  @QueryParam("endDateTime") final LocalDateTime endDateTime,
+                                  @QueryParam("passengerState") @Valid @PassengerState final String passengerState,
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page) throws CustomException {
+        LOGGER.debug("GET request for passengers from trip {}",id);
+        if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
+            //TODO: revisar si esta bien instanciar esto aca!
+            throw new CustomException("exceptions.startDateTime_with_enDateTime",Response.Status.BAD_REQUEST.getStatusCode());
+        }
+        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState!=null?Passenger.PassengerState.valueOf(passengerState):null,page,PAGE_SIZE);
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerDto::fromPassenger,PassengerDto.class);
+    }
 
 
 //    @GET
 ////    Usar los parámetros de esto para el url de las recomendadas
 ////    Tambien para las creadas por un usuario o donde un usuario es participante
 //    public Response getTrips(){
-//
-//    }
-//
-//
-//    @GET
-//    @Path("/{id}/passengers")
-////    TODO: ver cómo limitamos los pasajeros por cada usuario (en el url del trip se pasan los query params, pero está bien que eso cambie dependiendo del usuario?)
-//    public Response getPassengers(@PathParam("id") final long id){
 //
 //    }
 
