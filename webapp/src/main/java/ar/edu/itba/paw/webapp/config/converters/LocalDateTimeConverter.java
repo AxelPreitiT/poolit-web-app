@@ -10,7 +10,12 @@ public class LocalDateTimeConverter implements ParamConverter<LocalDateTime> {
         if(s == null){
             return null;
         }
-        return LocalDateTime.parse(s, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        try {
+            return LocalDateTime.parse(s, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        }catch (Exception e){
+            throw new ConversionException("conversions.dateTimeFormat");
+        }
+
     }
 
     @Override

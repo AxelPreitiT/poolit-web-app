@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.TripService;
+import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -12,6 +13,7 @@ import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.PassengerState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,6 +53,21 @@ public class TripController {
     public TripController(final TripService tripService){
         this.tripService = tripService;
     }
+
+    @GET
+    //TODO
+//    Usar los parámetros de esto para el url de las recomendadas
+//    Tambien para las creadas por un usuario o donde un usuario es participante
+    public Response getTrips(@QueryParam("originCityId") @Valid @CityId final int originCityId,
+                             @QueryParam("destinationCityId") @Valid @CityId final int destinationCityId,
+                             @QueryParam("minPrice") @Valid @Min(value = 0) final BigDecimal minPrice,
+                             @QueryParam("maxPrice") @Valid @Min(value = 0) final BigDecimal maxPrice,
+                             @QueryParam("carFeatures") final List<FeatureCar> carFeatures,
+                             @QueryParam("sortType") @DefaultValue("PRICE") final Trip.SortType sortType,
+                             @QueryParam("descending") final boolean descending,
+                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page){
+        return Response.ok().build();
+    }
     @POST
     public Response createTrip(@Valid CreateTripDto dto) throws UserNotFoundException, CarNotFoundException, CityNotFoundException {
         LOGGER.debug("POST request to create trip");
@@ -70,6 +90,22 @@ public class TripController {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
         return Response.ok().build();
+    }
+
+    @GET
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    public Response getPassengers(@PathParam("id") final long id,
+                                  @QueryParam("startDateTime") final LocalDateTime startDateTime,
+                                  @QueryParam("endDateTime") final LocalDateTime endDateTime,
+                                  @QueryParam("passengerState") final Passenger.PassengerState passengerState,
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page) throws CustomException {
+        LOGGER.debug("GET request for passengers from trip {}",id);
+        if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
+            //TODO: revisar si esta bien instanciar esto aca!
+            throw new CustomException("exceptions.startDateTime_with_enDateTime",Response.Status.BAD_REQUEST.getStatusCode());
+        }
+        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState,page,PAGE_SIZE);
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerDto::fromPassenger,PassengerDto.class);
     }
 
     @POST
@@ -113,29 +149,6 @@ public class TripController {
         tripService.removePassenger(id,userId);
         return Response.noContent().build();
     }
-    @GET
-    @Path("/{id}/passengers")
-    public Response getPassengers(@PathParam("id") final long id,
-                                  @QueryParam("startDateTime") final LocalDateTime startDateTime,
-                                  @QueryParam("endDateTime") final LocalDateTime endDateTime,
-                                  @QueryParam("passengerState") @Valid @PassengerState final String passengerState,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page) throws CustomException {
-        LOGGER.debug("GET request for passengers from trip {}",id);
-        if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
-            //TODO: revisar si esta bien instanciar esto aca!
-            throw new CustomException("exceptions.startDateTime_with_enDateTime",Response.Status.BAD_REQUEST.getStatusCode());
-        }
-        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState!=null?Passenger.PassengerState.valueOf(passengerState):null,page,PAGE_SIZE);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerDto::fromPassenger,PassengerDto.class);
-    }
-
-
-//    @GET
-////    Usar los parámetros de esto para el url de las recomendadas
-////    Tambien para las creadas por un usuario o donde un usuario es participante
-//    public Response getTrips(){
-//
-//    }
 
 
 }

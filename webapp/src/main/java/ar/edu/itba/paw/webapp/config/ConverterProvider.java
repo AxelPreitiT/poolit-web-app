@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.models.FeatureCar;
+import ar.edu.itba.paw.models.Passenger;
+import ar.edu.itba.paw.webapp.config.converters.FeatureCarConverter;
 import ar.edu.itba.paw.webapp.config.converters.LocalDateTimeConverter;
+import ar.edu.itba.paw.webapp.config.converters.PassengerStateConverter;
 
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
@@ -18,6 +22,13 @@ public class ConverterProvider implements ParamConverterProvider {
         if(type.equals(LocalDateTime.class)){
             return (ParamConverter<T>) new LocalDateTimeConverter();
         }
+        if(type.equals(FeatureCar.class)){
+            return (ParamConverter<T>) new FeatureCarConverter();
+        }
+        if(type.equals(Passenger.PassengerState.class)){
+            return (ParamConverter<T>) new PassengerStateConverter();
+        }
+
         return null;
     }
 }
