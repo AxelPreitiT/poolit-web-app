@@ -81,12 +81,18 @@ public interface TripService {
 
     PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize);
 
+    //TODO: delete
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long originCityId, long destinationCityId, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final BigDecimal minPrice, final BigDecimal maxPrice, final String sortType, final boolean descending,
             final List<FeatureCar> carFeatures, final int page, final int pageSize);
 
+    PagedContent<Trip> findTrips(
+            long originCityId, long destinationCityId, final LocalDateTime startDateTime,
+            final LocalDateTime endDateTimeValue, final BigDecimal minPriceValue, final BigDecimal maxPriceValue,
+            final Trip.SortType sortType, final boolean descending, final List<FeatureCar> carFeaturesValue,
+            final int page, final int pageSize);
 
     boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
 

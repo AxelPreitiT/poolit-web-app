@@ -630,6 +630,25 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
+    public PagedContent<Trip> findTrips(
+            long originCityId, long destinationCityId, final LocalDateTime startDateTime,
+            final LocalDateTime endDateTimeValue, final BigDecimal minPriceValue, final BigDecimal maxPriceValue,
+            final Trip.SortType sortType, final boolean descending, final List<FeatureCar> carFeaturesValue,
+            final int page, final int pageSize
+            ){
+        validatePageAndSize(page,pageSize);
+        final Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
+        final Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
+        final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
+        final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue:new ArrayList<>();
+        //TODO: delete logic of blocked users
+        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
+
+    }
+
+    //TODO: delete
+    @Transactional
+    @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long originCityId, long destinationCityId, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,

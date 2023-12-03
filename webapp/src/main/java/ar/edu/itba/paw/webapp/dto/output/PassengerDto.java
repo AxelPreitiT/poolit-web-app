@@ -13,11 +13,13 @@ public class PassengerDto {
 
     private URI tripUri;
 
-    LocalDateTime startDateTime;
+    private LocalDateTime startDateTime;
 
-    LocalDateTime endDateTime;
+    private LocalDateTime endDateTime;
 
-    Passenger.PassengerState passengerState;
+    private Passenger.PassengerState passengerState;
+
+    private URI otherPassengersUri;
 
     public static PassengerDto fromPassenger(final UriInfo uriInfo, final Passenger passenger){
         final PassengerDto ans = new PassengerDto();
@@ -26,6 +28,7 @@ public class PassengerDto {
         ans.endDateTime = passenger.getEndDateTime();
         ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).build();
         ans.userUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(passenger.getUserId())).build();
+        ans.otherPassengersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).queryParam("startDateTime",passenger.getStartDateTime()).queryParam("endDateTime",passenger.getEndDateTime()).queryParam("passengerState",Passenger.PassengerState.ACCEPTED).build();
         return ans;
     }
 
@@ -67,5 +70,13 @@ public class PassengerDto {
 
     public void setPassengerState(Passenger.PassengerState passengerState) {
         this.passengerState = passengerState;
+    }
+
+    public URI getOtherPassengersUri() {
+        return otherPassengersUri;
+    }
+
+    public void setOtherPassengersUri(URI otherPassengersUri) {
+        this.otherPassengersUri = otherPassengersUri;
     }
 }

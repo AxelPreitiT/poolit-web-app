@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
+import ar.edu.itba.paw.models.Passenger;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
@@ -23,6 +25,11 @@ public class TripDto {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
+    //URI for driver
+    private URI passengersUri;
+    //URI for passenger
+    private URI passengerUri;
+
 //    TODO: ver donde los pongo!
 //    private double driverRating;
 //    private double carRating;
@@ -30,6 +37,19 @@ public class TripDto {
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
 
+
+
+    public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip, final User currentUser, final Passenger currentUserPassenger){
+        //TODO: revisar esto para mandar algo distinto cuando está el usuario logueado
+        final TripDto ans = TripDto.fromTrip(uriInfo,trip);
+        if(currentUser != null && currentUser.getUserId() == trip.getDriver().getUserId()){
+            //currentUser is driver, it can access all the passengers
+            ans.passengersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).build();
+        }else if(currentUserPassenger!=null){
+            ans.passengerUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).path(String.valueOf(currentUserPassenger.getUser().getUserId())).build();
+        }
+        return ans;
+    }
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
         final TripDto ans = new TripDto();
         ans.originAddress = trip.getOriginAddress();
@@ -151,5 +171,21 @@ public class TripDto {
 
     public void setSelfUri(URI selfUri) {
         this.selfUri = selfUri;
+    }
+
+    public URI getPassengersUri() {
+        return passengersUri;
+    }
+
+    public void setPassengersUri(URI passengersUri) {
+        this.passengersUri = passengersUri;
+    }
+
+    public URI getPassengerUri() {
+        return passengerUri;
+    }
+
+    public void setPassengerUri(URI passengerUri) {
+        this.passengerUri = passengerUri;
     }
 }

@@ -4,9 +4,6 @@ import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.config.converters.Converter;
-import ar.edu.itba.paw.webapp.config.converters.FeatureCarConverter;
-import ar.edu.itba.paw.webapp.config.converters.LocalDateTimeConverter;
-import ar.edu.itba.paw.webapp.config.converters.PassengerStateConverter;
 
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;

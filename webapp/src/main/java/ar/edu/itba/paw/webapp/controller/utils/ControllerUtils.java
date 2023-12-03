@@ -23,23 +23,29 @@ public class ControllerUtils {
         return () -> constructor.apply(Response.Status.NOT_FOUND.getStatusCode());
     }
 
-    //page query param starts in 0
-    public static <T,E> Response getPaginatedResponse(final UriInfo uriInfo, final PagedContent<T> pagedContent, final long page, final BiFunction<UriInfo,T,E> dtoMapper, final Type type){
+
+    private static <T> Response.ResponseBuilder addLinks(Response.ResponseBuilder responseBuilder, PagedContent<T> pagedContent, final UriInfo uriInfo, final long page){
+        responseBuilder.link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,pagedContent.getFirst()).build(),"first")
+                .link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,pagedContent.getLast()).build(),"last");
+        if(!pagedContent.isFirst()){
+            responseBuilder.link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,page-1).build(),"prev");
+        }
+        if(!pagedContent.isLast()){
+            responseBuilder.link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,page+1).build(),"next");
+        }
+        return responseBuilder.header(TOTAL_PAGES_HEADER,pagedContent.getTotalPages());
+    }
+    public static <T,E> Response getPaginatedResponse(final UriInfo uriInfo, final PagedContent<T> pagedContent, final long page, final Function<T,E> dtoMapper, final Type eType){
         if(pagedContent.getElements().isEmpty()){
             return Response.noContent().build();
         }
-        //We use ParameterizedListType class to pass the type of List<E> and not E (defined by "type" argument)
-        Response.ResponseBuilder aux  = Response.ok(new GenericEntity<>(pagedContent.getElements().stream().map(t -> dtoMapper.apply(uriInfo,t)).collect(Collectors.toList()),new ParameterizedListType(type)))
-                                            .link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,pagedContent.getFirst()).build(),"first")
-                                            .link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,pagedContent.getLast()).build(),"last");
-        if(!pagedContent.isFirst()){
-            aux.link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,page-1).build(),"prev");
-        }
-        if(!pagedContent.isLast()){
-            aux.link(uriInfo.getRequestUriBuilder().replaceQueryParam(PAGE_QUERY_PARAM,page+1).build(),"next");
-        }
-        aux.header(TOTAL_PAGES_HEADER,pagedContent.getTotalPages());
-        return aux.build();
+        Response.ResponseBuilder aux = Response.ok(new GenericEntity<>(pagedContent.getElements().stream().map(dtoMapper).collect(Collectors.toList()), new ParameterizedListType(eType)));
+        return addLinks(aux,pagedContent,uriInfo,page).build();
+    }
+
+    //page query param starts in 0
+    public static <T,E> Response getPaginatedResponse(final UriInfo uriInfo, final PagedContent<T> pagedContent, final long page, final BiFunction<UriInfo,T,E> dtoMapper, final Type eType){
+        return getPaginatedResponse(uriInfo,pagedContent,page,t -> dtoMapper.apply(uriInfo,t),eType);
     }
 
     //We use this class because we need to get the type of List<E>
