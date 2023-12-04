@@ -14,7 +14,7 @@ public class UnauthorizedRequestHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON);
         response.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",authException.getMessage()));
     }

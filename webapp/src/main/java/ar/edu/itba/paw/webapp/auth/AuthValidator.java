@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.models.trips.Trip;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -54,5 +57,13 @@ public class AuthValidator {
             LOGGER.debug("User {} tried to delete a trip {} without being it's creator", user.getUserId(), trip.getTripId());
         }
         return ans;
+    }
+
+    public boolean checkIfUserCanSearchPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, Passenger.PassengerState passengerState) throws TripNotFoundException {
+        final Optional<User> optionalUser = userService.getCurrentUser();
+        if (!optionalUser.isPresent()) {
+            return false;
+        }
+        return tripService.checkIfUserCanGetPassengers(tripId,optionalUser.get(),startDateTime,endDateTime,passengerState);
     }
 }

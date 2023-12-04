@@ -100,4 +100,6 @@ public interface TripService {
 
     boolean acceptOrRejectPassenger(final long tripId, final long userId, Passenger.PassengerState passengerState) throws UserNotFoundException, PassengerNotFoundException, PassengerAlreadyProcessedException, NotAvailableSeatsException;
 
+    boolean checkIfUserCanGetPassengers(final long tripId, final User user, final LocalDateTime startDateTime, final LocalDateTime endDateTime, Passenger.PassengerState passengerState) throws TripNotFoundException;
+
 }

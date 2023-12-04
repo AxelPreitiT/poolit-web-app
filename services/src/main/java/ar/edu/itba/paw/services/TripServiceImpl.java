@@ -418,6 +418,22 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
+    public boolean checkIfUserCanGetPassengers(final long tripId, final User user, final LocalDateTime startDateTime, final LocalDateTime endDateTime, Passenger.PassengerState passengerState) throws TripNotFoundException {
+        final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
+        if(trip.getDriver().getUserId() == user.getUserId()){
+            //The trip driver can access all passengers
+            return true;
+        }
+        Optional<Passenger> passenger = getPassenger(trip,user);
+        if(!passenger.isPresent() || !passenger.get().getPassengerState().equals(Passenger.PassengerState.ACCEPTED)){
+            return false;
+        }
+//        passengerState.equals(Passenger.PassengerState.ACCEPTED) && startDateTime.compareTo(passenger.get().getStartDateTime())>=0 && endDateTime.compareTo(passenger.get().getEndDateTime())<=0
+        return passengerState.equals(Passenger.PassengerState.ACCEPTED) && !startDateTime.isBefore(passenger.get().getStartDateTime()) && !endDateTime.isAfter(passenger.get().getEndDateTime());
+    }
+
+    @Transactional
+    @Override
     public Optional<Passenger> getPassenger(final long tripId, final long userId) throws UserNotFoundException{
         final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return tripDao.getPassenger(tripId,user);

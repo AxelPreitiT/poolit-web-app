@@ -19,6 +19,8 @@ import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -37,6 +39,7 @@ import java.util.Optional;
 
 //TODO: agregar media Types
 @Path(UrlHolder.TRIPS_BASE)
+@Component
 public class TripController {
 
     private static final int PAGE_SIZE = 10;
@@ -101,6 +104,7 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#startDateTime,#endDateTime,#passengerState)")
     public Response getPassengers(@PathParam("id") final long id,
                                   @QueryParam("startDateTime") final LocalDateTime startDateTime,
                                   @QueryParam("endDateTime") final LocalDateTime endDateTime,
