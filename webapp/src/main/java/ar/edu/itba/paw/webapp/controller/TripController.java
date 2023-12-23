@@ -60,8 +60,7 @@ public class TripController {
     }
 
     @GET
-//    Usar los parámetros de esto para el url de las recomendadas
-//    Tambien para las creadas por un usuario o donde un usuario es participante
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId)")
     public Response getTrips(@QueryParam("originCityId") @Valid @CityId final int originCityId,
                              @QueryParam("destinationCityId") @Valid @CityId final int destinationCityId,
                              @QueryParam("startDateTime") @Valid @NotNull final LocalDateTime startDateTime,
@@ -70,10 +69,22 @@ public class TripController {
                              @QueryParam("maxPrice") @Valid @Min(value = 0) final BigDecimal maxPrice,
                              @QueryParam("carFeatures") final List<FeatureCar> carFeatures,
                              @QueryParam("sortType") @DefaultValue("PRICE") final Trip.SortType sortType,
+                             @QueryParam("createdBy") final Integer creatorUserId,
+                             @QueryParam("reservedBy") final Integer passengerUserId,
+                             @QueryParam("past") final boolean pastTrips,
                              @QueryParam("descending") final boolean descending,
-                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page){
-        LOGGER.debug("GET request to find trips");
-        final PagedContent<Trip> ans = tripService.findTrips(originCityId,destinationCityId,startDateTime,endDateTime,minPrice,maxPrice,sortType,descending,carFeatures,page,PAGE_SIZE);
+                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page) throws UserNotFoundException {
+        PagedContent<Trip> ans = null;
+        if(creatorUserId!=null){
+            LOGGER.debug("GET request to trips created by user {}",creatorUserId);
+            ans = tripService.getTripsCreatedByUser(creatorUserId,pastTrips,page,PAGE_SIZE);
+        }else if(passengerUserId!=null){
+            LOGGER.debug("GET request to trips reserved by user {}",passengerUserId);
+            ans = tripService.getTripsWhereUserIsPassenger(passengerUserId,pastTrips,page,PAGE_SIZE);
+        }else{
+            LOGGER.debug("GET request to find trips");
+            ans = tripService.findTrips(originCityId,destinationCityId,startDateTime,endDateTime,minPrice,maxPrice,sortType,descending,carFeatures,page,PAGE_SIZE);
+        }
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,TripDto::fromTrip,TripDto.class);
     }
     @POST

@@ -40,6 +40,13 @@ public class AuthValidator {
         return user.get().getUserId() == id;
     }
 
+    public boolean checkIfWantedIsSelf(Integer id){
+        if(id!=null){
+            return checkIfWantedIsSelf(id.longValue());
+        }
+        return true;
+    }
+
     //check if user is the trip creator
     public boolean checkIfUserIsTripCreator(long tripId) throws TripNotFoundException {
         final Optional<User> optionalUser = userService.getCurrentUser();
