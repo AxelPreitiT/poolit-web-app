@@ -566,18 +566,26 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
-    public PagedContent<Trip> getTripsCreatedByUser(final long userId, final boolean pastTrips, int page, int pageSize) throws UserNotFoundException {
-        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+    public PagedContent<Trip> getTripsCreatedByUser(final long userId, final boolean pastTrips, int page, int pageSize){
+        final Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()){
+            //avoid saying if a user exists or not
+            return PagedContent.emptyPagedContent();
+        }
         validatePageAndSize(page,pageSize);
-        return pastTrips?tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize):tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+        return pastTrips?tripDao.getTripsCreatedByUser(user.get(),Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize):tripDao.getTripsCreatedByUser(user.get(),Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
     }
 
     @Transactional
     @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassenger(final long userId, final boolean pastTrips, int page, int pageSize) throws UserNotFoundException {
-        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+    public PagedContent<Trip> getTripsWhereUserIsPassenger(final long userId, final boolean pastTrips, int page, int pageSize){
+        final Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()){
+            //avoid saying if a user exists or not
+            return PagedContent.emptyPagedContent();
+        }
         validatePageAndSize(page,pageSize);
-        return pastTrips?tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(), Optional.of(LocalDateTime.now()),null, page,pageSize):tripDao.getTripsWhereUserIsPassenger(user, Optional.of(LocalDateTime.now()),Optional.empty(),null, page,pageSize);
+        return pastTrips?tripDao.getTripsWhereUserIsPassenger(user.get(),Optional.empty(), Optional.of(LocalDateTime.now()),null, page,pageSize):tripDao.getTripsWhereUserIsPassenger(user.get(), Optional.of(LocalDateTime.now()),Optional.empty(),null, page,pageSize);
     }
 
     @Transactional
@@ -641,11 +649,25 @@ public class TripServiceImpl implements TripService {
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
     }
 
+
+    //TODO: delete
     @Transactional
     @Override
     public PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize){
         validatePageAndSize(page,pageSize);
         Optional<User> user = userService.getCurrentUser();
+        if(!user.isPresent()){
+            return PagedContent.emptyPagedContent();
+        }
+        LocalDateTime start = LocalDateTime.now();
+        return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<Trip> getRecommendedTripsForUser(final long userId, final int page, final int pageSize){
+        validatePageAndSize(page,pageSize);
+        Optional<User> user = userService.findById(userId);
         if(!user.isPresent()){
             return PagedContent.emptyPagedContent();
         }

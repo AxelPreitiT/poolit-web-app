@@ -16,6 +16,6 @@ public class CityIdValidator implements ConstraintValidator<CityId, Integer> {
     }
     @Override
     public boolean isValid( Integer cityId, ConstraintValidatorContext constraintValidatorContext) {
-        return cityId==-1 ||  cityService.findCityById(cityId).isPresent();
+        return cityId==null ||  cityService.findCityById(cityId).isPresent();
     }
 }

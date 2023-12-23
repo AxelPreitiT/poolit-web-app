@@ -60,10 +60,10 @@ public class TripController {
     }
 
     @GET
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId)")
-    public Response getTrips(@QueryParam("originCityId") @Valid @CityId final int originCityId,
-                             @QueryParam("destinationCityId") @Valid @CityId final int destinationCityId,
-                             @QueryParam("startDateTime") @Valid @NotNull final LocalDateTime startDateTime,
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId) and @authValidator.checkIfWantedIsSelf(#recommendedUserId)")
+    public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,
+                             @QueryParam("destinationCityId") @Valid @CityId final Integer destinationCityId,
+                             @QueryParam("startDateTime") @Valid final LocalDateTime startDateTime,
                              @QueryParam("endDateTime") final LocalDateTime endDateTime,
                              @QueryParam("minPrice") @Valid @Min(value = 0) final BigDecimal minPrice,
                              @QueryParam("maxPrice") @Valid @Min(value = 0) final BigDecimal maxPrice,
@@ -71,9 +71,10 @@ public class TripController {
                              @QueryParam("sortType") @DefaultValue("PRICE") final Trip.SortType sortType,
                              @QueryParam("createdBy") final Integer creatorUserId,
                              @QueryParam("reservedBy") final Integer passengerUserId,
+                             @QueryParam("recommendedFor") final Integer recommendedUserId,
                              @QueryParam("past") final boolean pastTrips,
                              @QueryParam("descending") final boolean descending,
-                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page) throws UserNotFoundException {
+                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page){
         PagedContent<Trip> ans = null;
         if(creatorUserId!=null){
             LOGGER.debug("GET request to trips created by user {}",creatorUserId);
@@ -81,6 +82,10 @@ public class TripController {
         }else if(passengerUserId!=null){
             LOGGER.debug("GET request to trips reserved by user {}",passengerUserId);
             ans = tripService.getTripsWhereUserIsPassenger(passengerUserId,pastTrips,page,PAGE_SIZE);
+        }else if(recommendedUserId!=null) {
+            //we use this instead of creating a URI in the userDTO with the fields to maintain the logic of recommendation in the trip service
+            LOGGER.debug("GET request to trips recommended for user {}",recommendedUserId);
+            ans = tripService.getRecommendedTripsForUser(recommendedUserId,page,PAGE_SIZE);
         }else{
             LOGGER.debug("GET request to find trips");
             ans = tripService.findTrips(originCityId,destinationCityId,startDateTime,endDateTime,minPrice,maxPrice,sortType,descending,carFeatures,page,PAGE_SIZE);

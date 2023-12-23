@@ -59,8 +59,8 @@ public interface TripService {
 
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
 
-    PagedContent<Trip> getTripsWhereUserIsPassenger(final long userId, final boolean pastTrips, int page, int pageSize) throws UserNotFoundException;
-    PagedContent<Trip> getTripsCreatedByUser(final long userId, final boolean pastTrips, int page, int pageSize) throws UserNotFoundException;
+    PagedContent<Trip> getTripsWhereUserIsPassenger(final long userId, final boolean pastTrips, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUser(final long userId, final boolean pastTrips, int page, int pageSize);
 
     PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize);
     PagedContent<Trip> getTripsCreatedByCurrentUserFuture(int page, int pageSize) throws UserNotFoundException;
@@ -82,7 +82,10 @@ public interface TripService {
 
     List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
 
+    //TODO: delete
     PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize);
+
+    PagedContent<Trip> getRecommendedTripsForUser(final long userId, final int page, final int pageSize);
 
     //TODO: delete
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
