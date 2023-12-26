@@ -12,7 +12,10 @@ public class ValidationErrorDto {
         dto.message = violation.getMessage();
 //        dto.message = violation.getMessageTemplate();
         final String path = violation.getPropertyPath().toString();
-        dto.field= path.substring(path.lastIndexOf(".")+1);
+        if(path.lastIndexOf('.')!=path.indexOf('.')){
+            //Not a class level validation (path is "class.arg0.field"), its a field validation
+            dto.field= path.substring(path.lastIndexOf(".")+1);
+        }
         return dto;
     }
 

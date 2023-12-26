@@ -55,14 +55,14 @@
     </init-param>
   </filter>
 <!--  No se deberia necesitar-->
-<!--  <filter>-->
-<!--    <filter-name>openEntityManagerInView</filter-name>-->
-<!--    <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>-->
-<!--  </filter>-->
-<!--  <filter-mapping>-->
-<!--    <filter-name>openEntityManagerInView</filter-name>-->
-<!--    <url-pattern>/*</url-pattern>-->
-<!--  </filter-mapping>-->
+  <filter>
+    <filter-name>openEntityManagerInView</filter-name>
+    <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>openEntityManagerInView</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -97,10 +97,11 @@
       <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
     </init-param>
 <!--    TODO: avoid tomact pages-->
-    <init-param>
-      <param-name>jersey.config.servlet.response.setStatusOverSendError</param-name>
-      <param-value>true</param-value>
-    </init-param>
+<!--    OJO: esto hace que a la primera que no funciona devuelva, y con esto no toma como "default" al usuario publico-->
+<!--    <init-param>-->
+<!--      <param-name>jersey.config.servlet.response.setStatusOverSendError</param-name>-->
+<!--      <param-value>true</param-value>-->
+<!--    </init-param>-->
   </filter>
   <filter-mapping>
     <filter-name>jersey</filter-name>

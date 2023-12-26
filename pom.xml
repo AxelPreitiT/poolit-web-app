@@ -47,6 +47,7 @@
       <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
       <jersey.version>3.0-SNAPSHOT</jersey.version>
       <jwt.version>4.4.0</jwt.version>
+      <javax.ws.rs.version>2.1.1</javax.ws.rs.version>
   </properties>
   <repositories>
     <repository>
@@ -292,6 +293,12 @@
                     <artifactId>validation-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+<!--        Change javax.ws.rs-api to support PATCH-->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.ws.rs.version}</version>
         </dependency>
         <!-- JERSEY JSON -->
         <dependency>

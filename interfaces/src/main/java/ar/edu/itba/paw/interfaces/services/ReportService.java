@@ -17,7 +17,7 @@ public interface ReportService {
 
     Optional<Report> findById(long reportId);
 
-    void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException;
+    void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException;
 
     void rejectReport(long reportId, String reason) throws ReportNotFoundException;
 
