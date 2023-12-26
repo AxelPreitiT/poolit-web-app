@@ -20,6 +20,8 @@ public class VndType {
 
     public static final String APPLICATION_CITY = BASE + "city.v1+json";
 
+    public static final String APPLICATION_CAR = BASE + "car.v1+json";
+
 
 }
 
