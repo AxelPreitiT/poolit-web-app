@@ -1,0 +1,89 @@
+@use "@/colors.module.scss" as colors;
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  height: 100vh;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+  aspect-ratio: 4/1;
+}
+
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  width: 30%;
+  padding: 2rem;
+  background-color: colors.$primary-color;
+  border-radius: 12px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  width: 100%;
+}
+
+.formContainer button {
+  margin-left: auto;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  width: 100%;
+  align-items: center;
+}
+
+.emailContainer,
+.passwordContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.3em;
+  align-items: start;
+}
+
+.rememberContainer {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5em;
+  align-items: center;
+  width: 100%;
+}
+
+.loginFooterContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  width: 100%;
+  align-items: center;
+}
+
+.loginFooterContainer > * {
+  text-align: center;
+}
+
+.footerContainer > * {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.3rem;
+  align-items: center;
+}
+
+@media (min-width: 1400px) {
+  .mainContainer {
+    row-gap: 3rem;
+  }
+}

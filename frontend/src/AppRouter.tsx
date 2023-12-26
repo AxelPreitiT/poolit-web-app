@@ -5,6 +5,7 @@ import LoginPage from "./pages/login/LoginPage";
 import TripsPage from "./pages/trips/TripsPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
 import RegisterPage from "./pages/register/RegisterPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -12,6 +13,7 @@ export const registerPath = "/register";
 export const verifyEmailPath = "/verify-email";
 export const tripsPath = "/trips";
 export const tripDetailsPath = "/trips/:tripId";
+export const profilePath = "/profile";
 
 const router = createBrowserRouter(
   [
@@ -42,6 +44,10 @@ const router = createBrowserRouter(
     {
       path: tripDetailsPath,
       element: <TripDetailsPage />,
+    },
+    {
+      path: profilePath,
+      element: <ProfilePage />,
     },
   ],
   {
