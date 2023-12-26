@@ -252,7 +252,7 @@ public class TripController {
 
     }
     @RequestMapping(value ="/trips/{id:\\d+$}/cancel", method = RequestMethod.POST)
-    public ModelAndView cancelTrip(@PathVariable("id") final int tripId, RedirectAttributes redirectAttributes) throws UserNotFoundException, TripNotFoundException{
+    public ModelAndView cancelTrip(@PathVariable("id") final int tripId, RedirectAttributes redirectAttributes) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         LOGGER.debug("POST Request to /trips/{}/cancel", tripId);
         tripService.removeCurrentUserAsPassenger(tripId);
         redirectAttributes.addFlashAttribute("tripCancelled",new DefaultBoolean(true));

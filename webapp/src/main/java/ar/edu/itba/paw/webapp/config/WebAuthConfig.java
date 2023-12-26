@@ -2,12 +2,14 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.webapp.auth.*;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -76,6 +78,20 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests()
+                //--------Trips--------
+                //Delete trip
+                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id)")
+                //Get single passenger
+                .antMatchers(HttpMethod.GET,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id) or @authValidator.checkIfWantedIsSelf(#userId)")
+                //Accept or reject passenger
+                .antMatchers(HttpMethod.PATCH,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id)")
+                //Cancel trip as passenger
+                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                    .access("@authValidator.checkIfWantedIsSelf(#userId)")
                 .and().exceptionHandling()
                     .accessDeniedHandler(new ForbiddenRequestHandler())
                     .authenticationEntryPoint(new UnauthorizedRequestHandler())
