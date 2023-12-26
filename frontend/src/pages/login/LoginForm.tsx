@@ -9,59 +9,54 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import FormError from "@/components/forms/FormError/FormError";
 import LoadingButton from "@/components/buttons/LoadingButton";
+import { Form } from "react-bootstrap";
 
 interface LoginFormProps {
   onSubmit: SubmitHandler<LoginFormSchemaType>;
-  isSubmitting: boolean;
 }
 
-const LoginForm = ({ onSubmit, isSubmitting }: LoginFormProps) => {
+const LoginForm = ({ onSubmit }: LoginFormProps) => {
   const { t } = useTranslation();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
   });
 
   return (
-    <form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
+    <Form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
       <div>
         <h3 className="light-text fw-bold">{t("login.title")}</h3>
         <hr className="light-text" />
       </div>
       <div className={styles.inputContainer}>
         <div className={styles.emailContainer}>
-          <input
+          <Form.Control
             type="email"
             id="email"
-            className="form-control"
             placeholder={t("login.email")}
             {...register("email")}
           />
           <FormError error={tFormError(errors.email?.message)} />
         </div>
         <div className={styles.passwordContainer}>
-          <input
+          <Form.Control
             type="password"
             id="password"
-            className="form-control"
             placeholder={t("login.password")}
             {...register("password")}
           />
           <FormError error={tFormError(errors.password?.message)} />
         </div>
         <div className={styles.rememberContainer}>
-          <input
-            type="checkbox"
-            id="remember"
-            className="form-check-input mt-0"
-            {...register("rememberMe")}
-          />
-          <label htmlFor="remember" className="light-text">
-            {t("login.remember")}
-          </label>
+          <Form.Check type="checkbox" id="remember">
+            <Form.Check.Input type="checkbox" {...register("rememberMe")} />
+            <Form.Check.Label className="light-text">
+              {t("login.remember")}
+            </Form.Check.Label>
+          </Form.Check>
         </div>
       </div>
       <LoadingButton
@@ -72,7 +67,7 @@ const LoginForm = ({ onSubmit, isSubmitting }: LoginFormProps) => {
       >
         <h5>{t("login.login")}</h5>
       </LoadingButton>
-    </form>
+    </Form>
   );
 };
 

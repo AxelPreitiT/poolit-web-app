@@ -4,9 +4,27 @@ import RegisterBanner from "@/images/register-banner.jpg";
 import { Link } from "react-router-dom";
 import { loginPath } from "@/AppRouter";
 import RedirectHomeLogo from "@/components/links/RedirectHomeLogo/RedirectHomeLogo";
+import { RegisterFormSchemaType } from "./registerFormSchema";
+import { SubmitHandler } from "react-hook-form";
+import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import ToastType from "@/enums/ToastType";
+import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
+import RegisterForm from "./RegisterForm";
 
 const RegisterPage = () => {
   const { t } = useTranslation();
+  const addToast = useToastStackStore((state) => state.addToast);
+
+  const onSubmit: SubmitHandler<RegisterFormSchemaType> = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+      console.log(data);
+      addToast({
+        type: ToastType.Error,
+        message: t("register.error"),
+        timeout: defaultToastTimeout,
+      });
+    });
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -20,105 +38,7 @@ const RegisterPage = () => {
         </div>
       </div>
       <div className={styles.formContainer}>
-        <form className={styles.form}>
-          <div className={styles.userPicContainer}>
-            <h4 className={styles.title + " light-text"}>
-              {t("register.profile_image")}
-            </h4>
-            <div className={styles.profilePic}>
-              <i className="bi bi-person-circle light-text"></i>
-            </div>
-          </div>
-          <hr className="light-text" />
-          <div className={styles.userInfoContainer}>
-            <h4 className={styles.title + " light-text"}>
-              {t("register.personal_info")}
-            </h4>
-            <div className={styles.formRow}>
-              <div className={styles.inputItem}>
-                <input
-                  type="text"
-                  id="name"
-                  className="form-control"
-                  placeholder={t("register.name")}
-                />
-              </div>
-              <div className={styles.inputItem}>
-                <input
-                  type="text"
-                  id="lastname"
-                  className="form-control"
-                  placeholder={t("register.last_name")}
-                />
-              </div>
-            </div>
-            <div className={styles.formRow}>
-              <div className={styles.inputItem}>
-                <input
-                  type="email"
-                  id="email"
-                  className="form-control"
-                  placeholder={t("register.email")}
-                />
-              </div>
-              <div className={styles.inputItem}>
-                <input
-                  type="text"
-                  id="phone"
-                  className="form-control"
-                  placeholder={t("register.telephone")}
-                />
-              </div>
-            </div>
-            <div className={styles.formRow}>
-              <div className={styles.inputItem}>
-                <input
-                  type="password"
-                  id="password"
-                  className="form-control"
-                  placeholder={t("register.password")}
-                />
-              </div>
-              <div className={styles.inputItem}>
-                <input
-                  type="password"
-                  id="password2"
-                  className="form-control"
-                  placeholder={t("register.confirm_password")}
-                />
-              </div>
-            </div>
-            <div className={styles.formRow}>
-              <div className={styles.inputItem}>
-                <select id="city" className="form-select">
-                  <option value="-1">{t("register.residence_city")}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <hr className="light-text" />
-          <div className={styles.preferencesContainer}>
-            <h4 className={styles.title + " light-text"}>
-              {t("register.preferences")}
-            </h4>
-            <div className={styles.formRow}>
-              <div className={styles.inputItem}>
-                <label className="light-text">
-                  {t("language.language_selector")}
-                </label>
-                <select id="language" className="form-select">
-                  <option value="es">{t("language.spanish")}</option>
-                  <option value="en">{t("language.english")}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className={styles.submitContainer}>
-            <button type="submit" className="btn secondary-btn">
-              <h5>{t("register.register")}</h5>
-            </button>
-          </div>
-        </form>
+        <RegisterForm onSubmit={onSubmit} />
         <hr className="light-text mt-auto" />
         <div className={styles.loginContainer}>
           <h5 className={styles.title + " light-text"}>
