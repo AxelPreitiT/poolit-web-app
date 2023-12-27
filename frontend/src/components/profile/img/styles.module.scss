@@ -1,0 +1,17 @@
+@use "@/colors.module.scss" as colors;
+
+.avatar_img {
+  display: flex;
+  justify-content: center;
+}
+
+.circular__landscape {
+  border: solid 3px lightgray;
+  display: flex;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+}

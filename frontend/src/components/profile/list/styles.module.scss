@@ -1,0 +1,25 @@
+@use "@/colors.module.scss" as colors;
+
+.row_data {
+  margin-bottom: 1%;
+}
+
+.travel_info_list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+  padding: 1em 0;
+  border-top: 2px solid #8b8b8b;
+}
+
+.list_container {
+  margin-bottom: 2%;
+  padding: 1% 2% 1% 2%;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
