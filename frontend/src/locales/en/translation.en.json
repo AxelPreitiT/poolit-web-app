@@ -74,6 +74,14 @@
     }
   },
   "profile": {
-    "default": "hola mundoooo"
+    "props": {
+      "email": "Email",
+      "phone": "Phone",
+      "neighborhood": "Residence neighborhood",
+      "language": "Language",
+      "trips": "Trips created",
+      "rating_driver": "Driver rating",
+      "rating_passenger": "Passenger rating"
+    }
   }
 }

@@ -1,15 +1,14 @@
 @use "@/colors.module.scss" as colors;
 
 .row_data {
-  margin-bottom: 1%;
+  padding-bottom: 1%;
+  border-bottom: 2px solid #8b8b8b;
 }
 
 .travel_info_list {
   display: flex;
   flex-direction: column;
   row-gap: 1em;
-  padding: 1em 0;
-  border-top: 2px solid #8b8b8b;
 }
 
 .list_container {
@@ -22,4 +21,30 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.review_empty_container {
+  display: flex;
+  min-height: 70px;
+  padding: 1.5% 1% 1% 1%;
+  flex-direction: row;
+  align-items: center;
+  gap: 3%;
+  justify-content: center;
+}
+
+.review_empty_container i {
+  color: colors.$secondary-color !important;
+}
+
+.plus_btn {
+  display: flex;
+  align-items: center;
+  padding: 1% 2% 1% 2%;
+  justify-content: center;
+  gap: 2%;
+}
+
+.plus_btn:hover {
+  opacity: 0.5;
 }

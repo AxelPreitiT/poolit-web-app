@@ -1,5 +1,6 @@
-import ProfileProp from "../prop/ProfileProp";
 import styles from "./styles.module.scss";
+import { Link } from "react-router-dom";
+import { homePath } from "@/AppRouter";
 
 interface ListContainerProps<T> {
   title: string;
@@ -29,17 +30,28 @@ const ListContainer = <T,>({
       <div className={styles.row_data}>
         <h2>{title}</h2>
       </div>
-      <h2>{btn_footer_text}</h2>
-      <h2>{empty_text}</h2>
-      <h2>{empty_icon}</h2>
-      <ul>
-        {props.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-      <div className={styles.travel_info_list}>
-        <h2>{btn_footer_text}</h2>
-      </div>
+      {props && props.length > 0 ? (
+        <div>
+          <div>
+            {props.map((item, index) => (
+              <div className={styles.travel_info_list} key={index}>
+                {item}
+              </div>
+            ))}
+          </div>
+          <Link to={homePath} className={styles.logoContainer}>
+            <div className={styles.plus_btn}>
+              <h3 className="text">{btn_footer_text}</h3>
+            </div>
+          </Link>
+        </div>
+      ) : (
+        <div className={styles.review_empty_container}>
+          <i className={`bi-solid bi-${empty_icon} h2`}></i>
+          <h3 className="italic-text placeholder-text">{empty_text}</h3>
+        </div>
+      )}
+      <div></div>
     </div>
   );
 };

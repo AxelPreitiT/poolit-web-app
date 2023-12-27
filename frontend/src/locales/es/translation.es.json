@@ -72,5 +72,16 @@
     "profile_pic": {
       "max_size": "La imagen no puede pesar más de {{max_size}} MB"
     }
+  },
+  "profile": {
+    "props": {
+      "email": "Email",
+      "phone": "Teléfono",
+      "neighborhood": "Barrio de residencia",
+      "language": "Idioma",
+      "trips": "Viajes creados",
+      "rating_driver": "Valoración como conductor",
+      "rating_passenger": "Valoración como pasajero"
+    }
   }
 }

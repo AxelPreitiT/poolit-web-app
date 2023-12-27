@@ -1,11 +1,17 @@
 import styles from "./styles.module.scss";
-import ProfilePropProps from "./ProfileInterface";
 
-const ProfileProp = ({ prop, text }: ProfilePropProps) => (
-  <div>
-    <h6 className={styles.propProfile}>{text}</h6>
-    <h4>{prop}</h4>
-  </div>
-);
+export interface ProfilePropProps {
+  prop: string;
+  text: string;
+}
+
+const ProfileProp = ({ prop, text }: ProfilePropProps) => {
+  return (
+    <div>
+      <h6 className={styles.propProfile}>{prop}</h6>
+      <h4>{text}</h4>
+    </div>
+  );
+};
 
 export default ProfileProp;
