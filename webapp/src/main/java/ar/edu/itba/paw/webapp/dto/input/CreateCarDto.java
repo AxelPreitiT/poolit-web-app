@@ -2,11 +2,11 @@ package ar.edu.itba.paw.webapp.dto.input;
 
 import ar.edu.itba.paw.models.CarBrand;
 import ar.edu.itba.paw.models.FeatureCar;
-
-
-import ar.edu.itba.paw.webapp.form.annotations.NotSamePlate;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.NotSamePlate;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.Plate;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class CreateCarDto {
 
     @Size(min = 1)
-    @Pattern(regexp = "([a-zA-Z]{2}\\s?\\d{3}\\s?[a-zA-Z]{2})|([a-zA-Z]{3}\\s?\\d{3})")
+    @Plate
     @NotSamePlate
     private String plate;
 
@@ -24,6 +24,7 @@ public class CreateCarDto {
     @Min(value = 1)
     private int seats;
 
+    @NotNull
     private CarBrand carBrand;
 
     private List<FeatureCar> features;
