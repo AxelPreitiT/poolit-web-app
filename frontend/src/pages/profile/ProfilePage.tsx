@@ -9,6 +9,11 @@ import ListContainer from "@/components/profile/list/ListContainer";
 const ProfilePage = () => {
   const { t } = useTranslation();
 
+  const data = [
+    { prop: "holaaaa", text: "jose" },
+    { prop: "hol2a", text: "2jose" },
+  ];
+
   return (
     <div className={styles.main_container}>
       <div className={styles.profileCard}>
@@ -28,6 +33,16 @@ const ProfilePage = () => {
           btn_footer_text={"hola"}
           empty_text={"hola"}
           empty_icon={"hola"}
+          data={data}
+          component_name={ProfileProp}
+        />
+        <ListContainer
+          title={"hola"}
+          btn_footer_text={"hola"}
+          empty_text={"hola"}
+          empty_icon={"hola"}
+          data={data}
+          component_name={ProfileProp}
         />
       </div>
     </div>

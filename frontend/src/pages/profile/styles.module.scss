@@ -34,18 +34,6 @@
   flex-grow: 2;
 }
 
-.list_container {
-  margin-bottom: 2%;
-  padding: 1% 2% 1% 2%;
-  background-color: white;
-  border: 2px solid gray;
-  border-radius: 20px;
-  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 @media (min-width: 1400px) {
   .mainContainer {
     row-gap: 3rem;

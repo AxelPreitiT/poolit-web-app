@@ -1,9 +1,5 @@
 import styles from "./styles.module.scss";
-
-interface ProfilePropProps {
-  prop: string;
-  text: string;
-}
+import ProfilePropProps from "./ProfileInterface";
 
 const ProfileProp = ({ prop, text }: ProfilePropProps) => (
   <div>
