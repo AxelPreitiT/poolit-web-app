@@ -39,7 +39,7 @@ public class CarServiceImpl implements CarService {
     public Car createCar(String plate, String infoCar, byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features) throws UserNotFoundException {
         User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         final long imageId;
-        if (imgData== null || imgData.length<=0){
+        if (imgData== null || imgData.length==0){
             //TODO CAMBIAR EN PRODUCCION A LA DEFAULT
             imageId = 1;
         } else {
@@ -68,6 +68,15 @@ public class CarServiceImpl implements CarService {
         return carDao.findById(carId);
     }
 
+
+    @Transactional
+    @Override
+    public List<Car> findUserCars(final long userId) throws UserNotFoundException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        return carDao.findByUser(user);
+    }
+
+    //TODO: delete
     @Transactional
     @Override
     public List<Car> findCurrentUserCars() throws UserNotFoundException {

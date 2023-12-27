@@ -41,6 +41,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
 
+    //TODO: que mande el default el servicio que lo llama, asi tenemos la default del auto y de perfil
     @Transactional
     @Override
     public byte[] getImageBytea(long imageId) throws ImageNotFoundException{

@@ -20,9 +20,12 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/api/cars")
 @Component
@@ -31,24 +34,31 @@ public class CarController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
 
     private final CarService carService;
-    private final CarReviewService carReviewService;
-
-
 
     @Context
     private UriInfo uriInfo;
 
     @Inject
     @Autowired
-    public CarController(CarService carService, CarReviewService carReviewService) {
+    public CarController(CarService carService) {
         this.carService = carService;
-        this.carReviewService = carReviewService;
     }
 
+
+    //TODO: revisar si se quiere paginado
+    @GET
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#userId)")
+    public Response getCars(@QueryParam("fromUser")@Valid @NotNull(message = "{dto.validation.fromUser}") Integer userId) throws UserNotFoundException {
+        LOGGER.debug("GET request for cars from user {}",userId);
+        final List<CarDto> cars = carService.findUserCars(userId).stream().map(car -> CarDto.fromCar(uriInfo,car)).collect(Collectors.toList());
+        return Response.ok(new GenericEntity<List<CarDto>>(cars){}).build();
+    }
+
+    //TODO: ver de buscar el rating en el servicio para el auto (como el usuario)
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CAR)
-    public Response getCarById(@PathParam("id") final long id) throws CarNotFoundException, UserNotFoundException{
+    public Response getCarById(@PathParam("id") final long id) throws CarNotFoundException{
         LOGGER.debug("GET request for car with carId {}",id);
         final Car car = carService.findById(id).orElseThrow(CarNotFoundException::new);
         return Response.ok(CarDto.fromCar(uriInfo, car)).build();
