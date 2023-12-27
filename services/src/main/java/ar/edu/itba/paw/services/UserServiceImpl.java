@@ -10,6 +10,8 @@ import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +44,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
+
+    @Value("classpath:images/profile.jpeg")
+    private Resource defaultImg;
+
+    private static final long DEFAULT_IMAGE_ID = 66;
 
 
     @Autowired
@@ -95,13 +102,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException {
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        return imageService.getImageBytea(user.getUserImageId());
+        try {
+            return imageService.getImageByteaOrDefault(user.getUserImageId(),defaultImg.getInputStream());
+        }catch (IOException e){
+            return new byte[0];
+        }
     }
 
     @Transactional
     @Override
     public void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException{
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        if(user.getUserImageId() == DEFAULT_IMAGE_ID){ //fix migration in pawserver
+            //creamos una imagen para no pisar la default
+            final long imageId = imageService.createImage(content).getImageId();
+            userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
+            return;
+        }
         imageService.updateImage(content,user.getUserImageId());
     }
 
