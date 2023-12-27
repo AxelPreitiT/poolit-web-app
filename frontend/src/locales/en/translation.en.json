@@ -72,5 +72,8 @@
     "profile_pic": {
       "max_size": "The image size must be at most {{max_size}} MB"
     }
+  },
+  "profile": {
+    "default": "hola mundoooo"
   }
 }

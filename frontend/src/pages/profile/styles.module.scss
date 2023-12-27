@@ -10,76 +10,40 @@
   height: 100vh;
 }
 
-.logoContainer {
-  display: flex;
-  justify-content: center;
+.profileCard {
+  padding: 1em 1.5em;
+  height: fit-content;
   width: 30%;
-  aspect-ratio: 4/1;
-}
-
-.loginContainer {
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
-  width: 30%;
-  padding: 2rem;
-  background-color: colors.$primary-color;
-  border-radius: 12px;
+  row-gap: 1em;
 }
 
-.formContainer {
+.main_container {
+  display: flex;
+  margin: 3% 2% 3% 2%;
+  max-width: none;
+  gap: 2%;
+}
+
+.list_block {
+  flex-grow: 2;
+}
+
+.list_container {
+  margin-bottom: 2%;
+  padding: 1% 2% 1% 2%;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
-  width: 100%;
-}
-
-.formContainer button {
-  margin-left: auto;
-}
-
-.inputContainer {
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5em;
-  width: 100%;
-  align-items: center;
-}
-
-.emailContainer,
-.passwordContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.3em;
-  align-items: start;
-}
-
-.rememberContainer {
-  display: flex;
-  flex-direction: row;
-  column-gap: 0.5em;
-  align-items: center;
-  width: 100%;
-}
-
-.loginFooterContainer {
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.5em;
-  width: 100%;
-  align-items: center;
-}
-
-.loginFooterContainer > * {
-  text-align: center;
-}
-
-.footerContainer > * {
-  display: flex;
-  flex-direction: row;
-  column-gap: 0.3rem;
-  align-items: center;
+  justify-content: space-between;
 }
 
 @media (min-width: 1400px) {
