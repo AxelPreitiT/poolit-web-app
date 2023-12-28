@@ -1,4 +1,8 @@
 {
+  "format": {
+    "price": "$ {{priceInt}}.{{princeFloat}}",
+    "plate": "Patente:{{carPlate}}"
+  },
   "poolit": {
     "name": "POOLIT",
     "logo": "Poolit Logo"
@@ -82,6 +86,21 @@
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
       "rating_passenger": "Valoración como pasajero"
+    },
+    "lists": {
+      "review_as_driver": "Opiniones como conductor",
+      "review_as_passanger": "Opiniones como pasajero",
+      "review_empty": "No tiene opiniones",
+      "review_more": "Mostrar mas opiniones",
+      "created_next_title": "Creados - Próximos viajes",
+      "created_next_more": "Ver todos los proximos viajes",
+      "created_next_empty": "No tienes proximos viajes",
+      "created_prev_title": "Creados - viajes realizados",
+      "created_prev_more": "Ver todos los viajes realizados",
+      "created_prev_empty": "No tienes viajes realizados",
+      "cars": "Mis autos",
+      "cars_create": "Crear nuevo auto",
+      "cars_empty": "No tienes autos creados"
     }
   }
 }
