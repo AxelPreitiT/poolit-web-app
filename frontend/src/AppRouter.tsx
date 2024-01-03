@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import RouteWithTitle from "./components/utils/RouteWithTitle";
+import RouteWrapper from "./components/utils/RouteWrapper";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
 import TripsPage from "./pages/trips/TripsPage";
@@ -28,17 +28,17 @@ const router = createBrowserRouter(
     {
       path: loginPath,
       element: (
-        <RouteWithTitle title="login.title">
+        <RouteWrapper title="login.title">
           <LoginPage />
-        </RouteWithTitle>
+        </RouteWrapper>
       ),
     },
     {
       path: registerPath,
       element: (
-        <RouteWithTitle title="register.title">
+        <RouteWrapper title="register.title">
           <RegisterPage />
-        </RouteWithTitle>
+        </RouteWrapper>
       ),
     },
     {
