@@ -1,20 +1,17 @@
-import { useParams } from "react-router-dom";
-
 import ProfileImg from "@/components/profile/img/ProfileImg";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
-import FullReviews from "@/components/review/fullList/fullReviews";
+import ListContainer from "@/components/profile/list/ListContainer";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
+import { PublicsReviewsPath } from "@/AppRouter";
 
-const ReviewPage = () => {
-  let { id } = useParams();
+const PublicProfilePage = () => {
   const { t } = useTranslation();
 
   const user = {
-    id: 3,
     name: "Gaston Francois",
     email: "gfrancois@itba.edu.ar",
     phone: "3424394741",
@@ -57,16 +54,27 @@ const ReviewPage = () => {
       </div>
 
       <div className={styles.list_block}>
-        <FullReviews
+        <ListContainer
           title={t("profile.lists.review_as_driver")}
+          btn_footer_text={t("profile.lists.review_more")}
           empty_text={t("profile.lists.review_empty")}
           empty_icon={"book"}
           data={data2}
           component_name={ShortReview}
+          link={PublicsReviewsPath.replace(":id", String(5))}
+        />
+        <ListContainer
+          title={t("profile.lists.review_as_passanger")}
+          btn_footer_text={t("profile.lists.review_more")}
+          empty_text={t("profile.lists.review_empty")}
+          empty_icon={"book"}
+          data={data2}
+          component_name={ShortReview}
+          link={PublicsReviewsPath.replace(":id", String(5))}
         />
       </div>
     </div>
   );
 };
 
-export default ReviewPage;
+export default PublicProfilePage;
