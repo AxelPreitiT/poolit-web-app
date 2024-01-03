@@ -9,6 +9,7 @@ import ProfileStars from "@/components/profile/stars/ProfileStars";
 import CardTrip from "@/components/cardTrip/cardTrip";
 import { Trip } from "@/components/cardTrip/cardTrip";
 import CardCar from "@/components/cardCar/CardCar";
+import { PublicsReviewsPath, tripsPath } from "@/AppRouter";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -104,6 +105,7 @@ const ProfilePage = () => {
           empty_icon={"book"}
           data={data2}
           component_name={ShortReview}
+          link={PublicsReviewsPath.replace(":id", String(5))}
         />
         <ListContainer
           title={t("profile.lists.created_next_title")}
@@ -112,6 +114,7 @@ const ProfilePage = () => {
           empty_icon={"car-front-fill"}
           data={data}
           component_name={CardTrip}
+          link={tripsPath}
         />
         <ListContainer
           title={t("profile.lists.created_prev_title")}
@@ -120,6 +123,7 @@ const ProfilePage = () => {
           empty_icon={"car-front-fill"}
           data={data}
           component_name={CardTrip}
+          link={tripsPath}
         />
         <ListContainer
           title={t("profile.lists.cars")}
@@ -128,6 +132,7 @@ const ProfilePage = () => {
           empty_icon={"car-front-fill"}
           data={data3}
           component_name={CardCar}
+          link={tripsPath}
         />
       </div>
     </div>

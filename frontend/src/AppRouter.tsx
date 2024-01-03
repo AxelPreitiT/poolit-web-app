@@ -6,6 +6,7 @@ import TripsPage from "./pages/trips/TripsPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import ReviewPage from "./pages/public/reviews/ReviewPage";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -14,6 +15,7 @@ export const verifyEmailPath = "/verify-email";
 export const tripsPath = "/trips";
 export const tripDetailsPath = "/trips/:tripId";
 export const profilePath = "/profile";
+export const PublicsReviewsPath = "/reviews/drivers/:id";
 
 const router = createBrowserRouter(
   [
@@ -48,6 +50,10 @@ const router = createBrowserRouter(
     {
       path: profilePath,
       element: <ProfilePage />,
+    },
+    {
+      path: PublicsReviewsPath,
+      element: <ReviewPage />,
     },
   ],
   {

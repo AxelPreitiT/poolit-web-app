@@ -1,25 +1,20 @@
 import styles from "./styles.module.scss";
-import { Link } from "react-router-dom";
 
-interface ListContainerProps<T> {
+interface FullReviewsProps<T> {
   title: string;
-  btn_footer_text: string;
   empty_text: string;
   empty_icon: string;
   data: T[];
   component_name: React.FC<T>;
-  link: string;
 }
 
-const ListContainer = <T,>({
+const FullReviews = <T,>({
   title,
-  btn_footer_text,
   empty_text,
   empty_icon,
   data,
   component_name,
-  link,
-}: ListContainerProps<T>) => {
+}: FullReviewsProps<T>) => {
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
     return data.map((item, index) => <Component key={index} {...item} />);
   };
@@ -40,11 +35,6 @@ const ListContainer = <T,>({
               </div>
             ))}
           </div>
-          <Link to={link} className={styles.logoContainer}>
-            <div className={styles.plus_btn}>
-              <h3 className="text">{btn_footer_text}</h3>
-            </div>
-          </Link>
         </div>
       ) : (
         <div className={styles.review_empty_container}>
@@ -57,4 +47,4 @@ const ListContainer = <T,>({
   );
 };
 
-export default ListContainer;
+export default FullReviews;
