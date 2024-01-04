@@ -1,0 +1,14 @@
+@use "@/colors.module.scss" as colors;
+
+.navbar {
+  background-color: colors.$primary-color;
+}
+
+.logoImg {
+  transition: opacity 0.3s;
+  width: 10em;
+}
+
+.active {
+  color: black;
+}

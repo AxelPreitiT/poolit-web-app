@@ -8,6 +8,7 @@ import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ReviewPage from "./pages/public/reviews/ReviewPage";
 import PublicProfilePage from "./pages/profile/PublicProfilePage";
+import NavbarWrapper from "./components/utils/Navbar";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -51,7 +52,11 @@ const router = createBrowserRouter(
     },
     {
       path: profilePath,
-      element: <ProfilePage />,
+      element: (
+        <NavbarWrapper>
+          <ProfilePage />,
+        </NavbarWrapper>
+      ),
     },
     {
       path: PublicsReviewsPath,
