@@ -28,25 +28,28 @@ const RegisterPage = () => {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.logoContainer}>
-        <RedirectHomeLogo />
-      </div>
       <div className={styles.bannerContainer}>
-        <img src={RegisterBanner} alt={t("register.banner")} />
+        <img
+          src={RegisterBanner}
+          alt={t("register.banner")}
+          className={styles.banner}
+        />
         <div className={styles.logoContainer}>
           <RedirectHomeLogo />
         </div>
       </div>
       <div className={styles.formContainer}>
         <RegisterForm onSubmit={onSubmit} />
-        <hr className="light-text mt-auto" />
-        <div className={styles.loginContainer}>
-          <h5 className={styles.title + " light-text"}>
-            {t("register.already_registered")}
-          </h5>
-          <Link to={loginPath}>
-            <h5 className="link-text fw-bold">{t("login.login")}</h5>
-          </Link>
+        <div className={styles.footerContainer}>
+          <hr className="light-text mt-auto" />
+          <div className={styles.loginContainer}>
+            <h6 className={styles.title + " light-text"}>
+              {t("register.already_registered")}
+            </h6>
+            <Link to={loginPath}>
+              <h5 className="link-text fw-bold">{t("login.login")}</h5>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
