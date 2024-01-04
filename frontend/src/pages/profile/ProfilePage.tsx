@@ -3,13 +3,13 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
-import ListContainer from "@/components/profile/list/ListContainer";
-import ShortReview from "@/components/review/shorts/ShortReview";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
-import CardTrip from "@/components/cardTrip/cardTrip";
-import { Trip } from "@/components/cardTrip/cardTrip";
-import CardCar from "@/components/cardCar/CardCar";
-import { PublicsReviewsPath, tripsPath } from "@/AppRouter";
+import { useState } from "react";
+import DriverList from "@/components/profile/ProfileLists/DriverList";
+import PassengerList from "@/components/profile/ProfileLists/PassangerList";
+import Nav from "react-bootstrap/Nav";
+import Row from "react-bootstrap/Row";
+import Tab from "react-bootstrap/Tab";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -24,55 +24,6 @@ const ProfilePage = () => {
     rating_driver: 3.5,
     rating_passenger: 1.5,
   };
-
-  const data: Trip[] = [
-    {
-      tripId: 1,
-      originCity: {
-        name: "Balvanera",
-      },
-      originAddress: "Av independencia 2135",
-      destinationCity: {
-        name: "Parque Patricios",
-      },
-      destinationAddress: "Iguazu 341",
-      dayOfWeekString: "Miercoles",
-      startDateString: "Date string",
-      endDateString: "Date string",
-      travelInfoDateString: "travel info",
-      startTimeString: "time",
-      integerQueryTotalPrice: "10",
-      decimalQueryTotalPrice: "00",
-      queryIsRecurrent: false,
-      car: {
-        imageId: "imagen",
-      },
-    },
-  ];
-
-  const data2 = [
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-  ];
-
-  const data3 = [
-    {
-      carId: 1,
-      imageId: 1,
-      infoCar: "Mondeo blanco",
-      plate: "AAA111",
-    },
-  ];
 
   return (
     <div className={styles.main_container}>
@@ -98,42 +49,30 @@ const ProfilePage = () => {
       </div>
 
       <div className={styles.list_block}>
-        <ListContainer
-          title={t("profile.lists.review_as_driver")}
-          btn_footer_text={t("profile.lists.review_more")}
-          empty_text={t("profile.lists.review_empty")}
-          empty_icon={"book"}
-          data={data2}
-          component_name={ShortReview}
-          link={PublicsReviewsPath.replace(":id", String(5))}
-        />
-        <ListContainer
-          title={t("profile.lists.created_next_title")}
-          btn_footer_text={t("profile.lists.created_next_more")}
-          empty_text={t("profile.lists.created_next_empty")}
-          empty_icon={"car-front-fill"}
-          data={data}
-          component_name={CardTrip}
-          link={tripsPath}
-        />
-        <ListContainer
-          title={t("profile.lists.created_prev_title")}
-          btn_footer_text={t("profile.lists.created_prev_more")}
-          empty_text={t("profile.lists.created_prev_empty")}
-          empty_icon={"car-front-fill"}
-          data={data}
-          component_name={CardTrip}
-          link={tripsPath}
-        />
-        <ListContainer
-          title={t("profile.lists.cars")}
-          btn_footer_text={t("profile.lists.cars_create")}
-          empty_text={t("profile.lists.cars_empty")}
-          empty_icon={"car-front-fill"}
-          data={data3}
-          component_name={CardCar}
-          link={tripsPath}
-        />
+        <Tab.Container id="center-tabs-example" defaultActiveKey="first">
+          <div>
+            <Nav variant="pills" className={styles.nav_prop}>
+              <Nav.Item className={styles.fulltab}>
+                <Nav.Link eventKey="first" className={styles.custom_tab}>
+                  <h3>{t("roles.passenger")}</h3>
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item className={styles.fulltab}>
+                <Nav.Link eventKey="second" className={styles.custom_tab}>
+                  <h3>{t("roles.driver")}</h3>
+                </Nav.Link>
+              </Nav.Item>
+            </Nav>
+            <Tab.Content>
+              <Tab.Pane eventKey="first">
+                <PassengerList />
+              </Tab.Pane>
+              <Tab.Pane eventKey="second">
+                <DriverList />
+              </Tab.Pane>
+            </Tab.Content>
+          </div>
+        </Tab.Container>
       </div>
     </div>
   );

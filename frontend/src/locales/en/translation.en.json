@@ -92,15 +92,25 @@
       "review_as_passanger": "Opinions as a passenger",
       "review_empty": "No reviews",
       "review_more": "Show more reviews",
-      "created_next_title": "Reserved - Upcoming",
+      "created_next_title": "Created - Upcoming",
       "created_next_more": "View all upcoming trips",
       "created_next_empty": "You have no upcoming trips",
-      "created_prev_title": "Reserved - History",
+      "created_prev_title": "Created - History",
       "created_prev_more": "View all completed trips",
       "created_prev_empty": "You have no completed trips",
+      "reserved_next_title": "Reserved - Upcoming",
+      "reserved_next_more": "View all upcoming trips",
+      "reserved_next_empty": "You have no upcoming trips",
+      "reserved_prev_title": "Reserved - History",
+      "reserved_prev_more": "View all completed trips",
+      "reserved_prev_empty": "You have no completed trips",
       "cars": "My cars",
       "cars_create": "Create new car",
       "cars_empty": "You have no created cars"
     }
+  },
+  "roles": {
+    "driver": "Conductor",
+    "passenger": "Pasajero"
   }
 }

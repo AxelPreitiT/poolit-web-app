@@ -39,3 +39,50 @@
     row-gap: 3rem;
   }
 }
+
+.custom_tab {
+  --bs-nav-pills-link-active-bg: #ffa216 !important;
+  display: flex;
+  flex-grow: 1;
+}
+
+.fulltab:hover {
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+}
+
+.fulltab {
+  display: flex !important;
+  border-radius: 0.5rem;
+  border-top: none !important;
+  border-left: none !important;
+  border-bottom: 2px solid #ffa216 !important;
+  border-right: 2px solid #ffa216 !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) !important;
+  opacity: 1 !important;
+  transition:
+    box-shadow 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+  display: flex !important;
+  flex-grow: 1 !important;
+  background: linear-gradient(
+      to top,
+      rgba(255, 162, 22, 0.7),
+      rgba(249, 204, 58, 0.7)
+    ),
+    linear-gradient(to right, rgba(249, 204, 58, 0.7), rgba(255, 162, 22, 0.7));
+  color: black !important;
+  height: 50px;
+  margin-bottom: 2%;
+}
+
+a {
+  text-decoration: none !important;
+  color: white !important;
+  text-align: center;
+  font-size: x-large;
+}
+
+.nav_prop {
+  display: flex;
+}

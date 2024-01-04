@@ -98,9 +98,19 @@
       "created_prev_title": "Creados - viajes realizados",
       "created_prev_more": "Ver todos los viajes realizados",
       "created_prev_empty": "No tienes viajes realizados",
+      "reserved_next_title": "Reservados - Próximos",
+      "reserved_next_more": "Ver todos los proximos viajes",
+      "reserved_next_empty": "No tienes proximos viajes",
+      "reserved_prev_title": "Reservados - Historial",
+      "reserved_prev_more": "Ver todos los viajes realizados",
+      "reserved_prev_empty": "No tienes viajes realizados",
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
       "cars_empty": "No tienes autos creados"
     }
+  },
+  "roles": {
+    "driver": "Driver",
+    "passenger": "Passenger"
   }
 }
