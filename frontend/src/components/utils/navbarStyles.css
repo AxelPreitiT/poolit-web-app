@@ -20,7 +20,7 @@
   width: 100%;
   height: 70px;
   align-items: center;
-  margin: 0 2%;
+  margin-right: 2%;
   justify-content: space-between;
 }
 
@@ -54,7 +54,12 @@
 }
 
 .img-container {
-  padding-right: 10%;
+  max-height: 50px;
+}
+
+.img-container:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s;
 }
 
 .img-profile-container:hover {
@@ -72,9 +77,27 @@
   display: flex;
   align-items: center;
   background-color: #ffa216 !important;
-  max-height: 50px !important;
+  max-height: 45px !important;
   min-width: max-content !important;
   border-radius: 12px !important;
   margin-right: 50px;
   column-gap: 5px;
+}
+
+.create-trip-btn:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-menu {
+  margin-top: 20%;
+}
+
+.dropdown-item {
+  width: fit-content;
+  padding: 0 10px;
 }

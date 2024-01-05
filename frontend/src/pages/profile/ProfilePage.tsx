@@ -8,7 +8,6 @@ import { useState } from "react";
 import DriverList from "@/components/profile/ProfileLists/DriverList";
 import PassengerList from "@/components/profile/ProfileLists/PassangerList";
 import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 
 const ProfilePage = () => {

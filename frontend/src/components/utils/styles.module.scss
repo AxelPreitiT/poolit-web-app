@@ -39,11 +39,13 @@
 .logoImg {
   transition: opacity 0.3s;
   width: 10em;
+  max-height: 36px;
 }
 
 .avatar_img {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .circular__landscape {
@@ -55,4 +57,31 @@
   height: 200px;
   overflow: hidden;
   border-radius: 50%;
+}
+
+.item_dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  justify-content: center;
+  margin: 0 0 0 14px;
+  gap: 20px;
+  height: 50px;
+}
+
+.item_dropdown:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.menu_dropdown {
+  background-color: #1c4c96 !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid white;
+  --bs-dropdown-link-hover-bg: none;
+}
+
+.dropdown_text {
+  display: flex;
+  align-items: center;
 }

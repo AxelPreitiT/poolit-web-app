@@ -12,6 +12,11 @@
     "spanish": "Español",
     "english": "Inglés"
   },
+  "navbar": {
+    "created": "Creados",
+    "reserved": "Reservados",
+    "log_out": "Cerrar sesión"
+  },
   "login": {
     "title": "Iniciar sesión",
     "email": "Correo electrónico",
@@ -111,8 +116,8 @@
     }
   },
   "roles": {
-    "driver": "Driver",
-    "passenger": "Passenger"
+    "driver": "Conductor",
+    "passenger": "Pasajero"
   },
   "reviews": {
     "title": "opiniones"

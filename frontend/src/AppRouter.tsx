@@ -8,7 +8,7 @@ import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ReviewPage from "./pages/public/reviews/ReviewPage";
 import PublicProfilePage from "./pages/profile/PublicProfilePage";
-import NavbarWrapper from "./components/utils/Navbar";
+import Navbar from "./components/utils/Navbar";
 import ReservedPage from "./pages/reserved/ReservedPage";
 import CreatedPage from "./pages/created/CreatedPage";
 import CreateTripPage from "./pages/createTrip/CreatedPage";
@@ -32,6 +32,7 @@ const router = createBrowserRouter(
       path: homePath,
       element: (
         <RouteWrapper title="poolit.name">
+          <Navbar />
           <HomePage />
         </RouteWrapper>
       ),
@@ -64,7 +65,7 @@ const router = createBrowserRouter(
       path: profilePath,
       element: (
         <RouteWrapper title="profile.title">
-          <NavbarWrapper />
+          <Navbar />
           <ProfilePage />,
         </RouteWrapper>
       ),
@@ -73,7 +74,7 @@ const router = createBrowserRouter(
       path: publicsReviewsPath,
       element: (
         <RouteWrapper title="reviews.title">
-          <NavbarWrapper />
+          <Navbar />
           <ReviewPage />
         </RouteWrapper>
       ),
@@ -82,7 +83,7 @@ const router = createBrowserRouter(
       path: publicProfilePath,
       element: (
         <RouteWrapper title="profile.title">
-          <NavbarWrapper />
+          <Navbar />
           <PublicProfilePage />
         </RouteWrapper>
       ),
@@ -91,7 +92,7 @@ const router = createBrowserRouter(
       path: reservedTripsPath,
       element: (
         <RouteWrapper title="reserved_trips.title">
-          <NavbarWrapper />
+          <Navbar />
           <ReservedPage />,
         </RouteWrapper>
       ),
@@ -100,7 +101,7 @@ const router = createBrowserRouter(
       path: createdTripsPath,
       element: (
         <RouteWrapper title="created_trips.title">
-          <NavbarWrapper />
+          <Navbar />
           <CreatedPage />,
         </RouteWrapper>
       ),
@@ -109,7 +110,7 @@ const router = createBrowserRouter(
       path: createTripsPath,
       element: (
         <RouteWrapper title="create_trip.title">
-          <NavbarWrapper />
+          <Navbar />
           <CreateTripPage />,
         </RouteWrapper>
       ),
