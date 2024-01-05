@@ -3,7 +3,6 @@ import styles from "./styles.module.scss";
 
 interface ProfileImgProps {
   src: string;
-  dim: number;
 }
 
 const ProfileImg = ({ src }: ProfileImgProps) => (

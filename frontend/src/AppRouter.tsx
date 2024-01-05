@@ -53,9 +53,10 @@ const router = createBrowserRouter(
     {
       path: profilePath,
       element: (
-        <NavbarWrapper>
+        <RouteWrapper title="register.title">
+          <NavbarWrapper />
           <ProfilePage />,
-        </NavbarWrapper>
+        </RouteWrapper>
       ),
     },
     {

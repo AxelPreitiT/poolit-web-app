@@ -1,0 +1,13 @@
+@use "@/colors.module.scss" as colors;
+
+.avatar_img {
+  display: flex;
+  justify-content: center;
+}
+
+.circular__landscape {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}

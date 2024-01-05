@@ -1,7 +1,39 @@
 @use "@/colors.module.scss" as colors;
 
-.navbar {
-  background-color: colors.$primary-color;
+/* navbarStyles.css */
+
+.nav-container {
+  max-width: 100vw;
+  background: cyanDark; /* Assuming cyanDark is a variable or valid color value */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+.nav-title {
+  font-family: "Righteous", cursive;
+  font-size: 38px;
+  margin: 0 0 0 14px;
+}
+
+.nav-sections-container {
+  display: flex;
+  height: 70px;
+  align-items: center;
+  margin-left: 48px;
+}
+
+.nav-section-item {
+  font-weight: 500;
+  list-style-type: none;
+  margin-right: 40px;
+  font-size: 16px;
+}
+
+.nav-section-item.active {
+  font-weight: 700;
 }
 
 .logoImg {
@@ -9,6 +41,18 @@
   width: 10em;
 }
 
-.active {
-  color: black;
+.avatar_img {
+  display: flex;
+  justify-content: center;
+}
+
+.circular__landscape {
+  border: solid 3px lightgray;
+  display: flex;
+  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
 }

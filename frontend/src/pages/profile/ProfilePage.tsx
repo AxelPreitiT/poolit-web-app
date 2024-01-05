@@ -28,7 +28,7 @@ const ProfilePage = () => {
   return (
     <div className={styles.main_container}>
       <div className={styles.profileCard}>
-        <ProfileImg dim={2} src={ProfilePhoto} />
+        <ProfileImg src={ProfilePhoto} />
         <h3 className="text-center">{user.name}</h3>
         <ProfileProp prop={t("profile.props.email")} text={user.email} />
         <ProfileProp prop={t("profile.props.phone")} text={user.phone} />
