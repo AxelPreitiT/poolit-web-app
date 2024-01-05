@@ -2,7 +2,7 @@ import { Trip } from "@/components/cardTrip/cardTrip";
 import ListContainer from "@/components/profile/list/ListContainer";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import CardTrip from "@/components/cardTrip/cardTrip";
-import { publicsReviewsPath, tripsPath } from "@/AppRouter";
+import { publicsReviewsPath, createdTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import CardCar from "@/components/cardCar/CardCar";
 
@@ -75,7 +75,7 @@ const DriverList = () => {
         empty_icon={"car-front-fill"}
         data={data}
         component_name={CardTrip}
-        link={tripsPath}
+        link={createdTripsPath}
       />
       <ListContainer
         title={t("profile.lists.created_prev_title")}
@@ -84,7 +84,7 @@ const DriverList = () => {
         empty_icon={"car-front-fill"}
         data={data}
         component_name={CardTrip}
-        link={tripsPath}
+        link={createdTripsPath}
       />
       <ListContainer
         title={t("profile.lists.cars")}
@@ -93,7 +93,7 @@ const DriverList = () => {
         empty_icon={"car-front-fill"}
         data={data3}
         component_name={CardCar}
-        link={tripsPath}
+        link={createdTripsPath}
       />
     </div>
   );
