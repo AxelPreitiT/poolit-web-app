@@ -15,7 +15,10 @@
   "navbar": {
     "created": "Creados",
     "reserved": "Reservados",
-    "log_out": "Cerrar sesión"
+    "log_out": "Cerrar sesión",
+    "log_in": "Iniciar sesión",
+    "register": "Registrarse",
+    "create": "Crear viaje"
   },
   "login": {
     "title": "Iniciar sesión",
@@ -130,5 +133,8 @@
   },
   "create_trip": {
     "title": "Crear viaje"
+  },
+  "admin": {
+    "title": "Administrador"
   }
 }

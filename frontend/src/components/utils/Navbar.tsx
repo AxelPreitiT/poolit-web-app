@@ -7,11 +7,14 @@ import PoolitLogo from "@/images/poolit.svg";
 import CircleImg from "../img/circleImg/CircleImg";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import {
+  registerPath,
+  loginPath,
   homePath,
   profilePath,
   createdTripsPath,
   reservedTripsPath,
   createTripsPath,
+  adminPath,
 } from "@/AppRouter";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -21,6 +24,9 @@ const Navbar = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const pathname = location?.pathname;
+
+  const isLoged = true;
+  const role = "admin";
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -44,64 +50,96 @@ const Navbar = () => {
               />
             </Link>
           </div>
-          {sections.map((section) => (
+          {isLoged &&
+            sections.map((section) => (
+              <div
+                className={`nav-section-item ${
+                  pathname === section.path ? "active" : ""
+                }`}
+                key={section.path}
+              >
+                <Link to={section.path}>
+                  <h4>{section.name}</h4>
+                </Link>
+              </div>
+            ))}
+          {role == "admin" && (
             <div
               className={`nav-section-item ${
-                pathname === section.path ? "active" : ""
+                pathname === adminPath ? "active" : ""
               }`}
-              key={section.path}
+              key={adminPath}
             >
-              <Link to={section.path}>
-                <h4>{section.name}</h4>
+              <Link to={adminPath}>
+                <h4>{t("admin.title")}</h4>
               </Link>
             </div>
-          ))}
+          )}
         </div>
-        <div className="right-container">
-          <div>
-            <Link to={createTripsPath}>
-              <Button
-                variant="primary"
-                size="lg"
-                active
-                className="create-trip-btn"
-              >
-                <i className="bi bi-plus-lg light-text h4"></i>
-                <span className="button-text-style light-text h4">
-                  Create Trip
+        {isLoged ? (
+          <div className="right-container">
+            <div>
+              <Link to={createTripsPath}>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  active
+                  className="create-trip-btn"
+                >
+                  <i className="bi bi-plus-lg light-text h4"></i>
+                  <span className="button-text-style light-text h4">
+                    {t("navbar.create")}
+                  </span>
+                </Button>
+              </Link>
+            </div>
+
+            <Dropdown show={dropdownOpen} onToggle={toggleDropdown} drop="down">
+              <Dropdown.Toggle variant="link" id="profile-dropdown">
+                <div className="img-profile-container">
+                  <CircleImg src={ProfilePhoto} size={50} />
+                </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className={styles.menu_dropdown}>
+                <Dropdown.Item as={Link} to={profilePath}>
+                  <div className={styles.item_dropdown}>
+                    <CircleImg src={ProfilePhoto} size={28} />
+                    <h3 className={styles.dropdown_text}>Poner nombree</h3>
+                  </div>
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to={loginPath}>
+                  <div className={styles.item_dropdown}>
+                    <div className={styles.dropdown_text}>
+                      <i className="bi bi-box-arrow-right light-text h5"></i>
+                    </div>
+                    <h5 className={styles.dropdown_text}>
+                      {t("navbar.log_out")}
+                    </h5>
+                  </div>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        ) : (
+          <div className="right-container">
+            <Link to={registerPath}>
+              <Button variant="primary" size="lg" active className="logout-btn">
+                <i className="bi bi-person-circle light-text h5"></i>
+                <span className="button-text-style light-text h5">
+                  {t("navbar.register")}
+                </span>
+              </Button>
+            </Link>
+            <Link to={loginPath}>
+              <Button variant="primary" size="lg" active className="logout-btn">
+                <i className="bi bi-box-arrow-in-right h5"></i>
+                <span className="button-text-style h5">
+                  {t("navbar.log_in")}
                 </span>
               </Button>
             </Link>
           </div>
-
-          <Dropdown show={dropdownOpen} onToggle={toggleDropdown} drop="down">
-            <Dropdown.Toggle variant="link" id="profile-dropdown">
-              <div className="img-profile-container">
-                <CircleImg src={ProfilePhoto} size={50} />
-              </div>
-            </Dropdown.Toggle>
-            <Dropdown.Menu className={styles.menu_dropdown}>
-              <Dropdown.Item as={Link} to={profilePath}>
-                <div className={styles.item_dropdown}>
-                  <CircleImg src={ProfilePhoto} size={28} />
-                  <h3 className={styles.dropdown_text}>
-                    Poner nombreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                  </h3>
-                </div>
-              </Dropdown.Item>
-              <Dropdown.Item as={Link} to={homePath}>
-                <div className={styles.item_dropdown}>
-                  <div className={styles.dropdown_text}>
-                    <i className="bi bi-box-arrow-right light-text h4"></i>
-                  </div>
-                  <h4 className={styles.dropdown_text}>
-                    {t("navbar.log_out")}
-                  </h4>
-                </div>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+        )}
       </div>
     </div>
   );

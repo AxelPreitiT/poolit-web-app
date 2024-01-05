@@ -77,10 +77,20 @@
   display: flex;
   align-items: center;
   background-color: #ffa216 !important;
-  max-height: 45px !important;
+  max-height: 40px !important;
   min-width: max-content !important;
   border-radius: 12px !important;
   margin-right: 50px;
+  column-gap: 5px;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  background-color: #ffa216 !important;
+  max-height: 40px !important;
+  min-width: max-content !important;
+  border-radius: 12px !important;
   column-gap: 5px;
 }
 

@@ -12,6 +12,7 @@ import Navbar from "./components/utils/Navbar";
 import ReservedPage from "./pages/reserved/ReservedPage";
 import CreatedPage from "./pages/created/CreatedPage";
 import CreateTripPage from "./pages/createTrip/CreatedPage";
+import AdminPage from "./pages/admin/AdminPage";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -25,6 +26,7 @@ export const publicProfilePath = "/profile/:id";
 export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
+export const adminPath = "/admin";
 
 const router = createBrowserRouter(
   [
@@ -112,6 +114,15 @@ const router = createBrowserRouter(
         <RouteWrapper title="create_trip.title">
           <Navbar />
           <CreateTripPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: adminPath,
+      element: (
+        <RouteWrapper title="admin.title">
+          <Navbar />
+          <AdminPage />,
         </RouteWrapper>
       ),
     },
