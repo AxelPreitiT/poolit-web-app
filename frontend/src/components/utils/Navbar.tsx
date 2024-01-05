@@ -6,7 +6,13 @@ import "./navbarStyles.css"; // Importa el archivo CSS auxiliar
 import PoolitLogo from "@/images/poolit.svg";
 import CircleImg from "../img/circleImg/CircleImg";
 import ProfilePhoto from "@/images/descarga.jpeg";
-import { profilePath } from "@/AppRouter";
+import {
+  profilePath,
+  createdTripsPath,
+  reservedTripsPath,
+  createTripsPath,
+} from "@/AppRouter";
+import Button from "react-bootstrap/Button";
 
 const NavbarWrapper = () => {
   const { t } = useTranslation();
@@ -14,10 +20,8 @@ const NavbarWrapper = () => {
   const pathname = location?.pathname;
 
   const sections: Section[] = [
-    { path: "/profile", name: "Mis cursos" },
-    { path: "/announcements", name: "Mis anuncios" },
-    { path: "/files", name: "Mis archivos" },
-    { path: "/timetable", name: "Mis horarios" },
+    { path: createdTripsPath, name: "Mis cursos" },
+    { path: reservedTripsPath, name: "Mis anuncios" },
   ];
 
   return (
@@ -44,7 +48,22 @@ const NavbarWrapper = () => {
             </div>
           ))}
         </div>
-        <div>
+        <div className="right-container">
+          <div>
+            <Link to={createTripsPath}>
+              <Button
+                variant="primary"
+                size="lg"
+                active
+                className="create-trip-btn"
+              >
+                <i className="bi bi-plus-lg light-text h4"></i>
+                <span className="button-text-style light-text h4">
+                  Create Trip
+                </span>
+              </Button>
+            </Link>
+          </div>
           <div className="img-profile-container">
             <CircleImg src={ProfilePhoto} size={50} path={profilePath} />
           </div>

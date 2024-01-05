@@ -6,7 +6,7 @@ import ProfileProp from "@/components/profile/prop/ProfileProp";
 import ListContainer from "@/components/profile/list/ListContainer";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
-import { PublicsReviewsPath } from "@/AppRouter";
+import { publicsReviewsPath } from "@/AppRouter";
 
 const PublicProfilePage = () => {
   const { t } = useTranslation();
@@ -61,7 +61,7 @@ const PublicProfilePage = () => {
           empty_icon={"book"}
           data={data2}
           component_name={ShortReview}
-          link={PublicsReviewsPath.replace(":id", String(5))}
+          link={publicsReviewsPath.replace(":id", String(5))}
         />
         <ListContainer
           title={t("profile.lists.review_as_passanger")}
@@ -70,7 +70,7 @@ const PublicProfilePage = () => {
           empty_icon={"book"}
           data={data2}
           component_name={ShortReview}
-          link={PublicsReviewsPath.replace(":id", String(5))}
+          link={publicsReviewsPath.replace(":id", String(5))}
         />
       </div>
     </div>

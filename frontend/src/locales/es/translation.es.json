@@ -78,6 +78,7 @@
     }
   },
   "profile": {
+    "title": "Perfil",
     "props": {
       "email": "Email",
       "phone": "Teléfono",
@@ -112,5 +113,17 @@
   "roles": {
     "driver": "Driver",
     "passenger": "Passenger"
+  },
+  "reviews": {
+    "title": "opiniones"
+  },
+  "created_trips": {
+    "title": "Viajes creados"
+  },
+  "reserved_trips": {
+    "title": "Viajes reservados"
+  },
+  "create_trip": {
+    "title": "Crear viaje"
   }
 }

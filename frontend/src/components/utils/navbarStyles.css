@@ -50,14 +50,31 @@
 .left-container {
   display: flex;
   align-items: center;
-  gap: 4%;
+  gap: 10%;
 }
 
 .img-container {
-  padding: 1%;
+  padding-right: 10%;
 }
 
 .img-profile-container:hover {
   opacity: 0.7;
   transition: opacity 0.3s;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 4%;
+}
+
+.create-trip-btn {
+  display: flex;
+  align-items: center;
+  background-color: #ffa216 !important;
+  max-height: 50px !important;
+  min-width: max-content !important;
+  border-radius: 12px !important;
+  margin-right: 50px;
+  column-gap: 5px;
 }

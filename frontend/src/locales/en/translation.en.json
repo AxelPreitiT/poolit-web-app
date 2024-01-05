@@ -78,6 +78,7 @@
     }
   },
   "profile": {
+    "title": "Profile",
     "props": {
       "email": "Email",
       "phone": "Phone",
@@ -112,5 +113,17 @@
   "roles": {
     "driver": "Conductor",
     "passenger": "Pasajero"
+  },
+  "reviews": {
+    "title": "Reviews"
+  },
+  "created_trips": {
+    "title": "Created trips"
+  },
+  "reserved_trips": {
+    "title": "Reserved trips"
+  },
+  "create_trip": {
+    "title": "Create a trip"
   }
 }
