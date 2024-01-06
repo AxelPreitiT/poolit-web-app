@@ -1,8 +1,10 @@
+import MainComponent from "@/components/utils/MainComponent";
+
 const ReservedPage = () => {
   return (
-    <div>
+    <MainComponent>
       <h1>Reserved Trips</h1>
-    </div>
+    </MainComponent>
   );
 };
 
