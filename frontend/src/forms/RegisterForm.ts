@@ -1,4 +1,3 @@
-import { z } from "zod";
 import CityFormField from "./fields/CityFormField";
 import ConfirmPasswordField from "./fields/ConfirmPasswordFormField";
 import EmailFormField from "./fields/EmailFormField";
@@ -8,7 +7,7 @@ import LocaleFormField from "./fields/LocaleFormField";
 import NameFormField from "./fields/NameFormField";
 import PasswordFormField from "./fields/PasswordFormField";
 import TelephoneFormField from "./fields/TelephoneFormField";
-import Form from "./Form";
+import Form, { InferedFormSchemaType } from "./Form";
 
 const imageFieldName = "image";
 const nameFieldName = "name";
@@ -46,4 +45,5 @@ export const RegisterFormSchema = RegisterForm.getSchema().refine(
   }
 );
 
-export type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
+export type RegisterFormSchemaType =
+  InferedFormSchemaType<RegisterFormFieldsType>;

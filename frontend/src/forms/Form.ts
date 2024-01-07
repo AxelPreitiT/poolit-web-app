@@ -3,15 +3,23 @@ import FormField from "./fields/FormField";
 import { FieldInterpolationValue } from "./fields/interpolations/FieldInterpolation";
 import i18next from "i18next";
 
+type FormFieldsRecordType = Record<string, { new (name: string): FormField }>;
+
 export type FormFieldsType = Record<string, typeof FormField>;
 
 type FormFieldSchemaReturnType<T extends typeof FormField> = ReturnType<
   InstanceType<T>["getSchema"]
 >;
 
-const calculateFormFields = (
-  formFieldsRecord: Record<string, { new (name: string): FormField }>
-) =>
+type FormSchemaType<T extends FormFieldsType> = ZodObject<{
+  [K in keyof T]: FormFieldSchemaReturnType<T[K]>;
+}>;
+
+export type InferedFormSchemaType<T extends FormFieldsType> = z.infer<
+  FormSchemaType<T>
+>;
+
+const calculateFormFields = (formFieldsRecord: FormFieldsRecordType) =>
   new Set(
     Object.entries(formFieldsRecord).map(
       ([name, FormFieldClass]) => new FormFieldClass(name)
@@ -38,16 +46,12 @@ class Form<T extends FormFieldsType> {
     Record<string, FieldInterpolationValue>
   >;
 
-  constructor(
-    formFieldsRecord: Record<string, { new (name: string): FormField }> // Fix for Problem 2
-  ) {
+  constructor(formFieldsRecord: FormFieldsRecordType) {
     this.formFields = calculateFormFields(formFieldsRecord);
     this.interpolations = calculateInterpolations(this.formFields);
   }
 
-  public getSchema(): ZodObject<{
-    [K in keyof T]: FormFieldSchemaReturnType<T[K]>;
-  }> {
+  public getSchema(): FormSchemaType<T> {
     return z.object(
       Object.fromEntries(
         [...this.formFields].map((formField) => [
@@ -55,7 +59,7 @@ class Form<T extends FormFieldsType> {
           formField.getSchema(),
         ])
       )
-    ) as ZodObject<{ [K in keyof T]: FormFieldSchemaReturnType<T[K]> }>;
+    ) as FormSchemaType<T>;
   }
 
   public tFormError(key?: `error.${string}`): string | undefined {
