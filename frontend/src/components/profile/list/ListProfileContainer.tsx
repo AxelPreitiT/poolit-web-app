@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
 
-interface ListContainerProps<T> {
+interface ListProfileContainerProps<T> {
   title: string;
   btn_footer_text: string;
   empty_text: string;
@@ -11,7 +11,7 @@ interface ListContainerProps<T> {
   link: string;
 }
 
-const ListContainer = <T,>({
+const ListProfileContainer = <T,>({
   title,
   btn_footer_text,
   empty_text,
@@ -19,7 +19,7 @@ const ListContainer = <T,>({
   data,
   component_name,
   link,
-}: ListContainerProps<T>) => {
+}: ListProfileContainerProps<T>) => {
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
     return data.map((item, index) => <Component key={index} {...item} />);
   };
@@ -57,4 +57,4 @@ const ListContainer = <T,>({
   );
 };
 
-export default ListContainer;
+export default ListProfileContainer;

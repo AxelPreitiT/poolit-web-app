@@ -3,14 +3,18 @@ import styles from "./styles.module.scss";
 
 interface ProfileImgProps {
   src: string;
+  size: number;
 }
 
-const ProfileImg = ({ src }: ProfileImgProps) => (
+const CircleImg = ({ src, size }: ProfileImgProps) => (
   <div className={styles.avatar_img}>
-    <div className={styles.circular__landscape}>
+    <div
+      className={styles.circular__landscape}
+      style={{ width: size, height: size }}
+    >
       <Image src={src} roundedCircle />
     </div>
   </div>
 );
 
-export default ProfileImg;
+export default CircleImg;

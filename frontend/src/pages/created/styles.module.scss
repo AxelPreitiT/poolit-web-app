@@ -1,0 +1,9 @@
+@use "@/colors.module.scss" as colors;
+
+.container_tab {
+  margin: 2% 0;
+}
+
+i {
+  color: colors.$secondary-color !important;
+}

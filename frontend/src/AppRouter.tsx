@@ -8,6 +8,11 @@ import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import ReviewPage from "./pages/public/reviews/ReviewPage";
 import PublicProfilePage from "./pages/profile/PublicProfilePage";
+import Navbar from "./components/utils/Navbar";
+import ReservedPage from "./pages/reserved/ReservedPage";
+import CreatedPage from "./pages/created/CreatedPage";
+import CreateTripPage from "./pages/createTrip/CreatedPage";
+import AdminPage from "./pages/admin/AdminPage";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -16,14 +21,23 @@ export const verifyEmailPath = "/verify-email";
 export const tripsPath = "/trips";
 export const tripDetailsPath = "/trips/:tripId";
 export const profilePath = "/profile";
-export const PublicsReviewsPath = "/reviews/drivers/:id";
-export const PublicProfilePath = "/profile/:id";
+export const publicsReviewsPath = "/reviews/drivers/:id";
+export const publicProfilePath = "/profile/:id";
+export const reservedTripsPath = "/trips/reserved";
+export const createdTripsPath = "/trips/created";
+export const createTripsPath = "/trips/create";
+export const adminPath = "/admin";
 
 const router = createBrowserRouter(
   [
     {
       path: homePath,
-      element: <HomePage />,
+      element: (
+        <RouteWrapper title="poolit.name">
+          <Navbar />
+          <HomePage />
+        </RouteWrapper>
+      ),
     },
     {
       path: loginPath,
@@ -51,15 +65,66 @@ const router = createBrowserRouter(
     },
     {
       path: profilePath,
-      element: <ProfilePage />,
+      element: (
+        <RouteWrapper title="profile.title">
+          <Navbar />
+          <ProfilePage />,
+        </RouteWrapper>
+      ),
     },
     {
-      path: PublicsReviewsPath,
-      element: <ReviewPage />,
+      path: publicsReviewsPath,
+      element: (
+        <RouteWrapper title="reviews.title">
+          <Navbar />
+          <ReviewPage />
+        </RouteWrapper>
+      ),
     },
     {
-      path: PublicProfilePath,
-      element: <PublicProfilePage />,
+      path: publicProfilePath,
+      element: (
+        <RouteWrapper title="profile.title">
+          <Navbar />
+          <PublicProfilePage />
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: reservedTripsPath,
+      element: (
+        <RouteWrapper title="reserved_trips.title">
+          <Navbar />
+          <ReservedPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: createdTripsPath,
+      element: (
+        <RouteWrapper title="created_trips.title">
+          <Navbar />
+          <CreatedPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: createTripsPath,
+      element: (
+        <RouteWrapper title="create_trip.title">
+          <Navbar />
+          <CreateTripPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: adminPath,
+      element: (
+        <RouteWrapper title="admin.title">
+          <Navbar />
+          <AdminPage />,
+        </RouteWrapper>
+      ),
     },
   ],
   {

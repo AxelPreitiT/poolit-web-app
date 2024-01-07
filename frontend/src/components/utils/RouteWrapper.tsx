@@ -15,10 +15,7 @@ const RouteWrapper = ({ children, title }: RouterComponentProps) => {
   return (
     <>
       <Helmet>
-        <title>
-          {title ? `${t(title)} | ` : ""}
-          {t("poolit.name")}
-        </title>
+        <title>{title ? `${t(title)}` : `{t("poolit.name")}`}</title>
       </Helmet>
       {children}
     </>

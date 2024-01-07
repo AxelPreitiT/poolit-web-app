@@ -12,6 +12,14 @@
     "spanish": "Spanish",
     "english": "English"
   },
+  "navbar": {
+    "created": "Created",
+    "reserved": "Reserved",
+    "log_out": "Log out",
+    "log_in": "Log in",
+    "register": "Register",
+    "create": "Create trip"
+  },
   "login": {
     "title": "Log in",
     "email": "Email",
@@ -78,6 +86,7 @@
     }
   },
   "profile": {
+    "title": "Profile",
     "props": {
       "email": "Email",
       "phone": "Phone",
@@ -92,15 +101,46 @@
       "review_as_passanger": "Opinions as a passenger",
       "review_empty": "No reviews",
       "review_more": "Show more reviews",
-      "created_next_title": "Reserved - Upcoming",
+      "created_next_title": "Created - Upcoming",
       "created_next_more": "View all upcoming trips",
       "created_next_empty": "You have no upcoming trips",
-      "created_prev_title": "Reserved - History",
+      "created_prev_title": "Created - History",
       "created_prev_more": "View all completed trips",
       "created_prev_empty": "You have no completed trips",
+      "reserved_next_title": "Reserved - Upcoming",
+      "reserved_next_more": "View all upcoming trips",
+      "reserved_next_empty": "You have no upcoming trips",
+      "reserved_prev_title": "Reserved - History",
+      "reserved_prev_more": "View all completed trips",
+      "reserved_prev_empty": "You have no completed trips",
       "cars": "My cars",
       "cars_create": "Create new car",
       "cars_empty": "You have no created cars"
     }
+  },
+  "roles": {
+    "driver": "Driver",
+    "passenger": "Passenger"
+  },
+  "reviews": {
+    "title": "Reviews"
+  },
+  "created_trips": {
+    "title": "Created trips",
+    "future": "Upcoming",
+    "past": "History",
+    "empty": "You don't have any created trips yet",
+    "more": "Click on the 'Create trip' button to create your first trip"
+  },
+  "reserved_trips": {
+    "title": "Reserved trips",
+    "future": "Upcoming",
+    "past": "History"
+  },
+  "create_trip": {
+    "title": "Create a trip"
+  },
+  "admin": {
+    "title": "Admin"
   }
 }

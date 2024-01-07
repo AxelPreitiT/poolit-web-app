@@ -12,6 +12,14 @@
     "spanish": "Español",
     "english": "Inglés"
   },
+  "navbar": {
+    "created": "Creados",
+    "reserved": "Reservados",
+    "log_out": "Cerrar sesión",
+    "log_in": "Iniciar sesión",
+    "register": "Registrarse",
+    "create": "Crear viaje"
+  },
   "login": {
     "title": "Iniciar sesión",
     "email": "Correo electrónico",
@@ -78,6 +86,7 @@
     }
   },
   "profile": {
+    "title": "Perfil",
     "props": {
       "email": "Email",
       "phone": "Teléfono",
@@ -98,9 +107,40 @@
       "created_prev_title": "Creados - viajes realizados",
       "created_prev_more": "Ver todos los viajes realizados",
       "created_prev_empty": "No tienes viajes realizados",
+      "reserved_next_title": "Reservados - Próximos",
+      "reserved_next_more": "Ver todos los proximos viajes",
+      "reserved_next_empty": "No tienes proximos viajes",
+      "reserved_prev_title": "Reservados - Historial",
+      "reserved_prev_more": "Ver todos los viajes realizados",
+      "reserved_prev_empty": "No tienes viajes realizados",
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
       "cars_empty": "No tienes autos creados"
     }
+  },
+  "roles": {
+    "driver": "Conductor",
+    "passenger": "Pasajero"
+  },
+  "reviews": {
+    "title": "opiniones"
+  },
+  "created_trips": {
+    "title": "Viajes creados",
+    "future": "Próximos",
+    "past": "Historial",
+    "empty": "Parece que no tenés viajes creados",
+    "more": "Hacé click en el botón 'Crear viaje' para crear tu primer viaje"
+  },
+  "reserved_trips": {
+    "title": "Viajes reservados",
+    "future": "Próximos",
+    "past": "Historial"
+  },
+  "create_trip": {
+    "title": "Crear viaje"
+  },
+  "admin": {
+    "title": "Administrador"
   }
 }
