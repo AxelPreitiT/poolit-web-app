@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

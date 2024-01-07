@@ -211,6 +211,61 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
+    public Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
+        final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+        final LocalDateTime startDateTime = startDate.atTime(startTime);
+        final LocalDateTime endDateTime = endDate==null?startDateTime:endDate.atTime(startTime);
+        if(trip==null || user==null || startDateTime == null || endDateTime == null){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);
+            throw e;
+        }
+        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
+        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        if(passengers.contains(passenger)){
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
+            throw e;
+        }
+        if(tripDao.getTripSeatCount(trip.getTripId(),startDateTime,endDateTime)>=trip.getMaxSeats()){
+            IllegalStateException e = new IllegalStateException();
+            LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
+            throw e;
+        }
+        if(startDateTime.isBefore(LocalDateTime.now())){
+            TripAlreadyStartedException e = new TripAlreadyStartedException();
+            LOGGER.error("Trip with id {} already started", trip.getTripId(), e);
+            throw e;
+        }
+        if(     startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
+                || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
+                || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
+                || trip.getDriver().equals(user)
+                || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("{}, startDateTime '{}' or endDateTime '{}' have invalid values", trip, startDateTime, endDateTime, e);
+            throw e;
+        }
+        try{
+            emailService.sendMailNewPassengerRequest(trip, passenger);
+        }
+        catch( Exception e){
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
+        }
+        try {
+            emailService.sendMailTripRequest(trip, passenger);
+        }
+        catch (Exception e) {
+            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
+        }
+        return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
+    }
+
+
+//    TODO: delete
+    @Transactional
+    @Override
     public boolean addCurrentUser(final long tripId, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
         final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
@@ -259,19 +314,19 @@ public class TripServiceImpl implements TripService {
         catch (Exception e) {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
         }
-        return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
+        return tripDao.addPassenger(trip,user,startDateTime,endDateTime)!=null;
     }
 
     @Transactional
     @Override
-    public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException{
+    public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         return removePassenger(tripId, user.getUserId());
     }
 
     @Transactional
     @Override
-    public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException {
+    public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         if(trip == null || user == null){
@@ -281,7 +336,7 @@ public class TripServiceImpl implements TripService {
         }
         final Optional<Passenger> passengerOptional = tripDao.getPassenger(trip,user);
         if(!passengerOptional.isPresent()) {
-            IllegalStateException e = new IllegalStateException();
+            PassengerNotFoundException e = new PassengerNotFoundException();
             LOGGER.error("Passenger with id {} is not in trip with id {}", user.getUserId(), trip.getTripId(), e);
             throw e;
         }
@@ -363,6 +418,22 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
+    public boolean checkIfUserCanGetPassengers(final long tripId, final User user, final LocalDateTime startDateTime, final LocalDateTime endDateTime, Passenger.PassengerState passengerState) throws TripNotFoundException {
+        final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
+        if(trip.getDriver().getUserId() == user.getUserId()){
+            //The trip driver can access all passengers
+            return true;
+        }
+        Optional<Passenger> passenger = getPassenger(trip,user);
+        if(!passenger.isPresent() || !passenger.get().getPassengerState().equals(Passenger.PassengerState.ACCEPTED)){
+            return false;
+        }
+//        passengerState.equals(Passenger.PassengerState.ACCEPTED) && startDateTime.compareTo(passenger.get().getStartDateTime())>=0 && endDateTime.compareTo(passenger.get().getEndDateTime())<=0
+        return passengerState.equals(Passenger.PassengerState.ACCEPTED) && !startDateTime.isBefore(passenger.get().getStartDateTime()) && !endDateTime.isAfter(passenger.get().getEndDateTime());
+    }
+
+    @Transactional
+    @Override
     public Optional<Passenger> getPassenger(final long tripId, final long userId) throws UserNotFoundException{
         final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return tripDao.getPassenger(tripId,user);
@@ -427,11 +498,25 @@ public class TripServiceImpl implements TripService {
         return Optional.empty();
     }
 
+
+    //TODO: Delete
     @Transactional
     @Override
     public PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),getPassengersState(passengerState),page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<Passenger> getPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final Passenger.PassengerState passengerState,final int page, final int pageSize) throws TripNotFoundException {
+        validatePageAndSize(page,pageSize);
+        final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
+        //TODO: revisar permisos aca?
+        if(startDateTime==null || endDateTime == null){
+            return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),Optional.ofNullable(passengerState),page,pageSize);
+        }
+        return tripDao.getPassengers(trip,startDateTime,endDateTime,Optional.ofNullable(passengerState),page,pageSize);
     }
 
     @Transactional
@@ -477,6 +562,30 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
         return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<Trip> getTripsCreatedByUser(final long userId, final boolean pastTrips, int page, int pageSize){
+        final Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()){
+            //avoid saying if a user exists or not
+            return PagedContent.emptyPagedContent();
+        }
+        validatePageAndSize(page,pageSize);
+        return pastTrips?tripDao.getTripsCreatedByUser(user.get(),Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize):tripDao.getTripsCreatedByUser(user.get(),Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<Trip> getTripsWhereUserIsPassenger(final long userId, final boolean pastTrips, int page, int pageSize){
+        final Optional<User> user = userService.findById(userId);
+        if (!user.isPresent()){
+            //avoid saying if a user exists or not
+            return PagedContent.emptyPagedContent();
+        }
+        validatePageAndSize(page,pageSize);
+        return pastTrips?tripDao.getTripsWhereUserIsPassenger(user.get(),Optional.empty(), Optional.of(LocalDateTime.now()),null, page,pageSize):tripDao.getTripsWhereUserIsPassenger(user.get(), Optional.of(LocalDateTime.now()),Optional.empty(),null, page,pageSize);
     }
 
     @Transactional
@@ -540,11 +649,25 @@ public class TripServiceImpl implements TripService {
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
     }
 
+
+    //TODO: delete
     @Transactional
     @Override
     public PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize){
         validatePageAndSize(page,pageSize);
         Optional<User> user = userService.getCurrentUser();
+        if(!user.isPresent()){
+            return PagedContent.emptyPagedContent();
+        }
+        LocalDateTime start = LocalDateTime.now();
+        return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<Trip> getRecommendedTripsForUser(final long userId, final int page, final int pageSize){
+        validatePageAndSize(page,pageSize);
+        Optional<User> user = userService.findById(userId);
         if(!user.isPresent()){
             return PagedContent.emptyPagedContent();
         }
@@ -559,6 +682,25 @@ public class TripServiceImpl implements TripService {
         }
     }
 
+    @Transactional
+    @Override
+    public PagedContent<Trip> findTrips(
+            long originCityId, long destinationCityId, final LocalDateTime startDateTime,
+            final LocalDateTime endDateTimeValue, final BigDecimal minPriceValue, final BigDecimal maxPriceValue,
+            final Trip.SortType sortType, final boolean descending, final List<FeatureCar> carFeaturesValue,
+            final int page, final int pageSize
+            ){
+        validatePageAndSize(page,pageSize);
+        final Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
+        final Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
+        final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
+        final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue:new ArrayList<>();
+        //TODO: delete logic of blocked users
+        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
+
+    }
+
+    //TODO: delete
     @Transactional
     @Override
     public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
@@ -616,6 +758,24 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", passenger.getUserId(), passenger.getTrip().getTripId(), e);
         }
         return tripDao.rejectPassenger(passenger);
+    }
+
+    @Transactional
+    @Override
+    public boolean acceptOrRejectPassenger(final long tripId, final long userId, Passenger.PassengerState passengerState) throws UserNotFoundException, PassengerNotFoundException, PassengerAlreadyProcessedException, NotAvailableSeatsException {
+        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        Passenger passenger = tripDao.getPassenger(tripId,user).orElseThrow(PassengerNotFoundException::new);
+        //Passenger was already accepted or rejected
+        if(!passenger.getPassengerState().equals(Passenger.PassengerState.PENDING)){
+            throw new PassengerAlreadyProcessedException();
+        }
+        switch (passengerState){
+            case PENDING: throw new IllegalArgumentException();
+            case ACCEPTED: return acceptPassenger(tripId,userId);
+            case REJECTED: return rejectPassenger(tripId,userId);
+        }
+        //Lamentablemente no podemos usar switch expressions
+        return false;
     }
 
 }

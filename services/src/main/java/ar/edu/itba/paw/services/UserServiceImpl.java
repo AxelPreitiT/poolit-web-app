@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -88,6 +90,21 @@ public class UserServiceImpl implements UserService {
         return finalUser;
     }
 
+
+    @Transactional
+    @Override
+    public byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException {
+        final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        return imageService.getImageBytea(user.getUserImageId());
+    }
+
+    @Transactional
+    @Override
+    public void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException{
+        final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        imageService.updateImage(content,user.getUserImageId());
+    }
+
     @Transactional
     @Override
     public boolean isDriver(User user){
@@ -137,6 +154,16 @@ public class UserServiceImpl implements UserService {
     public void changeToDriver() throws UserNotFoundException {
         User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
         userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
+    }
+
+    @Transactional
+    @Override
+    public void changeRole(final long userId, final String role) throws UserNotFoundException {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        if(!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())){
+            throw new IllegalArgumentException();
+        }
+        userDao.changeRole(user.getUserId(), role);
     }
 
     @Transactional
@@ -227,17 +254,21 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
-        Optional<User> user = getCurrentUser();
-        if(user.isPresent()){
-            if(imgData.length<=0){
-                userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.get().getUserImageId());
+    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+            if(imgData.length==0){
+                userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.getUserImageId());
                 return;
             }
             long imageId = imageService.createImage(imgData).getImageId();
-            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
+            userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
+    }
 
-        }
+    @Transactional
+    @Override
+    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString) throws CityNotFoundException, UserNotFoundException{
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        userDao.modifyUser(userId,username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.getUserImageId());
     }
 
     @Transactional

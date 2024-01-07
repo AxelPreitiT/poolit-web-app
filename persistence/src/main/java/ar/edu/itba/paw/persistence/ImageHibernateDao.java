@@ -40,4 +40,15 @@ public class ImageHibernateDao implements ImageDao {
         return result;
     }
 
+    @Override
+    public Image update(final Image image, final byte[] content){
+        if (image == null){
+            LOGGER.error("Trying to update null image in database");
+            return null;
+        }
+        LOGGER.debug("Updating image {} in the database",image.getImageId());
+        image.setData(content);
+        return em.merge(image);
+    }
+
 }

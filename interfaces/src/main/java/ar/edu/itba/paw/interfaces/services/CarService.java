@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.CarBrand;
@@ -23,4 +24,9 @@ public interface CarService {
     Optional<Car> findByUserAndPlate(User user, String plate);
 
     boolean currentUserIsCarOwner(Car car);
+
+    byte[] getCarImage(final long carId) throws CarNotFoundException, ImageNotFoundException;
+
+    void updateCarImage(final long carId, final byte[] content) throws CarNotFoundException, ImageNotFoundException;
+
 }

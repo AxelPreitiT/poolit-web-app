@@ -89,7 +89,8 @@ public class EmailServiceImpl implements EmailService {
         message.setContent(htmlContent, "text/html; charset=UTF-8");
 
         LOGGER.info("Sending email to '{}' with subject '{}' and Locale '{}'", to, subject, mailLocale);
-        mailSender.send(message);
+//        TODO: activar para deploy
+//        mailSender.send(message);
     }
 
     @Async
