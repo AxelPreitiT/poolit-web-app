@@ -1,23 +1,14 @@
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import {
-  RegisterFormSchema,
-  RegisterFormSchemaType,
-  tFormError,
-} from "./registerFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import ImageInput from "@/components/forms/ImageInput/ImageInput";
 import FormError from "@/components/forms/FormError/FormError";
 import LoadingButton from "@/components/buttons/LoadingButton";
+import useRegisterForm from "@/hooks/forms/useRegisterForm";
 
-interface RegisterFormProps {
-  onSubmit: SubmitHandler<RegisterFormSchemaType>;
-}
-
-const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
+const RegisterForm = () => {
   const { t } = useTranslation();
   const [preview, setPreview] = useState<string | undefined>(undefined);
 
@@ -26,22 +17,21 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterFormSchemaType>({
-    resolver: zodResolver(RegisterFormSchema),
-  });
+    tFormError,
+  } = useRegisterForm();
 
   return (
-    <Form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+    <Form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.userPicContainer}>
         <h4 className={styles.title + " light-text"}>
           {t("register.profile_image")}
         </h4>
         <Controller
-          name="profilePic"
+          name="image"
           control={control}
           render={({ field: { onChange } }) => (
             <ImageInput
-              id="profilePic"
+              id="image"
               preview={preview}
               previewAlt={t("register.profile_image")}
               onImageUpload={(image: File) => {
@@ -55,7 +45,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             />
           )}
         />
-        <FormError error={tFormError(errors.profilePic?.message)} />
+        <FormError error={tFormError(errors.image)} />
       </div>
       <hr className="light-text" />
       <div className={styles.userInfoContainer}>
@@ -71,7 +61,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               placeholder={t("register.name")}
               {...register("name")}
             />
-            <FormError error={tFormError(errors.name?.message)} />
+            <FormError error={tFormError(errors.name)} />
           </div>
           <div className={styles.inputItem}>
             <Form.Control
@@ -79,9 +69,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               id="lastName"
               size="sm"
               placeholder={t("register.last_name")}
-              {...register("lastName")}
+              {...register("last_name")}
             />
-            <FormError error={tFormError(errors.lastName?.message)} />
+            <FormError error={tFormError(errors.last_name)} />
           </div>
         </div>
         <div className={styles.formRow}>
@@ -93,7 +83,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               placeholder={t("register.email")}
               {...register("email")}
             />
-            <FormError error={tFormError(errors.email?.message)} />
+            <FormError error={tFormError(errors.email)} />
           </div>
           <div className={styles.inputItem}>
             <Form.Control
@@ -103,7 +93,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               placeholder={t("register.telephone")}
               {...register("telephone")}
             />
-            <FormError error={tFormError(errors.telephone?.message)} />
+            <FormError error={tFormError(errors.telephone)} />
           </div>
         </div>
         <div className={styles.formRow}>
@@ -115,7 +105,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               placeholder={t("register.password")}
               {...register("password")}
             />
-            <FormError error={tFormError(errors.password?.message)} />
+            <FormError error={tFormError(errors.password)} />
           </div>
           <div className={styles.inputItem}>
             <Form.Control
@@ -123,17 +113,17 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               id="confirmPassword"
               size="sm"
               placeholder={t("register.confirm_password")}
-              {...register("confirmPassword")}
+              {...register("confirm_password")}
             />
-            <FormError error={tFormError(errors.confirmPassword?.message)} />
+            <FormError error={tFormError(errors.confirm_password)} />
           </div>
         </div>
         <div className={styles.formRow}>
           <div className={styles.inputItem}>
-            <Form.Select id="cityId" size="sm" {...register("cityId")}>
+            <Form.Select id="cityId" size="sm" {...register("city")}>
               <option value="-1">{t("register.residence_city")}</option>
             </Form.Select>
-            <FormError error={tFormError(errors.cityId?.message)} />
+            <FormError error={tFormError(errors.city)} />
           </div>
         </div>
       </div>
@@ -153,7 +143,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                 <option value="en">{t("language.english")}</option>
               </Form.Select>
             </Form.Group>
-            <FormError error={tFormError(errors.locale?.message)} />
+            <FormError error={tFormError(errors.locale)} />
           </div>
         </div>
       </div>
