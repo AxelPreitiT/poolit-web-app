@@ -1,1 +1,34 @@
 @use "@/colors.module.scss" as colors;
+
+.short_date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  column-gap: 1em;
+  margin-bottom: 1em;
+}
+
+.card_trip_container {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar_container i {
+  color: colors.$secondary-color !important;
+}
+
+.calendar_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.text_calendar {
+  display: flex;
+  flex-direction: column;
+}
+
+.day_week_style {
+  color: colors.$secondary-color !important;
+}

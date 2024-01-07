@@ -48,7 +48,7 @@ const CreatedPage = () => {
         <TabComponent
           right_component={
             <PaginationList
-              pagination_component={<h3>hola</h3>}
+              pagination_component={<h3>Poner paginación</h3>}
               empty_component={
                 <EmptyList
                   text={t("created_trips.empty")}
@@ -62,7 +62,7 @@ const CreatedPage = () => {
           }
           left_component={
             <PaginationList
-              pagination_component={<h3>hola</h3>}
+              pagination_component={<h3>Poner paginación</h3>}
               empty_component={
                 <EmptyList
                   text={t("created_trips.empty")}
