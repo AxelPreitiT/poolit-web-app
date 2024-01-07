@@ -128,7 +128,9 @@
   "created_trips": {
     "title": "Created trips",
     "future": "Upcoming",
-    "past": "History"
+    "past": "History",
+    "empty": "You don't have any created trips yet",
+    "more": "Click on the 'Create trip' button to create your first trip"
   },
   "reserved_trips": {
     "title": "Reserved trips",

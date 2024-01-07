@@ -6,14 +6,15 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import CardTripScheduled from "@/components/cardTrip/cardTripScheduled/cardTripScheduled";
 import { Trip } from "@/types/Trip";
-import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
+import PaginationList from "@/components/paginationList/paginationList";
+import EmptyList from "@/components/emptyList/EmptyList";
 
 const CreatedPage = () => {
   const { t } = useTranslation();
   const { search } = useLocation();
   const time = new URLSearchParams(search).get("time");
 
-  const data: Trip[] = [
+  const dataFuture: Trip[] = [
     {
       tripId: 1,
       originCity: {
@@ -38,16 +39,41 @@ const CreatedPage = () => {
     },
   ];
 
+  const dataPast: Trip[] = [];
+
   return (
     <MainComponent>
-      <MainHeader
-        title={t("created_trips.title")}
-        left_component={<h3>hola</h3>}
-      />
+      <MainHeader title={t("created_trips.title")} />
       <div className={styles.container_tab}>
         <TabComponent
-          right_component={<h1>chau</h1>}
-          left_component={<h1>chau</h1>}
+          right_component={
+            <PaginationList
+              pagination_component={<h3>hola</h3>}
+              empty_component={
+                <EmptyList
+                  text={t("created_trips.empty")}
+                  second_text={t("created_trips.more")}
+                  icon={"car-front-fill"}
+                />
+              }
+              data={dataFuture}
+              component_name={CardTripScheduled}
+            />
+          }
+          left_component={
+            <PaginationList
+              pagination_component={<h3>hola</h3>}
+              empty_component={
+                <EmptyList
+                  text={t("created_trips.empty")}
+                  second_text={t("created_trips.more")}
+                  icon={"car-front-fill"}
+                />
+              }
+              data={dataPast}
+              component_name={CardTripScheduled}
+            />
+          }
           right_title={t("created_trips.future")}
           left_title={t("created_trips.past")}
           active={time == "past" ? "left" : "right"}
