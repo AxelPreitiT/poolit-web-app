@@ -20,25 +20,22 @@ abstract class FormFieldBuilder<T extends ZodType> {
       | ((this: T, val: V, message: string) => T)
       | ((this: T, message: string) => T)
       | ((this: T) => T),
-    value?: V,
-    message?: `error.${string}`
+    { value, message }: { value?: V; message?: `error.${string}` } = {}
   ): void {
     if (this.builded) {
       throw new Error("Field already builded");
     }
     if (value && message) {
-      (callbackFn as (this: T, val: V, message: string) => T).call(
-        this.schema,
-        value,
-        message
-      );
+      this.schema = (
+        callbackFn as (this: T, val: V, message: string) => T
+      ).call(this.schema, value, message);
     } else if (message) {
-      (callbackFn as (this: T, message: string) => T).call(
+      this.schema = (callbackFn as (this: T, message: string) => T).call(
         this.schema,
         message
       );
     } else {
-      (callbackFn as (this: T) => T).call(this.schema);
+      this.schema = (callbackFn as (this: T) => T).call(this.schema);
     }
   }
 

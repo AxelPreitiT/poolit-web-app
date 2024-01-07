@@ -12,16 +12,18 @@ class FormFieldNumberBuilder extends FormFieldBuilder<ZodNumber> {
   }
 
   public isRequired(): FormFieldNumberBuilder {
-    this.setSchema(this.schema.min, 1, `error.${this.name}.required`);
+    this.setSchema(this.schema.min, {
+      value: 1,
+      message: `error.${this.name}.required`,
+    });
     return this;
   }
 
   public hasMinValue(minValue: number): FormFieldNumberBuilder {
-    this.setSchema(
-      this.schema.min,
-      minValue,
-      `error.${this.name}.${MinValueFieldInterpolation.KEY}`
-    );
+    this.setSchema(this.schema.min, {
+      value: minValue,
+      message: `error.${this.name}.${MinValueFieldInterpolation.KEY}`,
+    });
     this.setInterpolationsBuilder(
       this.interpolationsBuilder.setMinValue,
       minValue
@@ -30,11 +32,10 @@ class FormFieldNumberBuilder extends FormFieldBuilder<ZodNumber> {
   }
 
   public hasMaxValue(maxValue: number): FormFieldNumberBuilder {
-    this.setSchema(
-      this.schema.max,
-      maxValue,
-      `error.${this.name}.${MaxValueFieldInterpolation.KEY}`
-    );
+    this.setSchema(this.schema.max, {
+      value: maxValue,
+      message: `error.${this.name}.${MaxValueFieldInterpolation.KEY}`,
+    });
     this.setInterpolationsBuilder(
       this.interpolationsBuilder.setMaxValue,
       maxValue

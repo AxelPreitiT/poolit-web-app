@@ -12,16 +12,18 @@ class FormFieldStringBuilder extends FormFieldBuilder<ZodString> {
   }
 
   public isRequired(): FormFieldStringBuilder {
-    this.setSchema(this.schema.min, 1, `error.${this.name}.required`);
+    this.setSchema(this.schema.min, {
+      value: 1,
+      message: `error.${this.name}.required`,
+    });
     return this;
   }
 
   public hasMinLength(minLength: number): FormFieldStringBuilder {
-    this.setSchema(
-      this.schema.min,
-      minLength,
-      `error.${this.name}.${MinValueFieldInterpolation.KEY}`
-    );
+    this.setSchema(this.schema.min, {
+      value: minLength,
+      message: `error.${this.name}.${MinValueFieldInterpolation.KEY}`,
+    });
     this.setInterpolationsBuilder(
       this.interpolationsBuilder.setMinValue,
       minLength
@@ -30,11 +32,10 @@ class FormFieldStringBuilder extends FormFieldBuilder<ZodString> {
   }
 
   public hasMaxLength(maxLength: number): FormFieldStringBuilder {
-    this.setSchema(
-      this.schema.max,
-      maxLength,
-      `error.${this.name}.${MaxValueFieldInterpolation.KEY}`
-    );
+    this.setSchema(this.schema.max, {
+      value: maxLength,
+      message: `error.${this.name}.${MaxValueFieldInterpolation.KEY}`,
+    });
     this.setInterpolationsBuilder(
       this.interpolationsBuilder.setMaxValue,
       maxLength
@@ -43,7 +44,10 @@ class FormFieldStringBuilder extends FormFieldBuilder<ZodString> {
   }
 
   public hasRegex(regex: RegExp, format: string): FormFieldStringBuilder {
-    this.setSchema(this.schema.regex, regex, `error.${this.name}.invalid`);
+    this.setSchema(this.schema.regex, {
+      value: regex,
+      message: `error.${this.name}.invalid`,
+    });
     this.setInterpolationsBuilder(
       this.interpolationsBuilder.setRegexFormat,
       format
@@ -52,7 +56,9 @@ class FormFieldStringBuilder extends FormFieldBuilder<ZodString> {
   }
 
   public isEmail(): FormFieldStringBuilder {
-    this.setSchema(this.schema.email, `error.${this.name}.invalid`);
+    this.setSchema(this.schema.email, {
+      message: `error.${this.name}.invalid`,
+    });
     return this;
   }
 
