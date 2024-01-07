@@ -26,7 +26,7 @@
     "password": "Contraseña",
     "remember": "Mantener la sesión iniciada",
     "login": "Ingresar",
-    "error": "Por favor, intentá iniciar sesión nuevamente más tarde"
+    "error": "Ocurrió un error al iniciar sesión"
   },
   "register": {
     "title": "Registro",
@@ -44,17 +44,23 @@
     "register": "Registrarse",
     "already_registered": "¿Ya tenés una cuenta?",
     "not_registered": "¿No tenés una cuenta aún?",
-    "error": "Por favor, intentá registrarte nuevamente más tarde"
+    "error": "Ocurrió un error al registrarse"
   },
-  "verify_email": {
+  "verify_account": {
+    "title": "Verificar cuenta",
+    "email": "Correo electrónico",
     "request": "Para reenviar el correo de verificación, hacé click",
-    "here": "aquí"
+    "here": "aquí",
+    "already_verified": "¿Ya verificaste tu cuenta?",
+    "error": "Ocurrió un error al verificar tu cuenta",
+    "send": "Enviar"
   },
   "error": {
     "default": "Ocurrió un error",
     "email": {
       "required": "El correo electrónico es requerido",
-      "invalid": "El correo electrónico es inválido"
+      "invalid": "El correo electrónico es inválido",
+      "max": "El correo electrónico debe tener como máximo {{max}} caracteres"
     },
     "password": {
       "required": "La contraseña es requerida",
@@ -73,16 +79,16 @@
     },
     "telephone": {
       "required": "El teléfono es requerido",
-      "invalid": "El teléfono es inválido"
+      "invalid": "El teléfono es inválido, debe tener el formato {{format}}"
     },
-    "city_id": {
-      "required": "El barrio es requerido"
+    "city": {
+      "min": "El barrio es requerido"
     },
     "confirm_password": {
       "invalid": "Las contraseñas no coinciden"
     },
-    "profile_pic": {
-      "max_size": "La imagen no puede pesar más de {{max_size}} MB"
+    "image": {
+      "max": "La imagen no puede pesar más de {{max}} MB"
     }
   },
   "profile": {

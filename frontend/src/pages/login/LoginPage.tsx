@@ -13,11 +13,11 @@ const LoginPage = () => {
       <div className={styles.logoContainer}>
         <RedirectHomeLogo />
       </div>
-      <div className={styles.loginContainer}>
+      <div className={styles.primaryContainer}>
         <LoginForm />
-        <div className={styles.loginFooterContainer}>
+        <div className={styles.primaryFooterContainer}>
           <hr className="light-text" />
-          <h4 className="light-text">{t("register.not_registered")}</h4>
+          <h5 className="light-text">{t("register.not_registered")}</h5>
           <Link to={registerPath}>
             <h5 className="link-text fw-bold">{t("register.register")}</h5>
           </Link>

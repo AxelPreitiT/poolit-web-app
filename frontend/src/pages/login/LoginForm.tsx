@@ -13,7 +13,6 @@ const LoginForm = () => {
     handleSubmit,
     tFormError,
   } = useLoginForm();
-  console.log(errors);
 
   return (
     <Form className={styles.formContainer} onSubmit={handleSubmit}>

@@ -13,11 +13,12 @@ import ReservedPage from "./pages/reserved/ReservedPage";
 import CreatedPage from "./pages/created/CreatedPage";
 import CreateTripPage from "./pages/createTrip/CreatedPage";
 import AdminPage from "./pages/admin/AdminPage";
+import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
 
 export const homePath = "/";
 export const loginPath = "/login";
 export const registerPath = "/register";
-export const verifyEmailPath = "/verify-email";
+export const verifyAccountPath = "/verify";
 export const tripsPath = "/trips";
 export const tripDetailsPath = "/trips/:tripId";
 export const profilePath = "/profile";
@@ -33,7 +34,7 @@ const router = createBrowserRouter(
     {
       path: homePath,
       element: (
-        <RouteWrapper title="poolit.name">
+        <RouteWrapper>
           <Navbar />
           <HomePage />
         </RouteWrapper>
@@ -52,6 +53,14 @@ const router = createBrowserRouter(
       element: (
         <RouteWrapper title="register.title">
           <RegisterPage />
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: verifyAccountPath,
+      element: (
+        <RouteWrapper title="verify_email.title">
+          <VerifyAccountPage />
         </RouteWrapper>
       ),
     },

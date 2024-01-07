@@ -26,9 +26,9 @@ const RegisterPage = () => {
         <div className={styles.footerContainer}>
           <hr className="light-text mt-auto" />
           <div className={styles.loginContainer}>
-            <h6 className={styles.title + " light-text"}>
+            <h5 className={styles.title + " light-text"}>
               {t("register.already_registered")}
-            </h6>
+            </h5>
             <Link to={loginPath}>
               <h5 className="link-text fw-bold">{t("login.login")}</h5>
             </Link>
