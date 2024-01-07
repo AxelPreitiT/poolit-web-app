@@ -1,6 +1,8 @@
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import ToastType from "@/enums/ToastType";
 import {
+  RegisterForm,
+  RegisterFormFieldsType,
   RegisterFormSchema,
   RegisterFormSchemaType,
 } from "@/forms/RegisterForm";
@@ -24,7 +26,11 @@ const useRegisterForm = () => {
     });
   };
 
-  return useForm<RegisterFormSchemaType>(RegisterFormSchema, onSubmit);
+  return useForm<RegisterFormFieldsType, RegisterFormSchemaType>(
+    RegisterForm,
+    RegisterFormSchema,
+    onSubmit
+  );
 };
 
 export default useRegisterForm;

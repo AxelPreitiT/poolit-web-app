@@ -14,9 +14,9 @@ const LoginFormFields = {
   [rememberMeFieldName]: RememberMeFormField,
 };
 
-type LoginFormFieldsType = typeof LoginFormFields;
+export type LoginFormFieldsType = typeof LoginFormFields;
 
-const LoginForm = new Form<LoginFormFieldsType>(LoginFormFields);
+export const LoginForm = new Form<LoginFormFieldsType>(LoginFormFields);
 
 export const LoginFormSchema = LoginForm.getSchema();
 

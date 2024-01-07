@@ -1,6 +1,11 @@
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import ToastType from "@/enums/ToastType";
-import { LoginFormSchema, LoginFormSchemaType } from "@/forms/LoginForm";
+import {
+  LoginForm,
+  LoginFormFieldsType,
+  LoginFormSchema,
+  LoginFormSchemaType,
+} from "@/forms/LoginForm";
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
 import { SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -21,7 +26,11 @@ const useLoginForm = () => {
     });
   };
 
-  return useForm<LoginFormSchemaType>(LoginFormSchema, onSubmit);
+  return useForm<LoginFormFieldsType, LoginFormSchemaType>(
+    LoginForm,
+    LoginFormSchema,
+    onSubmit
+  );
 };
 
 export default useLoginForm;

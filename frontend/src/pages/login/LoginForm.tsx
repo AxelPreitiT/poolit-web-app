@@ -18,13 +18,12 @@ const LoginForm = () => {
   return (
     <Form className={styles.formContainer} onSubmit={handleSubmit}>
       <div>
-        <h3 className="light-text fw-bold">{t("login.title")}</h3>
+        <h3 className="light-text fw-bold text-start">{t("login.title")}</h3>
         <hr className="light-text" />
       </div>
       <div className={styles.inputContainer}>
         <div className={styles.emailContainer}>
           <Form.Control
-            type="email"
             id="email"
             placeholder={t("login.email")}
             {...register("email")}

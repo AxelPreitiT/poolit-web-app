@@ -32,9 +32,11 @@ const RegisterFormFields = {
   [localeFieldName]: LocaleFormField,
 };
 
-type RegisterFormFieldsType = typeof RegisterFormFields;
+export type RegisterFormFieldsType = typeof RegisterFormFields;
 
-const RegisterForm = new Form<RegisterFormFieldsType>(RegisterFormFields);
+export const RegisterForm = new Form<RegisterFormFieldsType>(
+  RegisterFormFields
+);
 
 export const RegisterFormSchema = RegisterForm.getSchema().refine(
   (data) => data[passwordFieldName] === data[confirmPasswordFieldName],

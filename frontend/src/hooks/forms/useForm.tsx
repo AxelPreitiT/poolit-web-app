@@ -1,9 +1,11 @@
+import Form, { FormFieldsType } from "@/forms/Form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, FieldValues } from "react-hook-form";
 import { SubmitHandler, useForm as useReactHookForm } from "react-hook-form";
 import { ZodSchema } from "zod";
 
-const useForm = <F extends FieldValues>(
+const useForm = <T extends FormFieldsType, F extends FieldValues>(
+  form: Form<T>,
   formSchema: ZodSchema,
   onSubmit: SubmitHandler<F>
 ) => {
@@ -16,7 +18,7 @@ const useForm = <F extends FieldValues>(
   const tFormError = (errorField?: FieldError): string | undefined => {
     const message = errorField?.message;
     if (message && message.startsWith("error.")) {
-      return message;
+      return form.tFormError(message as `error.${string}`);
     }
   };
 
