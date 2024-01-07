@@ -93,3 +93,13 @@
   border-radius: 12px;
   background-color: white;
 }
+
+.main_header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.color_header {
+  color: colors.$secondary-color !important;
+}

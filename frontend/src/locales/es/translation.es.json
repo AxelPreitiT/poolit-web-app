@@ -126,10 +126,14 @@
     "title": "opiniones"
   },
   "created_trips": {
-    "title": "Viajes creados"
+    "title": "Viajes creados",
+    "future": "Próximos",
+    "past": "Historial"
   },
   "reserved_trips": {
-    "title": "Viajes reservados"
+    "title": "Viajes reservados",
+    "future": "Próximos",
+    "past": "Historial"
   },
   "create_trip": {
     "title": "Crear viaje"

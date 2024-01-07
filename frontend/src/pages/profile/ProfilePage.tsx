@@ -7,8 +7,7 @@ import ProfileStars from "@/components/profile/stars/ProfileStars";
 import { useState } from "react";
 import DriverList from "@/components/profile/ProfileLists/DriverList";
 import PassengerList from "@/components/profile/ProfileLists/PassangerList";
-import Nav from "react-bootstrap/Nav";
-import Tab from "react-bootstrap/Tab";
+import TabComponent from "@/components/tab/TabComponent";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -48,30 +47,12 @@ const ProfilePage = () => {
       </div>
 
       <div className={styles.list_block}>
-        <Tab.Container id="center-tabs-example" defaultActiveKey="first">
-          <div>
-            <Nav variant="pills" className={styles.nav_prop}>
-              <Nav.Item className={styles.fulltab}>
-                <Nav.Link eventKey="first" className={styles.custom_tab}>
-                  <h3>{t("roles.passenger")}</h3>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item className={styles.fulltab}>
-                <Nav.Link eventKey="second" className={styles.custom_tab}>
-                  <h3>{t("roles.driver")}</h3>
-                </Nav.Link>
-              </Nav.Item>
-            </Nav>
-            <Tab.Content>
-              <Tab.Pane eventKey="first">
-                <PassengerList />
-              </Tab.Pane>
-              <Tab.Pane eventKey="second">
-                <DriverList />
-              </Tab.Pane>
-            </Tab.Content>
-          </div>
-        </Tab.Container>
+        <TabComponent
+          right_title={t("roles.passenger")}
+          right_component={<PassengerList />}
+          left_title={t("roles.driver")}
+          left_component={<DriverList />}
+        />
       </div>
     </div>
   );

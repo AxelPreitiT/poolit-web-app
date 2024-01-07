@@ -1,7 +1,7 @@
-import { Trip } from "@/components/cardTrip/cardTrip";
-import ListContainer from "@/components/profile/list/ListContainer";
+import { Trip } from "@/types/Trip";
+import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import ShortReview from "@/components/review/shorts/ShortReview";
-import CardTrip from "@/components/cardTrip/cardTrip";
+import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
 import { publicsReviewsPath, createdTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import CardCar from "@/components/cardCar/CardCar";
@@ -59,7 +59,7 @@ const DriverList = () => {
 
   return (
     <div>
-      <ListContainer
+      <ListProfileContainer
         title={t("profile.lists.review_as_driver")}
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
@@ -68,25 +68,25 @@ const DriverList = () => {
         component_name={ShortReview}
         link={publicsReviewsPath.replace(":id", String(5))}
       />
-      <ListContainer
+      <ListProfileContainer
         title={t("profile.lists.created_next_title")}
         btn_footer_text={t("profile.lists.created_next_more")}
         empty_text={t("profile.lists.created_next_empty")}
         empty_icon={"car-front-fill"}
         data={data}
-        component_name={CardTrip}
+        component_name={CardTripProfile}
         link={createdTripsPath}
       />
-      <ListContainer
+      <ListProfileContainer
         title={t("profile.lists.created_prev_title")}
         btn_footer_text={t("profile.lists.created_prev_more")}
         empty_text={t("profile.lists.created_prev_empty")}
         empty_icon={"car-front-fill"}
         data={data}
-        component_name={CardTrip}
+        component_name={CardTripProfile}
         link={createdTripsPath}
       />
-      <ListContainer
+      <ListProfileContainer
         title={t("profile.lists.cars")}
         btn_footer_text={t("profile.lists.cars_create")}
         empty_text={t("profile.lists.cars_empty")}

@@ -126,10 +126,14 @@
     "title": "Reviews"
   },
   "created_trips": {
-    "title": "Created trips"
+    "title": "Created trips",
+    "future": "Upcoming",
+    "past": "History"
   },
   "reserved_trips": {
-    "title": "Reserved trips"
+    "title": "Reserved trips",
+    "future": "Upcoming",
+    "past": "History"
   },
   "create_trip": {
     "title": "Create a trip"

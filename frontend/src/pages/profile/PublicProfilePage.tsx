@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
-import ListContainer from "@/components/profile/list/ListContainer";
+import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
 import { publicsReviewsPath } from "@/AppRouter";
@@ -40,7 +40,7 @@ const PublicProfilePage = () => {
   return (
     <div className={styles.main_container}>
       <div className={styles.profileCard}>
-        <ProfileImg dim={2} src={ProfilePhoto} />
+        <ProfileImg src={ProfilePhoto} />
         <h3 className="text-center">{user.name}</h3>
         <ProfileProp prop={t("profile.props.trips")} text={user.trips} />
         <ProfileStars
@@ -54,7 +54,7 @@ const PublicProfilePage = () => {
       </div>
 
       <div className={styles.list_block}>
-        <ListContainer
+        <ListProfileContainer
           title={t("profile.lists.review_as_driver")}
           btn_footer_text={t("profile.lists.review_more")}
           empty_text={t("profile.lists.review_empty")}
@@ -63,7 +63,7 @@ const PublicProfilePage = () => {
           component_name={ShortReview}
           link={publicsReviewsPath.replace(":id", String(5))}
         />
-        <ListContainer
+        <ListProfileContainer
           title={t("profile.lists.review_as_passanger")}
           btn_footer_text={t("profile.lists.review_more")}
           empty_text={t("profile.lists.review_empty")}

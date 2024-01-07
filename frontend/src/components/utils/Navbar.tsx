@@ -1,7 +1,6 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import Section from "@/types/Section";
 import "./navbarStyles.css"; // Importa el archivo CSS auxiliar
 import PoolitLogo from "@/images/poolit.svg";
 import CircleImg from "../img/circleImg/CircleImg";
@@ -19,6 +18,11 @@ import {
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
+
+interface Section {
+  path: string;
+  name: string;
+}
 
 const Navbar = () => {
   const { t } = useTranslation();

@@ -1,31 +1,9 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
+import { Trip } from "@/types/Trip";
 
-export type Trip = {
-  tripId: number;
-  originCity: {
-    name: string;
-  };
-  originAddress: string;
-  destinationCity: {
-    name: string;
-  };
-  destinationAddress: string;
-  dayOfWeekString: string;
-  startDateString: string;
-  endDateString: string;
-  travelInfoDateString: string;
-  startTimeString: string;
-  integerQueryTotalPrice: string;
-  decimalQueryTotalPrice: string;
-  queryIsRecurrent: boolean;
-  car: {
-    imageId: string;
-  };
-};
-
-const CardTrip = (Trip: Trip) => {
+const CardTripProfile = (Trip: Trip) => {
   const { t } = useTranslation();
 
   return (
@@ -80,14 +58,10 @@ const CardTrip = (Trip: Trip) => {
         </div>
       </div>
       <div className={styles.img_container}>
-        <img
-          className={styles.car_container}
-          src={ProfilePhoto}
-          alt="Car Image"
-        />
+        <img className={styles.car_container} src={ProfilePhoto} />
       </div>
     </div>
   );
 };
 
-export default CardTrip;
+export default CardTripProfile;
