@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import ProfilePhoto from "@/images/descarga.jpeg";
 import { Trip } from "@/types/Trip";
+import CardTrip from "../cardTrip/CardTrip";
 
 const CardTripScheduled = (Trip: Trip) => {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ const CardTripScheduled = (Trip: Trip) => {
         </div>
       </div>
       <div className={styles.card_trip_container}>
-        <h4>Componente de tarjeta</h4>
+        <CardTrip Trip={Trip} />
       </div>
     </div>
   );
