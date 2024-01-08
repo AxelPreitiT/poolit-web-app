@@ -26,6 +26,9 @@
     "password": "Contraseña",
     "remember": "Mantener la sesión iniciada",
     "login": "Ingresar",
+    "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
+    "success": "¡Iniciaste sesión correctamente!",
+    "welcome": "¡Bienvenido de nuevo!",
     "error": "Ocurrió un error al iniciar sesión"
   },
   "register": {
@@ -56,7 +59,8 @@
     "send": "Enviar"
   },
   "error": {
-    "default": "Ocurrió un error",
+    "title": "Ocurrió un error",
+    "label": "La operación no pudo ser completada",
     "email": {
       "required": "El correo electrónico es requerido",
       "invalid": "El correo electrónico es inválido",

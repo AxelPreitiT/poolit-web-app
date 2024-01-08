@@ -26,6 +26,9 @@
     "password": "Password",
     "remember": "Keep me logged in",
     "login": "Log in",
+    "invalid_email": "The email cannot have colon (:) characters",
+    "success": "You have successfully logged in!",
+    "welcome": "Welcome back!",
     "error": "An error occurred while logging in"
   },
   "register": {
@@ -56,7 +59,8 @@
     "send": "Send"
   },
   "error": {
-    "default": "An error occurred",
+    "title": "An error occurred",
+    "label": "The operation could not be completed",
     "email": {
       "required": "The email is required",
       "invalid": "Invalid email",
