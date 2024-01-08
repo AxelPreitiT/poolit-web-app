@@ -1,10 +1,10 @@
 import UserPublicModel from "@/models/UserPublicModel";
 import AxiosApi from "./axios/AxiosApi";
-import ErrorModel from "@/models/ErrorModel";
 import UserPrivateModel from "@/models/UserPrivateModel";
-import { AxiosResponse } from "axios";
+import { AxiosPromise } from "axios";
 import BasicAuth from "./BasicAuth";
 import Jwt from "./axios/Jwt";
+import CitiesApi from "./CitiesApi";
 
 class UsersApi {
   private static readonly USERS_BASE_PATH: string = "/users";
@@ -12,24 +12,20 @@ class UsersApi {
     "application/vnd.user.output.public.v1+json";
   private static readonly USERS_PRIVATE_ACCEPT_HEADER: string =
     "application/vnd.user.output.private.v1+json";
-  private static readonly DEFAULT_REQUEST_PATH: string = `${
-    UsersApi.USERS_BASE_PATH
-  }/${1}`;
 
   public static login: (
     email: string,
     password: string,
     rememberMe: boolean
-  ) => Promise<AxiosResponse<UserPublicModel>> = (
+  ) => AxiosPromise = (
     email: string,
     password: string,
     rememberMe: boolean = false
   ) => {
     Jwt.setRememberMe(rememberMe);
     const authorization: string = BasicAuth.encode(email, password);
-    return AxiosApi.get<UserPublicModel>(UsersApi.DEFAULT_REQUEST_PATH, {
+    return CitiesApi.getOptions({
       headers: {
-        Accept: UsersApi.USERS_PUBLIC_ACCEPT_HEADER,
         Authorization: authorization,
       },
     });
@@ -37,7 +33,7 @@ class UsersApi {
 
   public static getPublicUserById: (
     id: number
-  ) => Promise<AxiosResponse<UserPublicModel | ErrorModel>> = (id: number) => {
+  ) => AxiosPromise<UserPublicModel> = (id: number) => {
     return AxiosApi.get<UserPublicModel>(`${UsersApi.USERS_BASE_PATH}/${id}`, {
       headers: {
         Accept: UsersApi.USERS_PUBLIC_ACCEPT_HEADER,
@@ -47,7 +43,7 @@ class UsersApi {
 
   public static getPrivateUserById: (
     id: number
-  ) => Promise<AxiosResponse<UserPrivateModel | ErrorModel>> = (id: number) => {
+  ) => AxiosPromise<UserPrivateModel> = (id: number) => {
     return AxiosApi.get<UserPrivateModel>(`${UsersApi.USERS_BASE_PATH}/${id}`, {
       headers: {
         Accept: UsersApi.USERS_PRIVATE_ACCEPT_HEADER,

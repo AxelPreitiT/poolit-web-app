@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from "axios";
 import Axios from "./axios";
 import {
   AxiosRequestErrorInterceptor,
@@ -36,7 +36,7 @@ class AxiosApi {
   public static get<Response>(
     url: string,
     config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<Response>> {
+  ): AxiosPromise<Response> {
     const interceptorIds = this.useAxiosInterceptors();
     return this.AXIOS_INSTANCE.get(url, config).finally(() => {
       this.ejectAxiosInterceptors(interceptorIds);
@@ -47,7 +47,7 @@ class AxiosApi {
     url: string,
     data?: Data,
     config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<Response>> {
+  ): AxiosPromise<Response> {
     const interceptorIds = this.useAxiosInterceptors();
     return this.AXIOS_INSTANCE.post(url, data, config).finally(() => {
       this.ejectAxiosInterceptors(interceptorIds);
@@ -58,7 +58,7 @@ class AxiosApi {
     url: string,
     data?: Data,
     config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<Response>> {
+  ): AxiosPromise<Response> {
     const interceptorIds = this.useAxiosInterceptors();
     return this.AXIOS_INSTANCE.put(url, data, config).finally(() => {
       this.ejectAxiosInterceptors(interceptorIds);
@@ -68,7 +68,7 @@ class AxiosApi {
   public static delete<Response>(
     url: string,
     config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<Response>> {
+  ): AxiosPromise<Response> {
     const interceptorIds = this.useAxiosInterceptors();
     return this.AXIOS_INSTANCE.delete(url, config).finally(() => {
       this.ejectAxiosInterceptors(interceptorIds);
@@ -79,9 +79,19 @@ class AxiosApi {
     url: string,
     data?: Data,
     config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<Response>> {
+  ): AxiosPromise<Response> {
     const interceptorIds = this.useAxiosInterceptors();
     return this.AXIOS_INSTANCE.patch(url, data, config).finally(() => {
+      this.ejectAxiosInterceptors(interceptorIds);
+    });
+  }
+
+  public static options<Response>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): AxiosPromise<Response> {
+    const interceptorIds = this.useAxiosInterceptors();
+    return this.AXIOS_INSTANCE.options(url, config).finally(() => {
       this.ejectAxiosInterceptors(interceptorIds);
     });
   }

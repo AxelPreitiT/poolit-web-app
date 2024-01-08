@@ -1,7 +1,6 @@
-import UserPublicModel from "@/models/UserPublicModel";
 import UserService from "@/services/UserService";
 // import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import { DefaultError, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 // import { useLocation, useNavigate } from "react-router";
 
 const useLogin = () => {
@@ -10,11 +9,7 @@ const useLogin = () => {
   // const addToast = useToastStackStore((state) => state.addToast);
 
   // const from = location.state?.from;
-  const mutation = useMutation<
-    UserPublicModel,
-    DefaultError,
-    [string, string, boolean]
-  >({
+  const mutation = useMutation({
     mutationFn: ([email, password, rememberMe]: [string, string, boolean]) =>
       UserService.login(email, password, rememberMe),
 
