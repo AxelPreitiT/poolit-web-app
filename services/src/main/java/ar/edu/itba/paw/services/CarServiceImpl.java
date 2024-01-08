@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.CarNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
@@ -86,5 +87,19 @@ public class CarServiceImpl implements CarService {
     public boolean currentUserIsCarOwner(Car car){
         Optional<User> user = userService.getCurrentUser();
         return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
+    }
+
+    @Transactional
+    @Override
+    public byte[] getCarImage(final long carId) throws CarNotFoundException, ImageNotFoundException {
+        final Car car = findById(carId).orElseThrow(CarNotFoundException::new);
+        return imageService.getImageBytea(car.getImageId());
+    }
+
+    @Transactional
+    @Override
+    public void updateCarImage(final long carId, final byte[] content) throws CarNotFoundException, ImageNotFoundException{
+        final Car car = findById(carId).orElseThrow(CarNotFoundException::new);
+        imageService.updateImage(content,car.getImageId());
     }
 }

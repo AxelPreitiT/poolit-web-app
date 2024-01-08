@@ -17,11 +17,11 @@
   aspect-ratio: 4/1;
 }
 
-.loginContainer {
+.primaryContainer {
   display: flex;
   flex-direction: column;
   row-gap: 1rem;
-  width: 30%;
+  min-width: 30%;
   padding: 2rem;
   background-color: colors.$primary-color;
   border-radius: 12px;
@@ -63,15 +63,15 @@
   width: 100%;
 }
 
-.loginFooterContainer {
+.primaryFooterContainer {
   display: flex;
   flex-direction: column;
-  row-gap: 0.5em;
+  row-gap: 0.5rem;
   width: 100%;
   align-items: center;
 }
 
-.loginFooterContainer > * {
+.primaryFooterContainer > * {
   text-align: center;
 }
 

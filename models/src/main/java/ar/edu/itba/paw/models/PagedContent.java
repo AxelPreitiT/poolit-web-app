@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PagedContent<T>{
+
+    private static final long START_PAGE = 0;
     private final List<T> elements;
     private final int currentPage;
     private final int pageSize;
@@ -57,4 +59,27 @@ public class PagedContent<T>{
     public boolean isMoreThanOnePage(){
         return getTotalPages()>1;
     }
+
+    public boolean isLast(){
+        //-1 porque currentPage inicia en 0
+        return currentPage==getTotalPages()-1;
+    }
+    public boolean isFirst(){
+        return currentPage==0;
+    }
+    public long getNextPage(){
+        return currentPage+1;
+    }
+    public long getPrevPage(){
+        return currentPage-1;
+    }
+    public long getLast(){
+        return getTotalPages()-1;
+    }
+
+    public long getFirst(){
+        return START_PAGE;
+    }
+
+
 }

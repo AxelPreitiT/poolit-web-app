@@ -23,7 +23,7 @@ const ErrorToast = ({
       <Toast.Header className={styles.toastHeader} closeVariant="white">
         <div>
           <i className="bi bi-exclamation-circle light-text" />
-          <strong className="light-text">{title || t("error.default")}</strong>
+          <strong className="light-text">{title || t("error.title")}</strong>
         </div>
       </Toast.Header>
       <Toast.Body className={styles.toastBody}>

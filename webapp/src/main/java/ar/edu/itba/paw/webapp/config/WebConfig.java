@@ -144,12 +144,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ms;
     }
 
-    @Bean
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(10485760*4); // Tamaño máximo de archivo en bytes, 1024*1024*10
-        return multipartResolver;
-    }
-
+//    @Bean
+//    public MultipartResolver multipartResolver() {
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//        multipartResolver.setMaxUploadSize(10485760*4); // Tamaño máximo de archivo en bytes, 1024*1024*10
+//        return multipartResolver;
+//    }
 
 }

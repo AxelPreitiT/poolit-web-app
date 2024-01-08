@@ -187,7 +187,7 @@ public class TripDaoImplTest {
         User auxUser = getUser(USER_2);
 
         //Execute and Assert
-        Assert.assertTrue(tripDao.addPassenger(auxTrip,auxUser,START,START));
+        Assert.assertNotNull(tripDao.addPassenger(auxTrip,auxUser,START,START));
         TypedQuery<Passenger> query = em.createQuery("from Passenger where trip.tripId = :tripId AND user.userId = :userId",Passenger.class);
         query.setParameter("tripId",TRIP_1.getTripId());
         query.setParameter("userId",USER_2.getUserId());

@@ -26,7 +26,10 @@
     "password": "Password",
     "remember": "Keep me logged in",
     "login": "Log in",
-    "error": "Please, try logging in again later"
+    "invalid_email": "The email cannot have colon (:) characters",
+    "success": "You have successfully logged in!",
+    "welcome": "Welcome back!",
+    "error": "An error occurred while logging in"
   },
   "register": {
     "title": "Sign up",
@@ -44,17 +47,24 @@
     "register": "Sign up",
     "already_registered": "Already have an account?",
     "not_registered": "Don't have an account yet?",
-    "error": "Please, try signing up again later"
+    "error": "An error occurred while signing up"
   },
-  "verify_email": {
+  "verify_account": {
+    "title": "Verify your account",
+    "email": "Email",
     "request": "To resend the verification email, please click",
-    "here": "here"
+    "here": "here",
+    "already_verified": "Has your account already been verified?",
+    "error": "An error occurred while verifying your account",
+    "send": "Send"
   },
   "error": {
-    "default": "An error occurred",
+    "title": "An error occurred",
+    "label": "The operation could not be completed",
     "email": {
       "required": "The email is required",
-      "invalid": "Invalid email"
+      "invalid": "Invalid email",
+      "max": "The email must have at most {{max}} characters"
     },
     "password": {
       "required": "The password is required",
@@ -73,16 +83,16 @@
     },
     "telephone": {
       "required": "The telephone is required",
-      "invalid": "Invalid telephone number"
+      "invalid": "Invalid telephone number, the format should be {{format}}"
     },
-    "city_id": {
-      "required": "The neighborhood is required"
+    "city": {
+      "min": "The neighborhood is required"
     },
     "confirm_password": {
       "invalid": "The passwords do not match"
     },
-    "profile_pic": {
-      "max_size": "The image size must be at most {{max_size}} MB"
+    "image": {
+      "max": "The image size must be at most {{max}} MB"
     }
   },
   "profile": {

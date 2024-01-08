@@ -14,11 +14,16 @@ import java.util.Optional;
 
 public interface TripService {
     Trip createTrip(final long originCityId, final String originAddress, final long destinationCityId, final String destinationAddress, final long carId, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, final LocalDate endDate, final LocalTime endTime)  throws UserNotFoundException, CityNotFoundException, CarNotFoundException;
+
+    //TODO: test
+    Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException;
+
+    //TODO: delete
     boolean addCurrentUser(final long trip, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, UserNotFoundException, TripNotFoundException;
 
-    boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException;
+    boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException;
 
-    boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException;
+    boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException;
 
     Optional<Trip> findById(long id);
 
@@ -41,6 +46,8 @@ public interface TripService {
 
     List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
 
+    PagedContent<Passenger> getPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final Passenger.PassengerState passengerState,final int page, final int pageSize) throws TripNotFoundException;
+
     List<Passenger> getPassengers(TripInstance tripInstance);
 
     List<Passenger> getPassengers(Trip trip);
@@ -51,6 +58,9 @@ public interface TripService {
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize);
 
     PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
+
+    PagedContent<Trip> getTripsWhereUserIsPassenger(final long userId, final boolean pastTrips, int page, int pageSize);
+    PagedContent<Trip> getTripsCreatedByUser(final long userId, final boolean pastTrips, int page, int pageSize);
 
     PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize);
     PagedContent<Trip> getTripsCreatedByCurrentUserFuture(int page, int pageSize) throws UserNotFoundException;
@@ -72,17 +82,30 @@ public interface TripService {
 
     List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate);
 
+    //TODO: delete
     PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize);
 
+    PagedContent<Trip> getRecommendedTripsForUser(final long userId, final int page, final int pageSize);
+
+    //TODO: delete
     PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
             long originCityId, long destinationCityId, final LocalDate startDate,
             final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
             final BigDecimal minPrice, final BigDecimal maxPrice, final String sortType, final boolean descending,
             final List<FeatureCar> carFeatures, final int page, final int pageSize);
 
+    PagedContent<Trip> findTrips(
+            long originCityId, long destinationCityId, final LocalDateTime startDateTime,
+            final LocalDateTime endDateTimeValue, final BigDecimal minPriceValue, final BigDecimal maxPriceValue,
+            final Trip.SortType sortType, final boolean descending, final List<FeatureCar> carFeaturesValue,
+            final int page, final int pageSize);
 
     boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException;
 
     boolean rejectPassenger(final long tripId, final long userId);
+
+    boolean acceptOrRejectPassenger(final long tripId, final long userId, Passenger.PassengerState passengerState) throws UserNotFoundException, PassengerNotFoundException, PassengerAlreadyProcessedException, NotAvailableSeatsException;
+
+    boolean checkIfUserCanGetPassengers(final long tripId, final User user, final LocalDateTime startDateTime, final LocalDateTime endDateTime, Passenger.PassengerState passengerState) throws TripNotFoundException;
 
 }

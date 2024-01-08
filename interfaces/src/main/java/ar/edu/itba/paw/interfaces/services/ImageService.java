@@ -13,8 +13,14 @@ public interface ImageService {
 
     Optional<Image> findById(long id);
 
+    byte[] getImageBytea(long imageId) throws ImageNotFoundException;
 
+    Image updateImage(final byte[] content, final long imageId) throws ImageNotFoundException;
+
+//    TODO: delete
     byte[] getByteaCheck(long imageId) throws IOException, ImageNotFoundException;
+
+
 
 }
 

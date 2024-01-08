@@ -85,7 +85,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     @Override
-    public void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException {
+    public void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
         try {

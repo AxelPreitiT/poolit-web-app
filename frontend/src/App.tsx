@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import PoolitFavicon from "@/images/favicon.svg";
 import router from "./AppRouter";
 import GlobalToastStack from "./components/toasts/GlobalToastStack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   const helmetContext = {};
@@ -16,7 +19,9 @@ const App = () => {
         <title>{t("poolit.name")}</title>
         <link rel="icon" type="image/svg+xml" href={PoolitFavicon} />
       </Helmet>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
       <GlobalToastStack />
     </HelmetProvider>
   );
