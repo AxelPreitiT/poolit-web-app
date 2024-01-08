@@ -61,14 +61,19 @@ const router = createBrowserRouter(
     },
     {
       path: tripDetailsPath,
-      element: <TripDetailsPage />,
+      element: (
+        <RouteWrapper title="trip_detail.title">
+          <Navbar />
+          <TripDetailsPage />,
+        </RouteWrapper>
+      ),
     },
     {
       path: profilePath,
       element: (
         <RouteWrapper title="profile.title">
           <Navbar />
-          <ProfilePage />,
+          <ProfilePage />
         </RouteWrapper>
       ),
     },

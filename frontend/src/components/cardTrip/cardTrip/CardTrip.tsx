@@ -2,13 +2,13 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Trip } from "@/types/Trip";
 import { Link } from "react-router-dom";
-import { homePath } from "@/AppRouter";
+import { tripDetailsPath } from "@/AppRouter";
 
 const CardTrip = ({ Trip }: { Trip: Trip }) => {
   const { t } = useTranslation();
 
   return (
-    <Link to={homePath} className={styles.link_container}>
+    <Link to={tripDetailsPath} className={styles.link_container}>
       <div className={styles.card_container}>
         <div className={styles.left_container}>
           <img

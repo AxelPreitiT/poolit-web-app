@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 
 const TripDetailsPage = () => {
   const { tripId } = useParams<{ tripId: string }>();
-  return <div>Trip {tripId}</div>;
+  return <h1>Trip {tripId}</h1>;
 };
 
 export default TripDetailsPage;

@@ -142,5 +142,8 @@
   },
   "admin": {
     "title": "Administrador"
+  },
+  "trip_detail": {
+    "title": "Viaje"
   }
 }
