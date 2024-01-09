@@ -59,7 +59,7 @@ const router = createBrowserRouter(
     {
       path: verifyAccountPath,
       element: (
-        <RouteWrapper title="verify_email.title">
+        <RouteWrapper title="verify_account.title">
           <VerifyAccountPage />
         </RouteWrapper>
       ),
