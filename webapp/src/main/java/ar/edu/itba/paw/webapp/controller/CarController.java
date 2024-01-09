@@ -4,10 +4,15 @@ import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.CarReviewService;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
+import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.CreateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateCarDto;
+import ar.edu.itba.paw.webapp.dto.input.reviews.CreateCarReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.CarDto;
+import ar.edu.itba.paw.webapp.dto.output.reviews.CarReviewDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageSize;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageType;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -20,14 +25,16 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Path("/api/cars")
+@Path(UrlHolder.CAR_BASE)
 @Component
 public class CarController {
 
@@ -35,13 +42,18 @@ public class CarController {
 
     private final CarService carService;
 
+    private final CarReviewService carReviewService;
+
+    private static final int PAGE_SIZE = 10;
+
     @Context
     private UriInfo uriInfo;
 
     @Inject
     @Autowired
-    public CarController(CarService carService) {
+    public CarController(final CarService carService, final CarReviewService carReviewService) {
         this.carService = carService;
+        this.carReviewService = carReviewService;
     }
 
 
@@ -86,7 +98,7 @@ public class CarController {
     }
 
     @GET
-    @Path("/{id}/image")
+    @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
     @Produces({"image/*"})
     public Response getCarImage(@PathParam("id") final long id) throws ImageNotFoundException, CarNotFoundException {
         LOGGER.debug("GET request for image of car with carId {}",id);
@@ -96,8 +108,8 @@ public class CarController {
     }
 
     @PUT
-    @Path("/{id}/image")
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
+    @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
+    @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateCarImage(@PathParam("id") final long id,
                                     @ImageType @FormDataParam("image") final FormDataBodyPart type,
@@ -106,6 +118,53 @@ public class CarController {
         carService.updateCarImage(id,image);
         return Response.noContent().contentLocation(uriInfo.getBaseUriBuilder().path(String.valueOf(id)).path("image/").build()).build();
     }
+
+    //Add a review
+    @POST
+    @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
+    public Response addReview(@PathParam("id") final long id,
+                              @Valid final CreateCarReviewDto createCarReviewDto) throws UserNotFoundException, PassengerNotFoundException, CarNotFoundException, TripNotFoundException {
+        LOGGER.debug("POST request to add a review for car {} on trip {}",id,createCarReviewDto.getTripId());
+        final CarReview carReview = carReviewService.createCarReview(createCarReviewDto.getTripId(),id,createCarReviewDto.getRating(),createCarReviewDto.getComment(),createCarReviewDto.getOption());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(carReview.getReviewId())).build()).build();
+    }
+
+
+    //Get one review
+    @GET
+    @Path("/{id}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId}")
+    public Response getReview(@PathParam("id") final long id,
+                              @PathParam("reviewId") final long reviewId){
+        LOGGER.debug("GET request for review for car {} with reviewId {}",id,reviewId);
+        final Optional<CarReview> carReview = carReviewService.findById(reviewId);
+        if(!carReview.isPresent()){
+            return Response.noContent().build();
+        }
+        return Response.ok(CarReviewDto.fromCarReview(uriInfo,carReview.get())).build();
+    }
+
+    //Get multiple reviews (made by a user or all of them)
+    @GET
+    @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    public Response getAllReviews(@PathParam("id") final long id,
+                                  @QueryParam("madeBy") final Integer reviewerUserId,
+                                  @QueryParam("forTrip") final Integer tripId,
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
+        if(reviewerUserId!=null || tripId!=null){
+            //request for a user and trip should be made
+            if(reviewerUserId==null || tripId==null){
+                throw new IllegalArgumentException();
+            }
+            final PagedContent<CarReview> ans =  carReviewService.getCarReviewsMadeByUserOnTrip(id,reviewerUserId,tripId,page,PAGE_SIZE);
+            return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
+        }
+
+        final PagedContent<CarReview> ans = carReviewService.getCarReviews(id,page,PAGE_SIZE);
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
+    }
+
+
 
 
 }

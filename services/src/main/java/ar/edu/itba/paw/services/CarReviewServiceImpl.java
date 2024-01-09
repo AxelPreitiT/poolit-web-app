@@ -51,13 +51,13 @@ public class CarReviewServiceImpl implements CarReviewService {
 
     @Transactional
     @Override
-    public CarReview createCarReview(long tripId, long carId, int rating, String comment, CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException, PassengerNotFoundException {
+    public CarReview createCarReview(final long tripId, final long carId, final int rating, final String comment, final CarReviewOptions option) throws TripNotFoundException, UserNotFoundException, CarNotFoundException, PassengerNotFoundException {
         Trip trip = tripService.findById(tripId).orElseThrow (TripNotFoundException::new);
         User currentUser = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         Passenger reviewer = tripService.getPassenger(trip, currentUser).orElseThrow(PassengerNotFoundException::new);
         Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         if(!canReviewCar(trip, reviewer, car)) {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to review car with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), car.getCarId(), e);
             throw e;
         }
@@ -66,40 +66,40 @@ public class CarReviewServiceImpl implements CarReviewService {
 
     @Transactional
     @Override
-    public double getCarsRating(long carId) throws CarNotFoundException {
+    public double getCarsRating(final long carId) throws CarNotFoundException {
         Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         return carReviewDao.getCarRating(car);
     }
 
     @Transactional
     @Override
-    public PagedContent<CarReview> getCarReviews(long carId, int page, int pageSize) throws CarNotFoundException {
+    public PagedContent<CarReview> getCarReviews(final long carId, final int page, final int pageSize) throws CarNotFoundException {
         Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
         return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
     @Transactional
     @Override
-    public boolean canReviewCar(Trip trip, Passenger reviewer, Car car) {
+    public boolean canReviewCar(final Trip trip, final Passenger reviewer, final Car car) {
         if(trip.getCar().getCarId() != car.getCarId()) {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to review car with id {}, but it's not the car of the trip with id {}", reviewer.getUserId(), car.getCarId(), trip.getTripId(), e);
             throw e;
         }
         if(!tripService.userIsPassenger(trip.getTripId(), reviewer.getUser())) {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("User with id {} tried to review car with id {}, but he's not a passenger of the trip with id {}", reviewer.getUserId(), car.getCarId(), trip.getTripId(), e);
             throw e;
         }
         if(car.getUser().getUserId() == reviewer.getUserId()) {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("User with id {} tried to review car with id {}, but he's the owner of the car", reviewer.getUserId(), car.getCarId(), e);
             throw e;
         }
         return getReviewState(trip, reviewer, car) == ReviewState.PENDING;
     }
 
-    private ReviewState getReviewState(Trip trip, Passenger reviewer, Car car) {
+    private ReviewState getReviewState(final Trip trip, final Passenger reviewer, final Car car) {
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
             return ReviewState.DISABLED;
@@ -115,5 +115,20 @@ public class CarReviewServiceImpl implements CarReviewService {
         Passenger reviewer = tripService.getPassenger(trip, currentUser).get();
         Car car = carService.findById(trip.getCar().getCarId()).orElseThrow(CarNotFoundException::new);
         return new ItemReview<>(car, getReviewState(trip, reviewer, car));
+    }
+
+    @Transactional
+    @Override
+    public Optional<CarReview> findById(final long reviewId){
+        return carReviewDao.findById(reviewId);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<CarReview> getCarReviewsMadeByUserOnTrip(final long carId, final long userId, final long tripId, final int page, final int pageSize) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
+        final Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
+        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        return carReviewDao.getCarReviewsMadeByUserOnTrip(car,user,trip,page,pageSize);
     }
 }

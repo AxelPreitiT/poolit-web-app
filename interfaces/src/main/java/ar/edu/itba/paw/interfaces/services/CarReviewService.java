@@ -13,6 +13,7 @@ import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarReviewService {
 
@@ -22,7 +23,11 @@ public interface CarReviewService {
 
     PagedContent<CarReview> getCarReviews(final long carId, int page, int pageSize) throws CarNotFoundException;
 
+    PagedContent<CarReview> getCarReviewsMadeByUserOnTrip(final long carId, final long userId, final long tripId, final int page, final int pageSize) throws CarNotFoundException, UserNotFoundException, TripNotFoundException;
+
     boolean canReviewCar(final Trip trip, final Passenger reviewer, final Car car);
 
     ItemReview<Car> getCarReviewState(final long tripId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException;
+
+    Optional<CarReview> findById(final long reviewId);
 }
