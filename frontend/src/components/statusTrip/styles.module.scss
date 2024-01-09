@@ -1,0 +1,23 @@
+@use "@/colors.module.scss" as colors;
+
+.propProfile {
+  color: #6c757d;
+}
+
+.waiting {
+  color: colors.$secondary-color;
+  display: flex;
+  align-items: center;
+}
+
+.success {
+  color: colors.$secondary-color;
+  display: flex;
+  align-items: center;
+}
+
+.canceled {
+  color: colors.$secondary-color;
+  display: flex;
+  align-items: center;
+}
