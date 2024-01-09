@@ -10,4 +10,8 @@ public class PassengerNotFoundException extends CustomException {
         super(MESSAGE_CODE);
     }
 
+    public PassengerNotFoundException(final int httpStatusCode){
+        super(MESSAGE_CODE,httpStatusCode);
+    }
+
 }

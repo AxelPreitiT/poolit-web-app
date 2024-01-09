@@ -12,16 +12,23 @@ import ar.edu.itba.paw.models.reviews.PassengerReviewOptions;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PassengerReviewService {
 
     PassengerReview createPassengerReview(final long tripId, final long reviewedId, final int rating, final String comment, final PassengerReviewOptions option) throws UserNotLoggedInException, TripNotFoundException, UserNotFoundException, PassengerNotFoundException;
+
+    Optional<PassengerReview> findById(final long tripId);
+
+
 
     double getPassengerRating(final long userId) throws UserNotFoundException;
 
     double getPassengerRatingOwnUser() throws UserNotLoggedInException;
 
     PagedContent<PassengerReview> getPassengerReviews(final long userId, int page, int pageSize) throws UserNotFoundException;
+
+    PagedContent<PassengerReview> getPassengerReviewsMadeByUserOnTrip(final long reviewerUserid, final long tripId, final int page, final  int pageSize) throws UserNotFoundException, TripNotFoundException;
 
     PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) throws UserNotLoggedInException;
 
