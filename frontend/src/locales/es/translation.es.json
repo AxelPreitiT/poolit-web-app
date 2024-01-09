@@ -155,5 +155,24 @@
   },
   "trip_detail": {
     "title": "Viaje"
+  },
+  "query": {
+    "request": {
+      "error": {
+        "unknown": "Ocurrió un error al realizar la operación",
+        "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
+        "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión"
+      }
+    },
+    "response": {
+      "success": {
+        "default": "¡La operación se realizó correctamente!"
+      },
+      "error": {
+        "unknown": "Ocurrió un error al realizar la operación",
+        "unauthorized": "La sesión expiró, por favor volvé a iniciar sesión",
+        "forbidden": "No tenés permisos para realizar esta operación"
+      }
+    }
   }
 }

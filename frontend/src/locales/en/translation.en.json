@@ -155,5 +155,24 @@
   },
   "trip_detail": {
     "title": "Trip"
+  },
+  "query": {
+    "request": {
+      "error": {
+        "unknown": "An error occurred while performing the operation",
+        "invalid_email": "The email cannot have colon (:) characters",
+        "authorization_header_missing": "The session expired, please log in again"
+      }
+    },
+    "response": {
+      "success": {
+        "default": "The operation was completed successfully!"
+      },
+      "error": {
+        "unknown": "An error occurred while performing the operation",
+        "unauthorized": "The session expired, please log in again",
+        "forbidden": "You do not have permission to perform this operation"
+      }
+    }
   }
 }

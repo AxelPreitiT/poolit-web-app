@@ -1,7 +1,7 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import Jwt from "./Jwt";
 import Axios from "./axios";
 import CitiesApi from "../CitiesApi";
+import Jwt from "@/auth/Jwt";
 
 const unauthorizedHttpStatusCode = 401;
 

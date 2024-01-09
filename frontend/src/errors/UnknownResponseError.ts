@@ -1,6 +1,6 @@
 import ResponseError from "./ResponseError";
 
-const unknownI18nKey = "errors.response.unknown";
+const unknownI18nKey = "query.response.error.unknown";
 const unknownStatusCode = -1;
 const unknownStatusText = "Unknown";
 
