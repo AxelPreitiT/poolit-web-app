@@ -72,7 +72,7 @@ public class CarController {
     @Produces(VndType.APPLICATION_CAR)
     public Response getCarById(@PathParam("id") final long id) throws CarNotFoundException{
         LOGGER.debug("GET request for car with carId {}",id);
-        final Car car = carService.findById(id).orElseThrow(CarNotFoundException::new);
+        final Car car = carService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(CarNotFoundException::new));
         return Response.ok(CarDto.fromCar(uriInfo, car)).build();
     }
 
@@ -134,13 +134,10 @@ public class CarController {
     @GET
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId}")
     public Response getReview(@PathParam("id") final long id,
-                              @PathParam("reviewId") final long reviewId){
+                              @PathParam("reviewId") final long reviewId) throws ReviewNotFoundException {
         LOGGER.debug("GET request for review for car {} with reviewId {}",id,reviewId);
-        final Optional<CarReview> carReview = carReviewService.findById(reviewId);
-        if(!carReview.isPresent()){
-            return Response.noContent().build();
-        }
-        return Response.ok(CarReviewDto.fromCarReview(uriInfo,carReview.get())).build();
+        final CarReview carReview = carReviewService.findById(reviewId).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
+        return Response.ok(CarReviewDto.fromCarReview(uriInfo,carReview)).build();
     }
 
     //Get multiple reviews (made by a user or all of them)

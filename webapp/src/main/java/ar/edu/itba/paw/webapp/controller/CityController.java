@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.services.CityService;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
+import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.output.CityDto;
 import org.slf4j.Logger;
@@ -37,16 +38,12 @@ public class CityController {
         this.cityService = cityService;
     }
 
-    private <T> Supplier<T> notFoundExceptionOf(Function<Integer,T> constructor){
-        return () -> constructor.apply(Response.Status.NOT_FOUND.getStatusCode());
-    }
-
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CITY)
     public Response getById(@PathParam("id") final int id) throws CityNotFoundException{
         LOGGER.debug("GET request for city with cityId {}",id);
-        final City ans = cityService.findCityById(id).orElseThrow(notFoundExceptionOf(CityNotFoundException::new));
+        final City ans = cityService.findCityById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(CityNotFoundException::new));
         return Response.ok(CityDto.fromCity(uriInfo,ans)).build();
     }
 }
