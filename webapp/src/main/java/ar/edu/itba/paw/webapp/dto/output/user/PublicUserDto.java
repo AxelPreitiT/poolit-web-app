@@ -9,6 +9,8 @@ import java.net.URI;
 public class PublicUserDto {
     private String username;
     private String surname;
+    private double driverRating;
+    private double passengerRating;
     private URI selfUri;
     private URI imageUri;
 
@@ -17,6 +19,8 @@ public class PublicUserDto {
     protected PublicUserDto(final UriInfo uriInfo, final User user){
         this.username = user.getName();
         this.surname= user.getSurname();
+        this.driverRating = user.getDriverRating();
+        this.passengerRating = user.getPassengerRating();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).build();
         this.imageUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).path(UrlHolder.IMAGE_ENTITY).build();
     }
@@ -55,5 +59,21 @@ public class PublicUserDto {
 
     public void setImageUri(URI imageUri) {
         this.imageUri = imageUri;
+    }
+
+    public double getDriverRating() {
+        return driverRating;
+    }
+
+    public void setDriverRating(double driverRating) {
+        this.driverRating = driverRating;
+    }
+
+    public double getPassengerRating() {
+        return passengerRating;
+    }
+
+    public void setPassengerRating(double passengerRating) {
+        this.passengerRating = passengerRating;
     }
 }

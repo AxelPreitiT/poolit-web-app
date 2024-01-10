@@ -59,7 +59,6 @@ public class TripController {
     }
 
 
-    //TODO: parametrizar PAGE_SIZE
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId) and @authValidator.checkIfWantedIsSelf(#recommendedUserId)")
     public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,

@@ -11,13 +11,10 @@ import java.time.LocalDateTime;
 
 public class TripDto {
 
-//    private long originCityId;
     private URI originCityUri;
     private String originAddress;
-//    private long destinationCityId;
     private URI destinationCityUri;
     private String destinationAddress;
-//    private long carId;
     private URI carUri;
     private URI driverUri;
     private long maxSeats;
@@ -29,10 +26,6 @@ public class TripDto {
     private URI passengersUri;
     //URI for passenger
     private URI passengerUri;
-
-//    TODO: ver donde los pongo!
-//    private double driverRating;
-//    private double carRating;
     private LocalDateTime queryStartDateTime;
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
