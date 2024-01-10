@@ -23,3 +23,5 @@ ResponseErrorDispatcher.register(
   unauthorizedStatusCode,
   UnauthorizedResponseError
 );
+
+export default UnauthorizedResponseError;

@@ -20,3 +20,5 @@ class ForbiddenResponseError extends ResponseError {
 }
 
 ResponseErrorDispatcher.register(forbiddenStatusCode, ForbiddenResponseError);
+
+export default ForbiddenResponseError;

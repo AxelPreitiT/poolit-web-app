@@ -7,30 +7,31 @@ import {
   RegisterFormSchemaType,
 } from "@/forms/RegisterForm";
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import { SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import useForm from "./useForm";
+import useForm, { SubmitHandlerReturnModel } from "./useForm";
 
 const useRegisterForm = () => {
   const { t } = useTranslation();
   const addToast = useToastStackStore((state) => state.addToast);
 
-  const onSubmit: SubmitHandler<RegisterFormSchemaType> = async (data) => {
+  const onSubmit: SubmitHandlerReturnModel<RegisterFormSchemaType> = async (
+    data: RegisterFormSchemaType
+  ) => {
     await new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
       console.log(data);
       addToast({
-        type: ToastType.Error,
+        type: ToastType.ERROR,
         message: t("register.error"),
         timeout: defaultToastTimeout,
       });
     });
   };
 
-  return useForm<RegisterFormFieldsType, RegisterFormSchemaType>(
-    RegisterForm,
-    RegisterFormSchema,
-    onSubmit
-  );
+  return useForm<RegisterFormFieldsType, RegisterFormSchemaType>({
+    form: RegisterForm,
+    formSchema: RegisterFormSchema,
+    onSubmit,
+  });
 };
 
 export default useRegisterForm;
