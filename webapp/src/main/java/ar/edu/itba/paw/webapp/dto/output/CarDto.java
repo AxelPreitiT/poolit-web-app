@@ -19,6 +19,8 @@ public class CarDto {
     private String plate;
 
     private String infoCar;
+
+    private double rating;
     private URI selfUri;
     private URI imageUri;
 
@@ -30,7 +32,7 @@ public class CarDto {
         this.plate = car.getPlate();
         this.features = car.getFeatures();
         this.seats= car.getSeats();
-
+        this.rating = car.getCarRating();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).build();
         this.imageUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).path(UrlHolder.IMAGE_ENTITY).build();
     }
@@ -77,5 +79,12 @@ public class CarDto {
 
     public void setImageUri(URI imageUri) {
         this.imageUri = imageUri;
+    }
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

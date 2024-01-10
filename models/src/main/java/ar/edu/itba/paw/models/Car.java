@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -38,6 +40,9 @@ public class Car {
 
     @Column(name = "image_id")
     private long imageId;
+
+    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
+    private double carRating;
 
     protected Car(){
 
@@ -127,5 +132,9 @@ public class Car {
 
     public boolean hasBrand() {
         return brand != null && brand.hasBrand();
+    }
+
+    public double getCarRating() {
+        return carRating;
     }
 }

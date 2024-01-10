@@ -66,7 +66,6 @@ public class CarController {
         return Response.ok(new GenericEntity<List<CarDto>>(cars){}).build();
     }
 
-    //TODO: ver de buscar el rating en el servicio para el auto (como el usuario)
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CAR)
