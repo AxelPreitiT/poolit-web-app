@@ -5,19 +5,16 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
-import java.time.LocalDateTime;
 
-//TODO: preguntar si hacer esto esta bien como para tener distintos tipos
-//TODO: preguntar por type en la respuesta
-//TODO: si puedo poner campos condicionalmente dependiendo de quien pregunta, pasar esto a un unico usuario
+//Avoid 'type' field from being added to response on JSON
+@XmlType(name = "")
 public class PrivateUserDto extends PublicUserDto{
 
     private String email;
 
     private String phone;
-
-    private long cityId; //TODO: ver que hacer con esto, vale la pena un controller para /city
 
     private URI cityUri;
 
@@ -41,7 +38,6 @@ public class PrivateUserDto extends PublicUserDto{
         super(uriInfo,user);
         this.email = user.getEmail();
         this.phone = user.getPhone();
-        this.cityId = user.getBornCity().getId();
         this.cityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(user.getBornCity().getId())).build();
         this.mailLocale = user.getMailLocale().getLanguage();
         this.roleUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).path("role/").build();
@@ -70,14 +66,6 @@ public class PrivateUserDto extends PublicUserDto{
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public long getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(long cityId) {
-        this.cityId = cityId;
     }
 
     public URI getCityUri() {

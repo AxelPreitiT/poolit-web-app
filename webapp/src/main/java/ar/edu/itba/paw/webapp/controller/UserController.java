@@ -67,7 +67,7 @@ public class UserController {
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_USER_PRIVATE)
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)") //TODO: ver por que lleva a 404
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
     public Response getByIdPrivate(@PathParam("id") final long id) throws UserNotFoundException{
         LOGGER.debug("GET request for private userId {}",id);
         final User user = userService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(UserNotFoundException::new));
