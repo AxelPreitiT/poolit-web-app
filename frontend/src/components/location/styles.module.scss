@@ -13,12 +13,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  min-width: fit-content;
 }
 
 .direction_container_l {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-width: fit-content;
 }
 
 .location_container h1 {
