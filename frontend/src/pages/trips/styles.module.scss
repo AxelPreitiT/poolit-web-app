@@ -1,0 +1,56 @@
+@use "@/colors.module.scss" as colors;
+
+.info_trip {
+  background-color: colors.$primary-color;
+  padding: 1.5%;
+  gap: 10px;
+  border-radius: 16px;
+  min-width: 35%;
+  max-width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+}
+
+.middle_content {
+  padding: 2% 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.img_container {
+  width: 42%;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img_style {
+  width: -webkit-fill-available;
+}
+
+.show_row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 1em;
+}
+
+.info_details {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle_info {
+  font-size: 0.7rem;
+  font-weight: normal;
+}
