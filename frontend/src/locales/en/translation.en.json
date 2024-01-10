@@ -153,7 +153,16 @@
     "title": "Admin"
   },
   "trip_detail": {
-    "title": "Trip"
+    "title": "Trip",
+    "header": "Trip details",
+    "status": {
+      "cancelled": "Cancelled",
+      "accepted": "Accepted",
+      "waiting": "Waiting",
+      "finished": "Finished",
+      "not_started": "Not started",
+      "in_progress": "In progress"
+    }
   },
   "query": {
     "request": {

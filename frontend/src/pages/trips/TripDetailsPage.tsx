@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 import MainComponent from "@/components/utils/MainComponent";
 import MainHeader from "@/components/utils/MainHeader";
 import { useTranslation } from "react-i18next";
-import StatusTrip from "@/components/statusTrip/ProfileProp";
 import Location from "@/components/location/Location";
 import CircleImg from "@/components/img/circleImg/CircleImg";
 import StarRating from "@/components/stars/StarsRanking";
+import StatusComponent from "@/components/statusTrip/StatusTrip";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -17,7 +17,13 @@ const TripDetailsPage = () => {
       <MainComponent>
         <MainHeader
           title={t("created_trips.title")}
-          left_component={<StatusTrip status="Created" />}
+          left_component={
+            <StatusComponent
+              text={t("trip_detail.status.accepted")}
+              icon={"bi bi-clock-history"}
+              color={"success"}
+            />
+          }
         />
         <Location
           start_address="hola"
@@ -92,10 +98,7 @@ const TripDetailsPage = () => {
         <h1>Trip {tripId}</h1>
       </MainComponent>
       <MainComponent>
-        <MainHeader
-          title={t("created_trips.title")}
-          left_component={<StatusTrip status="Created" />}
-        />
+        <MainHeader title={t("created_trips.title")} />
         <h1>Trip {tripId}</h1>
       </MainComponent>
     </div>

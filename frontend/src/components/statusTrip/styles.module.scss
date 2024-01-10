@@ -1,23 +1,33 @@
 @use "@/colors.module.scss" as colors;
 
-.propProfile {
-  color: #6c757d;
-}
-
-.waiting {
-  color: colors.$secondary-color;
-  display: flex;
-  align-items: center;
-}
-
 .success {
-  color: colors.$secondary-color;
+  color: colors.$success-color;
   display: flex;
+  gap: 5%;
   align-items: center;
 }
 
-.canceled {
+.secondary {
   color: colors.$secondary-color;
   display: flex;
+  gap: 5%;
   align-items: center;
+}
+
+.primary {
+  color: colors.$primary-color;
+  display: flex;
+  gap: 5%;
+  align-items: center;
+}
+
+.danger {
+  color: colors.$danger-color;
+  display: flex;
+  gap: 5%;
+  align-items: center;
+}
+
+.status_container i {
+  font-size: x-large;
 }
