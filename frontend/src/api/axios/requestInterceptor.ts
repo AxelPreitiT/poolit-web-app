@@ -20,6 +20,7 @@ export const AxiosRequestInterceptor = (config: InternalAxiosRequestConfig) => {
   Promise.reject(
     new AuthorizationHeaderMissingError("Authorization header missing")
   );
+  return config;
 };
 
 export const AxiosRequestErrorInterceptor = (error: AxiosError) =>
