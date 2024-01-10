@@ -3,9 +3,11 @@ import ToastType from "@/enums/ToastType";
 import { ToastContainer } from "react-bootstrap";
 import ErrorToast from "./ErrorToast/ErrorToast";
 import ToastProps from "./ToastProps";
+import SuccessToast from "./SuccessToast/SuccessToast";
 
 const toastTypeMap: Record<ToastType, React.FC<ToastProps>> = {
-  [ToastType.Error]: ErrorToast,
+  [ToastType.ERROR]: ErrorToast,
+  [ToastType.SUCCESS]: SuccessToast,
 };
 
 const GlobalToastStack = () => {

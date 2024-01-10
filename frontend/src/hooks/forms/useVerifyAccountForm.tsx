@@ -7,30 +7,31 @@ import {
   VerifyAccountFormSchemaType,
 } from "@/forms/VerifyAccountForm";
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import { SubmitHandler } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import useForm from "./useForm";
+import useForm, { SubmitHandlerReturnModel } from "./useForm";
 
 const useVerifyAccountForm = () => {
   const { t } = useTranslation();
   const addToast = useToastStackStore((state) => state.addToast);
 
-  const onSubmit: SubmitHandler<VerifyAccountFormSchemaType> = async (data) => {
+  const onSubmit: SubmitHandlerReturnModel<
+    VerifyAccountFormSchemaType
+  > = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
       console.log(data);
       addToast({
-        type: ToastType.Error,
+        type: ToastType.ERROR,
         message: t("verify_account.error"),
         timeout: defaultToastTimeout,
       });
     });
   };
 
-  return useForm<VerifyAccountFormFieldsType, VerifyAccountFormSchemaType>(
-    VerifyAccountForm,
-    VerifyAccountFormSchema,
-    onSubmit
-  );
+  return useForm<VerifyAccountFormFieldsType, VerifyAccountFormSchemaType>({
+    form: VerifyAccountForm,
+    formSchema: VerifyAccountFormSchema,
+    onSubmit,
+  });
 };
 
 export default useVerifyAccountForm;

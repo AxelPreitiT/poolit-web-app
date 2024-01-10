@@ -1,7 +1,7 @@
 const enum ToastType {
-  Error = "error",
-  // Success = "success",
-  // Warning = "warning",
+  ERROR = "error",
+  SUCCESS = "success",
+  // WARNING = "warning",
 }
 
 export default ToastType;

@@ -3,7 +3,7 @@ import ResponseErrorDispatcher from "./ResponseErrorDispatcher";
 
 const unauthorizedStatusCode = 401;
 const unauthorizedStatusText = "Unauthorized";
-const unauthorizedI18nKey = "errors.response.unauthorized";
+const unauthorizedI18nKey = "query.response.error.unauthorized";
 
 class UnauthorizedResponseError extends ResponseError {
   constructor(responseMessage?: string) {
@@ -23,3 +23,5 @@ ResponseErrorDispatcher.register(
   unauthorizedStatusCode,
   UnauthorizedResponseError
 );
+
+export default UnauthorizedResponseError;

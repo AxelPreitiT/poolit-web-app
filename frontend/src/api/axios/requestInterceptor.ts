@@ -1,5 +1,6 @@
 import { AxiosError, InternalAxiosRequestConfig } from "axios";
-import Jwt from "./Jwt";
+import AuthorizationHeaderMissingError from "@/errors/AuthorizationHeaderMissingError";
+import Jwt from "@/auth/Jwt";
 
 export const AxiosRequestInterceptor = (config: InternalAxiosRequestConfig) => {
   const headers = config.headers;
@@ -7,7 +8,18 @@ export const AxiosRequestInterceptor = (config: InternalAxiosRequestConfig) => {
     return config;
   }
   const authToken = Jwt.getAuthToken();
-  config.headers.Authorization = authToken;
+  if (authToken) {
+    config.headers.Authorization = authToken;
+    return config;
+  }
+  const refreshToken = Jwt.getRefreshToken();
+  if (refreshToken) {
+    config.headers.Authorization = refreshToken;
+    return config;
+  }
+  Promise.reject(
+    new AuthorizationHeaderMissingError("Authorization header missing")
+  );
   return config;
 };
 

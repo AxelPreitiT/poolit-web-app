@@ -2,9 +2,9 @@ import UserPublicModel from "@/models/UserPublicModel";
 import AxiosApi from "./axios/AxiosApi";
 import UserPrivateModel from "@/models/UserPrivateModel";
 import { AxiosPromise } from "axios";
-import BasicAuth from "./BasicAuth";
-import Jwt from "./axios/Jwt";
 import CitiesApi from "./CitiesApi";
+import Jwt from "@/auth/Jwt";
+import BasicAuth from "@/auth/BasicAuth";
 
 class UsersApi {
   private static readonly USERS_BASE_PATH: string = "/users";

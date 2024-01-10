@@ -1,13 +1,13 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import Jwt from "./Jwt";
 import Axios from "./axios";
 import CitiesApi from "../CitiesApi";
+import Jwt from "@/auth/Jwt";
 
 const unauthorizedHttpStatusCode = 401;
 
 export const AxiosResponseInterceptor = (response: AxiosResponse) => {
-  const authToken = response.headers.Authorization;
-  const refreshToken = response.headers["Authorization-refresh"];
+  const authToken = response.headers.authorization;
+  const refreshToken = response.headers["authorization-refresh"];
   if (authToken) {
     Jwt.storeAuthToken(authToken);
   }

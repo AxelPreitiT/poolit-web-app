@@ -1,0 +1,15 @@
+@use "@/colors.module.scss" as colors;
+@use "../styles.module.scss" as toastStyles;
+
+.toast {
+  background-color: colors.$success-color !important;
+}
+
+.toastHeader {
+  background-color: colors.$success-color !important;
+  @extend %toastHeader;
+}
+
+.toastBody {
+  @extend %toastBody;
+}

@@ -1,37 +1,41 @@
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
-import ToastType from "@/enums/ToastType";
 import {
   LoginForm,
   LoginFormFieldsType,
   LoginFormSchema,
   LoginFormSchemaType,
 } from "@/forms/LoginForm";
-import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import { SubmitHandler } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import useForm from "./useForm";
-import useLogin from "../query/useLogin";
+import useForm, { SubmitHandlerReturnModel } from "./useForm";
+import UsersApi from "@/api/UsersApi";
+import useSuccessToast from "../toasts/useSuccessToast";
+import { useLocation, useNavigate } from "react-router-dom";
+import { homePath } from "@/AppRouter";
 
 const useLoginForm = () => {
-  const { t } = useTranslation();
-  const addToast = useToastStackStore((state) => state.addToast);
-  const login = useLogin();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const showSuccessToast = useSuccessToast();
 
-  const onSubmit: SubmitHandler<LoginFormSchemaType> = async (data) => {
-    await login(data.email, data.password, data.rememberMe);
-    console.log(data);
-    addToast({
-      type: ToastType.Error,
-      message: t("login.error"),
-      timeout: defaultToastTimeout,
+  const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType> = async (
+    data: LoginFormSchemaType
+  ) => {
+    await UsersApi.login(data.email, data.password, !!data.rememberMe);
+  };
+
+  const onSuccess = () => {
+    showSuccessToast("login.success", defaultToastTimeout);
+    const from = location.state?.from?.pathname;
+    navigate(from || homePath, {
+      replace: !!from,
     });
   };
 
-  return useForm<LoginFormFieldsType, LoginFormSchemaType>(
-    LoginForm,
-    LoginFormSchema,
-    onSubmit
-  );
+  return useForm<LoginFormFieldsType, LoginFormSchemaType>({
+    form: LoginForm,
+    formSchema: LoginFormSchema,
+    onSubmit,
+    onSuccess,
+  });
 };
 
 export default useLoginForm;

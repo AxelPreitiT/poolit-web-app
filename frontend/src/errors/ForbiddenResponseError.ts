@@ -3,7 +3,7 @@ import ResponseErrorDispatcher from "./ResponseErrorDispatcher";
 
 const forbiddenStatusCode = 403;
 const forbiddenStatusText = "Forbidden";
-const forbiddenI18nKey = "errors.response.forbidden";
+const forbiddenI18nKey = "query.response.error.forbidden";
 
 class ForbiddenResponseError extends ResponseError {
   constructor(responseMessage?: string) {
@@ -20,3 +20,5 @@ class ForbiddenResponseError extends ResponseError {
 }
 
 ResponseErrorDispatcher.register(forbiddenStatusCode, ForbiddenResponseError);
+
+export default ForbiddenResponseError;
