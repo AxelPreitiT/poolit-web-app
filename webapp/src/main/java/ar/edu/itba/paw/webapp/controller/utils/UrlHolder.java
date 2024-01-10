@@ -16,7 +16,7 @@ public class UrlHolder {
     public static final String TRIPS_PASSENGERS = "/passengers";
 
     //    --------Reviews--------
-    public static final String DRIVER_REVIEWS_BASE = BASE + "/drive-reviews";
+    public static final String DRIVER_REVIEWS_BASE = BASE + "/driver-reviews";
 
     public static final String PASSENGER_REVIEWS_BASE = BASE + "/passenger-reviews";
 

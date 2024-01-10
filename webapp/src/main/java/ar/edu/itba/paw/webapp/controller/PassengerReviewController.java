@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -49,7 +48,7 @@ public class PassengerReviewController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("/{id}")
     public Response getReview(@PathParam("id") final long id) throws ReviewNotFoundException {
         LOGGER.debug("GET request for passenger review with id {}",id);
         final PassengerReview passengerReview = passengerReviewService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
@@ -67,12 +66,14 @@ public class PassengerReviewController {
             if(reviewerUserId==null || tripId == null || userId != null){
                 throw new IllegalArgumentException();
             }
+            LOGGER.debug("GET request for passenger reviews made by user {} for passengers on trip {}",reviewerUserId,tripId);
             final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(reviewerUserId,tripId,page,PAGE_SIZE);
             return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
         }
         if(userId==null){
             throw new IllegalArgumentException();
         }
+        LOGGER.debug("GET request for passenger reviews for user {}",userId);
         final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviews(userId,page,PAGE_SIZE);
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
     }

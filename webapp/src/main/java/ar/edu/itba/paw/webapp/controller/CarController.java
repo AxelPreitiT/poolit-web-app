@@ -153,10 +153,11 @@ public class CarController {
             if(reviewerUserId==null || tripId==null){
                 throw new IllegalArgumentException();
             }
+            LOGGER.debug("GET request for reviews of car {} made by {} for trip {}",id,reviewerUserId,tripId);
             final PagedContent<CarReview> ans =  carReviewService.getCarReviewsMadeByUserOnTrip(id,reviewerUserId,tripId,page,PAGE_SIZE);
             return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
         }
-
+        LOGGER.debug("GET request for reviews of car {}",id);
         final PagedContent<CarReview> ans = carReviewService.getCarReviews(id,page,PAGE_SIZE);
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
     }
