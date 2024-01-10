@@ -1,31 +1,15 @@
 @use "@/colors.module.scss" as colors;
+@use "../styles.module.scss" as toastStyles;
 
 .toast {
   background-color: colors.$danger-color !important;
 }
 
 .toastHeader {
-  display: flex;
-  flex-direction: row;
-  column-gap: 1rem;
-  justify-content: space-between;
-  align-items: center;
   background-color: colors.$danger-color !important;
-}
-
-.toastHeader > div {
-  display: flex;
-  flex-direction: row;
-  column-gap: 0.5rem;
-  align-items: center;
-  overflow: hidden;
+  @extend %toastHeader;
 }
 
 .toastBody {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
-}
-
-.toastBody > * {
-  font-size: 0.8rem;
+  @extend %toastBody;
 }

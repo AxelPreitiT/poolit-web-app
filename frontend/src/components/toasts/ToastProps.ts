@@ -6,6 +6,11 @@ type ToastProps = {
   timeout?: number;
   show: boolean;
   onClose: () => void;
+  styles?: {
+    readonly toast: string;
+    readonly toastHeader: string;
+    readonly toastBody: string;
+  };
 };
 
 export default ToastProps;
