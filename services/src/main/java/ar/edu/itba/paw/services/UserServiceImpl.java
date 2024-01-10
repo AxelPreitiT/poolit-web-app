@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
@@ -234,18 +231,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean confirmRegister(String token) {
+    public void confirmRegister(String token) throws InvalidTokenException {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
-        if(verificationToken == null){
-            return false;
+        if (verificationToken == null || !tokenService.isValidToken(verificationToken)){
+            throw new InvalidTokenException();
         }
-        boolean isValidToken = tokenService.isValidToken(verificationToken);
-        if (isValidToken) {
-            final User user = verificationToken.getUser();
-            user.setEnabled(true);
-            authWithoutPassword(user);
-        }
-        return isValidToken;
+        //verificationToken != null and it is a valid token
+        final User user = verificationToken.getUser();
+        user.setEnabled(true);
+        authWithoutPassword(user);
     }
 
 

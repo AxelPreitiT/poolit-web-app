@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.interfaces.exceptions.InvalidTokenException;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,7 +36,9 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
     private static final int PASSWORD_INDEX = 1;
 
-    private static final String REFRESH_HEADER = "Authorization-refresh";
+    public static final String JWT_HEADER = "JWT-authorization";
+
+    private static final String JWT_REFRESH_HEADER = "JWT-refresh-authorization";
 
     private static final String VERIFICATION_HEADER = "Account-verification";
 
@@ -56,21 +58,21 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
         try {
             String[] credentials = decodeHeader(header.split(" ")[1]);
-//            check if it's a verication token
             final User user = userService.findByEmail(credentials[EMAIL_INDEX]).orElseThrow(IllegalStateException::new);
-//            Si esta habilitado o (no esta habilitado y lo que mando no es token de verificación)
-            if(user.isEnabled() || !userService.confirmRegister(credentials[PASSWORD_INDEX])){
+            //Si esta habilitado, intentamos autenticarlo
+            if(user.isEnabled()){
                 final Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(credentials[EMAIL_INDEX], credentials[PASSWORD_INDEX])
                 );
-                httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUtils.createToken(user));
-//                https://www.rfc-editor.org/rfc/rfc9110#name-field-extensibility
-                httpServletResponse.setHeader(REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(user));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else {
+                //No está habilitado, intentamos confirmar el registro con el token
+                userService.confirmRegister(credentials[PASSWORD_INDEX]);
             }
-            //if token is confirmed, the user is logged in by service
-            //then, we only need to continue in the filter chain
-        }catch (DisabledException ex){
+            //https://www.rfc-editor.org/rfc/rfc9110#name-field-extensibility
+            httpServletResponse.setHeader(JWT_HEADER, "Bearer " + jwtUtils.createToken(user));
+            httpServletResponse.setHeader(JWT_REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(user));
+        }catch (InvalidTokenException ex){
             String[] credentials = decodeHeader(header.split(" ")[1]);
             userService.sendVerificationEmail(credentials[EMAIL_INDEX]);
             httpServletResponse.setHeader(VERIFICATION_HEADER,"true");
