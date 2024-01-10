@@ -1,5 +1,39 @@
 @use "@/colors.module.scss" as colors;
 
-.propProfile {
-  color: #6c757d;
+.location_container {
+  display: flex;
+  padding: 2% 10%;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.direction_container_r {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.direction_container_l {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.location_container h1 {
+  color: colors.$secondary-color !important;
+  font-size: 2.5vw;
+}
+
+.car_container {
+  color: colors.$secondary-color !important;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  width: -webkit-fill-available;
+}
+
+.car_container i {
+  font-size: 2.5vw;
 }

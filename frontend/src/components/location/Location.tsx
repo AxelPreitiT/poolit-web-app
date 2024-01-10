@@ -1,25 +1,37 @@
-import React, { useEffect, useState } from "react";
 import "./MovingCar.css";
-import { FaCarSide } from "react-icons/fa";
+import MovingCar from "./MovingCar";
+import styles from "./styles.module.scss";
 
-interface CarProps {
-  position: number;
+export interface LocationProps {
+  start_city: string;
+  start_address: string;
+  end_city: string;
+  end_address: string;
 }
 
-const Car: React.FC<CarProps> = ({ position }) => {
+const Location = ({
+  start_city,
+  start_address,
+  end_address,
+  end_city,
+}: LocationProps) => {
   return (
-    <div className="car" style={{ left: `${position * 600}px` }}>
-      <FaCarSide size={40} color="black" />
+    <div className={styles.location_container}>
+      <div className={styles.direction_container_r}>
+        <h1>{start_city}</h1>
+        <h5>{start_address}</h5>
+      </div>
+      <div className={styles.car_container}>
+        <i className="bi bi-geo-alt h2"></i>
+        <MovingCar />
+        <i className="bi bi-geo-alt-fill h2"></i>
+      </div>
+      <div className={styles.direction_container_l}>
+        <h1>{end_city}</h1>
+        <h5>{end_address}</h5>
+      </div>
     </div>
   );
 };
 
-const MovingCar: React.FC = () => {
-  return (
-    <div className="car-container">
-      <Car position={0} />
-    </div>
-  );
-};
-
-export default MovingCar;
+export default Location;
