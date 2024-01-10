@@ -44,7 +44,7 @@ public class CarController {
 
     private final CarReviewService carReviewService;
 
-    private static final int PAGE_SIZE = 10;
+    private static final String PAGE_SIZE = "10";
 
     @Context
     private UriInfo uriInfo;
@@ -146,18 +146,19 @@ public class CarController {
     public Response getAllReviews(@PathParam("id") final long id,
                                   @QueryParam("madeBy") final Integer reviewerUserId,
                                   @QueryParam("forTrip") final Integer tripId,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page,
+                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
         if(reviewerUserId!=null || tripId!=null){
             //request for a user and trip should be made
             if(reviewerUserId==null || tripId==null){
                 throw new IllegalArgumentException();
             }
             LOGGER.debug("GET request for reviews of car {} made by {} for trip {}",id,reviewerUserId,tripId);
-            final PagedContent<CarReview> ans =  carReviewService.getCarReviewsMadeByUserOnTrip(id,reviewerUserId,tripId,page,PAGE_SIZE);
+            final PagedContent<CarReview> ans =  carReviewService.getCarReviewsMadeByUserOnTrip(id,reviewerUserId,tripId,page,pageSize);
             return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
         }
         LOGGER.debug("GET request for reviews of car {}",id);
-        final PagedContent<CarReview> ans = carReviewService.getCarReviews(id,page,PAGE_SIZE);
+        final PagedContent<CarReview> ans = carReviewService.getCarReviews(id,page,pageSize);
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
     }
 

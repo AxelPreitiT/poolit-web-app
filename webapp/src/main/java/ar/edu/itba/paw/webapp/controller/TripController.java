@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -42,7 +41,7 @@ import java.util.Optional;
 @Component
 public class TripController {
 
-    private static final int PAGE_SIZE = 10;
+    private static final String PAGE_SIZE = "10";
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
 
     private final TripService tripService;
@@ -59,6 +58,8 @@ public class TripController {
         this.userService = userService;
     }
 
+
+    //TODO: parametrizar PAGE_SIZE
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId) and @authValidator.checkIfWantedIsSelf(#recommendedUserId)")
     public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,
@@ -74,21 +75,23 @@ public class TripController {
                              @QueryParam("recommendedFor") final Integer recommendedUserId,
                              @QueryParam("past") final boolean pastTrips,
                              @QueryParam("descending") final boolean descending,
-                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page){
+                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page,
+                             @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize
+                             ){
         PagedContent<Trip> ans = null;
         if(creatorUserId!=null){
             LOGGER.debug("GET request to trips created by user {}",creatorUserId);
-            ans = tripService.getTripsCreatedByUser(creatorUserId,pastTrips,page,PAGE_SIZE);
+            ans = tripService.getTripsCreatedByUser(creatorUserId,pastTrips,page,pageSize);
         }else if(passengerUserId!=null){
             LOGGER.debug("GET request to trips reserved by user {}",passengerUserId);
-            ans = tripService.getTripsWhereUserIsPassenger(passengerUserId,pastTrips,page,PAGE_SIZE);
+            ans = tripService.getTripsWhereUserIsPassenger(passengerUserId,pastTrips,page,pageSize);
         }else if(recommendedUserId!=null) {
             //we use this instead of creating a URI in the userDTO with the fields to maintain the logic of recommendation in the trip service
             LOGGER.debug("GET request to trips recommended for user {}",recommendedUserId);
-            ans = tripService.getRecommendedTripsForUser(recommendedUserId,page,PAGE_SIZE);
+            ans = tripService.getRecommendedTripsForUser(recommendedUserId,page,pageSize);
         }else{
             LOGGER.debug("GET request to find trips");
-            ans = tripService.findTrips(originCityId,destinationCityId,startDateTime,endDateTime,minPrice,maxPrice,sortType,descending,carFeatures,page,PAGE_SIZE);
+            ans = tripService.findTrips(originCityId,destinationCityId,startDateTime,endDateTime,minPrice,maxPrice,sortType,descending,carFeatures,page,pageSize);
         }
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,TripDto::fromTrip,TripDto.class);
     }
@@ -100,6 +103,7 @@ public class TripController {
         return Response.created(uri).build();
     }
 
+    //TODO: poner limites de fechas para viaje, y ponerlo en el URL
     @GET
     @Path("/{id}")
     public Response getById(@PathParam("id") final long id) throws TripNotFoundException, UserNotFoundException {
@@ -118,6 +122,7 @@ public class TripController {
         return Response.ok().build();
     }
 
+    //TODO: dejarlo aca para los pasajeros, pero moverlo tambien al findById para precio o inicio/fin para la persona
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#startDateTime,#endDateTime,#passengerState)")
@@ -125,13 +130,14 @@ public class TripController {
                                   @QueryParam("startDateTime") final LocalDateTime startDateTime,
                                   @QueryParam("endDateTime") final LocalDateTime endDateTime,
                                   @QueryParam("passengerState") final Passenger.PassengerState passengerState,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page) throws CustomException {
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page,
+                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize) throws CustomException {
         LOGGER.debug("GET request for passengers from trip {}",id);
         if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
             //TODO: revisar si esta bien instanciar esto aca!
             throw new CustomException("exceptions.startDateTime_with_enDateTime",Response.Status.BAD_REQUEST.getStatusCode());
         }
-        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState,page,PAGE_SIZE);
+        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState,page,pageSize);
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerDto::fromPassenger,PassengerDto.class);
     }
 
@@ -146,18 +152,13 @@ public class TripController {
         return Response.created(uri).build();
     }
 
-    //TODO: preguntar si esta bien que el userId se use como identificador del pasajero en el viaje
-    //Es como un id de la instancia de pasajero, ya que el usuario solo puede aparecer una vez como pasajero
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
     //si no ver como limitar el estado para los otros
-    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
+    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException, PassengerNotFoundException {
         LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
-        final Optional<Passenger> passenger = tripService.getPassenger(id,userId);
-        if(!passenger.isPresent()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(PassengerDto.fromPassenger(uriInfo,passenger.get())).build();
+        final Passenger passenger = tripService.getPassenger(id,userId).orElseThrow(ControllerUtils.notFoundExceptionOf(PassengerNotFoundException::new));
+        return Response.ok(PassengerDto.fromPassenger(uriInfo,passenger)).build();
     }
 
 //    https://www.rfc-editor.org/rfc/rfc5789

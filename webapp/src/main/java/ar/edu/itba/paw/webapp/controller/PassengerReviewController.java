@@ -29,7 +29,7 @@ public class PassengerReviewController {
 
     private final PassengerReviewService passengerReviewService;
 
-    private static final int PAGE_SIZE = 10;
+    private static final String PAGE_SIZE = "10";
 
     @Context
     private UriInfo uriInfo;
@@ -61,20 +61,21 @@ public class PassengerReviewController {
     public Response getReviews(@QueryParam("forUser") final Integer userId,
                                @QueryParam("madeBy") final Integer reviewerUserId,
                                @QueryParam("forTrip") final Integer tripId,
-                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page) throws UserNotFoundException, TripNotFoundException {
+                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page,
+                               @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize) throws UserNotFoundException, TripNotFoundException {
         if(reviewerUserId!=null || tripId!=null){
             if(reviewerUserId==null || tripId == null || userId != null){
                 throw new IllegalArgumentException();
             }
             LOGGER.debug("GET request for passenger reviews made by user {} for passengers on trip {}",reviewerUserId,tripId);
-            final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(reviewerUserId,tripId,page,PAGE_SIZE);
+            final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(reviewerUserId,tripId,page,pageSize);
             return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
         }
         if(userId==null){
             throw new IllegalArgumentException();
         }
         LOGGER.debug("GET request for passenger reviews for user {}",userId);
-        final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviews(userId,page,PAGE_SIZE);
+        final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviews(userId,page,pageSize);
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
     }
 
