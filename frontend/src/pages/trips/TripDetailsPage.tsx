@@ -3,6 +3,7 @@ import MainComponent from "@/components/utils/MainComponent";
 import MainHeader from "@/components/utils/MainHeader";
 import { useTranslation } from "react-i18next";
 import StatusTrip from "@/components/statusTrip/ProfileProp";
+import MovingCar from "@/components/location/Location";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -15,6 +16,7 @@ const TripDetailsPage = () => {
           title={t("created_trips.title")}
           left_component={<StatusTrip status="Created" />}
         />
+        <MovingCar />
         <h1>Trip {tripId}</h1>
       </MainComponent>
       <MainComponent>

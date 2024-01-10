@@ -1,0 +1,20 @@
+/* navbarStyles.css */
+
+.location-line {
+  width: 100vw;
+  height: 2.5vw;
+  align-items: end;
+  position: relative;
+  max-width: 40%;
+}
+
+.location-line-content {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.dotted-line {
+  width: 100%;
+  border-bottom: 2px dashed rgb(255, 162, 22);
+}
