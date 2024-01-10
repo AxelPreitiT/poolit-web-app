@@ -67,7 +67,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            header = "Bearer " +  jwtUtils.createToken(user.get());
+            final String baseUrl = httpServletRequest.getScheme()+"://"+httpServletRequest.getServerName()+":"+httpServletRequest.getServerPort()+httpServletRequest.getContextPath();
+            header = "Bearer " +  jwtUtils.createToken(user.get(),baseUrl);
             httpServletResponse.setHeader(BasicAuthFilter.JWT_HEADER,header);
         }
 

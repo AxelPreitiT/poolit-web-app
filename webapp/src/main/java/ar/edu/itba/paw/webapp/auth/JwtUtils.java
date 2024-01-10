@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -65,12 +66,12 @@ public class JwtUtils {
         }
     }
 
-    public String createToken(final User user){
+    public String createToken(final User user, final String baseUrl){
         final Instant instant = Instant.now();
         return JWT.create()
                 .withSubject(encodeEmail(user.getEmail()))
-                .withClaim("role",user.getRole())  //TODO: ver que hacemos cuando se cambia
-                    //TODO: ver de agregar el URL al usuario
+//                .withClaim("role",user.getRole())
+                .withClaim("userUrl",baseUrl+ UrlHolder.USER_BASE +"/"+ user.getUserId())
                 .withIssuedAt(instant)
                 .withExpiresAt(instant.plus(EXPIRY_TIME))
                 .sign(this.algorithm);
