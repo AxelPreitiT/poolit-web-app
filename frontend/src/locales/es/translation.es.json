@@ -26,7 +26,6 @@
     "password": "Contraseña",
     "remember": "Mantener la sesión iniciada",
     "login": "Ingresar",
-    "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
     "success": "¡Iniciaste sesión correctamente!",
     "welcome": "¡Bienvenido de nuevo!",
     "error": "Ocurrió un error al iniciar sesión"
