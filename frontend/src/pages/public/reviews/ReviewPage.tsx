@@ -1,5 +1,3 @@
-import { useParams } from "react-router-dom";
-
 import ProfileImg from "@/components/profile/img/ProfileImg";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
@@ -10,7 +8,6 @@ import ShortReview from "@/components/review/shorts/ShortReview";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
 
 const ReviewPage = () => {
-  let { id } = useParams();
   const { t } = useTranslation();
 
   const user = {
@@ -43,7 +40,7 @@ const ReviewPage = () => {
   return (
     <div className={styles.main_container}>
       <div className={styles.profileCard}>
-        <ProfileImg dim={2} src={ProfilePhoto} />
+        <ProfileImg src={ProfilePhoto} />
         <h3 className="text-center">{user.name}</h3>
         <ProfileProp prop={t("profile.props.trips")} text={user.trips} />
         <ProfileStars

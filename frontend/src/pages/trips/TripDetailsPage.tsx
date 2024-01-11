@@ -1,5 +1,4 @@
 import styles from "./styles.module.scss";
-import { useParams } from "react-router-dom";
 import MainComponent from "@/components/utils/MainComponent";
 import MainHeader from "@/components/utils/MainHeader";
 import { useTranslation } from "react-i18next";
@@ -8,14 +7,13 @@ import StatusComponent from "@/components/statusTrip/StatusTrip";
 import { Trip } from "@/types/Trip";
 import TripInfo from "@/components/tripInfo/TripInfo";
 import { Button } from "react-bootstrap";
-import React, { useState } from "react";
+import { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import PassangerComponent from "@/components/passanger/Passanger";
 import { Passanger as PassangerType } from "@/types/Passanger";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
-  const { tripId } = useParams<{ tripId: string }>();
 
   const options = ["All", "Accepted", "Waiting", "Rejected"];
   const [selectedOption, setSelectedOption] = useState<string>("All");

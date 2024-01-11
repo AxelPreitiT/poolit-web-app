@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
-import { useState } from "react";
 import DriverList from "@/components/profile/ProfileLists/DriverList";
 import PassengerList from "@/components/profile/ProfileLists/PassangerList";
 import TabComponent from "@/components/tab/TabComponent";
