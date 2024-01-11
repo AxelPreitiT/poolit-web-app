@@ -16,6 +16,9 @@ import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.MinField;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,8 +68,8 @@ public class TripController {
                              @QueryParam("destinationCityId") @Valid @CityId final Integer destinationCityId,
                              @QueryParam("startDateTime") @Valid final LocalDateTime startDateTime,
                              @QueryParam("endDateTime") final LocalDateTime endDateTime,
-                             @QueryParam("minPrice") @Valid @Min(value = 0) final BigDecimal minPrice,
-                             @QueryParam("maxPrice") @Valid @Min(value = 0) final BigDecimal maxPrice,
+                             @QueryParam("minPrice") @Valid @MinField(value = 0, fieldName = "minPrice") final BigDecimal minPrice,
+                             @QueryParam("maxPrice") @Valid @MinField(value = 0, fieldName = "maxPrice") final BigDecimal maxPrice,
                              @QueryParam("carFeatures") final List<FeatureCar> carFeatures,
                              @QueryParam("sortType") @DefaultValue("PRICE") final Trip.SortType sortType,
                              @QueryParam("createdBy") final Integer creatorUserId,
@@ -74,8 +77,8 @@ public class TripController {
                              @QueryParam("recommendedFor") final Integer recommendedUserId,
                              @QueryParam("past") final boolean pastTrips,
                              @QueryParam("descending") final boolean descending,
-                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page,
-                             @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize
+                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
+                             @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize
                              ){
         PagedContent<Trip> ans = null;
         if(creatorUserId!=null){
@@ -129,8 +132,8 @@ public class TripController {
                                   @QueryParam("startDateTime") final LocalDateTime startDateTime,
                                   @QueryParam("endDateTime") final LocalDateTime endDateTime,
                                   @QueryParam("passengerState") final Passenger.PassengerState passengerState,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") final int page,
-                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize) throws CustomException {
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
+                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws CustomException {
         LOGGER.debug("GET request for passengers from trip {}",id);
         if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
             //TODO: revisar si esta bien instanciar esto aca!

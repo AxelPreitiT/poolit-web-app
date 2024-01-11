@@ -8,6 +8,8 @@ import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateDriverReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.DriverReviewDto;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -61,8 +62,8 @@ public class DriverReviewController {
     public Response getReviews(@QueryParam("forUser") final Integer userId,
                                @QueryParam("madeBy") final Integer reviewerUserId,
                                @QueryParam("forTrip") final Integer tripId,
-                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page,
-                               @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize) throws UserNotFoundException, TripNotFoundException {
+                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
+                               @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws UserNotFoundException, TripNotFoundException {
         if(reviewerUserId!=null || tripId!=null){
             if(reviewerUserId==null || tripId == null || userId != null){
                 throw new IllegalArgumentException();

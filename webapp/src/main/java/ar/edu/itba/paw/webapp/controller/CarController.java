@@ -13,8 +13,7 @@ import ar.edu.itba.paw.webapp.dto.input.UpdateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateCarReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.CarDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.CarReviewDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageSize;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageType;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.*;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -25,13 +24,11 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path(UrlHolder.CAR_BASE)
@@ -57,6 +54,7 @@ public class CarController {
     }
 
 
+    //TODO: revisar si se quiere paginado
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#userId)")
     public Response getCars(@QueryParam("fromUser")@Valid @NotNull(message = "{dto.validation.fromUser}") Integer userId) throws UserNotFoundException {
@@ -145,8 +143,8 @@ public class CarController {
     public Response getAllReviews(@PathParam("id") final long id,
                                   @QueryParam("madeBy") final Integer reviewerUserId,
                                   @QueryParam("forTrip") final Integer tripId,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Min(0) final int page,
-                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @Min(1) final int pageSize) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
+                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
+                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
         if(reviewerUserId!=null || tripId!=null){
             //request for a user and trip should be made
             if(reviewerUserId==null || tripId==null){
