@@ -43,7 +43,7 @@ const router = createBrowserRouter(
     {
       path: loginPath,
       element: (
-        <RouteWrapper title="login.title">
+        <RouteWrapper title="login.title" showWhenUserIsAuthenticated={false}>
           <LoginPage />
         </RouteWrapper>
       ),
@@ -51,7 +51,10 @@ const router = createBrowserRouter(
     {
       path: registerPath,
       element: (
-        <RouteWrapper title="register.title">
+        <RouteWrapper
+          title="register.title"
+          showWhenUserIsAuthenticated={false}
+        >
           <RegisterPage />
         </RouteWrapper>
       ),
@@ -59,19 +62,29 @@ const router = createBrowserRouter(
     {
       path: verifyAccountPath,
       element: (
-        <RouteWrapper title="verify_account.title">
+        <RouteWrapper
+          title="verify_account.title"
+          showWhenUserIsAuthenticated={false}
+        >
           <VerifyAccountPage />
         </RouteWrapper>
       ),
     },
     {
       path: tripsPath,
-      element: <TripsPage />,
+      element: (
+        <RouteWrapper title="trips.title">
+          <TripsPage />
+        </RouteWrapper>
+      ),
     },
     {
       path: tripDetailsPath,
       element: (
-        <RouteWrapper title="trip_detail.title">
+        <RouteWrapper
+          title="trip_detail.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <TripDetailsPage />,
         </RouteWrapper>
@@ -80,7 +93,10 @@ const router = createBrowserRouter(
     {
       path: profilePath,
       element: (
-        <RouteWrapper title="profile.title">
+        <RouteWrapper
+          title="profile.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <ProfilePage />
         </RouteWrapper>
@@ -89,7 +105,10 @@ const router = createBrowserRouter(
     {
       path: publicsReviewsPath,
       element: (
-        <RouteWrapper title="reviews.title">
+        <RouteWrapper
+          title="reviews.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <ReviewPage />
         </RouteWrapper>
@@ -98,7 +117,10 @@ const router = createBrowserRouter(
     {
       path: publicProfilePath,
       element: (
-        <RouteWrapper title="profile.title">
+        <RouteWrapper
+          title="profile.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <PublicProfilePage />
         </RouteWrapper>
@@ -107,7 +129,10 @@ const router = createBrowserRouter(
     {
       path: reservedTripsPath,
       element: (
-        <RouteWrapper title="reserved_trips.title">
+        <RouteWrapper
+          title="reserved_trips.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <ReservedPage />,
         </RouteWrapper>
@@ -116,7 +141,10 @@ const router = createBrowserRouter(
     {
       path: createdTripsPath,
       element: (
-        <RouteWrapper title="created_trips.title">
+        <RouteWrapper
+          title="created_trips.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <CreatedPage />,
         </RouteWrapper>
@@ -125,7 +153,10 @@ const router = createBrowserRouter(
     {
       path: createTripsPath,
       element: (
-        <RouteWrapper title="create_trip.title">
+        <RouteWrapper
+          title="create_trip.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <CreateTripPage />,
         </RouteWrapper>
@@ -134,7 +165,10 @@ const router = createBrowserRouter(
     {
       path: adminPath,
       element: (
-        <RouteWrapper title="admin.title">
+        <RouteWrapper
+          title="admin.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
           <Navbar />
           <AdminPage />,
         </RouteWrapper>

@@ -182,5 +182,10 @@
         "forbidden": "You do not have permission to perform this operation"
       }
     }
+  },
+  "route": {
+    "error": {
+      "already_authenticated": "You are already logged in"
+    }
   }
 }

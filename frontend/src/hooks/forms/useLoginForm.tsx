@@ -26,7 +26,7 @@ const useLoginForm = () => {
     showSuccessToast("login.success", defaultToastTimeout);
     const from = location.state?.from?.pathname;
     navigate(from || homePath, {
-      replace: !!from,
+      replace: true,
     });
   };
 

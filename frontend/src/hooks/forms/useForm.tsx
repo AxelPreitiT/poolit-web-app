@@ -5,10 +5,9 @@ import { useMutation } from "@tanstack/react-query";
 import { FieldError, FieldValues } from "react-hook-form";
 import { SubmitHandler, useForm as useReactHookForm } from "react-hook-form";
 import { ZodSchema } from "zod";
-import useQueryError from "../errors/useQueryError";
+import useQueryError from "@/hooks/errors/useQueryError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
-
-type ModelType = object | void;
+import { ModelType } from "@/models/ModelType";
 
 export type SubmitHandlerReturnModel<
   F extends FieldValues,
