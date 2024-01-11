@@ -4,6 +4,7 @@ import org.glassfish.jersey.server.validation.ValidationConfig;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.method.P;
 
 import javax.validation.MessageInterpolator;
 import javax.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.ResourceBundle;
 
 //https://www.baeldung.com/spring-validation-message-interpolation
 //https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-resource-bundle-locator
+//https://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-message-interpolation.html#section-custom-message-interpolation
 @Provider
 public class ValidationContextResolver implements ContextResolver<ValidationConfig> {
 
@@ -29,12 +31,14 @@ public class ValidationContextResolver implements ContextResolver<ValidationConf
         private final MessageInterpolator messageInterpolator;
 
         public CustomMessageInterpolator(){
-//            PlatformResourceBundleLocator aux = new PlatformResourceBundleLocator("validation");
-//            ResourceBundle ans = aux.getResourceBundle(Locale.ENGLISH);
+            //Set default locale for messages (and avoid default JVM locale)
+            Locale.setDefault(Locale.ENGLISH);
             messageInterpolator = Validation.byDefaultProvider()
                     .configure()
-//                    .messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("classpath:i18n/ValidationMessages")))
-                    .getDefaultMessageInterpolator();
+                    //Use resource bundle in i18n directory
+                    .messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator("i18n/ValidationMessages")))
+                    .buildValidatorFactory()
+                    .getMessageInterpolator();
         }
 
 

@@ -57,7 +57,6 @@ public class CarController {
     }
 
 
-    //TODO: revisar si se quiere paginado
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#userId)")
     public Response getCars(@QueryParam("fromUser")@Valid @NotNull(message = "{dto.validation.fromUser}") Integer userId) throws UserNotFoundException {

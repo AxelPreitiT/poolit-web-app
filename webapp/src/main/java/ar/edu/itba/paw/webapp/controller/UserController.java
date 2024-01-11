@@ -63,7 +63,6 @@ public class UserController {
     }
 
 
-//    TODO: ver por qué agrega "type" a la respuesta
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_USER_PRIVATE)
