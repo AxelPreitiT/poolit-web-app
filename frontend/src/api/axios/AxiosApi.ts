@@ -33,7 +33,7 @@ class AxiosApi {
     this.AXIOS_INSTANCE.interceptors.response.eject(responseId);
   }
 
-  public static get<Response>(
+  protected static get<Response>(
     url: string,
     config?: AxiosRequestConfig
   ): AxiosPromise<Response> {
@@ -43,7 +43,7 @@ class AxiosApi {
     });
   }
 
-  public static post<Data, Response>(
+  protected static post<Data, Response>(
     url: string,
     data?: Data,
     config?: AxiosRequestConfig
@@ -54,7 +54,7 @@ class AxiosApi {
     });
   }
 
-  public static put<Data, Response>(
+  protected static put<Data, Response>(
     url: string,
     data?: Data,
     config?: AxiosRequestConfig
@@ -65,7 +65,7 @@ class AxiosApi {
     });
   }
 
-  public static delete<Response>(
+  protected static delete<Response>(
     url: string,
     config?: AxiosRequestConfig
   ): AxiosPromise<Response> {
@@ -75,7 +75,7 @@ class AxiosApi {
     });
   }
 
-  public static patch<Data, Response>(
+  protected static patch<Data, Response>(
     url: string,
     data?: Data,
     config?: AxiosRequestConfig
@@ -86,7 +86,7 @@ class AxiosApi {
     });
   }
 
-  public static options<Response>(
+  protected static options<Response>(
     url: string,
     config?: AxiosRequestConfig
   ): AxiosPromise<Response> {

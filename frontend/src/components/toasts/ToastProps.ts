@@ -1,3 +1,5 @@
+import ToastType from "@/enums/ToastType";
+
 export const defaultToastTimeout = 10000;
 
 type ToastProps = {
@@ -6,11 +8,7 @@ type ToastProps = {
   timeout?: number;
   show: boolean;
   onClose: () => void;
-  styles?: {
-    readonly toast: string;
-    readonly toastHeader: string;
-    readonly toastBody: string;
-  };
+  type: ToastType;
 };
 
 export default ToastProps;

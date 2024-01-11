@@ -1,7 +1,7 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import Axios from "./axios";
-import CitiesApi from "../CitiesApi";
 import Jwt from "@/auth/Jwt";
+import UtilsApi from "../UtilsApi";
 
 const unauthorizedHttpStatusCode = 401;
 
@@ -21,7 +21,7 @@ export const AxiosResponseErrorInterceptor = async (error: AxiosError) => {
   if (error.response?.status === unauthorizedHttpStatusCode) {
     const refreshToken = Jwt.getRefreshToken();
     if (refreshToken) {
-      await CitiesApi.getOptions({
+      await UtilsApi.tryAuthentication({
         headers: {
           Authorization: refreshToken,
         },

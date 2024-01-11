@@ -1,3 +1,13 @@
+@use "@/colors.module.scss" as colors;
+
+.error-toast {
+  background-color: colors.$danger-color !important;
+}
+
+.success-toast {
+  background-color: colors.$success-color !important;
+}
+
 %toastHeader {
   display: flex;
   flex-direction: row;
@@ -14,11 +24,21 @@
   overflow: hidden;
 }
 
-%toastBody {
+.error-header {
+  background-color: colors.$danger-color !important;
+  @extend %toastHeader;
+}
+
+.success-header {
+  background-color: colors.$success-color !important;
+  @extend %toastHeader;
+}
+
+.body {
   padding-top: 0.5rem !important;
   padding-bottom: 0.5rem !important;
 }
 
-%toastBody > * {
+.body > * {
   font-size: 0.8rem;
 }

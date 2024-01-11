@@ -1,14 +1,6 @@
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import ToastType from "@/enums/ToastType";
 import { ToastContainer } from "react-bootstrap";
-import ErrorToast from "./ErrorToast/ErrorToast";
-import ToastProps from "./ToastProps";
-import SuccessToast from "./SuccessToast/SuccessToast";
-
-const toastTypeMap: Record<ToastType, React.FC<ToastProps>> = {
-  [ToastType.ERROR]: ErrorToast,
-  [ToastType.SUCCESS]: SuccessToast,
-};
+import Toast from "./Toast";
 
 const GlobalToastStack = () => {
   const { toastStack, closeToast, removeToast } = useToastStackStore();
@@ -17,24 +9,20 @@ const GlobalToastStack = () => {
   return (
     <ToastContainer position="bottom-end" className="mb-2 me-2">
       {toasts.map((toast) => {
-        const ToastComponent = toastTypeMap[toast.type];
-        if (ToastComponent) {
-          return (
-            <ToastComponent
-              title={toast.title}
-              message={toast.message}
-              timeout={toast.timeout}
-              key={toast.id}
-              show={toast.show}
-              onClose={() => {
-                closeToast(toast.id);
-                setTimeout(() => removeToast(toast.id), 500);
-              }}
-            />
-          );
-        }
-        removeToast(toast.id);
-        return null;
+        return (
+          <Toast
+            title={toast.title}
+            message={toast.message}
+            timeout={toast.timeout}
+            key={toast.id}
+            show={toast.show}
+            type={toast.type}
+            onClose={() => {
+              closeToast(toast.id);
+              setTimeout(() => removeToast(toast.id), 500);
+            }}
+          />
+        );
       })}
     </ToastContainer>
   );

@@ -190,5 +190,10 @@
         "forbidden": "No tenés permisos para realizar esta operación"
       }
     }
+  },
+  "route": {
+    "error": {
+      "already_authenticated": "Ya iniciaste sesión"
+    }
   }
 }
