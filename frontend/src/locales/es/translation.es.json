@@ -1,7 +1,9 @@
 {
   "format": {
     "price": "$ {{priceInt}}.{{princeFloat}}",
-    "plate": "Patente:{{carPlate}}"
+    "plate": "Patente:{{carPlate}}",
+    "name": "{{name}} {{surname}}",
+    "date": "( {{date}} )"
   },
   "poolit": {
     "name": "POOLIT",

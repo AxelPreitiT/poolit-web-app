@@ -10,6 +10,8 @@ import TripInfo from "@/components/tripInfo/TripInfo";
 import { Button } from "react-bootstrap";
 import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
+import PassangerComponent from "@/components/passanger/Passanger";
+import { Passanger as PassangerType } from "@/types/Passanger";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -45,6 +47,20 @@ const TripDetailsPage = () => {
     car: {
       imageId: "http://pawserver.it.itba.edu.ar/paw-2023a-07/image/80",
     },
+  };
+
+  const passanger_data: PassangerType = {
+    userId: 2,
+    userImageId: 2,
+    name: "Pedro",
+    surname: "josesito",
+    recurrent: false,
+    startDateString: "fecha",
+    endDateString: "10/03/1029",
+    user: {
+      passengerRating: 3.5,
+    },
+    tripStarted: true,
   };
 
   return (
@@ -128,7 +144,7 @@ const TripDetailsPage = () => {
               })}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
+            <Dropdown.Menu className={styles.dropdown_menu}>
               {options.map((option, index) => (
                 <Dropdown.Item key={index} eventKey={option}>
                   {option}
@@ -136,6 +152,9 @@ const TripDetailsPage = () => {
               ))}
             </Dropdown.Menu>
           </Dropdown>
+        </div>
+        <div className={styles.passangers_container}>
+          <PassangerComponent passanger={passanger_data} />
         </div>
       </MainComponent>
     </div>
