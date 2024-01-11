@@ -5,9 +5,9 @@ import { AxiosPromise } from "axios";
 import Jwt from "@/auth/Jwt";
 import BasicAuth from "@/auth/BasicAuth";
 import UtilsApi from "./UtilsApi";
+import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 
 class UsersApi extends AxiosApi {
-  private static readonly USERS_BASE_PATH: string = "/users";
   private static readonly USERS_PUBLIC_ACCEPT_HEADER: string =
     "application/vnd.user.output.public.v1+json";
   private static readonly USERS_PRIVATE_ACCEPT_HEADER: string =
@@ -31,20 +31,22 @@ class UsersApi extends AxiosApi {
     });
   };
 
-  public static getPublicUserById: (
-    id: number
-  ) => AxiosPromise<UserPublicModel> = (id: number) => {
-    return this.get<UserPublicModel>(`${UsersApi.USERS_BASE_PATH}/${id}`, {
-      headers: {
-        Accept: UsersApi.USERS_PUBLIC_ACCEPT_HEADER,
-      },
-    });
-  };
+  public static getPublicUser: (uri: string) => AxiosPromise<UserPublicModel> =
+    (uri: string) => {
+      return this.get<UserPublicModel>(uri, {
+        headers: {
+          Accept: UsersApi.USERS_PUBLIC_ACCEPT_HEADER,
+        },
+      });
+    };
 
-  public static getPrivateUserById: (
-    id: number
-  ) => AxiosPromise<UserPrivateModel> = (id: number) => {
-    return this.get<UserPrivateModel>(`${UsersApi.USERS_BASE_PATH}/${id}`, {
+  public static getCurrentUser: () => AxiosPromise<UserPrivateModel> = () => {
+    const jwtClaims = Jwt.getJwtClaims();
+    const userUri = jwtClaims?.email;
+    if (!userUri) {
+      throw new CurrentUserUriMissingError();
+    }
+    return this.get<UserPrivateModel>(userUri, {
       headers: {
         Accept: UsersApi.USERS_PRIVATE_ACCEPT_HEADER,
       },

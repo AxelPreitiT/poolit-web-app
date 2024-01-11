@@ -1,5 +1,4 @@
 import { AxiosError, InternalAxiosRequestConfig } from "axios";
-import AuthorizationHeaderMissingError from "@/errors/AuthorizationHeaderMissingError";
 import Jwt from "@/auth/Jwt";
 import ApiLocale from "./ApiLocale";
 
@@ -7,8 +6,7 @@ const localeRequestIntercept: (
   config: InternalAxiosRequestConfig
 ) => InternalAxiosRequestConfig = (config) => {
   const newConfig = { ...config };
-  const headers = newConfig.headers;
-  if (headers && headers["Accept-Language"]) {
+  if (newConfig.headers && newConfig.headers["Accept-Language"]) {
     return newConfig;
   }
   const locale = ApiLocale.getLocale();
@@ -23,26 +21,27 @@ const authRequestIntercept: (
   config: InternalAxiosRequestConfig
 ) => InternalAxiosRequestConfig = (config) => {
   const newConfig = { ...config };
-  const headers = newConfig.headers;
-  if (headers && headers.Authorization) {
+  if (newConfig.headers && newConfig.headers["Authorization"]) {
     return newConfig;
   }
   const authToken = Jwt.getAuthToken();
   if (authToken) {
-    newConfig.headers.Authorization = authToken;
+    newConfig.headers["Authorization"] = authToken;
     return newConfig;
   }
   const refreshToken = Jwt.getRefreshToken();
   if (refreshToken) {
-    newConfig.headers.Authorization = refreshToken;
+    newConfig.headers["Authorization"] = refreshToken;
     return newConfig;
   }
-  throw new AuthorizationHeaderMissingError("Authorization header missing");
+  return newConfig;
 };
 
 export const AxiosRequestInterceptor = (config: InternalAxiosRequestConfig) => {
+  console.log("config pre", config);
   config = localeRequestIntercept(config);
   config = authRequestIntercept(config);
+  console.log("config post", config);
   return config;
 };
 

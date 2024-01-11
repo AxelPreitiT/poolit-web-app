@@ -5,8 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import { FieldError, FieldValues } from "react-hook-form";
 import { SubmitHandler, useForm as useReactHookForm } from "react-hook-form";
 import { ZodSchema } from "zod";
-import useQueryError from "@/hooks/errors/useQueryError";
-import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import { ModelType } from "@/models/ModelType";
 
 export type SubmitHandlerReturnModel<
@@ -35,12 +33,9 @@ const useForm = <
     resolver: zodResolver(formSchema),
   });
 
-  const onQueryError = useQueryError();
-
   const mutation = useMutation<Model, QueryError, F>({
     mutationFn: onSubmit,
     onError: (error: QueryError) => {
-      onQueryError(error, defaultToastTimeout);
       if (onError) {
         onError(error);
       }

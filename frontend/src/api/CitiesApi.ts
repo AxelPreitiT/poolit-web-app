@@ -5,10 +5,10 @@ import AxiosApi from "./axios/AxiosApi";
 class CitiesApi extends AxiosApi {
   private static readonly CITIES_BASE_PATH: string = "/cities";
 
-  public static getCityById: (id: number) => AxiosPromise<CityModel> = (
-    id: number
+  public static getCityById: (uri: string) => AxiosPromise<CityModel> = (
+    uri: string
   ) => {
-    return this.get<CityModel>(`${CitiesApi.CITIES_BASE_PATH}/${id}`);
+    return this.get<CityModel>(uri);
   };
 
   public static getOptions: (options: AxiosRequestConfig) => AxiosPromise = (

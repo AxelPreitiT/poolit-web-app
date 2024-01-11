@@ -1,3 +1,6 @@
+import { jwtDecode } from "jwt-decode";
+import JwtPayload from "./JwtPayload";
+
 class Jwt {
   private static readonly AUTH_TOKEN_KEY: string = "authToken";
   private static readonly REFRESH_TOKEN_KEY: string = "refreshToken";
@@ -56,6 +59,17 @@ class Jwt {
   public static getRememberMe: () => boolean = () => {
     const rememberMe: string | null = localStorage.getItem(Jwt.REMEMBER_ME_KEY);
     return rememberMe ? rememberMe === "true" : false;
+  };
+
+  public static getJwtClaims: () => JwtPayload | null = () => {
+    const authToken = Jwt.getAuthToken();
+    const refreshToken = Jwt.getRefreshToken();
+    if (!authToken && !refreshToken) {
+      return null;
+    }
+    const token = ((authToken || refreshToken) as string).split(" ")[1];
+    const claims = jwtDecode<JwtPayload>(token);
+    return claims;
   };
 }
 
