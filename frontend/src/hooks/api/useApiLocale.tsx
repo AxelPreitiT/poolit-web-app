@@ -7,7 +7,6 @@ const useApiLocale = () => {
 
   useEffect(() => {
     const locale = i18n.language;
-    console.log(locale);
     ApiLocale.setLocale(locale);
   }, [i18n.language]);
 };

@@ -4,8 +4,16 @@ import useToast from "./useToast";
 const useSuccessToast = () => {
   const showToast = useToast();
 
-  const showSuccessToast = (i18nKey: string, timeout?: number) => {
-    showToast(ToastType.SUCCESS, i18nKey, timeout);
+  const showSuccessToast = ({
+    message,
+    timeout,
+    title,
+  }: {
+    message: string;
+    timeout?: number;
+    title?: string;
+  }) => {
+    showToast(ToastType.SUCCESS, { message, timeout, title });
   };
 
   return showSuccessToast;

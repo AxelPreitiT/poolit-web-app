@@ -4,9 +4,9 @@ import AxiosApi from "./axios/AxiosApi";
 
 class UtilsApi extends AxiosApi {
   public static tryAuthentication: (
-    options: AxiosRequestConfig
-  ) => AxiosPromise = (options: AxiosRequestConfig) => {
-    return CitiesApi.getOptions(options);
+    options?: AxiosRequestConfig
+  ) => AxiosPromise = (options?: AxiosRequestConfig) => {
+    return CitiesApi.getOptions(options || {});
   };
 }
 

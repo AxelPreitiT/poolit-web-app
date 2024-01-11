@@ -1,6 +1,7 @@
 import ToastProps from "./ToastProps";
 import { Toast as BToast } from "react-bootstrap";
 import styles from "./styles.module.scss";
+import { useTranslation } from "react-i18next";
 
 const Toast = ({
   onClose,
@@ -9,28 +10,32 @@ const Toast = ({
   message,
   title,
   type,
-}: ToastProps) => (
-  <BToast
-    show={show}
-    delay={timeout}
-    autohide={!!timeout}
-    className={styles[`${type}-toast`]}
-    onClose={onClose}
-  >
-    <BToast.Header
-      className={styles.toastHeader}
-      closeVariant="white"
-      color={styles[`${type}-header`]}
+}: ToastProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <BToast
+      show={show}
+      delay={timeout}
+      autohide={!!timeout}
+      className={styles[`${type}-toast`]}
+      onClose={onClose}
     >
-      <div>
-        <i className="bi bi-exclamation-circle light-text" />
-        <strong className="light-text">{title}</strong>
-      </div>
-    </BToast.Header>
-    <BToast.Body className={styles.body}>
-      <span className="light-text">{message}</span>
-    </BToast.Body>
-  </BToast>
-);
+      <BToast.Header closeVariant="white" className={styles[`${type}-header`]}>
+        <div>
+          <i className="bi bi-exclamation-circle light-text" />
+          <strong className="light-text">
+            {title || t(`toast.${type}.title`)}
+          </strong>
+        </div>
+      </BToast.Header>
+      <BToast.Body className={styles.body}>
+        <span className="light-text">
+          {message || t(`toast.${type}.message`)}
+        </span>
+      </BToast.Body>
+    </BToast>
+  );
+};
 
 export default Toast;

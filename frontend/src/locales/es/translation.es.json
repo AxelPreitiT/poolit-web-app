@@ -30,7 +30,11 @@
     "login": "Ingresar",
     "success": "¡Iniciaste sesión correctamente!",
     "welcome": "¡Bienvenido de nuevo!",
-    "error": "Ocurrió un error al iniciar sesión"
+    "error": {
+      "title": "Inicio de sesión fallido",
+      "default": "Ocurrió un error al iniciar sesión",
+      "unauthorized": "El correo electrónico o la contraseña son inválidos"
+    }
   },
   "register": {
     "title": "Registro",
@@ -60,8 +64,6 @@
     "send": "Enviar"
   },
   "error": {
-    "title": "Ocurrió un error",
-    "label": "La operación no pudo ser completada",
     "email": {
       "required": "El correo electrónico es requerido",
       "invalid": "El correo electrónico es inválido",
@@ -177,7 +179,8 @@
       "error": {
         "unknown": "Ocurrió un error al realizar la operación",
         "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
-        "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión"
+        "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión",
+        "current_user_uri_missing": "La sesión expiró, por favor volvé a iniciar sesión"
       }
     },
     "response": {
@@ -194,6 +197,16 @@
   "route": {
     "error": {
       "already_authenticated": "Ya iniciaste sesión"
+    }
+  },
+  "toast": {
+    "error": {
+      "title": "Ocurrió un error",
+      "message": "La operación no pudo ser completada"
+    },
+    "success": {
+      "title": "¡Éxito!",
+      "message": "La operación se realizó correctamente"
     }
   }
 }

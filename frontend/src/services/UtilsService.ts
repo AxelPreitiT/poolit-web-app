@@ -4,7 +4,7 @@ import Service from "./Service";
 
 class UtilsService extends Service {
   public static async tryAuthentication(
-    options: AxiosRequestConfig
+    options?: AxiosRequestConfig
   ): AxiosPromise {
     return this.resolveQuery(UtilsApi.tryAuthentication(options));
   }

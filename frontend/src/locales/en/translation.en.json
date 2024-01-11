@@ -30,7 +30,11 @@
     "login": "Log in",
     "success": "You have successfully logged in!",
     "welcome": "Welcome back!",
-    "error": "An error occurred while logging in"
+    "error": {
+      "title": "Log in failed",
+      "default": "An error occurred while logging in",
+      "unauthorized": "The email or password are invalid"
+    }
   },
   "register": {
     "title": "Sign up",
@@ -60,8 +64,6 @@
     "send": "Send"
   },
   "error": {
-    "title": "An error occurred",
-    "label": "The operation could not be completed",
     "email": {
       "required": "The email is required",
       "invalid": "Invalid email",
@@ -177,7 +179,8 @@
       "error": {
         "unknown": "An error occurred while performing the operation",
         "invalid_email": "The email cannot have colon (:) characters",
-        "authorization_header_missing": "The session expired, please log in again"
+        "authorization_header_missing": "The session expired, please log in again",
+        "current_user_uri_missing": "The session expired, please log in again"
       }
     },
     "response": {
@@ -194,6 +197,16 @@
   "route": {
     "error": {
       "already_authenticated": "You are already logged in"
+    }
+  },
+  "toast": {
+    "error": {
+      "title": "An error occurred",
+      "message": "The operation could not be completed"
+    },
+    "success": {
+      "title": "Success!",
+      "message": "The operation was completed successfully"
     }
   }
 }

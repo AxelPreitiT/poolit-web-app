@@ -4,17 +4,15 @@ import { useEffect, useState } from "react";
 
 const useAuthentication = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const { isLoading, isError, isSuccess } = useQuery({
     queryKey: ["authentication"],
-    queryFn: UtilsService.tryAuthentication,
+    queryFn: async () => {
+      await UtilsService.tryAuthentication();
+      return isAuthenticated;
+    },
     retry: false,
   });
-
-  useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading]);
 
   useEffect(() => {
     if (isError) {
@@ -25,7 +23,7 @@ const useAuthentication = () => {
     }
   }, [isSuccess, isError]);
 
-  return { isAuthenticated, loading };
+  return { isAuthenticated, isLoading };
 };
 
 export default useAuthentication;
