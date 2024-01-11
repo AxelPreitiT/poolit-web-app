@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                             <div id="footer-price-container" class="footer-container">
-                                <h3 class="secondary-color">$<c:out value="${trip.queryTotalPrice}"/></h3>
+                                <h3 class="secondary-color">$<c:out value="${trip.queryTotalPriceString}"/></h3>
                             </div>
                         </div>
                     </div>

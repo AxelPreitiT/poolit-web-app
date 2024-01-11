@@ -24,6 +24,9 @@ public class MinFieldValidator implements ConstraintValidator<Annotation,Number>
     @Override
     public boolean isValid(Number value, ConstraintValidatorContext context) {
         //this is a simplified version of import org.hibernate.validator.internal.constraintvalidators.bv.MinValidatorForNumber for our use case
+        if(value==null){
+            return true;
+        }
         if (value instanceof BigDecimal){
             return ((BigDecimal) value).compareTo(BigDecimal.valueOf(minValue))>=0;
         }

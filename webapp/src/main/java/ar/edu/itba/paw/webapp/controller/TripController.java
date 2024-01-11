@@ -28,6 +28,7 @@ import org.springframework.stereotype.Component;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -66,7 +67,7 @@ public class TripController {
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId) and @authValidator.checkIfWantedIsSelf(#recommendedUserId)")
     public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,
                              @QueryParam("destinationCityId") @Valid @CityId final Integer destinationCityId,
-                             @QueryParam("startDateTime") @Valid final LocalDateTime startDateTime,
+                             @QueryParam("startDateTime") @Valid @NotNull() final LocalDateTime startDateTime,
                              @QueryParam("endDateTime") final LocalDateTime endDateTime,
                              @QueryParam("minPrice") @Valid @MinField(value = 0, fieldName = "minPrice") final BigDecimal minPrice,
                              @QueryParam("maxPrice") @Valid @MinField(value = 0, fieldName = "maxPrice") final BigDecimal maxPrice,
@@ -105,12 +106,22 @@ public class TripController {
         return Response.created(uri).build();
     }
 
-    //TODO: poner limites de fechas para viaje, y ponerlo en el URL
     @GET
     @Path("/{id}")
-    public Response getById(@PathParam("id") final long id) throws TripNotFoundException, UserNotFoundException {
-        LOGGER.debug("GET request for trip with id {}",id);
-        final Trip trip = tripService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+    public Response getById(@PathParam("id") final long id,
+                            @QueryParam("startDateTime") final LocalDateTime startDateTime,
+                            @QueryParam("endDateTime") final LocalDateTime endDateTime) throws TripNotFoundException, UserNotFoundException {
+        final Trip trip;
+        if(startDateTime!=null || endDateTime!=null){
+            if(startDateTime==null || endDateTime==null){
+                throw new IllegalArgumentException();
+            }
+            LOGGER.debug("GET request for trip with id {} from {} to {}",id,startDateTime,endDateTime);
+            trip = tripService.findById(id,startDateTime,endDateTime).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+        }else {
+            LOGGER.debug("GET request for trip with id {}",id);
+            trip = tripService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+        }
         final User user = userService.getCurrentUser().orElse(null);
         final Passenger currentUserPassenger = user!=null?tripService.getPassenger(id,user.getUserId()).orElse(null):null;
         return Response.ok(TripDto.fromTrip(uriInfo,trip,user,currentUserPassenger)).build();
@@ -124,7 +135,6 @@ public class TripController {
         return Response.ok().build();
     }
 
-    //TODO: dejarlo aca para los pasajeros, pero moverlo tambien al findById para precio o inicio/fin para la persona
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#startDateTime,#endDateTime,#passengerState)")

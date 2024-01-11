@@ -11,8 +11,6 @@ import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
@@ -249,10 +247,10 @@ public class Trip {
         return (int) queryStartDateTime.until(queryEndDateTime, ChronoUnit.DAYS) / 7 + 1;
     }
 
-    public double getQueryPrice(){
+    public double getQueryTotalPrice(){
         return price * getQueryTotalTrips();
     }
-    public String getQueryTotalPrice() {
+    public String getQueryTotalPriceString() {
         return String.format("%.2f",price * getQueryTotalTrips());
     }
 

@@ -18,7 +18,10 @@ public class TripDto {
     private URI carUri;
     private URI driverUri;
     private long maxSeats;
-    private double price;
+    private double pricePerTrip;
+    private double totalPrice;
+    private int totalTrips;
+    private int occupiedSeats;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
@@ -48,7 +51,10 @@ public class TripDto {
         ans.originAddress = trip.getOriginAddress();
         ans.destinationAddress = trip.getDestinationAddress();
         ans.maxSeats = trip.getMaxSeats();
-        ans.price = trip.getPrice();
+        ans.pricePerTrip = trip.getPrice();
+        ans.totalPrice = trip.getQueryTotalPrice();
+        ans.totalTrips = trip.getQueryTotalTrips();
+        ans.occupiedSeats = trip.getOccupiedSeats();
         ans.startDateTime = trip.getStartDateTime();
         ans.endDateTime = trip.getEndDateTime();
         ans.queryEndDateTime = trip.getQueryStartDateTime();
@@ -57,8 +63,7 @@ public class TripDto {
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
         ans.originCityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(trip.getOriginCity().getId())).build();
         ans.destinationCityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(trip.getDestinationCity().getId())).build();
-        //TODO: ver si pongo los límites de búsqueda en la URI
-        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).build();
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).queryParam("startDateTime",trip.getQueryStartDateTime()).queryParam("endDateTime",trip.getQueryEndDateTime()).build();
         return ans;
     }
 
@@ -118,12 +123,12 @@ public class TripDto {
         this.maxSeats = maxSeats;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPricePerTrip() {
+        return pricePerTrip;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPricePerTrip(double pricePerTrip) {
+        this.pricePerTrip = pricePerTrip;
     }
 
     public LocalDateTime getStartDateTime() {
@@ -180,5 +185,29 @@ public class TripDto {
 
     public void setPassengerUri(URI passengerUri) {
         this.passengerUri = passengerUri;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public int getTotalTrips() {
+        return totalTrips;
+    }
+
+    public void setTotalTrips(int totalTrips) {
+        this.totalTrips = totalTrips;
+    }
+
+    public int getOccupiedSeats() {
+        return occupiedSeats;
+    }
+
+    public void setOccupiedSeats(int occupiedSeats) {
+        this.occupiedSeats = occupiedSeats;
     }
 }
