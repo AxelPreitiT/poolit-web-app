@@ -1,4 +1,3 @@
-import Image from "react-bootstrap/Image";
 import styles from "./styles.module.scss";
 
 interface EmptyListProps {

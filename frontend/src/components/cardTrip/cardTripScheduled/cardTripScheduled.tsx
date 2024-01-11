@@ -1,11 +1,8 @@
 import styles from "./styles.module.scss";
-import { useTranslation } from "react-i18next";
 import { Trip } from "@/types/Trip";
 import CardTrip from "../cardTrip/CardTrip";
 
 const CardTripScheduled = (Trip: Trip) => {
-  const { t } = useTranslation();
-
   return (
     <div>
       <div className={styles.short_date}>
