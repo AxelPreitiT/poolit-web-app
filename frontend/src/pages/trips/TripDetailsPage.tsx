@@ -7,10 +7,22 @@ import Location from "@/components/location/Location";
 import StatusComponent from "@/components/statusTrip/StatusTrip";
 import { Trip } from "@/types/Trip";
 import TripInfo from "@/components/tripInfo/TripInfo";
+import { Button } from "react-bootstrap";
+import React, { useState } from "react";
+import Dropdown from "react-bootstrap/Dropdown";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
   const { tripId } = useParams<{ tripId: string }>();
+
+  const options = ["All", "Accepted", "Waiting", "Rejected"];
+  const [selectedOption, setSelectedOption] = useState<string>("All");
+
+  const handleSelect = (eventKey: string | null) => {
+    if (eventKey !== null) {
+      setSelectedOption(eventKey);
+    }
+  };
 
   const trip: Trip = {
     tripId: 1,
@@ -65,11 +77,66 @@ const TripDetailsPage = () => {
           </div>
         </div>
 
-        <h1>Trip {tripId}</h1>
+        <div className={styles.end_container}>
+          <div className={styles.status_trip}>
+            <div className={styles.info_container}>
+              <h3>Income:</h3>
+              <div className={styles.price_container}>
+                <h3>
+                  {t("format.price", {
+                    priceInt: trip.integerQueryTotalPrice,
+                    princeFloat: trip.decimalQueryTotalPrice,
+                  })}
+                </h3>
+                <span style={{ color: "gray", fontStyle: "italic" }}>
+                  4 viajes
+                </span>
+              </div>
+            </div>
+            <div className={styles.info_container}>
+              <h3>Status:</h3>
+              <StatusComponent
+                text={"Accepted"}
+                icon={"bi bi-clock-history"}
+                color={"success"}
+              />
+            </div>
+          </div>
+          <div className={styles.btn_container}>
+            <Button className={styles.btn_trips}>
+              <div className={styles.create_trip_btn}>
+                <i className="bi bi-car-front-fill light-text"></i>
+                <span>{t("trip_detail.btn.my_trips")}</span>
+              </div>
+            </Button>
+            <Button className={styles.btn_cancel}>
+              <div className={styles.create_trip_btn}>
+                <i className="bi bi-x light-text"></i>
+                <span>{t("trip_detail.btn.cancel")}</span>
+              </div>
+            </Button>
+          </div>
+        </div>
       </MainComponent>
       <MainComponent>
-        <MainHeader title={t("created_trips.title")} />
-        <h1>Trip {tripId}</h1>
+        <MainHeader title={t("trip_detail.passengers")} />
+        <div className={styles.dropdown_style}>
+          <Dropdown onSelect={handleSelect}>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              {t("trip_detail.filter_by", {
+                status: selectedOption,
+              })}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              {options.map((option, index) => (
+                <Dropdown.Item key={index} eventKey={option}>
+                  {option}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       </MainComponent>
     </div>
   );

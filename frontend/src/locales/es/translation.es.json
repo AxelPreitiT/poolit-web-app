@@ -155,6 +155,7 @@
   "trip_detail": {
     "title": "Viaje",
     "header": "Detalle de viaje",
+    "passengers": "Pasajeros",
     "status": {
       "cancelled": "Cancelado",
       "accepted": "Aceptado",
@@ -162,7 +163,12 @@
       "finished": "completado",
       "not_started": "No comenzado",
       "in_progress": "En progreso"
-    }
+    },
+    "btn": {
+      "my_trips": "Mis viajes",
+      "cancel": "Cancelar viaje"
+    },
+    "filter_by": "Filtrados por estado: {{priceInt}}"
   },
   "query": {
     "request": {

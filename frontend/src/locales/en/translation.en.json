@@ -155,6 +155,7 @@
   "trip_detail": {
     "title": "Trip",
     "header": "Trip details",
+    "passengers": "Passengers",
     "status": {
       "cancelled": "Cancelled",
       "accepted": "Accepted",
@@ -162,7 +163,12 @@
       "finished": "Finished",
       "not_started": "Not started",
       "in_progress": "In progress"
-    }
+    },
+    "btn": {
+      "my_trips": "My trips",
+      "cancel": "Cancel trip"
+    },
+    "filter_by": "Filter by status: {{status}}"
   },
   "query": {
     "request": {
