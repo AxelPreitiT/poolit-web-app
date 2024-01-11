@@ -1,24 +1,20 @@
+import RequestError from "@/errors/RequestError";
 import ResponseErrorDispatcher from "@/errors/ResponseErrorDispatcher";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import ErrorModel from "@/models/ErrorModel";
 import { AxiosError, AxiosPromise } from "axios";
 
-const OkHttpStatusCode = 200;
-
 abstract class Service {
   protected static async resolveQuery<Model = void>(
     query: AxiosPromise<Model>
-  ): AxiosPromise<Model> {
+  ): Promise<Model> {
     try {
       const response = await query;
-      if (response.status === OkHttpStatusCode) {
-        return response;
-      }
-      throw ResponseErrorDispatcher.dispatch(
-        response.status,
-        (response.data as ErrorModel)?.message
-      );
+      return response.data;
     } catch (error) {
+      if (error instanceof RequestError) {
+        throw error;
+      }
       if (error instanceof AxiosError && error.response) {
         throw ResponseErrorDispatcher.dispatch(
           error.response.status,

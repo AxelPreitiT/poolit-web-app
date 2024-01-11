@@ -33,7 +33,7 @@
     "error": {
       "title": "Log in failed",
       "default": "An error occurred while logging in",
-      "unauthorized": "The email or password are invalid"
+      "unauthorized": "The email or password is invalid"
     }
   },
   "register": {

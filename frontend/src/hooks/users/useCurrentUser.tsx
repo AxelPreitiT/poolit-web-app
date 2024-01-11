@@ -2,8 +2,8 @@ import UserService from "@/services/UserService";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import useQueryError from "../errors/useQueryError";
-import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import QueryError from "@/errors/QueryError";
 
 export const useCurrentUser = () => {
   const { isLoading, isError, data, error } = useQuery({
@@ -17,7 +17,7 @@ export const useCurrentUser = () => {
   useEffect(() => {
     if (isError) {
       onQueryError({
-        error: error as CurrentUserUriMissingError,
+        error: error as QueryError,
         timeout: defaultToastTimeout,
       });
     }

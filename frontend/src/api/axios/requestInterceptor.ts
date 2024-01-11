@@ -1,6 +1,7 @@
 import { AxiosError, InternalAxiosRequestConfig } from "axios";
 import Jwt from "@/auth/Jwt";
 import ApiLocale from "./ApiLocale";
+import AuthorizationHeaderMissingError from "@/errors/AuthorizationHeaderMissingError";
 
 const localeRequestIntercept: (
   config: InternalAxiosRequestConfig
@@ -34,14 +35,12 @@ const authRequestIntercept: (
     newConfig.headers["Authorization"] = refreshToken;
     return newConfig;
   }
-  return newConfig;
+  throw new AuthorizationHeaderMissingError();
 };
 
 export const AxiosRequestInterceptor = (config: InternalAxiosRequestConfig) => {
-  console.log("config pre", config);
   config = localeRequestIntercept(config);
   config = authRequestIntercept(config);
-  console.log("config post", config);
   return config;
 };
 

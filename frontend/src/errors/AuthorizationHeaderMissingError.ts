@@ -4,7 +4,7 @@ class AuthorizationHeaderMissingError extends RequestError {
   private static readonly I18N_KEY: string =
     "query.request.error.authorization_header_missing";
 
-  constructor(message: string) {
+  constructor(message: string = "AuthorizationHeaderMissingError") {
     super(AuthorizationHeaderMissingError.I18N_KEY, message);
   }
 }

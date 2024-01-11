@@ -35,7 +35,6 @@ const useRouteAuthentication = ({
     if (isLoading) {
       return;
     }
-    console.log("isAuthenticated", isAuthenticated);
     if (isAuthenticated && !showWhenUserIsAuthenticated) {
       onError("route.error.already_authenticated", homePath);
     } else if (!isAuthenticated && !showWhenUserIsNotAuthenticated) {
