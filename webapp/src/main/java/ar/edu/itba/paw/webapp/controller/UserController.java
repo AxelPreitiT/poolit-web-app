@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
@@ -83,12 +80,20 @@ public class UserController {
         return Response.created(uri).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
-    @Produces( value = { MediaType.APPLICATION_JSON } )
+    @Consumes(value = VndType.APPLICATION_USER_PRIVATE)
     public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserDto userForm) throws UserNotFoundException, CityNotFoundException {
         LOGGER.debug("PUT request to update user with userId {}",id);
         userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale());
+        return Response.noContent().build();
+    }
+    @PATCH
+    @Path("/{id}/")
+    @Consumes( value = { VndType.APPLICATION_USER_ROLE } )
+    public Response modifyRole(@PathParam("id") final long id, @Valid final UserRoleDto userRoleDto) throws UserNotFoundException, RoleAlreadyChangedException {
+        LOGGER.debug("PUT request for role of user with userId {}",id);
+        userService.changeRole(id,userRoleDto.getRole());
         return Response.noContent().build();
     }
 
@@ -113,32 +118,5 @@ public class UserController {
         userService.updateUserImage(id,image);
         return Response.noContent().contentLocation(uriInfo.getBaseUriBuilder().path(String.valueOf(id)).path("image/").build()).build();
     }
-
-    @GET
-    @Path("/{id}/role")
-    @Produces( value = { MediaType.APPLICATION_JSON } )
-    public Response getRole(@PathParam("id") final long id) throws UserNotFoundException{
-        LOGGER.debug("GET request for role of user with userId {}",id);
-        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(UserRoleDto.fromString(user.getRole())).build();
-    }
-
-    @PUT
-    @Path("/{id}/role")
-    @Produces( value = { VndType.APPLICATION_USER_ROLE } )
-    public Response modifyRole(@PathParam("id") final long id, @Valid final UserRoleDto userRoleDto) throws UserNotFoundException{
-        LOGGER.debug("PUT request for role of user with userId {}",id);
-        userService.changeRole(id,userRoleDto.getRole());
-        return Response.noContent().build();
-    }
-
-//    @GET
-//    @Path("/{id}")
-//    @Produces(VndType.APPLICATION_USER_PASSENGER)
-////    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
-//    public Response getByIdPassenger(@PathParam("id") final long id) throws UserNotFoundException{
-//        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-//        return Response.ok(UserDto.fromUser(uriInfo,user)).build();
-//    }
 
 }

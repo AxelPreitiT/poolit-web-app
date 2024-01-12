@@ -172,10 +172,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeRole(final long userId, final String role) throws UserNotFoundException {
+    public void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException {
         User user = findById(userId).orElseThrow(UserNotFoundException::new);
         if(!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())){
             throw new IllegalArgumentException();
+        }
+        if(!user.getRole().equals(UserRole.USER.getText())){
+            //role has already been changed
+            throw new RoleAlreadyChangedException();
         }
         userDao.changeRole(user.getUserId(), role);
     }

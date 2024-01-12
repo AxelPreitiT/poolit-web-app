@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto.output.user;
 
 
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
 import javax.ws.rs.core.UriInfo;
@@ -16,11 +17,11 @@ public class PrivateUserDto extends PublicUserDto{
 
     private String phone;
 
+    private String role;
+
     private URI cityUri;
 
     private String mailLocale;
-
-    private URI roleUri;
 
     private URI recommendedTripsUri;
 
@@ -40,7 +41,7 @@ public class PrivateUserDto extends PublicUserDto{
         this.phone = user.getPhone();
         this.cityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(user.getBornCity().getId())).build();
         this.mailLocale = user.getMailLocale().getLanguage();
-        this.roleUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).path("role/").build();
+        this.role = user.getRole();
         //We use recommendedFor and not pass the filters here to maintain the recommendation logic in the service
         this.recommendedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("recommendedFor",user.getUserId()).build();
         this.pastCreatedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("createdBy",user.getUserId()).queryParam("past",true).build();
@@ -83,13 +84,12 @@ public class PrivateUserDto extends PublicUserDto{
     public void setMailLocale(String mailLocale) {
         this.mailLocale = mailLocale;
     }
-
-    public URI getRoleUri() {
-        return roleUri;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleUri(URI roleUri) {
-        this.roleUri = roleUri;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public URI getRecommendedTripsUri() {

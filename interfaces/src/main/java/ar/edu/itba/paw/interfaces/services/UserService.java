@@ -26,7 +26,7 @@ public interface UserService {
 
     void changeToDriver() throws UserNotFoundException;
 
-    void changeRole(final long userId, final String role) throws UserNotFoundException;
+    void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException;
 
     void confirmRegister(String token)throws InvalidTokenException;
 
