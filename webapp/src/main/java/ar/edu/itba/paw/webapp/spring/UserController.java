@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.webapp.spring;
 
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.webapp.form.CreateUserForm;
 import ar.edu.itba.paw.webapp.form.UpdateUserForm;
 import ar.edu.itba.paw.webapp.form.*;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -245,9 +242,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register/confirm")
-    public ModelAndView confirmRegistration(@RequestParam("token") final String token) {
+    public ModelAndView confirmRegistration(@RequestParam("token") final String token) throws InvalidTokenException {
 
-        if (userService.confirmRegister(token)) {
+//        if (userService.confirmRegister(token)) {
+        if(true){
             return new ModelAndView("redirect:/");
         }
         final ModelAndView mav = new ModelAndView("/users/sendToken");

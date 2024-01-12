@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.DriverReviewService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.reviews.DriverReview;
+import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateDriverReviewDto;
@@ -43,6 +44,7 @@ public class DriverReviewController {
     }
 
     @POST
+    @Consumes(value = VndType.APPLICATION_REVIEW_DRIVER)
     public Response createReview(@Valid final CreateDriverReviewDto createDriverReviewDto) throws UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {
         LOGGER.debug("POST request to add a driver review for trip {} to driver {}",createDriverReviewDto.getTripId(),createDriverReviewDto.getDriverId());
         final DriverReview driverReview = driverReviewService.createDriverReview(createDriverReviewDto.getTripId(),createDriverReviewDto.getDriverId(),createDriverReviewDto.getRating(),createDriverReviewDto.getComment(),createDriverReviewDto.getOption());
@@ -51,6 +53,7 @@ public class DriverReviewController {
 
     @GET
     @Path("/{id}")
+    @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
     public Response getReview(@PathParam("id") final long id) throws ReviewNotFoundException {
         LOGGER.debug("GET request for passenger review with id {}",id);
         final DriverReview driverReview = driverReviewService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
@@ -59,6 +62,7 @@ public class DriverReviewController {
 
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
     public Response getReviews(@QueryParam("forUser") final Integer userId,
                                @QueryParam("madeBy") final Integer reviewerUserId,
                                @QueryParam("forTrip") final Integer tripId,

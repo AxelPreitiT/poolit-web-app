@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
+import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
@@ -65,6 +66,7 @@ public class TripController {
 
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId) and @authValidator.checkIfWantedIsSelf(#recommendedUserId)")
+    @Produces(value = VndType.APPLICATION_TRIP)
     public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,
                              @QueryParam("destinationCityId") @Valid @CityId final Integer destinationCityId,
                              @QueryParam("startDateTime") @Valid @NotNull() final LocalDateTime startDateTime,
@@ -99,6 +101,7 @@ public class TripController {
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,TripDto::fromTrip,TripDto.class);
     }
     @POST
+    @Consumes(value = VndType.APPLICATION_TRIP)
     public Response createTrip(@Valid CreateTripDto dto) throws UserNotFoundException, CarNotFoundException, CityNotFoundException {
         LOGGER.debug("POST request to create trip");
         final Trip trip = tripService.createTrip(dto.getOriginCityId(),dto.getOriginAddress(),dto.getDestinationCityId(),dto.getDestinationAddress(),dto.getCarId(),dto.getDate(),dto.getTime(), dto.getPrice(),dto.getMaxSeats(),dto.getLastDate(),dto.getTime());
@@ -108,6 +111,7 @@ public class TripController {
 
     @GET
     @Path("/{id}")
+    @Produces(value = VndType.APPLICATION_TRIP)
     public Response getById(@PathParam("id") final long id,
                             @QueryParam("startDateTime") final LocalDateTime startDateTime,
                             @QueryParam("endDateTime") final LocalDateTime endDateTime) throws TripNotFoundException, UserNotFoundException {
@@ -138,6 +142,7 @@ public class TripController {
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#startDateTime,#endDateTime,#passengerState)")
+    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response getPassengers(@PathParam("id") final long id,
                                   @QueryParam("startDateTime") final LocalDateTime startDateTime,
                                   @QueryParam("endDateTime") final LocalDateTime endDateTime,
@@ -155,6 +160,7 @@ public class TripController {
 
     @POST
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
         LOGGER.debug("POST request to add passenger for trip {}",id);
         //TODO: preguntar si está bien tomar el contexto de auth acá
@@ -166,6 +172,7 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     //si no ver como limitar el estado para los otros
     public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException, PassengerNotFoundException {
         LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
@@ -176,6 +183,7 @@ public class TripController {
 //    https://www.rfc-editor.org/rfc/rfc5789
     @PATCH
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+    @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER_STATE)
     public Response acceptOrRejectPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId, @Valid PatchPassengerDto dto) throws UserNotFoundException, PassengerAlreadyProcessedException, PassengerNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("PATCH request to passenger {} from trip {}",userId,id);
         tripService.acceptOrRejectPassenger(id,userId,dto.getPassengerState());

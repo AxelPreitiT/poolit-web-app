@@ -57,6 +57,7 @@ public class CarController {
     //TODO: revisar si se quiere paginado
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#userId)")
+    @Produces(value = VndType.APPLICATION_CAR)
     public Response getCars(@QueryParam("fromUser")@Valid @NotNull(message = "{dto.validation.fromUser}") Integer userId) throws UserNotFoundException {
         LOGGER.debug("GET request for cars from user {}",userId);
         final List<CarDto> cars = carService.findUserCars(userId).stream().map(car -> CarDto.fromCar(uriInfo,car)).collect(Collectors.toList());
@@ -74,7 +75,7 @@ public class CarController {
 
 
     @POST
-    @Consumes( value = {MediaType.APPLICATION_JSON})
+    @Consumes( value = VndType.APPLICATION_CAR)
     public Response createCar(@Valid final CreateCarDto carDto) throws UserNotFoundException {
         LOGGER.debug("POST request to create car");
         final Car car = carService.createCar(carDto.getPlate(), carDto.getCarInfo(), new byte[0], carDto.getSeats(),carDto.getCarBrand(),
@@ -86,7 +87,8 @@ public class CarController {
     @PUT
     @Path("/{id}")
     @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
-    @Produces( value = { MediaType.APPLICATION_JSON } )
+    @Consumes(value = VndType.APPLICATION_CAR)
+    //TODO: revisar @Produces en estos casos
     public Response modifyCar(@PathParam("id") final long id, @Valid final UpdateCarDto updateCarDto) throws CarNotFoundException {
         LOGGER.debug("PUT request to update car with carId {}",id);
         carService.modifyCar(id, updateCarDto.getCarInfo(), updateCarDto.getSeats(), updateCarDto.getFeatures(), new byte[0]);
@@ -118,6 +120,7 @@ public class CarController {
     //Add a review
     @POST
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
+    @Consumes(value = VndType.APPLICATION_CAR_REVIEW)
     public Response addReview(@PathParam("id") final long id,
                               @Valid final CreateCarReviewDto createCarReviewDto) throws UserNotFoundException, PassengerNotFoundException, CarNotFoundException, TripNotFoundException {
         LOGGER.debug("POST request to add a review for car {} on trip {}",id,createCarReviewDto.getTripId());
@@ -129,6 +132,7 @@ public class CarController {
     //Get one review
     @GET
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId}")
+    @Produces(value = VndType.APPLICATION_CAR_REVIEW)
     public Response getReview(@PathParam("id") final long id,
                               @PathParam("reviewId") final long reviewId) throws ReviewNotFoundException {
         LOGGER.debug("GET request for review for car {} with reviewId {}",id,reviewId);
@@ -140,6 +144,7 @@ public class CarController {
     @GET
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    @Produces(value = VndType.APPLICATION_CAR_REVIEW)
     public Response getAllReviews(@PathParam("id") final long id,
                                   @QueryParam("madeBy") final Integer reviewerUserId,
                                   @QueryParam("forTrip") final Integer tripId,

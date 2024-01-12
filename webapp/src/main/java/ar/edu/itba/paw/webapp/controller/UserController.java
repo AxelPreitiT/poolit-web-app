@@ -71,7 +71,8 @@ public class UserController {
     }
 
     @POST
-    @Consumes( value = {MediaType.APPLICATION_JSON})
+    //TODO: preguntar si el MIME type cambia si recibe parámetros distintos
+    @Consumes( value = VndType.APPLICATION_USER)
     public Response createUser(@Valid final CreateUserDto userDto) throws EmailAlreadyExistsException, CityNotFoundException {
         LOGGER.debug("POST request to create user");
         final User user = userService.createUser(userDto.getUsername(), userDto.getSurname(), userDto.getEmail(), userDto.getPhone(),
@@ -82,7 +83,8 @@ public class UserController {
 
     @PATCH
     @Path("/{id}")
-    @Consumes(value = VndType.APPLICATION_USER_PRIVATE)
+    @Consumes(value = VndType.APPLICATION_USER)
+    //TODO: revisar si realmente es un patch, o si deberia dejar que se pasen sólo algunos
     public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserDto userForm) throws UserNotFoundException, CityNotFoundException {
         LOGGER.debug("PUT request to update user with userId {}",id);
         userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale());

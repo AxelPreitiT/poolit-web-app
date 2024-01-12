@@ -45,7 +45,7 @@ public class ReportController {
         return TRIP_PATH_REDIRECT + tripId + REPORT_ERROR_QUERY_PARAM;
     }
 
-
+    //reporta a un pasajero
     @RequestMapping(value = TRIP_PASSENGERS_REPORT_PATH, method = RequestMethod.POST)
     public ModelAndView reportPassenger(
             @PathVariable("tripId") final long tripId,
@@ -60,6 +60,8 @@ public class ReportController {
         reportService.createReport(passengerId, tripId, reportForm.getComment(), reportForm.getRelation(), reportForm.getReason());
         return new ModelAndView(getTripRedirectPath(tripId));
     }
+
+    //reporta a un conductor
 
     @RequestMapping(value = TRIP_DRIVERS_REPORT_PATH, method = RequestMethod.POST)
     public ModelAndView reportDriver(
