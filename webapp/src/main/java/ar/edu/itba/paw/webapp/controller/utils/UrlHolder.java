@@ -15,4 +15,14 @@ public class UrlHolder {
     public static final String TRIPS_BASE = BASE + "/trips";
     public static final String TRIPS_PASSENGERS = "/passengers";
 
+    //    --------Reviews--------
+    public static final String DRIVER_REVIEWS_BASE = BASE + "/driver-reviews";
+
+    public static final String PASSENGER_REVIEWS_BASE = BASE + "/passenger-reviews";
+
+    //    --------Others--------
+    public static final String IMAGE_ENTITY = "/image";
+
+    public static final String REVIEWS_ENTITY = "/reviews";
+
 }

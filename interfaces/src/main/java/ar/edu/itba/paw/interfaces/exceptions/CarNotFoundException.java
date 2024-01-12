@@ -9,4 +9,8 @@ public class CarNotFoundException extends CustomException{
     public CarNotFoundException(){
         super(MESSAGE_CODE);
     }
+
+    public CarNotFoundException(final int httpStatusCode){
+        super(MESSAGE_CODE,httpStatusCode);
+    }
 }

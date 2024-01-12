@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,12 +48,12 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
     @Transactional
     @Override
     public PassengerReview createPassengerReview(long tripId, long reviewedId, int rating, String comment, PassengerReviewOptions option) throws UserNotLoggedInException, TripNotFoundException, UserNotFoundException, PassengerNotFoundException {
-        User reviewer = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        User userReviewed = userService.findById(reviewedId).orElseThrow(UserNotFoundException::new);
-        Passenger reviewed = tripService.getPassenger(trip,userReviewed).orElseThrow(RuntimeException::new);
+        final User reviewer = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        final User userReviewed = userService.findById(reviewedId).orElseThrow(UserNotFoundException::new);
+        final Passenger reviewed = tripService.getPassenger(trip,userReviewed).orElseThrow(PassengerNotFoundException::new);
         if(!canReviewPassenger(trip, reviewed)) {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to review passenger with id {}, but it's not finished yet or was already reviewed", reviewer.getUserId(), reviewed.getUserId(), e);
             throw e;
         }
@@ -61,22 +62,36 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     @Transactional
     @Override
+    public Optional<PassengerReview> findById(final long reviewId){
+        return passengerReviewDao.findById(reviewId);
+    }
+
+    @Transactional
+    @Override
     public double getPassengerRating(long userId) throws UserNotFoundException {
-        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return passengerReviewDao.getPassengerRating(user);
     }
     @Transactional
     @Override
     public double getPassengerRatingOwnUser() throws UserNotLoggedInException {
-        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+        final User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
         return passengerReviewDao.getPassengerRating(user);
     }
 
     @Transactional
     @Override
     public PagedContent<PassengerReview> getPassengerReviews(long userId, int page, int pageSize) throws UserNotFoundException {
-        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         return passengerReviewDao.getPassengerReviews(user, page, pageSize);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<PassengerReview> getPassengerReviewsMadeByUserOnTrip(final long reviewerUserid, final long tripId, final int page, final  int pageSize) throws UserNotFoundException, TripNotFoundException {
+        final User reviewer = userService.findById(reviewerUserid).orElseThrow(UserNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        return passengerReviewDao.getPassengerReviewsMadeByUserOnTrip(reviewer,trip,page,pageSize);
     }
 
     @Transactional
@@ -96,7 +111,7 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
             final Passenger reviewerPassenger = tripService.getPassenger(trip.getTripId(), reviewer).orElseThrow(PassengerNotFoundException::new);
             return canPassengerReviewPassenger(reviewerPassenger, reviewed);
         } else {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("User with id {} tried to review passenger with id {}, but he is not a passenger nor the driver in the trip", reviewer.getUserId(), reviewed.getUserId(), e);
             throw e;
         }

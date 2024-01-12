@@ -63,6 +63,7 @@ public class ReviewController {
         return TRIP_PATH_REDIRECT + tripId + ERROR_QUERY_PARAM;
     }
 
+    //agrega una review para un pasajero
     @RequestMapping(value = TRIP_PASSENGERS_REVIEW_PATH, method = RequestMethod.POST)
     public ModelAndView reviewPassenger(
             @PathVariable("tripId") final long tripId,
@@ -78,7 +79,7 @@ public class ReviewController {
         return new ModelAndView(getTripRedirectPath(tripId));
     }
 
-
+    //agrega una review para un conductor
     @RequestMapping(value = TRIP_DRIVERS_REVIEW_PATH, method = RequestMethod.POST)
     public ModelAndView reviewDriver(
             @PathVariable("tripId") final long tripId,
@@ -94,7 +95,7 @@ public class ReviewController {
         return new ModelAndView(getTripRedirectPath(tripId));
     }
 
-
+    //agrega una review para un auto
     @RequestMapping(value = TRIP_CARS_REVIEW_PATH, method = RequestMethod.POST)
     public ModelAndView reviewCar(
             @PathVariable("tripId") final long tripId,
@@ -110,6 +111,7 @@ public class ReviewController {
         return new ModelAndView(getTripRedirectPath(tripId));
     }
 
+    //Obtiene la lista de reseñas como pasajero
 
     @RequestMapping(value = PASSENGER_REVIEW_PATH, method = RequestMethod.GET)
     public ModelAndView showPassengerReviews(
@@ -125,6 +127,8 @@ public class ReviewController {
         mav.addObject("hasReviewsAsDriver", !reviewsAsDriver.getElements().isEmpty());
         return addUserReviewProperties(mav, user);
     }
+
+    //Obtiene la lista de reseñas como conductor
 
     @RequestMapping(value = DRIVER_REVIEW_PATH, method = RequestMethod.GET)
     public ModelAndView showDriverReviews(

@@ -17,6 +17,8 @@ public class ControllerUtils {
 
     public static final String PAGE_QUERY_PARAM = "page";
 
+    public static final String PAGE_SIZE_QUERY_PARAM = "pageSize";
+
     private static final String TOTAL_PAGES_HEADER = "X-Total-Pages";
 
     public static <T> Supplier<T> notFoundExceptionOf(Function<Integer,T> constructor){

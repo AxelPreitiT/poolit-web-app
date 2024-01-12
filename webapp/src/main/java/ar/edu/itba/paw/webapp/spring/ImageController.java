@@ -23,11 +23,13 @@ public class ImageController {
         this.imageService = imageService;
     }
 
+    //TODO: delete
     @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET, produces = "image/*")
     public @ResponseBody
     byte[] getImage(@PathVariable("imageId") final int imageId) throws ImageNotFoundException, IOException, URISyntaxException {
         LOGGER.debug("GET Request to /image/{}", imageId);
-        return imageService.getByteaCheck(imageId);
+//        return imageService.getByteaCheck(imageId);
+        return new byte[0];
     }
 
 }

@@ -33,6 +33,8 @@ public class AdminController {
         this.reportService = reportService;
     }
 
+
+    //Obtiene todos los reportes para un administrador
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public ModelAndView adminView(@RequestParam(value = "acceptReport", required = false, defaultValue = "false") final Boolean acceptReport,
                                   @RequestParam(value = "rejectReport", required = false, defaultValue = "false") final Boolean rejectReport,
@@ -46,7 +48,7 @@ public class AdminController {
         return mav;
     }
 
-
+    //obtiene los detalles para un reporte
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}", method = RequestMethod.GET)
     public ModelAndView detailsReport(
             @PathVariable("reportId") final long reportId,
@@ -63,6 +65,7 @@ public class AdminController {
         return mav;
     }
 
+    //acepta un reporte
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/accept", method = RequestMethod.POST)
     public ModelAndView acceptReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException {
         LOGGER.debug("POST request to /admin/{}/accept", reportId);
@@ -74,6 +77,8 @@ public class AdminController {
         return new ModelAndView("redirect:/admin?acceptReport=true");
     }
 
+
+    //rechaza un reporte
     @RequestMapping(value = "/admin/reports/{reportId:\\d+$}/reject", method = RequestMethod.POST)
     public ModelAndView rejectReport(@PathVariable("reportId") final long reportId, @Valid @ModelAttribute("reportAdminForm") final ReportAdminForm form, final BindingResult errors) throws ReportNotFoundException {
         LOGGER.debug("POST request to /admin/{}/reject", reportId);

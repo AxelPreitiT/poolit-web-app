@@ -1,15 +1,14 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +41,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
+
+    @Value("classpath:images/profile.jpeg")
+    private Resource defaultImg;
+
+    private static final long DEFAULT_IMAGE_ID = 66;
 
 
     @Autowired
@@ -95,13 +99,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException {
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        return imageService.getImageBytea(user.getUserImageId());
+        try {
+            return imageService.getImageByteaOrDefault(user.getUserImageId(),defaultImg.getInputStream());
+        }catch (IOException e){
+            return new byte[0];
+        }
     }
 
     @Transactional
     @Override
     public void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException{
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        if(user.getUserImageId() == DEFAULT_IMAGE_ID){ //fix migration in pawserver
+            //creamos una imagen para no pisar la default
+            final long imageId = imageService.createImage(content).getImageId();
+            userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
+            return;
+        }
         imageService.updateImage(content,user.getUserImageId());
     }
 
@@ -158,10 +172,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeRole(final long userId, final String role) throws UserNotFoundException {
+    public void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException {
         User user = findById(userId).orElseThrow(UserNotFoundException::new);
         if(!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())){
             throw new IllegalArgumentException();
+        }
+        if(!user.getRole().equals(UserRole.USER.getText())){
+            //role has already been changed
+            throw new RoleAlreadyChangedException();
         }
         userDao.changeRole(user.getUserId(), role);
     }
@@ -217,18 +235,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean confirmRegister(String token) {
+    public void confirmRegister(String token) throws InvalidTokenException {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
-        if(verificationToken == null){
-            return false;
+        if (verificationToken == null || !tokenService.isValidToken(verificationToken)){
+            throw new InvalidTokenException();
         }
-        boolean isValidToken = tokenService.isValidToken(verificationToken);
-        if (isValidToken) {
-            final User user = verificationToken.getUser();
-            user.setEnabled(true);
-            authWithoutPassword(user);
-        }
-        return isValidToken;
+        //verificationToken != null and it is a valid token
+        final User user = verificationToken.getUser();
+        user.setEnabled(true);
+        authWithoutPassword(user);
     }
 
 

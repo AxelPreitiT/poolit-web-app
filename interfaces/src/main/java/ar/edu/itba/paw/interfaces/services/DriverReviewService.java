@@ -12,16 +12,22 @@ import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
 import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.trips.Trip;
 
+import java.util.Optional;
+
 
 public interface DriverReviewService {
 
     DriverReview createDriverReview(final long tripId, final long driverId,  final int rating, final String comment, final DriverReviewOptions option) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException, UserNotFoundException;
+
+    Optional<DriverReview> findById(final long id);
 
     double getDriverRating(final long userId) throws UserNotFoundException;
 
     double getDriverRatingOwnUser() throws UserNotLoggedInException;
 
     PagedContent<DriverReview> getDriverReviews(final long userId, int page, int pageSize) throws UserNotFoundException;
+
+    PagedContent<DriverReview> getDriverReviewsMadeByUserOnTrip(final long reviewerId, final long tripId, final int page, final int pageSize) throws UserNotFoundException, TripNotFoundException;
 
     PagedContent<DriverReview> getDriverReviewsOwnUser( int page, int pageSize) throws UserNotLoggedInException;
 

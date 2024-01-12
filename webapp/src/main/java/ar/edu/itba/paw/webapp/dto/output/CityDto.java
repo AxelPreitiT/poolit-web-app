@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
 import ar.edu.itba.paw.models.City;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -17,7 +18,7 @@ public class CityDto {
         CityDto ans = new CityDto();
         ans.id = city.getId();
         ans.name = city.getName();
-        ans.selfUri = uriInfo.getBaseUriBuilder().path("/api/cities/").path(String.valueOf(city.getId())).build();
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(city.getId())).build();
         return ans;
     }
 
