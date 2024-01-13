@@ -1,12 +1,15 @@
 import ProfileImg from "@/components/profile/img/ProfileImg";
 import styles from "./styles.module.scss";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
 import DriverList from "@/components/profile/ProfileLists/DriverList";
 import PassengerList from "@/components/profile/ProfileLists/PassangerList";
 import TabComponent from "@/components/tab/TabComponent";
+import {useEffect, useState} from "react";
+import CityModel from "@/models/CityModel.ts";
+import CityService from "@/services/CityService.ts";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -22,11 +25,23 @@ const ProfilePage = () => {
     rating_passenger: 1.5,
   };
 
+  const [city, setCity] = useState<CityModel|null >(null);
+
+
+    useEffect(() => {
+      CityService.getCityById("http://localhost:8080/paw-2023a-07/api/cities/12").then(response => {
+        // Extraer el cuerpo de la respuesta Axios
+        // Luego, llamar a setProfileInfo con el resultado
+        setCity(response);
+      })
+    })
+
+
   return (
     <div className={styles.main_container}>
       <div className={styles.profileCard}>
         <ProfileImg src={ProfilePhoto} />
-        <h3 className="text-center">{user.name}</h3>
+        <h3 className="text-center">{city?.name}</h3>
         <ProfileProp prop={t("profile.props.email")} text={user.email} />
         <ProfileProp prop={t("profile.props.phone")} text={user.phone} />
         <ProfileProp

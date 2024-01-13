@@ -16,6 +16,12 @@ class CitiesApi extends AxiosApi {
   ) => {
     return this.options(CitiesApi.CITIES_BASE_PATH, options);
   };
+
+  public static getOptionsGaston: (options: AxiosRequestConfig) => AxiosPromise = (
+      options: AxiosRequestConfig
+  ) => {
+    return this.get(CitiesApi.CITIES_BASE_PATH, options);
+  };
 }
 
 export default CitiesApi;

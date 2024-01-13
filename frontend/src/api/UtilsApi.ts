@@ -6,7 +6,7 @@ class UtilsApi extends AxiosApi {
   public static tryAuthentication: (
     options?: AxiosRequestConfig
   ) => AxiosPromise = (options?: AxiosRequestConfig) => {
-    return CitiesApi.getOptions(options || {});
+    return CitiesApi.getOptionsGaston(options || {});
   };
 }
 
