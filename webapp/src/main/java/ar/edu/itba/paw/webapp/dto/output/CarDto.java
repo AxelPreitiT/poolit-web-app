@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.dto.output;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.CarBrand;
 import ar.edu.itba.paw.models.FeatureCar;
+import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -18,6 +19,8 @@ public class CarDto {
     private String plate;
 
     private String infoCar;
+
+    private double rating;
     private URI selfUri;
     private URI imageUri;
 
@@ -27,12 +30,11 @@ public class CarDto {
         this.infoCar = car.getInfoCar();
         this.brand = car.getBrand();
         this.plate = car.getPlate();
-        // TODO chequear esto
-        //this.features = car.getFeatures();
+        this.features = car.getFeatures();
         this.seats= car.getSeats();
-
-        this.selfUri = uriInfo.getBaseUriBuilder().path("/api/cars/").path(String.valueOf(car.getCarId())).build();
-        this.imageUri = uriInfo.getBaseUriBuilder().path("/api/cars/").path(String.valueOf(car.getCarId())).path("image/").build();
+        this.rating = car.getCarRating();
+        this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).build();
+        this.imageUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).path(UrlHolder.IMAGE_ENTITY).build();
     }
 
     public static CarDto fromCar(final UriInfo uriInfo, final Car car){
@@ -77,5 +79,12 @@ public class CarDto {
 
     public void setImageUri(URI imageUri) {
         this.imageUri = imageUri;
+    }
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

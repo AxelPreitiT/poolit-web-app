@@ -21,6 +21,8 @@ public interface CarService {
 
     List<Car> findCurrentUserCars() throws UserNotFoundException;
 
+    List<Car> findUserCars(final long userId) throws UserNotFoundException;
+
     Optional<Car> findByUserAndPlate(User user, String plate);
 
     boolean currentUserIsCarOwner(Car car);

@@ -16,7 +16,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ImageSize {
 
-//    TODO: add translation
     String message() default "{dto.validation.imageSize}";
 
     Class<?> [] groups() default {};

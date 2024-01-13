@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.interfaces.services;
 
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
 
@@ -29,9 +26,9 @@ public interface UserService {
 
     void changeToDriver() throws UserNotFoundException;
 
-    void changeRole(final long userId, final String role) throws UserNotFoundException;
+    void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException;
 
-    boolean confirmRegister(String token);
+    void confirmRegister(String token)throws InvalidTokenException;
 
     void blockUser( long blockedId) throws UserNotFoundException;
     void unblockUser( long blockedId) throws UserNotFoundException;

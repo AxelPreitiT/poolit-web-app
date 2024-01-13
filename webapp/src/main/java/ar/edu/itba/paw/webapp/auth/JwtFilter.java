@@ -47,7 +47,6 @@ public class JwtFilter extends OncePerRequestFilter {
         final String token = header.split(" ")[1].trim();
 
         if(!jwtUtils.validateToken(token)){
-//            TODO: check if public resources use this also (they should not)
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -68,7 +67,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            header = "Bearer " +  jwtUtils.createToken(user.get());
+            final String baseUrl = httpServletRequest.getScheme()+"://"+httpServletRequest.getServerName()+":"+httpServletRequest.getServerPort()+httpServletRequest.getContextPath();
+            header = "Bearer " +  jwtUtils.createToken(user.get(),baseUrl);
+            httpServletResponse.setHeader(BasicAuthFilter.JWT_HEADER,header);
         }
 
 //        Initialize principal with UserDetails
@@ -80,7 +81,6 @@ public class JwtFilter extends OncePerRequestFilter {
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        httpServletResponse.setHeader(HttpHeaders.AUTHORIZATION,header);
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 }

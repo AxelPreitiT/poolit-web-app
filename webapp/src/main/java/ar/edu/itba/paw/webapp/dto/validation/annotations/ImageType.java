@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ImageType {
 
-    //TODO: add translation
     String message() default "{dto.validation.imageType}";
 
     Class<?> [] groups() default {};

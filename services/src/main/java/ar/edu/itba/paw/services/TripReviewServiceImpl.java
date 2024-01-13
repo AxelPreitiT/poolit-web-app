@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
+//TODO: eliminar
 @Service
 public class TripReviewServiceImpl implements TripReviewService {
 

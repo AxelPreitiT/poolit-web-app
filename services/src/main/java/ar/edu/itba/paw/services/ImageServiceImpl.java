@@ -17,8 +17,8 @@ import java.util.Optional;
 public class ImageServiceImpl implements ImageService {
     private final ImageDao imageDao;
 
-    @Value("classpath:images/profile.jpeg")
-    private Resource defaultImg;
+//    @Value("classpath:images/profile.jpeg")
+//    private Resource defaultImg;
 
     @Autowired
     public ImageServiceImpl(final ImageDao imageDao){
@@ -43,14 +43,14 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public byte[] getImageBytea(long imageId) throws ImageNotFoundException{
+    public byte[] getImageByteaOrDefault(long imageId, InputStream defaultImageInputStream) throws ImageNotFoundException{
         Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
         try{
-            if(img.getData() == null){
-                InputStream inputStream = defaultImg.getInputStream();
-                byte[] input = new byte[defaultImg.getInputStream().available()];
+            if(img.getData() == null || img.getData().length == 0){
+                //TODO: revisar esto, dice que no esta bien resrevar espacio con available
+                byte[] input = new byte[defaultImageInputStream.available()];
                 for (int i = 0; i < input.length; i++) {
-                    int byteRead = inputStream.read();
+                    int byteRead = defaultImageInputStream.read();
                     if (byteRead == -1) break;
                     input[i] = (byte)byteRead;
                 }
@@ -62,6 +62,32 @@ public class ImageServiceImpl implements ImageService {
         return img.getData();
     }
 
+    //TODO: que mande el default el servicio que lo llama, asi tenemos la default del auto y de perfil
+//    @Transactional
+//    @Override
+//    public byte[] getImageBytea(long imageId) throws ImageNotFoundException{
+//        Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
+//        try{
+//            if(img.getData() == null){
+//                InputStream inputStream = defaultImg.getInputStream();
+//                byte[] input = new byte[defaultImg.getInputStream().available()];
+//                for (int i = 0; i < input.length; i++) {
+//                    int byteRead = inputStream.read();
+//                    if (byteRead == -1) break;
+//                    input[i] = (byte)byteRead;
+//                }
+//                return input;
+//            }
+//        }catch (IOException ex){
+//            throw new ImageNotFoundException();
+//        }
+//        return img.getData();
+//    }
+
+
+
+
+
 
     @Transactional
     @Override
@@ -72,21 +98,21 @@ public class ImageServiceImpl implements ImageService {
 
 
 // TODO: delete
-    @Transactional
-    @Override
-    public byte[] getByteaCheck(long imageId) throws IOException, ImageNotFoundException {
-        Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
-        if(img.getData() == null){
-            InputStream inputStream = defaultImg.getInputStream();
-            byte[] input = new byte[defaultImg.getInputStream().available()];
-            for (int i = 0; i < input.length; i++) {
-                int byteRead = inputStream.read();
-                if (byteRead == -1) break;
-                input[i] = (byte)byteRead;
-            }
-            return input;
-        }
-        return img.getData();
-    }
+//    @Transactional
+//    @Override
+//    public byte[] getByteaCheck(long imageId) throws IOException, ImageNotFoundException {
+//        Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
+//        if(img.getData() == null){
+//            InputStream inputStream = defaultImg.getInputStream();
+//            byte[] input = new byte[defaultImg.getInputStream().available()];
+//            for (int i = 0; i < input.length; i++) {
+//                int byteRead = inputStream.read();
+//                if (byteRead == -1) break;
+//                input[i] = (byte)byteRead;
+//            }
+//            return input;
+//        }
+//        return img.getData();
+//    }
 
 }

@@ -13,7 +13,6 @@ import java.util.Locale;
 
 @Provider
 public class AcceptLanguageFilter implements ContainerRequestFilter {
-//    TODO: no se ejecuta, ver por qué
     @Override
     public void filter(ContainerRequestContext requestContext) {
         List<Locale> acceptedLanguages = requestContext.getAcceptableLanguages();
