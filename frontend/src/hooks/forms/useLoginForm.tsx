@@ -23,7 +23,7 @@ const useLoginForm = () => {
   const { t } = useTranslation();
   const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
-  const { retryAuthentication } = useAuthentication();
+  const { invalidateAuthentication } = useAuthentication();
 
   const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType> = async (
     data: LoginFormSchemaType
@@ -37,11 +37,11 @@ const useLoginForm = () => {
       message: t("login.success.message"),
       timeout: defaultToastTimeout,
     });
-    await retryAuthentication();
     const from = location.state?.from;
     navigate(from || homePath, {
       replace: true,
     });
+    await invalidateAuthentication();
   };
 
   const onError = (error: QueryError) => {
