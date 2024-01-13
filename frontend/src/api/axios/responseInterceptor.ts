@@ -1,10 +1,12 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import Axios from "./axios";
 import Jwt from "@/auth/Jwt";
+import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
 
 const unauthorizedHttpStatusCode = 401;
 const jwtAuthTokenHeader = "jwt-authorization";
 const jwtRefreshTokenHeader = "jwt-refresh-authorization";
+const accountVerificationHeader = "account-verification";
 
 export const AxiosResponseInterceptor = (response: AxiosResponse) => {
   const authToken = response.headers[jwtAuthTokenHeader];
@@ -20,6 +22,9 @@ export const AxiosResponseInterceptor = (response: AxiosResponse) => {
 
 export const AxiosResponseErrorInterceptor = async (error: AxiosError) => {
   if (error.response?.status === unauthorizedHttpStatusCode) {
+    if (error.response.headers[accountVerificationHeader]) {
+      throw new AccountNotVerifiedError();
+    }
     // TODO: check if refresh token is expired (run interceptor only once)
     const refreshToken = Jwt.getRefreshToken();
     if (refreshToken) {

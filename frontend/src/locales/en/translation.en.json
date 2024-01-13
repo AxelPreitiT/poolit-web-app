@@ -36,7 +36,8 @@
     "error": {
       "title": "Log in failed",
       "default": "An error occurred while logging in",
-      "unauthorized": "The email or password is invalid"
+      "unauthorized": "The email or password is invalid",
+      "account_not_verified": "Your account has not been verified yet, please check your email inbox"
     }
   },
   "register": {

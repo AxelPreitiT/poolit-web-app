@@ -36,7 +36,8 @@
     "error": {
       "title": "Inicio de sesión fallido",
       "default": "Ocurrió un error al iniciar sesión",
-      "unauthorized": "El correo electrónico o la contraseña son inválidos"
+      "unauthorized": "El correo electrónico o la contraseña son inválidos",
+      "account_not_verified": "No verificate tu cuenta, por favor revisá tu casilla de correo electrónico"
     }
   },
   "register": {

@@ -13,9 +13,9 @@ import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
 import QueryError from "@/errors/QueryError";
 import useErrorToast from "../toasts/useErrorToast";
-import ResponseError from "@/errors/ResponseError";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
 import useAuthentication from "../api/useAuthentication";
+import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
 
 const useLoginForm = () => {
   const location = useLocation();
@@ -47,9 +47,10 @@ const useLoginForm = () => {
   const onError = (error: QueryError) => {
     showErrorToast({
       message: t(
-        error instanceof ResponseError &&
-          error instanceof UnauthorizedResponseError
+        error instanceof UnauthorizedResponseError
           ? "login.error.unauthorized"
+          : error instanceof AccountNotVerifiedError
+          ? "login.error.account_not_verified"
           : "login.error.default"
       ),
       timeout: defaultToastTimeout,
