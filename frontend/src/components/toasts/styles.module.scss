@@ -8,6 +8,10 @@
   background-color: colors.$success-color !important;
 }
 
+.warning-toast {
+  background-color: colors.$warning-color !important;
+}
+
 %toastHeader {
   display: flex;
   flex-direction: row;
@@ -31,6 +35,11 @@
 
 .success-header {
   background-color: colors.$success-color !important;
+  @extend %toastHeader;
+}
+
+.warning-header {
+  background-color: colors.$warning-color !important;
   @extend %toastHeader;
 }
 

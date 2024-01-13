@@ -1,16 +1,18 @@
 import UtilsService from "@/services/UtilsService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+const queryKey = "authentication";
+
 const useAuthentication = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(
+    undefined
+  );
+  const queryClient = useQueryClient();
 
   const { isLoading, isError, isSuccess } = useQuery({
-    queryKey: ["authentication"],
-    queryFn: async () => {
-      await UtilsService.tryAuthentication();
-      return isAuthenticated;
-    },
+    queryKey: [queryKey],
+    queryFn: UtilsService.tryAuthentication,
     retry: false,
   });
 
@@ -23,7 +25,16 @@ const useAuthentication = () => {
     }
   }, [isSuccess, isError]);
 
-  return { isAuthenticated, isLoading };
+  const retryAuthentication = () =>
+    queryClient.invalidateQueries({
+      queryKey: [queryKey],
+    });
+
+  return {
+    isAuthenticated,
+    isLoading: isLoading || isAuthenticated === undefined,
+    retryAuthentication,
+  };
 };
 
 export default useAuthentication;

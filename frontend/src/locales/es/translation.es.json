@@ -211,6 +211,10 @@
     "success": {
       "title": "¡Éxito!",
       "message": "La operación se realizó correctamente"
+    },
+    "warning": {
+      "title": "¡Atención!",
+      "message": "Esta operación no se debería realizar"
     }
   }
 }

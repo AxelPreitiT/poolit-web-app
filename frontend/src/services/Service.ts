@@ -21,10 +21,7 @@ abstract class Service {
           (error.response.data as ErrorModel)?.message
         );
       }
-      const unknownResponseError = new UnknownResponseError();
-      throw ResponseErrorDispatcher.dispatch(
-        unknownResponseError.getStatusCode()
-      );
+      throw new UnknownResponseError();
     }
   };
 }

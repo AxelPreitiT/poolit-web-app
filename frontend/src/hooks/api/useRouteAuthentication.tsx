@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 import useAuthentication from "./useAuthentication";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { homePath, loginPath } from "@/AppRouter";
 import ToastType from "@/enums/ToastType";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
-import { useNavigate } from "react-router-dom";
+import { NavigateOptions, useLocation, useNavigate } from "react-router-dom";
 
 const useRouteAuthentication = ({
   showWhenUserIsAuthenticated = true,
@@ -16,17 +16,27 @@ const useRouteAuthentication = ({
 }) => {
   const { t } = useTranslation();
   const { isAuthenticated, isLoading } = useAuthentication();
+  const [allowRender, setAllowRender] = useState(false);
   const addToast = useToastStackStore((state) => state.addToast);
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const onError = useCallback(
-    (toastKey: string, path: string) => {
+  const onInvalid = useCallback(
+    (
+      toastType: ToastType,
+      toastKey: string,
+      path: string,
+      options: NavigateOptions = {}
+    ) => {
       addToast({
-        type: ToastType.ERROR,
+        type: toastType,
         message: t(toastKey),
         timeout: defaultToastTimeout,
       });
-      navigate(path, { replace: true });
+      navigate(path, {
+        ...options,
+        replace: true,
+      });
     },
     [addToast, navigate, t]
   );
@@ -36,19 +46,28 @@ const useRouteAuthentication = ({
       return;
     }
     if (isAuthenticated && !showWhenUserIsAuthenticated) {
-      onError("route.error.already_authenticated", homePath);
+      onInvalid(
+        ToastType.WARNING,
+        "route.error.already_authenticated",
+        homePath
+      );
     } else if (!isAuthenticated && !showWhenUserIsNotAuthenticated) {
-      onError("route.error.not_authenticated", loginPath);
+      onInvalid(ToastType.ERROR, "route.error.not_authenticated", loginPath, {
+        state: { from: location.pathname },
+      });
+    } else {
+      setAllowRender(true);
     }
   }, [
     isLoading,
     isAuthenticated,
-    onError,
+    onInvalid,
     showWhenUserIsAuthenticated,
     showWhenUserIsNotAuthenticated,
+    location.pathname,
   ]);
 
-  return { isLoadingAuth: isLoading };
+  return { isLoadingAuth: !allowRender };
 };
 
 export default useRouteAuthentication;

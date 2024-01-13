@@ -211,6 +211,10 @@
     "success": {
       "title": "Success!",
       "message": "The operation was completed successfully"
+    },
+    "warning": {
+      "title": "Warning!",
+      "message": "The operation should not be completed"
     }
   }
 }

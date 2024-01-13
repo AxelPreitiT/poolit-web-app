@@ -2,6 +2,13 @@ import ToastProps from "./ToastProps";
 import { Toast as BToast } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
+import ToastType from "@/enums/ToastType";
+
+const toastIconByType: Record<ToastType, string> = {
+  [ToastType.ERROR]: "bi-exclamation-circle",
+  [ToastType.SUCCESS]: "bi-check-circle",
+  [ToastType.WARNING]: "bi-exclamation-triangle",
+};
 
 const Toast = ({
   onClose,
@@ -23,7 +30,7 @@ const Toast = ({
     >
       <BToast.Header closeVariant="white" className={styles[`${type}-header`]}>
         <div>
-          <i className="bi bi-exclamation-circle light-text" />
+          <i className={`bi ${toastIconByType[type]} light-text`} />
           <strong className="light-text">
             {title || t(`toast.${type}.title`)}
           </strong>

@@ -15,6 +15,7 @@ import QueryError from "@/errors/QueryError";
 import useErrorToast from "../toasts/useErrorToast";
 import ResponseError from "@/errors/ResponseError";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
+import useAuthentication from "../api/useAuthentication";
 
 const useLoginForm = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const useLoginForm = () => {
   const { t } = useTranslation();
   const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
+  const { retryAuthentication } = useAuthentication();
 
   const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType> = async (
     data: LoginFormSchemaType
@@ -29,13 +31,14 @@ const useLoginForm = () => {
     await UserService.login(data.email, data.password, !!data.rememberMe);
   };
 
-  const onSuccess = () => {
+  const onSuccess = async () => {
     showSuccessToast({
       title: t("login.success.title"),
       message: t("login.success.message"),
       timeout: defaultToastTimeout,
     });
-    const from = location.state?.from?.pathname;
+    await retryAuthentication();
+    const from = location.state?.from;
     navigate(from || homePath, {
       replace: true,
     });
