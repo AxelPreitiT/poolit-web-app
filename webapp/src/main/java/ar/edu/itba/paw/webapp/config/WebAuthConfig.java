@@ -152,7 +152,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader(CorsConfiguration.ALL);
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         // TODO: Update to JWT token headers
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Authorization-Refresh"));
+        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

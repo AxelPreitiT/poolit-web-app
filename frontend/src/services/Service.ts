@@ -5,9 +5,9 @@ import ErrorModel from "@/models/ErrorModel";
 import { AxiosError, AxiosPromise } from "axios";
 
 abstract class Service {
-  protected static async resolveQuery<Model = void>(
+  protected static resolveQuery = async <Model = void>(
     query: AxiosPromise<Model>
-  ): Promise<Model> {
+  ): Promise<Model> => {
     try {
       const response = await query;
       return response.data;
@@ -26,7 +26,7 @@ abstract class Service {
         unknownResponseError.getStatusCode()
       );
     }
-  }
+  };
 }
 
 export default Service;

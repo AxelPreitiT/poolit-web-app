@@ -1,6 +1,6 @@
 type JwtPayload = {
-  email: string;
-  role: string;
+  sub: string;
+  userUrl: string;
   iat: number;
   exp: number;
 };
