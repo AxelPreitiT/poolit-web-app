@@ -6,6 +6,24 @@ class Jwt {
   private static readonly REFRESH_TOKEN_KEY: string = "refreshToken";
   private static readonly REMEMBER_ME_KEY: string = "rememberMe";
 
+  private static removeAuthToken: () => void = () => {
+    const rememberMe: boolean = Jwt.getRememberMe();
+    if (!rememberMe) {
+      sessionStorage.removeItem(Jwt.AUTH_TOKEN_KEY);
+    } else {
+      localStorage.removeItem(Jwt.AUTH_TOKEN_KEY);
+    }
+  };
+
+  private static removeRefreshToken: () => void = () => {
+    const rememberMe: boolean = Jwt.getRememberMe();
+    if (!rememberMe) {
+      sessionStorage.removeItem(Jwt.REFRESH_TOKEN_KEY);
+    } else {
+      localStorage.removeItem(Jwt.REFRESH_TOKEN_KEY);
+    }
+  };
+
   public static storeAuthToken: (token: `Bearer ${string}`) => void = (
     token: `Bearer ${string}`
   ) => {
@@ -59,6 +77,11 @@ class Jwt {
   public static getRememberMe: () => boolean = () => {
     const rememberMe: string | null = localStorage.getItem(Jwt.REMEMBER_ME_KEY);
     return rememberMe ? rememberMe === "true" : false;
+  };
+
+  public static removeTokens: () => void = () => {
+    Jwt.removeAuthToken();
+    Jwt.removeRefreshToken();
   };
 
   public static getJwtClaims: () => JwtPayload | null = () => {

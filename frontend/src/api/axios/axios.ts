@@ -8,6 +8,4 @@ const Axios: AxiosInstance = axios.create({
   timeout: requestTimeout,
 });
 
-Axios.interceptors.request.use;
-
 export default Axios;

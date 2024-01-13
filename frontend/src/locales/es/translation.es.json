@@ -28,7 +28,10 @@
     "password": "Contraseña",
     "remember": "Mantener la sesión iniciada",
     "login": "Ingresar",
-    "success": "¡Iniciaste sesión correctamente!",
+    "success": {
+      "title": "¡Bienvenido de nuevo!",
+      "message": "¡Iniciaste sesión correctamente!"
+    },
     "welcome": "¡Bienvenido de nuevo!",
     "error": {
       "title": "Inicio de sesión fallido",
@@ -196,7 +199,8 @@
   },
   "route": {
     "error": {
-      "already_authenticated": "Ya iniciaste sesión"
+      "already_authenticated": "Ya iniciaste sesión",
+      "not_authenticated": "Tenés que iniciar sesión para acceder a esta página"
     }
   },
   "toast": {

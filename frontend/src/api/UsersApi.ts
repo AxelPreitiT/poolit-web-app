@@ -9,9 +9,9 @@ import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 
 class UsersApi extends AxiosApi {
   private static readonly USERS_PUBLIC_ACCEPT_HEADER: string =
-    "application/vnd.user.output.public.v1+json";
+    "application/vnd.user.public.v1+json";
   private static readonly USERS_PRIVATE_ACCEPT_HEADER: string =
-    "application/vnd.user.output.private.v1+json";
+    "application/vnd.user.private.v1+json";
 
   public static login: (
     email: string,

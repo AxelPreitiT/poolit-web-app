@@ -31,7 +31,8 @@ const useLoginForm = () => {
 
   const onSuccess = () => {
     showSuccessToast({
-      message: t("login.success"),
+      title: t("login.success.title"),
+      message: t("login.success.message"),
       timeout: defaultToastTimeout,
     });
     const from = location.state?.from?.pathname;

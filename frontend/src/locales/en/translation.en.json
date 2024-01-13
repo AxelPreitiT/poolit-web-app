@@ -28,7 +28,10 @@
     "password": "Password",
     "remember": "Keep me logged in",
     "login": "Log in",
-    "success": "You have successfully logged in!",
+    "success": {
+      "title": "Welcome back!",
+      "message": "You have successfully logged in!"
+    },
     "welcome": "Welcome back!",
     "error": {
       "title": "Log in failed",
@@ -196,7 +199,8 @@
   },
   "route": {
     "error": {
-      "already_authenticated": "You are already logged in"
+      "already_authenticated": "You are already logged in",
+      "not_authenticated": "You must be logged in to access this page"
     }
   },
   "toast": {

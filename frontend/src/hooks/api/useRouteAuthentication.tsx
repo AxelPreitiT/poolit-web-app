@@ -38,7 +38,7 @@ const useRouteAuthentication = ({
     if (isAuthenticated && !showWhenUserIsAuthenticated) {
       onError("route.error.already_authenticated", homePath);
     } else if (!isAuthenticated && !showWhenUserIsNotAuthenticated) {
-      onError("query.response.error.not_authenticated", loginPath);
+      onError("route.error.not_authenticated", loginPath);
     }
   }, [
     isLoading,
