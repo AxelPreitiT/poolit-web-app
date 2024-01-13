@@ -4,8 +4,9 @@ import { useTranslation } from "react-i18next";
 import PoolitFavicon from "@/images/favicon.svg";
 import router from "./AppRouter";
 import GlobalToastStack from "./components/toasts/GlobalToastStack";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useApiLocale from "@/hooks/api/useApiLocale";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,10 @@ const App = () => {
       </Helmet>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <ReactQueryDevtools
+          initialIsOpen={false}
+          buttonPosition="bottom-left"
+        />
       </QueryClientProvider>
       <GlobalToastStack />
     </HelmetProvider>
