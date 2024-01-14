@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
 
 interface ListProfileContainerProps<T> {
-  title: string;
+  title: string | undefined;
   btn_footer_text: string;
   empty_text: string;
   empty_icon: string;

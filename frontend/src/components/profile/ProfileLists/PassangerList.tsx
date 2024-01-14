@@ -4,9 +4,23 @@ import ShortReview from "@/components/review/shorts/ShortReview";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
 import { publicsReviewsPath, reservedTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
+import {useEffect, useState} from "react";
+import tripsService from "@/services/TripsService.ts";
 
 const PassengerList = () => {
   const { t } = useTranslation();
+
+  const [trip, setTrip] = useState<TripModel|null >(null);
+
+
+  useEffect(() => {
+    tripsService.getTripById("http://localhost:8080/paw-2023a-07/api/trips/4").then(response => {
+      // Extraer el cuerpo de la respuesta Axios
+      // Luego, llamar a setProfileInfo con el resultado
+      setTrip(response);
+    })
+  })
+
 
   const data: Trip[] = [
     {
@@ -51,7 +65,7 @@ const PassengerList = () => {
   return (
     <div>
       <ListProfileContainer
-        title={t("profile.lists.review_as_passanger")}
+        title={trip?.originAddress}
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
