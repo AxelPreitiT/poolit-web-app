@@ -1,9 +1,24 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
+import {useEffect, useState} from "react";
+import CityService from "@/services/CityService.ts";
 
 const CardTripProfile = (Trip: TripModel) => {
   const { t } = useTranslation();
+
+  const [cityOrigin, setCityOrigin] = useState<string|null>(null)
+  const [cityDestination, setCityDestination] = useState<string|null>(null)
+
+
+  useEffect(() => {
+    CityService.getCityById(Trip.originCityUri).then(response => {
+      setCityOrigin(response.name);
+    })
+    CityService.getCityById(Trip.destinationCityUri).then(response => {
+      setCityDestination(response.name);
+    })
+  })
 
   return (
     <div className={styles.card_info}>
@@ -15,11 +30,11 @@ const CardTripProfile = (Trip: TripModel) => {
         </div>
         <div className={styles.address_container}>
           <div className={styles.route_info_text}>
-            <h3>{Trip.originCityUri}</h3>
+            <h3>{cityOrigin}</h3>
             <span className="text">{Trip.originAddress}</span>
           </div>
           <div className={styles.route_info_text}>
-            <h3>{Trip.destinationCityUri}</h3>
+            <h3>{cityDestination}</h3>
             <span style={{ textAlign: "right" }}>
               {Trip.destinationAddress}
             </span>
@@ -30,7 +45,7 @@ const CardTripProfile = (Trip: TripModel) => {
             <i className="bi bi-calendar text"></i>
             {Trip.totalTrips==1 ? (
               <div className={styles.format_date}>
-                <span className="text">"PONER DIA DE LA SEMANA"</span>
+                <span className="text">PONER DIA</span>
                 <span className={styles.date_text}>
                   {`${Trip.startDateTime}, ${Trip.endDateTime}`}
                 </span>

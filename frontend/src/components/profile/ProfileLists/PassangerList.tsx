@@ -45,7 +45,7 @@ const PassengerList = ({uri} : PassengerListProp) => {
   return (
     <div>
       <ListProfileContainer
-        title={t("profile.lists.review_title")}
+        title={t("review_as_passanger")}
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
