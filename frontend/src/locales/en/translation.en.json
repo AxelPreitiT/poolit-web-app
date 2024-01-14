@@ -29,15 +29,19 @@
     "remember": "Keep me logged in",
     "login": "Log in",
     "success": {
-      "title": "Welcome back!",
+      "title": "Ready to ride!",
       "message": "You have successfully logged in!"
     },
-    "welcome": "Welcome back!",
     "error": {
       "title": "Log in failed",
       "default": "An error occurred while logging in",
-      "unauthorized": "The email or password is invalid"
+      "unauthorized": "The email or password is invalid",
+      "account_not_verified": "Your account has not been verified yet, please check your email inbox"
     }
+  },
+  "logout": {
+    "title": "Car parked",
+    "message": "You have logged out"
   },
   "register": {
     "title": "Sign up",

@@ -1,4 +1,4 @@
-import RequestError from "@/errors/RequestError";
+import QueryError from "@/errors/QueryError";
 import ResponseErrorDispatcher from "@/errors/ResponseErrorDispatcher";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import ErrorModel from "@/models/ErrorModel";
@@ -12,7 +12,7 @@ abstract class Service {
       const response = await query;
       return response.data;
     } catch (error) {
-      if (error instanceof RequestError) {
+      if (error instanceof QueryError) {
         throw error;
       }
       if (error instanceof AxiosError && error.response) {

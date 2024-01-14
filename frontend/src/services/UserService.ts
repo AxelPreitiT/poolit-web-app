@@ -11,6 +11,10 @@ class UserService extends Service {
     await this.resolveQuery(UsersApi.login(email, password, rememberMe));
   };
 
+  public static logout = async () => {
+    UsersApi.logout();
+  };
+
   public static getCurrentUser = async (): Promise<UserPrivateModel> => {
     return await this.resolveQuery(UsersApi.getCurrentUser());
   };

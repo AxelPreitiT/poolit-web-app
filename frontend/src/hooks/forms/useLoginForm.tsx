@@ -13,9 +13,9 @@ import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
 import QueryError from "@/errors/QueryError";
 import useErrorToast from "../toasts/useErrorToast";
-import ResponseError from "@/errors/ResponseError";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
 import useAuthentication from "../api/useAuthentication";
+import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
 
 const useLoginForm = () => {
   const location = useLocation();
@@ -23,7 +23,7 @@ const useLoginForm = () => {
   const { t } = useTranslation();
   const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
-  const { retryAuthentication } = useAuthentication();
+  const { invalidateAuthentication } = useAuthentication();
 
   const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType> = async (
     data: LoginFormSchemaType
@@ -37,19 +37,20 @@ const useLoginForm = () => {
       message: t("login.success.message"),
       timeout: defaultToastTimeout,
     });
-    await retryAuthentication();
     const from = location.state?.from;
     navigate(from || homePath, {
       replace: true,
     });
+    await invalidateAuthentication();
   };
 
   const onError = (error: QueryError) => {
     showErrorToast({
       message: t(
-        error instanceof ResponseError &&
-          error instanceof UnauthorizedResponseError
+        error instanceof UnauthorizedResponseError
           ? "login.error.unauthorized"
+          : error instanceof AccountNotVerifiedError
+          ? "login.error.account_not_verified"
           : "login.error.default"
       ),
       timeout: defaultToastTimeout,

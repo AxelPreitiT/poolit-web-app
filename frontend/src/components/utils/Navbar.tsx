@@ -18,6 +18,7 @@ import {
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
+import useLogout from "@/hooks/api/useLogout";
 
 interface Section {
   path: string;
@@ -26,6 +27,7 @@ interface Section {
 
 const Navbar = () => {
   const { t } = useTranslation();
+  const logout = useLogout();
   const location = useLocation();
   const pathname = location?.pathname;
 
@@ -111,7 +113,7 @@ const Navbar = () => {
                     <h3 className={styles.dropdown_text}>Poner nombree</h3>
                   </div>
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to={loginPath}>
+                <Dropdown.Item onClick={logout}>
                   <div className={styles.item_dropdown}>
                     <div className={styles.dropdown_text}>
                       <i className="bi bi-box-arrow-right light-text h5"></i>

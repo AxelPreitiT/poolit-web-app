@@ -12,6 +12,8 @@ interface RouterComponentProps {
 // This component is a wrapper of route pages
 // Should be used to:
 //  - set the title of the page
+//  - check if the user is authenticated
+//  - show a loading screen
 const RouteWrapper = ({
   children,
   title,

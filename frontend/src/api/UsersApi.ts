@@ -31,6 +31,10 @@ class UsersApi extends AxiosApi {
     });
   };
 
+  public static logout: () => void = () => {
+    Jwt.removeTokens();
+  };
+
   public static getPublicUser: (uri: string) => AxiosPromise<UserPublicModel> =
     (uri: string) => {
       return this.get<UserPublicModel>(uri, {
