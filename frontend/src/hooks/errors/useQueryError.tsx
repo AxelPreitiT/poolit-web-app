@@ -5,27 +5,49 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useErrorToast from "../toasts/useErrorToast";
 import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { useTranslation } from "react-i18next";
+import ResponseError from "@/errors/ResponseError";
+import UnknownResponseError from "@/errors/UnknownResponseError";
 
 const useQueryError = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
-
   const showErrorToast = useErrorToast();
+
+  const getMessage = (
+    error: QueryError,
+    customMessages?: Record<string, string>
+  ) => {
+    const errorId = error.getErrorId();
+    return (
+      (customMessages?.[errorId]
+        ? t(customMessages[errorId])
+        : t(error.getI18nKey())) +
+      (error instanceof ResponseError &&
+      !(error instanceof UnknownResponseError)
+        ? ` (${error.getStatusCode()} - ${error.getStatusText()})`
+        : "")
+    );
+  };
 
   const onQueryError = ({
     error,
     timeout,
     title,
+    customMessages,
   }: {
-    error: QueryError;
+    error: Error;
     timeout?: number;
     title?: string;
+    customMessages?: Record<string, string>;
   }) => {
+    const queryError =
+      error instanceof QueryError ? error : new UnknownResponseError(error);
     showErrorToast({
-      message: t(error.getI18nKey()),
+      message: getMessage(queryError, customMessages),
       timeout,
       title,
+      children: queryError.getChildren(),
     });
 
     if (

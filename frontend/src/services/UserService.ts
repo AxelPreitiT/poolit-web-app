@@ -1,6 +1,7 @@
 import UsersApi from "@/api/UsersApi";
 import Service from "./Service";
 import UserPrivateModel from "@/models/UserPrivateModel";
+import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 
 class UserService extends Service {
   public static login = async (
@@ -15,9 +16,21 @@ class UserService extends Service {
     UsersApi.logout();
   };
 
-  public static getCurrentUser = async (): Promise<UserPrivateModel> => {
-    return await this.resolveQuery(UsersApi.getCurrentUser());
+  public static register = async (registerForm: RegisterFormSchemaType) => {
+    // TODO: Resolve upload image on register
+    await this.resolveQuery(UsersApi.createUser(registerForm));
+    // const response = await this.resolveQuery(UsersApi.createUser(registerForm));
+    // const { userUri } = response;
+    // if (registerForm.image) {
+    // TODO: Concat /image
+    // await this.resolveQuery(
+    //   UsersApi.updateUserImage(`${userUri}/image`, registerForm.image)
+    // );
+    // }
   };
+
+  public static getCurrentUser = async (): Promise<UserPrivateModel> =>
+    await this.resolveQuery(UsersApi.getCurrentUser());
 }
 
 export default UserService;

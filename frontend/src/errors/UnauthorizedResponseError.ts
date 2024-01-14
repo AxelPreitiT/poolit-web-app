@@ -1,21 +1,31 @@
+import { AxiosError } from "axios";
 import ResponseError from "./ResponseError";
 import ResponseErrorDispatcher from "./ResponseErrorDispatcher";
 
 const unauthorizedStatusCode = 401;
-const unauthorizedStatusText = "Unauthorized";
-const unauthorizedI18nKey = "query.response.error.unauthorized";
 
 class UnauthorizedResponseError extends ResponseError {
-  constructor(responseMessage?: string) {
-    super(unauthorizedI18nKey, responseMessage);
+  private static readonly STATUS_CODE: number = unauthorizedStatusCode;
+  private static readonly STATUS_TEXT: string = "Unauthorized";
+  private static readonly I18N_KEY: string =
+    "query.response.error.unauthorized";
+  public static readonly ERROR_ID: string = "UnauthorizedResponseError";
+
+  constructor(error: AxiosError) {
+    const message = error.message || UnauthorizedResponseError.STATUS_TEXT;
+    super(
+      UnauthorizedResponseError.I18N_KEY,
+      UnauthorizedResponseError.ERROR_ID,
+      message
+    );
   }
 
   public getStatusCode(): number {
-    return unauthorizedStatusCode;
+    return UnauthorizedResponseError.STATUS_CODE;
   }
 
   public getStatusText(): string {
-    return unauthorizedStatusText;
+    return UnauthorizedResponseError.STATUS_TEXT;
   }
 }
 

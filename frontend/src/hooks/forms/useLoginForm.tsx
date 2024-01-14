@@ -12,18 +12,19 @@ import { homePath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
 import QueryError from "@/errors/QueryError";
-import useErrorToast from "../toasts/useErrorToast";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
 import useAuthentication from "../api/useAuthentication";
 import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
+import useQueryError from "../errors/useQueryError";
+import UnknownResponseError from "@/errors/UnknownResponseError";
 
 const useLoginForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const showErrorToast = useErrorToast();
   const showSuccessToast = useSuccessToast();
   const { invalidateAuthentication } = useAuthentication();
+  const onQueryError = useQueryError();
 
   const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType> = async (
     data: LoginFormSchemaType
@@ -45,17 +46,14 @@ const useLoginForm = () => {
   };
 
   const onError = (error: QueryError) => {
-    showErrorToast({
-      message: t(
-        error instanceof UnauthorizedResponseError
-          ? "login.error.unauthorized"
-          : error instanceof AccountNotVerifiedError
-          ? "login.error.account_not_verified"
-          : "login.error.default"
-      ),
-      timeout: defaultToastTimeout,
-      title: t("login.error.title"),
-    });
+    const title = t("login.error.title");
+    const timeout = defaultToastTimeout;
+    const customMessages = {
+      [UnauthorizedResponseError.ERROR_ID]: "login.error.unauthorized",
+      [AccountNotVerifiedError.ERROR_ID]: "login.error.account_not_verified",
+      [UnknownResponseError.ERROR_ID]: "login.error.default",
+    };
+    onQueryError({ error, title, timeout, customMessages });
   };
 
   return useForm<LoginFormFieldsType, LoginFormSchemaType>({

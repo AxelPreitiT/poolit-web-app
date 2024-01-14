@@ -59,7 +59,15 @@
     "register": "Sign up",
     "already_registered": "Already have an account?",
     "not_registered": "Don't have an account yet?",
-    "error": "An error occurred while signing up"
+    "error": {
+      "title": "Sign up failed",
+      "default": "An error occurred while signing up",
+      "email_already_exists": "The email is already registered"
+    },
+    "success": {
+      "title": "Welcome to Poolit!",
+      "message": "You have successfully registered! Please check your email inbox to verify your account"
+    }
   },
   "verify_account": {
     "title": "Verify your account",
@@ -197,7 +205,10 @@
       "error": {
         "unknown": "An error occurred while performing the operation",
         "unauthorized": "The session expired, please log in again",
-        "forbidden": "You do not have permission to perform this operation"
+        "forbidden": "You do not have permission to perform this operation",
+        "conflict": "There is already a resource with the same data",
+        "bad_request": "The form contains invalid data",
+        "internal_server_error": "An error occurred while performing the operation"
       }
     }
   },
@@ -219,6 +230,15 @@
     "warning": {
       "title": "Warning!",
       "message": "The operation should not be completed"
+    }
+  },
+  "bad_request": {
+    "title": "Errors list",
+    "label": "See the errors list"
+  },
+  "city": {
+    "error": {
+      "title": "An error occurred while loading the neighborhoods"
     }
   }
 }

@@ -8,12 +8,14 @@ const useSuccessToast = () => {
     message,
     timeout,
     title,
+    children,
   }: {
     message: string;
     timeout?: number;
     title?: string;
+    children?: JSX.Element;
   }) => {
-    showToast(ToastType.SUCCESS, { message, timeout, title });
+    showToast(ToastType.SUCCESS, { message, timeout, title, children });
   };
 
   return showSuccessToast;

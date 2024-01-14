@@ -1,14 +1,9 @@
-import ToastType from "@/enums/ToastType";
+import { ToastState } from "@/stores/ToastStackStore/ToastStackStore";
 
 export const defaultToastTimeout = 10000;
 
-type ToastProps = {
-  message: string;
-  title?: string;
-  timeout?: number;
-  show: boolean;
+type ToastProps = ToastState & {
   onClose: () => void;
-  type: ToastType;
 };
 
 export default ToastProps;

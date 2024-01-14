@@ -7,7 +7,11 @@ const GlobalToastStack = () => {
   const toasts = Object.values(toastStack);
 
   return (
-    <ToastContainer position="bottom-end" className="mb-2 me-2">
+    <ToastContainer
+      position="bottom-end"
+      className="mb-2 me-2"
+      containerPosition="fixed"
+    >
       {toasts.map((toast) => {
         return (
           <Toast
@@ -17,6 +21,7 @@ const GlobalToastStack = () => {
             key={toast.id}
             show={toast.show}
             type={toast.type}
+            children={toast.children}
             onClose={() => {
               closeToast(toast.id);
               setTimeout(() => removeToast(toast.id), 500);

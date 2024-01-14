@@ -1,7 +1,6 @@
 import QueryError from "@/errors/QueryError";
 import ResponseErrorDispatcher from "@/errors/ResponseErrorDispatcher";
 import UnknownResponseError from "@/errors/UnknownResponseError";
-import ErrorModel from "@/models/ErrorModel";
 import { AxiosError, AxiosPromise } from "axios";
 
 abstract class Service {
@@ -16,12 +15,11 @@ abstract class Service {
         throw error;
       }
       if (error instanceof AxiosError && error.response) {
-        throw ResponseErrorDispatcher.dispatch(
-          error.response.status,
-          (error.response.data as ErrorModel)?.message
-        );
+        throw ResponseErrorDispatcher.dispatch(error.response.status, error);
       }
-      throw new UnknownResponseError();
+      throw new UnknownResponseError(
+        error instanceof Error ? error : undefined
+      );
     }
   };
 }

@@ -5,9 +5,17 @@ import { Link } from "react-router-dom";
 import { loginPath } from "@/AppRouter";
 import RedirectHomeLogo from "@/components/links/RedirectHomeLogo/RedirectHomeLogo";
 import RegisterForm from "./RegisterForm";
+import useGetAllCities from "@/hooks/cities/useGetAllCities";
 
 const RegisterPage = () => {
+  const { isLoading, data: cities, isError } = useGetAllCities();
   const { t } = useTranslation();
+
+  // Todo: Create loading component
+  if (isLoading) return <div>Loading...</div>;
+
+  // Todo: Create error component
+  if (isError || !cities) return <div>Error</div>;
 
   return (
     <div className={styles.mainContainer}>
@@ -22,7 +30,7 @@ const RegisterPage = () => {
         </div>
       </div>
       <div className={styles.formContainer}>
-        <RegisterForm />
+        <RegisterForm cities={cities} />
         <div className={styles.footerContainer}>
           <hr className="light-text mt-auto" />
           <div className={styles.loginContainer}>

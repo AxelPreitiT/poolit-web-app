@@ -59,7 +59,15 @@
     "register": "Registrarse",
     "already_registered": "¿Ya tenés una cuenta?",
     "not_registered": "¿No tenés una cuenta aún?",
-    "error": "Ocurrió un error al registrarse"
+    "error": {
+      "title": "Registro fallido",
+      "default": "Ocurrió un error al registrarse",
+      "email_already_exists": "El correo electrónico ya está registrado"
+    },
+    "success": {
+      "title": "¡Bienvenido a Poolit!",
+      "message": "¡Ya estás registrado! Te enviamos un correo electrónico para que verifiques tu cuenta"
+    }
   },
   "verify_account": {
     "title": "Verificar cuenta",
@@ -197,7 +205,10 @@
       "error": {
         "unknown": "Ocurrió un error al realizar la operación",
         "unauthorized": "La sesión expiró, por favor volvé a iniciar sesión",
-        "forbidden": "No tenés permisos para realizar esta operación"
+        "forbidden": "No tenés permisos para realizar esta operación",
+        "conflict": "Ya existe un recurso con los datos ingresados",
+        "bad_request": "El formulario contiene datos inválidos",
+        "internal_server_error": "Ocurrió un error al realizar la operación"
       }
     }
   },
@@ -219,6 +230,15 @@
     "warning": {
       "title": "¡Atención!",
       "message": "Esta operación no se debería realizar"
+    }
+  },
+  "bad_request": {
+    "title": "Listado de errores",
+    "label": "Ver el listado de errores"
+  },
+  "city": {
+    "error": {
+      "title": "Ocurrió un error al obtener los barrios"
     }
   }
 }

@@ -1,36 +1,59 @@
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
-import ToastType from "@/enums/ToastType";
 import {
   RegisterForm,
   RegisterFormFieldsType,
   RegisterFormSchema,
   RegisterFormSchemaType,
 } from "@/forms/RegisterForm";
-import useToastStackStore from "@/stores/ToastStackStore/ToastStackStore";
 import { useTranslation } from "react-i18next";
 import useForm, { SubmitHandlerReturnModel } from "./useForm";
+import UserService from "@/services/UserService";
+import useSuccessToast from "../toasts/useSuccessToast";
+import { useNavigate } from "react-router-dom";
+import { loginPath } from "@/AppRouter";
+import ConflictResponseError from "@/errors/ConflictResponseError";
+import UnknownResponseError from "@/errors/UnknownResponseError";
+import useQueryError from "../errors/useQueryError";
+import QueryError from "@/errors/QueryError";
 
 const useRegisterForm = () => {
   const { t } = useTranslation();
-  const addToast = useToastStackStore((state) => state.addToast);
+  const navigate = useNavigate();
+  const showSuccessToast = useSuccessToast();
+  const onQueryError = useQueryError();
 
   const onSubmit: SubmitHandlerReturnModel<RegisterFormSchemaType> = async (
     data: RegisterFormSchemaType
   ) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
-      console.log(data);
-      addToast({
-        type: ToastType.ERROR,
-        message: t("register.error"),
-        timeout: defaultToastTimeout,
-      });
+    console.log(data);
+    await UserService.register(data);
+  };
+
+  const onSuccess = () => {
+    showSuccessToast({
+      title: t("register.success.title"),
+      message: t("register.success.message"),
+      timeout: defaultToastTimeout,
     });
+    navigate(loginPath, { replace: true });
+  };
+
+  const onError = (error: QueryError) => {
+    const title = t("register.error.title");
+    const timeout = defaultToastTimeout;
+    const customMessages = {
+      [ConflictResponseError.ERROR_ID]: "register.error.email_already_exists",
+      [UnknownResponseError.ERROR_ID]: "register.error.default",
+    };
+    onQueryError({ error, title, timeout, customMessages });
   };
 
   return useForm<RegisterFormFieldsType, RegisterFormSchemaType>({
     form: RegisterForm,
     formSchema: RegisterFormSchema,
     onSubmit,
+    onSuccess,
+    onError,
   });
 };
 
