@@ -20,6 +20,10 @@ public class UrlHolder {
 
     public static final String PASSENGER_REVIEWS_BASE = BASE + "/passenger-reviews";
 
+    //    --------Reports--------
+
+    public static final String REPORT_BASE = BASE + "/reports";
+
     //    --------Others--------
     public static final String IMAGE_ENTITY = "/image";
 

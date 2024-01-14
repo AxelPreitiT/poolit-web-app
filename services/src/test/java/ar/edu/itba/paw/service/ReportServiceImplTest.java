@@ -67,7 +67,7 @@ public class ReportServiceImplTest {
     private ReportServiceImpl reportService;
 
     @Test
-    public void TestCreateReport() throws UserNotFoundException, TripNotFoundException {
+    public void TestCreateReport() throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(REPORTED));
         when(userService.getCurrentUser()).thenReturn(Optional.of(REPORTER));
         when(tripService.findById(anyLong())).thenReturn(Optional.of(trip));
@@ -86,7 +86,7 @@ public class ReportServiceImplTest {
     }
 
     @Test(expected = TripNotFoundException.class)
-    public void TestDontHaveTripCreateReport() throws UserNotFoundException, TripNotFoundException {
+    public void TestDontHaveTripCreateReport() throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(REPORTED));
         when(tripService.findById(anyLong())).thenReturn(Optional.empty());
 

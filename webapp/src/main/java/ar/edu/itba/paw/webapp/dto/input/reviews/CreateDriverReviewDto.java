@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.dto.input.reviews;
 
 import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.ValidReviewOption;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.ValidOption;
 
 import javax.validation.constraints.NotNull;
 
-@ValidReviewOption(reviewOption = "option")
+@ValidOption(listableField = "option")
 public class CreateDriverReviewDto extends CreateReviewDto{
     @NotNull
     private DriverReviewOptions option;

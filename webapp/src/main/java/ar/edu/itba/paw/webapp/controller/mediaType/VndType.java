@@ -27,6 +27,11 @@ public class VndType {
     public static final String APPLICATION_TRIP = BASE + "trip.v1+json";
     public static final String APPLICATION_TRIP_PASSENGER = BASE + "trip.passenger.v1+json";
     public static final String APPLICATION_TRIP_PASSENGER_STATE = BASE + "trip.passenger.state.v1+json";
+    //    --------Reports--------
+    public static final String APPLICATION_REPORT = BASE + "report.v1+json";
+    public static final String APPLICATION_REPORT_PUBLIC = BASE + "report.public.v1+json";
+    public static final String APPLICATION_REPORT_PRIVATE = BASE + "report.private.v1+json";
+    public static final String APPLICATION_REPORT_DECISION = BASE + "report.decision.v1+json";
 
 }
 
