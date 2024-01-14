@@ -13,31 +13,6 @@ import UserPrivateModel from "@/models/UserPrivateModel.ts";
 const ProfilePage = () => {
   const { t } = useTranslation();
 
-  const user = {
-    name: "Gaston Francois",
-    email: "gfrancois@itba.edu.ar",
-    phone: "3424394741",
-    neighborhood: "Balvanera",
-    language: "Español",
-    trips: "5",
-    rating_driver: 3.5,
-    rating_passenger: 1.5,
-  };
-
-  /*
-  const [city, setCity] = useState<CityModel|null >(null);
-
-
-    useEffect(() => {
-      CityService.getCityById("http://localhost:8080/paw-2023a-07/api/cities/12").then(response => {
-        // Extraer el cuerpo de la respuesta Axios
-        // Luego, llamar a setProfileInfo con el resultado
-        setCity(response);
-      })
-    })
-
-   */
-
     const {isLoading, currentUser} = useCurrentUser();
 
     const ProfileInfo =({ currentUser }: { currentUser: UserPrivateModel }) => (
@@ -52,10 +27,10 @@ const ProfilePage = () => {
             <ProfileProp prop={t("profile.props.phone")} text={currentUser.phone} />
             <ProfileProp
                 prop={t("profile.props.neighborhood")}
-                text={user.neighborhood}
+                text={currentUser.cityUri}
             />
             <ProfileProp prop={t("profile.props.language")} text={currentUser.mailLocale} />
-            <ProfileProp prop={t("profile.props.trips")} text={user.trips} />
+            <ProfileProp prop={t("profile.props.trips")} text="PONER CANTIDAD DE VIAJES" />
             <ProfileStars
                 prop={t("profile.props.rating_driver")}
                 rating={currentUser.driverRating}
@@ -87,10 +62,10 @@ const ProfilePage = () => {
               <TabComponent
                   right_title={t("roles.passenger")}
                   //right_component={<PassengerList futureReservedTrips={currentUser.futureReservedTripsUri} pastReservedTrips={currentUser.pastReservedTripsUri}/>}
-                  right_component={<PassengerList/>}
+                  right_component={<PassengerList uri={currentUser.futureCreatedTripsUri}/>}
                   left_title={t("roles.driver")}
                   //left_component={<DriverList futureCreatedTrips={currentUser.futureCreatedTripsUri} pastCreatedTrips={currentUser.pastCreatedTripsUri}/>}
-                  left_component={<DriverList/>}
+                  left_component={<DriverList uri={currentUser.pastCreatedTripsUri}/>}
               />
           }
       </div>

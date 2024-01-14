@@ -1,9 +1,8 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
-import { Trip } from "@/types/Trip";
 
-const CardTripProfile = (Trip: Trip) => {
+const CardTripProfile = (Trip: TripModel) => {
   const { t } = useTranslation();
 
   return (
@@ -16,11 +15,11 @@ const CardTripProfile = (Trip: Trip) => {
         </div>
         <div className={styles.address_container}>
           <div className={styles.route_info_text}>
-            <h3>{Trip.originCity.name}</h3>
+            <h3>{Trip.originCityUri}</h3>
             <span className="text">{Trip.originAddress}</span>
           </div>
           <div className={styles.route_info_text}>
-            <h3>{Trip.destinationCity.name}</h3>
+            <h3>{Trip.destinationCityUri}</h3>
             <span style={{ textAlign: "right" }}>
               {Trip.destinationAddress}
             </span>
@@ -29,29 +28,29 @@ const CardTripProfile = (Trip: Trip) => {
         <div className={styles.extra_info_container}>
           <div className={styles.calendar_container}>
             <i className="bi bi-calendar text"></i>
-            {Trip.queryIsRecurrent ? (
+            {Trip.totalTrips==1 ? (
               <div className={styles.format_date}>
-                <span className="text">{Trip.dayOfWeekString}</span>
+                <span className="text">"PONER DIA DE LA SEMANA"</span>
                 <span className={styles.date_text}>
-                  {`${Trip.startDateString}, ${Trip.endDateString}`}
+                  {`${Trip.startDateTime}, ${Trip.endDateTime}`}
                 </span>
               </div>
             ) : (
               <div className={styles.format_date}>
-                <span className="text">{Trip.dayOfWeekString}</span>
-                <span className={styles.date_text}>{Trip.startDateString}</span>
+                <span className="text">"PONER DIA DE LA SEMANA"</span>
+                <span className={styles.date_text}>{Trip.startDateTime}</span>
               </div>
             )}
           </div>
           <div>
             <i className="bi bi-clock"></i>
-            <span>{Trip.startTimeString}</span>
+            <span>{Trip.startDateTime}</span>
           </div>
           <div>
             <h2 className={styles.price_format}>
               {t("format.price", {
-                priceInt: Trip.integerQueryTotalPrice,
-                princeFloat: Trip.decimalQueryTotalPrice,
+                priceInt: Trip.pricePerTrip,
+                princeFloat: 0,
               })}
             </h2>
           </div>

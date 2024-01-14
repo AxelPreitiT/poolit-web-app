@@ -7,6 +7,9 @@ class TripsService extends Service {
         return await this.resolveQuery(TripsApi.getTripById(uri));
     };
 
+    public static getTripsByUser = async (uri : string): Promise<TripModel[]> => {
+        return await this.resolveQuery(TripsApi.getTripsByUser(uri));
+    };
 }
 
 export default TripsService;

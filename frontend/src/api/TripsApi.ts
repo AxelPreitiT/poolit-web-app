@@ -10,9 +10,9 @@ class TripsApi extends AxiosApi{
             });
         };
 
-    public static getTrip: (uri: string) => AxiosPromise<TripModel> =
+    public static getTripsByUser: (uri: string) => AxiosPromise<TripModel[]> =
         (uri: string) => {
-            return this.get<TripModel>(uri, {
+            return this.get<TripModel[]>(uri, {
                 headers: {
                 },
             });
