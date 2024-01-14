@@ -13,6 +13,8 @@ interface UserPrivateModel extends UserPublicModel {
   phone: string;
   recommendedTripsUri: string;
   roleUri: string;
+  driverRating: number;
+  passengerRating: number;
 }
 
 export default UserPrivateModel;

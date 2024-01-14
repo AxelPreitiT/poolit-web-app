@@ -69,7 +69,7 @@ public class TripController {
     @Produces(value = VndType.APPLICATION_TRIP)
     public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,
                              @QueryParam("destinationCityId") @Valid @CityId final Integer destinationCityId,
-                             @QueryParam("startDateTime") @Valid @NotNull() final LocalDateTime startDateTime,
+                             @QueryParam("startDateTime") @Valid final LocalDateTime startDateTime,
                              @QueryParam("endDateTime") final LocalDateTime endDateTime,
                              @QueryParam("minPrice") @Valid @MinField(value = 0, fieldName = "minPrice") final BigDecimal minPrice,
                              @QueryParam("maxPrice") @Valid @MinField(value = 0, fieldName = "maxPrice") final BigDecimal maxPrice,

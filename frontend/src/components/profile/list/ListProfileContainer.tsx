@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import { Link } from "react-router-dom";
 
 interface ListProfileContainerProps<T> {
-  title: string;
+  title: string | undefined;
   btn_footer_text: string;
   empty_text: string;
   empty_icon: string;
@@ -21,7 +21,18 @@ const ListProfileContainer = <T,>({
   link,
 }: ListProfileContainerProps<T>) => {
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
-    return data.map((item, index) => <Component key={index} {...item} />);
+    const items: JSX.Element[] = [];
+
+    for (let index = 0; index < data.length; index++) {
+      const item = <Component key={index} {...data[index]} />;
+      items.push(
+        <div className={styles.travel_info_list} key={index}>
+          {item}
+        </div>
+      );
+    }
+
+    return items;
   };
 
   const props = generateItems(data, component_name);
@@ -33,13 +44,7 @@ const ListProfileContainer = <T,>({
       </div>
       {props && props.length > 0 ? (
         <div>
-          <div>
-            {props.map((item, index) => (
-              <div className={styles.travel_info_list} key={index}>
-                {item}
-              </div>
-            ))}
-          </div>
+          <div>{props}</div>
           <Link to={link} className={styles.logoContainer}>
             <div className={styles.plus_btn}>
               <h3 className="text">{btn_footer_text}</h3>
