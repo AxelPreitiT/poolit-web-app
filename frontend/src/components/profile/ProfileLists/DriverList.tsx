@@ -1,29 +1,28 @@
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
-import {publicsReviewsPath, createdTripsPath} from "@/AppRouter";
+import { publicsReviewsPath, createdTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import CardCar from "@/components/cardCar/CardCar";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import tripsService from "@/services/TripsService.ts";
-import {PassengerListProp} from "@/components/profile/ProfileLists/PassangerList.tsx";
 
-const DriverList = ({uri} : PassengerListProp) => {
+export interface PassengerListProp {
+  uri: string;
+}
+
+const DriverList = ({ uri }: PassengerListProp) => {
   const { t } = useTranslation();
 
-  const [trip, setTrip] = useState<TripModel[]|null>(null);
-
-
+  const [trip, setTrip] = useState<TripModel[] | null>(null);
 
   useEffect(() => {
-    tripsService.getTripsByUser(uri).then(response => {
+    tripsService.getTripsByUser(uri).then((response) => {
       // Extraer el cuerpo de la respuesta Axios
       // Luego, llamar a setProfileInfo con el resultado
       setTrip(response);
-    })
-  })
-
-
+    });
+  });
 
   const data2 = [
     {
@@ -60,28 +59,32 @@ const DriverList = ({uri} : PassengerListProp) => {
         component_name={ShortReview}
         link={publicsReviewsPath.replace(":id", String(5))}
       />
-      {
-        trip==null ? <h1>holaaa</h1> :             <ListProfileContainer
-            title={t("profile.lists.created_next_title")}
-            btn_footer_text={t("profile.lists.created_next_more")}
-            empty_text={t("profile.lists.created_next_empty")}
-            empty_icon={"car-front-fill"}
-            data={trip}
-            component_name={CardTripProfile}
-            link={createdTripsPath}
+      {trip == null ? (
+        <h1>holaaa</h1>
+      ) : (
+        <ListProfileContainer
+          title={t("profile.lists.created_next_title")}
+          btn_footer_text={t("profile.lists.created_next_more")}
+          empty_text={t("profile.lists.created_next_empty")}
+          empty_icon={"car-front-fill"}
+          data={trip}
+          component_name={CardTripProfile}
+          link={createdTripsPath}
         />
-      }
-      {
-        trip==null ? <h1>holaaa</h1> :                   <ListProfileContainer
-            title={t("profile.lists.created_prev_title")}
-            btn_footer_text={t("profile.lists.created_prev_more")}
-            empty_text={t("profile.lists.created_prev_empty")}
-            empty_icon={"car-front-fill"}
-            data={trip}
-            component_name={CardTripProfile}
-            link={createdTripsPath}
+      )}
+      {trip == null ? (
+        <h1>holaaa</h1>
+      ) : (
+        <ListProfileContainer
+          title={t("profile.lists.created_prev_title")}
+          btn_footer_text={t("profile.lists.created_prev_more")}
+          empty_text={t("profile.lists.created_prev_empty")}
+          empty_icon={"car-front-fill"}
+          data={trip}
+          component_name={CardTripProfile}
+          link={createdTripsPath}
         />
-      }
+      )}
 
       <ListProfileContainer
         title={t("profile.lists.cars")}
