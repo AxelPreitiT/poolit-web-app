@@ -93,7 +93,10 @@ const ProfilePage = () => {
             left_title={t("roles.driver")}
             //left_component={<DriverList futureCreatedTrips={currentUser.futureCreatedTripsUri} pastCreatedTrips={currentUser.pastCreatedTripsUri}/>}
             left_component={
-              <DriverList uri={currentUser.pastCreatedTripsUri} />
+              <DriverList
+                futureCreatedTripsUri={currentUser.futureCreatedTripsUri}
+                pastCreatedTripsUri={currentUser.pastCreatedTripsUri}
+              />
             }
           />
         )}
