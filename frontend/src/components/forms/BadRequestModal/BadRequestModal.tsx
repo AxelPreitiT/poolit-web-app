@@ -2,6 +2,7 @@ import BadRequestModel from "@/models/BadRequestModel";
 import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import styles from "./styles.module.scss";
 
 type BadRequestModalOutput = Record<string, string[]>;
 
@@ -17,25 +18,32 @@ const formatErrors = (errors: BadRequestModel): BadRequestModalOutput => {
 };
 
 const ModalBody = ({ errors }: { errors: BadRequestModalOutput }) => {
+  const capitalize = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
   return (
     <div>
-      {Object.entries(errors).map(([field, messages]) => {
-        return (
-          <div>
-            <h4>{field}</h4>
-            <ul>
-              {messages.map((message) => {
-                return <li>{message}</li>;
-              })}
-            </ul>
-          </div>
-        );
-      })}
+      {Object.entries(errors).map(([field, messages]) => (
+        <div>
+          <h4 className="mb-2">{capitalize(field)}</h4>
+          <ul>
+            {messages.map((message) => (
+              <li>{capitalize(message)}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };
 
-const BadRequestModal = ({ errors }: { errors?: BadRequestModel }) => {
+const BadRequestModal = ({
+  errors,
+  className,
+}: {
+  errors?: BadRequestModel;
+  className?: string;
+}) => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
 
@@ -45,8 +53,8 @@ const BadRequestModal = ({ errors }: { errors?: BadRequestModel }) => {
 
   const output = formatErrors(errors);
   return (
-    <>
-      <a>
+    <div className={className}>
+      <a onClick={() => setShowModal(true)} className={styles.clicker}>
         <i className="bi bi-caret-right-fill" />
         <p>{t("bad_request.label")}</p>
       </a>
@@ -54,17 +62,16 @@ const BadRequestModal = ({ errors }: { errors?: BadRequestModel }) => {
         show={showModal}
         onHide={() => setShowModal(false)}
         centered
-        size="sm"
         scrollable
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className={styles.modal} closeVariant="white">
           <Modal.Title>{t("bad_request.title")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={styles.modal + " pb-0"}>
           <ModalBody errors={output} />
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 };
 

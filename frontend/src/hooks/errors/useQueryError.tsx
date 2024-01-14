@@ -7,6 +7,22 @@ import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { useTranslation } from "react-i18next";
 import ResponseError from "@/errors/ResponseError";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import BadRequestResponseError from "@/errors/BadRequestResponseError";
+import BadRequestModal from "@/components/forms/BadRequestModal/BadRequestModal";
+
+const childrenByErrorId: Record<
+  string,
+  (error: QueryError) => JSX.Element | undefined
+> = {
+  [BadRequestResponseError.ERROR_ID]: (error: QueryError) =>
+    (error instanceof BadRequestResponseError && (
+      <BadRequestModal
+        errors={(error as BadRequestResponseError).getErrors()}
+        className="mt-1"
+      />
+    )) ||
+    undefined,
+};
 
 const useQueryError = () => {
   const location = useLocation();
@@ -30,6 +46,12 @@ const useQueryError = () => {
     );
   };
 
+  const getChildren = (error: QueryError) => {
+    const errorId = error.getErrorId();
+    const children = childrenByErrorId[errorId];
+    return (children && children(error)) || undefined;
+  };
+
   const onQueryError = ({
     error,
     timeout,
@@ -45,9 +67,9 @@ const useQueryError = () => {
       error instanceof QueryError ? error : new UnknownResponseError(error);
     showErrorToast({
       message: getMessage(queryError, customMessages),
-      timeout,
+      timeout: error instanceof BadRequestResponseError ? undefined : timeout,
       title,
-      children: queryError.getChildren(),
+      children: getChildren(queryError),
     });
 
     if (

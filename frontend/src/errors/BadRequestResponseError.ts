@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import ResponseError from "./ResponseError";
 import ResponseErrorDispatcher from "./ResponseErrorDispatcher";
-import BadRequestModal from "@/components/forms/BadRequestModal/BadRequestModal";
 import BadRequestModel from "@/models/BadRequestModel";
 
 const badRequestStatusCode = 400;
@@ -34,8 +33,8 @@ class BadRequestResponseError extends ResponseError {
     return BadRequestResponseError.STATUS_TEXT;
   }
 
-  public getChildren(): JSX.Element | undefined {
-    return BadRequestModal({ errors: this.errors });
+  public getErrors(): BadRequestModel | undefined {
+    return this.errors;
   }
 }
 

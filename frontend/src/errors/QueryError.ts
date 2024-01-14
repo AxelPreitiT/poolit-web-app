@@ -19,10 +19,6 @@ abstract class QueryError extends Error {
   public getErrorId(): string {
     return this.errorId;
   }
-
-  public getChildren(): JSX.Element | undefined {
-    return undefined;
-  }
 }
 
 export default QueryError;
