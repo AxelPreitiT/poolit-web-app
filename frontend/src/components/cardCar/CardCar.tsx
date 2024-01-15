@@ -1,15 +1,10 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
+import CarModel from "@/models/CarModel.ts";
 
-export interface Car {
-  carId: number;
-  imageId: number;
-  infoCar: string;
-  plate: string;
-}
 
-const CardCar = (car: Car) => {
+const CardCar = (car: CarModel) => {
   const { t } = useTranslation();
 
   return (

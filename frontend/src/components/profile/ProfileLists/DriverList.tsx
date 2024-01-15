@@ -7,15 +7,20 @@ import tripsService from "@/services/TripsService.ts";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import CardCar from "@/components/cardCar/CardCar";
+import reviewsService from "@/services/ReviewsService.ts";
+import CarService from "@/services/CarService.ts";
+import CarModel from "@/models/CarModel.ts";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
   pastCreatedTripsUri: string;
+  selfUri : string;
 }
 
 const DriverList = ({
   futureCreatedTripsUri,
   pastCreatedTripsUri,
+    selfUri
 }: DriverListProp) => {
   const { t } = useTranslation();
 
@@ -25,6 +30,9 @@ const DriverList = ({
   const [PastCreatedTrips, setPastCreatedTrips] = useState<TripModel[] | null>(
     null
   );
+  const [Reviews, setReviews] = useState<ReviewModel[] | null>(null);
+  const [Cars, setCars] = useState<CarModel[] | null>(null);
+
 
   useEffect(() => {
     tripsService.getTripsByUser(futureCreatedTripsUri).then((response) => {
@@ -38,40 +46,32 @@ const DriverList = ({
     });
   });
 
-  const data2 = [
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-  ];
-  const data3 = [
-    {
-      carId: 1,
-      imageId: 1,
-      infoCar: "Mondeo blanco",
-      plate: "AAA111",
-    },
-  ];
+  useEffect(() => {
+    reviewsService.getReviewsAsDriverByUserId(selfUri).then((response) => {
+      setReviews(response);
+    });
+  });
+
+  useEffect(() => {
+    CarService.getCarsByUserId(selfUri).then((response) => {
+      setCars(response);
+    });
+  });
 
   return (
     <div>
+      {Reviews == null ? (
+          <h1>holaaa</h1>
+      ) : (
       <ListProfileContainer
         title={t("profile.lists.review_as_driver")}
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
-        data={data2}
+        data={Reviews}
         component_name={ShortReview}
         link={publicsReviewsPath.replace(":id", String(5))}
-      />
+      />)}
       {FutureCreatedTrips == null ? (
         <h1>holaaa</h1>
       ) : (
@@ -98,15 +98,18 @@ const DriverList = ({
           link={createdTripsPath}
         />
       )}
+      {Cars == null ? (
+          <h1>holaaa</h1>
+      ) : (
       <ListProfileContainer
         title={t("profile.lists.cars")}
         btn_footer_text={t("profile.lists.cars_create")}
         empty_text={t("profile.lists.cars_empty")}
         empty_icon={"car-front-fill"}
-        data={data3}
+        data={Cars}
         component_name={CardCar}
         link={createdTripsPath}
-      />
+      />)}
     </div>
   );
 };

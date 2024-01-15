@@ -21,6 +21,9 @@ const ListProfileContainer = <T,>({
   link,
 }: ListProfileContainerProps<T>) => {
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
+    if (data.length === 0) {
+      return null; // O cualquier otra cosa que desees devolver en este caso
+    }
     const items: JSX.Element[] = [];
 
     for (let index = 0; index < data.length; index++) {
@@ -42,20 +45,20 @@ const ListProfileContainer = <T,>({
       <div className={styles.row_data}>
         <h2>{title}</h2>
       </div>
-      {props && props.length > 0 ? (
-        <div>
-          <div>{props}</div>
-          <Link to={link} className={styles.logoContainer}>
-            <div className={styles.plus_btn}>
-              <h3 className="text">{btn_footer_text}</h3>
-            </div>
-          </Link>
-        </div>
-      ) : (
+      {props == null ? (
         <div className={styles.review_empty_container}>
           <i className={`bi-solid bi-${empty_icon} h2`}></i>
           <h3 className="italic-text placeholder-text">{empty_text}</h3>
         </div>
+      ) : (
+          <div>
+            <div>{props}</div>
+            <Link to={link} className={styles.logoContainer}>
+              <div className={styles.plus_btn}>
+                <h3 className="text">{btn_footer_text}</h3>
+              </div>
+            </Link>
+          </div>
       )}
       <div></div>
     </div>

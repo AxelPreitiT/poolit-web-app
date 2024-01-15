@@ -6,15 +6,19 @@ import { useEffect, useState } from "react";
 import tripsService from "@/services/TripsService.ts";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
+import reviewsService from "@/services/ReviewsService.ts";
+
 
 export interface PassengerListProp {
   futureReservedTripsUri: string;
   pastReservedTripsUri: string;
+  selfUri : string;
 }
 
 const PassengerList = ({
   futureReservedTripsUri,
   pastReservedTripsUri,
+   selfUri
 }: PassengerListProp) => {
   const { t } = useTranslation();
 
@@ -24,6 +28,7 @@ const PassengerList = ({
   const [PastReservedTrips, setPastReservedTrips] = useState<
     TripModel[] | null
   >(null);
+  const [Reviews, setReviews] = useState<ReviewModel[] | null>(null);
 
   useEffect(() => {
     tripsService.getTripsByUser(futureReservedTripsUri).then((response) => {
@@ -37,32 +42,27 @@ const PassengerList = ({
     });
   });
 
-  const data2 = [
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-  ];
+  useEffect(() => {
+    reviewsService.getReviewsAsPassangerByUserId(selfUri).then((response) => {
+      setReviews(response);
+    });
+  });
+
 
   return (
     <div>
+      {Reviews == null ? (
+          <h1>holaaa</h1>
+      ) : (
       <ListProfileContainer
-        title={t("profile.lists.review_as_passenger")}
+        title={t("profile.lists.review_as_passanger")}
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
-        data={data2}
+        data={Reviews}
         component_name={ShortReview}
         link={publicsReviewsPath.replace(":id", String(5))}
-      />
+      />)}
       {FutureReservedTrips == null ? (
         <h1>holaaa</h1>
       ) : (

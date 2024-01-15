@@ -22,19 +22,18 @@ const PublicProfilePage = () => {
     rating_passenger: 1.5,
   };
 
-  const data2 = [
+
+  const data2 : ReviewModel[] = [
     {
-      type: "type",
       comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
-    {
-      type: "type",
-      comment: "comment",
-      raiting: 2,
-      formattedDate: "Date",
-    },
+      id:1,
+      option: "type",
+      rating: 2,
+      reviewDateTime: "Date",
+      reviewedUserUri: "Uri",
+      selfUri: "Uri",
+      tripUri: "Uri",
+    }
   ];
 
   return (
