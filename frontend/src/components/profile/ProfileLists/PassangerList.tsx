@@ -4,6 +4,8 @@ import { reservedTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import tripsService from "@/services/TripsService.ts";
+import ShortReview from "@/components/review/shorts/ShortReview";
+import { publicsReviewsPath } from "@/AppRouter";
 
 export interface PassengerListProp {
   futureReservedTripsUri: string;
@@ -35,8 +37,32 @@ const PassengerList = ({
     });
   });
 
+  const data2 = [
+    {
+      type: "type",
+      comment: "comment",
+      raiting: 2,
+      formattedDate: "Date",
+    },
+    {
+      type: "type",
+      comment: "comment",
+      raiting: 2,
+      formattedDate: "Date",
+    },
+  ];
+
   return (
     <div>
+      <ListProfileContainer
+        title={t("profile.lists.review_as_passenger")}
+        btn_footer_text={t("profile.lists.review_more")}
+        empty_text={t("profile.lists.review_empty")}
+        empty_icon={"book"}
+        data={data2}
+        component_name={ShortReview}
+        link={publicsReviewsPath.replace(":id", String(5))}
+      />
       {FutureReservedTrips == null ? (
         <h1>holaaa</h1>
       ) : (
