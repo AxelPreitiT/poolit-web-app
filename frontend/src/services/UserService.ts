@@ -16,6 +16,10 @@ class UserService extends Service {
     UsersApi.logout();
   };
 
+  public static verifyAccount = async (email: string, token: string) => {
+    await this.resolveQuery(UsersApi.verifyAccount(email, token));
+  };
+
   public static register = async (registerForm: RegisterFormSchemaType) => {
     // TODO: Resolve upload image on register
     await this.resolveQuery(UsersApi.createUser(registerForm));

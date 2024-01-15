@@ -1,30 +1,14 @@
-import { useTranslation } from "react-i18next";
-import styles from "../login/styles.module.scss";
-import { Link } from "react-router-dom";
-import { loginPath } from "@/AppRouter";
-import RedirectHomeLogo from "@/components/links/RedirectHomeLogo/RedirectHomeLogo";
-import VerifyAccountForm from "./VerifyAccountForm";
+import { useSearchParams } from "react-router-dom";
+import useVerifyAccount from "@/hooks/api/useVerifyAccount";
 
 const VerifyAccountPage = () => {
-  const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get("email") || "";
+  const token = searchParams.get("token") || "";
+  useVerifyAccount(email, token);
 
-  return (
-    <div className={styles.mainContainer}>
-      <div className={styles.logoContainer}>
-        <RedirectHomeLogo />
-      </div>
-      <div className={styles.primaryContainer}>
-        <VerifyAccountForm />
-        <div className={styles.primaryFooterContainer}>
-          <hr className="light-text" />
-          <h5 className="light-text">{t("verify_account.already_verified")}</h5>
-          <Link to={loginPath}>
-            <h5 className="link-text fw-bold">{t("login.title")}</h5>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  // TODO: Add loading component
+  return <p>Loading...</p>;
 };
 
 export default VerifyAccountPage;

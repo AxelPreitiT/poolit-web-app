@@ -71,12 +71,17 @@
   },
   "verify_account": {
     "title": "Verificar cuenta",
-    "email": "Correo electrónico",
-    "request": "Para reenviar el correo de verificación, hacé click",
-    "here": "aquí",
-    "already_verified": "¿Ya verificaste tu cuenta?",
-    "error": "Ocurrió un error al verificar tu cuenta",
-    "send": "Enviar"
+    "success": {
+      "title": "¡Listo para viajar!",
+      "message": "¡Verificaste tu cuenta correctamente!"
+    },
+    "error": {
+      "title": "Verificación fallida",
+      "default": "Ocurrió un error al verificar tu cuenta",
+      "invalid_token": "El token de verificación es inválido, expiró o ya fue utilizado",
+      "email_missing": "El link de verificación no contiene el correo electrónico, por favor comprobá que el link sea el enviado a tu casilla de correo electrónico",
+      "token_missing": "El link de verificación no contiene el token, por favor comprobá que el link sea el enviado a tu casilla de correo electrónico"
+    }
   },
   "error": {
     "email": {

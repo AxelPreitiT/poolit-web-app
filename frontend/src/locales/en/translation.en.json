@@ -71,12 +71,17 @@
   },
   "verify_account": {
     "title": "Verify your account",
-    "email": "Email",
-    "request": "To resend the verification email, please click",
-    "here": "here",
-    "already_verified": "Has your account already been verified?",
-    "error": "An error occurred while verifying your account",
-    "send": "Send"
+    "success": {
+      "title": "Ready to ride!",
+      "message": "You have successfully verified your account!"
+    },
+    "error": {
+      "title": "Verification failed",
+      "default": "An error occurred while verifying your account",
+      "invalid_token": "The verification token is invalid, expired or has already been used",
+      "email_missing": "The verification link does not contain the email, please check the link is the one sent to your email inbox",
+      "token_missing": "The verification link does not contain the token, please check the link is the one sent to your email inbox"
+    }
   },
   "error": {
     "email": {

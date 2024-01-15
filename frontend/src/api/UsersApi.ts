@@ -36,6 +36,14 @@ class UsersApi extends AxiosApi {
     Jwt.removeTokens();
   };
 
+  public static verifyAccount: (
+    email: string,
+    token: string
+  ) => AxiosPromise<void> = (email: string, token: string) => {
+    const authorization = BasicAuth.encode(email, token);
+    return UtilsApi.authenticate(authorization);
+  };
+
   public static createUser: (
     registerForm: RegisterFormSchemaType
   ) => AxiosPromise<RegisterModel> = ({
