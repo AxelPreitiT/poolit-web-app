@@ -35,20 +35,24 @@ public class AuthValidator {
     }
 
     //check if wanted user is the user doing the request
-    public boolean checkIfWantedIsSelf(long id){
+    public boolean checkIfWantedIsSelf(Long id){
+        if(id==null){
+            return true;
+        }
         final Optional<User> user = userService.getCurrentUser();
         if(!user.isPresent()){
             return false;
         }
         return user.get().getUserId() == id;
     }
+    //Remove because if not WebAuthConfig fails because of ambiguity
 
-    public boolean checkIfWantedIsSelf(Integer id){
-        if(id!=null){
-            return checkIfWantedIsSelf(id.longValue());
-        }
-        return true;
-    }
+//    public boolean checkIfWantedIsSelf(Integer id){
+//        if(id!=null){
+//            return checkIfWantedIsSelf(id.longValue());
+//        }
+//        return true;
+//    }
 
     //check if user is the trip creator
     public boolean checkIfUserIsTripCreator(long tripId) throws TripNotFoundException {
