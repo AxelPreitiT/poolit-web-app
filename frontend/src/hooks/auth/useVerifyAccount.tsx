@@ -38,14 +38,14 @@ const useVerifyAccount = (email: string | null, token: string | null) => {
 
   const { isSuccess, isError, error } = query;
 
-  const onSuccess = useCallback(() => {
+  const onSuccess = useCallback(async () => {
     showSuccessToast({
       title: t("verify_account.success.title"),
       message: t("verify_account.success.message"),
       timeout: defaultToastTimeout,
     });
     navigate(homePath, { replace: true });
-    invalidateAuthentication();
+    await invalidateAuthentication();
   }, [showSuccessToast, t, navigate, invalidateAuthentication]);
 
   const onError = useCallback(

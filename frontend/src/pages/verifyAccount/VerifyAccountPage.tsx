@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import useVerifyAccount from "@/hooks/api/useVerifyAccount";
+import useVerifyAccount from "@/hooks/auth/useVerifyAccount";
 
 const VerifyAccountPage = () => {
   const [searchParams] = useSearchParams();

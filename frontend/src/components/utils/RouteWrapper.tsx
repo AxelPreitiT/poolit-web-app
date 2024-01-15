@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import useRouteAuthentication from "@/hooks/api/useRouteAuthentication";
+import useRouteAuthentication from "@/hooks/auth/useRouteAuthentication";
 
 interface RouterComponentProps {
   children: React.ReactNode;
