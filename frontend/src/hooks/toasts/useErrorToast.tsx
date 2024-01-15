@@ -8,12 +8,14 @@ const useErrorToast = () => {
     message,
     timeout,
     title,
+    children,
   }: {
     message: string;
     timeout?: number;
     title?: string;
+    children?: JSX.Element;
   }) => {
-    showToast(ToastType.ERROR, { message, timeout, title });
+    showToast(ToastType.ERROR, { message, timeout, title, children });
   };
 
   return showErrorToast;

@@ -10,13 +10,20 @@ const useToast = () => {
       message,
       timeout,
       title,
-    }: { message: string; timeout?: number; title?: string }
+      children,
+    }: {
+      message: string;
+      timeout?: number;
+      title?: string;
+      children?: JSX.Element;
+    }
   ) => {
     addToast({
       type,
       message,
       timeout,
       title,
+      children,
     });
   };
 

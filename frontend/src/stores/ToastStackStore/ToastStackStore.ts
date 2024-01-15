@@ -1,27 +1,33 @@
 import ToastType from "@/enums/ToastType";
 import { create } from "zustand";
 
-interface ToastState {
+export interface ToastState {
   message: string; // Message to display in the toast
   title?: string; // Title to display in the toast
   type: ToastType; // Type of toast (error)
   timeout?: number; // Time in ms to display the toast
   show: boolean; // Whether or not to show the toast
-  id: number; // Unique ID for the toast (timestamp)
+  children?: JSX.Element; // Children to display in the toast body
 }
 
+type ToastInstance = ToastState & {
+  id: number;
+};
+
 interface ToastStackState {
-  toastStack: Record<number, ToastState>; // Object of toast states, keyed by ID
+  toastStack: Record<number, ToastInstance>; // Object of toast states, keyed by ID
   addToast: ({
     title,
     message,
     type,
     timeout,
+    children,
   }: {
     title?: string;
     message: string;
     type: ToastType;
     timeout?: number;
+    children?: JSX.Element;
   }) => void; // Add a toast to the stack
   closeToast: (id: number) => void; // Close a toast (hide it)
   removeToast: (id: number) => void; // Remove a toast from the stack
@@ -30,7 +36,7 @@ interface ToastStackState {
 const useToastStackStore = create<ToastStackState>((set) => ({
   toastStack: {},
 
-  addToast: ({ title, message, type, timeout }) =>
+  addToast: ({ title, message, type, timeout, children }) =>
     set((state) => {
       const now = Date.now();
       return {
@@ -42,6 +48,7 @@ const useToastStackStore = create<ToastStackState>((set) => ({
             type,
             timeout,
             show: true,
+            children,
             id: now,
           },
         },

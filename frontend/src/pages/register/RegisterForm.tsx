@@ -7,9 +7,13 @@ import ImageInput from "@/components/forms/ImageInput/ImageInput";
 import FormError from "@/components/forms/FormError/FormError";
 import LoadingButton from "@/components/buttons/LoadingButton";
 import useRegisterForm from "@/hooks/forms/useRegisterForm";
+import CityModel from "@/models/CityModel";
+import CitySelector, {
+  citySelectorDefaultValue,
+} from "@/components/forms/CitySelector/CitySelector";
 
-const RegisterForm = () => {
-  const { t } = useTranslation();
+const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
+  const { t, i18n } = useTranslation();
   const [preview, setPreview] = useState<string | undefined>(undefined);
 
   const {
@@ -120,9 +124,19 @@ const RegisterForm = () => {
         </div>
         <div className={styles.formRow}>
           <div className={styles.inputItem}>
-            <Form.Select id="cityId" size="sm" {...register("city")}>
-              <option value="-1">{t("register.residence_city")}</option>
-            </Form.Select>
+            <Controller
+              name="city"
+              defaultValue={citySelectorDefaultValue}
+              control={control}
+              render={({ field: { onChange } }) => (
+                <CitySelector
+                  cities={cities}
+                  defaultOption={t("register.residence_city")}
+                  size="sm"
+                  onChange={onChange}
+                />
+              )}
+            />
             <FormError error={tFormError(errors.city)} />
           </div>
         </div>
@@ -138,9 +152,14 @@ const RegisterForm = () => {
               <Form.Label className="light-text">
                 {t("language.language_selector")}
               </Form.Label>
-              <Form.Select id="locale" size="sm" {...register("locale")}>
-                <option value="es">{t("language.spanish")}</option>
+              <Form.Select
+                id="locale"
+                size="sm"
+                {...register("locale")}
+                defaultValue={i18n.language}
+              >
                 <option value="en">{t("language.english")}</option>
+                <option value="es">{t("language.spanish")}</option>
               </Form.Select>
             </Form.Group>
             <FormError error={tFormError(errors.locale)} />

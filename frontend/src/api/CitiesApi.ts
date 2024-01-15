@@ -7,21 +7,15 @@ class CitiesApi extends AxiosApi {
 
   public static getCityById: (uri: string) => AxiosPromise<CityModel> = (
     uri: string
-  ) => {
-    return this.get<CityModel>(uri);
-  };
+  ) => this.get<CityModel>(uri);
 
-  public static getOptions: (options: AxiosRequestConfig) => AxiosPromise = (
-    options: AxiosRequestConfig
-  ) => {
-    return this.options(CitiesApi.CITIES_BASE_PATH, options);
-  };
+  public static getOptions: (config: AxiosRequestConfig) => AxiosPromise = (
+    config?: AxiosRequestConfig
+  ) => this.options(CitiesApi.CITIES_BASE_PATH, config);
 
-  public static getOptionsGaston: (options: AxiosRequestConfig) => AxiosPromise = (
-      options: AxiosRequestConfig
-  ) => {
-    return this.get(CitiesApi.CITIES_BASE_PATH, options);
-  };
+  // Todo: On deploy, as we will use OPTIONS method, useRequestInterceptor should be false always
+  public static getAllCities = (config?: AxiosRequestConfig) =>
+    this.get<CityModel[]>(CitiesApi.CITIES_BASE_PATH, config);
 }
 
 export default CitiesApi;

@@ -102,6 +102,7 @@ public class EmailServiceImpl implements EmailService {
         final Context ctx = new Context();
         ctx.setVariable("user", user);
         ctx.setVariable("token", token);
+        ctx.setVariable("email", user.getEmail());
         ctx.setLocale(user.getMailLocale());
 
         //enviamos el mail

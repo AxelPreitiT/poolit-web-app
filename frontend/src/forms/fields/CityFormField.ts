@@ -1,27 +1,24 @@
-import { ZodEffects, ZodNumber, z } from "zod";
+import { ZodNumber } from "zod";
 import FieldInterpolation from "./interpolations/FieldInterpolation";
 import FormField from "./FormField";
 import FormFieldNumberBuilder from "./builders/FormFieldNumberBuilder";
 
-export type CityZodType = ZodEffects<ZodNumber, number, unknown>;
+export type CityZodType = ZodNumber;
 const cityMinId: number = 1;
 
 export default class CityFormField extends FormField {
   private interpolations: FieldInterpolation[];
-  private preSchema: ZodNumber;
+  private schema: CityZodType;
 
   constructor(name: string) {
     super(name);
-    [this.preSchema, this.interpolations] = new FormFieldNumberBuilder(name)
+    [this.schema, this.interpolations] = new FormFieldNumberBuilder(name)
       .hasMinValue(cityMinId)
       .build();
   }
 
   public getSchema(): CityZodType {
-    return z.preprocess(
-      (val) => parseInt(z.string().parse(val), 10),
-      this.preSchema
-    );
+    return this.schema;
   }
 
   public getInterpolations(): FieldInterpolation[] {

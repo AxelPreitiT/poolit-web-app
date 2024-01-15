@@ -1,23 +1,26 @@
+import { AxiosError } from "axios";
 import ResponseError from "./ResponseError";
 import UnknownResponseError from "./UnknownResponseError";
 
 class ResponseErrorDispatcher {
   private readonly _responseErrorHandlers: Map<
     number,
-    new (responseMessage?: string) => ResponseError
-  > = new Map<number, new (responseMessage?: string) => ResponseError>();
+    new (error: AxiosError) => ResponseError
+  > = new Map<number, new (error: AxiosError) => ResponseError>();
 
   public register(
     statusCode: number,
-    handler: new (responseMessage?: string) => ResponseError
+    handler: new (error: AxiosError) => ResponseError
   ): void {
     this._responseErrorHandlers.set(statusCode, handler);
   }
 
-  public dispatch(statusCode: number, responseMessage?: string): ResponseError {
-    const handler =
-      this._responseErrorHandlers.get(statusCode) || UnknownResponseError;
-    return new handler(responseMessage);
+  public dispatch(statusCode: number, error: AxiosError): ResponseError {
+    const handler = this._responseErrorHandlers.get(statusCode);
+    if (!handler) {
+      return new UnknownResponseError(error);
+    }
+    return new handler(error);
   }
 }
 

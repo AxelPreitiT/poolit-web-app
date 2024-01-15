@@ -17,6 +17,7 @@ const Toast = ({
   message,
   title,
   type,
+  children,
 }: ToastProps) => {
   const { t } = useTranslation();
 
@@ -37,9 +38,8 @@ const Toast = ({
         </div>
       </BToast.Header>
       <BToast.Body className={styles.body}>
-        <span className="light-text">
-          {message || t(`toast.${type}.message`)}
-        </span>
+        <p className="light-text">{message || t(`toast.${type}.message`)}</p>
+        {children}
       </BToast.Body>
     </BToast>
   );

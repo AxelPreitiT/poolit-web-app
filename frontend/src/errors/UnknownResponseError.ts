@@ -1,20 +1,28 @@
 import ResponseError from "./ResponseError";
 
-const unknownI18nKey = "query.response.error.unknown";
 const unknownStatusCode = -1;
-const unknownStatusText = "Unknown";
 
 class UnknownResponseError extends ResponseError {
-  constructor(responseMessage: string = "unknown response error") {
-    super(unknownI18nKey, responseMessage);
+  private static readonly STATUS_CODE: number = unknownStatusCode;
+  private static readonly STATUS_TEXT: string = "Unknown";
+  private static readonly I18N_KEY: string = "query.response.error.unknown";
+  public static readonly ERROR_ID: string = "UnknownResponseError";
+
+  constructor(error?: Error) {
+    const message = error?.message || UnknownResponseError.STATUS_TEXT;
+    super(
+      UnknownResponseError.I18N_KEY,
+      UnknownResponseError.ERROR_ID,
+      message
+    );
   }
 
   public getStatusCode(): number {
-    return unknownStatusCode;
+    return UnknownResponseError.STATUS_CODE;
   }
 
   public getStatusText(): string {
-    return unknownStatusText;
+    return UnknownResponseError.STATUS_TEXT;
   }
 }
 

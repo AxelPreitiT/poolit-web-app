@@ -59,16 +59,29 @@
     "register": "Registrarse",
     "already_registered": "¿Ya tenés una cuenta?",
     "not_registered": "¿No tenés una cuenta aún?",
-    "error": "Ocurrió un error al registrarse"
+    "error": {
+      "title": "Registro fallido",
+      "default": "Ocurrió un error al registrarse",
+      "email_already_exists": "El correo electrónico ya está registrado"
+    },
+    "success": {
+      "title": "¡Bienvenido a Poolit!",
+      "message": "¡Ya estás registrado! Te enviamos un correo electrónico para que verifiques tu cuenta"
+    }
   },
   "verify_account": {
     "title": "Verificar cuenta",
-    "email": "Correo electrónico",
-    "request": "Para reenviar el correo de verificación, hacé click",
-    "here": "aquí",
-    "already_verified": "¿Ya verificaste tu cuenta?",
-    "error": "Ocurrió un error al verificar tu cuenta",
-    "send": "Enviar"
+    "success": {
+      "title": "¡Listo para viajar!",
+      "message": "¡Verificaste tu cuenta correctamente!"
+    },
+    "error": {
+      "title": "Verificación fallida",
+      "default": "Ocurrió un error al verificar tu cuenta",
+      "invalid_token": "El token de verificación es inválido, expiró o ya fue utilizado",
+      "email_missing": "El link de verificación no contiene el correo electrónico, por favor comprobá que el link sea el enviado a tu casilla de correo electrónico",
+      "token_missing": "El link de verificación no contiene el token, por favor comprobá que el link sea el enviado a tu casilla de correo electrónico"
+    }
   },
   "error": {
     "email": {
@@ -197,7 +210,10 @@
       "error": {
         "unknown": "Ocurrió un error al realizar la operación",
         "unauthorized": "La sesión expiró, por favor volvé a iniciar sesión",
-        "forbidden": "No tenés permisos para realizar esta operación"
+        "forbidden": "No tenés permisos para realizar esta operación",
+        "conflict": "Ya existe un recurso con los datos ingresados",
+        "bad_request": "El formulario contiene datos inválidos",
+        "internal_server_error": "Ocurrió un error al realizar la operación"
       }
     }
   },
@@ -219,6 +235,15 @@
     "warning": {
       "title": "¡Atención!",
       "message": "Esta operación no se debería realizar"
+    }
+  },
+  "bad_request": {
+    "title": "Listado de errores",
+    "label": "Ver el listado de errores"
+  },
+  "city": {
+    "error": {
+      "title": "Ocurrió un error al obtener los barrios"
     }
   }
 }
