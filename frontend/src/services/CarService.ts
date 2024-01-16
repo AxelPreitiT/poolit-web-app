@@ -11,6 +11,10 @@ class CarService extends Service {
         return await this.resolveQuery(CarApi.getCarsByUser(uri));
     };
 
+    public static getCarById = async (uri : string): Promise<CarModel> => {
+        return await this.resolveQuery(CarApi.getCarById(uri));
+    };
+
 }
 
 export default CarService;
