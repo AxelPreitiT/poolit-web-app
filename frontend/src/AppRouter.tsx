@@ -11,7 +11,7 @@ import PublicProfilePage from "./pages/profile/PublicProfilePage";
 import Navbar from "./components/utils/Navbar";
 import ReservedPage from "./pages/reserved/ReservedPage";
 import CreatedPage from "./pages/created/CreatedPage";
-import CreateTripPage from "./pages/createTrip/CreatedPage";
+import CreateTripPage from "./pages/createTrip/CreateTripPage";
 import AdminPage from "./pages/admin/AdminPage";
 import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
 
