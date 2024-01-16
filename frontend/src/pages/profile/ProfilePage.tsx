@@ -10,6 +10,7 @@ import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UserPrivateModel from "@/models/UserPrivateModel.ts";
 import CityService from "@/services/CityService.ts";
 import { useEffect, useState } from "react";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ const ProfilePage = () => {
       <ProfileProp prop={t("profile.props.email")} text={currentUser.email} />
       <ProfileProp prop={t("profile.props.phone")} text={currentUser.phone} />
       {cityUser === null ? (
-        <h1>holaaa</h1>
+          <ProfileProp prop={t("profile.props.neighborhood")} text={t("spinner.loading")} />
       ) : (
         <ProfileProp prop={t("profile.props.neighborhood")} text={cityUser} />
       )}
@@ -65,7 +66,7 @@ const ProfilePage = () => {
     <div className={styles.main_container}>
       {isLoading || currentUser === undefined ? (
         <div className={styles.profileCard}>
-          <h3>Loading...</h3>
+            <SpinnerComponent />
         </div>
       ) : (
         <ProfileInfo currentUser={currentUser} />
@@ -75,9 +76,9 @@ const ProfilePage = () => {
         {isLoading || currentUser === undefined ? (
           <TabComponent
             right_title={t("roles.passenger")}
-            right_component={<h3>Loading...</h3>}
+            right_component={<SpinnerComponent />}
             left_title={t("roles.driver")}
-            left_component={<h3>Loading...</h3>}
+            left_component={<SpinnerComponent />}
           />
         ) : (
           <TabComponent

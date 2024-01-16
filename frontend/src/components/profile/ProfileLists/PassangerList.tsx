@@ -7,6 +7,7 @@ import tripsService from "@/services/TripsService.ts";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import reviewsService from "@/services/ReviewsService.ts";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 
 
 export interface PassengerListProp {
@@ -52,7 +53,7 @@ const PassengerList = ({
   return (
     <div>
       {Reviews == null ? (
-          <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
       <ListProfileContainer
         title={t("profile.lists.review_as_passanger")}
@@ -64,7 +65,7 @@ const PassengerList = ({
         link={publicsReviewsPath.replace(":id", String(5))}
       />)}
       {FutureReservedTrips == null ? (
-        <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.reserved_next_title")}
@@ -77,7 +78,7 @@ const PassengerList = ({
         />
       )}
       {PastReservedTrips == null ? (
-        <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.reserved_prev_title")}

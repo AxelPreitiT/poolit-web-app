@@ -10,6 +10,7 @@ import CardCar from "@/components/cardCar/CardCar";
 import reviewsService from "@/services/ReviewsService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
@@ -61,7 +62,7 @@ const DriverList = ({
   return (
     <div>
       {Reviews == null ? (
-          <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
       <ListProfileContainer
         title={t("profile.lists.review_as_driver")}
@@ -73,7 +74,7 @@ const DriverList = ({
         link={publicsReviewsPath.replace(":id", String(5))}
       />)}
       {FutureCreatedTrips == null ? (
-        <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.created_next_title")}
@@ -86,7 +87,7 @@ const DriverList = ({
         />
       )}
       {PastCreatedTrips == null ? (
-        <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.created_prev_title")}
@@ -99,7 +100,7 @@ const DriverList = ({
         />
       )}
       {Cars == null ? (
-          <h1>holaaa</h1>
+          <SpinnerComponent />
       ) : (
       <ListProfileContainer
         title={t("profile.lists.cars")}

@@ -265,5 +265,8 @@
     "error": {
       "title": "An error occurred while loading the neighborhoods"
     }
+  },
+  "spinner":{
+    "loading": "Loading..."
   }
 }

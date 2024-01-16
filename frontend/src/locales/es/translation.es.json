@@ -265,5 +265,8 @@
     "error": {
       "title": "Ocurrió un error al obtener los barrios"
     }
+  },
+  "spinner":{
+    "loading": "Cargando..."
   }
 }
