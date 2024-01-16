@@ -4,7 +4,7 @@ import UserPrivateModel from "@/models/UserPrivateModel";
 import { AxiosPromise, AxiosResponse } from "axios";
 import Jwt from "@/auth/Jwt";
 import BasicAuth from "@/auth/BasicAuth";
-import UtilsApi from "./UtilsApi";
+import AuthApi from "./AuthApi";
 import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import RegisterModel from "@/models/RegisterModel";
@@ -29,7 +29,7 @@ class UsersApi extends AxiosApi {
   ) => {
     Jwt.setRememberMe(rememberMe);
     const authorization = BasicAuth.encode(email, password);
-    return UtilsApi.authenticate(authorization);
+    return AuthApi.authenticate(authorization);
   };
 
   public static logout: () => void = () => {
@@ -41,7 +41,7 @@ class UsersApi extends AxiosApi {
     token: string
   ) => AxiosPromise<void> = (email: string, token: string) => {
     const authorization = BasicAuth.encode(email, token);
-    return UtilsApi.authenticate(authorization);
+    return AuthApi.authenticate(authorization);
   };
 
   public static createUser: (

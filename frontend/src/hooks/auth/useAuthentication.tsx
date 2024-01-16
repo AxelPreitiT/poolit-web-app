@@ -1,4 +1,4 @@
-import UtilsService from "@/services/UtilsService";
+import AuthService from "@/services/AuthService";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const queryKey = "authentication";
@@ -8,7 +8,10 @@ const useAuthentication = () => {
 
   const { isLoading, isSuccess, isError } = useQuery({
     queryKey: [queryKey],
-    queryFn: UtilsService.tryAuthentication,
+    queryFn: async () => {
+      await AuthService.tryAuthentication();
+      return true;
+    },
     retry: false,
   });
 

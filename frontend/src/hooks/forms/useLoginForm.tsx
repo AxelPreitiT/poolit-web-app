@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
 import QueryError from "@/errors/QueryError";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
-import useAuthentication from "../api/useAuthentication";
+import useAuthentication from "../auth/useAuthentication";
 import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
 import useQueryError from "../errors/useQueryError";
 import UnknownResponseError from "@/errors/UnknownResponseError";

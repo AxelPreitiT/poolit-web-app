@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import PoolitFavicon from "@/images/favicon.svg";
 import router from "./AppRouter";
 import GlobalToastStack from "./components/toasts/GlobalToastStack";
-import useApiLocale from "@/hooks/api/useApiLocale";
+import useApiLocale from "@/hooks/auth/useApiLocale";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 

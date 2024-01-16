@@ -3,7 +3,7 @@ import CitiesApi from "./CitiesApi";
 import AxiosApi from "./axios/AxiosApi";
 import UsersApi from "./UsersApi";
 
-class UtilsApi extends AxiosApi {
+class AuthApi extends AxiosApi {
   public static authenticate: (
     Authorization: `Basic ${string}`
   ) => AxiosPromise = (Authorization: `Basic ${string}`) =>
@@ -18,4 +18,4 @@ class UtilsApi extends AxiosApi {
     UsersApi.getCurrentUser();
 }
 
-export default UtilsApi;
+export default AuthApi;
