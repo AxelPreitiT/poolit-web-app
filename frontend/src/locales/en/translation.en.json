@@ -127,7 +127,9 @@
       "language": "Language",
       "trips": "Trips created",
       "rating_driver": "Driver rating",
-      "rating_passenger": "Passenger rating"
+      "rating_passenger": "Passenger rating",
+      "es" : "Spanish",
+      "en" : "English"
     },
     "lists": {
       "review_as_driver": "Opinions as a driver",
@@ -156,7 +158,25 @@
     "passenger": "Passenger"
   },
   "reviews": {
-    "title": "Reviews"
+    "title": "Reviews",
+    "NOT_FRIENDLY": "Not friendly",
+    "DANGEROUS_DRIVER": "Dangerous driver",
+    "UNPUNCTUAL": "Unpunctual",
+    "DISTRACTED_DRIVER": "Distracted driver",
+    "NOT_RESPECTED_TRAFFIC_RULES": "Does not respect traffic rules",
+    "UNCOMFORTABLE_EXPERIENCE": "Uncomfortable experience",
+    "NOT_GOOD_TREATMENT": "Not good treatment",
+    "IMPRUDENT_DRIVER": "Imprudent driver",
+    "RESPECTED_TRAFFIC_RULES": "Respects traffic rules",
+    "ACCEPTABLE_DRIVER": "Acceptable driver",
+    "ACCEPTABLE_EXPERIENCE": "Acceptable experience",
+    "FRIENDLY": "Friendly",
+    "PUNCTUAL": "Punctual",
+    "VERY_FRIENDLY": "Very friendly",
+    "SAFE_DRIVER": "Safe driver",
+    "GOOD_EXPERIENCE": "Good experience",
+    "PROFESSIONAL_DRIVER": "Professional driver",
+    "EXCELLENT_EXPERIENCE": "Excellent experience"
   },
   "created_trips": {
     "title": "Created trips",

@@ -44,7 +44,7 @@ const ProfilePage = () => {
       )}
       <ProfileProp
         prop={t("profile.props.language")}
-        text={currentUser.mailLocale}
+        text={t(`profile.props.${currentUser.mailLocale}`)}
       />
       <ProfileProp
         prop={t("profile.props.trips")}
