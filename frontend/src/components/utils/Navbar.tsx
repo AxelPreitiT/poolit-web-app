@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import "./navbarStyles.css"; // Importa el archivo CSS auxiliar
 import PoolitLogo from "@/images/poolit.svg";
 import CircleImg from "../img/circleImg/CircleImg";
-import ProfilePhoto from "@/images/descarga.jpeg";
 import {
   registerPath,
   loginPath,
@@ -19,6 +18,10 @@ import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
 import useLogout from "@/hooks/auth/useLogout";
+import useAuthentication from "@/hooks/auth/useAuthentication";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
+import UsersRoles from "@/enums/UsersRoles";
 
 interface Section {
   path: string;
@@ -28,11 +31,12 @@ interface Section {
 const Navbar = () => {
   const { t } = useTranslation();
   const logout = useLogout();
+  const { isAuthenticated } = useAuthentication();
   const location = useLocation();
   const pathname = location?.pathname;
+  const { isLoading, currentUser } = useCurrentUser();
 
-  const isLoged = true;
-  const role = "admin";
+  const isLoged = isAuthenticated;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -69,7 +73,7 @@ const Navbar = () => {
                 </Link>
               </div>
             ))}
-          {role == "admin" && (
+          {isLoged && currentUser?.role == UsersRoles.ADMIN && (
             <div
               className={`nav-section-item ${
                 pathname === adminPath ? "active" : ""
@@ -103,15 +107,37 @@ const Navbar = () => {
             <Dropdown show={dropdownOpen} onToggle={toggleDropdown} drop="down">
               <Dropdown.Toggle variant="link" id="profile-dropdown">
                 <div className="img-profile-container">
-                  <CircleImg src={ProfilePhoto} size={50} />
+                  {isLoading ||
+                  currentUser === undefined ||
+                  currentUser == null ? (
+                    <SpinnerComponent />
+                  ) : (
+                    <CircleImg src={currentUser.imageUri} size={50} />
+                  )}
                 </div>
               </Dropdown.Toggle>
               <Dropdown.Menu className={styles.menu_dropdown}>
                 <Dropdown.Item as={Link} to={profilePath}>
-                  <div className={styles.item_dropdown}>
-                    <CircleImg src={ProfilePhoto} size={28} />
-                    <h3 className={styles.dropdown_text}>Poner nombree</h3>
-                  </div>
+                  {isLoading ||
+                  currentUser === undefined ||
+                  currentUser == null ? (
+                    <div className={styles.item_dropdown}>
+                      <SpinnerComponent />
+                      <h3 className={styles.dropdown_text}>
+                        {t("spinner.loading")}
+                      </h3>
+                    </div>
+                  ) : (
+                    <div className={styles.item_dropdown}>
+                      <CircleImg src={currentUser.imageUri} size={28} />
+                      <h3 className={styles.dropdown_text}>
+                        {t("format.name", {
+                          name: currentUser.username,
+                          surname: currentUser.surname,
+                        })}
+                      </h3>
+                    </div>
+                  )}
                 </Dropdown.Item>
                 <Dropdown.Item onClick={logout}>
                   <div className={styles.item_dropdown}>
