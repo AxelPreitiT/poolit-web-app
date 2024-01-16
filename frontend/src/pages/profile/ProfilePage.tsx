@@ -1,7 +1,6 @@
 import ProfileImg from "@/components/profile/img/ProfileImg";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import ProfilePhoto from "@/images/descarga.jpeg";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
 import ProfileStars from "@/components/profile/stars/ProfileStars";
 import DriverList from "@/components/profile/ProfileLists/DriverList";
@@ -29,7 +28,7 @@ const ProfilePage = () => {
 
   const ProfileInfo = ({ currentUser }: { currentUser: UserPrivateModel }) => (
     <div className={styles.profileCard}>
-      <ProfileImg src={ProfilePhoto} />
+      <ProfileImg src={currentUser.imageUri} />
       <h3 className="text-center">
         {t("format.name", {
           name: currentUser.username,

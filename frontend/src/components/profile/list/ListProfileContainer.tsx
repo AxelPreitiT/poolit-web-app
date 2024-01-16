@@ -28,11 +28,7 @@ const ListProfileContainer = <T,>({
 
     for (let index = 0; index < data.length; index++) {
       const item = <Component key={index} {...data[index]} />;
-      items.push(
-        <div className={styles.travel_info_list} key={index}>
-          {item}
-        </div>
-      );
+      items.push(item);
     }
 
     return items;
@@ -52,7 +48,7 @@ const ListProfileContainer = <T,>({
         </div>
       ) : (
           <div>
-            <div>{props}</div>
+            <div className={styles.list_prop_container}>{props}</div>
             <Link to={link} className={styles.logoContainer}>
               <div className={styles.plus_btn}>
                 <h3 className="text">{btn_footer_text}</h3>
