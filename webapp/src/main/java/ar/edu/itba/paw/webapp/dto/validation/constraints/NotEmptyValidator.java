@@ -6,6 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
+//TODO: revisar, es raro que funcione si tiene a email
 public class NotEmptyValidator implements ConstraintValidator<Email,String> {
 
     private static final String PATTERN_STRING = ".+";

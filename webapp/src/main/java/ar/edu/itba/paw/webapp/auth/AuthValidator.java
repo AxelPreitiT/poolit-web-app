@@ -74,10 +74,14 @@ public class AuthValidator {
     }
 
     public boolean checkIfUserCanSearchPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, Passenger.PassengerState passengerState) throws TripNotFoundException {
+        if(startDateTime==null || endDateTime==null || passengerState==null){
+            return true;
+        }
         final Optional<User> optionalUser = userService.getCurrentUser();
         if (!optionalUser.isPresent()) {
             return false;
         }
+        //TOOD: check null values!
         return tripService.checkIfUserCanGetPassengers(tripId,optionalUser.get(),startDateTime,endDateTime,passengerState);
     }
 

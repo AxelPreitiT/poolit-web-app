@@ -11,6 +11,7 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.PassengersQuery;
 import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
@@ -41,7 +42,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-//TODO: agregar media Types
 @Path(UrlHolder.TRIPS_BASE)
 @Component
 public class TripController {
@@ -141,21 +141,13 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
-    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#startDateTime,#endDateTime,#passengerState)")
+    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response getPassengers(@PathParam("id") final long id,
-                                  @QueryParam("startDateTime") final LocalDateTime startDateTime,
-                                  @QueryParam("endDateTime") final LocalDateTime endDateTime,
-                                  @QueryParam("passengerState") final Passenger.PassengerState passengerState,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws CustomException {
+                                  @Valid @BeanParam PassengersQuery passengersQuery) throws CustomException {
         LOGGER.debug("GET request for passengers from trip {}",id);
-        if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
-            //TODO: revisar si esta bien instanciar esto aca!
-            throw new CustomException("exceptions.startDateTime_with_enDateTime",Response.Status.BAD_REQUEST.getStatusCode());
-        }
-        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState,page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerDto::fromPassenger,PassengerDto.class);
+        PagedContent<Passenger> ans = tripService.getPassengers(id,passengersQuery.getStartDateTime(),passengersQuery.getEndDateTime(), passengersQuery.getPassengerState(),passengersQuery.getPage(),passengersQuery.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,passengersQuery.getPage(),PassengerDto::fromPassenger,PassengerDto.class);
     }
 
     @POST

@@ -512,7 +512,6 @@ public class TripServiceImpl implements TripService {
     public PagedContent<Passenger> getPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final Passenger.PassengerState passengerState,final int page, final int pageSize) throws TripNotFoundException {
         validatePageAndSize(page,pageSize);
         final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
-        //TODO: revisar permisos aca?
         if(startDateTime==null || endDateTime == null){
             return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),Optional.ofNullable(passengerState),page,pageSize);
         }
