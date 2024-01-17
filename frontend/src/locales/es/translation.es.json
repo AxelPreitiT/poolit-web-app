@@ -127,7 +127,9 @@
       "language": "Idioma",
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
-      "rating_passenger": "Valoración como pasajero"
+      "rating_passenger": "Valoración como pasajero",
+      "es" : "Español",
+      "en" : "Ingles"
     },
     "lists": {
       "review_as_driver": "Opiniones como conductor",
@@ -156,7 +158,25 @@
     "passenger": "Pasajero"
   },
   "reviews": {
-    "title": "opiniones"
+    "title": "opiniones",
+    "NOT_FRIENDLY": "No amigable",
+    "DANGEROUS_DRIVER": "Conductor peligroso",
+    "UNPUNCTUAL": "Impuntual",
+    "DISTRACTED_DRIVER": "Conductor distraído",
+    "NOT_RESPECTED_TRAFFIC_RULES": "No respeta las reglas de tránsito",
+    "UNCOMFORTABLE_EXPERIENCE": "Experiencia incómoda",
+    "NOT_GOOD_TREATMENT": "Mal trato",
+    "IMPRUDENT_DRIVER": "Conductor imprudente",
+    "RESPECTED_TRAFFIC_RULES": "Respeta las reglas de tránsito",
+    "ACCEPTABLE_DRIVER": "Conductor aceptable",
+    "ACCEPTABLE_EXPERIENCE": "Experiencia aceptable",
+    "FRIENDLY": "Amigable",
+    "PUNCTUAL": "Puntual",
+    "VERY_FRIENDLY": "Muy amigable",
+    "SAFE_DRIVER": "Conductor seguro",
+    "GOOD_EXPERIENCE": "Buena experiencia",
+    "PROFESSIONAL_DRIVER": "Conductor profesional",
+    "EXCELLENT_EXPERIENCE": "Excelente experiencia"
   },
   "created_trips": {
     "title": "Viajes creados",
@@ -245,5 +265,8 @@
     "error": {
       "title": "Ocurrió un error al obtener los barrios"
     }
+  },
+  "spinner":{
+    "loading": "Cargando..."
   }
 }

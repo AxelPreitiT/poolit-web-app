@@ -12,7 +12,7 @@ interface UserPrivateModel extends UserPublicModel {
   pastReservedTripsUri: string;
   phone: string;
   recommendedTripsUri: string;
-  roleUri: string;
+  role: string;
   driverRating: number;
   passengerRating: number;
 }

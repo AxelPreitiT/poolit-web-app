@@ -2,17 +2,17 @@
 
 .card_info {
   margin: 1%;
+  gap: 30px;
+  min-width: -webkit-fill-available;
   border: 2px solid #8b8b8b;
   border-radius: 16px;
   display: flex;
   height: fit-content;
   padding: 1.5% 1% 1% 1%;
   flex-direction: row;
-  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
   opacity: 1;
-  transition:
-    opacity 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .data_container {
@@ -84,13 +84,14 @@
 
 .car_container {
   object-fit: contain;
-  max-width: 200px;
-  max-height: 170px;
+  max-width: -webkit-fill-available;
   border-radius: 20px;
 }
 
 .img_container {
   flex-grow: 1;
+  width: 200px;
+  margin: 10px;
   max-height: inherit;
   align-content: center;
   border-radius: 20px;

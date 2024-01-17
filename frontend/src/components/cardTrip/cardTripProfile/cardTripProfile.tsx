@@ -1,14 +1,16 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import ProfilePhoto from "@/images/descarga.jpeg";
 import {useEffect, useState} from "react";
 import CityService from "@/services/CityService.ts";
+import CarService from "@/services/CarService.ts";
+import CarModel from "@/models/CarModel.ts";
 
 const CardTripProfile = (Trip: TripModel) => {
   const { t } = useTranslation();
 
   const [cityOrigin, setCityOrigin] = useState<string|null>(null)
   const [cityDestination, setCityDestination] = useState<string|null>(null)
+  const [CarTrip, setCarTrip] = useState<CarModel|null>(null)
 
 
   useEffect(() => {
@@ -17,6 +19,12 @@ const CardTripProfile = (Trip: TripModel) => {
     })
     CityService.getCityById(Trip.destinationCityUri).then(response => {
       setCityDestination(response.name);
+    })
+  })
+
+  useEffect(() => {
+    CarService.getCarById(Trip.carUri).then(response => {
+      setCarTrip(response);
     })
   })
 
@@ -72,7 +80,9 @@ const CardTripProfile = (Trip: TripModel) => {
         </div>
       </div>
       <div className={styles.img_container}>
-        <img className={styles.car_container} src={ProfilePhoto} />
+        { CarTrip === null ? (<h1>hola</h1>) :
+          <img className={styles.car_container} src={CarTrip.imageUri} />
+        }
       </div>
     </div>
   );

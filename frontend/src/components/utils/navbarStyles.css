@@ -105,9 +105,17 @@
 
 .dropdown-menu {
   margin-top: 20%;
+  border: 1px white solid;
 }
 
 .dropdown-item {
   width: fit-content;
   padding: 0 10px;
+  color: white !important;
+}
+
+.dropdown-item:hover {
+  background-color: #1c4c96;
+  opacity: 0.7;
+  transition: opacity 0.3s;
 }

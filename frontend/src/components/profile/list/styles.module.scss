@@ -7,8 +7,11 @@
 
 .travel_info_list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   row-gap: 1em;
+  max-width: 100%;
+  min-width: fit-content;
+  flex-wrap: wrap;
 }
 
 .list_container {
@@ -48,3 +51,10 @@
 .plus_btn:hover {
   opacity: 0.5;
 }
+
+.list_prop_container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+

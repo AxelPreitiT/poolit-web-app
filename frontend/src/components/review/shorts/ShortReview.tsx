@@ -1,14 +1,17 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import StarRating from "@/components/stars/StarsRanking";
+import {useTranslation} from "react-i18next";
 
 
 const ShortReview = (review: ReviewModel) => {
-  return (
+    const { t } = useTranslation();
+
+    return (
     <div className={styles.short_review}>
       <div className={styles.row_content}>
         <div>
-          <h4 className={styles.type}>{review.option}</h4>
+          <h4 className={styles.type}>{t(`reviews.${review.option}`)}</h4>
           <span className={styles.review_info_comment}>{review.comment}</span>
         </div>
         <StarRating rating={review.rating} />
