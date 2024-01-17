@@ -38,6 +38,7 @@ public class User {
     @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = user_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
     private double driverRating;
 
+    //TODO: agregar viajes creados como conductor
     @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reporter_id = user_id)")
     private int reportsPublished;
 

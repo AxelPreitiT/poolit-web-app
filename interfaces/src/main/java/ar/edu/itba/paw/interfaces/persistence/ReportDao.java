@@ -22,5 +22,7 @@ public interface ReportDao {
 
     PagedContent<Report> getReports(int page, int pageSize);
 
+    PagedContent<Report> getReportsMadeByUserOnTrip(final User reporter, final Trip trip, final int page, final int pageSize);
+
     Optional<Report>  getReportByTripAndUsers(long tripId, long reporterId, long reportedId);
 }

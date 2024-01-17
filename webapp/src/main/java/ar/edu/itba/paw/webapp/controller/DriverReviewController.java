@@ -7,10 +7,9 @@ import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ReviewsQuery;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateDriverReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.DriverReviewDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,27 +60,17 @@ public class DriverReviewController {
     }
 
     @GET
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
     @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
-    public Response getReviews(@QueryParam("forUser") final Integer userId,
-                               @QueryParam("madeBy") final Integer reviewerUserId,
-                               @QueryParam("forTrip") final Integer tripId,
-                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                               @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws UserNotFoundException, TripNotFoundException {
-        if(reviewerUserId!=null || tripId!=null){
-            if(reviewerUserId==null || tripId == null || userId != null){
-                throw new IllegalArgumentException();
-            }
-            LOGGER.debug("GET request for driver reviews made by user {} for passengers on trip {}",reviewerUserId,tripId);
-            final PagedContent<DriverReview> ans = driverReviewService.getDriverReviewsMadeByUserOnTrip(reviewerUserId,tripId,page,pageSize);
-            return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,DriverReviewDto::fromDriverReview,DriverReviewDto.class);
+    public Response getReviews(@Valid @BeanParam final ReviewsQuery query) throws UserNotFoundException, TripNotFoundException {
+        if(query.getMadeBy()!=null || query.getForTrip()!=null){
+            LOGGER.debug("GET request for driver reviews made by user {} for passengers on trip {}",query.getMadeBy(),query.getForTrip());
+            final PagedContent<DriverReview> ans = driverReviewService.getDriverReviewsMadeByUserOnTrip(query.getMadeBy(),query.getForTrip(),query.getPage(),query.getPageSize());
+            return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),DriverReviewDto::fromDriverReview,DriverReviewDto.class);
         }
-        if(userId==null){
-            throw new IllegalArgumentException();
-        }
-        LOGGER.debug("GET request for driver reviews for user {}",userId);
-        final PagedContent<DriverReview> ans = driverReviewService.getDriverReviews(userId,page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,DriverReviewDto::fromDriverReview,DriverReviewDto.class);
+        LOGGER.debug("GET request for driver reviews for user {}",query.getForUser());
+        final PagedContent<DriverReview> ans = driverReviewService.getDriverReviews(query.getForUser(),query.getPage(),query.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),DriverReviewDto::fromDriverReview,DriverReviewDto.class);
     }
 
 

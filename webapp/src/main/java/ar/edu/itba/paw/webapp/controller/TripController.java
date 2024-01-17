@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
@@ -11,15 +10,14 @@ import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.PassengersQuery;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripQuery;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripsQuery;
 import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.MinField;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,25 +26,17 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.math.BigDecimal;
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 
-//TODO: agregar media Types
 @Path(UrlHolder.TRIPS_BASE)
 @Component
 public class TripController {
 
-    private static final String PAGE_SIZE = "10";
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
 
     private final TripService tripService;
@@ -65,40 +55,25 @@ public class TripController {
 
 
     @GET
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#creatorUserId) and @authValidator.checkIfWantedIsSelf(#passengerUserId) and @authValidator.checkIfWantedIsSelf(#recommendedUserId)")
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.createdBy) and @authValidator.checkIfWantedIsSelf(#query.reservedBy) and @authValidator.checkIfWantedIsSelf(#query.recommendedFor)")
     @Produces(value = VndType.APPLICATION_TRIP)
-    public Response getTrips(@QueryParam("originCityId") @Valid @CityId final Integer originCityId,
-                             @QueryParam("destinationCityId") @Valid @CityId final Integer destinationCityId,
-                             @QueryParam("startDateTime") @Valid @NotNull() final LocalDateTime startDateTime,
-                             @QueryParam("endDateTime") final LocalDateTime endDateTime,
-                             @QueryParam("minPrice") @Valid @MinField(value = 0, fieldName = "minPrice") final BigDecimal minPrice,
-                             @QueryParam("maxPrice") @Valid @MinField(value = 0, fieldName = "maxPrice") final BigDecimal maxPrice,
-                             @QueryParam("carFeatures") final List<FeatureCar> carFeatures,
-                             @QueryParam("sortType") @DefaultValue("PRICE") final Trip.SortType sortType,
-                             @QueryParam("createdBy") final Integer creatorUserId,
-                             @QueryParam("reservedBy") final Integer passengerUserId,
-                             @QueryParam("recommendedFor") final Integer recommendedUserId,
-                             @QueryParam("past") final boolean pastTrips,
-                             @QueryParam("descending") final boolean descending,
-                             @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                             @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize
-                             ){
+    public Response getTrips(@Valid @BeanParam final TripsQuery query){
         PagedContent<Trip> ans = null;
-        if(creatorUserId!=null){
-            LOGGER.debug("GET request to trips created by user {}",creatorUserId);
-            ans = tripService.getTripsCreatedByUser(creatorUserId,pastTrips,page,pageSize);
-        }else if(passengerUserId!=null){
-            LOGGER.debug("GET request to trips reserved by user {}",passengerUserId);
-            ans = tripService.getTripsWhereUserIsPassenger(passengerUserId,pastTrips,page,pageSize);
-        }else if(recommendedUserId!=null) {
+        if(query.getCreatedBy()!=null){
+            LOGGER.debug("GET request to trips created by user {}",query.getCreatedBy());
+            ans = tripService.getTripsCreatedByUser(query.getCreatedBy(),query.isPast(),query.getPage(),query.getPageSize());
+        }else if(query.getReservedBy()!=null){
+            LOGGER.debug("GET request to trips reserved by user {}",query.getReservedBy());
+            ans = tripService.getTripsWhereUserIsPassenger(query.getReservedBy(),query.isPast(),query.getPage(),query.getPageSize());
+        }else if(query.getRecommendedFor()!=null) {
             //we use this instead of creating a URI in the userDTO with the fields to maintain the logic of recommendation in the trip service
-            LOGGER.debug("GET request to trips recommended for user {}",recommendedUserId);
-            ans = tripService.getRecommendedTripsForUser(recommendedUserId,page,pageSize);
+            LOGGER.debug("GET request to trips recommended for user {}",query.getRecommendedFor());
+            ans = tripService.getRecommendedTripsForUser(query.getRecommendedFor(),query.getPage(),query.getPageSize());
         }else{
             LOGGER.debug("GET request to find trips");
-            ans = tripService.findTrips(originCityId,destinationCityId,startDateTime,endDateTime,minPrice,maxPrice,sortType,descending,carFeatures,page,pageSize);
+            ans = tripService.findTrips(query.getOriginCityId(), query.getDestinationCityId(),query.getStartDateTime(),query.getEndDateTime(),query.getMinPrice(),query.getMaxPrice(),query.getSortType(),query.isDescending(),query.getCarFeatures(),query.getPage(),query.getPageSize());
         }
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,TripDto::fromTrip,TripDto.class);
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),TripDto::fromTrip,TripDto.class);
     }
     @POST
     @Consumes(value = VndType.APPLICATION_TRIP)
@@ -113,21 +88,18 @@ public class TripController {
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_TRIP)
     public Response getById(@PathParam("id") final long id,
-                            @QueryParam("startDateTime") final LocalDateTime startDateTime,
-                            @QueryParam("endDateTime") final LocalDateTime endDateTime) throws TripNotFoundException, UserNotFoundException {
+                            @Valid @BeanParam final TripQuery query) throws TripNotFoundException, UserNotFoundException {
         final Trip trip;
-        if(startDateTime!=null || endDateTime!=null){
-            if(startDateTime==null || endDateTime==null){
-                throw new IllegalArgumentException();
-            }
-            LOGGER.debug("GET request for trip with id {} from {} to {}",id,startDateTime,endDateTime);
-            trip = tripService.findById(id,startDateTime,endDateTime).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
+            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
+            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
         }else {
             LOGGER.debug("GET request for trip with id {}",id);
             trip = tripService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
         }
         final User user = userService.getCurrentUser().orElse(null);
         final Passenger currentUserPassenger = user!=null?tripService.getPassenger(id,user.getUserId()).orElse(null):null;
+        //TODO: revisar si esta bien agregar links asi
         return Response.ok(TripDto.fromTrip(uriInfo,trip,user,currentUserPassenger)).build();
     }
 
@@ -141,21 +113,13 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
-    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#startDateTime,#endDateTime,#passengerState)")
+    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response getPassengers(@PathParam("id") final long id,
-                                  @QueryParam("startDateTime") final LocalDateTime startDateTime,
-                                  @QueryParam("endDateTime") final LocalDateTime endDateTime,
-                                  @QueryParam("passengerState") final Passenger.PassengerState passengerState,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws CustomException {
+                                  @Valid @BeanParam final PassengersQuery passengersQuery) throws CustomException {
         LOGGER.debug("GET request for passengers from trip {}",id);
-        if((startDateTime==null && endDateTime!=null)||(startDateTime!=null && endDateTime==null)){
-            //TODO: revisar si esta bien instanciar esto aca!
-            throw new CustomException("exceptions.startDateTime_with_enDateTime",Response.Status.BAD_REQUEST.getStatusCode());
-        }
-        PagedContent<Passenger> ans = tripService.getPassengers(id,startDateTime,endDateTime, passengerState,page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerDto::fromPassenger,PassengerDto.class);
+        PagedContent<Passenger> ans = tripService.getPassengers(id,passengersQuery.getStartDateTime(),passengersQuery.getEndDateTime(), passengersQuery.getPassengerState(),passengersQuery.getPage(),passengersQuery.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,passengersQuery.getPage(),PassengerDto::fromPassenger,PassengerDto.class);
     }
 
     @POST
@@ -163,13 +127,13 @@ public class TripController {
     @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
         LOGGER.debug("POST request to add passenger for trip {}",id);
-        //TODO: preguntar si está bien tomar el contexto de auth acá
         Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getStartTime(),dto.getEndDate());
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(ans.getUserId())).build();
         //Los pasajeros se acceden en /trips/{tripId}/passengers/{userId}
         return Response.created(uri).build();
     }
 
+    //TODO: agregar permisos!
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)

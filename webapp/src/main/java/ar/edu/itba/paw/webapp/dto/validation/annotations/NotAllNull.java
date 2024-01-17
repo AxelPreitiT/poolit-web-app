@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.dto.validation.annotations;
 
-import ar.edu.itba.paw.webapp.dto.validation.constraints.EmailValidator;
-import ar.edu.itba.paw.webapp.dto.validation.constraints.NotEmptyValidator;
+import ar.edu.itba.paw.webapp.dto.validation.constraints.NotAllNullValidator;
+import ar.edu.itba.paw.webapp.dto.validation.constraints.NotNullTogetherValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,12 +12,14 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({TYPE, FIELD, ANNOTATION_TYPE})
+@Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-@Constraint(validatedBy = NotEmptyValidator.class)
+@Constraint(validatedBy = NotAllNullValidator.class)
 @Documented
-public @interface NotEmpty {
-    String message() default "{dto.validation.notEmpty}";
+public @interface NotAllNull {
+    String message() default "{dto.validation.notAllNull}";
+
+    String[] fields() default {};
 
     Class<?> [] groups() default {};
 
