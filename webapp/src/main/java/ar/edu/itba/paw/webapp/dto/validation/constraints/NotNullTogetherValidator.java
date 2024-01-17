@@ -35,6 +35,7 @@ public class NotNullTogetherValidator implements ConstraintValidator<NotNullToge
             }
         }catch (Exception e){
             LOGGER.error("Error while getting fields values in NotNullTogetherValidator",e);
+            return false;
         }
         context.unwrap(HibernateConstraintValidatorContext.class).addExpressionVariable("presentFields",String.join(", ",present));
         context.unwrap(HibernateConstraintValidatorContext.class).addExpressionVariable("missingFields",String.join(", ",missing));
