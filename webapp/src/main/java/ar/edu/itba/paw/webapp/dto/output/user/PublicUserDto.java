@@ -11,6 +11,7 @@ public class PublicUserDto {
     private String surname;
     private double driverRating;
     private double passengerRating;
+    private int tripCount;
     private URI selfUri;
     private URI imageUri;
 
@@ -21,6 +22,7 @@ public class PublicUserDto {
         this.surname= user.getSurname();
         this.driverRating = user.getDriverRating();
         this.passengerRating = user.getPassengerRating();
+        this.tripCount = user.getTripCount();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).build();
         this.imageUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).path(UrlHolder.IMAGE_ENTITY).build();
     }
@@ -76,4 +78,8 @@ public class PublicUserDto {
     public void setPassengerRating(double passengerRating) {
         this.passengerRating = passengerRating;
     }
+
+    public int getTripCount() { return tripCount; }
+
+    public void setTripCount(int tripCount) { this.tripCount = tripCount; }
 }
