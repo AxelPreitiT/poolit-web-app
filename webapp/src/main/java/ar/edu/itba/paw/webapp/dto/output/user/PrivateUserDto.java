@@ -33,6 +33,12 @@ public class PrivateUserDto extends PublicUserDto{
 
     private URI futureReservedTripsUri;
 
+    private URI carsUri;
+
+    private URI reviewsDriverUri;
+
+    private URI reviewsPassengerUri;
+
     private int tripCount;
 
     public PrivateUserDto(){}
@@ -45,6 +51,9 @@ public class PrivateUserDto extends PublicUserDto{
         this.mailLocale = user.getMailLocale().getLanguage();
         this.role = user.getRole();
         this.tripCount = user.getTripCount();
+        this.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).queryParam("fromUser",user.getUserId()).build();
+        this.reviewsDriverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forUser",user.getUserId()).build();
+        this.reviewsPassengerUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).queryParam("forUser",user.getUserId()).build();
         //We use recommendedFor and not pass the filters here to maintain the recommendation logic in the service
         this.recommendedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("recommendedFor",user.getUserId()).build();
         this.pastCreatedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("createdBy",user.getUserId()).queryParam("past",true).build();
@@ -138,4 +147,16 @@ public class PrivateUserDto extends PublicUserDto{
     public int getTripCount() { return tripCount; }
 
     public void setTripCount(int tripCount) { this.tripCount = tripCount; }
+
+    public URI getCarsUri() { return carsUri; }
+
+    public void setCarsUri(URI carsUri) { this.carsUri = carsUri; }
+
+    public URI getReviewsDriverUri() { return reviewsDriverUri; }
+
+    public void setReviewsDriverUri(URI reviewsDriverUri) { this.reviewsDriverUri = reviewsDriverUri; }
+
+    public URI getReviewsPassengerUri() { return reviewsPassengerUri; }
+
+    public void setReviewsPassengerUri(URI reviewsPassengerUri) { this.reviewsPassengerUri = reviewsPassengerUri; }
 }

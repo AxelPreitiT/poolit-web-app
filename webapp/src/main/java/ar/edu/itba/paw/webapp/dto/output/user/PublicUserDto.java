@@ -12,6 +12,9 @@ public class PublicUserDto {
     private double driverRating;
     private double passengerRating;
     private int tripCount;
+    private URI carsUri;
+    private URI reviewsDriverUri;
+    private URI reviewsPassengerUri;
     private URI selfUri;
     private URI imageUri;
 
@@ -23,6 +26,9 @@ public class PublicUserDto {
         this.driverRating = user.getDriverRating();
         this.passengerRating = user.getPassengerRating();
         this.tripCount = user.getTripCount();
+        this.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).queryParam("fromUser",user.getUserId()).build();
+        this.reviewsDriverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forUser",user.getUserId()).build();
+        this.reviewsPassengerUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).queryParam("forUser",user.getUserId()).build();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).build();
         this.imageUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(user.getUserId())).path(UrlHolder.IMAGE_ENTITY).build();
     }
@@ -82,4 +88,16 @@ public class PublicUserDto {
     public int getTripCount() { return tripCount; }
 
     public void setTripCount(int tripCount) { this.tripCount = tripCount; }
+
+    public URI getCarsUri() { return carsUri; }
+
+    public void setCarsUri(URI carsUri) { this.carsUri = carsUri; }
+
+    public URI getReviewsDriverUri() { return reviewsDriverUri; }
+
+    public void setReviewsDriverUri(URI reviewsDriverUri) { this.reviewsDriverUri = reviewsDriverUri; }
+
+    public URI getReviewsPassengerUri() { return reviewsPassengerUri; }
+
+    public void setReviewsPassengerUri(URI reviewsPassengerUri) { this.reviewsPassengerUri = reviewsPassengerUri; }
 }
