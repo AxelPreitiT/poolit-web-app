@@ -10,8 +10,6 @@ import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ReviewsQuery;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreatePassengerReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.PassengerReviewDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

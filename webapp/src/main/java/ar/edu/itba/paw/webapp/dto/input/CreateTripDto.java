@@ -44,24 +44,20 @@ public class CreateTripDto {
     private BigDecimal price;
 
 
-//    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull(message = "{dto.validation.dateFormat}")
     private LocalDate date;
 
-//    private String date;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     @NotNull(message = "{dto.validation.timeFormat}")
     private LocalTime time;
 
-//    private String time;
     private boolean multitrip;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate lastDate;
 
-//    private String lastDate;
     public int getOriginCityId() {
         return originCityId;
     }

@@ -21,7 +21,6 @@ public class CreateReportDto {
     @Size(min = 10, max = 200)
     private String comment;
 
-    //TODO: preguntar si está bien que lo reciba por id o por url
     @NotNull
     private Integer reportedId;
 

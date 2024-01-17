@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
@@ -19,10 +18,6 @@ import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.MinField;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +26,11 @@ import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.math.BigDecimal;
 import java.net.URI;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 
 @Path(UrlHolder.TRIPS_BASE)

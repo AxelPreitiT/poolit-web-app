@@ -5,16 +5,14 @@ import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.ReportService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.reports.Report;
-import ar.edu.itba.paw.models.reports.ReportState;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.PagedQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateReportDto;
 import ar.edu.itba.paw.webapp.dto.input.DecideReportDto;
 import ar.edu.itba.paw.webapp.dto.output.reports.PrivateReportDto;
 import ar.edu.itba.paw.webapp.dto.output.reports.PublicReportDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,22 +76,20 @@ public class ReportController {
     @GET
     @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
     //TODO: admin only
-    public Response getReportsForAdmin(@QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                                       @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize){
+    public Response getReportsForAdmin(@Valid @BeanParam final PagedQuery query){
         LOGGER.debug("GET request for private reports");
-        final PagedContent<Report> ans = reportService.getReports(page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PrivateReportDto::fromReport,PrivateReportDto.class);
+        final PagedContent<Report> ans = reportService.getReports(query.getPage(),query.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PrivateReportDto::fromReport,PrivateReportDto.class);
     }
     @GET
     @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reporterUserId)")
     public Response getReports(@QueryParam("madeBy") final @Valid @NotNull Integer reporterUserId,
                                @QueryParam("forTrip") final @Valid @NotNull Integer tripId,
-                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                               @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws UserNotFoundException, TripNotFoundException {
+                               @Valid @BeanParam final PagedQuery query) throws UserNotFoundException, TripNotFoundException {
         LOGGER.debug("GET request for public reports made by user {} for trip {}",reporterUserId, tripId);
-        final PagedContent<Report> ans = reportService.getReportsMadeByUserOnTrip(reporterUserId,tripId,page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PublicReportDto::fromReport,PrivateReportDto.class);
+        final PagedContent<Report> ans = reportService.getReportsMadeByUserOnTrip(reporterUserId,tripId,query.getPage(),query.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PublicReportDto::fromReport,PrivateReportDto.class);
     }
 
     //TODO: preguntar por content type asi con distintos campos

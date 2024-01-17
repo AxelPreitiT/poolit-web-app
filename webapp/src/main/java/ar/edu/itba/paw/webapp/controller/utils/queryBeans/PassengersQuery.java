@@ -9,7 +9,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 
-@NotNullTogether(fields = {"startDateTime","endDateTime","passengerState"})
+@NotNullTogether(fields = {"startDateTime","endDateTime"})
 public class PassengersQuery extends PagedQuery{
     @QueryParam("startDateTime")
     private LocalDateTime startDateTime;
