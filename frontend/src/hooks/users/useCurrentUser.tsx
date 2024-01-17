@@ -5,11 +5,14 @@ import useQueryError from "../errors/useQueryError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import QueryError from "@/errors/QueryError";
 
-export const useCurrentUser = () => {
-  const { isLoading, isError, data, error } = useQuery({
+export const useCurrentUser = ({
+    enabled = true
+}: {enabled?:boolean}={}) => {
+  const { isLoading, isError, data, error, isPending } = useQuery({
     queryKey: ["currentUser"],
     queryFn: UserService.getCurrentUser,
     retry: false,
+    enabled
   });
 
   const onQueryError = useQueryError();
@@ -23,5 +26,5 @@ export const useCurrentUser = () => {
     }
   }, [isError, error, onQueryError]);
 
-  return { isLoading, currentUser: data };
+  return {isLoading: isLoading || isPending, currentUser:data };
 };
