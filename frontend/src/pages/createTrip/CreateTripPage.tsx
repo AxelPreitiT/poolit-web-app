@@ -15,6 +15,7 @@ import {
 } from "react-icons/bs";
 import { FaCaretRight } from "react-icons/fa";
 import RegisterBanner from "@/images/register-banner.jpg";
+import DatePicker from "react-multi-date-picker";
 
 const CreateTripPage = () => {
   return (
@@ -49,7 +50,12 @@ const CreateTripPage = () => {
                     <Button className="secondary-btn">
                       <BsCalendarFill className="light-text" />
                     </Button>
-                    <Form.Control type="text" placeholder="Date" />
+                    <DatePicker
+                      inputClass="form-control form-control-sm"
+                      placeholder="Date"
+                      containerClassName={styles.pickerContainer}
+                      format="DD/MM/YYYY"
+                    />
                   </InputGroup>
                   <FormError error="error" className={styles.formItemError} />
                 </div>
