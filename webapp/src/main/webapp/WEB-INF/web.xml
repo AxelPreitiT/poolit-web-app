@@ -115,7 +115,7 @@
   <filter-mapping>
     <filter-name>UnconditionalCacheFilter</filter-name>
 <!--    TODO: revisar la url a los contenidos del frontend-->
-    <url-pattern>/static/*</url-pattern>
+    <url-pattern>/assets/*</url-pattern>
   </filter-mapping>
 
 </web-app>
