@@ -29,6 +29,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -99,11 +100,11 @@ public class CarController {
     @GET
     @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
     @Produces({"image/*"})
-    public Response getCarImage(@PathParam("id") final long id) throws ImageNotFoundException, CarNotFoundException {
+    public Response getCarImage(@PathParam("id") final long id,
+                                @Context Request request) throws ImageNotFoundException, CarNotFoundException {
         LOGGER.debug("GET request for image of car with carId {}",id);
         final byte[] image = carService.getCarImage(id);
-//        TODO: add caching capability
-        return Response.ok(image).build();
+        return ControllerUtils.getConditionalCacheResponse(request,image, Arrays.hashCode(image));
     }
 
     @PUT
