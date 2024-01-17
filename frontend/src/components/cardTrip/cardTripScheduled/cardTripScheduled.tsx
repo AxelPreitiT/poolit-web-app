@@ -15,9 +15,9 @@ const CardTripScheduled = (trip: TripModel) => {
             <h3 className={styles.day_week_style}>PONER DIA</h3>
             {trip.totalTrips > 1 ? (
               <span className={styles.date_text}>
-                {t("format.date", {
-                  startDateTime: getFormattedDateTime(trip.startDateTime).date,
-                  endDateTime: getFormattedDateTime(trip.endDateTime).date,
+                {t("format.recurrent_date", {
+                  initial_date: getFormattedDateTime(trip.startDateTime).date,
+                  final_date: getFormattedDateTime(trip.endDateTime).date,
                 })}
               </span>
             ) : (
