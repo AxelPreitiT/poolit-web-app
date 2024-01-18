@@ -28,6 +28,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -102,11 +103,12 @@ public class UserController {
     @GET
     @Path("/{id}/image")
     @Produces({"image/*"})
-    public Response getUserImage(@PathParam("id") final long id) throws ImageNotFoundException, UserNotFoundException {
+    public Response getUserImage(@PathParam("id") final long id,
+                                 @Context Request request) throws ImageNotFoundException, UserNotFoundException {
         LOGGER.debug("GET request for image of user with userId {}",id);
         final byte[] image = userService.getUserImage(id);
-//        TODO: add caching capability
-        return Response.ok(image).build();
+        return ControllerUtils.getConditionalCacheResponse(request,image, Arrays.hashCode(image));
+//        return Response.ok(image).build();
     }
 
     @PUT
