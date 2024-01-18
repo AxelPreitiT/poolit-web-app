@@ -31,8 +31,6 @@ public class DriverReviewController {
 
     private final DriverReviewService driverReviewService;
 
-    private static final String PAGE_SIZE = "10";
-
     @Context
     private UriInfo uriInfo;
 

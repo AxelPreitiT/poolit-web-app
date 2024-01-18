@@ -3,7 +3,7 @@ package ar.edu.itba.paw.webapp.controller.utils;
 public class UrlHolder {
 
     //No hago un enum porque quiero tenerlo como variables estáticas, y no puedo acceder a las variables en el constructor del enum
-    private static final String BASE = "/api";
+    public static final String BASE = "/api";
 
     //    --------Cities--------
     public static final String CITY_BASE = BASE + "/cities";

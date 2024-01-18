@@ -30,8 +30,6 @@ public class PassengerReviewController {
 
     private final PassengerReviewService passengerReviewService;
 
-    private static final String PAGE_SIZE = "10";
-
     @Context
     private UriInfo uriInfo;
 
