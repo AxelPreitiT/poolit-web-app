@@ -13,6 +13,7 @@ export default class CityFormField extends FormField {
   constructor(name: string) {
     super(name);
     [this.schema, this.interpolations] = new FormFieldNumberBuilder(name)
+      .isRequired()
       .hasMinValue(cityMinId)
       .build();
   }

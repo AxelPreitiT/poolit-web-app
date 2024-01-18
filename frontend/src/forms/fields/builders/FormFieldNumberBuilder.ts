@@ -4,11 +4,13 @@ import MinValueFieldInterpolation from "../interpolations/MinValueFieldInterpola
 import MaxValueFieldInterpolation from "../interpolations/MaxValueFieldInterpolation";
 
 class FormFieldNumberBuilder extends FormFieldBuilder<ZodNumber> {
-  private name: string;
-
   constructor(name: string) {
-    super(z.number());
-    this.name = name;
+    super(
+      z.coerce.number({
+        invalid_type_error: `error.${name}.invalid`,
+      }),
+      name
+    );
   }
 
   public isRequired(): FormFieldNumberBuilder {

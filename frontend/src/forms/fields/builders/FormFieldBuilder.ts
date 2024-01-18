@@ -1,18 +1,18 @@
-import { ZodType } from "zod";
+import { ZodOptional, ZodType } from "zod";
 import FieldInterpolationsBuilder from "../interpolations/FieldInterpolationsBuilder";
-import FieldInterpolation, {
-  FieldInterpolationValue,
-} from "../interpolations/FieldInterpolation";
+import FieldInterpolation from "../interpolations/FieldInterpolation";
 
-abstract class FormFieldBuilder<T extends ZodType> {
+abstract class FormFieldBuilder<T extends ZodType | ZodOptional<ZodType>> {
+  protected name: string;
   protected schema: T;
   protected interpolationsBuilder: FieldInterpolationsBuilder;
   private builded: boolean;
 
-  constructor(schema: T) {
+  constructor(schema: T, name: string) {
     this.schema = schema;
     this.interpolationsBuilder = new FieldInterpolationsBuilder();
     this.builded = false;
+    this.name = name;
   }
 
   protected setSchema<V>(
@@ -39,7 +39,7 @@ abstract class FormFieldBuilder<T extends ZodType> {
     }
   }
 
-  protected setInterpolationsBuilder<V extends FieldInterpolationValue>(
+  protected setInterpolationsBuilder<V>(
     callbackFn: (this: FieldInterpolationsBuilder, value: V) => void,
     value: V
   ): void {

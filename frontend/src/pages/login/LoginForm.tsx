@@ -40,7 +40,7 @@ const LoginForm = () => {
         </div>
         <div className={styles.rememberContainer}>
           <Form.Check type="checkbox" id="remember">
-            <Form.Check.Input type="checkbox" {...register("rememberMe")} />
+            <Form.Check.Input type="checkbox" {...register("remember_me")} />
             <Form.Check.Label className="light-text">
               {t("login.remember")}
             </Form.Check.Label>

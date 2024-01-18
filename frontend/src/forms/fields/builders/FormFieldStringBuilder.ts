@@ -4,11 +4,8 @@ import MinValueFieldInterpolation from "../interpolations/MinValueFieldInterpola
 import MaxValueFieldInterpolation from "../interpolations/MaxValueFieldInterpolation";
 
 class FormFieldStringBuilder extends FormFieldBuilder<ZodString> {
-  private name: string;
-
   constructor(name: string) {
-    super(z.string());
-    this.name = name;
+    super(z.string(), name);
   }
 
   public isRequired(): FormFieldStringBuilder {

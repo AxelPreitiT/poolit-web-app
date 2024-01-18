@@ -5,7 +5,7 @@ import Form, { InferedFormSchemaType } from "./Form";
 
 const emailFieldName = "email";
 const passwordFieldName = "password";
-const rememberMeFieldName = "rememberMe";
+const rememberMeFieldName = "remember_me";
 
 const LoginFormFields = {
   [emailFieldName]: EmailFormField,
@@ -17,6 +17,6 @@ export type LoginFormFieldsType = typeof LoginFormFields;
 
 export const LoginForm = new Form<LoginFormFieldsType>(LoginFormFields);
 
-export const LoginFormSchema = LoginForm.getSchema();
-
 export type LoginFormSchemaType = InferedFormSchemaType<LoginFormFieldsType>;
+
+export const LoginFormSchema = LoginForm.getSchema();

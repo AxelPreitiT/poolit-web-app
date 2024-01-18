@@ -109,13 +109,63 @@
       "invalid": "El teléfono es inválido, debe tener el formato {{format}}"
     },
     "city": {
-      "min": "El barrio es requerido"
+      "required": "Debe seleccionar un barrio",
+      "min": "Debe seleccionar un barrio"
     },
     "confirm_password": {
       "invalid": "Las contraseñas no coinciden"
     },
     "image": {
       "max": "La imagen no puede pesar más de {{max}} MB"
+    },
+    "origin_city": {
+      "required": "Debe seleccionar un barrio de origen",
+      "min": "Debe seleccionar un barrio de origen"
+    },
+    "origin_address": {
+      "required": "La dirección de origen es requerida",
+      "min": "La dirección de origen debe tener al menos {{min}} caracteres",
+      "max": "La dirección de origen debe tener como máximo {{max}} caracteres"
+    },
+    "date": {
+      "required": "La fecha es requerida",
+      "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
+      "min": "La fecha debe ser posterior a {{min}}",
+      "before_now": "La fecha y el hora deben ser posteriores a la actual"
+    },
+    "time": {
+      "required": "La hora es requerida",
+      "invalid": "La hora tiene un formato inválido, debe ser {{format}}"
+    },
+    "last_date": {
+      "invalid": "La fecha tiene un formato inválido",
+      "min": "La fecha debe ser posterior a {{min}}",
+      "required": "La fecha final es obligatoria si se trata de un viaje recurrente",
+      "before_initial": "La fecha final debe ser posterior a la fecha inicial",
+      "different_day": "La fecha inicial y final deben ser el mismo día de la semana"
+    },
+    "destination_city": {
+      "required": "Debe seleccionar un barrio de destino",
+      "min": "Debe seleccionar un barrio de destino"
+    },
+    "destination_address": {
+      "required": "La dirección de destino es requerida",
+      "min": "La dirección de destino debe tener al menos {{min}} caracteres",
+      "max": "La dirección de destino debe tener como máximo {{max}} caracteres"
+    },
+    "car": {
+      "required": "Debe seleccionar un auto",
+      "min": "Debe seleccionar un auto"
+    },
+    "seats": {
+      "required": "Debe seleccionar la cantidad de asientos",
+      "invalid": "La cantidad de asientos debe ser un número",
+      "min": "La cantidad de asientos debe ser al menos {{min}}"
+    },
+    "price": {
+      "required": "El precio es requerido",
+      "invalid": "El precio debe ser un número",
+      "min": "El precio debe ser al menos {{min}}"
     }
   },
   "profile": {
@@ -128,8 +178,8 @@
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
       "rating_passenger": "Valoración como pasajero",
-      "es" : "Español",
-      "en" : "Ingles"
+      "es": "Español",
+      "en": "Ingles"
     },
     "lists": {
       "review_as_driver": "Opiniones como conductor",
@@ -266,7 +316,7 @@
       "title": "Ocurrió un error al obtener los barrios"
     }
   },
-  "spinner":{
+  "spinner": {
     "loading": "Cargando..."
   }
 }

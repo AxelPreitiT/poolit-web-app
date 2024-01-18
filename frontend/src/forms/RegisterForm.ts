@@ -8,6 +8,7 @@ import NameFormField from "./fields/NameFormField";
 import PasswordFormField from "./fields/PasswordFormField";
 import TelephoneFormField from "./fields/TelephoneFormField";
 import Form, { InferedFormSchemaType } from "./Form";
+import equalRefine from "./refine/EqualRefine";
 
 const imageFieldName = "image";
 const nameFieldName = "name";
@@ -37,13 +38,16 @@ export const RegisterForm = new Form<RegisterFormFieldsType>(
   RegisterFormFields
 );
 
+export type RegisterFormSchemaType =
+  InferedFormSchemaType<RegisterFormFieldsType>;
+
 export const RegisterFormSchema = RegisterForm.getSchema().refine(
-  (data) => data[passwordFieldName] === data[confirmPasswordFieldName],
+  equalRefine<RegisterFormSchemaType>(
+    passwordFieldName,
+    confirmPasswordFieldName
+  ),
   {
     message: `error.${confirmPasswordFieldName}.invalid`,
     path: [confirmPasswordFieldName],
   }
 );
-
-export type RegisterFormSchemaType =
-  InferedFormSchemaType<RegisterFormFieldsType>;

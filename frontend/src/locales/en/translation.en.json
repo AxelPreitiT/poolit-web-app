@@ -109,13 +109,63 @@
       "invalid": "Invalid telephone number, the format should be {{format}}"
     },
     "city": {
-      "min": "The neighborhood is required"
+      "required": "You must select a city",
+      "min": "You must select a city"
     },
     "confirm_password": {
       "invalid": "The passwords do not match"
     },
     "image": {
       "max": "The image size must be at most {{max}} MB"
+    },
+    "origin_city": {
+      "required": "You must select an origin neighborhood",
+      "min": "You must select an origin neighborhood"
+    },
+    "origin_address": {
+      "required": "The origin address is required",
+      "min": "The origin address must have at least {{min}} characters",
+      "max": "The origin address must have at most {{max}} characters"
+    },
+    "date": {
+      "required": "The date is required",
+      "invalid": "The date has an invalid format, it should be dd/mm/yyyy",
+      "min": "The date cannot be earlier than {{min}}",
+      "before_now": "The date and time cannot be earlier than the current ones"
+    },
+    "time": {
+      "required": "The time is required",
+      "invalid": "The time has an invalid format, it should be {{format}}"
+    },
+    "last_date": {
+      "invalid": "The date has an invalid format, it should be dd/mm/yyyy",
+      "min": "The date cannot be earlier than {{min}}",
+      "required": "The last date is required to create a recurring trip",
+      "before_initial": "The last date must be later than the initial date",
+      "different_day": "The last date must be on the same day of the week as the initial date"
+    },
+    "destination_city": {
+      "required": "You must select a destination neighborhood",
+      "min": "You must select a destination neighborhood"
+    },
+    "destination_address": {
+      "required": "The destination address is required",
+      "min": "The destination address must have at least {{min}} characters",
+      "max": "The destination address must have at most {{max}} characters"
+    },
+    "car": {
+      "required": "You must select a car",
+      "min": "You must select a car"
+    },
+    "seats": {
+      "required": "The number of seats is required",
+      "invalid": "The number of seats must be a number",
+      "min": "The number of seats must be at least {{min}}"
+    },
+    "price": {
+      "required": "The price is required",
+      "invalid": "The price must be a number",
+      "min": "The price must be at least {{min}}"
     }
   },
   "profile": {
@@ -128,8 +178,8 @@
       "trips": "Trips created",
       "rating_driver": "Driver rating",
       "rating_passenger": "Passenger rating",
-      "es" : "Spanish",
-      "en" : "English"
+      "es": "Spanish",
+      "en": "English"
     },
     "lists": {
       "review_as_driver": "Opinions as a driver",
@@ -266,7 +316,7 @@
       "title": "An error occurred while loading the neighborhoods"
     }
   },
-  "spinner":{
+  "spinner": {
     "loading": "Loading..."
   }
 }
