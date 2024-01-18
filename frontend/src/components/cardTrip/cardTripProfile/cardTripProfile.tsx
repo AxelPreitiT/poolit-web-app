@@ -1,32 +1,33 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import CityService from "@/services/CityService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 const CardTripProfile = (Trip: TripModel) => {
   const { t } = useTranslation();
 
-  const [cityOrigin, setCityOrigin] = useState<string|null>(null)
-  const [cityDestination, setCityDestination] = useState<string|null>(null)
-  const [CarTrip, setCarTrip] = useState<CarModel|null>(null)
-
+  const [cityOrigin, setCityOrigin] = useState<string | null>(null);
+  const [cityDestination, setCityDestination] = useState<string | null>(null);
+  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
 
   useEffect(() => {
-    CityService.getCityById(Trip.originCityUri).then(response => {
+    CityService.getCityById(Trip.originCityUri).then((response) => {
       setCityOrigin(response.name);
-    })
-    CityService.getCityById(Trip.destinationCityUri).then(response => {
+    });
+    CityService.getCityById(Trip.destinationCityUri).then((response) => {
       setCityDestination(response.name);
-    })
-  })
+    });
+  });
 
   useEffect(() => {
-    CarService.getCarById(Trip.carUri).then(response => {
+    CarService.getCarById(Trip.carUri).then((response) => {
       setCarTrip(response);
-    })
-  })
+    });
+  });
 
   return (
     <div className={styles.card_info}>
@@ -51,23 +52,28 @@ const CardTripProfile = (Trip: TripModel) => {
         <div className={styles.extra_info_container}>
           <div className={styles.calendar_container}>
             <i className="bi bi-calendar text"></i>
-            {Trip.totalTrips==1 ? (
+            {Trip.totalTrips == 1 ? (
               <div className={styles.format_date}>
                 <span className="text">PONER DIA</span>
                 <span className={styles.date_text}>
-                  {`${Trip.startDateTime}, ${Trip.endDateTime}`}
+                  {getFormattedDateTime(Trip.startDateTime).date}
                 </span>
               </div>
             ) : (
               <div className={styles.format_date}>
-                <span className="text">"PONER DIA DE LA SEMANA"</span>
-                <span className={styles.date_text}>{Trip.startDateTime}</span>
+                <span className="text">PONER DIA</span>
+                <span className={styles.date_text}>
+                  {t("format.recurrent_date", {
+                    initial_date: getFormattedDateTime(Trip.startDateTime).date,
+                    final_date: getFormattedDateTime(Trip.endDateTime).date,
+                  })}
+                </span>
               </div>
             )}
           </div>
-          <div>
+          <div className={styles.calendar_container}>
             <i className="bi bi-clock"></i>
-            <span>{Trip.startDateTime}</span>
+            <span>{getFormattedDateTime(Trip.startDateTime).time}</span>
           </div>
           <div>
             <h2 className={styles.price_format}>
@@ -80,9 +86,11 @@ const CardTripProfile = (Trip: TripModel) => {
         </div>
       </div>
       <div className={styles.img_container}>
-        { CarTrip === null ? (<h1>hola</h1>) :
+        {CarTrip === null ? (
+          <SpinnerComponent />
+        ) : (
           <img className={styles.car_container} src={CarTrip.imageUri} />
-        }
+        )}
       </div>
     </div>
   );

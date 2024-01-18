@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import StarRating from "@/components/stars/StarsRanking";
 import {useTranslation} from "react-i18next";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 
 const ShortReview = (review: ReviewModel) => {
@@ -17,7 +18,7 @@ const ShortReview = (review: ReviewModel) => {
         <StarRating rating={review.rating} />
       </div>
       <div className={styles.date_review}>
-        <span>{review.reviewDateTime}</span>
+        <span>{getFormattedDateTime(review.reviewDateTime).date}</span>
       </div>
     </div>
   );
