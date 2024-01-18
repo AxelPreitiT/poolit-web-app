@@ -24,28 +24,12 @@ public class TripDto {
     private int occupiedSeats;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-
-    //URI for driver
-    private URI passengersUri;
-    //URI for passenger
-    private URI passengerUri;
+    private String passengersUriTemplate;
     private LocalDateTime queryStartDateTime;
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
 
 
-
-    public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip, final User currentUser, final Passenger currentUserPassenger){
-        //TODO: revisar esto para mandar algo distinto cuando está el usuario logueado
-        final TripDto ans = TripDto.fromTrip(uriInfo,trip);
-        if(currentUser != null && currentUser.getUserId() == trip.getDriver().getUserId()){
-            //currentUser is driver, it can access all the passengers
-            ans.passengersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).build();
-        }else if(currentUserPassenger!=null){
-            ans.passengerUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).path(String.valueOf(currentUserPassenger.getUser().getUserId())).build();
-        }
-        return ans;
-    }
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
         final TripDto ans = new TripDto();
         ans.originAddress = trip.getOriginAddress();
@@ -59,6 +43,7 @@ public class TripDto {
         ans.endDateTime = trip.getEndDateTime();
         ans.queryEndDateTime = trip.getQueryStartDateTime();
         ans.queryEndDateTime = trip.getQueryEndDateTime();
+        ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).path("{/userId}").toTemplate();
         ans.driverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(trip.getDriver().getUserId())).build();
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
         ans.originCityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(trip.getOriginCity().getId())).build();
@@ -171,20 +156,12 @@ public class TripDto {
         this.selfUri = selfUri;
     }
 
-    public URI getPassengersUri() {
-        return passengersUri;
+    public String getPassengersUriTemplate() {
+        return passengersUriTemplate;
     }
 
-    public void setPassengersUri(URI passengersUri) {
-        this.passengersUri = passengersUri;
-    }
-
-    public URI getPassengerUri() {
-        return passengerUri;
-    }
-
-    public void setPassengerUri(URI passengerUri) {
-        this.passengerUri = passengerUri;
+    public void setPassengersUriTemplate(String passengersUriTemplate) {
+        this.passengersUriTemplate = passengersUriTemplate;
     }
 
     public double getTotalPrice() {
