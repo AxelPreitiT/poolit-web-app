@@ -9,7 +9,6 @@ import { Button } from "react-bootstrap";
 import {useEffect, useState} from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import PassangerComponent from "@/components/passanger/Passanger";
-import { Passanger as PassangerType } from "@/types/Passanger";
 import {useParams, useSearchParams} from "react-router-dom";
 import TripModel from "@/models/TripModel.ts";
 import tripsService from "@/services/TripsService.ts";
@@ -19,6 +18,7 @@ import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import UserService from "@/services/UserService.ts";
+import PassangerService from "@/services/PassangerService.ts";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -28,6 +28,7 @@ const TripDetailsPage = () => {
   const [Trip, setTrip] = useState<TripModel | null>(null);
   const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
   const [DriverTrip, setDriverTrip] = useState<UserPublicModel | null>(null);
+  const [PassangerTrip, setPassangerTrip] = useState<UserPublicModel[] | null>(null);
 
 
   const link = CreateUri(id.tripId, params.toString(), '/trips')
@@ -43,6 +44,9 @@ const TripDetailsPage = () => {
       UserService.getUserById(Trip.driverUri).then((response) => {
         setDriverTrip(response);
       });
+      PassangerService.getPassangersTrips(Trip.passengersUri).then((response) => {
+        setPassangerTrip(response);
+      });
     }
   });
 
@@ -53,20 +57,6 @@ const TripDetailsPage = () => {
     if (eventKey !== null) {
       setSelectedOption(eventKey);
     }
-  };
-
-  const passanger_data: PassangerType = {
-    userId: 2,
-    userImageId: 2,
-    name: "Pedro",
-    surname: "josesito",
-    recurrent: false,
-    startDateString: "fecha",
-    endDateString: "10/03/1029",
-    user: {
-      passengerRating: 3.5,
-    },
-    tripStarted: true,
   };
 
   return (
@@ -161,7 +151,7 @@ const TripDetailsPage = () => {
           </Dropdown>
         </div>
         <div className={styles.passangers_container}>
-          <PassangerComponent passanger={passanger_data} />
+          <PassangerComponent passanger={PassangerTrip} />
         </div>
       </MainComponent>
     </div>
