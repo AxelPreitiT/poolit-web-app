@@ -21,13 +21,13 @@ public class BaseDto {
         BaseDto ans = new BaseDto();
         //No ponemos todos los query parameters, si no queda más confuso
         //Lo ponemos en la documentación (como acá: https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-issues-assigned-to-the-authenticated-user)
-        ans.citiesUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path("{/cityId}").toTemplate();
-        ans.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path("{carId}").toTemplate();
+        ans.citiesUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).toTemplate() + "{/cityId}"; //prevent builder from adding '/' in front of variable
+        ans.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).toTemplate() + "{/carId}";
         ans.usersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path("{userId}").toTemplate();
-        ans.reportsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).path("{/reportId}").toTemplate();
-        ans.driverReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).path("{/reviewId}").toTemplate();
-        ans.passengerReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path("{/reviewId}").toTemplate();
-        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path("{/tripId}").toTemplate();
+        ans.reportsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).toTemplate() + "{/reportId}";
+        ans.driverReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
+        ans.passengerReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
+        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).toTemplate() + "{/tripId}";
         return ans;
     }
 
