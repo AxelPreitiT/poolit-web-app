@@ -11,9 +11,12 @@ import { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import PassangerComponent from "@/components/passanger/Passanger";
 import { Passanger as PassangerType } from "@/types/Passanger";
+import {useParams, useSearchParams} from "react-router-dom";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
+  const id = useParams();
+  const [params,] = useSearchParams();
 
   const options = ["All", "Accepted", "Waiting", "Rejected"];
   const [selectedOption, setSelectedOption] = useState<string>("All");
@@ -96,6 +99,9 @@ const TripDetailsPage = () => {
             <div className={styles.info_container}>
               <h3>Income:</h3>
               <div className={styles.price_container}>
+                <h1>{id.tripId}</h1>
+                <h1>{params.get('startDateTime')}</h1>
+                <span>{params.toString()}</span>
                 <h3>
                   {t("format.price", {
                     priceInt: trip.integerQueryTotalPrice,
