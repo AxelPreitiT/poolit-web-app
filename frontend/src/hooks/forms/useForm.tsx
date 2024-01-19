@@ -9,13 +9,13 @@ import { ModelType } from "@/models/ModelType";
 
 export type SubmitHandlerReturnModel<
   F extends FieldValues,
-  Model extends ModelType = void,
+  Model extends ModelType,
 > = SubmitHandler<F> & ((data: F) => Promise<Model>);
 
 const useForm = <
   T extends FormFieldsType,
   F extends FieldValues,
-  Model extends ModelType = void,
+  Model extends ModelType,
 >({
   form,
   formSchema,
@@ -33,7 +33,7 @@ const useForm = <
     resolver: zodResolver(formSchema),
   });
 
-  const mutation = useMutation<Model, QueryError, F>({
+  const mutation = useMutation({
     mutationFn: onSubmit,
     onError: (error: QueryError) => {
       if (onError) {

@@ -1,7 +1,10 @@
+import { dateToDdmmyyyy } from "@/utils/date/ddmmyyyy";
 import FieldInterpolation, {
   FieldInterpolationValue,
 } from "./FieldInterpolation";
+import MaxDateFieldInterpolation from "./MaxDateFieldInterpolation";
 import MaxValueFieldInterpolation from "./MaxValueFieldInterpolation";
+import MinDateFieldInterpolation from "./MinDateFieldInterpolation";
 import MinValueFieldInterpolation from "./MinValueFieldInterpolation";
 import RegexFieldInterpolation from "./RegexFieldInterpolation";
 
@@ -39,6 +42,20 @@ class FieldInterpolationsBuilder {
 
   public setRegexFormat(format: string): FieldInterpolationsBuilder {
     return this.setProperty<string>(RegexFieldInterpolation, format);
+  }
+
+  public setMinDate(value: Date): FieldInterpolationsBuilder {
+    return this.setProperty<string>(
+      MinDateFieldInterpolation,
+      dateToDdmmyyyy(value)
+    );
+  }
+
+  public setMaxDate(value: Date): FieldInterpolationsBuilder {
+    return this.setProperty<string>(
+      MaxDateFieldInterpolation,
+      dateToDdmmyyyy(value)
+    );
   }
 
   public build(): FieldInterpolation[] {

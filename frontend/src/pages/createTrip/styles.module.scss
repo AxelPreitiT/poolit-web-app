@@ -66,8 +66,17 @@
   row-gap: 0.2rem;
 }
 
+.formItem button {
+  box-shadow: none;
+}
+
 .formItemError {
   color: colors.$danger-color;
+}
+
+.pickerContainer {
+  flex-grow: 1;
+  border-radius: 0.25rem;
 }
 
 .recurrentCheckbox,

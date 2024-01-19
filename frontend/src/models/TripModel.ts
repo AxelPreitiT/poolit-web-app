@@ -1,4 +1,5 @@
 interface TripModel {
+  tripId: number;
   carUri: string;
   destinationAddress: number;
   destinationCityUri: string;
@@ -16,3 +17,5 @@ interface TripModel {
   totalPrice: number;
   totalTrips: number;
 }
+
+export default TripModel;

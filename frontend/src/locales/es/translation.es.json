@@ -1,10 +1,9 @@
 {
   "format": {
     "price": "$ {{priceInt}}.{{princeFloat}}",
-    "plate": "Patente: {{carPlate}}",
+    "plate": "Patente:{{carPlate}}",
     "name": "{{name}} {{surname}}",
-    "date": "( {{date}} )",
-    "recurrent_date": "({{initial_date}} - {{final_date}})"
+    "date": "( {{date}} )"
   },
   "poolit": {
     "name": "POOLIT",
@@ -14,6 +13,15 @@
     "language_selector": "¿En qué idioma preferís recibir las notificaciones?",
     "spanish": "Español",
     "english": "Inglés"
+  },
+  "day": {
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado{{plural}}",
+    "sunday": "Domingo{{plural}}"
   },
   "navbar": {
     "created": "Creados",
@@ -110,13 +118,63 @@
       "invalid": "El teléfono es inválido, debe tener el formato {{format}}"
     },
     "city": {
-      "min": "El barrio es requerido"
+      "required": "Debe seleccionar un barrio",
+      "min": "Debe seleccionar un barrio"
     },
     "confirm_password": {
       "invalid": "Las contraseñas no coinciden"
     },
     "image": {
       "max": "La imagen no puede pesar más de {{max}} MB"
+    },
+    "origin_city": {
+      "required": "Debe seleccionar un barrio de origen",
+      "min": "Debe seleccionar un barrio de origen"
+    },
+    "origin_address": {
+      "required": "La dirección de origen es requerida",
+      "min": "La dirección de origen debe tener al menos {{min}} caracteres",
+      "max": "La dirección de origen debe tener como máximo {{max}} caracteres"
+    },
+    "date": {
+      "required": "La fecha es requerida",
+      "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
+      "min": "La fecha no puede ser anterior a {{min}}",
+      "before_now": "La fecha y el hora deben ser posteriores a las actuales"
+    },
+    "time": {
+      "required": "La hora es requerida",
+      "invalid": "La hora tiene un formato inválido, debe ser {{format}}"
+    },
+    "last_date": {
+      "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
+      "min": "La fecha no puede ser anterior a {{min}}",
+      "required": "La fecha final es obligatoria si se trata de un viaje recurrente",
+      "before_initial": "La fecha final debe ser posterior a la fecha inicial",
+      "different_day": "La fecha inicial y final deben ser el mismo día de la semana"
+    },
+    "destination_city": {
+      "required": "Debe seleccionar un barrio de destino",
+      "min": "Debe seleccionar un barrio de destino"
+    },
+    "destination_address": {
+      "required": "La dirección de destino es requerida",
+      "min": "La dirección de destino debe tener al menos {{min}} caracteres",
+      "max": "La dirección de destino debe tener como máximo {{max}} caracteres"
+    },
+    "car": {
+      "required": "Debe seleccionar un auto",
+      "min": "Debe seleccionar un auto"
+    },
+    "seats": {
+      "required": "Debe seleccionar la cantidad de asientos",
+      "invalid": "La cantidad de asientos debe ser un número",
+      "min": "La cantidad de asientos debe ser al menos {{min}}"
+    },
+    "price": {
+      "required": "El precio es requerido",
+      "invalid": "El precio debe ser un número",
+      "min": "El precio debe ser al menos {{min}}"
     }
   },
   "profile": {
@@ -129,8 +187,8 @@
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
       "rating_passenger": "Valoración como pasajero",
-      "es" : "Español",
-      "en" : "Ingles"
+      "es": "Español",
+      "en": "Ingles"
     },
     "lists": {
       "review_as_driver": "Opiniones como conductor",
@@ -152,6 +210,10 @@
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
       "cars_empty": "No tienes autos creados"
+    },
+    "error": {
+      "title": "No se pudo obtener tu perfil",
+      "default": "Ocurrió un error al obtener tu perfil"
     }
   },
   "roles": {
@@ -192,7 +254,33 @@
     "past": "Historial"
   },
   "create_trip": {
-    "title": "Crear viaje"
+    "title": "Crear viaje",
+    "origin": "Origen",
+    "district": "Barrio",
+    "address": "Dirección",
+    "date": "Fecha",
+    "time": "Horario",
+    "recurrent_trip": "Viaje recurrente",
+    "every": "Todos los",
+    "until": "Hasta el",
+    "last_date": "Última fecha",
+    "destination": "Destino",
+    "details": "Detalles",
+    "select_car": "Seleccione un auto",
+    "brand": "Marca: {{brand}}",
+    "license_plate": "Patente: {{license_plate}}",
+    "car_image": "Imagen del auto {{car_info}}",
+    "number_of_seats": "Cantidad de asientos",
+    "price_per_trip": "Precio por viaje",
+    "create": "Crear viaje",
+    "success": {
+      "title": "¡Viaje creado!",
+      "message": "¡Tu viaje fue creado correctamente!"
+    },
+    "error": {
+      "title": "Inicio de sesión fallido",
+      "default": "Ocurrió un error al crear el viaje"
+    }
   },
   "admin": {
     "title": "Administrador"
@@ -213,7 +301,11 @@
       "my_trips": "Mis viajes",
       "cancel": "Cancelar viaje"
     },
-    "filter_by": "Filtrados por estado: {{priceInt}}"
+    "filter_by": "Filtrados por estado: {{priceInt}}",
+    "error": {
+      "title": "No se pudo obtener el viaje",
+      "default": "Ocurrió un error al obtener el viaje"
+    }
   },
   "query": {
     "request": {
@@ -267,7 +359,7 @@
       "title": "Ocurrió un error al obtener los barrios"
     }
   },
-  "spinner":{
+  "spinner": {
     "loading": "Cargando..."
   }
 }

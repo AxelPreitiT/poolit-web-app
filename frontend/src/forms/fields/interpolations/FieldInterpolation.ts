@@ -4,7 +4,7 @@ abstract class FieldInterpolation {
   private key: string;
   private value: FieldInterpolationValue;
 
-  constructor(key: string, value: number | string) {
+  constructor(key: string, value: FieldInterpolationValue) {
     this.key = key;
     this.value = value;
   }
@@ -13,7 +13,7 @@ abstract class FieldInterpolation {
     return this.key;
   }
 
-  public getValue(): number | string {
+  public getValue(): FieldInterpolationValue {
     return this.value;
   }
 
