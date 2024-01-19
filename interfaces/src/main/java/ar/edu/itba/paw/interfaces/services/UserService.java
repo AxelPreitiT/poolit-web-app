@@ -28,7 +28,7 @@ public interface UserService {
 
     void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException;
 
-    void confirmRegister(String token)throws InvalidTokenException;
+    void confirmRegister(String token, final User user)throws InvalidTokenException;
 
     void blockUser( long blockedId) throws UserNotFoundException;
     void unblockUser( long blockedId) throws UserNotFoundException;
