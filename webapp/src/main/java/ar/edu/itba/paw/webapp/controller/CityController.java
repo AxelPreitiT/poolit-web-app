@@ -44,6 +44,7 @@ public class CityController {
     public Response getById(@PathParam("id") final int id) throws CityNotFoundException{
         LOGGER.debug("GET request for city with cityId {}",id);
         final City ans = cityService.findCityById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(CityNotFoundException::new));
-        return Response.ok(CityDto.fromCity(uriInfo,ans)).build();
+        Response.ResponseBuilder res = Response.ok(CityDto.fromCity(uriInfo,ans));
+        return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }
 }

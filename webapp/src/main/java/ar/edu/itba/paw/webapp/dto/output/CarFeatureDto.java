@@ -1,12 +1,14 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
-import ar.edu.itba.paw.models.CarBrand;
+import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
-public class CarBrandDto {
+public class CarFeatureDto {
 
     private String id;
 
@@ -14,11 +16,11 @@ public class CarBrandDto {
 
     private URI selfUri;
 
-    public static CarBrandDto fromCarBrand(final UriInfo uriInfo, final CarBrand carBrand){
-        CarBrandDto ans = new CarBrandDto();
-        ans.id = carBrand.name();
-        ans.name = carBrand.toString();
-        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BRAND_BASE).path(carBrand.name()).build();
+    public static CarFeatureDto fromCarFeature(final UriInfo uriInfo, final FeatureCar featureCar, final MessageSource messageSource){
+        CarFeatureDto ans = new CarFeatureDto();
+        ans.id = featureCar.name();
+        ans.name = messageSource.getMessage(featureCar.getCode(),null, LocaleContextHolder.getLocale());
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_FEATURE_BASE).path(featureCar.name()).build();
         return ans;
     }
 

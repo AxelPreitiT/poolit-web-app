@@ -5,8 +5,7 @@ import ar.edu.itba.paw.models.CarBrand;
 import java.util.List;
 import java.util.Optional;
 
-public interface CarBrandController {
+public interface CarBrandService {
     List<CarBrand> getCarBrands();
-
-    Optional<CarBrand> findById()
+    Optional<CarBrand> findById(final String id);
 }

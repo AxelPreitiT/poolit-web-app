@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-//Con el Provider no manda esto tampoco!
 @Provider
 @Component
 public class AccessDeniedExceptionMapper implements ExceptionMapper<AccessDeniedException> {
