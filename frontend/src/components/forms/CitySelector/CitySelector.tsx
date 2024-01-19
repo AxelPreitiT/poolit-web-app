@@ -3,11 +3,11 @@ import { Form, FormSelectProps } from "react-bootstrap";
 
 export const citySelectorDefaultValue = -1;
 
-type CitySelectorProps = {
+interface CitySelectorProps {
   cities: CityModel[];
   defaultOption: string;
   onChange: (value: number) => void;
-};
+}
 
 const CitySelector = ({
   cities,

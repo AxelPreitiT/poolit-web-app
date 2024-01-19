@@ -15,6 +15,15 @@
     "spanish": "Spanish",
     "english": "English"
   },
+  "day": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
   "navbar": {
     "created": "Created",
     "reserved": "Reserved",
@@ -247,6 +256,24 @@
   },
   "create_trip": {
     "title": "Create a trip",
+    "origin": "Origin",
+    "district": "District",
+    "address": "Address",
+    "date": "Date",
+    "time": "Time",
+    "recurrent_trip": "Recurrent trip",
+    "every": "Every",
+    "until": "Until",
+    "last_date": "Last date",
+    "destination": "Destination",
+    "details": "Details",
+    "select_car": "Select a car",
+    "brand": "Brand: {{brand}}",
+    "license_plate": "License plate: {{license_plate}}",
+    "car_image": "Image of the car {{car_info}}",
+    "number_of_seats": "Number of seats",
+    "price_per_trip": "Price per trip",
+    "create": "Create trip",
     "success": {
       "title": "Trip created!",
       "message": "The trip was created successfully!"

@@ -11,7 +11,7 @@ import TripsService from "@/services/TripsService";
 import useForm, { SubmitHandlerReturnModel } from "./useForm";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import { useEffect, useState } from "react";
-import useTripByUri from "../trips/useTripById";
+import useTripByUri from "../trips/useTripByUri";
 import CreateTripModel from "@/models/CreateTripModel";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import { createdTripsPath, tripDetailsPath } from "@/AppRouter";

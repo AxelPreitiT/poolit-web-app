@@ -23,10 +23,12 @@ public class CarDto {
     private double rating;
     private URI selfUri;
     private URI imageUri;
+    private long carId;
 
     public CarDto(){}
 
     protected CarDto(final UriInfo uriInfo, final Car car){
+        this.carId = car.getCarId();
         this.infoCar = car.getInfoCar();
         this.brand = car.getBrand();
         this.plate = car.getPlate();
@@ -86,5 +88,13 @@ public class CarDto {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(long carId) {
+        this.carId = carId;
     }
 }

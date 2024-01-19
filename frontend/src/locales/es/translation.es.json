@@ -14,6 +14,15 @@
     "spanish": "Español",
     "english": "Inglés"
   },
+  "day": {
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado{{plural}}",
+    "sunday": "Domingo{{plural}}"
+  },
   "navbar": {
     "created": "Creados",
     "reserved": "Reservados",
@@ -246,6 +255,24 @@
   },
   "create_trip": {
     "title": "Crear viaje",
+    "origin": "Origen",
+    "district": "Barrio",
+    "address": "Dirección",
+    "date": "Fecha",
+    "time": "Horario",
+    "recurrent_trip": "Viaje recurrente",
+    "every": "Todos los",
+    "until": "Hasta el",
+    "last_date": "Última fecha",
+    "destination": "Destino",
+    "details": "Detalles",
+    "select_car": "Seleccione un auto",
+    "brand": "Marca: {{brand}}",
+    "license_plate": "Patente: {{license_plate}}",
+    "car_image": "Imagen del auto {{car_info}}",
+    "number_of_seats": "Cantidad de asientos",
+    "price_per_trip": "Precio por viaje",
+    "create": "Crear viaje",
     "success": {
       "title": "¡Viaje creado!",
       "message": "¡Tu viaje fue creado correctamente!"
