@@ -45,19 +45,19 @@ export const CreateTripForm = new Form<CreateTripFormFieldsType>(
   CreateTripFormFields
 );
 
-export type RegisterFormSchemaType =
+export type CreateTripFormSchemaType =
   InferedFormSchemaType<CreateTripFormFieldsType>;
 
-export const RegisterFormSchema = CreateTripForm.getSchema()
+export const CreateTripFormSchema = CreateTripForm.getSchema()
   .refine(
-    nowOrLaterRefine<RegisterFormSchemaType>(dateFieldName, timeFieldName),
+    nowOrLaterRefine<CreateTripFormSchemaType>(dateFieldName, timeFieldName),
     {
       message: `error.${dateFieldName}.before_now`,
       path: [dateFieldName],
     }
   )
   .refine(
-    isMultitripRefine<RegisterFormSchemaType>(
+    isMultitripRefine<CreateTripFormSchemaType>(
       multitripFieldName,
       lastDateFieldName
     ),
@@ -67,7 +67,7 @@ export const RegisterFormSchema = CreateTripForm.getSchema()
     }
   )
   .refine(
-    endDateIsAfterStartDateRefine<RegisterFormSchemaType>(
+    endDateIsAfterStartDateRefine<CreateTripFormSchemaType>(
       dateFieldName,
       lastDateFieldName
     ),
@@ -77,7 +77,10 @@ export const RegisterFormSchema = CreateTripForm.getSchema()
     }
   )
   .refine(
-    sameWeekDayRefine<RegisterFormSchemaType>(dateFieldName, lastDateFieldName),
+    sameWeekDayRefine<CreateTripFormSchemaType>(
+      dateFieldName,
+      lastDateFieldName
+    ),
     {
       message: `error.${lastDateFieldName}.different_day`,
       path: [lastDateFieldName],

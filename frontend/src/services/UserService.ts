@@ -2,14 +2,12 @@ import UsersApi from "@/api/UsersApi";
 import Service from "./Service";
 import UserPrivateModel from "@/models/UserPrivateModel";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
+import { LoginFormSchemaType } from "@/forms/LoginForm";
 
 class UserService extends Service {
-  public static login = async (
-    email: string,
-    password: string,
-    rememberMe: boolean = false
-  ) => {
-    await this.resolveQuery(UsersApi.login(email, password, rememberMe));
+  public static login = async (data: LoginFormSchemaType) => {
+    const { email, password, remember_me: rememberMe } = data;
+    await this.resolveQuery(UsersApi.login(email, password, !!rememberMe));
   };
 
   public static logout = async () => {

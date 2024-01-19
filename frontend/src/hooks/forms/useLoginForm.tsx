@@ -1,7 +1,6 @@
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import {
   LoginForm,
-  LoginFormFieldsType,
   LoginFormSchema,
   LoginFormSchemaType,
 } from "@/forms/LoginForm";
@@ -26,11 +25,8 @@ const useLoginForm = () => {
   const { invalidateAuthentication } = useAuthentication();
   const onQueryError = useQueryError();
 
-  const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType> = async (
-    data: LoginFormSchemaType
-  ) => {
-    await UserService.login(data.email, data.password, !!data.rememberMe);
-  };
+  const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType, void> =
+    UserService.login;
 
   const onSuccess = async () => {
     showSuccessToast({
@@ -56,7 +52,7 @@ const useLoginForm = () => {
     onQueryError({ error, title, timeout, customMessages });
   };
 
-  return useForm<LoginFormFieldsType, LoginFormSchemaType>({
+  return useForm({
     form: LoginForm,
     formSchema: LoginFormSchema,
     onSubmit,

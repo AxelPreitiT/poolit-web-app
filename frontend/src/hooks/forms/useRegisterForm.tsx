@@ -1,7 +1,6 @@
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import {
   RegisterForm,
-  RegisterFormFieldsType,
   RegisterFormSchema,
   RegisterFormSchemaType,
 } from "@/forms/RegisterForm";
@@ -22,12 +21,8 @@ const useRegisterForm = () => {
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
 
-  const onSubmit: SubmitHandlerReturnModel<RegisterFormSchemaType> = async (
-    data: RegisterFormSchemaType
-  ) => {
-    console.log(data);
-    await UserService.register(data);
-  };
+  const onSubmit: SubmitHandlerReturnModel<RegisterFormSchemaType, void> =
+    UserService.register;
 
   const onSuccess = () => {
     showSuccessToast({
@@ -48,7 +43,7 @@ const useRegisterForm = () => {
     onQueryError({ error, title, timeout, customMessages });
   };
 
-  return useForm<RegisterFormFieldsType, RegisterFormSchemaType>({
+  return useForm({
     form: RegisterForm,
     formSchema: RegisterFormSchema,
     onSubmit,

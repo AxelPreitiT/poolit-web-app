@@ -202,6 +202,10 @@
       "cars": "My cars",
       "cars_create": "Create new car",
       "cars_empty": "You have no created cars"
+    },
+    "error": {
+      "title": "Could not fetch your profile",
+      "default": "An error occurred while fetching your profile"
     }
   },
   "roles": {
@@ -242,7 +246,15 @@
     "past": "History"
   },
   "create_trip": {
-    "title": "Create a trip"
+    "title": "Create a trip",
+    "success": {
+      "title": "Trip created!",
+      "message": "The trip was created successfully!"
+    },
+    "error": {
+      "title": "Trip creation failed",
+      "default": "An error occurred while creating the trip"
+    }
   },
   "admin": {
     "title": "Admin"
@@ -263,7 +275,11 @@
       "my_trips": "My trips",
       "cancel": "Cancel trip"
     },
-    "filter_by": "Filter by status: {{status}}"
+    "filter_by": "Filter by status: {{status}}",
+    "error": {
+      "title": "Could not fetch the trip",
+      "default": "An error occurred while fetching the trip"
+    }
   },
   "query": {
     "request": {

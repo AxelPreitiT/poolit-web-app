@@ -11,7 +11,7 @@ const useGetAllCities = () => {
 
   const query = useQuery({
     queryKey: ["cities"],
-    queryFn: () => CityService.getAllCities(),
+    queryFn: CityService.getAllCities,
   });
 
   const { isError, error } = query;

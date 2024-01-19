@@ -1,10 +1,9 @@
 {
   "format": {
     "price": "$ {{priceInt}}.{{princeFloat}}",
-    "plate": "Patente: {{carPlate}}",
+    "plate": "Patente:{{carPlate}}",
     "name": "{{name}} {{surname}}",
-    "date": "( {{date}} )",
-    "recurrent_date": "({{initial_date}} - {{final_date}})"
+    "date": "( {{date}} )"
   },
   "poolit": {
     "name": "POOLIT",
@@ -131,16 +130,16 @@
     "date": {
       "required": "La fecha es requerida",
       "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
-      "min": "La fecha debe ser posterior a {{min}}",
-      "before_now": "La fecha y el hora deben ser posteriores a la actual"
+      "min": "La fecha no puede ser anterior a {{min}}",
+      "before_now": "La fecha y el hora deben ser posteriores a las actuales"
     },
     "time": {
       "required": "La hora es requerida",
       "invalid": "La hora tiene un formato inválido, debe ser {{format}}"
     },
     "last_date": {
-      "invalid": "La fecha tiene un formato inválido",
-      "min": "La fecha debe ser posterior a {{min}}",
+      "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
+      "min": "La fecha no puede ser anterior a {{min}}",
       "required": "La fecha final es obligatoria si se trata de un viaje recurrente",
       "before_initial": "La fecha final debe ser posterior a la fecha inicial",
       "different_day": "La fecha inicial y final deben ser el mismo día de la semana"
@@ -202,6 +201,10 @@
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
       "cars_empty": "No tienes autos creados"
+    },
+    "error": {
+      "title": "No se pudo obtener tu perfil",
+      "default": "Ocurrió un error al obtener tu perfil"
     }
   },
   "roles": {
@@ -242,7 +245,15 @@
     "past": "Historial"
   },
   "create_trip": {
-    "title": "Crear viaje"
+    "title": "Crear viaje",
+    "success": {
+      "title": "¡Viaje creado!",
+      "message": "¡Tu viaje fue creado correctamente!"
+    },
+    "error": {
+      "title": "Inicio de sesión fallido",
+      "default": "Ocurrió un error al crear el viaje"
+    }
   },
   "admin": {
     "title": "Administrador"
@@ -263,7 +274,11 @@
       "my_trips": "Mis viajes",
       "cancel": "Cancelar viaje"
     },
-    "filter_by": "Filtrados por estado: {{priceInt}}"
+    "filter_by": "Filtrados por estado: {{priceInt}}",
+    "error": {
+      "title": "No se pudo obtener el viaje",
+      "default": "Ocurrió un error al obtener el viaje"
+    }
   },
   "query": {
     "request": {
