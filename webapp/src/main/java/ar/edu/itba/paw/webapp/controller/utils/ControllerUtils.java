@@ -52,8 +52,6 @@ public class ControllerUtils {
     //Used to add unconditional cache for responses like enums, cities, etc
     public static Response.ResponseBuilder getUnconditionalCacheResponseBuilder(Response.ResponseBuilder responseBuilder){
         final CacheControl cacheControl = new CacheControl();
-        cacheControl.setNoCache(false);
-        cacheControl.setMustRevalidate(false);
         cacheControl.setMaxAge(MAX_AGE);
         responseBuilder.cacheControl(cacheControl);
         return responseBuilder;
