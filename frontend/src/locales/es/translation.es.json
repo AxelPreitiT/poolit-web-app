@@ -251,7 +251,9 @@
   "reserved_trips": {
     "title": "Viajes reservados",
     "future": "Próximos",
-    "past": "Historial"
+    "past": "Historial",
+    "empty": "Parece que no tenés viajes reservados",
+    "more": "Hacé click en el botón 'Buscar' para encontrar tu primer viaje"
   },
   "create_trip": {
     "title": "Crear viaje",

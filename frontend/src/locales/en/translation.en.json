@@ -252,7 +252,9 @@
   "reserved_trips": {
     "title": "Reserved trips",
     "future": "Upcoming",
-    "past": "History"
+    "past": "History",
+    "empty": "You don't have any reserved trips yet",
+    "more": "Click on 'Search' to find your first trip"
   },
   "create_trip": {
     "title": "Create a trip",
