@@ -13,6 +13,8 @@ public class UrlHolder {
     public static final String CAR_BASE = BASE + "/cars";
     //    --------Car brands--------
     public static final String CAR_BRAND_BASE = BASE + "/car-brands";
+    //    --------Car features--------
+    public static final String CAR_FEATURE_BASE = BASE + "/car-features";
     //    --------Trips--------
     public static final String TRIPS_BASE = BASE + "/trips";
     public static final String TRIPS_PASSENGERS = "/passengers";

@@ -24,8 +24,7 @@ public class ControllerUtils {
 
     private static final String TOTAL_PAGES_HEADER = "X-Total-Pages";
 
-    //TODO: change, just for testing
-    private static final int MAX_AGE = (int) Duration.ofSeconds(30).getSeconds();
+    private static final int MAX_AGE = (int) Duration.ofDays(1).getSeconds();
 
     public static <T> Supplier<T> notFoundExceptionOf(Function<Integer,T> constructor){
         return () -> constructor.apply(Response.Status.NOT_FOUND.getStatusCode());
@@ -53,6 +52,8 @@ public class ControllerUtils {
     //Used to add unconditional cache for responses like enums, cities, etc
     public static Response.ResponseBuilder getUnconditionalCacheResponseBuilder(Response.ResponseBuilder responseBuilder){
         final CacheControl cacheControl = new CacheControl();
+        cacheControl.setNoCache(false);
+        cacheControl.setMustRevalidate(false);
         cacheControl.setMaxAge(MAX_AGE);
         responseBuilder.cacheControl(cacheControl);
         return responseBuilder;
