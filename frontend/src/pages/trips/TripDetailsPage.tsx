@@ -4,50 +4,48 @@ import MainHeader from "@/components/utils/MainHeader";
 import { useTranslation } from "react-i18next";
 import Location from "@/components/location/Location";
 import StatusComponent from "@/components/statusTrip/StatusTrip";
-import { Trip } from "@/types/Trip";
 import TripInfo from "@/components/tripInfo/TripInfo";
 import { Button } from "react-bootstrap";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import PassangerComponent from "@/components/passanger/Passanger";
 import { Passanger as PassangerType } from "@/types/Passanger";
 import {useParams, useSearchParams} from "react-router-dom";
+import TripModel from "@/models/TripModel.ts";
+import tripsService from "@/services/TripsService.ts";
+import CreateUri from "@/functions/CreateUri.ts";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import CarService from "@/services/CarService.ts";
+import CarModel from "@/models/CarModel.ts";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
   const id = useParams();
   const [params,] = useSearchParams();
 
+  const [Trip, setTrip] = useState<TripModel | null>(null);
+  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
+
+  const link = CreateUri(id.tripId, params.toString(), '/trips')
+
+  useEffect(() => {
+    tripsService.getTripById(link).then((response) => {
+      setTrip(response);
+    });
+    if (Trip != null) {
+      CarService.getCarById(Trip.carUri).then((response) => {
+        setCarTrip(response);
+      });
+    }
+  });
+
+
   const options = ["All", "Accepted", "Waiting", "Rejected"];
   const [selectedOption, setSelectedOption] = useState<string>("All");
-
   const handleSelect = (eventKey: string | null) => {
     if (eventKey !== null) {
       setSelectedOption(eventKey);
     }
-  };
-
-  const trip: Trip = {
-    tripId: 1,
-    originCity: {
-      name: "Balvanera",
-    },
-    originAddress: "Av independencia 2135",
-    destinationCity: {
-      name: "Parque Patricios",
-    },
-    destinationAddress: "Iguazu 341",
-    dayOfWeekString: "Miercoles",
-    startDateString: "10/02/2019",
-    endDateString: "10/03/2019",
-    travelInfoDateString: "travel info",
-    startTimeString: "10:09",
-    integerQueryTotalPrice: "10",
-    decimalQueryTotalPrice: "05",
-    queryIsRecurrent: false,
-    car: {
-      imageId: "http://pawserver.it.itba.edu.ar/paw-2023a-07/image/80",
-    },
   };
 
   const passanger_data: PassangerType = {
@@ -77,66 +75,66 @@ const TripDetailsPage = () => {
             />
           }
         />
-        <Location
-          start_address={trip.originAddress}
-          start_city={trip.originCity.name}
-          end_address={trip.destinationAddress}
-          end_city={trip.destinationCity.name}
-        />
-        <div className={styles.middle_content}>
-          <TripInfo {...trip} />
-          <div className={styles.img_container}>
-            <img
-              src="http://pawserver.it.itba.edu.ar/paw-2023a-07/image/80"
-              className={styles.img_style}
-              alt=""
-            />
-          </div>
-        </div>
-
-        <div className={styles.end_container}>
-          <div className={styles.status_trip}>
-            <div className={styles.info_container}>
-              <h3>Income:</h3>
-              <div className={styles.price_container}>
-                <h1>{id.tripId}</h1>
-                <h1>{params.get('startDateTime')}</h1>
-                <span>{params.toString()}</span>
-                <h3>
-                  {t("format.price", {
-                    priceInt: trip.integerQueryTotalPrice,
-                    princeFloat: trip.decimalQueryTotalPrice,
-                  })}
-                </h3>
-                <span style={{ color: "gray", fontStyle: "italic" }}>
-                  4 viajes
-                </span>
-              </div>
-            </div>
-            <div className={styles.info_container}>
-              <h3>Status:</h3>
-              <StatusComponent
-                text={"Accepted"}
-                icon={"bi bi-clock-history"}
-                color={"success"}
+        {Trip == undefined || CarTrip === null ?
+          (<SpinnerComponent /> ) :
+          (<div>
+              <Location
+                startAddress={Trip.originAddress}
+                startCityUri={Trip.originCityUri}
+                endAddress={Trip.destinationAddress}
+                endCityUri={Trip.destinationCityUri}
               />
-            </div>
-          </div>
-          <div className={styles.btn_container}>
-            <Button className={styles.btn_trips}>
-              <div className={styles.create_trip_btn}>
-                <i className="bi bi-car-front-fill light-text"></i>
-                <span>{t("trip_detail.btn.my_trips")}</span>
+              <div className={styles.middle_content}>
+                <TripInfo trip={Trip} car={CarTrip} />
+                <div className={styles.img_container}>
+                  <img
+                      src={CarTrip?.imageUri}
+                      className={styles.img_style}
+                      alt=""
+                  />
+                </div>
               </div>
-            </Button>
-            <Button className={styles.btn_cancel}>
-              <div className={styles.create_trip_btn}>
-                <i className="bi bi-x light-text"></i>
-                <span>{t("trip_detail.btn.cancel")}</span>
+
+              <div className={styles.end_container}>
+                <div className={styles.status_trip}>
+                  <div className={styles.info_container}>
+                    <h3>Income:</h3>
+                    <div className={styles.price_container}>
+                      <h3>
+                        {t("format.price", {
+                          priceInt: Trip.pricePerTrip,
+                          princeFloat: 0,
+                        })}
+                      </h3>
+                      <span style={{ color: "gray", fontStyle: "italic" }}>{Trip.totalTrips} viajes</span>
+                    </div>
+                  </div>
+                  <div className={styles.info_container}>
+                    <h3>Status:</h3>
+                    <StatusComponent
+                        text={"Accepted"}
+                        icon={"bi bi-clock-history"}
+                        color={"success"}
+                    />
+                  </div>
+                </div>
+                <div className={styles.btn_container}>
+                  <Button className={styles.btn_trips}>
+                    <div className={styles.create_trip_btn}>
+                      <i className="bi bi-car-front-fill light-text"></i>
+                      <span>{t("trip_detail.btn.my_trips")}</span>
+                    </div>
+                  </Button>
+                  <Button className={styles.btn_cancel}>
+                    <div className={styles.create_trip_btn}>
+                      <i className="bi bi-x light-text"></i>
+                      <span>{t("trip_detail.btn.cancel")}</span>
+                    </div>
+                  </Button>
+                </div>
               </div>
-            </Button>
-          </div>
-        </div>
+            </div>)}
+
       </MainComponent>
       <MainComponent>
         <MainHeader title={t("trip_detail.passengers")} />
@@ -163,6 +161,6 @@ const TripDetailsPage = () => {
       </MainComponent>
     </div>
   );
-};
+}
 
 export default TripDetailsPage;
