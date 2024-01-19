@@ -17,6 +17,8 @@ import CreateUri from "@/functions/CreateUri.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
+import UserPublicModel from "@/models/UserPublicModel.ts";
+import UserService from "@/services/UserService.ts";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -25,6 +27,8 @@ const TripDetailsPage = () => {
 
   const [Trip, setTrip] = useState<TripModel | null>(null);
   const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
+  const [DriverTrip, setDriverTrip] = useState<UserPublicModel | null>(null);
+
 
   const link = CreateUri(id.tripId, params.toString(), '/trips')
 
@@ -35,6 +39,9 @@ const TripDetailsPage = () => {
     if (Trip != null) {
       CarService.getCarById(Trip.carUri).then((response) => {
         setCarTrip(response);
+      });
+      UserService.getUserById(Trip.driverUri).then((response) => {
+        setDriverTrip(response);
       });
     }
   });
@@ -75,7 +82,7 @@ const TripDetailsPage = () => {
             />
           }
         />
-        {Trip == undefined || CarTrip === null ?
+        {Trip == undefined || CarTrip === null || DriverTrip === null ?
           (<SpinnerComponent /> ) :
           (<div>
               <Location
@@ -85,7 +92,7 @@ const TripDetailsPage = () => {
                 endCityUri={Trip.destinationCityUri}
               />
               <div className={styles.middle_content}>
-                <TripInfo trip={Trip} car={CarTrip} />
+                <TripInfo trip={Trip} car={CarTrip} driver={DriverTrip} />
                 <div className={styles.img_container}>
                   <img
                       src={CarTrip?.imageUri}
@@ -134,19 +141,17 @@ const TripDetailsPage = () => {
                 </div>
               </div>
             </div>)}
-
       </MainComponent>
       <MainComponent>
         <MainHeader title={t("trip_detail.passengers")} />
         <div className={styles.dropdown_style}>
           <Dropdown onSelect={handleSelect}>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            <Dropdown.Toggle id="dropdown-basic" className={styles.btn_dropdown}>
               {t("trip_detail.filter_by", {
                 status: selectedOption,
               })}
             </Dropdown.Toggle>
-
-            <Dropdown.Menu className={styles.dropdown_menu}>
+            <Dropdown.Menu className={styles.dropdown_menu_passanger}>
               {options.map((option, index) => (
                 <Dropdown.Item key={index} eventKey={option}>
                   {option}

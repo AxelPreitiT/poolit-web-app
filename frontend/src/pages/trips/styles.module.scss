@@ -109,6 +109,12 @@
   justify-content: flex-end;
 }
 
-.dropdown_menu {
+.dropdown_menu_passanger {
   margin-top: 0 !important;
+  background-color: colors.$primary-color !important;
+}
+
+.btn_dropdown{
+  background-color: colors.$secondary-color !important;
+  border-color: white !important;
 }

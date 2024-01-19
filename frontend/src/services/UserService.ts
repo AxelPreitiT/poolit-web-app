@@ -3,6 +3,7 @@ import Service from "./Service";
 import UserPrivateModel from "@/models/UserPrivateModel";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import { LoginFormSchemaType } from "@/forms/LoginForm";
+import UserPublicModel from "@/models/UserPublicModel.ts";
 
 class UserService extends Service {
   public static login = async (data: LoginFormSchemaType) => {
@@ -33,6 +34,9 @@ class UserService extends Service {
 
   public static getCurrentUser = async (): Promise<UserPrivateModel> =>
     await this.resolveQuery(UsersApi.getCurrentUser());
+
+  public static getUserById = async  (uri : string): Promise<UserPublicModel> =>
+      await this.resolveQuery(UsersApi.getPublicUser(uri));
 }
 
 export default UserService;
