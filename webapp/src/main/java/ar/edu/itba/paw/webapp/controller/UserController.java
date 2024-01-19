@@ -14,6 +14,7 @@ import ar.edu.itba.paw.webapp.dto.output.user.PrivateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PublicUserDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageSize;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageType;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -29,8 +30,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Path(UrlHolder.USER_BASE)
 @Component
@@ -54,9 +53,9 @@ public class UserController {
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_USER_PUBLIC)
-    public Response getByIdPublic(@PathParam("id") final long id) throws UserNotFoundException{
+    public Response getByIdPublic(@PathParam("id") final long id){
         LOGGER.debug("GET request for public userId {}",id);
-        final User user = userService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(UserNotFoundException::new));
+        final User user = userService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PublicUserDto.fromUser(uriInfo,user)).build();
     }
 
@@ -65,14 +64,13 @@ public class UserController {
     @Path("/{id}")
     @Produces(VndType.APPLICATION_USER_PRIVATE)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
-    public Response getByIdPrivate(@PathParam("id") final long id) throws UserNotFoundException{
+    public Response getByIdPrivate(@PathParam("id") final long id){
         LOGGER.debug("GET request for private userId {}",id);
-        final User user = userService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(UserNotFoundException::new));
+        final User user = userService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PrivateUserDto.fromUser(uriInfo,user)).build();
     }
 
     @POST
-    //TODO: preguntar si el MIME type cambia si recibe parámetros distintos
     @Consumes( value = VndType.APPLICATION_USER)
     public Response createUser(@Valid final CreateUserDto userDto) throws EmailAlreadyExistsException, CityNotFoundException {
         LOGGER.debug("POST request to create user");
@@ -85,7 +83,6 @@ public class UserController {
     @PATCH
     @Path("/{id}")
     @Consumes(value = VndType.APPLICATION_USER)
-    //TODO: revisar si realmente es un patch, o si deberia dejar que se pasen sólo algunos
     public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserDto userForm) throws UserNotFoundException, CityNotFoundException {
         LOGGER.debug("PUT request to update user with userId {}",id);
         userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale());
