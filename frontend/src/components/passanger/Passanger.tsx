@@ -29,7 +29,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
       { UserTrip === null ?
           (<SpinnerComponent /> ) :
           (<div className={styles.left_container}>
-            <CircleImg src={ProfilePhoto} size={70} />
+            <CircleImg src={UserTrip.imageUri} size={70} />
             <div className={styles.name_container}>
               <h4>
                 {t("format.name", {
@@ -45,7 +45,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
             </div>
           </div>) }
       <div className={styles.right_container}>
-        <StarRating rating={3.5} size="x-large" />
+        <StarRating rating={0} size="x-large" />
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
             <Button className={styles.btn_delete}>

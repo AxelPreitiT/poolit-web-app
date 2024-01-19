@@ -7,6 +7,8 @@ import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import TripModel from "@/models/TripModel.ts";
+import extractPathAfterApi from "@/functions/extractPathAfterApi.ts";
+import { Link } from "react-router-dom";
 
 const CardTripProfile = (Trip: TripModel) => {
   const { t } = useTranslation();
@@ -31,6 +33,10 @@ const CardTripProfile = (Trip: TripModel) => {
   });
 
   return (
+    <Link
+        to={extractPathAfterApi(Trip.selfUri)}
+        className={styles.link_container}
+    >
     <div className={styles.card_info}>
       <div className={styles.data_container}>
         <div className={styles.route_container}>
@@ -94,6 +100,7 @@ const CardTripProfile = (Trip: TripModel) => {
         )}
       </div>
     </div>
+    </Link>
   );
 };
 

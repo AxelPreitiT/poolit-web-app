@@ -134,6 +134,11 @@ const TripDetailsPage = () => {
               </div>
             </div>)}
       </MainComponent>
+      <div>
+        {PassangersTrip === null ?
+            (<h1>pepe</h1>) :
+            (<h1>{PassangersTrip.toString()}</h1>)}
+      </div>
       <MainComponent>
         <MainHeader title={t("trip_detail.passengers")} />
         <div className={styles.dropdown_style}>
@@ -153,14 +158,18 @@ const TripDetailsPage = () => {
           </Dropdown>
         </div>
         <div className={styles.passangers_container}>
-          { PassangersTrip === null ?
-              (<SpinnerComponent /> ) :
-              (<PaginationList
+          {PassangersTrip === null ? (
+              <SpinnerComponent />
+          ) : PassangersTrip.length > 10000 ? (
+              <PaginationList
                   pagination_component={<h3>Poner paginación</h3>}
-                  empty_component={<h3>No tenes nada</h3>}
+                  empty_component={<h3>No tienes pasajeros</h3>}
                   data={PassangersTrip}
                   component_name={PassangerComponent}
-              />)}
+              />
+          ) : (
+              <h3>No tienes pasajeros</h3>
+            )}
         </div>
       </MainComponent>
     </div>
