@@ -8,6 +8,8 @@ const jwtAuthTokenHeader = "jwt-authorization";
 const jwtRefreshTokenHeader = "jwt-refresh-authorization";
 const accountVerificationHeader = "account-verification";
 
+type AxiosRetryRequestConfig = AxiosRequestConfig & { retried?: boolean };
+
 export const AxiosResponseInterceptor = (response: AxiosResponse) => {
   const authToken = response.headers[jwtAuthTokenHeader];
   const refreshToken = response.headers[jwtRefreshTokenHeader];
@@ -21,17 +23,23 @@ export const AxiosResponseInterceptor = (response: AxiosResponse) => {
 };
 
 export const AxiosResponseErrorInterceptor = async (error: AxiosError) => {
-  if (error.response?.status === unauthorizedHttpStatusCode) {
+  const errorConfig = error.config as AxiosRetryRequestConfig;
+  if (
+    error.response?.status === unauthorizedHttpStatusCode &&
+    !errorConfig.retried
+  ) {
     if (error.response.headers[accountVerificationHeader]) {
       throw new AccountNotVerifiedError();
     }
     // TODO: check if refresh token is expired (run interceptor only once)
     const refreshToken = Jwt.getRefreshToken();
     if (refreshToken) {
-      const prevRequest = error.config as AxiosRequestConfig;
-      prevRequest.headers = {
-        ...(prevRequest.headers || {}),
-        Authorization: refreshToken,
+      const prevRequest = {
+        ...(errorConfig || {}),
+        headers: {
+          Authorization: refreshToken,
+        },
+        retried: true,
       };
       return Axios(prevRequest);
     }

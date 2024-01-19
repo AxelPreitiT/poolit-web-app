@@ -9,7 +9,7 @@ class CitiesApi extends AxiosApi {
     uri: string
   ) => this.get<CityModel>(uri);
 
-  public static getOptions: (config: AxiosRequestConfig) => AxiosPromise = (
+  public static getOptions: (config?: AxiosRequestConfig) => AxiosPromise = (
     config?: AxiosRequestConfig
   ) => this.options(CitiesApi.CITIES_BASE_PATH, config);
 
