@@ -6,6 +6,7 @@ import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import TripModel from "@/models/TripModel.ts";
 
 const CardTripProfile = (Trip: TripModel) => {
   const { t } = useTranslation();

@@ -2,6 +2,7 @@ import styles from "./styles.module.scss";
 import CardTrip from "../cardTrip/CardTrip";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import { useTranslation } from "react-i18next";
+import TripModel from "@/models/TripModel.ts";
 
 const CardTripScheduled = (trip: TripModel) => {
   const { t } = useTranslation();

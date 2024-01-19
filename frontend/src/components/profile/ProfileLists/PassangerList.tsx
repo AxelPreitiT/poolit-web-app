@@ -8,6 +8,7 @@ import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import reviewsService from "@/services/ReviewsService.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import TripModel from "@/models/TripModel.ts";
 
 
 export interface PassengerListProp {

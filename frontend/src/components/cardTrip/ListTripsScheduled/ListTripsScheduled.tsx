@@ -3,6 +3,7 @@ import CardTripScheduled from "@/components/cardTrip/cardTripScheduled/cardTripS
 import { useEffect, useState } from "react";
 import tripsService from "@/services/TripsService.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner";
+import TripModel from "@/models/TripModel.ts";
 
 export interface ListTripsScheduledProps {
   uri: string;

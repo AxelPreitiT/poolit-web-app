@@ -8,6 +8,7 @@ import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import extractPathAfterApi from "@/functions/extractPathAfterApi";
+import TripModel from "@/models/TripModel.ts";
 
 const CardTrip = ({ trip }: { trip: TripModel }) => {
   const { t } = useTranslation();

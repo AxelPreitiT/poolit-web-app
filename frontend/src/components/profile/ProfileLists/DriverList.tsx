@@ -11,6 +11,7 @@ import reviewsService from "@/services/ReviewsService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import TripModel from "@/models/TripModel.ts";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
