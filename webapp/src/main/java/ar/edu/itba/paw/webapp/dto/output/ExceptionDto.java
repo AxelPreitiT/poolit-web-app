@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
-import ar.edu.itba.paw.interfaces.exceptions.CustomException;
-
 public class ExceptionDto {
     private String message;
 

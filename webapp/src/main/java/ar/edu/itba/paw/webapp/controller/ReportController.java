@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.dto.input.CreateReportDto;
 import ar.edu.itba.paw.webapp.dto.input.DecideReportDto;
 import ar.edu.itba.paw.webapp.dto.output.reports.PrivateReportDto;
 import ar.edu.itba.paw.webapp.dto.output.reports.PublicReportDto;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class ReportController {
     @GET
     @Path("{id}")
     @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
-    public Response getByIdPublic(@PathParam("id") final long id) throws ReportNotFoundException {
+    public Response getByIdPublic(@PathParam("id") final long id) {
         LOGGER.debug("GET request for public report with id {}",id);
-        final Report ans = reportService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReportNotFoundException::new));
+        final Report ans = reportService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PublicReportDto.fromReport(uriInfo,ans)).build();
     }
 
@@ -67,9 +68,9 @@ public class ReportController {
     @Path("{id}")
     @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
     @PreAuthorize("hasRole('ADMIN')")//TODO: intentar hacer en WebAuthConfig
-    public Response getByIdPrivate(@PathParam("id") final long id) throws ReportNotFoundException {
+    public Response getByIdPrivate(@PathParam("id") final long id){
         LOGGER.debug("GET request for private report with id {}",id);
-        final Report ans = reportService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReportNotFoundException::new));
+        final Report ans = reportService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PrivateReportDto.fromReport(uriInfo,ans)).build();
     }
 

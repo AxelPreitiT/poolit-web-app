@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.output.CityDto;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class CityController {
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CITY)
-    public Response getById(@PathParam("id") final int id) throws CityNotFoundException{
+    public Response getById(@PathParam("id") final int id){
         LOGGER.debug("GET request for city with cityId {}",id);
-        final City ans = cityService.findCityById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(CityNotFoundException::new));
+        final City ans = cityService.findCityById(id).orElseThrow(ResourceNotFoundException::new);
         Response.ResponseBuilder res = Response.ok(CityDto.fromCity(uriInfo,ans));
         return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }

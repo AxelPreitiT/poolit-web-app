@@ -15,6 +15,7 @@ import ar.edu.itba.paw.webapp.dto.input.reviews.CreateCarReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.CarDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.CarReviewDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.*;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -69,9 +70,9 @@ public class CarController {
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CAR)
-    public Response getCarById(@PathParam("id") final long id) throws CarNotFoundException{
+    public Response getCarById(@PathParam("id") final long id){
         LOGGER.debug("GET request for car with carId {}",id);
-        final Car car = carService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(CarNotFoundException::new));
+        final Car car = carService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(CarDto.fromCar(uriInfo, car)).build();
     }
 
@@ -136,9 +137,9 @@ public class CarController {
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId}")
     @Produces(value = VndType.APPLICATION_CAR_REVIEW)
     public Response getReview(@PathParam("id") final long id,
-                              @PathParam("reviewId") final long reviewId) throws ReviewNotFoundException {
+                              @PathParam("reviewId") final long reviewId){
         LOGGER.debug("GET request for review for car {} with reviewId {}",id,reviewId);
-        final CarReview carReview = carReviewService.findById(reviewId).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
+        final CarReview carReview = carReviewService.findById(reviewId).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(CarReviewDto.fromCarReview(uriInfo,carReview)).build();
     }
 

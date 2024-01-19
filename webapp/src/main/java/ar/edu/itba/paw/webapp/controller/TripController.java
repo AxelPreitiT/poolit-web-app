@@ -89,7 +89,7 @@ public class TripController {
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_TRIP)
     public Response getById(@PathParam("id") final long id,
-                            @Valid @BeanParam final TripQuery query) throws TripNotFoundException, UserNotFoundException {
+                            @Valid @BeanParam final TripQuery query) throws  UserNotFoundException {
         final Trip trip;
         if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
             LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
@@ -139,7 +139,7 @@ public class TripController {
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     //si no ver como limitar el estado para los otros
-    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException, PassengerNotFoundException {
+    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
         LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
         final Passenger passenger = tripService.getPassenger(id,userId).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PassengerDto.fromPassenger(uriInfo,passenger)).build();
