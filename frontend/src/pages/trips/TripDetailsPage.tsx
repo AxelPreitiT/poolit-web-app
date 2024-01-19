@@ -19,6 +19,8 @@ import CarModel from "@/models/CarModel.ts";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import UserService from "@/services/UserService.ts";
 import PassangerService from "@/services/PassangerService.ts";
+import PassangerModel from "@/models/PassangerModel.ts";
+import PaginationList from "@/components/paginationList/paginationList.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -28,7 +30,7 @@ const TripDetailsPage = () => {
   const [Trip, setTrip] = useState<TripModel | null>(null);
   const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
   const [DriverTrip, setDriverTrip] = useState<UserPublicModel | null>(null);
-  const [PassangerTrip, setPassangerTrip] = useState<UserPublicModel[] | null>(null);
+  const [PassangersTrip, setPassangersTrip] = useState<PassangerModel[] | null>(null);
 
 
   const link = CreateUri(id.tripId, params.toString(), '/trips')
@@ -45,7 +47,7 @@ const TripDetailsPage = () => {
         setDriverTrip(response);
       });
       PassangerService.getPassangersTrips(Trip.passengersUri).then((response) => {
-        setPassangerTrip(response);
+        setPassangersTrip(response);
       });
     }
   });
@@ -151,7 +153,14 @@ const TripDetailsPage = () => {
           </Dropdown>
         </div>
         <div className={styles.passangers_container}>
-          <PassangerComponent passanger={PassangerTrip} />
+          { PassangersTrip === null ?
+              (<SpinnerComponent /> ) :
+              (<PaginationList
+                  pagination_component={<h3>Poner paginación</h3>}
+                  empty_component={<h3>No tenes nada</h3>}
+                  data={PassangersTrip}
+                  component_name={PassangerComponent}
+              />)}
         </div>
       </MainComponent>
     </div>

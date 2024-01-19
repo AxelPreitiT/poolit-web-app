@@ -1,11 +1,11 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
 import {AxiosPromise} from "axios";
-import UserPublicModel from "@/models/UserPublicModel.ts";
+import PassangerModel from "@/models/PassangerModel.ts";
 
 class PassangerApi extends AxiosApi{
-    public static getPassangerByUri: (uri: string) => AxiosPromise<UserPublicModel[]> =
+    public static getPassangerByUri: (uri: string) => AxiosPromise<PassangerModel[]> =
         (uri: string) => {
-            return this.get<UserPublicModel[]>(uri, {
+            return this.get<PassangerModel[]>(uri, {
                 headers: {
                 },
             });

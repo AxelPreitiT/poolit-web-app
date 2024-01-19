@@ -1,39 +1,49 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
-import { Passanger } from "@/types/Passanger";
 import ProfilePhoto from "@/images/descarga.jpeg";
 import CircleImg from "../img/circleImg/CircleImg";
 import { useTranslation } from "react-i18next";
 import { Button } from "react-bootstrap";
 import StarRating from "../stars/StarsRanking";
+import PassangerModel from "@/models/PassangerModel.ts";
+import {useEffect, useState} from "react";
+import UserService from "@/services/UserService.ts";
+import UserPublicModel from "@/models/UserPublicModel.ts";
+import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 
-interface PassangerComponentProp {
-  passanger: Passanger;
-}
 
-const PassangerComponent = ({
-  passanger: passanger,
-}: PassangerComponentProp) => {
+
+const PassangerComponent = (passanger: PassangerModel) => {
   const { t } = useTranslation();
+  const [UserTrip, setUserTrip] = useState<UserPublicModel | null>(null);
+
+
+  useEffect(() => {
+    UserService.getUserById(passanger.userUri).then((response) => {
+      setUserTrip(response);
+    });
+  });
 
   return (
     <div className={styles.passanger_container}>
-      <div className={styles.left_container}>
-        <CircleImg src={ProfilePhoto} size={70} />
-        <div className={styles.name_container}>
-          <h4>
-            {t("format.name", {
-              name: passanger.name,
-              surname: passanger.surname,
-            })}
-          </h4>
-          <span style={{ color: "gray", fontStyle: "italic" }}>
+      { UserTrip === null ?
+          (<SpinnerComponent /> ) :
+          (<div className={styles.left_container}>
+            <CircleImg src={ProfilePhoto} size={70} />
+            <div className={styles.name_container}>
+              <h4>
+                {t("format.name", {
+                  name: UserTrip.username,
+                  surname: UserTrip.surname,
+                })}
+              </h4>
+              <span style={{ color: "gray", fontStyle: "italic" }}>
             {t("format.date", {
-              date: passanger.startDateString,
+              date: passanger.startDateTime,
             })}
           </span>
-        </div>
-      </div>
+            </div>
+          </div>) }
       <div className={styles.right_container}>
         <StarRating rating={3.5} size="x-large" />
         <div className={styles.info_passanger_style}>
