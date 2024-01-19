@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { tripDetailsPath } from "@/AppRouter";
 import { useEffect, useState } from "react";
 import CityService from "@/services/CityService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import extractPathAfterApi from "@/functions/extractPathAfterApi";
 
 const CardTrip = ({ trip }: { trip: TripModel }) => {
   const { t } = useTranslation();
@@ -17,22 +17,27 @@ const CardTrip = ({ trip }: { trip: TripModel }) => {
   const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
 
   useEffect(() => {
-    CityService.getCityById(trip.originCityUri).then((response) => {
-      setCityOrigin(response.name);
-    });
-    CityService.getCityById(trip.destinationCityUri).then((response) => {
-      setCityDestination(response.name);
-    });
-  });
+    const fetchData = async () => {
+      const originCity = await CityService.getCityById(trip.originCityUri);
+      setCityOrigin(originCity.name);
 
-  useEffect(() => {
-    CarService.getCarById(trip.carUri).then((response) => {
-      setCarTrip(response);
-    });
-  });
+      const destinationCity = await CityService.getCityById(
+        trip.destinationCityUri
+      );
+      setCityDestination(destinationCity.name);
+
+      const car = await CarService.getCarById(trip.carUri);
+      setCarTrip(car);
+    };
+
+    fetchData();
+  }, [trip]); // Add trip as a dependency to avoid unnecessary calls
 
   return (
-    <Link to={tripDetailsPath} className={styles.link_container}>
+    <Link
+      to={extractPathAfterApi(trip.selfUri)}
+      className={styles.link_container}
+    >
       <div className={styles.card_container}>
         <div className={styles.left_container}>
           {CarTrip === null ? (
