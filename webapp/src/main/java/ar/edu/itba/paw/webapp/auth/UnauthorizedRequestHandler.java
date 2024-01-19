@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
+//TODO: chequear, no funciona
+
 //https://docs.spring.io/spring-security/reference/servlet/authentication/architecture.html#servlet-authentication-authenticationentrypoint
 public class UnauthorizedRequestHandler implements AuthenticationEntryPoint {
 

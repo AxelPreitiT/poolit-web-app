@@ -24,7 +24,8 @@ public class ControllerUtils {
 
     private static final String TOTAL_PAGES_HEADER = "X-Total-Pages";
 
-    private static final int MAX_AGE = (int) Duration.ofDays(1).getSeconds();
+    //TODO: change, just for testing
+    private static final int MAX_AGE = (int) Duration.ofSeconds(30).getSeconds();
 
     public static <T> Supplier<T> notFoundExceptionOf(Function<Integer,T> constructor){
         return () -> constructor.apply(Response.Status.NOT_FOUND.getStatusCode());
