@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ReviewsQuery;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateDriverReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.DriverReviewDto;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +54,9 @@ public class DriverReviewController {
     @GET
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
-    public Response getReview(@PathParam("id") final long id) throws ReviewNotFoundException {
+    public Response getReview(@PathParam("id") final long id){
         LOGGER.debug("GET request for passenger review with id {}",id);
-        final DriverReview driverReview = driverReviewService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
+        final DriverReview driverReview = driverReviewService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(DriverReviewDto.fromDriverReview(uriInfo,driverReview)).build();
     }
 

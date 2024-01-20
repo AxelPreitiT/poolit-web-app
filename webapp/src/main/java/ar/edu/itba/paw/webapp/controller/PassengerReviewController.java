@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ReviewsQuery;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreatePassengerReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.PassengerReviewDto;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,15 +53,15 @@ public class PassengerReviewController {
     @GET
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_REVIEW_PASSENGER)
-    public Response getReview(@PathParam("id") final long id) throws ReviewNotFoundException {
+    public Response getReview(@PathParam("id") final long id){
         LOGGER.debug("GET request for passenger review with id {}",id);
-        final PassengerReview passengerReview = passengerReviewService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
+        final PassengerReview passengerReview = passengerReviewService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PassengerReviewDto.fromPassengerReview(uriInfo,passengerReview)).build();
     }
 
 
     @GET
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
     @Produces(value = VndType.APPLICATION_REVIEW_PASSENGER)
     public Response getReviews(@Valid @BeanParam final ReviewsQuery query) throws UserNotFoundException, TripNotFoundException {
         if(query.getMadeBy()!=null || query.getForTrip()!=null){

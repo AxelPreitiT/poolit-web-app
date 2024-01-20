@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.utils;
 
+//TODO: delete
 public class DefaultBoolean {
     private boolean value;
 

@@ -18,6 +18,7 @@ import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.TripDto;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,14 +89,14 @@ public class TripController {
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_TRIP)
     public Response getById(@PathParam("id") final long id,
-                            @Valid @BeanParam final TripQuery query) throws TripNotFoundException, UserNotFoundException {
+                            @Valid @BeanParam final TripQuery query) throws  UserNotFoundException {
         final Trip trip;
         if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
             LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
-            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
         }else {
             LOGGER.debug("GET request for trip with id {}",id);
-            trip = tripService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(TripNotFoundException::new));
+            trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
         }
         final User user = userService.getCurrentUser().orElse(null);
         final Passenger currentUserPassenger = user!=null?tripService.getPassenger(id,user.getUserId()).orElse(null):null;
@@ -116,7 +117,7 @@ public class TripController {
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response getPassengers(@PathParam("id") final long id,
-                                  @Valid @BeanParam final PassengersQuery passengersQuery) throws CustomException {
+                                  @Valid @BeanParam final PassengersQuery passengersQuery) throws  TripNotFoundException {
         LOGGER.debug("GET request for passengers from trip {}",id);
         PagedContent<Passenger> ans = tripService.getPassengers(id,passengersQuery.getStartDateTime(),passengersQuery.getEndDateTime(), passengersQuery.getPassengerState(),passengersQuery.getPage(),passengersQuery.getPageSize());
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,passengersQuery.getPage(),PassengerDto::fromPassenger,PassengerDto.class);
@@ -138,9 +139,9 @@ public class TripController {
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     //si no ver como limitar el estado para los otros
-    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException, PassengerNotFoundException {
+    public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
         LOGGER.debug("GET request to get passenger {} from trip {}",userId,id);
-        final Passenger passenger = tripService.getPassenger(id,userId).orElseThrow(ControllerUtils.notFoundExceptionOf(PassengerNotFoundException::new));
+        final Passenger passenger = tripService.getPassenger(id,userId).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PassengerDto.fromPassenger(uriInfo,passenger)).build();
     }
 
