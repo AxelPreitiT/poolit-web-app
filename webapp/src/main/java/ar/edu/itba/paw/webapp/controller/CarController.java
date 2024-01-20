@@ -8,12 +8,14 @@ import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.CarReviewsQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateCarReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.CarDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.CarReviewDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.*;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +43,6 @@ public class CarController {
     private final CarService carService;
 
     private final CarReviewService carReviewService;
-
-    private static final String PAGE_SIZE = "10";
 
     @Context
     private UriInfo uriInfo;
@@ -67,9 +68,9 @@ public class CarController {
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_CAR)
-    public Response getCarById(@PathParam("id") final long id) throws CarNotFoundException{
+    public Response getCarById(@PathParam("id") final long id){
         LOGGER.debug("GET request for car with carId {}",id);
-        final Car car = carService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(CarNotFoundException::new));
+        final Car car = carService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(CarDto.fromCar(uriInfo, car)).build();
     }
 
@@ -98,11 +99,11 @@ public class CarController {
     @GET
     @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
     @Produces({"image/*"})
-    public Response getCarImage(@PathParam("id") final long id) throws ImageNotFoundException, CarNotFoundException {
+    public Response getCarImage(@PathParam("id") final long id,
+                                @Context Request request) throws ImageNotFoundException, CarNotFoundException {
         LOGGER.debug("GET request for image of car with carId {}",id);
         final byte[] image = carService.getCarImage(id);
-//        TODO: add caching capability
-        return Response.ok(image).build();
+        return ControllerUtils.getConditionalCacheResponse(request,image, Arrays.hashCode(image));
     }
 
     @PUT
@@ -134,34 +135,27 @@ public class CarController {
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId}")
     @Produces(value = VndType.APPLICATION_CAR_REVIEW)
     public Response getReview(@PathParam("id") final long id,
-                              @PathParam("reviewId") final long reviewId) throws ReviewNotFoundException {
+                              @PathParam("reviewId") final long reviewId){
         LOGGER.debug("GET request for review for car {} with reviewId {}",id,reviewId);
-        final CarReview carReview = carReviewService.findById(reviewId).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
+        final CarReview carReview = carReviewService.findById(reviewId).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(CarReviewDto.fromCarReview(uriInfo,carReview)).build();
     }
 
     //Get multiple reviews (made by a user or all of them)
     @GET
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
     @Produces(value = VndType.APPLICATION_CAR_REVIEW)
     public Response getAllReviews(@PathParam("id") final long id,
-                                  @QueryParam("madeBy") final Integer reviewerUserId,
-                                  @QueryParam("forTrip") final Integer tripId,
-                                  @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                                  @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
-        if(reviewerUserId!=null || tripId!=null){
-            //request for a user and trip should be made
-            if(reviewerUserId==null || tripId==null){
-                throw new IllegalArgumentException();
-            }
-            LOGGER.debug("GET request for reviews of car {} made by {} for trip {}",id,reviewerUserId,tripId);
-            final PagedContent<CarReview> ans =  carReviewService.getCarReviewsMadeByUserOnTrip(id,reviewerUserId,tripId,page,pageSize);
-            return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
+                                  @Valid @BeanParam final CarReviewsQuery query) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
+        if(query.getForTrip()!=null || query.getMadeBy() !=null){
+            LOGGER.debug("GET request for reviews of car {} made by {} for trip {}",id,query.getMadeBy(),query.getForTrip());
+            final PagedContent<CarReview> ans =  carReviewService.getCarReviewsMadeByUserOnTrip(id,query.getMadeBy(),query.getForTrip(),query.getPage(),query.getPageSize());
+            return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),CarReviewDto::fromCarReview,CarReviewDto.class);
         }
         LOGGER.debug("GET request for reviews of car {}",id);
-        final PagedContent<CarReview> ans = carReviewService.getCarReviews(id,page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,CarReviewDto::fromCarReview,CarReviewDto.class);
+        final PagedContent<CarReview> ans = carReviewService.getCarReviews(id,query.getPage(),query.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),CarReviewDto::fromCarReview,CarReviewDto.class);
     }
 
 

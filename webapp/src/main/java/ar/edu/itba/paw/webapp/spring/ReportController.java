@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.spring;
 
+import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.services.ReportService;
@@ -52,7 +53,7 @@ public class ReportController {
             @PathVariable("passengerId") final long passengerId,
             @Valid @ModelAttribute("reportForm") final ReportForm reportForm,
             final BindingResult errors
-            ) throws UserNotFoundException, TripNotFoundException {
+            ) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         if(errors.hasErrors()){
             return new ModelAndView(getTripErrorRedirectPath(tripId));
         }
@@ -69,7 +70,7 @@ public class ReportController {
             @PathVariable("driverId") final long driverId,
             @Valid @ModelAttribute("reportForm") final ReportForm reportForm,
             final BindingResult errors
-    ) throws UserNotFoundException, TripNotFoundException {
+    ) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         if(errors.hasErrors()){
             return new ModelAndView(getTripErrorRedirectPath(tripId));
         }

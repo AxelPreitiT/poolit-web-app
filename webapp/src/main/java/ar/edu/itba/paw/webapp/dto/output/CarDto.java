@@ -8,19 +8,18 @@ import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CarDto {
 
     private int seats;
-    private List<FeatureCar> features;
-
-    private CarBrand brand;
-
     private String plate;
 
     private String infoCar;
 
     private double rating;
+    private URI brandUri;
+    private List<URI> featuresUri;
     private URI selfUri;
     private URI imageUri;
     private long carId;
@@ -30,9 +29,9 @@ public class CarDto {
     protected CarDto(final UriInfo uriInfo, final Car car){
         this.carId = car.getCarId();
         this.infoCar = car.getInfoCar();
-        this.brand = car.getBrand();
+        this.brandUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BRAND_BASE).path(car.getBrand().name()).build();
         this.plate = car.getPlate();
-        this.features = car.getFeatures();
+        this.featuresUri = car.getFeatures().stream().map(e -> uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_FEATURE_BASE).path(e.name()).build()).collect(Collectors.toList());
         this.seats= car.getSeats();
         this.rating = car.getCarRating();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).build();
@@ -50,14 +49,6 @@ public class CarDto {
     public void setSeats(int seats) {
         this.seats = seats;
     }
-
-    public List<FeatureCar> getFeatures() { return features; }
-
-    public void setFeatures(List<FeatureCar> features) { this.features = features; }
-
-    public CarBrand getBrand() { return brand; }
-
-    public void setBrand(CarBrand brand) { this.brand = brand; }
 
     public String getPlate() { return plate; }
 
@@ -88,6 +79,22 @@ public class CarDto {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public URI getBrandUri() {
+        return brandUri;
+    }
+
+    public void setBrandUri(URI brandUri) {
+        this.brandUri = brandUri;
+    }
+
+    public List<URI> getFeaturesUri() {
+        return featuresUri;
+    }
+
+    public void setFeaturesUri(List<URI> featuresUri) {
+        this.featuresUri = featuresUri;
     }
 
     public long getCarId() {

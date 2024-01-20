@@ -67,7 +67,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else {
                 //No está habilitado, intentamos confirmar el registro con el token
-                userService.confirmRegister(credentials[PASSWORD_INDEX]);
+                userService.confirmRegister(credentials[PASSWORD_INDEX],user);
             }
             final String baseUrl = httpServletRequest.getScheme()+"://"+httpServletRequest.getServerName()+":"+httpServletRequest.getServerPort()+httpServletRequest.getContextPath();
             //https://www.rfc-editor.org/rfc/rfc9110#name-field-extensibility

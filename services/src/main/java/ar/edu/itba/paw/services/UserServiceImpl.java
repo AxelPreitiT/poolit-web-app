@@ -235,13 +235,20 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void confirmRegister(String token) throws InvalidTokenException {
+    public void confirmRegister(String token, final User tokenUser) throws InvalidTokenException {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
-        if (verificationToken == null || !tokenService.isValidToken(verificationToken)){
+        if(verificationToken == null){
+            throw new IllegalArgumentException();
+        }
+        final User user = verificationToken.getUser();
+        if(user.getUserId() != tokenUser.getUserId()){
+            throw new IllegalArgumentException();
+        }
+        if (!tokenService.isValidToken(verificationToken)){
             throw new InvalidTokenException();
         }
         //verificationToken != null and it is a valid token
-        final User user = verificationToken.getUser();
+
         user.setEnabled(true);
         authWithoutPassword(user);
     }

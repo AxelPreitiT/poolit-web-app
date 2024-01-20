@@ -36,7 +36,7 @@ public class ImageHibernateDao implements ImageDao {
     public Optional<Image> findById(final long imageId){
         LOGGER.debug("Looking for image with id {} in the database", imageId);
         final Optional<Image> result = Optional.ofNullable(em.find(Image.class, imageId));
-        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        LOGGER.debug("Found image with id {} in the database", result.isPresent() ? result.get().getImageId()  : "nothing");
         return result;
     }
 

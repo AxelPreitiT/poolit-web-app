@@ -7,10 +7,10 @@ import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ReviewsQuery;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreatePassengerReviewDto;
 import ar.edu.itba.paw.webapp.dto.output.reviews.PassengerReviewDto;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Page;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.PageSize;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,6 @@ public class PassengerReviewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PassengerReviewController.class);
 
     private final PassengerReviewService passengerReviewService;
-
-    private static final String PAGE_SIZE = "10";
 
     @Context
     private UriInfo uriInfo;
@@ -53,35 +51,25 @@ public class PassengerReviewController {
     @GET
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_REVIEW_PASSENGER)
-    public Response getReview(@PathParam("id") final long id) throws ReviewNotFoundException {
+    public Response getReview(@PathParam("id") final long id){
         LOGGER.debug("GET request for passenger review with id {}",id);
-        final PassengerReview passengerReview = passengerReviewService.findById(id).orElseThrow(ControllerUtils.notFoundExceptionOf(ReviewNotFoundException::new));
+        final PassengerReview passengerReview = passengerReviewService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PassengerReviewDto.fromPassengerReview(uriInfo,passengerReview)).build();
     }
 
 
     @GET
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reviewerUserId)")
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
     @Produces(value = VndType.APPLICATION_REVIEW_PASSENGER)
-    public Response getReviews(@QueryParam("forUser") final Integer userId,
-                               @QueryParam("madeBy") final Integer reviewerUserId,
-                               @QueryParam("forTrip") final Integer tripId,
-                               @QueryParam(ControllerUtils.PAGE_QUERY_PARAM) @DefaultValue("0") @Valid @Page final int page,
-                               @QueryParam(ControllerUtils.PAGE_SIZE_QUERY_PARAM) @DefaultValue(PAGE_SIZE) @Valid @PageSize final int pageSize) throws UserNotFoundException, TripNotFoundException {
-        if(reviewerUserId!=null || tripId!=null){
-            if(reviewerUserId==null || tripId == null || userId != null){
-                throw new IllegalArgumentException();
-            }
-            LOGGER.debug("GET request for passenger reviews made by user {} for passengers on trip {}",reviewerUserId,tripId);
-            final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(reviewerUserId,tripId,page,pageSize);
-            return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
+    public Response getReviews(@Valid @BeanParam final ReviewsQuery query) throws UserNotFoundException, TripNotFoundException {
+        if(query.getMadeBy()!=null || query.getForTrip()!=null){
+            LOGGER.debug("GET request for passenger reviews made by user {} for passengers on trip {}",query.getMadeBy(),query.getForTrip());
+            final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(query.getMadeBy(),query.getForTrip(),query.getPage(),query.getPageSize());
+            return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
         }
-        if(userId==null){
-            throw new IllegalArgumentException();
-        }
-        LOGGER.debug("GET request for passenger reviews for user {}",userId);
-        final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviews(userId,page,pageSize);
-        return ControllerUtils.getPaginatedResponse(uriInfo,ans,page,PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
+        LOGGER.debug("GET request for passenger reviews for user {}",query.getForUser());
+        final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviews(query.getForUser(),query.getPage(),query.getPageSize());
+        return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
     }
 
 }

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
+//TODO: agregar contador de viajes creados por el usuario
 public class PublicUserDto {
     private String username;
     private String surname;

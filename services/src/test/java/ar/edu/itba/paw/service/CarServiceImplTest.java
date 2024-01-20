@@ -46,24 +46,24 @@ public class CarServiceImplTest {
     @Mock
     private UserServiceImpl userService;
 
-/*
-    @Test
-    public void TestCreateCar() throws UserNotFoundException {
-        when(carDao.create(eq(PLATE), eq(INFO_CAR), eq(USER), anyLong(), anyInt(), eq(BRAND_ID), eq(FEATURES)))
-                .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
-//        when(imageService.createImage(any())).thenReturn(IMAGEN);
-        when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
 
-        Car newCar = carService.createCar(PLATE, INFO_CAR, null, SEATS, BRAND_ID, FEATURES);
-
-        Assert.assertNotNull(newCar);
-        Assert.assertEquals(PLATE, newCar.getPlate());
-        Assert.assertEquals(INFO_CAR, newCar.getInfoCar());
-        Assert.assertEquals(USER, newCar.getUser());
-        Assert.assertEquals(IMAGE_ID, newCar.getImageId());
-        Assert.assertEquals(SEATS, newCar.getSeats());
-        Assert.assertEquals(FEATURES, newCar.getFeatures());
-    }
+//    @Test
+//    public void TestCreateCar() throws UserNotFoundException {
+//        when(carDao.create(eq(PLATE), eq(INFO_CAR), eq(USER), anyLong(), anyInt(), eq(BRAND_ID), eq(FEATURES)))
+//                .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
+////        when(imageService.createImage(any())).thenReturn(IMAGEN);
+//        when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
+//
+//        Car newCar = carService.createCar(PLATE, INFO_CAR, null, SEATS, BRAND_ID, FEATURES);
+//
+//        Assert.assertNotNull(newCar);
+//        Assert.assertEquals(PLATE, newCar.getPlate());
+//        Assert.assertEquals(INFO_CAR, newCar.getInfoCar());
+//        Assert.assertEquals(USER, newCar.getUser());
+//        Assert.assertEquals(IMAGE_ID, newCar.getImageId());
+//        Assert.assertEquals(SEATS, newCar.getSeats());
+//        Assert.assertEquals(FEATURES, newCar.getFeatures());
+//    }
 
 
  */

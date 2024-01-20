@@ -109,6 +109,16 @@
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
 
+  <filter>
+    <filter-name>UnconditionalCacheFilter</filter-name>
+    <filter-class>ar.edu.itba.paw.webapp.config.UnconditionalCacheFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>UnconditionalCacheFilter</filter-name>
+<!--    TODO: revisar la url a los contenidos del frontend-->
+    <url-pattern>/assets/*</url-pattern>
+  </filter-mapping>
+
   <!-- Redirect all requests to index.html so Router in React works -->
   <!-- Exclude JS, CSS, and other non-HTML files stored in /assets from forwarding -->
   <servlet-mapping>
