@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import RouteWrapper from "./components/utils/RouteWrapper";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/login/LoginPage";
-import TripsPage from "./pages/trips/TripsPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
@@ -67,14 +66,6 @@ const router = createBrowserRouter(
           showWhenUserIsAuthenticated={false}
         >
           <VerifyAccountPage />
-        </RouteWrapper>
-      ),
-    },
-    {
-      path: tripsPath,
-      element: (
-        <RouteWrapper title="trips.title">
-          <TripsPage />
         </RouteWrapper>
       ),
     },

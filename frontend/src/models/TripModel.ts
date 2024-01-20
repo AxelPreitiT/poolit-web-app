@@ -1,7 +1,7 @@
 interface TripModel {
   tripId: number;
   carUri: string;
-  destinationAddress: number;
+  destinationAddress: string;
   destinationCityUri: string;
   driverUri: string;
   endDateTime: string;

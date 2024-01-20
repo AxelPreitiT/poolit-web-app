@@ -1,49 +1,65 @@
 import styles from "./styles.module.scss";
-import { Trip } from "@/types/Trip";
 import CircleImg from "@/components/img/circleImg/CircleImg";
 import StarRating from "@/components/stars/StarsRanking";
+import TripModel from "@/models/TripModel.ts";
+import CarModel from "@/models/CarModel.ts";
+import UserPublicModel from "@/models/UserPublicModel.ts";
+import {useTranslation} from "react-i18next";
 
-const TripInfo = (trip: Trip) => {
-  return (
+interface TripInfoProps {
+    trip: TripModel;
+    car: CarModel;
+    driver: UserPublicModel;
+}
+
+const TripInfo = ({trip, car, driver} : TripInfoProps) => {
+    const availableSeats = parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10);
+    const { t } = useTranslation();
+
+    return (
     <div className={styles.info_trip}>
       <div className={styles.show_row}>
         <i className="bi bi-clock light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">{trip.startTimeString}</span>
+          <span className="light-text detail">{trip.startDateTime}</span>
         </div>
       </div>
       <div className={styles.show_row}>
         <i className="bi bi-calendar light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">{trip.dayOfWeekString}</span>
-          <span className={styles.subtitle_info}>{trip.startDateString}</span>
+          <span className="light-text detail">PONER DIA</span>
+          <span className={styles.subtitle_info}>{trip.startDateTime}</span>
         </div>
       </div>
       <div className={styles.show_row}>
         <CircleImg
-          src="http://pawserver.it.itba.edu.ar/paw-2023a-07/image/80"
+          src={car.imageUri}
           size={40}
         />
         <div className={styles.info_details}>
-          <span className="light-text detail">PONER CAR</span>
-          <StarRating rating={3.5} color={"#ffffff"} size="10" />
+          <span className="light-text detail">{car.infoCar}</span>
+          <StarRating rating={car.rating} color={"#ffffff"} size="10" />
         </div>
       </div>
       <div className={styles.show_row}>
         <i className="bi bi-people light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">PONER ASIENTOS</span>
+          <span className="light-text detail">{availableSeats}</span>
         </div>
       </div>
       <hr className="white" />
       <div className={styles.show_row}>
         <CircleImg
-          src="http://pawserver.it.itba.edu.ar/paw-2023a-07/image/80"
+          src={driver.imageUri}
           size={40}
         />
         <div className={styles.info_details}>
-          <span className="light-text detail">PONER USER</span>
-          <StarRating rating={3.5} color={"#ffffff"} size="10" />
+          <span className="light-text detail">
+              {t("format.name", {
+              name: driver.username,
+              surname: driver.surname,
+          })}</span>
+          <StarRating rating={0} color={"#ffffff"} size="10" />
         </div>
       </div>
       <div className={styles.show_row}>
