@@ -10,12 +10,14 @@ export const useCurrentUser = ({
   enabled = true,
 }: { enabled?: boolean } = {}) => {
   const { t } = useTranslation();
-  const { isLoading, isError, data, error, isPending } = useQuery({
+  const query = useQuery({
     queryKey: ["currentUser"],
     queryFn: UserService.getCurrentUser,
     retry: false,
     enabled,
   });
+
+  const { isLoading, isError, error, data, isPending } = query;
 
   const onQueryError = useQueryError();
 
@@ -34,5 +36,9 @@ export const useCurrentUser = ({
     }
   }, [isError, error, onQueryError, t]);
 
-  return { isLoading: isLoading || isPending, currentUser: data };
+  return {
+    ...query,
+    currentUser: data,
+    isLoading: isLoading || isPending,
+  };
 };

@@ -39,7 +39,10 @@ const ProfilePage = () => {
       <ProfileProp prop={t("profile.props.email")} text={currentUser.email} />
       <ProfileProp prop={t("profile.props.phone")} text={currentUser.phone} />
       {cityUser === null ? (
-          <ProfileProp prop={t("profile.props.neighborhood")} text={t("spinner.loading")} />
+        <ProfileProp
+          prop={t("profile.props.neighborhood")}
+          text={t("spinner.loading")}
+        />
       ) : (
         <ProfileProp prop={t("profile.props.neighborhood")} text={cityUser} />
       )}
@@ -66,7 +69,7 @@ const ProfilePage = () => {
     <div className={styles.main_container}>
       {isLoading || currentUser === undefined ? (
         <div className={styles.profileCard}>
-            <SpinnerComponent />
+          <SpinnerComponent />
         </div>
       ) : (
         <ProfileInfo currentUser={currentUser} />
@@ -97,7 +100,7 @@ const ProfilePage = () => {
               <DriverList
                 futureCreatedTripsUri={currentUser.futureCreatedTripsUri}
                 pastCreatedTripsUri={currentUser.pastCreatedTripsUri}
-                selfUri={currentUser.selfUri}
+                currentUser={currentUser}
               />
             }
           />

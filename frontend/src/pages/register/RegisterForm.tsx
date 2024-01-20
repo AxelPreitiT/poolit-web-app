@@ -128,12 +128,13 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
               name="city"
               defaultValue={citySelectorDefaultValue}
               control={control}
-              render={({ field: { onChange } }) => (
+              render={({ field: { onChange, value } }) => (
                 <CitySelector
                   cities={cities}
                   defaultOption={t("register.residence_city")}
                   size="sm"
-                  onChange={onChange}
+                  onChange={(event) => onChange(parseInt(event.target.value))}
+                  value={value}
                 />
               )}
             />

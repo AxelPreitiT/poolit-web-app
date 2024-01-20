@@ -13,7 +13,6 @@ export default class SeatsFormField extends FormField {
   constructor(name: string) {
     super(name);
     [this.schema, this.interpolations] = new FormFieldNumberBuilder(name)
-      .isRequired()
       .hasMinValue(seatsMinValue)
       .build();
   }

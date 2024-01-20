@@ -14,7 +14,7 @@ const useGetAllCities = () => {
     queryFn: CityService.getAllCities,
   });
 
-  const { isError, error } = query;
+  const { isError, error, data } = query;
 
   useEffect(() => {
     if (isError) {
@@ -26,7 +26,10 @@ const useGetAllCities = () => {
     }
   }, [isError, error, onQueryError, t]);
 
-  return query;
+  return {
+    ...query,
+    cities: data,
+  };
 };
 
 export default useGetAllCities;

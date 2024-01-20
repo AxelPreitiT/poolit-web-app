@@ -1,4 +1,5 @@
 import CarModel from "@/models/CarModel";
+import { ChangeEventHandler } from "react";
 import { Form, FormSelectProps } from "react-bootstrap";
 
 export const carSelectorDefaultValue = -1;
@@ -6,20 +7,18 @@ export const carSelectorDefaultValue = -1;
 interface CarSelectorProps {
   cars: CarModel[];
   defaultOption: string;
-  onChange: (value: number) => void;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+  value: number;
 }
 
 const CarSelector = ({
   cars,
   defaultOption,
   onChange,
+  value,
   ...props
 }: CarSelectorProps & FormSelectProps) => (
-  <Form.Select
-    {...props}
-    onChange={(event) => onChange(parseInt(event.target.value))}
-    defaultValue={carSelectorDefaultValue}
-  >
+  <Form.Select {...props} onChange={onChange} value={value}>
     <option value={carSelectorDefaultValue} disabled>
       {defaultOption}
     </option>

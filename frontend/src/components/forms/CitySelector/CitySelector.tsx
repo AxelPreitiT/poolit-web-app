@@ -1,4 +1,5 @@
 import CityModel from "@/models/CityModel";
+import { ChangeEventHandler } from "react";
 import { Form, FormSelectProps } from "react-bootstrap";
 
 export const citySelectorDefaultValue = -1;
@@ -6,20 +7,18 @@ export const citySelectorDefaultValue = -1;
 interface CitySelectorProps {
   cities: CityModel[];
   defaultOption: string;
-  onChange: (value: number) => void;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+  value: number;
 }
 
 const CitySelector = ({
   cities,
   defaultOption,
   onChange,
+  value,
   ...props
 }: CitySelectorProps & FormSelectProps) => (
-  <Form.Select
-    {...props}
-    onChange={(event) => onChange(parseInt(event.target.value))}
-    defaultValue={citySelectorDefaultValue}
-  >
+  <Form.Select {...props} onChange={onChange} value={value}>
     <option value={citySelectorDefaultValue} disabled>
       {defaultOption}
     </option>
