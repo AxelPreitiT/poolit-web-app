@@ -313,7 +313,11 @@
     "error": {
       "title": "No se pudo obtener el viaje",
       "default": "Ocurrió un error al obtener el viaje"
-    }
+    },
+    "recurrent_trip" :  " {{number}} viajes",
+    "single_trip": "Viaje unico.",
+    "price": "Precio: ",
+    "income" : "Total: "
   },
   "query": {
     "request": {
@@ -371,12 +375,12 @@
     "loading": "Cargando..."
   },
   "day_week": {
+    "0" : "Domingo",
     "1" : "Lunes",
     "2" : "Martes",
     "3" : "Miercoles",
     "4" : "Jueves",
     "5" : "Viernes",
-    "6" : "Sabado",
-    "7" : "Domingo"
+    "6" : "Sabado"
   }
 }

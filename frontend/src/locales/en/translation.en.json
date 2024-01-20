@@ -314,7 +314,11 @@
     "error": {
       "title": "Could not fetch the trip",
       "default": "An error occurred while fetching the trip"
-    }
+    },
+    "recurrent_trip" :  " {{number}} trips",
+    "single_trip": "Single trip.",
+    "price": "Price: ",
+    "income" : "Income: "
   },
   "query": {
     "request": {
@@ -372,12 +376,12 @@
     "loading": "Loading..."
   },
   "day_week": {
+    "0" : "sunday",
     "1" : "Monday",
     "2" : "tuesday",
     "3" : "wednesday",
     "4" : "thursday",
     "5" : "friday",
-    "6" : "saturday",
-    "7" : "sunday"
+    "6" : "saturday"
   }
 }
