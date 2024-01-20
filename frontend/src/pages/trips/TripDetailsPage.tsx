@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import Location from "@/components/location/Location";
 import StatusTrip from "@/components/statusTrip/StatusTrip";
 import TripInfo from "@/components/tripInfo/TripInfo";
-import { Button } from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useParams, useSearchParams} from "react-router-dom";
 import TripModel from "@/models/TripModel.ts";
@@ -21,6 +20,8 @@ import PassangerModel from "@/models/PassangerModel.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 import getTripRole from "@/functions/GetTripRole.ts";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
+import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
+import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -51,9 +52,6 @@ const TripDetailsPage = () => {
       });
     }
   });
-
-
-
 
   const {isPassanger, isDriver} = isLoading || currentUser == null  || DriverTrip == null || PassangersTrip == null ? {isPassanger:false, isDriver:false} : getTripRole(currentUser, DriverTrip, PassangersTrip);
 
@@ -86,38 +84,8 @@ const TripDetailsPage = () => {
               </div>
 
               <div className={styles.end_container}>
-                <div className={styles.status_trip}>
-                  <div className={styles.info_container}>
-                    <h3>Income:</h3>
-                    <div className={styles.price_container}>
-                      <h3>
-                        {t("format.price", {
-                          priceInt: Trip.pricePerTrip,
-                          princeFloat: 0,
-                        })}
-                      </h3>
-                      <span style={{ color: "gray", fontStyle: "italic" }}>{Trip.totalTrips} viajes</span>
-                    </div>
-                  </div>
-                  <div className={styles.info_container}>
-                    <h3>Status:</h3>
-                    <StatusTrip status={"ACCEPT"} />
-                  </div>
-                </div>
-                <div className={styles.btn_container}>
-                  <Button className={styles.btn_trips}>
-                    <div className={styles.create_trip_btn}>
-                      <i className="bi bi-car-front-fill light-text"></i>
-                      <span>{t("trip_detail.btn.my_trips")}</span>
-                    </div>
-                  </Button>
-                  <Button className={styles.btn_cancel}>
-                    <div className={styles.create_trip_btn}>
-                      <i className="bi bi-x light-text"></i>
-                      <span>{t("trip_detail.btn.cancel")}</span>
-                    </div>
-                  </Button>
-                </div>
+                <LeftDetails trip={Trip} isPassanger={isPassanger} isDriver={isDriver}/>
+                <RightDetails isPassanger={isPassanger} isDriver={isDriver} status={"FINISHED"}/>
               </div>
             </div>)}
       </MainComponent>

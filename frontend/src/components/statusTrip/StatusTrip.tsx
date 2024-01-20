@@ -38,7 +38,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
     case "FINISHED":
       componentToRender = (
         <div className={styles.success}>
-            <i className={"bi bi-x"}></i>
+            <i className={"bi bi-check-lg"}></i>
             <h3>{t("trip_detail.status.finished")}</h3>
         </div>
       );
