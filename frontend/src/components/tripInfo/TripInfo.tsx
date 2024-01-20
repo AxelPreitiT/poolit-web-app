@@ -15,6 +15,8 @@ interface TripInfoProps {
 const TripInfo = ({trip, car, driver} : TripInfoProps) => {
     const availableSeats = parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10);
     const { t } = useTranslation();
+    const date = new Date(trip.startDateTime)
+    const DayOfWeek = date.getDay()
 
     return (
     <div className={styles.info_trip}>
@@ -27,7 +29,7 @@ const TripInfo = ({trip, car, driver} : TripInfoProps) => {
       <div className={styles.show_row}>
         <i className="bi bi-calendar light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">PONER DIA</span>
+          <span className="light-text detail">{t(`day_week.${DayOfWeek}`)}</span>
           <span className={styles.subtitle_info}>{trip.startDateTime}</span>
         </div>
       </div>
