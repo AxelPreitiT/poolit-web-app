@@ -36,8 +36,6 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    private static final String PAGE_SIZE = "10";
-
     @Context
     private UriInfo uriInfo;
 

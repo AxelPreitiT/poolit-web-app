@@ -98,10 +98,7 @@ public class TripController {
             LOGGER.debug("GET request for trip with id {}",id);
             trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
         }
-        final User user = userService.getCurrentUser().orElse(null);
-        final Passenger currentUserPassenger = user!=null?tripService.getPassenger(id,user.getUserId()).orElse(null):null;
-        //TODO: revisar si esta bien agregar links asi
-        return Response.ok(TripDto.fromTrip(uriInfo,trip,user,currentUserPassenger)).build();
+        return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
     @DELETE
@@ -114,7 +111,7 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
-    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
+    @PreAuthorize("@authValidator.checkIfUserCanSearchPapssengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response getPassengers(@PathParam("id") final long id,
                                   @Valid @BeanParam final PassengersQuery passengersQuery) throws  TripNotFoundException {

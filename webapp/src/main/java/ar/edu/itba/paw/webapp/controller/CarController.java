@@ -44,8 +44,6 @@ public class CarController {
 
     private final CarReviewService carReviewService;
 
-    private static final String PAGE_SIZE = "10";
-
     @Context
     private UriInfo uriInfo;
 
