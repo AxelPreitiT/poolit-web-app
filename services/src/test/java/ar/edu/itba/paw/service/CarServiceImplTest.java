@@ -66,7 +66,6 @@ public class CarServiceImplTest {
 //    }
 
 
- */
     @Test(expected = UserNotFoundException.class)
     public void TestNotUserCreateCar() throws UserNotFoundException {
         when(userService.getCurrentUser()).thenReturn(Optional.empty());
