@@ -13,6 +13,8 @@ public class BaseDto {
 
     private String citiesUri;
     private String carsUri;
+    private String carBrandsUri;
+    private String carFeaturesUri;
     private String usersUri;
     private String reportsUri;
     private String driverReviewsUri;
@@ -25,9 +27,11 @@ public class BaseDto {
         //No ponemos todos los query parameters, si no queda más confuso
         //Lo ponemos en la documentación (como acá: https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-issues-assigned-to-the-authenticated-user)
 //        ans.citiesUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).toTemplate() + "{/cityId}"; //prevent builder from adding '/' in front of variable
-        ans.citiesUri = builder.cloneBuilder().path(UrlHolder.CITY_BASE).path("{/carId}").build().toString();
+        ans.citiesUri = builder.cloneBuilder().path(UrlHolder.CITY_BASE).path("{/cityId}").build().toString();
 //        ans.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).toTemplate() + "{/carId}";
         ans.carsUri = builder.cloneBuilder().path(UrlHolder.CAR_BASE).path("{/carId}").build().toString();
+        ans.carBrandsUri = builder.cloneBuilder().path(UrlHolder.CAR_BRAND_BASE).path("{/brandId}").build().toString();
+        ans.carFeaturesUri = builder.cloneBuilder().path(UrlHolder.CAR_FEATURE_BASE).path("{/featureId}").build().toString();
 //        ans.usersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path("{userId}").toTemplate();
         ans.usersUri = builder.cloneBuilder().path(UrlHolder.USER_BASE).pathSegment("{userId}").build().toString();
 //        ans.reportsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).toTemplate() + "{/reportId}";
@@ -95,5 +99,21 @@ public class BaseDto {
 
     public void setTripsUri(String tripsUri) {
         this.tripsUri = tripsUri;
+    }
+
+    public String getCarBrandsUri() {
+        return carBrandsUri;
+    }
+
+    public void setCarBrandsUri(String carBrandsUri) {
+        this.carBrandsUri = carBrandsUri;
+    }
+
+    public String getCarFeaturesUri() {
+        return carFeaturesUri;
+    }
+
+    public void setCarFeaturesUri(String carFeaturesUri) {
+        this.carFeaturesUri = carFeaturesUri;
     }
 }
