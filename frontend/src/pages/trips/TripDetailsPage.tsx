@@ -3,12 +3,10 @@ import MainComponent from "@/components/utils/MainComponent";
 import MainHeader from "@/components/utils/MainHeader";
 import { useTranslation } from "react-i18next";
 import Location from "@/components/location/Location";
-import StatusComponent from "@/components/statusTrip/StatusTrip";
+import StatusTrip from "@/components/statusTrip/StatusTrip";
 import TripInfo from "@/components/tripInfo/TripInfo";
 import { Button } from "react-bootstrap";
 import {useEffect, useState} from "react";
-import Dropdown from "react-bootstrap/Dropdown";
-import PassangerComponent from "@/components/passanger/Passanger";
 import {useParams, useSearchParams} from "react-router-dom";
 import TripModel from "@/models/TripModel.ts";
 import tripsService from "@/services/TripsService.ts";
@@ -20,18 +18,20 @@ import UserPublicModel from "@/models/UserPublicModel.ts";
 import UserService from "@/services/UserService.ts";
 import PassangerService from "@/services/PassangerService.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
-import PaginationList from "@/components/paginationList/paginationList.tsx";
+import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
+import getTripRole from "@/functions/GetTripRole.ts";
+import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
   const id = useParams();
   const [params,] = useSearchParams();
+  const { isLoading, currentUser } = useCurrentUser();
 
   const [Trip, setTrip] = useState<TripModel | null>(null);
   const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
   const [DriverTrip, setDriverTrip] = useState<UserPublicModel | null>(null);
   const [PassangersTrip, setPassangersTrip] = useState<PassangerModel[] | null>(null);
-
 
   const link = CreateUri(id.tripId, params.toString(), '/trips')
 
@@ -53,27 +53,18 @@ const TripDetailsPage = () => {
   });
 
 
-  const options = ["All", "Accepted", "Waiting", "Rejected"];
-  const [selectedOption, setSelectedOption] = useState<string>("All");
-  const handleSelect = (eventKey: string | null) => {
-    if (eventKey !== null) {
-      setSelectedOption(eventKey);
-    }
-  };
+
+
+  const {isPassanger, isDriver} = isLoading || currentUser == null  || DriverTrip == null || PassangersTrip == null ? {isPassanger:false, isDriver:false} : getTripRole(currentUser, DriverTrip, PassangersTrip);
 
   return (
     <div>
       <MainComponent>
         <MainHeader
           title={t("trip_detail.header")}
-          left_component={
-            <StatusComponent
-              text={t("trip_detail.status.accepted")}
-              icon={"bi bi-clock-history"}
-              color={"success"}
-            />
-          }
+          left_component={ isPassanger && (<StatusTrip status={"ACCEPT"}/>)}
         />
+
         {Trip == undefined || CarTrip === null || DriverTrip === null ?
           (<SpinnerComponent /> ) :
           (<div>
@@ -110,11 +101,7 @@ const TripDetailsPage = () => {
                   </div>
                   <div className={styles.info_container}>
                     <h3>Status:</h3>
-                    <StatusComponent
-                        text={"Accepted"}
-                        icon={"bi bi-clock-history"}
-                        color={"success"}
-                    />
+                    <StatusTrip status={"ACCEPT"} />
                   </div>
                 </div>
                 <div className={styles.btn_container}>
@@ -134,42 +121,9 @@ const TripDetailsPage = () => {
               </div>
             </div>)}
       </MainComponent>
-      <div>
-        {PassangersTrip === null ?
-            (<h1>pepe</h1>) :
-            (<h1>{PassangersTrip.toString()}</h1>)}
-      </div>
-      <MainComponent>
-        <MainHeader title={t("trip_detail.passengers.header")} />
-        <div className={styles.dropdown_style}>
-          <Dropdown onSelect={handleSelect}>
-            <Dropdown.Toggle id="dropdown-basic" className={styles.btn_dropdown}>
-              {t("trip_detail.filter_by", {
-                status: selectedOption,
-              })}
-            </Dropdown.Toggle>
-            <Dropdown.Menu className={styles.dropdown_menu_passanger}>
-              {options.map((option, index) => (
-                <Dropdown.Item key={index} eventKey={option}>
-                  {option}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-        <div className={styles.passangers_container}>
-          {PassangersTrip === null ? (
-              <SpinnerComponent />
-          ) : (
-              <PaginationList
-                  pagination_component={<h3>Poner paginación</h3>}
-                  empty_component={<h3>No tienes pasajeros</h3>}
-                  data={PassangersTrip}
-                  component_name={PassangerComponent}
-              />
-          )}
-        </div>
-      </MainComponent>
+      {isDriver && PassangersTrip != null  &&
+          <PassangersTripComponent passangers={PassangersTrip}/>
+      }
     </div>
   );
 }

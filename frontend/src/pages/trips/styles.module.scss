@@ -101,20 +101,3 @@
   column-gap: 7px;
   font-size: x-large;
 }
-
-.dropdown_style {
-  display: flex;
-  padding: 1% 4%;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-.dropdown_menu_passanger {
-  margin-top: 0 !important;
-  background-color: colors.$primary-color !important;
-}
-
-.btn_dropdown{
-  background-color: colors.$secondary-color !important;
-  border-color: white !important;
-}
