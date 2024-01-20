@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
-import ProfilePhoto from "@/images/descarga.jpeg";
 import CircleImg from "../img/circleImg/CircleImg";
 import { useTranslation } from "react-i18next";
 import { Button } from "react-bootstrap";
@@ -50,12 +49,12 @@ const PassangerComponent = (passanger: PassangerModel) => {
           <div className={styles.btn_container}>
             <Button className={styles.btn_delete}>
               <div className={styles.create_trip_btn}>
-                <span>{t("trip_detail.btn.my_trips")}</span>
+                <span>{t("trip_detail.passangers.btn_accept")}</span>
               </div>
             </Button>
             <Button className={styles.btn_accept}>
               <div className={styles.create_trip_btn}>
-                <span>{t("trip_detail.btn.cancel")}</span>
+                <span>{t("trip_detail.passangers.btn_delete")}</span>
               </div>
             </Button>
           </div>

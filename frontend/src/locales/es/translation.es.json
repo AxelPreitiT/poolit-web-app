@@ -290,7 +290,6 @@
   "trip_detail": {
     "title": "Viaje",
     "header": "Detalle de viaje",
-    "passengers": "Pasajeros",
     "status": {
       "cancelled": "Cancelado",
       "accepted": "Aceptado",
@@ -298,6 +297,13 @@
       "finished": "completado",
       "not_started": "No comenzado",
       "in_progress": "En progreso"
+    },
+    "passengers": {
+      "header" : "Pasajeros",
+      "btn_accept": "Aceptar",
+      "btn_delete": "Rechazar",
+      "reservation_started": "La reserva ya ha empezado.",
+      "empty": "Todavía no tienes pasajeros interesandos."
     },
     "btn": {
       "my_trips": "Mis viajes",
