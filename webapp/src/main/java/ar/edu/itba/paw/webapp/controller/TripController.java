@@ -88,8 +88,9 @@ public class TripController {
     @GET
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_TRIP)
+    //Todos pueden buscar al viaje en cualquier intervalo (para anotarse por ejemplo), pero no pueden buscar a los pasajeros
     public Response getById(@PathParam("id") final long id,
-                            @Valid @BeanParam final TripQuery query) throws  UserNotFoundException {
+                            @Valid @BeanParam final TripQuery query) {
         final Trip trip;
         if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
             LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
@@ -111,7 +112,7 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
-    @PreAuthorize("@authValidator.checkIfUserCanSearchPapssengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
+    @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response getPassengers(@PathParam("id") final long id,
                                   @Valid @BeanParam final PassengersQuery passengersQuery) throws  TripNotFoundException {
@@ -131,7 +132,6 @@ public class TripController {
         return Response.created(uri).build();
     }
 
-    //TODO: agregar permisos!
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
