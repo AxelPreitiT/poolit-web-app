@@ -24,8 +24,6 @@ import useCreateTripForm from "@/hooks/forms/useCreateTripForm";
 import { useCallback, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import LoadingButton from "@/components/buttons/LoadingButton";
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import ReactTimePicker from "react-multi-date-picker/plugins/time_picker";
 import { parseInputFloat } from "@/utils/float/parse";
 import { parseInputInteger } from "@/utils/integer/parse";
 import CityModel from "@/models/CityModel";
@@ -35,8 +33,8 @@ import { getNextDay } from "@/utils/date/nextDay";
 import { getDayString } from "@/utils/date/dayString";
 import CarInfoCard from "@/components/car/CarInfoCard/CarInfoCard";
 import CarImage from "@/components/car/CarImage/CarImage";
-import { weekDays } from "@/utils/date/weekDays";
-import { months } from "@/utils/date/months";
+import DatePicker from "@/components/forms/DatePicker/DatePicker";
+import TimePicker from "@/components/forms/TimePicker/TimePicker";
 
 const useLastDateCollapse = (removeLastDate: () => void) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -116,9 +114,6 @@ const CreateTripForm = ({
   const minLastDate = date ? getNextDay(date) : getToday();
   const { showCarInfo, car, setCar } = useCarInfoCollapse();
 
-  const tWeekDays = weekDays.map((day) => t(`day.short.${day.toLowerCase()}`));
-  const tMonths = months.map((month) => t(`month.full.${month.toLowerCase()}`));
-
   return (
     <Form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.formGroup} id="origin">
@@ -168,15 +163,11 @@ const CreateTripForm = ({
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <DatePicker
-                    weekDays={tWeekDays}
-                    months={tMonths}
-                    inputClass="form-control form-control-sm"
                     containerClassName={styles.pickerContainer}
-                    onChange={(date: DateObject) => {
-                      const dateValue = date?.toDate();
-                      onChange(dateValue);
+                    onPick={(date: Date | undefined) => {
+                      onChange(date);
                       removeLastDate();
-                      setDate(dateValue);
+                      setDate(date);
                     }}
                     format="DD/MM/YYYY"
                     value={value}
@@ -209,43 +200,28 @@ const CreateTripForm = ({
                 name="time"
                 control={control}
                 defaultValue=""
-                render={({ field: { onChange, value } }) => {
-                  const [hours, minutes] = value.split(":");
-                  const dateValue =
-                    hours && minutes
-                      ? new DateObject().set({
-                          hour: parseInt(hours),
-                          minute: parseInt(minutes),
-                        })
-                      : undefined;
-                  return (
-                    <DatePicker
-                      disableDayPicker
-                      inputClass="form-control form-control-sm"
-                      placeholder={t("create_trip.time")}
-                      containerClassName={styles.pickerContainer}
-                      onChange={(date) => onChange(date?.toString() || "")}
-                      format="HH:mm"
-                      value={dateValue}
-                      plugins={[<ReactTimePicker hideSeconds mStep={5} />]}
-                      render={(value, onFocus, onChange) => (
-                        <InputGroup size="sm" className={styles.formItemGroup}>
-                          <Button className="secondary-btn" onClick={onFocus}>
-                            <BsClockFill className="light-text" />
-                          </Button>
-                          <Form.Control
-                            type="text"
-                            placeholder={t("create_trip.time")}
-                            size="sm"
-                            onFocus={onFocus}
-                            value={value || ""}
-                            onChange={onChange}
-                          />
-                        </InputGroup>
-                      )}
-                    />
-                  );
-                }}
+                render={({ field: { onChange, value } }) => (
+                  <TimePicker
+                    containerClassName={styles.pickerContainer}
+                    onPick={onChange}
+                    value={value}
+                    render={(value, onFocus, onChange) => (
+                      <InputGroup size="sm" className={styles.formItemGroup}>
+                        <Button className="secondary-btn" onClick={onFocus}>
+                          <BsClockFill className="light-text" />
+                        </Button>
+                        <Form.Control
+                          type="text"
+                          placeholder={t("create_trip.time")}
+                          size="sm"
+                          onFocus={onFocus}
+                          value={value || ""}
+                          onChange={onChange}
+                        />
+                      </InputGroup>
+                    )}
+                  />
+                )}
               />
               <FormError
                 error={tFormError(errors.time)}
@@ -289,16 +265,11 @@ const CreateTripForm = ({
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <DatePicker
-                      weekDays={tWeekDays}
-                      months={tMonths}
                       mapDays={({ date: calendarDate }) => ({
                         disabled: calendarDate.weekDay.index !== date?.getDay(),
                       })}
-                      inputClass="form-control form-control-sm"
-                      placeholder={t("create_trip.last_date")}
                       containerClassName={styles.pickerContainer}
-                      onChange={(date: DateObject) => onChange(date?.toDate())}
-                      format="DD/MM/YYYY"
+                      onPick={onChange}
                       value={value}
                       minDate={minLastDate}
                       render={(value, onFocus, onChange) => (
@@ -311,7 +282,7 @@ const CreateTripForm = ({
                             placeholder={t("create_trip.last_date")}
                             size="sm"
                             onFocus={onFocus}
-                            value={showLastDate ? value || "" : ""}
+                            value={value || ""}
                             onChange={onChange}
                             disabled={!showLastDate}
                           />
@@ -401,10 +372,7 @@ const CreateTripForm = ({
                         onChange(carId);
                         const car = cars.find((car) => car.carId === carId);
                         setCar(car);
-                        if (car) {
-                          setCar(car);
-                          setCarSeats(car.seats);
-                        }
+                        setCarSeats(car?.seats || 0);
                       }}
                       value={value}
                     />
