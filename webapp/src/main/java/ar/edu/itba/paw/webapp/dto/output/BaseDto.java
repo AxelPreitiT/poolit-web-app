@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.core.UriInfo;
@@ -18,16 +19,25 @@ public class BaseDto {
     private String passengerReviewsUri;
     private String tripsUri;
     public static BaseDto fromUriInfo(final UriInfo uriInfo){
+        //use Spring's builder because of path() method implementation (jersey adds a / all the time)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(uriInfo.getBaseUriBuilder().build());
         BaseDto ans = new BaseDto();
         //No ponemos todos los query parameters, si no queda más confuso
         //Lo ponemos en la documentación (como acá: https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#list-issues-assigned-to-the-authenticated-user)
-        ans.citiesUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).toTemplate() + "{/cityId}"; //prevent builder from adding '/' in front of variable
-        ans.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).toTemplate() + "{/carId}";
-        ans.usersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path("{userId}").toTemplate();
-        ans.reportsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).toTemplate() + "{/reportId}";
-        ans.driverReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
-        ans.passengerReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
-        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).toTemplate() + "{/tripId}";
+//        ans.citiesUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).toTemplate() + "{/cityId}"; //prevent builder from adding '/' in front of variable
+        ans.citiesUri = builder.cloneBuilder().path(UrlHolder.CITY_BASE).path("{/carId}").build().toString();
+//        ans.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).toTemplate() + "{/carId}";
+        ans.carsUri = builder.cloneBuilder().path(UrlHolder.CAR_BASE).path("{/carId}").build().toString();
+//        ans.usersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path("{userId}").toTemplate();
+        ans.usersUri = builder.cloneBuilder().path(UrlHolder.USER_BASE).pathSegment("{userId}").build().toString();
+//        ans.reportsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).toTemplate() + "{/reportId}";
+        ans.reportsUri = builder.cloneBuilder().path(UrlHolder.REPORT_BASE).path("{/reportId}").build().toString();
+//        ans.driverReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
+        ans.driverReviewsUri = builder.cloneBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).path("{/reviewId}").build().toString();
+//        ans.passengerReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
+        ans.passengerReviewsUri = builder.cloneBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path("{/reviewId}").build().toString();
+//        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).toTemplate() + "{/tripId}";
+        ans.tripsUri = builder.cloneBuilder().path(UrlHolder.TRIPS_BASE).path("{/tripId}").build().toString();
         return ans;
     }
 
