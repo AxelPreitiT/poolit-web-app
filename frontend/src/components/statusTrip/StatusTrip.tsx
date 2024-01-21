@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import {useTranslation} from "react-i18next";
+import Status from "@/enums/Status.ts";
 
 export interface StatusTripProps {
   status: string;
@@ -11,7 +12,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
   const { t } = useTranslation();
 
   switch (status) {
-    case "WAITING":
+    case Status.WAITING:
       componentToRender = (
         <div className={styles.secondary}>
           <i className={"bi bi-clock-history"}></i>
@@ -19,7 +20,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
         </div>
       );
       break;
-    case "ACCEPT":
+    case Status.ACCEPT:
       componentToRender = (
         <div className={styles.success}>
             <i className={"bi bi-check-lg"}></i>
@@ -27,7 +28,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
         </div>
       );
       break;
-    case "CANCEL":
+    case Status.CANCEL:
       componentToRender = (
         <div className={styles.danger}>
             <i className={"bi bi-x"}></i>
@@ -35,7 +36,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
         </div>
       );
       break;
-    case "FINISHED":
+    case Status.FINISHED:
       componentToRender = (
         <div className={styles.success}>
             <i className={"bi bi-check-lg"}></i>
@@ -43,7 +44,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
         </div>
       );
       break;
-      case "NOT_STARTED":
+      case Status.NOT_STARTED:
       componentToRender = (
           <div className={styles.secondary}>
               <i className={"bi bi-clock-history"}></i>
@@ -51,7 +52,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
           </div>
       );
       break;
-      case "IN_PROGRESS":
+      case Status.IN_PROGRESS:
       componentToRender = (
           <div className={styles.secondary}>
               <i className={"bi bi-clock-history"}></i>

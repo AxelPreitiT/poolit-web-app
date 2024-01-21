@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Button } from "react-bootstrap";
+import Status from "@/enums/Status.ts";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -15,14 +16,14 @@ const RightDetails = ({ isPassanger, isDriver, status }: RightDetailsProps) => {
     return (
         (!isPassanger && !isDriver) ?
             <div className={styles.btn_container}>
-                <Button className={styles.btn_trips}>
+                <Button className={styles.btn_join}>
                     <div className={styles.create_trip_btn}>
-                        <i className="bi bi-car-front-fill light-text"></i>
-                        <span>{t("trip_detail.btn.my_trips")}</span>
+                        <i className="bi bi-check-lg light-text"></i>
+                        <span>{t("trip_detail.btn.join")}</span>
                     </div>
                 </Button>
             </div> :
-            (status === "FISINSHED" ?
+            (status === Status.FINISHED ?
                     <div className={styles.btn_container}>
                         <Button className={styles.btn_trips}>
                             <div className={styles.create_trip_btn}>
@@ -48,7 +49,7 @@ const RightDetails = ({ isPassanger, isDriver, status }: RightDetailsProps) => {
                                 <Button className={styles.btn_cancel}>
                                     <div className={styles.create_trip_btn}>
                                         <i className="bi bi-x light-text"></i>
-                                        <span>{t("trip_detail.btn.cancel")}</span>
+                                        <span>{t("trip_detail.btn.delete")}</span>
                                     </div>
                                 </Button>
                             </div> :

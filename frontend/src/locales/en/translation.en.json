@@ -346,7 +346,9 @@
     },
     "btn": {
       "my_trips": "My trips",
-      "cancel": "Cancel trip"
+      "delete": "Delete",
+      "cancel": "Cancel trip",
+      "join": "Join"
     },
     "filter_by": "Filter by status: {{status}}",
     "error": {
