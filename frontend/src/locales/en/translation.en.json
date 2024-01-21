@@ -451,7 +451,8 @@
   },
   "bad_request": {
     "title": "Errors list",
-    "label": "See the errors list"
+    "label": "See the errors list",
+    "general": "General errors"
   },
   "city": {
     "error": {

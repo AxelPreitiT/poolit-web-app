@@ -450,7 +450,8 @@
   },
   "bad_request": {
     "title": "Listado de errores",
-    "label": "Ver el listado de errores"
+    "label": "Ver el listado de errores",
+    "general": "Errores generales"
   },
   "city": {
     "error": {

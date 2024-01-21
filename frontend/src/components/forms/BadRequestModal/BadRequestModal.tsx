@@ -6,13 +6,17 @@ import styles from "./styles.module.scss";
 
 type BadRequestModalOutput = Record<string, string[]>;
 
-const formatErrors = (errors: BadRequestModel): BadRequestModalOutput => {
+const formatErrors = (
+  errors: BadRequestModel,
+  defaultKey: string
+): BadRequestModalOutput => {
   const output: BadRequestModalOutput = {};
   for (const { field, message } of errors) {
-    if (output[field] === undefined) {
-      output[field] = [];
+    const key = field || defaultKey;
+    if (output[key] === undefined) {
+      output[key] = [];
     }
-    output[field].push(message);
+    output[key].push(message);
   }
   return output;
 };
@@ -51,7 +55,7 @@ const BadRequestModal = ({
     return undefined;
   }
 
-  const output = formatErrors(errors);
+  const output = formatErrors(errors, t("bad_request.general"));
   return (
     <div className={className}>
       <a onClick={() => setShowModal(true)} className={styles.clicker}>

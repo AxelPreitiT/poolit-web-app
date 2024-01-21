@@ -1,5 +1,5 @@
 type BadRequestModel = {
-  field: string;
+  field?: string;
   message: string;
 }[];
 
