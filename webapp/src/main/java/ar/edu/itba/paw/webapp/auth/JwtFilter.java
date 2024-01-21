@@ -3,10 +3,13 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.User;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,10 +32,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     final UserService userService;
 
-    public JwtFilter(final JwtUtils jwtUtils, final UserDetailsService userDetailsService, final UserService userService){
+    final AuthenticationEntryPoint authenticationEntryPoint;
+
+    public JwtFilter(final JwtUtils jwtUtils, final UserDetailsService userDetailsService, final UserService userService, final AuthenticationEntryPoint authenticationEntryPoint){
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
         this.userService = userService;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -47,15 +53,15 @@ public class JwtFilter extends OncePerRequestFilter {
         final String token = header.split(" ")[1].trim();
 
         if(!jwtUtils.validateToken(token)){
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,new BadCredentialsException(""));
             return;
         }
 
         UserDetails userDetails;
         try {
             userDetails = userDetailsService.loadUserByUsername(jwtUtils.getEmail(token));
-        }catch (Exception e){
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }catch (AuthenticationException e){
+            authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,e);
             return;
         }
 

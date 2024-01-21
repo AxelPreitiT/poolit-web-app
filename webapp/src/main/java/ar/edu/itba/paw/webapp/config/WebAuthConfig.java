@@ -61,6 +61,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtFilter jwtFilter;
 
+    @Autowired
+    private UnauthorizedRequestHandler unauthorizedRequestHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -124,22 +127,22 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(UrlHolder.REPORT_BASE+"/**")//TODO: chequear
                     .authenticated()
                 //--------Passenger reviews--------
-                .antMatchers(UrlHolder.PASSENGER_REVIEWS_BASE+"/**")
+                .antMatchers(HttpMethod.POST,UrlHolder.PASSENGER_REVIEWS_BASE)
                     .authenticated()
                 //--------Driver reviews--------
-                .antMatchers(UrlHolder.DRIVER_REVIEWS_BASE+"/**")
+                .antMatchers(HttpMethod.POST,UrlHolder.DRIVER_REVIEWS_BASE)
                     .authenticated()
                 //--------Cars--------
                 .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE)
                     .hasRole(UserRole.DRIVER.getText())
                 .antMatchers(UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")//TODO: ver si matchea el de buscar varias con esto
                     .authenticated()
-                //--------Cities, Car brands, Car features, Base--------
+                //--------Cities, Car brands, Car features, Base, others--------
                 .antMatchers(UrlHolder.BASE+"/**")
                     .permitAll()
                 .and().exceptionHandling()
                     .accessDeniedHandler(new ForbiddenRequestHandler())
-                    .authenticationEntryPoint(new UnauthorizedRequestHandler())
+                    .authenticationEntryPoint(unauthorizedRequestHandler)
                 .and().authorizeRequests()
 //                    .antMatchers("/api/users/{id}").authenticated()
 //                .antMatchers("/api/users/{id}").access("@authValidator.checkIfWantedIsSelf(request,#id)")
