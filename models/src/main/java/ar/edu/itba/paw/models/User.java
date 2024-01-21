@@ -50,6 +50,8 @@ public class User {
 
     @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reporter_id = user_id AND reports.status = 'REJECTED')")
     private int reportsRejected;
+    @Formula("(SELECT coalesce(count(trips.trip_id),0) FROM trips WHERE trips.driver_id = user_id)")
+    private int tripCount;
 
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn( name = "city_id")
@@ -255,6 +257,8 @@ public class User {
     public int getReportsRejected() {
         return reportsRejected;
     }
+
+    public int getTripCount(){ return tripCount; }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
