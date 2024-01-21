@@ -24,20 +24,24 @@ const RightDetails = ({ isPassanger, isDriver, status }: RightDetailsProps) => {
                 </Button>
             </div> :
             (status === Status.FINISHED ?
-                    <div className={styles.btn_container}>
-                        <Button className={styles.btn_trips}>
-                            <div className={styles.create_trip_btn}>
-                                <i className="bi bi-car-front-fill light-text"></i>
-                                <span>{t("trip_detail.btn.my_trips")}</span>
-                            </div>
-                        </Button>
-                        <Button className={styles.btn_cancel}>
-                            <div className={styles.create_trip_btn}>
-                                <i className="bi bi-x light-text"></i>
-                                <span>{t("trip_detail.btn.cancel")}</span>
-                            </div>
-                        </Button>
-                    </div> :
+                    <div className={styles.review_btn}>
+                        <div className={styles.btn_container}>
+                            <Button className={styles.btn_join}>
+                                <div className={styles.create_trip_btn}>
+                                    <i className="bi bi-x light-text"></i>
+                                    <span>{t("trip_detail.btn.reviews")}</span>
+                                </div>
+                            </Button>
+                            <Button className={styles.btn_trips}>
+                                <div className={styles.create_trip_btn}>
+                                    <i className="bi bi-car-front-fill light-text"></i>
+                                    <span>{t("trip_detail.btn.my_trips")}</span>
+                                </div>
+                            </Button>
+                        </div>
+                        <span>Hola como estas</span>
+                    </div>
+ :
                     (isDriver ?
                             <div className={styles.btn_container}>
                                 <Button className={styles.btn_trips}>

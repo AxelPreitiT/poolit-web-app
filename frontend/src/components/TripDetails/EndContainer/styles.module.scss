@@ -119,11 +119,12 @@
   color: colors.$italic-text-color;
 }
 
-
-
 .text_btn {
   display: flex;
   font-size: x-large;
 }
 
-
+.review_btn{
+  display: flex;
+  flex-direction: column;
+}

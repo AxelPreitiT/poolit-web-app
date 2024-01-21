@@ -350,7 +350,8 @@
       "my_trips": "My trips",
       "delete": "Delete",
       "cancel": "Cancel trip",
-      "join": "Join"
+      "join": "Join",
+      "reviews": "Reviews"
     },
     "filter_by": "Filter by status: {{status}}",
     "error": {

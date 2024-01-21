@@ -349,7 +349,8 @@
       "my_trips": "Mis viajes",
       "delete": "Eliminar",
       "cancel": "Cancelar viaje",
-      "join": "Join"
+      "join": "Join",
+      "reviews": "Reviews"
     },
     "filter_by": "Filtrados por estado: {{priceInt}}",
     "error": {
