@@ -345,6 +345,8 @@
       "empty": "You still do not have interested passengers."
     },
     "btn": {
+      "accept": "Accept",
+      "reject": "Reject",
       "my_trips": "My trips",
       "delete": "Delete",
       "cancel": "Cancel trip",

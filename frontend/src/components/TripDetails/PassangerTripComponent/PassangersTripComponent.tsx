@@ -50,7 +50,11 @@ const PassangersTripComponent = ({passangers}: PassangersTripComponentProps)  =>
                 ) : (
                     <PaginationList
                         pagination_component={<h3>Poner paginación</h3>}
-                        empty_component={<h3>No tienes pasajeros</h3>}
+                        empty_component={
+                        <div className={styles.review_empty_container}>
+                            <i className={`bi-solid bi-people h2`}></i>
+                            <h3 className="italic-text placeholder-text">{t('trip_detail.passengers.empty')}</h3>
+                        </div>}
                         data={passangers}
                         component_name={PassangerComponent}
                     />

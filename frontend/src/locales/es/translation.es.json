@@ -344,6 +344,8 @@
       "empty": "Todavía no tienes pasajeros interesandos."
     },
     "btn": {
+      "accept": "Aceptar",
+      "reject": "Rechazar",
       "my_trips": "Mis viajes",
       "delete": "Eliminar",
       "cancel": "Cancelar viaje",
