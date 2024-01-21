@@ -111,7 +111,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //Delete trip
                 .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}")
                     .access("@authValidator.checkIfUserIsTripCreator(#id)")//if it's not a driver, then it fails
-                //Add passenger (get in trip)
+                //Add passenger
                 .antMatchers(HttpMethod.POST,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS)
                     .authenticated()
                 //Get single passenger
@@ -138,7 +138,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //--------Cars--------
                 .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE)
                     .hasRole(UserRole.DRIVER.getText())
-                .antMatchers(UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")//TODO: ver si matchea el de buscar varias con esto
+                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")//TODO: ver si matchea el de buscar varias con esto
                     .authenticated()
                 //--------Cities, Car brands, Car features, Base, others--------
                 .antMatchers(UrlHolder.BASE+"/**")

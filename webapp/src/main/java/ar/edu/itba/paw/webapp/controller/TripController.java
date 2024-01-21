@@ -85,6 +85,8 @@ public class TripController {
         return Response.created(uri).build();
     }
 
+    //TODO: ver de hacer con otro content type el recaudado, y que lo pueda acceder sólo el conductor
+
     @GET
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_TRIP)
@@ -124,7 +126,7 @@ public class TripController {
     @POST
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
     @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER)
-    public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
+    public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("POST request to add passenger for trip {}",id);
         Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getStartTime(),dto.getEndDate());
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(ans.getUserId())).build();
