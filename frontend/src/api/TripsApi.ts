@@ -72,6 +72,12 @@ class TripsApi extends AxiosApi {
       return newResponse;
     });
   };
+
+  public static getRecommendedTrips: (
+    uri: string
+  ) => AxiosPromise<TripModel[]> = (uri: string) => {
+    return this.get<TripModel[]>(uri);
+  };
 }
 
 export default TripsApi;

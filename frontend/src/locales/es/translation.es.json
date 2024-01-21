@@ -322,6 +322,13 @@
       "default": "Ocurrió un error al crear el viaje"
     }
   },
+  "recommended_trips": {
+    "title": "Viajes recomendados",
+    "error": {
+      "title": "No se pudo obtener los viajes recomendados",
+      "default": "Ocurrió un error al obtener los viajes recomendados"
+    }
+  },
   "admin": {
     "title": "Administrador"
   },
@@ -337,7 +344,7 @@
       "in_progress": "En progreso"
     },
     "passengers": {
-      "header" : "Pasajeros",
+      "header": "Pasajeros",
       "btn_accept": "Aceptar",
       "btn_delete": "Rechazar",
       "reservation_started": "La reserva ya ha empezado.",

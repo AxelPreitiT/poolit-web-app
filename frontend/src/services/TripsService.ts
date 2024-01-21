@@ -22,6 +22,12 @@ class TripsService extends Service {
   ): Promise<CreateTripModel> => {
     return await this.resolveQuery(TripsApi.createTrip(trip));
   };
+
+  public static getRecommendedTrips = async (
+    uri: string
+  ): Promise<TripModel[]> => {
+    return await this.resolveQuery(TripsApi.getRecommendedTrips(uri));
+  };
 }
 
 export default TripsService;

@@ -323,6 +323,13 @@
       "default": "An error occurred while creating the trip"
     }
   },
+  "recommended_trips": {
+    "title": "Available trips",
+    "error": {
+      "title": "Could not fetch the recommended trips",
+      "default": "An error occurred while fetching the recommended trips"
+    }
+  },
   "admin": {
     "title": "Admin"
   },
@@ -338,7 +345,7 @@
       "in_progress": "In progress"
     },
     "passengers": {
-      "header" : "Passengers",
+      "header": "Passengers",
       "btn_accept": "Accept",
       "btn_delete": "Delete",
       "reservation_started": "The reservation has started.",
