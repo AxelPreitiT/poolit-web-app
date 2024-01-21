@@ -61,6 +61,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtFilter jwtFilter;
 
+    @Autowired
+    private UnauthorizedRequestHandler unauthorizedRequestHandler;
+
+    @Autowired
+    private ForbiddenRequestHandler forbiddenRequestHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -91,10 +97,23 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
+                //--------Users--------
+                //Modify user
+                .antMatchers(HttpMethod.PATCH,UrlHolder.USER_BASE+"/{id}")
+                    .access("@authValidator.checkIfWantedIsSelf(#id)")
+                //Modify image
+                .antMatchers(HttpMethod.PUT,UrlHolder.USER_BASE+"/{id}/image")
+                    .access("@authValidator.checkIfWantedIsSelf(#id)")
                 //--------Trips--------
+                //Create trip
+                .antMatchers(HttpMethod.POST,UrlHolder.TRIPS_BASE)
+                    .hasRole(UserRole.DRIVER.getText())
                 //Delete trip
                 .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}")
-                    .access("@authValidator.checkIfUserIsTripCreator(#id)")
+                    .access("@authValidator.checkIfUserIsTripCreator(#id)")//if it's not a driver, then it fails
+                //Add passenger
+                .antMatchers(HttpMethod.POST,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS)
+                    .authenticated()
                 //Get single passenger
                 .antMatchers(HttpMethod.GET,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
                     .access("@authValidator.checkIfUserIsTripCreator(#id) or @authValidator.checkIfWantedIsSelf(#userId)")
@@ -104,9 +123,29 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //Cancel trip as passenger
                 .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
                     .access("@authValidator.checkIfWantedIsSelf(#userId)")
+                //--------Reports--------
+                //Accept or reject report
+                .antMatchers(HttpMethod.PATCH,UrlHolder.REPORT_BASE+"/{id}")
+                    .hasRole(UserRole.ADMIN.getText())
+                .antMatchers(UrlHolder.REPORT_BASE+"/**")//TODO: chequear
+                    .authenticated()
+                //--------Passenger reviews--------
+                .antMatchers(HttpMethod.POST,UrlHolder.PASSENGER_REVIEWS_BASE)
+                    .authenticated()
+                //--------Driver reviews--------
+                .antMatchers(HttpMethod.POST,UrlHolder.DRIVER_REVIEWS_BASE)
+                    .authenticated()
+                //--------Cars--------
+                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE)
+                    .hasRole(UserRole.DRIVER.getText())
+                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")//TODO: ver si matchea el de buscar varias con esto
+                    .authenticated()
+                //--------Cities, Car brands, Car features, Base, others--------
+                .antMatchers(UrlHolder.BASE+"/**")
+                    .permitAll()
                 .and().exceptionHandling()
-                    .accessDeniedHandler(new ForbiddenRequestHandler())
-                    .authenticationEntryPoint(new UnauthorizedRequestHandler())
+                    .accessDeniedHandler(forbiddenRequestHandler)
+                    .authenticationEntryPoint(unauthorizedRequestHandler)
                 .and().authorizeRequests()
 //                    .antMatchers("/api/users/{id}").authenticated()
 //                .antMatchers("/api/users/{id}").access("@authValidator.checkIfWantedIsSelf(request,#id)")

@@ -6,10 +6,12 @@ import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -42,11 +44,14 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
     private static final String VERIFICATION_HEADER = "Account-verification";
 
+    private final AuthenticationEntryPoint authenticationEntryPoint;
+
     @Autowired
-    public BasicAuthFilter(final JwtUtils jwtUtils, final UserService userService, final AuthenticationManager authenticationManager){
+    public BasicAuthFilter(final JwtUtils jwtUtils, final UserService userService, final AuthenticationManager authenticationManager, final AuthenticationEntryPoint authenticationEntryPoint){
         this.jwtUtils = jwtUtils;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
@@ -58,7 +63,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
         try {
             String[] credentials = decodeHeader(header.split(" ")[1]);
-            final User user = userService.findByEmail(credentials[EMAIL_INDEX]).orElseThrow(IllegalStateException::new);
+            final User user = userService.findByEmail(credentials[EMAIL_INDEX]).orElseThrow(IllegalArgumentException::new);
             //Si esta habilitado, intentamos autenticarlo
             if(user.isEnabled()){
                 final Authentication authentication = authenticationManager.authenticate(
@@ -79,9 +84,14 @@ public class BasicAuthFilter extends OncePerRequestFilter {
             httpServletResponse.setHeader(VERIFICATION_HEADER,"true");
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
-        }catch (Exception e){
+        }catch (AuthenticationException e){
+            //use same handler when credentials are invalid
+            authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,e);
+            return;
+        } catch (Exception e){
 //            Si no manda las credenciales, alguna operación provoca ArrayIndexOutOfBoundsException y cae aca
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,new BadCredentialsException(""));
             return;
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
@@ -94,7 +104,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
         try {
             decodedToken = Base64.getDecoder().decode(base64Token);
         }catch (IllegalArgumentException e){
-            throw new IllegalArgumentException();
+            throw new BadCredentialsException("Provided encoding for Basic auth is not valid");
         }
 
         String info = new String(decodedToken, StandardCharsets.UTF_8);
