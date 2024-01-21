@@ -5,6 +5,7 @@ import TripModel from "@/models/TripModel.ts";
 import CarModel from "@/models/CarModel.ts";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 interface TripInfoProps {
     trip: TripModel;
@@ -23,14 +24,14 @@ const TripInfo = ({trip, car, driver} : TripInfoProps) => {
       <div className={styles.show_row}>
         <i className="bi bi-clock light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">{trip.startDateTime}</span>
+          <span className="light-text detail">{getFormattedDateTime(trip.startDateTime).time}</span>
         </div>
       </div>
       <div className={styles.show_row}>
         <i className="bi bi-calendar light-text"></i>
         <div className={styles.info_details}>
           <span className="light-text detail">{t(`day_week.${DayOfWeek}`)}</span>
-          <span className={styles.subtitle_info}>{trip.startDateTime}</span>
+          <span className={styles.subtitle_info}>{getFormattedDateTime(trip.startDateTime).date}</span>
         </div>
       </div>
       <div className={styles.show_row}>
@@ -46,7 +47,8 @@ const TripInfo = ({trip, car, driver} : TripInfoProps) => {
       <div className={styles.show_row}>
         <i className="bi bi-people light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">{availableSeats}</span>
+          <span className="light-text detail">
+            {t("trip_detail.seats", {number: availableSeats})}</span>
         </div>
       </div>
       <hr className="white" />

@@ -318,7 +318,8 @@
     "recurrent_trip" :  " {{number}} trips",
     "single_trip": "Single trip.",
     "price": "Price: ",
-    "income" : "Income: "
+    "income" : "Income: ",
+    "seats": "{{number}} seats availables"
   },
   "query": {
     "request": {

@@ -317,7 +317,8 @@
     "recurrent_trip" :  " {{number}} viajes",
     "single_trip": "Viaje unico.",
     "price": "Precio: ",
-    "income" : "Total: "
+    "income" : "Total: ",
+    "seats": "{{number}} asientos disponibles"
   },
   "query": {
     "request": {
