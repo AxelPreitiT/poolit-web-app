@@ -362,7 +362,11 @@
     "single_trip": "Single trip.",
     "price": "Price: ",
     "income" : "Income: ",
-    "seats": "{{number}} seats availables"
+    "seats": "{{number}} seats availables",
+    "report":{
+      "pre_link_text": "Did you have any problem?",
+      "link_text": "Report"
+    }
   },
   "query": {
     "request": {

@@ -127,4 +127,12 @@
 .review_btn{
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.report_link{
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
 }

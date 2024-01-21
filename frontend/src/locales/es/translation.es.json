@@ -361,7 +361,11 @@
     "single_trip": "Viaje unico.",
     "price": "Precio: ",
     "income" : "Total: ",
-    "seats": "{{number}} asientos disponibles"
+    "seats": "{{number}} asientos disponibles",
+    "report":{
+      "pre_link_text": "¿Has tenido algun problema?",
+      "link_text": "Reportar"
+    }
   },
   "query": {
     "request": {
