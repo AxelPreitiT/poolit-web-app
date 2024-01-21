@@ -1,30 +1,32 @@
+import { months } from "@/utils/date/months";
+import { weekDays } from "@/utils/date/weekDays";
 import { useTranslation } from "react-i18next";
-import ReactDatePicker, { DateObject } from "react-multi-date-picker";
+import ReactDatePicker, {
+  CalendarProps,
+  DateObject,
+  DatePickerProps,
+} from "react-multi-date-picker";
 
-interface DatePickerProps {
-  inputClass?: string;
-  placeholder?: string;
-  containerClassName?: string;
-  value?: Date;
-  onChange: (value: Date) => void;
+interface IDatePickerProps {
+  onPick: (date: Date | undefined) => void;
 }
 
 const DatePicker = ({
-  inputClass,
-  placeholder,
-  containerClassName,
-  value,
-  onChange,
-}: DatePickerProps) => {
-  const { i18n } = useTranslation();
+  onPick,
+  ...props
+}: Omit<CalendarProps, "onChange"> & DatePickerProps & IDatePickerProps) => {
+  const { t } = useTranslation();
+
+  const tWeekDays = weekDays.map((day) => t(`day.short.${day.toLowerCase()}`));
+  const tMonths = months.map((month) => t(`month.full.${month.toLowerCase()}`));
+
   return (
     <ReactDatePicker
-      value={value || ""}
-      onChange={(date: DateObject) => onChange(date?.toDate())}
-      format={i18n.language === "en" ? "MM/DD/YYYY" : "DD/MM/YYYY"}
-      inputClass={inputClass}
-      placeholder={placeholder}
-      containerClassName={containerClassName}
+      {...props}
+      weekDays={tWeekDays}
+      months={tMonths}
+      format="DD/MM/YYYY"
+      onChange={(date: DateObject) => onPick(date?.toDate())}
     />
   );
 };

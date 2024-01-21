@@ -6,24 +6,35 @@ import MaxValueFieldInterpolation from "../interpolations/MaxValueFieldInterpola
 class FormFieldNumberBuilder extends FormFieldBuilder<ZodNumber> {
   constructor(name: string) {
     super(
-      z.coerce.number({
-        invalid_type_error: `error.${name}.invalid`,
+      z.number({
+        errorMap: (error, ctx) => {
+          if (ctx.data === "" && error.code === "invalid_type") {
+            return {
+              message: `error.${this.name}.required`,
+            };
+          }
+          let message: string;
+          switch (error.code) {
+            case "too_small":
+              message = `error.${this.name}.${MinValueFieldInterpolation.KEY}`;
+              break;
+            case "too_big":
+              message = `error.${this.name}.${MaxValueFieldInterpolation.KEY}`;
+              break;
+            default:
+              message = `error.${this.name}.invalid`;
+              break;
+          }
+          return { message };
+        },
       }),
       name
     );
   }
 
-  public isRequired(): FormFieldNumberBuilder {
-    this.setSchema(this.schema.min, {
-      value: 1,
-      message: `error.${this.name}.required`,
-    });
-    return this;
-  }
-
   public hasMinValue(minValue: number): FormFieldNumberBuilder {
     this.setSchema(this.schema.min, {
-      value: minValue,
+      value: minValue - 0.000000000000001,
       message: `error.${this.name}.${MinValueFieldInterpolation.KEY}`,
     });
     this.setInterpolationsBuilder(

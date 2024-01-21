@@ -15,13 +15,54 @@
     "english": "Inglés"
   },
   "day": {
-    "monday": "Lunes",
-    "tuesday": "Martes",
-    "wednesday": "Miércoles",
-    "thursday": "Jueves",
-    "friday": "Viernes",
-    "saturday": "Sábado{{plural}}",
-    "sunday": "Domingo{{plural}}"
+    "full": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    },
+    "short": {
+      "monday": "Lun",
+      "tuesday": "Mar",
+      "wednesday": "Mié",
+      "thursday": "Jue",
+      "friday": "Vie",
+      "saturday": "Sáb",
+      "sunday": "Dom"
+    }
+  },
+  "month": {
+    "full": {
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    },
+    "short": {
+      "january": "Ene",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Abr",
+      "may": "May",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Ago",
+      "september": "Sep",
+      "october": "Oct",
+      "november": "Nov",
+      "december": "Dic"
+    }
   },
   "navbar": {
     "created": "Creados",
@@ -139,8 +180,8 @@
     "date": {
       "required": "La fecha es requerida",
       "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
-      "min": "La fecha no puede ser anterior a {{min}}",
-      "before_now": "La fecha y el hora deben ser posteriores a las actuales"
+      "min": "La fecha no puede ser anterior a {{- min}}",
+      "before_now": "La fecha y la hora deben ser posteriores a las actuales"
     },
     "time": {
       "required": "La hora es requerida",
@@ -148,7 +189,7 @@
     },
     "last_date": {
       "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
-      "min": "La fecha no puede ser anterior a {{min}}",
+      "min": "La fecha no puede ser anterior a {{- min}}",
       "required": "La fecha final es obligatoria si se trata de un viaje recurrente",
       "before_initial": "La fecha final debe ser posterior a la fecha inicial",
       "different_day": "La fecha inicial y final deben ser el mismo día de la semana"
@@ -167,7 +208,7 @@
       "min": "Debe seleccionar un auto"
     },
     "seats": {
-      "required": "Debe seleccionar la cantidad de asientos",
+      "required": "La cantidad de asientos es requerida",
       "invalid": "La cantidad de asientos debe ser un número",
       "min": "La cantidad de asientos debe ser al menos {{min}}"
     },
@@ -269,9 +310,6 @@
     "destination": "Destino",
     "details": "Detalles",
     "select_car": "Seleccione un auto",
-    "brand": "Marca: {{brand}}",
-    "license_plate": "Patente: {{license_plate}}",
-    "car_image": "Imagen del auto {{car_info}}",
     "number_of_seats": "Cantidad de asientos",
     "price_per_trip": "Precio por viaje",
     "create": "Crear viaje",
@@ -371,6 +409,15 @@
     "error": {
       "title": "Ocurrió un error al obtener los barrios"
     }
+  },
+  "car": {
+    "error": {
+      "yours": "Ocurrió un error al obtener tus autos",
+      "image": "Ocurrió un error al obtener la imagen del auto"
+    },
+    "image": "Imagen del auto {{car_info}}",
+    "brand": "Marca: {{brand}}",
+    "license_plate": "Patente: {{license_plate}}"
   },
   "spinner": {
     "loading": "Cargando..."

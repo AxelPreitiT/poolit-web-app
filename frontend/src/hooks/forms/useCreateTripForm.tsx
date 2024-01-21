@@ -62,7 +62,7 @@ const useCreateTripForm = () => {
       return;
     }
     if (trip) {
-      navigate(tripDetailsPath.replace(":tripUri", trip.tripId.toString()), {
+      navigate(tripDetailsPath.replace(":tripId", trip.tripId.toString()), {
         replace: true,
       });
     }

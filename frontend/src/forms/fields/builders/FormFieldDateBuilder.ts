@@ -6,7 +6,7 @@ import MaxDateFieldInterpolation from "../interpolations/MaxDateFieldInterpolati
 class FormFieldDateBuilder extends FormFieldBuilder<ZodDate> {
   constructor(name: string) {
     super(
-      z.coerce.date({
+      z.date({
         required_error: `error.${name}.required`,
         invalid_type_error: `error.${name}.invalid`,
       }),

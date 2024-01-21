@@ -16,13 +16,54 @@
     "english": "English"
   },
   "day": {
-    "monday": "Monday",
-    "tuesday": "Tuesday",
-    "wednesday": "Wednesday",
-    "thursday": "Thursday",
-    "friday": "Friday",
-    "saturday": "Saturday",
-    "sunday": "Sunday"
+    "full": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "short": {
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat",
+      "sunday": "Sun"
+    }
+  },
+  "month": {
+    "full": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "short": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Apr",
+      "may": "May",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Oct",
+      "november": "Nov",
+      "december": "Dec"
+    }
   },
   "navbar": {
     "created": "Created",
@@ -140,7 +181,7 @@
     "date": {
       "required": "The date is required",
       "invalid": "The date has an invalid format, it should be dd/mm/yyyy",
-      "min": "The date cannot be earlier than {{min}}",
+      "min": "The date cannot be earlier than {{- min}}",
       "before_now": "The date and time cannot be earlier than the current ones"
     },
     "time": {
@@ -149,7 +190,7 @@
     },
     "last_date": {
       "invalid": "The date has an invalid format, it should be dd/mm/yyyy",
-      "min": "The date cannot be earlier than {{min}}",
+      "min": "The date cannot be earlier than {{- min}}",
       "required": "The last date is required to create a recurring trip",
       "before_initial": "The last date must be later than the initial date",
       "different_day": "The last date must be on the same day of the week as the initial date"
@@ -270,9 +311,6 @@
     "destination": "Destination",
     "details": "Details",
     "select_car": "Select a car",
-    "brand": "Brand: {{brand}}",
-    "license_plate": "License plate: {{license_plate}}",
-    "car_image": "Image of the car {{car_info}}",
     "number_of_seats": "Number of seats",
     "price_per_trip": "Price per trip",
     "create": "Create trip",
@@ -372,6 +410,15 @@
     "error": {
       "title": "An error occurred while loading the neighborhoods"
     }
+  },
+  "car": {
+    "error": {
+      "yours": "An error occurred while loading your cars",
+      "image": "An error occurred while loading the car image"
+    },
+    "image": "Imagen del auto {{car_info}}",
+    "brand": "Brand: {{brand}}",
+    "license_plate": "License plate: {{license_plate}}"
   },
   "spinner": {
     "loading": "Loading..."
