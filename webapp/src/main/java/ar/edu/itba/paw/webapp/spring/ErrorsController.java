@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+/*
 @Controller
 public class ErrorsController {
 
@@ -68,3 +69,5 @@ public class ErrorsController {
         }
     }
 }
+
+ */

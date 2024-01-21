@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 
 
+/*
 @Controller
 public class AdminController {
 
@@ -90,3 +91,5 @@ public class AdminController {
         return new ModelAndView("redirect:/admin?rejectReport=true");
     }
 }
+
+ */

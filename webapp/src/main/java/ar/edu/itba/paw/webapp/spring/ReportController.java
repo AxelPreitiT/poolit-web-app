@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
+/*
 @Controller
 public class ReportController {
 
@@ -81,3 +82,5 @@ public class ReportController {
 
 
 }
+
+ */
