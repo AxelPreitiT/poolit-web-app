@@ -8,7 +8,7 @@ class FormFieldNumberBuilder extends FormFieldBuilder<ZodNumber> {
     super(
       z.number({
         errorMap: (error, ctx) => {
-          if (ctx.data === "" && error.code === "invalid_type") {
+          if (ctx.data === undefined && error.code === "invalid_type") {
             return {
               message: `error.${this.name}.required`,
             };

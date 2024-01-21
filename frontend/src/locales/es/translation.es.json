@@ -217,6 +217,15 @@
       "required": "El precio es requerido",
       "invalid": "El precio debe ser un número",
       "min": "El precio debe ser al menos {{min}}"
+    },
+    "min_price": {
+      "invalid": "El precio mínimo debe ser un número",
+      "min": "El precio mínimo debe ser al menos {{min}}"
+    },
+    "max_price": {
+      "invalid": "El precio máximo debe ser un número",
+      "min": "El precio máximo debe ser al menos {{min}}",
+      "lower_than_min": "El precio máximo debe ser mayor o igual al precio mínimo"
     }
   },
   "profile": {
@@ -323,6 +332,28 @@
       "default": "Ocurrió un error al crear el viaje"
     }
   },
+  "search_trips": {
+    "unique_trip": "Viaje único",
+    "recurrent_trip": "Viaje recurrente",
+    "route": "Ruta",
+    "origin": "Origen",
+    "destination": "Destino",
+    "district": "Barrio",
+    "date": "Fecha",
+    "time": "Horario",
+    "every": "Todos los",
+    "until": "Hasta el",
+    "last_date": "Última fecha",
+    "price_per_trip": "Precio (por viaje)",
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "car_features": "Características del auto",
+    "search": "Buscar",
+    "error": {
+      "title": "Could not search for trips",
+      "default": "An error occurred while fetching the trips"
+    }
+  },
   "recommended_trips": {
     "title": "Viajes recomendados",
     "error": {
@@ -410,7 +441,8 @@
         "unknown": "Ocurrió un error al realizar la operación",
         "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
         "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión",
-        "current_user_uri_missing": "La sesión expiró, por favor volvé a iniciar sesión"
+        "current_user_uri_missing": "La sesión expiró, por favor volvé a iniciar sesión",
+        "discovery_missing": "No se pudo comunicar con el servidor, por favor volvé a intentarlo más tarde"
       }
     },
     "response": {

@@ -1,9 +1,9 @@
 const integerRegex = /^-?\d+$/;
 
-export const parseInputInteger = (value: string): number | string => {
+export const parseInputInteger = (value: string): number | undefined => {
   if (!integerRegex.test(value)) {
-    return value;
+    return undefined;
   }
   const parsedValue = parseInt(value, 10);
-  return isNaN(parsedValue) ? value : parsedValue;
+  return isNaN(parsedValue) ? undefined : parsedValue;
 };

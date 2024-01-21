@@ -1,6 +1,8 @@
 import { months } from "@/utils/date/months";
 import { weekDays } from "@/utils/date/weekDays";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { BsCalendarFill } from "react-icons/bs";
 import ReactDatePicker, {
   CalendarProps,
   DateObject,
@@ -13,6 +15,9 @@ interface IDatePickerProps {
 
 const DatePicker = ({
   onPick,
+  placeholder,
+  disabled = false,
+  inputClass,
   ...props
 }: Omit<CalendarProps, "onChange"> & DatePickerProps & IDatePickerProps) => {
   const { t } = useTranslation();
@@ -25,8 +30,26 @@ const DatePicker = ({
       {...props}
       weekDays={tWeekDays}
       months={tMonths}
+      disabled={disabled}
+      onOpenPickNewDate={false}
       format="DD/MM/YYYY"
       onChange={(date: DateObject) => onPick(date?.toDate())}
+      render={(value, onFocus, onChange) => (
+        <InputGroup size="sm" className={inputClass}>
+          <Button className="secondary-btn" onClick={onFocus}>
+            <BsCalendarFill className="light-text" />
+          </Button>
+          <Form.Control
+            type="text"
+            placeholder={placeholder}
+            size="sm"
+            onFocus={onFocus}
+            value={value || ""}
+            onChange={onChange}
+            disabled={disabled}
+          />
+        </InputGroup>
+      )}
     />
   );
 };

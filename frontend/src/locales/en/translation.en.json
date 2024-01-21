@@ -218,6 +218,15 @@
       "required": "The price is required",
       "invalid": "The price must be a number",
       "min": "The price must be at least {{min}}"
+    },
+    "min_price": {
+      "invalid": "The minimum price must be a number",
+      "min": "The minimum price must be at least {{min}}"
+    },
+    "max_price": {
+      "invalid": "The maximum price must be a number",
+      "min": "The maximum price must be at least {{min}}",
+      "lower_than_min": "The maximum price must be greater than the minimum price"
     }
   },
   "profile": {
@@ -331,6 +340,28 @@
       "default": "An error occurred while fetching the recommended trips"
     }
   },
+  "search_trips": {
+    "unique_trip": "Unique trip",
+    "recurrent_trip": "Recurrent trip",
+    "route": "Route",
+    "origin": "Origin",
+    "destination": "Destination",
+    "district": "District",
+    "date": "Date",
+    "time": "Time",
+    "every": "Every",
+    "until": "Until",
+    "last_date": "Last date",
+    "price_per_trip": "Price (per trip)",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
+    "car_features": "Car features",
+    "search": "Search",
+    "error": {
+      "title": "Could not search for trips",
+      "default": "An error occurred while fetching the trips"
+    }
+  },
   "admin": {
     "title": "Admin"
   },
@@ -411,7 +442,8 @@
         "unknown": "An error occurred while performing the operation",
         "invalid_email": "The email cannot have colon (:) characters",
         "authorization_header_missing": "The session expired, please log in again",
-        "current_user_uri_missing": "The session expired, please log in again"
+        "current_user_uri_missing": "The session expired, please log in again",
+        "discovery_missing": "Cannot communicate with the server, please try again later"
       }
     },
     "response": {

@@ -74,11 +74,6 @@
   color: colors.$danger-color;
 }
 
-.pickerContainer {
-  flex-grow: 1;
-  border-radius: 0.25rem;
-}
-
 .recurrentCheckbox,
 .recurrentLabel {
   @extend .formItem;

@@ -27,6 +27,7 @@ export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
 export const adminPath = "/admin";
+export const searchPath = "/search";
 
 const router = createBrowserRouter(
   [

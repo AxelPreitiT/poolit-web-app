@@ -4,21 +4,24 @@ import { useState } from "react";
 
 interface CarFeaturesPillsProps {
   carFeatures: CarFeatureModel[];
+  onSelect?: (selectedCarFeatures: string[]) => void;
 }
 
-const CarFeaturesPills = ({ carFeatures }: CarFeaturesPillsProps) => {
+const CarFeaturesPills = ({ carFeatures, onSelect }: CarFeaturesPillsProps) => {
   const [selectedCarFeatures, setSelectedCarFeatures] = useState<string[]>([]);
 
-  const toggleCarFeature = (carFeatureId: string) =>
-    setSelectedCarFeatures((prevSelectedCarFeatures: string[]) => {
-      if (prevSelectedCarFeatures.includes(carFeatureId)) {
-        return prevSelectedCarFeatures.filter(
-          (selectedCarFeature) => selectedCarFeature !== carFeatureId
-        );
-      } else {
-        return [...prevSelectedCarFeatures, carFeatureId];
-      }
-    });
+  const toggleCarFeature = (carFeatureId: string) => {
+    let newSelectedCarFeatures: string[] = [];
+    if (selectedCarFeatures.includes(carFeatureId)) {
+      newSelectedCarFeatures = selectedCarFeatures.filter(
+        (selectedCarFeature) => selectedCarFeature !== carFeatureId
+      );
+    } else {
+      newSelectedCarFeatures = [...selectedCarFeatures, carFeatureId];
+    }
+    setSelectedCarFeatures(newSelectedCarFeatures);
+    onSelect && onSelect(newSelectedCarFeatures);
+  };
 
   return (
     <div className={styles.mainContainer}>

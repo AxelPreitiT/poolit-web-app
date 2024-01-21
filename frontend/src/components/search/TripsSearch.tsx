@@ -1,23 +1,34 @@
 import CarFeatureModel from "@/models/CarFeatureModel";
 import CityModel from "@/models/CityModel";
 import styles from "./styles.module.scss";
-import { Button, Collapse, Form, InputGroup, Nav } from "react-bootstrap";
+import { Button, Collapse, Form, Nav } from "react-bootstrap";
 import {
   BsArrowLeftRight,
   BsArrowRepeat,
   BsCalendar,
   BsCalendarEventFill,
-  BsCalendarFill,
   BsCarFrontFill,
-  BsClockFill,
   BsCurrencyDollar,
   BsGeoAltFill,
 } from "react-icons/bs";
-import { useState } from "react";
-import CitySelector from "../forms/CitySelector/CitySelector";
+import { useCallback, useEffect, useState } from "react";
+import CitySelector, {
+  citySelectorDefaultValue,
+} from "../forms/CitySelector/CitySelector";
 import FormError from "../forms/FormError/FormError";
 import { BiSearch } from "react-icons/bi";
 import CarFeaturesPills from "../car/CarFeaturesPills/CarFeaturesPills";
+import { useTranslation } from "react-i18next";
+import { getDayString } from "@/utils/date/dayString";
+import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
+import { Controller } from "react-hook-form";
+import DatePicker from "../forms/DatePicker/DatePicker";
+import { getToday } from "@/utils/date/today";
+import TimePicker from "../forms/TimePicker/TimePicker";
+import { getNextDay } from "@/utils/date/nextDay";
+import { parseInputFloat } from "@/utils/float/parse";
+import LoadingButton from "../buttons/LoadingButton";
+import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
 
 const uniqueTripId = "unique";
 const recurrentTripId = "recurrent";
@@ -27,21 +38,96 @@ interface TripsSearchProps {
   carFeatures?: CarFeatureModel[];
 }
 
-const TripsSearch = ({ cities, carFeatures }: TripsSearchProps) => {
-  // const { t } = useTranslation();
+const useCitiesSwap = (
+  onSwap: (oldOriginCityId: number, oldDestinationCityId: number) => void
+) => {
+  const [originCity, setOriginCity] = useState<number>(
+    citySelectorDefaultValue
+  );
+  const [destinationCity, setDestinationCity] = useState<number>(
+    citySelectorDefaultValue
+  );
+  const [canSwap, setCanSwap] = useState<boolean>(false);
+
+  useEffect(() => {
+    setCanSwap(
+      originCity !== citySelectorDefaultValue ||
+        destinationCity !== citySelectorDefaultValue
+    );
+  }, [originCity, destinationCity]);
+
+  const swapCities = () => {
+    const oldOriginCity = originCity;
+    const oldDestinationCity = destinationCity;
+    setOriginCity(oldDestinationCity);
+    setDestinationCity(oldOriginCity);
+    onSwap(oldOriginCity, oldDestinationCity);
+  };
+
+  return {
+    setOriginCity,
+    setDestinationCity,
+    swapCities,
+    canSwap,
+  };
+};
+
+const TripsSearch = ({ cities = [], carFeatures = [] }: TripsSearchProps) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<string>(uniqueTripId);
-  const [showLastDate, setShowLastDate] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+    tFormError,
+    setValue,
+  } = useSearchTripsForm();
+
+  const removeLastDate = useCallback(
+    () => setValue("last_date", undefined),
+    [setValue]
+  );
+
+  const { setDate, setIsMultitrip, date, isMultitrip } =
+    useLastDateCollapse(removeLastDate);
+  const minLastDate = date ? getNextDay(date) : getToday();
+
+  const setMultitrip = useCallback(
+    (value: boolean) => {
+      setValue("multitrip", value);
+      setIsMultitrip(value);
+    },
+    [setValue, setIsMultitrip]
+  );
+
+  const setCarFeatures = useCallback(
+    (value: string[]) => setValue("car_features", value),
+    [setValue]
+  );
 
   const onTabSelect = (eventKey: string | null) => {
     if (eventKey === recurrentTripId) {
-      setShowLastDate(true);
+      setMultitrip(true);
     } else {
-      setShowLastDate(false);
+      removeLastDate();
+      setMultitrip(false);
     }
     if (eventKey) {
       setActiveTab(eventKey);
     }
   };
+
+  const onSwap = useCallback(
+    (oldOriginCityId: number, oldDestinationCityId: number) => {
+      setValue("origin_city", oldDestinationCityId);
+      setValue("destination_city", oldOriginCityId);
+    },
+    [setValue]
+  );
+
+  const { setOriginCity, setDestinationCity, swapCities, canSwap } =
+    useCitiesSwap(onSwap);
 
   return (
     <div className={styles.searchContainer}>
@@ -59,7 +145,7 @@ const TripsSearch = ({ cities, carFeatures }: TripsSearchProps) => {
             }
           >
             <BsCalendarEventFill className="light-text" />
-            <span className="light-text">Unique trip</span>
+            <span className="light-text">{t("search_trips.unique_trip")}</span>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item className={styles.searchTab}>
@@ -70,93 +156,169 @@ const TripsSearch = ({ cities, carFeatures }: TripsSearchProps) => {
             }
           >
             <BsArrowRepeat className="light-text" />
-            <span className="light-text">Recurrent trip</span>
+            <span className="light-text">
+              {t("search_trips.recurrent_trip")}
+            </span>
           </Nav.Link>
         </Nav.Item>
       </Nav>
-      <Form className={styles.searchForm}>
+      <Form className={styles.searchForm} onSubmit={handleSubmit}>
         <div className={styles.searchFormGroup}>
           <div className={styles.searchFormTitle}>
             <BsGeoAltFill className="light-text" />
-            <span className="light-text">Route</span>
+            <span className="light-text">{t("search_trips.route")}</span>
           </div>
           <div className={styles.searchFormInput}>
             <div className={styles.searchFormInputItem}>
               <Form.Group className={styles.searchFormRouteInput}>
-                <Form.Label className="light-text">Origin</Form.Label>
-                <CitySelector
-                  cities={cities || []}
-                  defaultOption="District"
-                  onChange={() => {}}
-                  value={-1}
-                  size="sm"
+                <Form.Label className="light-text">
+                  {t("search_trips.origin")}
+                </Form.Label>
+                <Controller
+                  name="origin_city"
+                  control={control}
+                  defaultValue={citySelectorDefaultValue}
+                  render={({ field: { value, onChange } }) => (
+                    <CitySelector
+                      cities={cities}
+                      defaultOption={t("search_trips.district")}
+                      onChange={(event) => {
+                        const cityId = parseInt(event.target.value);
+                        onChange(cityId);
+                        setOriginCity(cityId);
+                      }}
+                      value={value}
+                      size="sm"
+                    />
+                  )}
                 />
               </Form.Group>
-              <FormError error="error" />
+              <FormError error={tFormError(errors.origin_city)} />
             </div>
-            <Button type="button" className="secondary-btn">
+            <Button
+              type="button"
+              className="secondary-btn"
+              onClick={swapCities}
+              disabled={!canSwap}
+            >
               <BsArrowLeftRight className="light-text" />
             </Button>
             <div className={styles.searchFormInputItem}>
               <Form.Group className={styles.searchFormRouteInput}>
-                <Form.Label className="light-text">Destination</Form.Label>
-                <CitySelector
-                  cities={cities || []}
-                  defaultOption="District"
-                  onChange={() => {}}
-                  value={-1}
-                  size="sm"
+                <Form.Label className="light-text">
+                  {t("search_trips.destination")}
+                </Form.Label>
+                <Controller
+                  name="destination_city"
+                  control={control}
+                  defaultValue={citySelectorDefaultValue}
+                  render={({ field: { value, onChange } }) => (
+                    <CitySelector
+                      cities={cities}
+                      defaultOption={t("search_trips.district")}
+                      onChange={(event) => {
+                        const cityId = parseInt(event.target.value);
+                        onChange(cityId);
+                        setDestinationCity(cityId);
+                      }}
+                      value={value}
+                      size="sm"
+                    />
+                  )}
                 />
               </Form.Group>
-              <FormError error="error" />
+              <FormError error={tFormError(errors.destination_city)} />
             </div>
           </div>
         </div>
         <div className={styles.searchFormGroup}>
           <div className={styles.searchFormTitle}>
             <BsCalendar className="light-text" />
-            <span className="light-text">Date</span>
+            <span className="light-text">{t("search_trips.date")}</span>
           </div>
           <div className={styles.searchFormInput}>
             <div className={styles.searchFormInputItem}>
-              <InputGroup size="sm" className={styles.formItemGroup}>
-                <Button className="secondary-btn">
-                  <BsCalendarFill className="light-text" />
-                </Button>
-                <Form.Control type="text" placeholder="Date" size="sm" />
-              </InputGroup>
-              <FormError error="error" />
+              <Controller
+                name="date"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <DatePicker
+                    onPick={(date: Date | undefined) => {
+                      onChange(date);
+                      removeLastDate();
+                      setDate(date);
+                    }}
+                    value={value}
+                    placeholder={t("search_trips.date")}
+                    inputClass={styles.formItemGroup}
+                    minDate={getToday()}
+                  />
+                )}
+              />
+              <FormError error={tFormError(errors.date)} />
             </div>
             <div className={styles.searchFormInputItem}>
-              <InputGroup size="sm" className={styles.formItemGroup}>
-                <Button className="secondary-btn">
-                  <BsClockFill className="light-text" />
-                </Button>
-                <Form.Control type="text" placeholder="Time" size="sm" />
-              </InputGroup>
-              <FormError error="error" />
+              <Controller
+                name="time"
+                control={control}
+                defaultValue=""
+                render={({ field: { value, onChange } }) => (
+                  <TimePicker
+                    onPick={onChange}
+                    inputClass={styles.formItemGroup}
+                    value={value}
+                    placeholder={t("search_trips.time")}
+                  />
+                )}
+              />
+              <FormError error={tFormError(errors.time)} />
             </div>
           </div>
-          <Collapse in={showLastDate}>
+          <Collapse in={isMultitrip}>
             <div className={styles.searchFormInput}>
-              <div className={styles.searchFormInputItem}>
-                <div className={styles.searchFormLastDateDecorator}>
-                  <BsArrowRepeat className="light-text" />
-                  <div className={styles.searchFormLastDateInputText}>
-                    <span className="light-text">Every</span>
-                    <strong className="light-text">Monday</strong>
-                    <span className="light-text">until</span>
+              <Collapse in={date && isMultitrip} dimension="width">
+                <div className={styles.searchFormInputItem}>
+                  <div className={styles.searchFormLastDateDecorator}>
+                    {date && (
+                      <>
+                        <BsArrowRepeat className="light-text" />
+                        <div className={styles.searchFormLastDateInputText}>
+                          <span className="light-text">
+                            {t("search_trips.every")}
+                          </span>
+                          <strong className="light-text">
+                            {t(`day.full.${getDayString(date).toLowerCase()}`, {
+                              plural: "s",
+                            })}
+                          </strong>
+                          <span className="light-text">
+                            {t("search_trips.until").toLowerCase()}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-              </div>
+              </Collapse>
               <div className={styles.searchFormInputItem}>
-                <InputGroup size="sm" className={styles.formItemGroup}>
-                  <Button className="secondary-btn">
-                    <BsCalendarFill className="light-text" />
-                  </Button>
-                  <Form.Control type="text" placeholder="Last date" size="sm" />
-                </InputGroup>
-                <FormError error="error" />
+                <Controller
+                  name="last_date"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <DatePicker
+                      mapDays={({ date: calendarDate }) => ({
+                        disabled: calendarDate.weekDay.index !== date?.getDay(),
+                      })}
+                      onPick={onChange}
+                      value={value}
+                      placeholder={t("search_trips.last_date")}
+                      inputClass={styles.formItemGroup}
+                      minDate={minLastDate}
+                      disabled={!isMultitrip}
+                    />
+                  )}
+                />
+                <FormError error={tFormError(errors.last_date)} />
               </div>
             </div>
           </Collapse>
@@ -164,17 +326,33 @@ const TripsSearch = ({ cities, carFeatures }: TripsSearchProps) => {
         <div className={styles.searchFormGroup}>
           <div className={styles.searchFormTitle}>
             <BsCurrencyDollar className="light-text" />
-            <span className="light-text">Price (per trip)</span>
+            <span className="light-text">
+              {t("search_trips.price_per_trip")}
+            </span>
           </div>
           <div className={styles.searchFormInput}>
             <div className={styles.searchFormInputItem}>
-              <Form.Control type="text" placeholder="Minimum" size="sm" />
-              <FormError error="error" />
+              <Form.Control
+                type="text"
+                placeholder={t("search_trips.minimum")}
+                size="sm"
+                {...register("min_price", {
+                  setValueAs: parseInputFloat,
+                })}
+              />
+              <FormError error={tFormError(errors.min_price)} />
             </div>
             <span className="light-text">-</span>
             <div className={styles.searchFormInputItem}>
-              <Form.Control type="text" placeholder="Maximum" size="sm" />
-              <FormError error="error" />
+              <Form.Control
+                type="text"
+                placeholder={t("search_trips.maximum")}
+                size="sm"
+                {...register("max_price", {
+                  setValueAs: parseInputFloat,
+                })}
+              />
+              <FormError error={tFormError(errors.max_price)} />
             </div>
             <span className="light-text">ARS</span>
           </div>
@@ -183,18 +361,27 @@ const TripsSearch = ({ cities, carFeatures }: TripsSearchProps) => {
           <div className={styles.searchFormGroup}>
             <div className={styles.searchFormTitle}>
               <BsCarFrontFill className="light-text" />
-              <span className="light-text">Car features</span>
+              <span className="light-text">
+                {t("search_trips.car_features")}
+              </span>
             </div>
             <div className={styles.searchFormInput}>
-              <CarFeaturesPills carFeatures={carFeatures} />
+              <CarFeaturesPills
+                carFeatures={carFeatures}
+                onSelect={setCarFeatures}
+              />
             </div>
           </div>
         )}
         <div className={styles.searchFormSubmit}>
-          <Button type="submit" className="secondary-btn">
+          <LoadingButton
+            type="submit"
+            className="secondary-btn"
+            isLoading={isSubmitting}
+          >
             <BiSearch className="light-text" />
-            <span className="light-text">Search</span>
-          </Button>
+            <span className="light-text">{t("search_trips.search")}</span>
+          </LoadingButton>
         </div>
       </Form>
     </div>

@@ -15,6 +15,8 @@ import useTripByUri from "../trips/useTripByUri";
 import CreateTripModel from "@/models/CreateTripModel";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import { createdTripsPath, tripDetailsPath } from "@/AppRouter";
+import useDiscovery from "../discovery/useDiscovery";
+import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 
 const emptyTripUri = "";
 
@@ -24,6 +26,7 @@ const useCreateTripForm = () => {
   const navigate = useNavigate();
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
+  const { discovery, isError: isDiscoveryError } = useDiscovery();
   const {
     isLoading: isTripLoading,
     trip,
@@ -33,7 +36,12 @@ const useCreateTripForm = () => {
   const onSubmit: SubmitHandlerReturnModel<
     CreateTripFormSchemaType,
     CreateTripModel
-  > = TripsService.createTrip;
+  > = async (data: CreateTripFormSchemaType) => {
+    if (!discovery || isDiscoveryError) {
+      throw new DiscoveryMissingError();
+    }
+    return await TripsService.createTrip(discovery.tripsUriTemplate, data);
+  };
 
   const onSuccess = (data: CreateTripModel) => {
     showSuccessToast({

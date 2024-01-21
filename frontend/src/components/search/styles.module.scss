@@ -80,6 +80,7 @@
   flex-direction: row;
   column-gap: 0.5rem;
   align-items: flex-start;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -104,7 +105,11 @@
 }
 
 .searchFormInput:has(.searchFormLastDateDecorator) {
-  margin-bottom: -1rem;
+  margin-bottom: -0.5rem;
+}
+
+.searchFormInput:has(.searchFormLastDateDecorator) .searchFormInputItem {
+  margin-left: auto;
 }
 
 .searchFormLastDateDecorator {
@@ -118,7 +123,7 @@
   font-weight: 500;
   font-style: italic;
   margin-top: 0.4rem;
-  margin-right: 0.25rem;
+  margin-right: 0.5rem;
 }
 
 .searchFormLastDateDecorator svg {

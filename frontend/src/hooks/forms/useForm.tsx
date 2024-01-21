@@ -26,7 +26,7 @@ const useForm = <
   form: Form<T>;
   formSchema: ZodSchema;
   onSubmit: SubmitHandlerReturnModel<F, Model>;
-  onSuccess?: (data: Model) => void;
+  onSuccess?: (data: Model, form: F) => void;
   onError?: (error: QueryError) => void;
 }) => {
   const { handleSubmit, ...formProps } = useReactHookForm<F>({
@@ -40,9 +40,9 @@ const useForm = <
         onError(error);
       }
     },
-    onSuccess: (data: Model) => {
+    onSuccess: (data: Model, variables: F) => {
       if (onSuccess) {
-        onSuccess(data);
+        onSuccess(data, variables);
       }
     },
   });

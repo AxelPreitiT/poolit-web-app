@@ -1,10 +1,8 @@
-import { Button, Collapse, Form, InputGroup } from "react-bootstrap";
+import { Collapse, Form, InputGroup } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import {
   BsArrowRepeat,
-  BsCalendarFill,
   BsCarFrontFill,
-  BsClockFill,
   BsFillPeopleFill,
   BsGeoAlt,
   BsGeoAltFill,
@@ -35,28 +33,7 @@ import CarInfoCard from "@/components/car/CarInfoCard/CarInfoCard";
 import CarImage from "@/components/car/CarImage/CarImage";
 import DatePicker from "@/components/forms/DatePicker/DatePicker";
 import TimePicker from "@/components/forms/TimePicker/TimePicker";
-
-const useLastDateCollapse = (removeLastDate: () => void) => {
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [isMultitrip, setIsMultitrip] = useState<boolean>(false);
-  const [showLastDate, setShowLastDate] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (date && isMultitrip) {
-      setShowLastDate(true);
-    } else {
-      setShowLastDate(false);
-      removeLastDate();
-    }
-  }, [date, isMultitrip, removeLastDate]);
-
-  return {
-    showLastDate,
-    setDate,
-    setIsMultitrip,
-    date,
-  };
-};
+import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
 
 const useCarInfoCollapse = () => {
   const [showCarInfo, setShowCarInfo] = useState<boolean>(false);
@@ -169,24 +146,10 @@ const CreateTripForm = ({
                       removeLastDate();
                       setDate(date);
                     }}
-                    format="DD/MM/YYYY"
                     value={value}
                     minDate={getToday()}
-                    render={(value, onFocus, onChange) => (
-                      <InputGroup size="sm" className={styles.formItemGroup}>
-                        <Button className="secondary-btn" onClick={onFocus}>
-                          <BsCalendarFill className="light-text" />
-                        </Button>
-                        <Form.Control
-                          type="text"
-                          placeholder={t("create_trip.date")}
-                          size="sm"
-                          onFocus={onFocus}
-                          value={value || ""}
-                          onChange={onChange}
-                        />
-                      </InputGroup>
-                    )}
+                    placeholder={t("create_trip.date")}
+                    inputClass={styles.formItemGroup}
                   />
                 )}
               />
@@ -205,21 +168,8 @@ const CreateTripForm = ({
                     containerClassName={styles.pickerContainer}
                     onPick={onChange}
                     value={value}
-                    render={(value, onFocus, onChange) => (
-                      <InputGroup size="sm" className={styles.formItemGroup}>
-                        <Button className="secondary-btn" onClick={onFocus}>
-                          <BsClockFill className="light-text" />
-                        </Button>
-                        <Form.Control
-                          type="text"
-                          placeholder={t("create_trip.time")}
-                          size="sm"
-                          onFocus={onFocus}
-                          value={value || ""}
-                          onChange={onChange}
-                        />
-                      </InputGroup>
-                    )}
+                    inputClass={styles.formItemGroup}
+                    placeholder={t("create_trip.time")}
                   />
                 )}
               />
@@ -272,22 +222,9 @@ const CreateTripForm = ({
                       onPick={onChange}
                       value={value}
                       minDate={minLastDate}
-                      render={(value, onFocus, onChange) => (
-                        <InputGroup size="sm" className={styles.formItemGroup}>
-                          <Button className="secondary-btn" onClick={onFocus}>
-                            <BsCalendarFill className="light-text" />
-                          </Button>
-                          <Form.Control
-                            type="text"
-                            placeholder={t("create_trip.last_date")}
-                            size="sm"
-                            onFocus={onFocus}
-                            value={value || ""}
-                            onChange={onChange}
-                            disabled={!showLastDate}
-                          />
-                        </InputGroup>
-                      )}
+                      inputClass={styles.formItemGroup}
+                      disabled={!showLastDate}
+                      placeholder={t("create_trip.last_date")}
                     />
                   )}
                 />

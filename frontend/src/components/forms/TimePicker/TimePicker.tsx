@@ -1,3 +1,5 @@
+import { Button, Form, InputGroup } from "react-bootstrap";
+import { BsClockFill } from "react-icons/bs";
 import ReactDatePicker, {
   CalendarProps,
   DateObject,
@@ -13,6 +15,8 @@ interface ITimePickerProps {
 const TimePicker = ({
   onPick,
   value,
+  inputClass,
+  placeholder,
   ...props
 }: Omit<CalendarProps, "onChange"> & DatePickerProps & ITimePickerProps) => {
   const [hours, minutes] = (value || "").split(":");
@@ -31,6 +35,21 @@ const TimePicker = ({
       onChange={(date: DateObject) => onPick(date?.toString() || "")}
       plugins={[<ReactTimePicker hideSeconds mStep={5} />]}
       value={timeValue}
+      render={(value, onFocus, onChange) => (
+        <InputGroup size="sm" className={inputClass}>
+          <Button className="secondary-btn" onClick={onFocus}>
+            <BsClockFill className="light-text" />
+          </Button>
+          <Form.Control
+            type="text"
+            placeholder={placeholder}
+            size="sm"
+            onFocus={onFocus}
+            value={value || ""}
+            onChange={onChange}
+          />
+        </InputGroup>
+      )}
     />
   );
 };
