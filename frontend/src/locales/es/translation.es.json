@@ -365,12 +365,12 @@
       "title": "No se pudo obtener el viaje",
       "default": "Ocurrió un error al obtener el viaje"
     },
-    "recurrent_trip" :  " {{number}} viajes",
+    "recurrent_trip": " {{number}} viajes",
     "single_trip": "Viaje unico.",
     "price": "Precio: ",
-    "income" : "Total: ",
+    "income": "Total: ",
     "seats": "{{number}} asientos disponibles",
-    "report":{
+    "report": {
       "pre_link_text": "¿Has tenido algun problema?",
       "link_text": "Reportar"
     }
@@ -423,7 +423,8 @@
         "forbidden": "No tenés permisos para realizar esta operación",
         "conflict": "Ya existe un recurso con los datos ingresados",
         "bad_request": "El formulario contiene datos inválidos",
-        "internal_server_error": "Ocurrió un error al realizar la operación"
+        "internal_server_error": "Ocurrió un error al realizar la operación",
+        "not_found": "No se encontró el recurso solicitado"
       }
     }
   },
@@ -481,12 +482,12 @@
     "loading": "Cargando..."
   },
   "day_week": {
-    "0" : "Domingo",
-    "1" : "Lunes",
-    "2" : "Martes",
-    "3" : "Miercoles",
-    "4" : "Jueves",
-    "5" : "Viernes",
-    "6" : "Sabado"
+    "0": "Domingo",
+    "1": "Lunes",
+    "2": "Martes",
+    "3": "Miercoles",
+    "4": "Jueves",
+    "5": "Viernes",
+    "6": "Sabado"
   }
 }

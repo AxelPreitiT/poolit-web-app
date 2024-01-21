@@ -366,12 +366,12 @@
       "title": "Could not fetch the trip",
       "default": "An error occurred while fetching the trip"
     },
-    "recurrent_trip" :  " {{number}} trips",
+    "recurrent_trip": " {{number}} trips",
     "single_trip": "Single trip.",
     "price": "Price: ",
-    "income" : "Income: ",
+    "income": "Income: ",
     "seats": "{{number}} seats availables",
-    "report":{
+    "report": {
       "pre_link_text": "Did you have any problem?",
       "link_text": "Report"
     }
@@ -424,7 +424,8 @@
         "forbidden": "You do not have permission to perform this operation",
         "conflict": "There is already a resource with the same data",
         "bad_request": "The form contains invalid data",
-        "internal_server_error": "An error occurred while performing the operation"
+        "internal_server_error": "An error occurred while performing the operation",
+        "not_found": "The resource was not found"
       }
     }
   },
@@ -482,12 +483,12 @@
     "loading": "Loading..."
   },
   "day_week": {
-    "0" : "sunday",
-    "1" : "Monday",
-    "2" : "tuesday",
-    "3" : "wednesday",
-    "4" : "thursday",
-    "5" : "friday",
-    "6" : "saturday"
+    "0": "sunday",
+    "1": "Monday",
+    "2": "tuesday",
+    "3": "wednesday",
+    "4": "thursday",
+    "5": "friday",
+    "6": "saturday"
   }
 }
