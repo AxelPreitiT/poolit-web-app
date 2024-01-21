@@ -353,13 +353,27 @@
       "empty": "You still do not have interested passengers."
     },
     "btn": {
+      "accept": "Accept",
+      "reject": "Reject",
       "my_trips": "My trips",
-      "cancel": "Cancel trip"
+      "delete": "Delete",
+      "cancel": "Cancel trip",
+      "join": "Join",
+      "reviews": "Reviews"
     },
     "filter_by": "Filter by status: {{status}}",
     "error": {
       "title": "Could not fetch the trip",
       "default": "An error occurred while fetching the trip"
+    },
+    "recurrent_trip" :  " {{number}} trips",
+    "single_trip": "Single trip.",
+    "price": "Price: ",
+    "income" : "Income: ",
+    "seats": "{{number}} seats availables",
+    "report":{
+      "pre_link_text": "Did you have any problem?",
+      "link_text": "Report"
     }
   },
   "home": {
@@ -466,5 +480,14 @@
   },
   "spinner": {
     "loading": "Loading..."
+  },
+  "day_week": {
+    "0" : "sunday",
+    "1" : "Monday",
+    "2" : "tuesday",
+    "3" : "wednesday",
+    "4" : "thursday",
+    "5" : "friday",
+    "6" : "saturday"
   }
 }

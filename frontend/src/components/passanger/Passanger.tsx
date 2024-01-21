@@ -49,12 +49,12 @@ const PassangerComponent = (passanger: PassangerModel) => {
           <div className={styles.btn_container}>
             <Button className={styles.btn_delete}>
               <div className={styles.create_trip_btn}>
-                <span>{t("trip_detail.passangers.btn_accept")}</span>
+                <span>{t("trip_detail.btn.accept")}</span>
               </div>
             </Button>
             <Button className={styles.btn_accept}>
               <div className={styles.create_trip_btn}>
-                <span>{t("trip_detail.passangers.btn_delete")}</span>
+                <span>{t("trip_detail.btn.reject")}</span>
               </div>
             </Button>
           </div>

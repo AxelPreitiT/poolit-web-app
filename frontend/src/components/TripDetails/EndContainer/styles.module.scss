@@ -14,6 +14,11 @@
   border: none !important;
 }
 
+.btn_join {
+  background-color: colors.$secondary-color !important;
+  border: none !important;
+}
+
 .create_trip_btn {
   display: flex;
   align-items: center;
@@ -114,11 +119,20 @@
   color: colors.$italic-text-color;
 }
 
-
-
 .text_btn {
   display: flex;
   font-size: x-large;
 }
 
+.review_btn{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
+.report_link{
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+}

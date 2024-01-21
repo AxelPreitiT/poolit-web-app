@@ -8,24 +8,26 @@ interface LeftDetailsProps {
   trip : TripModel;
   isPassanger:boolean;
   isDriver:boolean;
+  status : string;
 }
 
-const LeftDetails = ({trip, isPassanger, isDriver}: LeftDetailsProps) => {
+const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) => {
   const { t } = useTranslation();
 
-  const status = "WAITING"
   return (
       <div className={styles.status_trip}>
         {isDriver ?
           (<div className={styles.info_container}>
-            <h3>Income:</h3>
+            <h3>{t("trip_detail.income")}</h3>
             <div className={styles.price_container}>
               <h3>PONER PRECIO CONDUC</h3>
-              <span style={{ color: "gray", fontStyle: "italic" }}>{trip.totalTrips} viajes</span>
+              {trip.totalTrips > 1 ?
+                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.recurrent_trip", {number: trip.totalTrips})}</span>) :
+                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.single_trip")}</span>)}
             </div>
           </div>) :
           (<div className={styles.info_container}>
-            <h3>Price:</h3>
+            <h3>{t("trip_detail.price")}</h3>
             <div className={styles.price_container}>
               <h3>
                 {t("format.price", {
@@ -33,7 +35,9 @@ const LeftDetails = ({trip, isPassanger, isDriver}: LeftDetailsProps) => {
                   princeFloat: 0,
                 })}
               </h3>
-              <span style={{ color: "gray", fontStyle: "italic" }}>{trip.totalTrips} viajes</span>
+              {trip.totalTrips > 1 ?
+                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.recurrent_trip", {number: trip.totalTrips})}</span>) :
+                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.single_trip")}</span>)}
             </div>
           </div>)}
           {isPassanger || isDriver &&

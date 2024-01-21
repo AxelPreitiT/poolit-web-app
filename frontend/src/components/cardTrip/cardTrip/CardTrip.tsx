@@ -12,6 +12,8 @@ import TripModel from "@/models/TripModel.ts";
 
 const CardTrip = ({ trip }: { trip: TripModel }) => {
   const { t } = useTranslation();
+  const date = new Date(trip.startDateTime)
+  const DayOfWeek = date.getDay()
 
   const [cityOrigin, setCityOrigin] = useState<string | null>(null);
   const [cityDestination, setCityDestination] = useState<string | null>(null);
@@ -69,7 +71,7 @@ const CardTrip = ({ trip }: { trip: TripModel }) => {
             <div className={styles.footer_details}>
               <i className="bi bi-calendar text"></i>
               {trip.totalTrips > 1 ? (
-                <span>PONER DIA</span>
+                <span>{t(`day_week.${DayOfWeek}`)}</span>
               ) : (
                 <span>{getFormattedDateTime(trip.startDateTime).date}</span>
               )}

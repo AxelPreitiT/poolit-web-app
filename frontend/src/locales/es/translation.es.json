@@ -352,13 +352,27 @@
       "empty": "Todavía no tienes pasajeros interesandos."
     },
     "btn": {
+      "accept": "Aceptar",
+      "reject": "Rechazar",
       "my_trips": "Mis viajes",
-      "cancel": "Cancelar viaje"
+      "delete": "Eliminar",
+      "cancel": "Cancelar viaje",
+      "join": "Join",
+      "reviews": "Reviews"
     },
     "filter_by": "Filtrados por estado: {{priceInt}}",
     "error": {
       "title": "No se pudo obtener el viaje",
       "default": "Ocurrió un error al obtener el viaje"
+    },
+    "recurrent_trip" :  " {{number}} viajes",
+    "single_trip": "Viaje unico.",
+    "price": "Precio: ",
+    "income" : "Total: ",
+    "seats": "{{number}} asientos disponibles",
+    "report":{
+      "pre_link_text": "¿Has tenido algun problema?",
+      "link_text": "Reportar"
     }
   },
   "home": {
@@ -465,5 +479,14 @@
   },
   "spinner": {
     "loading": "Cargando..."
+  },
+  "day_week": {
+    "0" : "Domingo",
+    "1" : "Lunes",
+    "2" : "Martes",
+    "3" : "Miercoles",
+    "4" : "Jueves",
+    "5" : "Viernes",
+    "6" : "Sabado"
   }
 }

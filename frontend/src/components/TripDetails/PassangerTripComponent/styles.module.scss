@@ -17,3 +17,17 @@
   background-color: colors.$primary-color !important;
 }
 
+.review_empty_container {
+  display: flex;
+  min-height: 70px;
+  padding: 1.5% 1% 1% 1%;
+  flex-direction: row;
+  align-items: center;
+  gap: 3%;
+  justify-content: center;
+}
+
+.review_empty_container i {
+  color: colors.$secondary-color !important;
+}
+

@@ -22,6 +22,7 @@ import getTripRole from "@/functions/GetTripRole.ts";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
+import Status from "@/enums/Status.ts";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -73,7 +74,7 @@ const TripDetailsPage = () => {
                 endCityUri={Trip.destinationCityUri}
               />
               <div className={styles.middle_content}>
-                <TripInfo trip={Trip} car={CarTrip} driver={DriverTrip} />
+                <TripInfo trip={Trip} car={CarTrip} driver={DriverTrip} isDriver={isDriver}/>
                 <div className={styles.img_container}>
                   <img
                       src={CarTrip?.imageUri}
@@ -84,8 +85,8 @@ const TripDetailsPage = () => {
               </div>
 
               <div className={styles.end_container}>
-                <LeftDetails trip={Trip} isPassanger={isPassanger} isDriver={isDriver}/>
-                <RightDetails isPassanger={isPassanger} isDriver={isDriver} status={"FINISHED"}/>
+                <LeftDetails trip={Trip} isPassanger={isPassanger} isDriver={isDriver} status={Status.FINISHED}/>
+                <RightDetails isPassanger={isPassanger} isDriver={isDriver} status={Status.FINISHED}/>
               </div>
             </div>)}
       </MainComponent>
