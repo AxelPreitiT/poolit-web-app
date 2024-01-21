@@ -22,8 +22,8 @@
       "wednesday": "Miércoles",
       "thursday": "Jueves",
       "friday": "Viernes",
-      "saturday": "Sábado",
-      "sunday": "Domingo"
+      "saturday": "Sábado{{plural}}",
+      "sunday": "Domingo{{plural}}"
     },
     "short": {
       "monday": "Lun",
