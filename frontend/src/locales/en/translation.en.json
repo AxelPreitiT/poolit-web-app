@@ -8,7 +8,8 @@
   },
   "poolit": {
     "name": "POOLIT",
-    "logo": "Poolit Logo"
+    "logo": "Poolit Logo",
+    "text": "Poolit"
   },
   "language": {
     "language_selector": "What language would you prefer to receive notifications in?",
@@ -359,6 +360,35 @@
     "error": {
       "title": "Could not fetch the trip",
       "default": "An error occurred while fetching the trip"
+    }
+  },
+  "home": {
+    "title": {
+      "travel_with": "Travel with",
+      "exclamation": "!"
+    },
+    "subtitle": {
+      "with": "With",
+      "description": "you can share your trips with other users who have the same destination, reducing transportation costs, traffic, and emissions of polluting gases. Plus, you can meet new people and make connections while you travel.",
+      "join": "Join the community and start traveling in a more smart and sustainable way."
+    },
+    "tutorial": {
+      "one": {
+        "title": "Find your trip in CABA",
+        "description": "You can search for trips that fit your needs. Simply enter your starting and ending points, date, and time, and we'll show you the available trips that fit your schedule. Plus, you can filter by price and even search if you need to do it every week",
+        "recurrent_trips": "Recurrent trips",
+        "alt": "Search trips"
+      },
+      "two": {
+        "title": "Book your trip",
+        "description": "Once you have decided on the best option, click on the 'Book' button. Once your reservation is confirmed, we'll send an email to both you and the driver with each other's contact information. This makes it easy to coordinate the details of your trip and ensures a smooth experience for both you and the driver.",
+        "alt": "Book trips"
+      },
+      "three": {
+        "title": "Drive and share",
+        "description": "Not only can you find trips, but you can also become a driver and share your own trips. You just need to add your car information and you can offer trips to others. Set your own schedule and route, and users can join your trip if it fits their travel needs. This way, you'll help reduce traffic and emissions while also saving money on gas and tolls.",
+        "alt": "Create trips"
+      }
     }
   },
   "query": {

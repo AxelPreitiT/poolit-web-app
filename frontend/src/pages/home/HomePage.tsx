@@ -6,8 +6,10 @@ import Tutorial from "./Tutorial";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser";
 import useRecommendedTrips from "@/hooks/trips/useRecommendedTrips";
 import RecommendedTripsList from "./RecommendedTripsList";
+import { useTranslation } from "react-i18next";
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const { isLoading: isLoadingAuth, isAuthenticated } = useAuthentication();
   const { isLoading: isLoadingCurrentUser, currentUser } = useCurrentUser({
     enabled: isAuthenticated,
@@ -16,7 +18,11 @@ const HomePage = () => {
     useRecommendedTrips(currentUser);
 
   // Todo: Create loading screen
-  if (isLoadingAuth || isLoadingCurrentUser || isLoadingRecommendedTrips) {
+  if (
+    isLoadingAuth ||
+    (isAuthenticated && isLoadingCurrentUser) ||
+    (currentUser && isLoadingRecommendedTrips)
+  ) {
     return <div>Loading...</div>;
   }
 
@@ -26,26 +32,22 @@ const HomePage = () => {
         <div className={styles.bannerContainer}>
           <div className={styles.textContainer}>
             <div className={styles.title}>
-              <p>¡Viaja con</p>
+              <p>{t("home.title.travel_with")}</p>
               <Image src={PoolitLogo} alt="Poolit" />
-              <p>!</p>
+              <p>{t("home.title.exclamation")}</p>
             </div>
             <div className={styles.subtitle}>
               <div className={styles.subtitleRow}>
                 <span>
-                  Con
-                  <span className="secondary-text mx-1">Poolit</span>
-                  podrás compartir tus viajes con otros usuarios que tengan el
-                  mismo destino, reduciendo los costos de transporte, el tráfico
-                  y la emisión de gases contaminantes. Además, podrás conocer a
-                  nuevas personas y hacer conexiones mientras viajas.
+                  {t("home.subtitle.with")}
+                  <span className="secondary-text mx-1">
+                    {t("poolit.text")}
+                  </span>
+                  {t("home.subtitle.description")}
                 </span>
               </div>
               <div className={styles.subtitleRow}>
-                <p>
-                  ¡Unite a la comunidad y comenzá a viajar de manera
-                  inteligente!
-                </p>
+                <p>{t("home.subtitle.join")}</p>
               </div>
             </div>
           </div>
