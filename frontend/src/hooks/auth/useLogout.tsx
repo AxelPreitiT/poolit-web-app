@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router";
-import useAuthentication from "./useAuthentication";
 import { loginPath } from "@/AppRouter";
 import useSuccessToast from "../toasts/useSuccessToast";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
+import { useQueryClient } from "@tanstack/react-query";
 
 const useLogout = () => {
-  const { invalidateAuthentication } = useAuthentication();
+  const queryClient = useQueryClient();
   const showSuccessToast = useSuccessToast();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -19,8 +19,8 @@ const useLogout = () => {
       timeout: defaultToastTimeout,
       message: t("logout.message"),
     });
-    await invalidateAuthentication();
     navigate(loginPath, { replace: true });
+    await queryClient.removeQueries();
   };
 
   return logout;
