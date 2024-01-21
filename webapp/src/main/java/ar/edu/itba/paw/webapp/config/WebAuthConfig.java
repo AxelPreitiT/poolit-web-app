@@ -64,6 +64,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UnauthorizedRequestHandler unauthorizedRequestHandler;
 
+    @Autowired
+    private ForbiddenRequestHandler forbiddenRequestHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -141,7 +144,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(UrlHolder.BASE+"/**")
                     .permitAll()
                 .and().exceptionHandling()
-                    .accessDeniedHandler(new ForbiddenRequestHandler())
+                    .accessDeniedHandler(forbiddenRequestHandler)
                     .authenticationEntryPoint(unauthorizedRequestHandler)
                 .and().authorizeRequests()
 //                    .antMatchers("/api/users/{id}").authenticated()
