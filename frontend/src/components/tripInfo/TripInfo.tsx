@@ -11,9 +11,10 @@ interface TripInfoProps {
     trip: TripModel;
     car: CarModel;
     driver: UserPublicModel;
+    isDriver: boolean;
 }
 
-const TripInfo = ({trip, car, driver} : TripInfoProps) => {
+const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
     const availableSeats = parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10);
     const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
@@ -66,18 +67,20 @@ const TripInfo = ({trip, car, driver} : TripInfoProps) => {
           <StarRating rating={0} color={"#ffffff"} size="10" />
         </div>
       </div>
+      {isDriver &&
       <div className={styles.show_row}>
         <i className="bi bi-envelope-fill light-text"></i>
         <div className={styles.info_details}>
           <span className="light-text detail">PONER EMAIL</span>
         </div>
-      </div>
+      </div>}
+      {isDriver &&
       <div className={styles.show_row}>
         <i className="bi bi-telephone-fill light-text"></i>
         <div className={styles.info_details}>
           <span className="light-text detail">PONER CELU</span>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

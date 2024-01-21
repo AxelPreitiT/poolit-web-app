@@ -74,7 +74,7 @@ const TripDetailsPage = () => {
                 endCityUri={Trip.destinationCityUri}
               />
               <div className={styles.middle_content}>
-                <TripInfo trip={Trip} car={CarTrip} driver={DriverTrip} />
+                <TripInfo trip={Trip} car={CarTrip} driver={DriverTrip} isDriver={isDriver}/>
                 <div className={styles.img_container}>
                   <img
                       src={CarTrip?.imageUri}
