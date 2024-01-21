@@ -6,8 +6,10 @@ class CityService extends Service {
   public static getCityById = async (uri: string): Promise<CityModel> =>
     await this.resolveQuery(CitiesApi.getCityById(uri));
 
-  public static getAllCities = async (): Promise<CityModel[]> =>
-    await this.resolveQuery(CitiesApi.getAllCities());
+  public static getAllCities = async (
+    uriTemplate: string
+  ): Promise<CityModel[]> =>
+    await this.resolveQuery(CitiesApi.getAllCities(uriTemplate));
 }
 
 export default CityService;

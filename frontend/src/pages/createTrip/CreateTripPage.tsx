@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import styles from "./styles.module.scss";
 import CreateTripForm from "./CreateTripForm";
-import useGetAllCities from "@/hooks/cities/useGetAllCities";
-import useGetUserCars from "@/hooks/cars/useGetUserCars";
+import useAllCities from "@/hooks/cities/useAllCities";
+import useUserCars from "@/hooks/cars/useUserCars";
 
 const CreateTripPage = () => {
   const { t } = useTranslation();
-  const { isLoading: isLoadingCities, cities } = useGetAllCities();
-  const { isLoading: isLoadingUserCars, cars } = useGetUserCars();
+  const { isLoading: isLoadingCities, cities } = useAllCities();
+  const { isLoading: isLoadingUserCars, cars } = useUserCars();
 
   // Todo: Loading spinner
   if (isLoadingCities || isLoadingUserCars) {

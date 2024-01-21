@@ -451,6 +451,18 @@
     "brand": "Marca: {{brand}}",
     "license_plate": "Patente: {{license_plate}}"
   },
+  "car_features": {
+    "error": {
+      "title": "No se pudo obtener las características del auto",
+      "default": "Ocurrió un error al obtener las características del auto"
+    }
+  },
+  "discovery": {
+    "error": {
+      "title": "No se pudo comunicar con el servidor",
+      "default": "Ocurrió un error al obtener los endpoints del servidor"
+    }
+  },
   "spinner": {
     "loading": "Cargando..."
   }

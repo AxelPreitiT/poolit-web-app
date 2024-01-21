@@ -452,6 +452,18 @@
     "brand": "Brand: {{brand}}",
     "license_plate": "License plate: {{license_plate}}"
   },
+  "car_features": {
+    "error": {
+      "title": "Could not fetch the car features",
+      "default": "An error occurred while fetching the car features"
+    }
+  },
+  "discovery": {
+    "error": {
+      "title": "Could not communicate with the server",
+      "default": "An error occurred while fetching the API's discovery"
+    }
+  },
   "spinner": {
     "loading": "Loading..."
   }

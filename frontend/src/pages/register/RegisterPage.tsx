@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { loginPath } from "@/AppRouter";
 import RedirectHomeLogo from "@/components/links/RedirectHomeLogo/RedirectHomeLogo";
 import RegisterForm from "./RegisterForm";
-import useGetAllCities from "@/hooks/cities/useGetAllCities";
+import useAllCities from "@/hooks/cities/useAllCities";
 
 const RegisterPage = () => {
-  const { isLoading, data: cities, isError } = useGetAllCities();
+  const { isLoading, data: cities, isError } = useAllCities();
   const { t } = useTranslation();
 
   // Todo: Create loading component

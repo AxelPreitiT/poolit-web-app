@@ -4,17 +4,26 @@ import { useEffect } from "react";
 import useQueryError from "../errors/useQueryError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import { useTranslation } from "react-i18next";
+import useDiscovery from "../discovery/useDiscovery";
 
-const useGetAllCities = () => {
+const useAllCities = () => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
+  const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
 
   const query = useQuery({
     queryKey: ["cities"],
-    queryFn: CityService.getAllCities,
+    queryFn: async () => {
+      if (!discovery?.citiesUriTemplate) {
+        return [];
+      }
+      return await CityService.getAllCities(discovery.citiesUriTemplate);
+    },
+    retry: false,
+    enabled: !isLoadingDiscovery && !!discovery?.citiesUriTemplate,
   });
 
-  const { isError, error, data } = query;
+  const { isError, error, data, isLoading, isPending } = query;
 
   useEffect(() => {
     if (isError) {
@@ -28,8 +37,9 @@ const useGetAllCities = () => {
 
   return {
     ...query,
+    isLoading: isLoading || isPending,
     cities: data,
   };
 };
 
-export default useGetAllCities;
+export default useAllCities;

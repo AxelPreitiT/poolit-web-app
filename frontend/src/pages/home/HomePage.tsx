@@ -7,6 +7,9 @@ import { useCurrentUser } from "@/hooks/users/useCurrentUser";
 import useRecommendedTrips from "@/hooks/trips/useRecommendedTrips";
 import RecommendedTripsList from "./RecommendedTripsList";
 import { useTranslation } from "react-i18next";
+import TripsSearch from "@/components/search/TripsSearch";
+import useAllCities from "@/hooks/cities/useAllCities";
+import useCarFeatures from "@/hooks/cars/useCarFeatures";
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -16,12 +19,16 @@ const HomePage = () => {
   });
   const { isLoading: isLoadingRecommendedTrips, recommendedTrips } =
     useRecommendedTrips(currentUser);
+  const { isLoading: isLoadingCities, cities } = useAllCities();
+  const { isLoading: isLoadingCarFeatures, carFeatures } = useCarFeatures();
 
   // Todo: Create loading screen
   if (
     isLoadingAuth ||
     (isAuthenticated && isLoadingCurrentUser) ||
-    (currentUser && isLoadingRecommendedTrips)
+    (currentUser && isLoadingRecommendedTrips) ||
+    isLoadingCities ||
+    isLoadingCarFeatures
   ) {
     return <div>Loading...</div>;
   }
@@ -47,11 +54,13 @@ const HomePage = () => {
                 </span>
               </div>
               <div className={styles.subtitleRow}>
-                <p>{t("home.subtitle.join")}</p>
+                <span>{t("home.subtitle.join")}</span>
               </div>
             </div>
           </div>
-          <div className={styles.searchContainer}></div>
+          <div className={styles.searchContainer}>
+            <TripsSearch cities={cities} carFeatures={carFeatures} />
+          </div>
         </div>
       </div>
       {recommendedTrips && recommendedTrips.length > 0 ? (

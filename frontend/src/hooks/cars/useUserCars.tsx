@@ -6,7 +6,7 @@ import useQueryError from "../errors/useQueryError";
 import { useEffect } from "react";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 
-const useGetUserCars = () => {
+const useUserCars = () => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
   const {
@@ -46,4 +46,4 @@ const useGetUserCars = () => {
   };
 };
 
-export default useGetUserCars;
+export default useUserCars;
