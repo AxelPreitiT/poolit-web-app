@@ -8,12 +8,12 @@ interface LeftDetailsProps {
   trip : TripModel;
   isPassanger:boolean;
   isDriver:boolean;
+  status : string;
 }
 
-const LeftDetails = ({trip, isPassanger, isDriver}: LeftDetailsProps) => {
+const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) => {
   const { t } = useTranslation();
 
-  const status = "WAITING"
   return (
       <div className={styles.status_trip}>
         {isDriver ?
