@@ -1,9 +1,7 @@
 import PaginationList from "@/components/paginationList/paginationList";
 import CardTripScheduled from "@/components/cardTrip/cardTripScheduled/cardTripScheduled";
-import { useEffect, useState } from "react";
-import tripsService from "@/services/TripsService.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner";
-import TripModel from "@/models/TripModel.ts";
+import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 
 export interface ListTripsScheduledProps {
   uri: string;
@@ -14,23 +12,18 @@ const ListTripsScheduled = ({
   uri,
   empty_component,
 }: ListTripsScheduledProps) => {
-  const [Trips, setTrips] = useState<TripModel[] | null>(null);
 
-  useEffect(() => {
-    tripsService.getTripsByUri(uri).then((response) => {
-      setTrips(response);
-    });
-  });
+  const { isLoading: isLoadingTrips, trips } = useTripsByUri(uri);
 
   return (
     <div>
-      {Trips == null ? (
+      {trips == undefined || isLoadingTrips ? (
         <SpinnerComponent />
       ) : (
         <PaginationList
           pagination_component={<h3>Poner paginación</h3>}
           empty_component={empty_component}
-          data={Trips}
+          data={trips}
           component_name={CardTripScheduled}
         />
       )}
