@@ -2,16 +2,14 @@ import ListProfileContainer from "@/components/profile/list/ListProfileContainer
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
 import { createdTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import CardCar from "@/components/cardCar/CardCar";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import UserPrivateModel from "@/models/UserPrivateModel";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
+import useUserCars from "@/hooks/cars/useUserCars.tsx";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
@@ -23,24 +21,15 @@ export interface DriverListProp {
 const DriverList = ({
   futureCreatedTripsUri,
   pastCreatedTripsUri,
-  reviewsDriverUri,
-    currentUser
+  reviewsDriverUri
 }: DriverListProp) => {
   const { t } = useTranslation();
 
   const { isLoading: isLoadingFutureCreatedTrips, trips:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
   const { isLoading: isLoadingPastCreatedTrips, trips:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
   const { isLoading: isLoadingReviewsDriver, reviews:reviewsDriver } = useUserReviewsByUri(reviewsDriverUri);
+  const { isLoading: isLoadingUserCars, cars } = useUserCars();
 
-
-  const [Cars, setCars] = useState<CarModel[] | null>(null);
-
-
-  useEffect(() => {
-    CarService.getCarsByUser(currentUser).then((response) => {
-      setCars(response);
-    });
-  });
 
   return (
     <div>
@@ -83,7 +72,7 @@ const DriverList = ({
           link={createdTripsPath}
         />
       )}
-      {Cars == null ? (
+      {cars == undefined || isLoadingUserCars ? (
         <SpinnerComponent />
       ) : (
         <ListProfileContainer
@@ -91,7 +80,7 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.cars_create")}
           empty_text={t("profile.lists.cars_empty")}
           empty_icon={"car-front-fill"}
-          data={Cars}
+          data={cars}
           component_name={CardCar}
           link={createdTripsPath}
         />
