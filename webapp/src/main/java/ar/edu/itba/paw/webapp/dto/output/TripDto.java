@@ -28,10 +28,12 @@ public class TripDto {
     private LocalDateTime queryStartDateTime;
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
+    private long tripId;
 
 
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
         final TripDto ans = new TripDto();
+        ans.tripId = trip.getTripId();
         ans.originAddress = trip.getOriginAddress();
         ans.destinationAddress = trip.getDestinationAddress();
         ans.maxSeats = trip.getMaxSeats();
@@ -186,5 +188,13 @@ public class TripDto {
 
     public void setOccupiedSeats(int occupiedSeats) {
         this.occupiedSeats = occupiedSeats;
+    }
+
+    public long getTripId() {
+        return tripId;
+    }
+
+    public void setTripId(long tripId) {
+        this.tripId = tripId;
     }
 }

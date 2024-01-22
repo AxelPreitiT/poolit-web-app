@@ -65,6 +65,7 @@ public class CarServiceImplTest {
 //        Assert.assertEquals(FEATURES, newCar.getFeatures());
 //    }
 
+
     @Test(expected = UserNotFoundException.class)
     public void TestNotUserCreateCar() throws UserNotFoundException {
         when(userService.getCurrentUser()).thenReturn(Optional.empty());

@@ -16,5 +16,6 @@ public class UnconditionalCacheFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         response.setHeader("Cache-Control",String.format("public, max-age=%d, inmutable",MAX_TIME));
+        filterChain.doFilter(request,response);
     }
 }

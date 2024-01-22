@@ -18,13 +18,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Path(UrlHolder.CITY_BASE)
 public class CityController {
+
+    private final static long DEFAULT_PROVINCE_ID = 1;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CityController.class);
 
@@ -37,6 +42,15 @@ public class CityController {
     @Autowired
     public CityController(final CityService cityService){
         this.cityService = cityService;
+    }
+
+    @GET
+    @Path("/")
+    @Produces(VndType.APPLICATION_CITY)
+    public Response getAllCities(){
+        LOGGER.debug("GET request for all cities");
+        final List<CityDto> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID).stream().map(city -> CityDto.fromCity(uriInfo,city)).collect(Collectors.toList());
+        return Response.ok(new GenericEntity<List<CityDto>>(cities){}).build();
     }
 
     @GET

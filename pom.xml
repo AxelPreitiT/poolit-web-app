@@ -37,13 +37,12 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
-      <frontend.project.name>poolit_nextjs</frontend.project.name>
-      <frontend.maven.plugin.version>1.12.1</frontend.maven.plugin.version>
+      <frontend.maven.plugin.version>1.14.0</frontend.maven.plugin.version>
       <node.version>v18.14.0</node.version>
       <npm.version>9.3.1</npm.version>
-      <frontend.working.directory>${frontend.project.name}</frontend.working.directory>
-      <maven.war.plugin.version>3.2.2</maven.war.plugin.version>
-      <frontend.build.directory>../frontend/${frontend.project.name}/out</frontend.build.directory>
+      <frontend.working.directory>.</frontend.working.directory>
+      <maven.war.plugin.version>3.4.0</maven.war.plugin.version>
+      <frontend.build.directory>../frontend/dist</frontend.build.directory>
       <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
       <jersey.version>3.0-SNAPSHOT</jersey.version>
       <jwt.version>4.4.0</jwt.version>

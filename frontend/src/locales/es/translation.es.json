@@ -1,0 +1,526 @@
+{
+  "format": {
+    "price": "$ {{priceInt}}.{{princeFloat}}",
+    "plate": "Patente:{{carPlate}}",
+    "name": "{{name}} {{surname}}",
+    "date": "( {{date}} )"
+  },
+  "poolit": {
+    "name": "POOLIT",
+    "logo": "Poolit Logo",
+    "text": "Poolit"
+  },
+  "language": {
+    "language_selector": "¿En qué idioma preferís recibir las notificaciones?",
+    "spanish": "Español",
+    "english": "Inglés"
+  },
+  "day": {
+    "full": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado{{plural}}",
+      "sunday": "Domingo{{plural}}"
+    },
+    "short": {
+      "monday": "Lun",
+      "tuesday": "Mar",
+      "wednesday": "Mié",
+      "thursday": "Jue",
+      "friday": "Vie",
+      "saturday": "Sáb",
+      "sunday": "Dom"
+    }
+  },
+  "month": {
+    "full": {
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    },
+    "short": {
+      "january": "Ene",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Abr",
+      "may": "May",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Ago",
+      "september": "Sep",
+      "october": "Oct",
+      "november": "Nov",
+      "december": "Dic"
+    }
+  },
+  "navbar": {
+    "created": "Creados",
+    "reserved": "Reservados",
+    "log_out": "Cerrar sesión",
+    "log_in": "Iniciar sesión",
+    "register": "Registrarse",
+    "create": "Crear viaje"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "remember": "Mantener la sesión iniciada",
+    "login": "Ingresar",
+    "success": {
+      "title": "¡Listo para viajar!",
+      "message": "¡Iniciaste sesión correctamente!"
+    },
+    "error": {
+      "title": "Inicio de sesión fallido",
+      "default": "Ocurrió un error al iniciar sesión",
+      "unauthorized": "El correo electrónico o la contraseña son inválidos",
+      "account_not_verified": "No verificate tu cuenta, por favor revisá tu casilla de correo electrónico"
+    }
+  },
+  "logout": {
+    "title": "Estacionado",
+    "message": "Cerraste sesión"
+  },
+  "register": {
+    "title": "Registro",
+    "banner": "Banner de registro",
+    "profile_image": "Imagen de perfil",
+    "personal_info": "Información personal",
+    "name": "Nombre",
+    "last_name": "Apellido",
+    "email": "Correo electrónico",
+    "telephone": "Teléfono",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar contraseña",
+    "residence_city": "Barrio de residencia",
+    "preferences": "Preferencias",
+    "register": "Registrarse",
+    "already_registered": "¿Ya tenés una cuenta?",
+    "not_registered": "¿No tenés una cuenta aún?",
+    "error": {
+      "title": "Registro fallido",
+      "default": "Ocurrió un error al registrarse",
+      "email_already_exists": "El correo electrónico ya está registrado"
+    },
+    "success": {
+      "title": "¡Bienvenido a Poolit!",
+      "message": "¡Ya estás registrado! Te enviamos un correo electrónico para que verifiques tu cuenta"
+    }
+  },
+  "verify_account": {
+    "title": "Verificar cuenta",
+    "success": {
+      "title": "¡Listo para viajar!",
+      "message": "¡Verificaste tu cuenta correctamente!"
+    },
+    "error": {
+      "title": "Verificación fallida",
+      "default": "Ocurrió un error al verificar tu cuenta",
+      "invalid_token": "El token de verificación es inválido, expiró o ya fue utilizado",
+      "email_missing": "El link de verificación no contiene el correo electrónico, por favor comprobá que el link sea el enviado a tu casilla de correo electrónico",
+      "token_missing": "El link de verificación no contiene el token, por favor comprobá que el link sea el enviado a tu casilla de correo electrónico"
+    }
+  },
+  "error": {
+    "email": {
+      "required": "El correo electrónico es requerido",
+      "invalid": "El correo electrónico es inválido",
+      "max": "El correo electrónico debe tener como máximo {{max}} caracteres"
+    },
+    "password": {
+      "required": "La contraseña es requerida",
+      "min": "La contraseña debe tener al menos {{min}} caracteres",
+      "max": "La contraseña debe tener como máximo {{max}} caracteres"
+    },
+    "name": {
+      "required": "El nombre es requerido",
+      "min": "El nombre debe tener al menos {{min}} caracteres",
+      "max": "El nombre debe tener como máximo {{max}} caracteres"
+    },
+    "last_name": {
+      "required": "El apellido es requerido",
+      "min": "El apellido debe tener al menos {{min}} caracteres",
+      "max": "El apellido debe tener como máximo {{max}} caracteres"
+    },
+    "telephone": {
+      "required": "El teléfono es requerido",
+      "invalid": "El teléfono es inválido, debe tener el formato {{format}}"
+    },
+    "city": {
+      "required": "Debe seleccionar un barrio",
+      "min": "Debe seleccionar un barrio"
+    },
+    "confirm_password": {
+      "invalid": "Las contraseñas no coinciden"
+    },
+    "image": {
+      "max": "La imagen no puede pesar más de {{max}} MB"
+    },
+    "origin_city": {
+      "required": "Debe seleccionar un barrio de origen",
+      "min": "Debe seleccionar un barrio de origen"
+    },
+    "origin_address": {
+      "required": "La dirección de origen es requerida",
+      "min": "La dirección de origen debe tener al menos {{min}} caracteres",
+      "max": "La dirección de origen debe tener como máximo {{max}} caracteres"
+    },
+    "date": {
+      "required": "La fecha es requerida",
+      "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
+      "min": "La fecha no puede ser anterior a {{- min}}",
+      "before_now": "La fecha y la hora deben ser posteriores a las actuales"
+    },
+    "time": {
+      "required": "La hora es requerida",
+      "invalid": "La hora tiene un formato inválido, debe ser {{format}}"
+    },
+    "last_date": {
+      "invalid": "La fecha tiene un formato inválido, debe ser dd/mm/aaaa",
+      "min": "La fecha no puede ser anterior a {{- min}}",
+      "required": "La fecha final es obligatoria si se trata de un viaje recurrente",
+      "before_initial": "La fecha final debe ser posterior a la fecha inicial",
+      "different_day": "La fecha inicial y final deben ser el mismo día de la semana"
+    },
+    "destination_city": {
+      "required": "Debe seleccionar un barrio de destino",
+      "min": "Debe seleccionar un barrio de destino"
+    },
+    "destination_address": {
+      "required": "La dirección de destino es requerida",
+      "min": "La dirección de destino debe tener al menos {{min}} caracteres",
+      "max": "La dirección de destino debe tener como máximo {{max}} caracteres"
+    },
+    "car": {
+      "required": "Debe seleccionar un auto",
+      "min": "Debe seleccionar un auto"
+    },
+    "seats": {
+      "required": "La cantidad de asientos es requerida",
+      "invalid": "La cantidad de asientos debe ser un número",
+      "min": "La cantidad de asientos debe ser al menos {{min}}"
+    },
+    "price": {
+      "required": "El precio es requerido",
+      "invalid": "El precio debe ser un número",
+      "min": "El precio debe ser al menos {{min}}"
+    },
+    "min_price": {
+      "invalid": "El precio mínimo debe ser un número",
+      "min": "El precio mínimo debe ser al menos {{min}}"
+    },
+    "max_price": {
+      "invalid": "El precio máximo debe ser un número",
+      "min": "El precio máximo debe ser al menos {{min}}",
+      "lower_than_min": "El precio máximo debe ser mayor o igual al precio mínimo"
+    }
+  },
+  "profile": {
+    "title": "Perfil",
+    "props": {
+      "email": "Email",
+      "phone": "Teléfono",
+      "neighborhood": "Barrio de residencia",
+      "language": "Idioma",
+      "trips": "Viajes creados",
+      "rating_driver": "Valoración como conductor",
+      "rating_passenger": "Valoración como pasajero",
+      "es": "Español",
+      "en": "Ingles"
+    },
+    "lists": {
+      "review_as_driver": "Opiniones como conductor",
+      "review_as_passanger": "Opiniones como pasajero",
+      "review_empty": "No tiene opiniones",
+      "review_more": "Mostrar mas opiniones",
+      "created_next_title": "Creados - Próximos viajes",
+      "created_next_more": "Ver todos los proximos viajes",
+      "created_next_empty": "No tienes proximos viajes",
+      "created_prev_title": "Creados - viajes realizados",
+      "created_prev_more": "Ver todos los viajes realizados",
+      "created_prev_empty": "No tienes viajes realizados",
+      "reserved_next_title": "Reservados - Próximos",
+      "reserved_next_more": "Ver todos los proximos viajes",
+      "reserved_next_empty": "No tienes proximos viajes",
+      "reserved_prev_title": "Reservados - Historial",
+      "reserved_prev_more": "Ver todos los viajes realizados",
+      "reserved_prev_empty": "No tienes viajes realizados",
+      "cars": "Mis autos",
+      "cars_create": "Crear nuevo auto",
+      "cars_empty": "No tienes autos creados"
+    },
+    "error": {
+      "title": "No se pudo obtener tu perfil",
+      "default": "Ocurrió un error al obtener tu perfil"
+    }
+  },
+  "roles": {
+    "driver": "Conductor",
+    "passenger": "Pasajero"
+  },
+  "reviews": {
+    "title": "opiniones",
+    "NOT_FRIENDLY": "No amigable",
+    "DANGEROUS_DRIVER": "Conductor peligroso",
+    "UNPUNCTUAL": "Impuntual",
+    "DISTRACTED_DRIVER": "Conductor distraído",
+    "NOT_RESPECTED_TRAFFIC_RULES": "No respeta las reglas de tránsito",
+    "UNCOMFORTABLE_EXPERIENCE": "Experiencia incómoda",
+    "NOT_GOOD_TREATMENT": "Mal trato",
+    "IMPRUDENT_DRIVER": "Conductor imprudente",
+    "RESPECTED_TRAFFIC_RULES": "Respeta las reglas de tránsito",
+    "ACCEPTABLE_DRIVER": "Conductor aceptable",
+    "ACCEPTABLE_EXPERIENCE": "Experiencia aceptable",
+    "FRIENDLY": "Amigable",
+    "PUNCTUAL": "Puntual",
+    "VERY_FRIENDLY": "Muy amigable",
+    "SAFE_DRIVER": "Conductor seguro",
+    "GOOD_EXPERIENCE": "Buena experiencia",
+    "PROFESSIONAL_DRIVER": "Conductor profesional",
+    "EXCELLENT_EXPERIENCE": "Excelente experiencia"
+  },
+  "created_trips": {
+    "title": "Viajes creados",
+    "future": "Próximos",
+    "past": "Historial",
+    "empty": "Parece que no tenés viajes creados",
+    "more": "Hacé click en el botón 'Crear viaje' para crear tu primer viaje"
+  },
+  "reserved_trips": {
+    "title": "Viajes reservados",
+    "future": "Próximos",
+    "past": "Historial",
+    "empty": "Parece que no tenés viajes reservados",
+    "more": "Hacé click en el botón 'Buscar' para encontrar tu primer viaje"
+  },
+  "create_trip": {
+    "title": "Crear viaje",
+    "origin": "Origen",
+    "district": "Barrio",
+    "address": "Dirección",
+    "date": "Fecha",
+    "time": "Horario",
+    "recurrent_trip": "Viaje recurrente",
+    "every": "Todos los",
+    "until": "Hasta el",
+    "last_date": "Última fecha",
+    "destination": "Destino",
+    "details": "Detalles",
+    "select_car": "Seleccione un auto",
+    "number_of_seats": "Cantidad de asientos",
+    "price_per_trip": "Precio por viaje",
+    "create": "Crear viaje",
+    "success": {
+      "title": "¡Viaje creado!",
+      "message": "¡Tu viaje fue creado correctamente!"
+    },
+    "error": {
+      "title": "Inicio de sesión fallido",
+      "default": "Ocurrió un error al crear el viaje"
+    }
+  },
+  "search_trips": {
+    "unique_trip": "Viaje único",
+    "recurrent_trip": "Viaje recurrente",
+    "route": "Ruta",
+    "origin": "Origen",
+    "destination": "Destino",
+    "district": "Barrio",
+    "date": "Fecha",
+    "time": "Horario",
+    "every": "Todos los",
+    "until": "Hasta el",
+    "last_date": "Última fecha",
+    "price_per_trip": "Precio (por viaje)",
+    "minimum": "Mínimo",
+    "maximum": "Máximo",
+    "car_features": "Características del auto",
+    "search": "Buscar",
+    "error": {
+      "title": "Could not search for trips",
+      "default": "An error occurred while fetching the trips"
+    }
+  },
+  "recommended_trips": {
+    "title": "Viajes recomendados",
+    "error": {
+      "title": "No se pudo obtener los viajes recomendados",
+      "default": "Ocurrió un error al obtener los viajes recomendados"
+    }
+  },
+  "admin": {
+    "title": "Administrador"
+  },
+  "trip_detail": {
+    "title": "Viaje",
+    "header": "Detalle de viaje",
+    "status": {
+      "cancelled": "Cancelado",
+      "accepted": "Aceptado",
+      "waiting": "Esperando",
+      "finished": "completado",
+      "not_started": "No comenzado",
+      "in_progress": "En progreso"
+    },
+    "passengers": {
+      "header": "Pasajeros",
+      "btn_accept": "Aceptar",
+      "btn_delete": "Rechazar",
+      "reservation_started": "La reserva ya ha empezado.",
+      "empty": "Todavía no tienes pasajeros interesandos."
+    },
+    "btn": {
+      "accept": "Aceptar",
+      "reject": "Rechazar",
+      "my_trips": "Mis viajes",
+      "delete": "Eliminar",
+      "cancel": "Cancelar viaje",
+      "join": "Join",
+      "reviews": "Reviews"
+    },
+    "filter_by": "Filtrados por estado: {{priceInt}}",
+    "error": {
+      "title": "No se pudo obtener el viaje",
+      "default": "Ocurrió un error al obtener el viaje"
+    },
+    "recurrent_trip": " {{number}} viajes",
+    "single_trip": "Viaje unico.",
+    "price": "Precio: ",
+    "income": "Total: ",
+    "seats": "{{number}} asientos disponibles",
+    "report": {
+      "pre_link_text": "¿Has tenido algun problema?",
+      "link_text": "Reportar"
+    }
+  },
+  "home": {
+    "title": {
+      "travel_with": "¡Viajá con",
+      "exclamation": "!"
+    },
+    "subtitle": {
+      "with": "Con",
+      "description": "podrás compartir tus viajes con otros usuarios que tengan el mismo destino, reduciendo los costos de transporte, el tráfico y la emisión de gases contaminantes. Además, podrás conocer a nuevas personas y hacer conexiones mientras viajas.",
+      "join": "¡Unite a la comunidad y comenzá a viajar de manera inteligente y sustentable!"
+    },
+    "tutorial": {
+      "one": {
+        "title": "Encontrá tu viaje en CABA",
+        "description": "Podrás buscar viajes que se ajusten a tus necesidades. Simplemente, ingresá tus puntos de partida y llegada, la fecha y la hora, y te mostraremos los viajes disponibles que se ajusten a tu horario. Además, podrás filtrar por precio e incluso, si lo necesitás realizar todas las semanas, podrás buscar",
+        "recurrent_trips": "viajes recurrentes",
+        "alt": "Buscar viajes"
+      },
+      "two": {
+        "title": "Reservá tu viaje",
+        "description": "Cuando tengas decidido la mejor opción, hacé click en el botón 'Reservar'. Una vez que se confirme tu reserva, enviaremos un correo electrónico tanto a ti como al conductor con la información de contacto del otro. Esto hace que sea fácil coordinar los detalles de tu viaje y garantiza una experiencia fluida tanto para ti como para el conductor.",
+        "alt": "Reservar viajes"
+      },
+      "three": {
+        "title": "Manejá y compartí",
+        "description": "No solo podrás encontrar viajes, sino que también podrás convertirte en conductor y compartir tus propios viajes. Solo necesitarás agregar la información de tu auto y ya podrás ofrecer viajes a otros. Establecé tu propio horario y ruta, y los usuarios podrán unirse a tu viaje si se ajusta a sus necesidades de viaje. De esta manera, estarás ayudando a reducir el tráfico y las emisiones, al mismo tiempo que ahorrarás dinero en gasolina y peajes.",
+        "alt": "Crear viajes"
+      }
+    }
+  },
+  "query": {
+    "request": {
+      "error": {
+        "unknown": "Ocurrió un error al realizar la operación",
+        "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
+        "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión",
+        "current_user_uri_missing": "La sesión expiró, por favor volvé a iniciar sesión",
+        "discovery_missing": "No se pudo comunicar con el servidor, por favor volvé a intentarlo más tarde"
+      }
+    },
+    "response": {
+      "success": {
+        "default": "¡La operación se realizó correctamente!"
+      },
+      "error": {
+        "unknown": "Ocurrió un error al realizar la operación",
+        "unauthorized": "La sesión expiró, por favor volvé a iniciar sesión",
+        "forbidden": "No tenés permisos para realizar esta operación",
+        "conflict": "Ya existe un recurso con los datos ingresados",
+        "bad_request": "El formulario contiene datos inválidos",
+        "internal_server_error": "Ocurrió un error al realizar la operación",
+        "not_found": "No se encontró el recurso solicitado"
+      }
+    }
+  },
+  "route": {
+    "error": {
+      "already_authenticated": "Ya iniciaste sesión",
+      "not_authenticated": "Tenés que iniciar sesión para acceder a esta página"
+    }
+  },
+  "toast": {
+    "error": {
+      "title": "Ocurrió un error",
+      "message": "La operación no pudo ser completada"
+    },
+    "success": {
+      "title": "¡Éxito!",
+      "message": "La operación se realizó correctamente"
+    },
+    "warning": {
+      "title": "¡Atención!",
+      "message": "Esta operación no se debería realizar"
+    }
+  },
+  "bad_request": {
+    "title": "Listado de errores",
+    "label": "Ver el listado de errores",
+    "general": "Errores generales"
+  },
+  "city": {
+    "error": {
+      "title": "Ocurrió un error al obtener los barrios"
+    }
+  },
+  "car": {
+    "error": {
+      "yours": "Ocurrió un error al obtener tus autos",
+      "image": "Ocurrió un error al obtener la imagen del auto"
+    },
+    "image": "Imagen del auto {{car_info}}",
+    "brand": "Marca: {{brand}}",
+    "license_plate": "Patente: {{license_plate}}"
+  },
+  "car_features": {
+    "error": {
+      "title": "No se pudo obtener las características del auto",
+      "default": "Ocurrió un error al obtener las características del auto"
+    }
+  },
+  "discovery": {
+    "error": {
+      "title": "No se pudo comunicar con el servidor",
+      "default": "Ocurrió un error al obtener los endpoints del servidor"
+    }
+  },
+  "spinner": {
+    "loading": "Cargando..."
+  },
+  "day_week": {
+    "0": "Domingo",
+    "1": "Lunes",
+    "2": "Martes",
+    "3": "Miercoles",
+    "4": "Jueves",
+    "5": "Viernes",
+    "6": "Sabado"
+  }
+}

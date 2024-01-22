@@ -1,0 +1,320 @@
+@use "@/colors.module.scss" as colors;
+
+.mainContainer {
+  width: 100%;
+}
+
+.banner {
+  background-image: linear-gradient(
+      rgba(28, 76, 150, 0.4),
+      rgba(213, 227, 247, 0.2)
+    ),
+    url("@/images/home-banner.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: fit-content;
+  width: 100%;
+  transform: scaleX(-1);
+}
+
+.bannerContainer {
+  transform: scaleX(-1);
+  color: colors.$light-text-color;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 2rem 2rem 3rem 2rem;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4rem;
+  width: 30%;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.title > * {
+  font-size: 4rem;
+}
+
+.title p {
+  text-wrap: nowrap;
+  font-weight: 600;
+}
+
+.title img {
+  height: 3.5rem;
+  object-fit: contain;
+  object-position: center;
+  margin-left: 1rem;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle .subtitleRow {
+  display: flex;
+  flex-direction: column;
+  column-gap: 0.5rem;
+  align-items: center;
+}
+
+.searchContainer {
+  width: 30%;
+}
+
+@media (max-width: 1900px) {
+  .textContainer {
+    width: 45%;
+  }
+}
+
+@media (max-width: 1400px) {
+  .searchContainer {
+    width: 40%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .title > * {
+    font-size: 3rem;
+  }
+
+  .title img {
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .bannerContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .title > * {
+    font-size: 4rem;
+  }
+
+  .title img {
+    height: 3.5rem;
+  }
+
+  .textContainer {
+    width: 80%;
+    row-gap: 2rem;
+    align-items: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+  .subtitleRow {
+    align-items: center;
+  }
+
+  .searchContainer {
+    width: 60%;
+  }
+}
+
+@media (max-width: 800px) {
+  .title > * {
+    font-size: 3rem;
+  }
+
+  .title img {
+    height: 2.5rem;
+  }
+
+  .textContainer {
+    width: 100%;
+    row-gap: 2rem;
+    align-items: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .searchContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .title > * {
+    font-size: 2.5rem;
+  }
+
+  .title img {
+    height: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+%contentContainer {
+  background-color: colors.$container-color;
+  margin: 2rem 5rem 2rem 5rem;
+  padding: 1rem 2rem 2rem 2rem;
+  border-radius: 12px;
+}
+
+// ----------------- TUTORIAL -----------------
+
+.tutorialContainer {
+  @extend %contentContainer;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.tutorialRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tutorialRow .tutorialText {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+}
+
+.tutorialRow .tutorialText .tutorialTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: colors.$secondary-color;
+}
+
+.tutorialRow .tutorialText .tutorialDescription {
+  font-size: 1rem;
+  font-weight: 400;
+  color: colors.$text-color;
+}
+
+.tutorialRow .tutorialImage {
+  width: 20%;
+}
+
+.tutorialRow .tutorialImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 8px;
+  border: 1px solid colors.$secondary-color;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 1400px) {
+  .tutorialRow .tutorialText {
+    width: 85%;
+  }
+
+  .tutorialRow .tutorialImage {
+    width: 15%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .tutorialRow .tutorialText {
+    width: 75%;
+  }
+
+  .tutorialRow .tutorialImage {
+    width: 25%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .tutorialContainer {
+    margin: 2rem 2rem 2rem 2rem;
+  }
+
+  .tutorialRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tutorialRow .tutorialText {
+    width: 100%;
+  }
+
+  .tutorialRow .tutorialImage {
+    width: 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .tutorialRow .tutorialImage {
+    width: 100%;
+  }
+}
+
+// ----------------- RECOMMENDED TRIPS -----------------
+
+.recommendedTripsListContainer {
+  @extend %contentContainer;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
+.recommendedTripsListContainer .recommendedTripsList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.recommendedTripsListContainer .recommendedTripsList > * {
+  width: 33%;
+}
+
+@media (max-width: 1900px) {
+  .recommendedTripsListContainer .recommendedTripsList > * {
+    width: 50%;
+  }
+}
+
+@media (max-width: 1300px) {
+  .recommendedTripsListContainer .recommendedTripsList > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 800px) {
+  .recommendedTripsListContainer {
+    margin: 1rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .recommendedTripsListContainer {
+    margin: 0;
+    padding: 0.5rem;
+    padding-top: 1rem;
+    border-radius: 0;
+  }
+}

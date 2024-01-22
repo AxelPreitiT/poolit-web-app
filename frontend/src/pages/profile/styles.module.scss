@@ -1,0 +1,42 @@
+@use "@/colors.module.scss" as colors;
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  height: 100vh;
+}
+
+.profileCard {
+  padding: 1em 1.5em;
+  height: fit-content;
+  width: 30%;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+}
+
+.main_container {
+  display: flex;
+  margin: 3% 2% 3% 2%;
+  max-width: none;
+  gap: 2%;
+}
+
+.list_block {
+  flex-grow: 2;
+}
+
+@media (min-width: 1400px) {
+  .mainContainer {
+    row-gap: 3rem;
+  }
+}
+

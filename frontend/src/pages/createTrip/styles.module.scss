@@ -1,0 +1,157 @@
+@use "@/colors.module.scss" as colors;
+@use "@/globals.scss" as globals;
+
+.mainContainer {
+  background-color: colors.$container-color;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+  padding: 1rem 2rem 2rem 2rem;
+  margin: 2rem 20% 0 20%;
+}
+
+.containerHeader {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  width: 100%;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  width: 100%;
+}
+
+.formHeader {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
+  margin-left: 3rem;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2rem;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.formRow:has(.recurrentLabel) {
+  align-items: flex-start;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  row-gap: 0.2rem;
+}
+
+.formItem button {
+  box-shadow: none;
+}
+
+.formItemError {
+  color: colors.$danger-color;
+}
+
+.recurrentCheckbox,
+.recurrentLabel {
+  @extend .formItem;
+}
+
+.recurrentCheckbox {
+  background-color: colors.$secondary-color;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 0.5rem;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+}
+
+.recurrentLabel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 0.3rem;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.recurrentLabel > svg {
+  margin-right: 0.5rem;
+}
+
+.verticalDottedLine {
+  border-left: 3px dashed colors.$secondary-color;
+  height: 10rem;
+  margin: -140px 0 -10px 14px;
+  width: min-content;
+}
+
+.verticalDottedLineExtended {
+  @extend .verticalDottedLine;
+  margin: -175px 0 -10px 14px;
+}
+
+.carInfoContainer {
+  background-color: colors.$primary-color;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.carInfoItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 0.25rem;
+}
+
+.formRow:has(.carImage) {
+  align-items: stretch;
+}
+
+.formItem:has(.carImage) {
+  flex: 1;
+  position: relative;
+}
+
+.carImage {
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  position: absolute;
+}
+
+.submitContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}

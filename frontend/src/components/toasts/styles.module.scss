@@ -1,0 +1,53 @@
+@use "@/colors.module.scss" as colors;
+
+.error-toast {
+  background-color: colors.$danger-color !important;
+}
+
+.success-toast {
+  background-color: colors.$success-color !important;
+}
+
+.warning-toast {
+  background-color: colors.$warning-color !important;
+}
+
+%toastHeader {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+%toastHeader > div {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5rem;
+  align-items: center;
+  overflow: hidden;
+}
+
+.error-header {
+  background-color: colors.$danger-color !important;
+  @extend %toastHeader;
+}
+
+.success-header {
+  background-color: colors.$success-color !important;
+  @extend %toastHeader;
+}
+
+.warning-header {
+  background-color: colors.$warning-color !important;
+  @extend %toastHeader;
+}
+
+.body {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.body > * {
+  font-size: 0.8rem;
+}

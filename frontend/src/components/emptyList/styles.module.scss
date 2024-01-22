@@ -1,0 +1,21 @@
+@use "@/colors.module.scss" as colors;
+
+.empty_list_cointainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.empty_list_cointainer i {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.empty_list_cointainer i {
+  color: colors.$secondary-color;
+}

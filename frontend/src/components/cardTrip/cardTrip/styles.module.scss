@@ -1,0 +1,98 @@
+@use "@/colors.module.scss" as colors;
+
+.card_container {
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0);
+  opacity: 1;
+  transition:
+    opacity 0.3s,
+    box-shadow 0.3s;
+  border: 2px solid #ffa216;
+  border-radius: 12px;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.left_container {
+  display: flex;
+  width: 45%;
+}
+
+.right_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 55%;
+  padding: 2% 2% 1% 2%;
+}
+
+.img_container {
+  width: -webkit-fill-available;
+  z-index: 0;
+}
+
+.footer_description {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.address_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.footer_description h3 {
+  color: colors.$secondary-color;
+}
+
+.address_container h4 {
+  color: colors.$secondary-color;
+}
+
+.route_info_row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  column-gap: 1em;
+}
+
+.route_info_text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.vertical_dotted_line {
+  border-left: 3px dashed #ffa216;
+  height: 2em;
+  margin: -15px 0 5px 10px;
+}
+
+.route_info_row h6 {
+  font-size: small;
+}
+
+.route_info_row i {
+  color: colors.$secondary-color;
+}
+
+.link_container {
+  width: 100%;
+  height: 100%;
+  color: black;
+}
+
+.footer_details {
+  display: flex;
+  gap: 10px;
+}

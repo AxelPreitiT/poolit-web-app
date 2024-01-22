@@ -40,9 +40,9 @@ public class BasicAuthFilter extends OncePerRequestFilter {
 
     public static final String JWT_HEADER = "JWT-authorization";
 
-    private static final String JWT_REFRESH_HEADER = "JWT-refresh-authorization";
+    public static final String JWT_REFRESH_HEADER = "JWT-refresh-authorization";
 
-    private static final String VERIFICATION_HEADER = "Account-verification";
+    public static final String VERIFICATION_HEADER = "Account-verification";
 
     private final AuthenticationEntryPoint authenticationEntryPoint;
 

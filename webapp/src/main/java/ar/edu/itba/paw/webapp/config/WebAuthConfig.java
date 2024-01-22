@@ -181,17 +181,17 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
 
-        final List<String> allowedOrigins = environment.getProperty("CORS_ALLOWED_ORIGINS") != null ?
-                Arrays.asList(environment.getProperty("CORS_ALLOWED_ORIGINS").split(",")) :
-                Collections.emptyList();
+//        final List<String> allowedOrigins = environment.getProperty("CORS_ALLOWED_ORIGINS") != null ?
+//                Arrays.asList(environment.getProperty("CORS_ALLOWED_ORIGINS").split(",")) :
+//                Collections.emptyList();
 
-
-        configuration.setAllowedOrigins(allowedOrigins);
+        configuration.setAllowedOrigins(Collections.singletonList(CorsConfiguration.ALL));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+//        configuration.setAllowCredentials(true);
+        configuration.addAllowedHeader(CorsConfiguration.ALL);
+//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         // TODO: Update to JWT token headers
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Authorization-Refresh"));
+        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER, "Location"));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -1,0 +1,121 @@
+/* navbarStyles.css */
+
+.nav-container {
+  background-color: #1c4c96; /* Assuming cyanDark is a variable or valid color value */
+  color: white;
+  display: flex;
+  align-items: left;
+  height: 70px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.nav-title {
+  font-family: "Righteous", cursive;
+  font-size: 38px;
+  margin: 0 0 0 14px;
+}
+
+.nav-sections-container {
+  display: flex;
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  margin: 0 2%;
+  justify-content: space-between;
+}
+
+.nav-section-item {
+  color: black !important;
+  list-style-type: none;
+  font-size: 16px;
+  min-width: fit-content;
+}
+
+.nav-section-item a {
+  color: white !important;
+  opacity: 0.5;
+}
+
+.nav-section-item.active a {
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.nav-section-item:hover a {
+  color: white !important;
+  opacity: 0.95 !important;
+  transition: opacity 0.3s;
+}
+
+.left-container {
+  display: flex;
+  align-items: center;
+  gap: 10%;
+}
+
+.img-container {
+  max-height: 50px;
+}
+
+.img-container:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.img-profile-container:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  gap: 4%;
+}
+
+.create-trip-btn {
+  display: flex;
+  align-items: center;
+  background-color: #ffa216 !important;
+  max-height: 40px !important;
+  min-width: max-content !important;
+  border-radius: 12px !important;
+  margin-right: 50px;
+  column-gap: 5px;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  background-color: #ffa216 !important;
+  max-height: 40px !important;
+  min-width: max-content !important;
+  border-radius: 12px !important;
+  column-gap: 5px;
+}
+
+.create-trip-btn:hover {
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-menu {
+  margin-top: 20%;
+  border: 1px white solid;
+}
+
+.dropdown-item {
+  width: fit-content;
+  padding: 0 10px;
+  color: white !important;
+}
+
+.dropdown-item:hover {
+  background-color: #1c4c96;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}

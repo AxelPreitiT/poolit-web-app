@@ -1,0 +1,21 @@
+@use "@/colors.module.scss" as colors;
+
+.car_card {
+  width: fit-content;
+  height: 220px;
+  margin: 2% 2% 2% 2%;
+  /*object-fit: cover;*/
+}
+
+.img_car {
+  width: 100%;
+  object-fit: cover;
+  height: 80%;
+  max-height: fit-content;
+  border: 1px solid black;
+  border-radius: 20px;
+}
+
+.model_car {
+  color: #6c757d;
+}

@@ -1,0 +1,16 @@
+@use "@/colors.module.scss" as colors;
+
+.clicker {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5rem;
+  align-items: baseline;
+  color: colors.$light-text-color;
+  text-decoration: underline !important;
+}
+
+.modal {
+  background-color: colors.$danger-color;
+  color: colors.$light-text-color;
+}

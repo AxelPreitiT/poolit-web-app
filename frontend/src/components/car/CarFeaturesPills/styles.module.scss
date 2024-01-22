@@ -1,0 +1,45 @@
+@use "@/colors.module.scss" as colors;
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+%pill {
+  box-shadow:
+    0 0 0 2px rgb(255 255 255),
+    0 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0.5rem;
+  color: colors.$light-text-color;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  opacity: 1;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease;
+  // Prevent highlight
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+%pill:hover {
+  opacity: 0.8;
+}
+
+.pill {
+  @extend %pill;
+}
+
+.activePill {
+  @extend %pill;
+  background-color: colors.$secondary-color;
+  border-color: colors.$secondary-color;
+}

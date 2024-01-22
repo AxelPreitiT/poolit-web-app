@@ -22,10 +22,12 @@ public class CarDto {
     private List<URI> featuresUri;
     private URI selfUri;
     private URI imageUri;
+    private long carId;
 
     public CarDto(){}
 
     protected CarDto(final UriInfo uriInfo, final Car car){
+        this.carId = car.getCarId();
         this.infoCar = car.getInfoCar();
         this.brandUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BRAND_BASE).path(car.getBrand().name()).build();
         this.plate = car.getPlate();
@@ -93,5 +95,13 @@ public class CarDto {
 
     public void setFeaturesUri(List<URI> featuresUri) {
         this.featuresUri = featuresUri;
+    }
+
+    public long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(long carId) {
+        this.carId = carId;
     }
 }
