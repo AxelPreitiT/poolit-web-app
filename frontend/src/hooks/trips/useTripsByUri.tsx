@@ -28,9 +28,9 @@ const useTripsByUri = (tripsUri: string) => {
 
     useEffect(() => {
         if (isError) {
-            const title = t("trip_detail.error.title");
+            const title = t("created_trips.error.title");
             const customMessages = {
-                [UnknownResponseError.ERROR_ID]: "trip_detail.error.default",
+                [UnknownResponseError.ERROR_ID]: "created_trips.error.default",
             };
             onQueryError({
                 error: error,

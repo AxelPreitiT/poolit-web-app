@@ -298,7 +298,11 @@
     "future": "Upcoming",
     "past": "History",
     "empty": "You don't have any created trips yet",
-    "more": "Click on the 'Create trip' button to create your first trip"
+    "more": "Click on the 'Create trip' button to create your first trip",
+    "error": {
+      "title": "Could not fetch the trips",
+      "default": "An error occurred while fetching the trips"
+    }
   },
   "reserved_trips": {
     "title": "Reserved trips",

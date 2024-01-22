@@ -297,7 +297,11 @@
     "future": "Próximos",
     "past": "Historial",
     "empty": "Parece que no tenés viajes creados",
-    "more": "Hacé click en el botón 'Crear viaje' para crear tu primer viaje"
+    "more": "Hacé click en el botón 'Crear viaje' para crear tu primer viaje",
+    "error": {
+      "title": "No se pudieron obtener los viajes",
+      "default": "Ocurrió un error al obtener los viajes"
+    }
   },
   "reserved_trips": {
     "title": "Viajes reservados",
