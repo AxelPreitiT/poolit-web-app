@@ -8,24 +8,14 @@ import PassengerList from "@/components/profile/ProfileLists/PassangerList";
 import TabComponent from "@/components/tab/TabComponent";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UserPrivateModel from "@/models/UserPrivateModel.ts";
-import CityService from "@/services/CityService.ts";
-import { useEffect, useState } from "react";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import useGetCityById from "@/hooks/cities/useGetCityById.tsx";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
 
   const { isLoading, currentUser } = useCurrentUser();
-  const [cityUser, setCityUser] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (isLoading || currentUser === undefined) return;
-    CityService.getCityById(currentUser.cityUri).then((response) => {
-      // Extraer el cuerpo de la respuesta Axios
-      // Luego, llamar a setProfileInfo con el resultado
-      setCityUser(response.name);
-    });
-  });
+  const {isLoading: isLoadingCity, city} = useGetCityById(currentUser?.cityUri);
 
   const ProfileInfo = ({ currentUser }: { currentUser: UserPrivateModel }) => (
     <div className={styles.profileCard}>
@@ -38,13 +28,13 @@ const ProfilePage = () => {
       </h3>
       <ProfileProp prop={t("profile.props.email")} text={currentUser.email} />
       <ProfileProp prop={t("profile.props.phone")} text={currentUser.phone} />
-      {cityUser === null ? (
+      {city === undefined || isLoadingCity ? (
         <ProfileProp
           prop={t("profile.props.neighborhood")}
           text={t("spinner.loading")}
         />
       ) : (
-        <ProfileProp prop={t("profile.props.neighborhood")} text={cityUser} />
+        <ProfileProp prop={t("profile.props.neighborhood")} text={city.name} />
       )}
       <ProfileProp
         prop={t("profile.props.language")}
