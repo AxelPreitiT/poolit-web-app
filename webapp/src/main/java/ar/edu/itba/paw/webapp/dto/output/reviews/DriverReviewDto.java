@@ -26,8 +26,8 @@ public class DriverReviewDto {
         ans.option = driverReview.getOption();
         ans.reviewDateTime = driverReview.getDate();
         ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(driverReview.getTrip().getTripId())).build();
-        ans.reviewedUserUri = uriInfo.getBaseUriBuilder().path(String.valueOf(UrlHolder.USER_BASE)).path(String.valueOf(driverReview.getReviewId())).build();
-        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).build();
+        ans.reviewedUserUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(driverReview.getReviewed().getUserId())).build();
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).path(String.valueOf(driverReview.getReviewId())).build();
         return ans;
     }
 

@@ -65,7 +65,7 @@ public class ReportController {
     @GET
     @Path("{id}")
     @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
-    @PreAuthorize("hasRole('ADMIN')")//TODO: intentar hacer en WebAuthConfig
+    @PreAuthorize("hasRole('ADMIN')")
     public Response getByIdPrivate(@PathParam("id") final long id){
         LOGGER.debug("GET request for private report with id {}",id);
         final Report ans = reportService.findById(id).orElseThrow(ResourceNotFoundException::new);
@@ -74,7 +74,7 @@ public class ReportController {
 
     @GET
     @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
-    //TODO: admin only
+    @PreAuthorize("hasRole('ADMIN')")
     public Response getReportsForAdmin(@Valid @BeanParam final PagedQuery query){
         LOGGER.debug("GET request for private reports");
         final PagedContent<Report> ans = reportService.getReports(query.getPage(),query.getPageSize());
@@ -91,7 +91,6 @@ public class ReportController {
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PublicReportDto::fromReport,PrivateReportDto.class);
     }
 
-    //TODO: preguntar por content type asi con distintos campos
     @PATCH
     @Consumes(value = VndType.APPLICATION_REPORT_DECISION)
     @Path("{id}")

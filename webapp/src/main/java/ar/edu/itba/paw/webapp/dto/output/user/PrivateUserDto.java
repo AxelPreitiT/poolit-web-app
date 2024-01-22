@@ -32,6 +32,7 @@ public class PrivateUserDto extends PublicUserDto{
     private URI pastReservedTripsUri;
 
     private URI futureReservedTripsUri;
+
     private URI carsUri;
 
     public PrivateUserDto(){}
@@ -43,13 +44,13 @@ public class PrivateUserDto extends PublicUserDto{
         this.cityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(user.getBornCity().getId())).build();
         this.mailLocale = user.getMailLocale().getLanguage();
         this.role = user.getRole();
+        this.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).queryParam("fromUser",user.getUserId()).build();
         //We use recommendedFor and not pass the filters here to maintain the recommendation logic in the service
         this.recommendedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("recommendedFor",user.getUserId()).build();
         this.pastCreatedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("createdBy",user.getUserId()).queryParam("past",true).build();
         this.futureCreatedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("createdBy",user.getUserId()).queryParam("past",false).build();
         this.pastReservedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("reservedBy",user.getUserId()).queryParam("past",true).build();
         this.futureReservedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("reservedBy",user.getUserId()).queryParam("past",false).build();
-        this.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).queryParam("fromUser",user.getUserId()).build();
     }
     public static PrivateUserDto fromUser(final UriInfo uriInfo, final User user){
         return new PrivateUserDto(uriInfo,user);
@@ -134,11 +135,9 @@ public class PrivateUserDto extends PublicUserDto{
         this.futureReservedTripsUri = futureReservedTripsUri;
     }
 
-    public URI getCarsUri() {
-        return carsUri;
-    }
+    public URI getCarsUri() { return carsUri; }
 
-    public void setCarsUri(URI carsUri) {
-        this.carsUri = carsUri;
-    }
+    public void setCarsUri(URI carsUri) { this.carsUri = carsUri; }
+
+
 }

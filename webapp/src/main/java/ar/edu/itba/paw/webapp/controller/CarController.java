@@ -55,7 +55,6 @@ public class CarController {
     }
 
 
-    //TODO: revisar si se quiere paginado
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#userId)")
     @Produces(value = VndType.APPLICATION_CAR)

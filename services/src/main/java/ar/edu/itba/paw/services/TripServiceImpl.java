@@ -211,7 +211,7 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
-    public Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
+    public Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException, NotAvailableSeatsException {
         final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         final LocalDateTime startDateTime = startDate.atTime(startTime);
@@ -221,15 +221,15 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);
             throw e;
         }
-        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
+        Passenger passenger = new Passenger(user,trip,startDateTime,endDateTime);
         List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
         if(passengers.contains(passenger)){
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
             throw e;
         }
         if(tripDao.getTripSeatCount(trip.getTripId(),startDateTime,endDateTime)>=trip.getMaxSeats()){
-            IllegalStateException e = new IllegalStateException();
+            NotAvailableSeatsException e = new NotAvailableSeatsException();
             LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
             throw e;
         }

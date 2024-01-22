@@ -110,7 +110,6 @@ public class UserController {
 
     @PUT
     @Path("/{id}/image")
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateUserImage(@PathParam("id") final long id,
                                     @ImageType @FormDataParam("image") final FormDataBodyPart type,

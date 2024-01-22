@@ -27,7 +27,7 @@ public class PassengerReviewDto {
         ans.option = passengerReview.getOption();
         ans.reviewDateTime = passengerReview.getDate();
         ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passengerReview.getTrip().getTripId())).build();
-        ans.reviewedUserUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(passengerReview.getReviewId())).build();
+        ans.reviewedUserUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(passengerReview.getReviewed().getUserId())).build();
         ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path(String.valueOf(passengerReview.getReviewId())).build();
         return ans;
     }
