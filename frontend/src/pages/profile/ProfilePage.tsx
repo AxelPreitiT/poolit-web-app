@@ -42,7 +42,7 @@ const ProfilePage = () => {
       />
       <ProfileProp
         prop={t("profile.props.trips")}
-        text="PONER CANTIDAD DE VIAJES"
+        text={currentUser.tripCount.toString()}
       />
       <ProfileStars
         prop={t("profile.props.rating_driver")}
