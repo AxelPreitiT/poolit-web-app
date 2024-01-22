@@ -2,43 +2,34 @@ import ListProfileContainer from "@/components/profile/list/ListProfileContainer
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
 import { reservedTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
-import reviewsService from "@/services/ReviewsService.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
+import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 
 
 export interface PassengerListProp {
   futureReservedTripsUri: string;
   pastReservedTripsUri: string;
-  selfUri : string;
+  reviewsPassengerUri : string;
 }
 
 const PassengerList = ({
   futureReservedTripsUri,
   pastReservedTripsUri,
-   selfUri
+  reviewsPassengerUri
 }: PassengerListProp) => {
   const { t } = useTranslation();
 
-  const [Reviews, setReviews] = useState<ReviewModel[] | null>(null);
-
   const { isLoading: isLoadingFutureReservedTrips, trips:futureReservedTrips } = useTripsByUri(futureReservedTripsUri);
   const { isLoading: isLoadingPastReservedTrips, trips:pastReservedTrips } = useTripsByUri(pastReservedTripsUri);
-
-
-  useEffect(() => {
-    reviewsService.getReviewsAsPassangerByUserId(selfUri).then((response) => {
-      setReviews(response);
-    });
-  });
+  const { isLoading: isLoadingReviewsPassenger, reviews:reviewsPassenger } = useUserReviewsByUri(reviewsPassengerUri);
 
 
   return (
     <div>
-      {Reviews == null ? (
+      {reviewsPassenger == undefined || isLoadingReviewsPassenger ? (
           <SpinnerComponent />
       ) : (
       <ListProfileContainer
@@ -46,7 +37,7 @@ const PassengerList = ({
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
-        data={Reviews}
+        data={reviewsPassenger}
         component_name={ShortReview}
         link={publicsReviewsPath.replace(":id", String(5))}
       />)}

@@ -6,40 +6,35 @@ import { useEffect, useState } from "react";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import CardCar from "@/components/cardCar/CardCar";
-import reviewsService from "@/services/ReviewsService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import UserPrivateModel from "@/models/UserPrivateModel";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
+import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
   pastCreatedTripsUri: string;
+  reviewsDriverUri : string;
   currentUser: UserPrivateModel;
 }
 
 const DriverList = ({
   futureCreatedTripsUri,
   pastCreatedTripsUri,
-  currentUser,
+  reviewsDriverUri,
+    currentUser
 }: DriverListProp) => {
   const { t } = useTranslation();
 
   const { isLoading: isLoadingFutureCreatedTrips, trips:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
   const { isLoading: isLoadingPastCreatedTrips, trips:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
+  const { isLoading: isLoadingReviewsDriver, reviews:reviewsDriver } = useUserReviewsByUri(reviewsDriverUri);
 
 
-  const [Reviews, setReviews] = useState<ReviewModel[] | null>(null);
   const [Cars, setCars] = useState<CarModel[] | null>(null);
 
-  useEffect(() => {
-    reviewsService
-      .getReviewsAsDriverByUserId(currentUser.selfUri)
-      .then((response) => {
-        setReviews(response);
-      });
-  });
 
   useEffect(() => {
     CarService.getCarsByUser(currentUser).then((response) => {
@@ -49,7 +44,7 @@ const DriverList = ({
 
   return (
     <div>
-      {Reviews == null ? (
+      {reviewsDriver == undefined || isLoadingReviewsDriver ? (
         <SpinnerComponent />
       ) : (
         <ListProfileContainer
@@ -57,7 +52,7 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.review_more")}
           empty_text={t("profile.lists.review_empty")}
           empty_icon={"book"}
-          data={Reviews}
+          data={reviewsDriver}
           component_name={ShortReview}
           link={publicsReviewsPath.replace(":id", String(5))}
         />

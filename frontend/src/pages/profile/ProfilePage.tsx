@@ -80,7 +80,7 @@ const ProfilePage = () => {
               <PassengerList
                 futureReservedTripsUri={currentUser.futureReservedTripsUri}
                 pastReservedTripsUri={currentUser.pastReservedTripsUri}
-                selfUri={currentUser.selfUri}
+                reviewsPassengerUri={currentUser.selfUri}
               />
             }
             left_title={t("roles.driver")}
@@ -89,6 +89,7 @@ const ProfilePage = () => {
                 futureCreatedTripsUri={currentUser.futureCreatedTripsUri}
                 pastCreatedTripsUri={currentUser.pastCreatedTripsUri}
                 currentUser={currentUser}
+                reviewsDriverUri={currentUser.reviewsDriverUri}
               />
             }
           />
