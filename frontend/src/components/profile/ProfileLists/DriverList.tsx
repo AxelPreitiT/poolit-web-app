@@ -3,7 +3,6 @@ import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfi
 import { createdTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import tripsService from "@/services/TripsService.ts";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import CardCar from "@/components/cardCar/CardCar";
@@ -11,8 +10,8 @@ import reviewsService from "@/services/ReviewsService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
-import TripModel from "@/models/TripModel.ts";
 import UserPrivateModel from "@/models/UserPrivateModel";
+import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
@@ -27,26 +26,12 @@ const DriverList = ({
 }: DriverListProp) => {
   const { t } = useTranslation();
 
-  const [FutureCreatedTrips, setFutureCreatedTrips] = useState<
-    TripModel[] | null
-  >(null);
-  const [PastCreatedTrips, setPastCreatedTrips] = useState<TripModel[] | null>(
-    null
-  );
+  const { isLoading: isLoadingFutureCreatedTrips, trips:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
+  const { isLoading: isLoadingPastCreatedTrips, trips:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
+
+
   const [Reviews, setReviews] = useState<ReviewModel[] | null>(null);
   const [Cars, setCars] = useState<CarModel[] | null>(null);
-
-  useEffect(() => {
-    tripsService.getTripsByUser(futureCreatedTripsUri).then((response) => {
-      setFutureCreatedTrips(response);
-    });
-  });
-
-  useEffect(() => {
-    tripsService.getTripsByUser(pastCreatedTripsUri).then((response) => {
-      setPastCreatedTrips(response);
-    });
-  });
 
   useEffect(() => {
     reviewsService
@@ -77,7 +62,7 @@ const DriverList = ({
           link={publicsReviewsPath.replace(":id", String(5))}
         />
       )}
-      {FutureCreatedTrips == null ? (
+      {futureCreatedTrips == undefined ||  isLoadingFutureCreatedTrips? (
         <SpinnerComponent />
       ) : (
         <ListProfileContainer
@@ -85,12 +70,12 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.created_next_more")}
           empty_text={t("profile.lists.created_next_empty")}
           empty_icon={"car-front-fill"}
-          data={FutureCreatedTrips}
+          data={futureCreatedTrips}
           component_name={CardTripProfile}
           link={createdTripsPath}
         />
       )}
-      {PastCreatedTrips == null ? (
+      {pastCreatedTrips == undefined ||  isLoadingPastCreatedTrips? (
         <SpinnerComponent />
       ) : (
         <ListProfileContainer
@@ -98,7 +83,7 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.created_prev_more")}
           empty_text={t("profile.lists.created_prev_empty")}
           empty_icon={"car-front-fill"}
-          data={PastCreatedTrips}
+          data={pastCreatedTrips}
           component_name={CardTripProfile}
           link={createdTripsPath}
         />

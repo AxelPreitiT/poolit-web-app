@@ -76,7 +76,6 @@ const ProfilePage = () => {
         ) : (
           <TabComponent
             right_title={t("roles.passenger")}
-            //right_component={<PassengerList futureReservedTrips={currentUser.futureReservedTripsUri} pastReservedTrips={currentUser.pastReservedTripsUri}/>}
             right_component={
               <PassengerList
                 futureReservedTripsUri={currentUser.futureReservedTripsUri}
@@ -85,7 +84,6 @@ const ProfilePage = () => {
               />
             }
             left_title={t("roles.driver")}
-            //left_component={<DriverList futureCreatedTrips={currentUser.futureCreatedTripsUri} pastCreatedTrips={currentUser.pastCreatedTripsUri}/>}
             left_component={
               <DriverList
                 futureCreatedTripsUri={currentUser.futureCreatedTripsUri}
