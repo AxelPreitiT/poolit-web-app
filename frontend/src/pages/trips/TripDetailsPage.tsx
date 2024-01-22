@@ -23,6 +23,8 @@ import PassangersTripComponent from "@/components/TripDetails/PassangerTripCompo
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
 import Status from "@/enums/Status.ts";
+import { parseTemplate } from 'url-template';
+
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -54,6 +56,11 @@ const TripDetailsPage = () => {
     }
   });
 
+  const emailUrlTemplate = parseTemplate("http://localhost:8080/paw-2023a-07/api/trips/6/passengers{/userId}");
+  const emailUrl = emailUrlTemplate.expand({
+    userId: '2',
+  });
+
   const {isPassanger, isDriver} = isLoading || currentUser == null  || DriverTrip == null || PassangersTrip == null ? {isPassanger:false, isDriver:false} : getTripRole(currentUser, DriverTrip, PassangersTrip);
 
   return (
@@ -67,6 +74,7 @@ const TripDetailsPage = () => {
         {Trip == undefined || CarTrip === null || DriverTrip === null ?
           (<SpinnerComponent /> ) :
           (<div>
+              <h1>{emailUrl}</h1>
               <Location
                 startAddress={Trip.originAddress}
                 startCityUri={Trip.originCityUri}
