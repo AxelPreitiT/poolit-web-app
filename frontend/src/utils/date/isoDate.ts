@@ -1,2 +1,2 @@
 export const getIsoDate = (date: Date): string =>
-  date.toISOString().split("T")[0];
+  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
