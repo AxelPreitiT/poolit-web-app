@@ -119,25 +119,25 @@ public class UserServiceImpl implements UserService {
         imageService.updateImage(content,user.getUserImageId());
     }
 
-    @Transactional
-    @Override
-    public boolean isDriver(User user){
-        return user.getIsDriver();
-    }
+//    @Transactional
+//    @Override
+//    public boolean isDriver(User user){
+//        return user.getIsDriver();
+//    }
 
-    @Transactional
-    @Override
-    public boolean isUser(User user){
-        return user.getIsUser();
-    }
+//    @Transactional
+//    @Override
+//    public boolean isUser(User user){
+//        return user.getIsUser();
+//    }
 
-    @Transactional
-    @Override
-    public void loginUser(final String email, final String password){
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
-        Authentication auth = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
+//    @Transactional
+//    @Override
+//    public void loginUser(final String email, final String password){
+//        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
+//        Authentication auth = authenticationManager.authenticate(authRequest);
+//        SecurityContextHolder.getContext().setAuthentication(auth);
+//    }
 
     @Transactional
     @Override
@@ -163,12 +163,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Transactional
-    @Override
-    public void changeToDriver() throws UserNotFoundException {
-        User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
-    }
+//    @Transactional
+//    @Override
+//    public void changeToDriver() throws UserNotFoundException {
+//        User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
+//    }
 
     @Transactional
     @Override
@@ -184,36 +184,36 @@ public class UserServiceImpl implements UserService {
         userDao.changeRole(user.getUserId(), role);
     }
 
-    @Transactional
-    @Override
-    public void blockUser( long blockedId) throws UserNotFoundException{
-        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.blockUser(blocker.getUserId(),blockedId);
-    }
+//    @Transactional
+//    @Override
+//    public void blockUser( long blockedId) throws UserNotFoundException{
+//        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        userDao.blockUser(blocker.getUserId(),blockedId);
+//    }
 
-    @Transactional
-    @Override
-    public void unblockUser( long blockedId) throws UserNotFoundException{
-        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.unblockUser(blocker.getUserId(),blockedId);
-    }
+//    @Transactional
+//    @Override
+//    public void unblockUser( long blockedId) throws UserNotFoundException{
+//        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        userDao.unblockUser(blocker.getUserId(),blockedId);
+//    }
 
-    @Transactional
-    @Override
-    public boolean isBlocked( long blockedId) throws UserNotFoundException {
-        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        return userDao.isBlocked(blocker.getUserId(),blockedId);
-    }
+//    @Transactional
+//    @Override
+//    public boolean isBlocked( long blockedId) throws UserNotFoundException {
+//        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        return userDao.isBlocked(blocker.getUserId(),blockedId);
+//    }
 
-    @Transactional
-    @Override
-    public boolean isCurrentUser(long userId) throws UserNotFoundException {
-        Optional<User> user = getCurrentUser();
-        if(user.isPresent()){
-            return user.orElseThrow(UserNotFoundException::new).getUserId() == userId;
-        }
-        return false;
-    }
+//    @Transactional
+//    @Override
+//    public boolean isCurrentUser(long userId) throws UserNotFoundException {
+//        Optional<User> user = getCurrentUser();
+//        if(user.isPresent()){
+//            return user.orElseThrow(UserNotFoundException::new).getUserId() == userId;
+//        }
+//        return false;
+//    }
 
     @Transactional
     @Override
@@ -274,17 +274,17 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authRequest);
     }
 
-    @Transactional
-    @Override
-    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException {
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-            if(imgData.length==0){
-                userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.getUserImageId());
-                return;
-            }
-            long imageId = imageService.createImage(imgData).getImageId();
-            userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
-    }
+//    @Transactional
+//    @Override
+//    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException {
+//        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+//            if(imgData.length==0){
+//                userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.getUserImageId());
+//                return;
+//            }
+//            long imageId = imageService.createImage(imgData).getImageId();
+//            userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
+//    }
 
     @Transactional
     @Override
@@ -299,6 +299,8 @@ public class UserServiceImpl implements UserService {
         return userDao.getAdmins();
     }
 
+
+    //TODO: revisar cómo es el ban, cómo funciona
     @Transactional
     @Override
     public void banUser(User user) {

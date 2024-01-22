@@ -22,28 +22,28 @@ public interface UserService {
     Optional<User> findById(long userId);
 
     Optional<User> findByEmail(String email);
-    void loginUser(final String email, final String password);
+//    void loginUser(final String email, final String password);
 
-    void changeToDriver() throws UserNotFoundException;
+//    void changeToDriver() throws UserNotFoundException;
 
     void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException;
 
     void confirmRegister(String token, final User user)throws InvalidTokenException;
 
-    void blockUser( long blockedId) throws UserNotFoundException;
-    void unblockUser( long blockedId) throws UserNotFoundException;
-    boolean isBlocked( long blockedId) throws UserNotFoundException;
-    void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException;
+//    void blockUser( long blockedId) throws UserNotFoundException;
+//    void unblockUser( long blockedId) throws UserNotFoundException;
+//    boolean isBlocked( long blockedId) throws UserNotFoundException;
+//    void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException;
 
 
-    boolean isCurrentUser(long userId) throws UserNotFoundException;
+//    boolean isCurrentUser(long userId) throws UserNotFoundException;
 
     boolean sendVerificationEmail(String email);
 
-    public boolean isDriver(User user);
+//    public boolean isDriver(User user);
 
-    public boolean isUser(User user);
+//    public boolean isUser(User user);
 
-    public List<User> getAdmins();
+    List<User> getAdmins();
     void banUser(User user);
 }

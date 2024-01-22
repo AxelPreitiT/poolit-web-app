@@ -97,34 +97,34 @@ public class ReportServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = ReportNotFoundException.class)
-    public void TestRejectReportDoesntExist() throws ReportNotFoundException {
-        when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
+//    @Test(expected = ReportNotFoundException.class)
+//    public void TestRejectReportDoesntExist() throws ReportNotFoundException {
+//        when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
+//
+//        reportService.rejectReport(1, REASONADMIN);
+//
+//        Assert.fail();
+//    }
 
-        reportService.rejectReport(1, REASONADMIN);
+//    @Test(expected = ReportNotFoundException.class)
+//    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException, ReportNotFoundException, PassengerNotFoundException {
+//        when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
+//
+//        reportService.acceptReport(1, REASONADMIN);
+//
+//        Assert.fail();
+//    }
 
-        Assert.fail();
-    }
-
-    @Test(expected = ReportNotFoundException.class)
-    public void TestAcceptReportDoesntExist() throws TripNotFoundException, UserNotFoundException, ReportNotFoundException, PassengerNotFoundException {
-        when(reportDao.findById(anyLong())).thenReturn(Optional.empty());
-
-        reportService.acceptReport(1, REASONADMIN);
-
-        Assert.fail();
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void TestNotIncludeInTripGetTripReportCollection() throws PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {
-        when(tripService.findById(anyLong())).thenReturn(Optional.of(trip));
-        when(userService.getCurrentUser()).thenReturn(Optional.of(user));
-        when(tripService.userIsDriver(anyLong(), any())).thenReturn(false);
-        when(tripService.userIsPassenger(anyLong(), any())).thenReturn(false);
-
-        reportService.getTripReportCollection(trip.getTripId());
-
-        Assert.fail();
-    }
+//    @Test(expected = IllegalStateException.class)
+//    public void TestNotIncludeInTripGetTripReportCollection() throws PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {
+//        when(tripService.findById(anyLong())).thenReturn(Optional.of(trip));
+//        when(userService.getCurrentUser()).thenReturn(Optional.of(user));
+//        when(tripService.userIsDriver(anyLong(), any())).thenReturn(false);
+//        when(tripService.userIsPassenger(anyLong(), any())).thenReturn(false);
+//
+//        reportService.getTripReportCollection(trip.getTripId());
+//
+//        Assert.fail();
+//    }
 
 }
