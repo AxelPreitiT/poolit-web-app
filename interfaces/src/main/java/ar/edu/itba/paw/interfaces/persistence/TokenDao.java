@@ -12,7 +12,7 @@ public interface TokenDao {
 
     Optional<VerificationToken> getToken(String token);
 
-    void deleteToken(VerificationToken token);
+//    void deleteToken(VerificationToken token);
 
     void updateToken(String token, User user, LocalDate date);
 }

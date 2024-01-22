@@ -107,21 +107,21 @@ public class TripServiceImpl implements TripService {
 //        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
 //        return Optional.of(ans);
 //    }
-    private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
-        if(date == null || time == null || date.length()==0 || time.length()==0){
-            return Optional.empty();
-        }
-        LocalDateTime ans;
-        try{
-            String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
-        }catch (Exception e){
-            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
-            return Optional.empty();
-        }
-        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
-        return Optional.of(ans);
-    }
+//    private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
+//        if(date == null || time == null || date.length()==0 || time.length()==0){
+//            return Optional.empty();
+//        }
+//        LocalDateTime ans;
+//        try{
+//            String[] timeTokens = time.split(":");
+//            ans = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+//        }catch (Exception e){
+//            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
+//            return Optional.empty();
+//        }
+//        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
+//        return Optional.of(ans);
+//    }
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) {
             IllegalArgumentException e = new IllegalArgumentException();
@@ -696,7 +696,7 @@ public class TripServiceImpl implements TripService {
         final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
         final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue:new ArrayList<>();
         //TODO: delete logic of blocked users
-        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
+        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,startDateTime.getDayOfWeek(),endDateTime,OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
 
     }
 

@@ -16,7 +16,7 @@ public interface DriverReviewDao {
 
     Optional<DriverReview> findById(final long id);
 
-    double getDriverRating(final User user);
+//    double getDriverRating(final User user);
 
     PagedContent<DriverReview> getDriverReviews(final User user, int page, int pageSize);
 

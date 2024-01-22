@@ -17,9 +17,9 @@ public interface TripDao {
     Passenger addPassenger(Trip trip,User user,LocalDateTime startDateTime,LocalDateTime endDateTime);
     //
     boolean removePassenger(final Trip trip, final Passenger passenger);
-    List<Passenger> getPassengers(final TripInstance tripInstance);
+//    List<Passenger> getPassengers(final TripInstance tripInstance);
     //
-    List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime);
+//    List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime);
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
@@ -28,8 +28,8 @@ public interface TripDao {
     Optional<Passenger> getPassenger(final Trip trip, final User user);
     //
     Optional<Passenger> getPassenger(final long tripId, final User user);
-    PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize);
-    PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
+//    PagedContent<TripInstance> getTripInstances(final Trip trip,int page, int pageSize);
+//    PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end);
     //
     int getTripSeatCount(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
@@ -44,11 +44,11 @@ public interface TripDao {
     boolean markTripAsDeleted(Trip trip, LocalDateTime lastOccurrence);
     //
     void truncatePassengerEndDateTime(Passenger passenger, LocalDateTime newLastDateTime);
-    PagedContent<Trip> getTripsWithFilters(
-            long originCityId, long destinationCityId,
-            LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
-            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-            long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize);
+//    PagedContent<Trip> getTripsWithFilters(
+//            long originCityId, long destinationCityId,
+//            LocalDateTime startDateTime, Optional<DayOfWeek> dayOfWeek, Optional<LocalDateTime> endDateTime, int minutes,
+//            Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
+//            long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize);
     PagedContent<Trip> getTripsWithFilters(
             long originCityId, long destinationCityId,
             LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
@@ -57,11 +57,11 @@ public interface TripDao {
 
     PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime, long searchUserId, int page, int pageSize);
     //
-    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
+//    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
-    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime dateTime);
+//    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime dateTime);
     //
-    public List<Passenger> getAcceptedPassengers(TripInstance tripInstance);
+//    public List<Passenger> getAcceptedPassengers(TripInstance tripInstance);
     //
     public boolean acceptPassenger(Passenger passenger);
     //

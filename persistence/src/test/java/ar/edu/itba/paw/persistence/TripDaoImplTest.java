@@ -241,17 +241,17 @@ public class TripDaoImplTest {
         Assert.assertTrue(ans.isPresent());
         Assert.assertEquals(Passenger.PassengerState.REJECTED,ans.get().getPassengerState());
     }
-    @Test
-    public void testGetPassengersForDate(){
-        //Setup
-        Trip auxTrip = getTrip(TRIP_2);
-        //Execute
-        List<Passenger> ans = tripDao.getPassengers(auxTrip,START);
-        //Assert
-        Assert.assertEquals(2,ans.size());
-        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_1));
-        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_2));
-    }
+//    @Test
+//    public void testGetPassengersForDate(){
+//        //Setup
+//        Trip auxTrip = getTrip(TRIP_2);
+//        //Execute
+//        List<Passenger> ans = tripDao.getPassengers(auxTrip,START);
+//        //Assert
+//        Assert.assertEquals(2,ans.size());
+//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_1));
+//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_2));
+//    }
 
     @Test
     public void testGetPassengersForRange(){
@@ -370,16 +370,16 @@ public class TripDaoImplTest {
         Assert.assertEquals(START,ans.get().getEndDateTime());
     }
 
-    @Test
-    public void testGetAcceptedPassengers(){
-        //Setup
-        Trip auxTrip = getTrip(TRIP_2);
-        //Execute
-        List<Passenger> ans = tripDao.getAcceptedPassengers(auxTrip,auxTrip.getStartDateTime(),auxTrip.getEndDateTime());
-        //Assert
-        Assert.assertEquals(2,ans.size());
-        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_1));
-        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_2));
-    }
+//    @Test
+//    public void testGetAcceptedPassengers(){
+//        //Setup
+//        Trip auxTrip = getTrip(TRIP_2);
+//        //Execute
+//        List<Passenger> ans = tripDao.getAcceptedPassengers(auxTrip,auxTrip.getStartDateTime(),auxTrip.getEndDateTime());
+//        //Assert
+//        Assert.assertEquals(2,ans.size());
+//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_1));
+//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_2));
+//    }
 }
 

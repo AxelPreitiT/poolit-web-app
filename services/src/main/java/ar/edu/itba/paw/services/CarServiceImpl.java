@@ -89,7 +89,6 @@ public class CarServiceImpl implements CarService {
     @Transactional
     @Override
     public List<Car> findCurrentUserCars() throws UserNotFoundException {
-        //TODO Chequear si esta funcion esta hecha para solo ser usada por el usuario principal
         User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         return carDao.findByUser(user);
     }

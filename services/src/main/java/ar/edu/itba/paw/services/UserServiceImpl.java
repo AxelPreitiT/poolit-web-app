@@ -267,7 +267,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-
+        //TODO: revisar usos, y ver si hay que poner lo de banned acá
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
                 user.getEmail(), user.getPassword(), authorities);
         Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);

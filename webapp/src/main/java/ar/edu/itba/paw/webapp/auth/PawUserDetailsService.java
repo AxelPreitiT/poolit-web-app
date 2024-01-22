@@ -57,7 +57,7 @@ public class PawUserDetailsService implements UserDetailsService {
                 authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
             }
         }
-
+        //TODO: testear que no pueda entrar si está banned
         return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, !user.isBanned(), authorities);
     }
 

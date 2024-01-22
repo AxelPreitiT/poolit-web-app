@@ -77,13 +77,13 @@ public class CarReviewDaoImplTest {
         Assert.assertEquals(CAR_REVIEW_OPTION,ans.getOption());
     }
 
-    @Test
-    public void testGetCarRating(){
-        //Execute
-        double ans = carReviewDao.getCarRating(CAR_1);
-        //Assert
-        Assert.assertEquals(0, Double.compare(RATING, ans));
-    }
+//    @Test
+//    public void testGetCarRating(){
+//        //Execute
+//        double ans = carReviewDao.getCarRating(CAR_1);
+//        //Assert
+//        Assert.assertEquals(0, Double.compare(RATING, ans));
+//    }
 
     @Test
     public void testGetCarReviews(){
