@@ -110,7 +110,7 @@ public class TripController {
     public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET

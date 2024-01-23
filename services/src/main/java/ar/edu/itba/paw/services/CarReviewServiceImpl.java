@@ -15,7 +15,6 @@ import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.CarReview;
 import ar.edu.itba.paw.models.reviews.CarReviewOptions;
-import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.ReviewState;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service

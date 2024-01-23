@@ -11,7 +11,6 @@ import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.PassengerReview;
 import ar.edu.itba.paw.models.reviews.PassengerReviewOptions;
 import ar.edu.itba.paw.models.reviews.ReviewState;
@@ -23,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PassengerReviewServiceImpl implements PassengerReviewService {

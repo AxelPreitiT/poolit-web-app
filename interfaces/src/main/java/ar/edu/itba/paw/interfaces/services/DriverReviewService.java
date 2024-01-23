@@ -5,12 +5,8 @@ import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.UserNotLoggedInException;
 import ar.edu.itba.paw.models.PagedContent;
-import ar.edu.itba.paw.models.Passenger;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
-import ar.edu.itba.paw.models.reviews.ItemReview;
-import ar.edu.itba.paw.models.trips.Trip;
 
 import java.util.Optional;
 

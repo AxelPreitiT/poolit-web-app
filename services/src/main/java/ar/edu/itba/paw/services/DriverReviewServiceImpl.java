@@ -13,7 +13,6 @@ import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
-import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.ReviewState;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;

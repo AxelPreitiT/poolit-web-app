@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
 public class TripReviewCollection {
 
     final private ItemReview<User> driver;
@@ -81,3 +82,5 @@ public class TripReviewCollection {
         return String.join("", Collections.nCopies(rating, "★"));
     }
 }
+
+ */

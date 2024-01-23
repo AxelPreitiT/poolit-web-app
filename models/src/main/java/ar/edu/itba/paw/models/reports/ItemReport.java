@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models.reports;
 
 import java.util.List;
 
+/*
 public class ItemReport<T> {
 
     private final T item;
@@ -50,3 +51,5 @@ public class ItemReport<T> {
         return state == ReportState.DISABLED;
     }
 }
+
+ */

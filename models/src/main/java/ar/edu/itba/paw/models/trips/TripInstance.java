@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models.trips;
 
 import java.time.LocalDateTime;
 
+/*
 public class TripInstance {
     //Date and time when trip occurs
     private final LocalDateTime dateTime;
@@ -34,3 +35,5 @@ public class TripInstance {
         return passengerCount;
     }
 }
+
+ */
