@@ -6,50 +6,76 @@ class Jwt {
   private static readonly REFRESH_TOKEN_KEY: string = "refreshToken";
   private static readonly REMEMBER_ME_KEY: string = "rememberMe";
 
-  private static removeAuthToken: () => void = () => {
+  private static hasTokenExpired: (token: string) => boolean = (
+    token: string
+  ) => {
+    const claims = jwtDecode<JwtPayload>(token);
+    const exp = claims.exp;
+    return !!(exp && exp * 1000 < Date.now().valueOf());
+  };
+
+  public static getRememberMe: () => boolean = () => {
+    const rememberMe: string | null = localStorage.getItem(Jwt.REMEMBER_ME_KEY);
+    return rememberMe ? rememberMe === "true" : false;
+  };
+
+  private static removeToken: (key: string) => void = (key: string) => {
     const rememberMe: boolean = Jwt.getRememberMe();
     if (!rememberMe) {
-      sessionStorage.removeItem(Jwt.AUTH_TOKEN_KEY);
+      sessionStorage.removeItem(key);
     } else {
-      localStorage.removeItem(Jwt.AUTH_TOKEN_KEY);
+      localStorage.removeItem(key);
     }
   };
 
-  private static removeRefreshToken: () => void = () => {
+  private static getToken: (key: string) => `Bearer ${string}` | null = (
+    key: string
+  ) => {
     const rememberMe: boolean = Jwt.getRememberMe();
-    if (!rememberMe) {
-      sessionStorage.removeItem(Jwt.REFRESH_TOKEN_KEY);
-    } else {
-      localStorage.removeItem(Jwt.REFRESH_TOKEN_KEY);
+    const token = rememberMe
+      ? localStorage.getItem(key)
+      : sessionStorage.getItem(key);
+    if (!token) {
+      return null;
     }
+    if (Jwt.hasTokenExpired(token)) {
+      Jwt.removeToken(key);
+      return null;
+    }
+    return `Bearer ${token}`;
+  };
+
+  private static storeToken: (key: string, token: `Bearer ${string}`) => void =
+    (key: string, token: `Bearer ${string}`) => {
+      const rememberMe: boolean = Jwt.getRememberMe();
+      const tokenValue: string = token.split(" ")[1];
+      if (!rememberMe) {
+        localStorage.removeItem(key);
+        sessionStorage.setItem(key, tokenValue);
+      } else {
+        sessionStorage.removeItem(key);
+        localStorage.setItem(key, tokenValue);
+      }
+    };
+
+  private static removeAuthToken: () => void = () => {
+    this.removeToken(Jwt.AUTH_TOKEN_KEY);
+  };
+
+  private static removeRefreshToken: () => void = () => {
+    this.removeToken(Jwt.REFRESH_TOKEN_KEY);
   };
 
   public static storeAuthToken: (token: `Bearer ${string}`) => void = (
     token: `Bearer ${string}`
   ) => {
-    const authToken: string = token.split(" ")[1];
-    const rememberMe: boolean = Jwt.getRememberMe();
-    if (!rememberMe) {
-      localStorage.removeItem(Jwt.AUTH_TOKEN_KEY);
-      sessionStorage.setItem(Jwt.AUTH_TOKEN_KEY, authToken);
-    } else {
-      sessionStorage.removeItem(Jwt.AUTH_TOKEN_KEY);
-      localStorage.setItem(Jwt.AUTH_TOKEN_KEY, authToken);
-    }
+    this.storeToken(Jwt.AUTH_TOKEN_KEY, token);
   };
 
   public static storeRefreshToken: (token: `Bearer ${string}`) => void = (
     token: `Bearer ${string}`
   ) => {
-    const refreshToken: string = token.split(" ")[1];
-    const rememberMe: boolean = Jwt.getRememberMe();
-    if (!rememberMe) {
-      localStorage.removeItem(Jwt.REFRESH_TOKEN_KEY);
-      sessionStorage.setItem(Jwt.REFRESH_TOKEN_KEY, refreshToken);
-    } else {
-      sessionStorage.removeItem(Jwt.REFRESH_TOKEN_KEY);
-      localStorage.setItem(Jwt.REFRESH_TOKEN_KEY, refreshToken);
-    }
+    this.storeToken(Jwt.REFRESH_TOKEN_KEY, token);
   };
 
   public static setRememberMe: (rememberMe: boolean) => void = (
@@ -59,24 +85,11 @@ class Jwt {
   };
 
   public static getAuthToken: () => `Bearer ${string}` | null = () => {
-    const rememberMe: boolean = Jwt.getRememberMe();
-    const authToken: string | null = rememberMe
-      ? localStorage.getItem(Jwt.AUTH_TOKEN_KEY)
-      : sessionStorage.getItem(Jwt.AUTH_TOKEN_KEY);
-    return authToken ? `Bearer ${authToken}` : null;
+    return this.getToken(Jwt.AUTH_TOKEN_KEY);
   };
 
   public static getRefreshToken: () => `Bearer ${string}` | null = () => {
-    const rememberMe: boolean = Jwt.getRememberMe();
-    const refreshToken: string | null = rememberMe
-      ? localStorage.getItem(Jwt.REFRESH_TOKEN_KEY)
-      : sessionStorage.getItem(Jwt.REFRESH_TOKEN_KEY);
-    return refreshToken ? `Bearer ${refreshToken}` : null;
-  };
-
-  public static getRememberMe: () => boolean = () => {
-    const rememberMe: string | null = localStorage.getItem(Jwt.REMEMBER_ME_KEY);
-    return rememberMe ? rememberMe === "true" : false;
+    return this.getToken(Jwt.REFRESH_TOKEN_KEY);
   };
 
   public static removeTokens: () => void = () => {
@@ -94,6 +107,9 @@ class Jwt {
     const claims = jwtDecode<JwtPayload>(token);
     return claims;
   };
+
+  public static isAuthenticated: () => boolean = () =>
+    Jwt.getJwtClaims() !== null;
 }
 
 export default Jwt;

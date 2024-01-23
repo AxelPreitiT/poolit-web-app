@@ -1,7 +1,7 @@
 import { AxiosPromise } from "axios";
 import AxiosApi from "./axios/AxiosApi";
-import UsersApi from "./UsersApi";
 import DiscoveryApi from "./DiscoveryApi";
+import Jwt from "@/auth/Jwt";
 
 class AuthApi extends AxiosApi {
   public static authenticate: (
@@ -13,8 +13,7 @@ class AuthApi extends AxiosApi {
       },
     });
 
-  public static tryAuthentication: () => AxiosPromise = () =>
-    UsersApi.getCurrentUser();
+  public static isAuthenticated: () => boolean = () => Jwt.isAuthenticated();
 }
 
 export default AuthApi;

@@ -1,9 +1,12 @@
+import { useRef } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
+import { BiCheck } from "react-icons/bi";
 import { BsClockFill } from "react-icons/bs";
 import ReactDatePicker, {
   CalendarProps,
   DateObject,
   DatePickerProps,
+  DatePickerRef,
 } from "react-multi-date-picker";
 import ReactTimePicker from "react-multi-date-picker/plugins/time_picker";
 
@@ -19,6 +22,7 @@ const TimePicker = ({
   placeholder,
   ...props
 }: Omit<CalendarProps, "onChange"> & DatePickerProps & ITimePickerProps) => {
+  const timePickerRef = useRef<DatePickerRef>();
   const [hours, minutes] = (value || "").split(":");
   const timeValue =
     hours && minutes
@@ -30,6 +34,7 @@ const TimePicker = ({
   return (
     <ReactDatePicker
       {...props}
+      ref={timePickerRef}
       disableDayPicker
       format="HH:mm"
       onChange={(date: DateObject) => onPick(date?.toString() || "")}
@@ -50,7 +55,17 @@ const TimePicker = ({
           />
         </InputGroup>
       )}
-    />
+    >
+      <hr className="primary-text mt-1" />
+      <Button
+        className="w-100"
+        onClick={() => timePickerRef.current?.closeCalendar()}
+        variant="white"
+        size="sm"
+      >
+        <BiCheck className="primary-text h5" />
+      </Button>
+    </ReactDatePicker>
   );
 };
 

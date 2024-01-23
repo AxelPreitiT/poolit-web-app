@@ -7,14 +7,7 @@ import { useTranslation } from "react-i18next";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import TripModel from "@/models/TripModel";
 
-const useTripByUri = (
-  tripUri: string,
-  {
-    enabled = true,
-  }: {
-    enabled?: boolean;
-  } = {}
-) => {
+const useTripByUri = (tripUri: string) => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
 
@@ -31,7 +24,7 @@ const useTripByUri = (
       return await TripsService.getTripById(tripUri);
     },
     retry: false,
-    enabled,
+    enabled: !!tripUri,
   });
 
   useEffect(() => {

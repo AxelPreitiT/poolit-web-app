@@ -77,11 +77,12 @@ public class JwtUtils {
                 .sign(this.algorithm);
     }
 
-    public String createRefreshToken(final User user){
+    public String createRefreshToken(final User user, final String baseUrl){
         final Instant instant = Instant.now();
         return JWT.create()
                 .withSubject(encodeEmail(user.getEmail()))
                 .withClaim("refresh",true)
+                .withClaim("userUrl",baseUrl+ UrlHolder.USER_BASE +"/"+ user.getUserId())
                 .withIssuedAt(instant)
                 .withExpiresAt(instant.plus(REFRESH_EXPIRY_TIME))
                 .sign(this.algorithm);

@@ -13,10 +13,8 @@ import useCarFeatures from "@/hooks/cars/useCarFeatures";
 
 const HomePage = () => {
   const { t } = useTranslation();
-  const { isLoading: isLoadingAuth, isAuthenticated } = useAuthentication();
-  const { isLoading: isLoadingCurrentUser, currentUser } = useCurrentUser({
-    enabled: isAuthenticated,
-  });
+  const isAuthenticated = useAuthentication();
+  const { isLoading: isLoadingCurrentUser, currentUser } = useCurrentUser();
   const { isLoading: isLoadingRecommendedTrips, recommendedTrips } =
     useRecommendedTrips(currentUser);
   const { isLoading: isLoadingCities, cities } = useAllCities();
@@ -24,7 +22,6 @@ const HomePage = () => {
 
   // Todo: Create loading screen
   if (
-    isLoadingAuth ||
     (isAuthenticated && isLoadingCurrentUser) ||
     (currentUser && isLoadingRecommendedTrips) ||
     isLoadingCities ||

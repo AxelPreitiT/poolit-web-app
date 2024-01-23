@@ -7,9 +7,11 @@ import TripModel from "@/models/TripModel";
 import { useEffect } from "react";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import useAuthentication from "../auth/useAuthentication";
 
 const useRecommendedTrips = (user?: UserPrivateModel) => {
   const { t } = useTranslation();
+  const isAuthenticated = useAuthentication();
   const onQueryError = useQueryError();
 
   const query = useQuery({
@@ -21,7 +23,7 @@ const useRecommendedTrips = (user?: UserPrivateModel) => {
       return await TripsService.getRecommendedTrips(user?.recommendedTripsUri);
     },
     retry: false,
-    enabled: !!user,
+    enabled: isAuthenticated && !!user?.recommendedTripsUri,
   });
 
   const {

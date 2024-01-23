@@ -77,7 +77,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
             final String baseUrl = httpServletRequest.getScheme()+"://"+httpServletRequest.getServerName()+":"+httpServletRequest.getServerPort()+httpServletRequest.getContextPath();
             //https://www.rfc-editor.org/rfc/rfc9110#name-field-extensibility
             httpServletResponse.setHeader(JWT_HEADER, "Bearer " + jwtUtils.createToken(user,baseUrl));
-            httpServletResponse.setHeader(JWT_REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(user));
+            httpServletResponse.setHeader(JWT_REFRESH_HEADER,"Bearer " + jwtUtils.createRefreshToken(user,baseUrl));
         }catch (InvalidTokenException ex){
             String[] credentials = decodeHeader(header.split(" ")[1]);
             userService.sendVerificationEmail(credentials[EMAIL_INDEX]);
