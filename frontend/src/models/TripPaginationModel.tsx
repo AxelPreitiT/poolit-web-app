@@ -1,7 +1,7 @@
 import TripModel from "@/models/TripModel.ts";
 
 interface TripPaginationModel{
-    pagUri : String;
+    first : String;
     trips: TripModel[];
 }
 

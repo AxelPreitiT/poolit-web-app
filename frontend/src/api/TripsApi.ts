@@ -7,6 +7,7 @@ import {getIsoDate} from "@/utils/date/isoDate";
 import {AxiosPromise, AxiosResponse} from "axios";
 import {parseTemplate} from "url-template";
 import TripPaginationModel from "@/models/TripPaginationModel.tsx";
+//import parse from "parse-link-header";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -37,18 +38,21 @@ class TripsApi extends AxiosApi {
   public static getTripsByUser: (uri: string) => AxiosPromise<TripPaginationModel> = (
     uri: string
   ) => {
-    const uriFinal = uri + '&pageSize=1&page=0';
+    const uriFinal = uri + '&pageSize=2&page=0';
     return this.get<TripModel[]>(uriFinal, {
       headers: {},
     }).then((response: AxiosResponse<TripModel[]>) => {
         const trips = response.data;
 
-        const firstLink = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1]; // Extract first link
+        //const parsedLinkHeader = parse(linkHeader);
+        //console.log("parsedLink" + parsedLinkHeader)
+        //console.log("parsedLink.first" + parsedLinkHeader?.first)
+        const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
 
         const newResponse: AxiosResponse<TripPaginationModel> = {
           ...response,
           data:{
-            pagUri: firstLink || "hola",
+            first: first,
             trips: trips
           }
         };

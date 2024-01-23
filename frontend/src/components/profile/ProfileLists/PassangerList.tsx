@@ -45,7 +45,7 @@ const PassengerList = ({
           <SpinnerComponent />
       ) : (
         <div>
-          <h1>{futureReservedTrips.pagUri}</h1>
+          <h1>{futureReservedTrips.first}</h1>
           <ListProfileContainer
               title={t("profile.lists.reserved_next_title")}
               btn_footer_text={t("profile.lists.reserved_next_more")}
