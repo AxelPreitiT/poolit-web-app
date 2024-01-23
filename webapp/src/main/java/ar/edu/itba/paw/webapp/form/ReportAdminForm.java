@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.Size;
 
+/*
 public class ReportAdminForm {
 
     @Size(min = 10,max = 200)
@@ -15,3 +16,5 @@ public class ReportAdminForm {
         this.reason = reason;
     }
 }
+
+ */

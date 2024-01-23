@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
+/*
 public class SelectionForm {
     private String startDate;
     private String startTime;
@@ -37,3 +38,5 @@ public class SelectionForm {
         this.endDate = endDate;
     }
 }
+
+ */

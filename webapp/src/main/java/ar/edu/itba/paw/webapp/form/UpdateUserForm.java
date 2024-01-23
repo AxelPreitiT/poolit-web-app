@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.form.annotations.MPFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
@@ -10,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
 public class UpdateUserForm {
     @Pattern(regexp = ".+")
     @Size(min = 2, max = 20)
@@ -121,3 +121,5 @@ public class UpdateUserForm {
         this.imageFile = imageFile;
     }
 }
+
+ */

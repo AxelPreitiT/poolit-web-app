@@ -1,14 +1,15 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.models.FeatureCar;
-import ar.edu.itba.paw.webapp.form.annotations.LastDateIsAfterDate;
-import ar.edu.itba.paw.webapp.form.annotations.Price;
-import ar.edu.itba.paw.webapp.form.annotations.SameWeekDay;
+//import ar.edu.itba.paw.webapp.form.annotations.LastDateIsAfterDate;
+//import ar.edu.itba.paw.webapp.form.annotations.Price;
+//import ar.edu.itba.paw.webapp.form.annotations.SameWeekDay;
 
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.util.List;
 
+/*
 @SameWeekDay
 @LastDateIsAfterDate
 @Price
@@ -73,3 +74,5 @@ public class SearchTripForm extends RecurrentTripForm {
         return carFeatures != null && carFeatures.contains(featureCar);
     }
 }
+
+ */

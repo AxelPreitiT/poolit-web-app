@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.SearchTripForm;
+//import ar.edu.itba.paw.webapp.form.SearchTripForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/*
 @Constraint(validatedBy = PriceValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -27,3 +28,5 @@ class PriceValidator implements ConstraintValidator<Price, SearchTripForm> {
         return form.getMinPrice() == null || form.getMaxPrice() == null || form.getMinPrice().compareTo(form.getMaxPrice()) <= 0;
     }
 }
+
+ */

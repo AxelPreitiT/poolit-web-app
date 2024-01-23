@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.reports.ReportRelations;
 
 import javax.validation.constraints.Size;
 
+/*
 public class ReportForm {
 
     private ReportRelations relation;
@@ -38,3 +39,5 @@ public class ReportForm {
         this.relation = relation;
     }
 }
+
+ */
