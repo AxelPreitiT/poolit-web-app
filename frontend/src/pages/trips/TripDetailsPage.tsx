@@ -5,113 +5,86 @@ import { useTranslation } from "react-i18next";
 import Location from "@/components/location/Location";
 import StatusTrip from "@/components/statusTrip/StatusTrip";
 import TripInfo from "@/components/tripInfo/TripInfo";
-import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import TripModel from "@/models/TripModel.ts";
-import tripsService from "@/services/TripsService.ts";
 import CreateUri from "@/functions/CreateUri.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
-import UserPublicModel from "@/models/UserPublicModel.ts";
-import UserService from "@/services/UserService.ts";
-import PassangerService from "@/services/PassangerService.ts";
-import PassangerModel from "@/models/PassangerModel.ts";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
-import getTripRole from "@/functions/GetTripRole.ts";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
 import Status from "@/enums/Status.ts";
-import { parseTemplate } from "url-template";
+import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
+import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
+import usePublicUser from "@/hooks/users/usePublicUser.tsx";
+import usePassangers from "@/hooks/passanger/usePassangers.tsx";
+import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
   const id = useParams();
   const [params] = useSearchParams();
-  const { isLoading, currentUser } = useCurrentUser();
-
-  const [Trip, setTrip] = useState<TripModel | null>(null);
-  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
-  const [DriverTrip, setDriverTrip] = useState<UserPublicModel | null>(null);
-  const [PassangersTrip, setPassangersTrip] = useState<PassangerModel[] | null>(
-    null
-  );
 
   const link = CreateUri(id.tripId, params.toString(), "/trips");
-
-  useEffect(() => {
-    tripsService.getTripById(link).then((response) => {
-      setTrip(response);
-    });
-    if (Trip != null) {
-      CarService.getCarById(Trip.carUri).then((response) => {
-        setCarTrip(response);
-      });
-      UserService.getUserById(Trip.driverUri).then((response) => {
-        setDriverTrip(response);
-      });
-      PassangerService.getPassangersTrips(Trip.passengersUri).then(
-        (response) => {
-          setPassangersTrip(response);
-        }
-      );
-    }
-  });
-
-  const emailUrlTemplate = parseTemplate(
-    "http://localhost:8080/paw-2023a-07/api/trips/6/passengers{/userId}"
+  const { currentUser } = useCurrentUser();
+  const { isLoading: isLoadingTrip, trip: trip } = useTripByUri(link);
+  const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
+  const { isLoading: isLoadingDriver, driver: driver } = usePublicUser(
+    trip?.driverUri
   );
-  const emailUrl = emailUrlTemplate.expand({
-    userId: "2",
-  });
-
-  const { isPassanger, isDriver } =
-    isLoading ||
-    currentUser == null ||
-    DriverTrip == null ||
-    PassangersTrip == null
-      ? { isPassanger: false, isDriver: false }
-      : getTripRole(currentUser, DriverTrip, PassangersTrip);
+  const { isLoading: isLoadingPassangers, passangers: passangers } =
+    usePassangers(trip?.passengersUriTemplate);
+  const {
+    isLoading: isLoadingRole,
+    passangersRole: passangerRole,
+    isError: isError,
+  } = useRolePassanger(currentUser, trip?.passengersUriTemplate);
+  const isPassanger = !isError;
+  const isDriver = trip?.driverUri === currentUser?.selfUri;
 
   return (
     <div>
       <MainComponent>
         <MainHeader
           title={t("trip_detail.header")}
-          left_component={isPassanger && <StatusTrip status={"ACCEPT"} />}
+          left_component={
+            isPassanger &&
+            !isLoadingRole &&
+            passangerRole != undefined && (
+              <StatusTrip status={passangerRole.passengerState} />
+            )
+          }
         />
 
-        {Trip == undefined || CarTrip === null || DriverTrip === null ? (
+        {isLoadingTrip ||
+        trip == undefined ||
+        isLoadingCar ||
+        car === undefined ||
+        isLoadingDriver ||
+        driver === undefined ? (
           <SpinnerComponent />
         ) : (
           <div>
-            <h1>{emailUrl}</h1>
             <Location
-              startAddress={Trip.originAddress}
-              startCityUri={Trip.originCityUri}
-              endAddress={Trip.destinationAddress}
-              endCityUri={Trip.destinationCityUri}
+              startAddress={trip.originAddress}
+              startCityUri={trip.originCityUri}
+              endAddress={trip.destinationAddress}
+              endCityUri={trip.destinationCityUri}
             />
             <div className={styles.middle_content}>
               <TripInfo
-                trip={Trip}
-                car={CarTrip}
-                driver={DriverTrip}
+                trip={trip}
+                car={car}
+                driver={driver}
                 isDriver={isDriver}
               />
               <div className={styles.img_container}>
-                <img
-                  src={CarTrip?.imageUri}
-                  className={styles.img_style}
-                  alt=""
-                />
+                <img src={car?.imageUri} className={styles.img_style} alt="" />
               </div>
             </div>
 
             <div className={styles.end_container}>
               <LeftDetails
-                trip={Trip}
+                trip={trip}
                 isPassanger={isPassanger}
                 isDriver={isDriver}
                 status={Status.FINISHED}
@@ -125,9 +98,12 @@ const TripDetailsPage = () => {
           </div>
         )}
       </MainComponent>
-      {isDriver && PassangersTrip != null && (
-        <PassangersTripComponent passangers={PassangersTrip} />
-      )}
+      {isDriver &&
+        (isLoadingPassangers || passangers === undefined ? (
+          <SpinnerComponent />
+        ) : (
+          <PassangersTripComponent passangers={passangers} />
+        ))}
     </div>
   );
 };

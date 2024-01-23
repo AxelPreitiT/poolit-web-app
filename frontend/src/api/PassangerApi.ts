@@ -10,6 +10,14 @@ class PassangerApi extends AxiosApi{
                 },
             });
         };
+
+    public static getPassangerRole: (uri: string) => AxiosPromise<PassangerModel> =
+        (uri: string) => {
+            return this.get<PassangerModel>(uri, {
+                headers: {
+                },
+            });
+        };
 }
 
 export default PassangerApi;

@@ -366,7 +366,12 @@
     }
   },
   "admin": {
-    "title": "Administrador"
+    "title": "Administrador",
+    "empty": "No hay reportes todavía",
+    "error": {
+      "title": "No se pudo obtener los reportes",
+      "default": "Ocurrió un error al obtener los reportes"
+    }
   },
   "trip_detail": {
     "title": "Viaje",

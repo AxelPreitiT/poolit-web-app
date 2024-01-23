@@ -367,7 +367,12 @@
     }
   },
   "admin": {
-    "title": "Admin"
+    "title": "Admin",
+    "empty": "There aren't any reports yet",
+    "error": {
+      "title": "Could not search for reports",
+      "default": "An error occurred while fetching the reports"
+    }
   },
   "trip_detail": {
     "title": "Trip",
