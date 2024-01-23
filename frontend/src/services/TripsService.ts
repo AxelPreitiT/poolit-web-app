@@ -4,17 +4,18 @@ import { CreateTripFormSchemaType } from "@/forms/CreateTripForm";
 import CreateTripModel from "@/models/CreateTripModel";
 import TripModel from "@/models/TripModel";
 import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
+import TripPaginationModel from "@/models/TripPaginationModel.tsx";
 
 class TripsService extends Service {
   public static getTripById = async (uri: string): Promise<TripModel> => {
     return await this.resolveQuery(TripsApi.getTripById(uri));
   };
 
-  public static getTripsByUser = async (uri: string): Promise<TripModel[]> => {
+  public static getTripsByUser = async (uri: string): Promise<TripPaginationModel> => {
     return await this.resolveQuery(TripsApi.getTripsByUser(uri));
   };
 
-  public static getTripsByUri = async (uri: string): Promise<TripModel[]> => {
+  public static getTripsByUri = async (uri: string): Promise<TripPaginationModel> => {
     return await this.resolveQuery(TripsApi.getTripsByUser(uri));
   };
 

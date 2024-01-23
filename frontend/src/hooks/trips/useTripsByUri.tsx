@@ -1,11 +1,11 @@
 import {useTranslation} from "react-i18next";
 import TripsService from "@/services/TripsService.ts";
-import TripModel from "@/models/TripModel.ts";
 import {useQuery} from "@tanstack/react-query";
 import {useEffect} from "react";
 import UnknownResponseError from "@/errors/UnknownResponseError.ts";
 import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
+import TripPaginationModel from "@/models/TripPaginationModel.tsx";
 
 const useTripsByUri = (tripsUri: string) => {
     const { t } = useTranslation();
@@ -19,7 +19,7 @@ const useTripsByUri = (tripsUri: string) => {
         isPending,
     } = useQuery({
         queryKey: ["trips", tripsUri],
-        queryFn: async ({ queryKey }): Promise<TripModel[]> => {
+        queryFn: async ({ queryKey }): Promise<TripPaginationModel> => {
             const [, tripsUri] = queryKey;
             return await TripsService.getTripsByUri(tripsUri);
         },

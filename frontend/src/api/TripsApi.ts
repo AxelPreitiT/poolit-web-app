@@ -1,11 +1,12 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
-import { CreateTripFormSchemaType } from "@/forms/CreateTripForm";
-import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
+import {CreateTripFormSchemaType} from "@/forms/CreateTripForm";
+import {SearchTripsFormSchemaType} from "@/forms/SearchTripsForm";
 import CreateTripModel from "@/models/CreateTripModel";
 import TripModel from "@/models/TripModel";
-import { getIsoDate } from "@/utils/date/isoDate";
-import { AxiosPromise, AxiosResponse } from "axios";
-import { parseTemplate } from "url-template";
+import {getIsoDate} from "@/utils/date/isoDate";
+import {AxiosPromise, AxiosResponse} from "axios";
+import {parseTemplate} from "url-template";
+import TripPaginationModel from "@/models/TripPaginationModel.tsx";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -33,11 +34,22 @@ class TripsApi extends AxiosApi {
     });
   };
 
-  public static getTripsByUser: (uri: string) => AxiosPromise<TripModel[]> = (
+  public static getTripsByUser: (uri: string) => AxiosPromise<TripPaginationModel> = (
     uri: string
   ) => {
     return this.get<TripModel[]>(uri, {
       headers: {},
+    }).then((response: AxiosResponse<TripModel[]>) => {
+        const trips = response.data;
+        const link = "hola";
+        const newResponse: AxiosResponse<TripPaginationModel> = {
+          ...response,
+          data:{
+            pagUri: link,
+            trips: trips
+          }
+        };
+        return newResponse;
     });
   };
 

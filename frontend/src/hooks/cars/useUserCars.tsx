@@ -1,10 +1,11 @@
-import { useTranslation } from "react-i18next";
-import { useCurrentUser } from "../users/useCurrentUser";
+import {useTranslation} from "react-i18next";
+import {useCurrentUser} from "../users/useCurrentUser";
 import CarService from "@/services/CarService";
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import useQueryError from "../errors/useQueryError";
-import { useEffect } from "react";
-import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import {useEffect} from "react";
+import {defaultToastTimeout} from "@/components/toasts/ToastProps";
+import carModel from "@/models/CarModel.ts";
 
 const useUserCars = () => {
   const { t } = useTranslation();
@@ -21,7 +22,9 @@ const useUserCars = () => {
       if (currentUser === undefined) {
         return;
       }
-      return await CarService.getCarsByUser(currentUser);
+      return await CarService.getCarsByUser(currentUser).then((response: carModel[]) => {
+        return {...response};
+      });
     },
     enabled: !isCurrentUserLoading && !isCurrentUserError,
     retry: false,

@@ -23,7 +23,7 @@ const ListTripsScheduled = ({
         <PaginationList
           pagination_component={<h3>Poner paginación</h3>}
           empty_component={empty_component}
-          data={trips}
+          data={trips.trips}
           component_name={CardTripScheduled}
         />
       )}

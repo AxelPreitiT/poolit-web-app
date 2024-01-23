@@ -44,15 +44,18 @@ const PassengerList = ({
       {futureReservedTrips == undefined || isLoadingFutureReservedTrips ? (
           <SpinnerComponent />
       ) : (
-        <ListProfileContainer
-          title={t("profile.lists.reserved_next_title")}
-          btn_footer_text={t("profile.lists.reserved_next_more")}
-          empty_text={t("profile.lists.reserved_next_empty")}
-          empty_icon={"car-front-fill"}
-          data={futureReservedTrips}
-          component_name={CardTripProfile}
-          link={reservedTripsPath}
-        />
+        <div>
+          <h1>{futureReservedTrips.pagUri}</h1>
+          <ListProfileContainer
+              title={t("profile.lists.reserved_next_title")}
+              btn_footer_text={t("profile.lists.reserved_next_more")}
+              empty_text={t("profile.lists.reserved_next_empty")}
+              empty_icon={"car-front-fill"}
+              data={futureReservedTrips.trips}
+              component_name={CardTripProfile}
+              link={reservedTripsPath}
+          />
+        </div>
       )}
       {pastReservedTrips == undefined || isLoadingPastReservedTrips ? (
           <SpinnerComponent />
@@ -62,7 +65,7 @@ const PassengerList = ({
           btn_footer_text={t("profile.lists.reserved_prev_more")}
           empty_text={t("profile.lists.reserved_prev_empty")}
           empty_icon={"car-front-fill"}
-          data={pastReservedTrips}
+          data={pastReservedTrips.trips}
           component_name={CardTripProfile}
           link={reservedTripsPath}
         />
