@@ -1,12 +1,5 @@
 @use "@/colors.module.scss" as colors;
 
-.middle_content {
-  padding: 2% 4%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-}
 
 .img_container {
   width: 42%;
@@ -26,9 +19,8 @@
   padding: 2%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
-
 
 
 .btn_container {
