@@ -18,6 +18,7 @@
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
     "jwt-decode": "^4.0.0",
+    "parse-link-header": "^2.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.17.10",
     "@types/node": "^20.10.6",
+    "@types/parse-link-header": "^2.0.3",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

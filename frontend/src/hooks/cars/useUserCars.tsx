@@ -5,7 +5,6 @@ import {useQuery} from "@tanstack/react-query";
 import useQueryError from "../errors/useQueryError";
 import {useEffect} from "react";
 import {defaultToastTimeout} from "@/components/toasts/ToastProps";
-import carModel from "@/models/CarModel.ts";
 
 const useUserCars = () => {
   const { t } = useTranslation();
@@ -22,9 +21,7 @@ const useUserCars = () => {
       if (currentUser === undefined) {
         return;
       }
-      return await CarService.getCarsByUser(currentUser).then((response: carModel[]) => {
-        return {...response};
-      });
+      return await CarService.getCarsByUser(currentUser);
     },
     enabled: !isCurrentUserLoading && !isCurrentUserError,
     retry: false,
