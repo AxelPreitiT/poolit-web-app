@@ -192,7 +192,7 @@
     "last_date": {
       "invalid": "The date has an invalid format, it should be dd/mm/yyyy",
       "min": "The date cannot be earlier than {{- min}}",
-      "required": "The last date is required to create a recurring trip",
+      "required": "The last date is required for a recurring trip",
       "before_initial": "The last date must be later than the initial date",
       "different_day": "The last date must be on the same day of the week as the initial date"
     },
