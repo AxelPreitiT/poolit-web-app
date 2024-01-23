@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/*
 @Controller
 public class TripController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
@@ -284,3 +285,5 @@ public class TripController {
         return new ModelAndView(String.format("redirect:/trips/%d", tripId));
     }
 }
+
+ */

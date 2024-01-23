@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.RecurrentTripForm;
+//import ar.edu.itba.paw.webapp.form.RecurrentTripForm;
 
 import javax.validation.Constraint;
 import javax.validation.ConstraintValidator;
@@ -11,6 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/*
 @Constraint(validatedBy = LastDateIsAfterDateValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -27,3 +28,5 @@ class LastDateIsAfterDateValidator implements ConstraintValidator<LastDateIsAfte
         return !form.isMultitrip() || form.getDate() == null || form.getLastDate() == null || form.getLastDate().isAfter(form.getDate());
     }
 }
+
+ */

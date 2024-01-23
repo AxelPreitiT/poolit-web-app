@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
+/*
 @Controller
 public class ReviewController {
 
@@ -159,3 +160,5 @@ public class ReviewController {
         return mav;
     }
 }
+
+ */

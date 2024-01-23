@@ -103,33 +103,33 @@ public class UserHibernateDao implements UserDao {
         }
     }
 
-    @Override
-    public void blockUser(long blockerId, long blockedId) {
-        String sql = "INSERT INTO blocks (blockedById, blockedId) VALUES (:blockerId, :blockedId)";
-        em.createNativeQuery(sql)
-                .setParameter("blockerId", blockerId)
-                .setParameter("blockedId", blockedId)
-                .executeUpdate();
-    }
+//    @Override
+//    public void blockUser(long blockerId, long blockedId) {
+//        String sql = "INSERT INTO blocks (blockedById, blockedId) VALUES (:blockerId, :blockedId)";
+//        em.createNativeQuery(sql)
+//                .setParameter("blockerId", blockerId)
+//                .setParameter("blockedId", blockedId)
+//                .executeUpdate();
+//    }
 
-    @Override
-    public void unblockUser(long blockerId, long blockedId) {
-        String sql = "DELETE FROM blocks WHERE blockedById = :blockerId AND blockedId = :blockedId";
-        em.createNativeQuery(sql)
-                .setParameter("blockerId", blockerId)
-                .setParameter("blockedId", blockedId)
-                .executeUpdate();
-    }
+//    @Override
+//    public void unblockUser(long blockerId, long blockedId) {
+//        String sql = "DELETE FROM blocks WHERE blockedById = :blockerId AND blockedId = :blockedId";
+//        em.createNativeQuery(sql)
+//                .setParameter("blockerId", blockerId)
+//                .setParameter("blockedId", blockedId)
+//                .executeUpdate();
+//    }
 
-    @Override
-    public boolean isBlocked(long blockerId, long blockedId) {
-        String sql = "SELECT COUNT(*) FROM blocks WHERE blockedById = :blockerId AND blockedId = :blockedId";
-        int count = ((Number) em.createNativeQuery(sql)
-                .setParameter("blockerId", blockerId)
-                .setParameter("blockedId", blockedId)
-                .getSingleResult()).intValue();
-        return count > 0;
-    }
+//    @Override
+//    public boolean isBlocked(long blockerId, long blockedId) {
+//        String sql = "SELECT COUNT(*) FROM blocks WHERE blockedById = :blockerId AND blockedId = :blockedId";
+//        int count = ((Number) em.createNativeQuery(sql)
+//                .setParameter("blockerId", blockerId)
+//                .setParameter("blockedId", blockedId)
+//                .getSingleResult()).intValue();
+//        return count > 0;
+//    }
 
     @Override
     public List<User> getAdmins() {

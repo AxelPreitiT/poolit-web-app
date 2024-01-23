@@ -86,11 +86,9 @@ public class CarServiceImpl implements CarService {
         return carDao.findByUser(user);
     }
 
-    //TODO: delete
     @Transactional
     @Override
     public List<Car> findCurrentUserCars() throws UserNotFoundException {
-        //TODO Chequear si esta funcion esta hecha para solo ser usada por el usuario principal
         User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         return carDao.findByUser(user);
     }
@@ -101,12 +99,12 @@ public class CarServiceImpl implements CarService {
         return carDao.findByPlateAndUser(plate,user);
     }
 
-    @Transactional
-    @Override
-    public boolean currentUserIsCarOwner(Car car){
-        Optional<User> user = userService.getCurrentUser();
-        return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
-    }
+//    @Transactional
+//    @Override
+//    public boolean currentUserIsCarOwner(Car car){
+//        Optional<User> user = userService.getCurrentUser();
+//        return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
+//    }
 
     @Transactional
     @Override

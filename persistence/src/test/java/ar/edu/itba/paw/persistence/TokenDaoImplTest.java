@@ -69,19 +69,19 @@ public class TokenDaoImplTest {
         Assert.assertEquals(DEFAULT_USER_ID,token.get().getUser().getUserId());
     }
 
-    @Test
-    @Rollback
-    public void testDelete(){
-        //SetUp
-        TypedQuery<VerificationToken> query = em.createQuery("from VerificationToken where token = :token",VerificationToken.class);
-        query.setParameter("token",TOKEN);
-        VerificationToken aux = query.getResultList().stream().findFirst().get();
-        //Execute
-        tokenDao.deleteToken(aux);
-        //Assert
-        Optional<VerificationToken> ans = query.getResultList().stream().findFirst();
-        Assert.assertFalse(ans.isPresent());
-    }
+//    @Test
+//    @Rollback
+//    public void testDelete(){
+//        //SetUp
+//        TypedQuery<VerificationToken> query = em.createQuery("from VerificationToken where token = :token",VerificationToken.class);
+//        query.setParameter("token",TOKEN);
+//        VerificationToken aux = query.getResultList().stream().findFirst().get();
+//        //Execute
+//        tokenDao.deleteToken(aux);
+//        //Assert
+//        Optional<VerificationToken> ans = query.getResultList().stream().findFirst();
+//        Assert.assertFalse(ans.isPresent());
+//    }
 
     @Test
     @Rollback

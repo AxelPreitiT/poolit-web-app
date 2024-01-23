@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.persistence.TripDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.models.trips.TripInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +24,7 @@ public class TripServiceImpl implements TripService {
 
     private static final int OFFSET_MINUTES = 30;
 
-    private static final double DEFAULT_EARNINGS = 0.0;
+//    private static final double DEFAULT_EARNINGS = 0.0;
 
     private final EmailService emailService;
 
@@ -91,37 +88,37 @@ public class TripServiceImpl implements TripService {
         }
         return newTrip;
     }
-    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
-        if(date == null || time == null || date.length()==0 || time.length()==0){
-            return Optional.empty();
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDateTime ans;
-        try{
-            String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, formatter).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
-        }catch (Exception e){
-            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
-            return Optional.empty();
-        }
-        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
-        return Optional.of(ans);
-    }
-    private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
-        if(date == null || time == null || date.length()==0 || time.length()==0){
-            return Optional.empty();
-        }
-        LocalDateTime ans;
-        try{
-            String[] timeTokens = time.split(":");
-            ans = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
-        }catch (Exception e){
-            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
-            return Optional.empty();
-        }
-        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
-        return Optional.of(ans);
-    }
+//    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
+//        if(date == null || time == null || date.length()==0 || time.length()==0){
+//            return Optional.empty();
+//        }
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        LocalDateTime ans;
+//        try{
+//            String[] timeTokens = time.split(":");
+//            ans = LocalDate.parse(date, formatter).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+//        }catch (Exception e){
+//            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
+//            return Optional.empty();
+//        }
+//        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
+//        return Optional.of(ans);
+//    }
+//    private Optional<LocalDateTime> getIsoLocalDateTime(final String date, final String time){
+//        if(date == null || time == null || date.length()==0 || time.length()==0){
+//            return Optional.empty();
+//        }
+//        LocalDateTime ans;
+//        try{
+//            String[] timeTokens = time.split(":");
+//            ans = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atTime(Integer.parseInt(timeTokens[0]),Integer.parseInt(timeTokens[1]));
+//        }catch (Exception e){
+//            LOGGER.error("Error parsing date '{}' and time '{}'", date, time, e);
+//            return Optional.empty();
+//        }
+//        LOGGER.debug("Parsed date '{}' and time '{}' to LocalDateTime '{}'", date, time, ans);
+//        return Optional.of(ans);
+//    }
     private static void validatePageAndSize(int page, int pageSize){
         if(page<0 || pageSize<0) {
             IllegalArgumentException e = new IllegalArgumentException();
@@ -264,65 +261,65 @@ public class TripServiceImpl implements TripService {
 
 
 //    TODO: delete
-    @Transactional
-    @Override
-    public boolean addCurrentUser(final long tripId, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
-        final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        LocalDateTime startDateTime = getIsoLocalDateTime(startDate,startTime).get();
-        LocalDateTime endDateTime = getIsoLocalDateTime(endDate,startTime).orElse(startDateTime);
-        if(trip==null || user==null || startDateTime == null || endDateTime == null){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);
-            throw e;
-        }
-        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
-        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        if(passengers.contains(passenger)){
-            IllegalStateException e = new IllegalStateException();
-            LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
-            throw e;
-        }
-        if(tripDao.getTripSeatCount(trip.getTripId(),startDateTime,endDateTime)>=trip.getMaxSeats()){
-            IllegalStateException e = new IllegalStateException();
-            LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
-            throw e;
-        }
-        if(startDateTime.isBefore(LocalDateTime.now())){
-            TripAlreadyStartedException e = new TripAlreadyStartedException();
-            LOGGER.error("Trip with id {} already started", trip.getTripId(), e);
-            throw e;
-        }
-        if(     startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
-            || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
-            || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
-            || trip.getDriver().equals(user)
-            || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("{}, startDateTime '{}' or endDateTime '{}' have invalid values", trip, startDateTime, endDateTime, e);
-            throw e;
-        }
-        try{
-            emailService.sendMailNewPassengerRequest(trip, passenger);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
-        }
-        try {
-            emailService.sendMailTripRequest(trip, passenger);
-        }
-        catch (Exception e) {
-            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
-        }
-        return tripDao.addPassenger(trip,user,startDateTime,endDateTime)!=null;
-    }
+//    @Transactional
+//    @Override
+//    public boolean addCurrentUser(final long tripId, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException {
+//        final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        LocalDateTime startDateTime = getIsoLocalDateTime(startDate,startTime).get();
+//        LocalDateTime endDateTime = getIsoLocalDateTime(endDate,startTime).orElse(startDateTime);
+//        if(trip==null || user==null || startDateTime == null || endDateTime == null){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);
+//            throw e;
+//        }
+//        Passenger passenger = new Passenger(user,startDateTime,endDateTime);
+//        List<Passenger> passengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+//        if(passengers.contains(passenger)){
+//            IllegalStateException e = new IllegalStateException();
+//            LOGGER.error("Passenger with id {} is already in trip with id {}", passenger.getUserId(), trip.getTripId(), e);
+//            throw e;
+//        }
+//        if(tripDao.getTripSeatCount(trip.getTripId(),startDateTime,endDateTime)>=trip.getMaxSeats()){
+//            IllegalStateException e = new IllegalStateException();
+//            LOGGER.error("Trip with id {} is full", trip.getTripId(), e);
+//            throw e;
+//        }
+//        if(startDateTime.isBefore(LocalDateTime.now())){
+//            TripAlreadyStartedException e = new TripAlreadyStartedException();
+//            LOGGER.error("Trip with id {} already started", trip.getTripId(), e);
+//            throw e;
+//        }
+//        if(     startDateTime.isAfter(endDateTime) || trip.getStartDateTime().isAfter(startDateTime)
+//            || trip.getEndDateTime().isBefore(endDateTime) || !trip.getStartDateTime().getDayOfWeek().equals(startDateTime.getDayOfWeek())
+//            || !trip.getEndDateTime().getDayOfWeek().equals(endDateTime.getDayOfWeek()) || endDateTime.isBefore(startDateTime)
+//            || trip.getDriver().equals(user)
+//            || !startDateTime.toLocalTime().equals(trip.getStartDateTime().toLocalTime()) || !endDateTime.toLocalTime().equals(trip.getEndDateTime().toLocalTime())){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("{}, startDateTime '{}' or endDateTime '{}' have invalid values", trip, startDateTime, endDateTime, e);
+//            throw e;
+//        }
+//        try{
+//            emailService.sendMailNewPassengerRequest(trip, passenger);
+//        }
+//        catch( Exception e){
+//            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
+//        }
+//        try {
+//            emailService.sendMailTripRequest(trip, passenger);
+//        }
+//        catch (Exception e) {
+//            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
+//        }
+//        return tripDao.addPassenger(trip,user,startDateTime,endDateTime)!=null;
+//    }
 
-    @Transactional
-    @Override
-    public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        return removePassenger(tripId, user.getUserId());
-    }
+//    @Transactional
+//    @Override
+//    public boolean removeCurrentUserAsPassenger(final long tripId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        return removePassenger(tripId, user.getUserId());
+//    }
 
     @Transactional
     @Override
@@ -360,23 +357,23 @@ public class TripServiceImpl implements TripService {
         return tripDao.findById(id);
     }
 
-    @Transactional
-    @Override
-    public Optional<Trip> findById(long id, String startDate, String startTime, String endDate){
-        Optional<LocalDateTime> start = getIsoLocalDateTime(startDate,startTime);
-        if(!start.isPresent()){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("StartDate '{}' or startTime '{}' have invalid values", startDate, startTime, e);
-            throw e;
-        }
-        Optional<LocalDateTime> end = getIsoLocalDateTime(endDate,startTime);
-        if(!end.isPresent()){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("EndDate '{}' or endTime '{}' have invalid values", endDate, startTime, e);
-            throw e;
-        }
-        return findById(id,start.get(),end.get());
-    }
+//    @Transactional
+//    @Override
+//    public Optional<Trip> findById(long id, String startDate, String startTime, String endDate){
+//        Optional<LocalDateTime> start = getIsoLocalDateTime(startDate,startTime);
+//        if(!start.isPresent()){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("StartDate '{}' or startTime '{}' have invalid values", startDate, startTime, e);
+//            throw e;
+//        }
+//        Optional<LocalDateTime> end = getIsoLocalDateTime(endDate,startTime);
+//        if(!end.isPresent()){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("EndDate '{}' or endTime '{}' have invalid values", endDate, startTime, e);
+//            throw e;
+//        }
+//        return findById(id,start.get(),end.get());
+//    }
 
     @Transactional
     @Override
@@ -384,11 +381,11 @@ public class TripServiceImpl implements TripService {
         return tripDao.findById(id,start,end);
     }
 
-    @Transactional
-    @Override
-    public Optional<Trip> findById(long id, LocalDateTime dateTime){
-        return tripDao.findById(id,dateTime,dateTime);
-    }
+//    @Transactional
+//    @Override
+//    public Optional<Trip> findById(long id, LocalDateTime dateTime){
+//        return tripDao.findById(id,dateTime,dateTime);
+//    }
 
     @Transactional
     @Override
@@ -408,13 +405,14 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassenger(tripId,user).isPresent();
     }
 
-    @Transactional
-    @Override
-    public double getTotalTripEarnings(final long tripId) throws TripNotFoundException{
-        final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
-        List<Passenger> acceptedPassengers = getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
-        return acceptedPassengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(DEFAULT_EARNINGS);
-    }
+    //TODO: agregar al viaje
+//    @Transactional
+//    @Override
+//    public double getTotalTripEarnings(final long tripId) throws TripNotFoundException{
+//        final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
+//        List<Passenger> acceptedPassengers = getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+//        return acceptedPassengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(DEFAULT_EARNINGS);
+//    }
 
     @Transactional
     @Override
@@ -451,40 +449,40 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassenger(tripId,user);
     }
 
-    @Transactional
-    @Override
-    public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
-        if( trip.getStartDateTime().isAfter(dateTime)
-                || trip.getEndDateTime().isBefore(dateTime)
-                || trip.getStartDateTime().until(dateTime, ChronoUnit.DAYS) % 7 != 0
-                || dateTime.until(trip.getEndDateTime(), ChronoUnit.DAYS) % 7 != 0
-        ){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("{} or dateTime '{}' have invalid values", trip, dateTime, e);
-            throw e;
-        }
-        return tripDao.getPassengers(trip,dateTime);
-    }
+//    @Transactional
+//    @Override
+//    public List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime){
+//        if( trip.getStartDateTime().isAfter(dateTime)
+//                || trip.getEndDateTime().isBefore(dateTime)
+//                || trip.getStartDateTime().until(dateTime, ChronoUnit.DAYS) % 7 != 0
+//                || dateTime.until(trip.getEndDateTime(), ChronoUnit.DAYS) % 7 != 0
+//        ){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("{} or dateTime '{}' have invalid values", trip, dateTime, e);
+//            throw e;
+//        }
+//        return tripDao.getPassengers(trip,dateTime);
+//    }
 
-    @Transactional
-    @Override
-    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
-        return tripDao.getAcceptedPassengers(trip,startDate,endDate);
-    }
+//    @Transactional
+//    @Override
+//    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
+//        return tripDao.getAcceptedPassengers(trip,startDate,endDate);
+//    }
 
-    @Transactional
-    @Override
-    public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
-        if( trip.getStartDateTime().isAfter(startDate)
-                || trip.getStartDateTime().until(startDate, ChronoUnit.DAYS) % 7 != 0
-                || startDate.until(endDate, ChronoUnit.DAYS) % 7 != 0
-        ){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("{} or startDate '{}' or endDate '{}' have invalid values", trip, startDate, endDate, e);
-            throw e;
-        }
-        return tripDao.getPassengers(trip,startDate,endDate);
-    }
+//    @Transactional
+//    @Override
+//    public List<Passenger> getPassengersRecurrent(Trip trip, LocalDateTime startDate, LocalDateTime endDate){
+//        if( trip.getStartDateTime().isAfter(startDate)
+//                || trip.getStartDateTime().until(startDate, ChronoUnit.DAYS) % 7 != 0
+//                || startDate.until(endDate, ChronoUnit.DAYS) % 7 != 0
+//        ){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("{} or startDate '{}' or endDate '{}' have invalid values", trip, startDate, endDate, e);
+//            throw e;
+//        }
+//        return tripDao.getPassengers(trip,startDate,endDate);
+//    }
     private Optional<Passenger.PassengerState> getPassengersState(String status){
         if(status.equals("accept")){
             return Optional.of(Passenger.PassengerState.ACCEPTED);
@@ -500,12 +498,12 @@ public class TripServiceImpl implements TripService {
 
 
     //TODO: Delete
-    @Transactional
-    @Override
-    public PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),getPassengersState(passengerState),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Passenger> getPassengersPaged(Trip trip, String passengerState, int page, int pageSize){
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime(),getPassengersState(passengerState),page,pageSize);
+//    }
 
     @Transactional
     @Override
@@ -518,44 +516,44 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassengers(trip,startDateTime,endDateTime,Optional.ofNullable(passengerState),page,pageSize);
     }
 
-    @Transactional
-    @Override
-    public List<Passenger> getPassengers(Trip trip){
-        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
-    }
-    @Transactional
-    @Override
-    public List<Passenger> getPassengers(TripInstance tripInstance){
-        return tripDao.getPassengers(tripInstance);
-    }
+//    @Transactional
+//    @Override
+//    public List<Passenger> getPassengers(Trip trip){
+//        return tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+//    }
+//    @Transactional
+//    @Override
+//    public List<Passenger> getPassengers(TripInstance tripInstance){
+//        return tripDao.getPassengers(tripInstance);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripInstances(trip,page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize){
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripInstances(trip,page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
-        validatePageAndSize(page,pageSize);
-        if(start.isBefore(trip.getStartDateTime()) || end.isAfter(trip.getEndDateTime())
-         || !start.getDayOfWeek().equals(end.getDayOfWeek()) || !start.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek())){
-            IllegalArgumentException e = new IllegalArgumentException();
-            LOGGER.error("StartDateTime '{}' or endDateTime '{}' have invalid values", start, end, e);
-            throw e;
-        }
-        return tripDao.getTripInstances(trip,page,pageSize,start,end);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<TripInstance> getTripInstances(final Trip trip, int page, int pageSize, LocalDateTime start, LocalDateTime end){
+//        validatePageAndSize(page,pageSize);
+//        if(start.isBefore(trip.getStartDateTime()) || end.isAfter(trip.getEndDateTime())
+//         || !start.getDayOfWeek().equals(end.getDayOfWeek()) || !start.getDayOfWeek().equals(trip.getStartDateTime().getDayOfWeek())){
+//            IllegalArgumentException e = new IllegalArgumentException();
+//            LOGGER.error("StartDateTime '{}' or endDateTime '{}' have invalid values", start, end, e);
+//            throw e;
+//        }
+//        return tripDao.getTripInstances(trip,page,pageSize,start,end);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsCreatedByCurrentUserFuture(int page, int pageSize) throws UserNotFoundException{
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsCreatedByCurrentUserFuture(int page, int pageSize) throws UserNotFoundException{
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+//    }
     @Transactional
     @Override
     public PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize){
@@ -587,44 +585,44 @@ public class TripServiceImpl implements TripService {
         return pastTrips?tripDao.getTripsWhereUserIsPassenger(user.get(),Optional.empty(), Optional.of(LocalDateTime.now()),null, page,pageSize):tripDao.getTripsWhereUserIsPassenger(user.get(), Optional.of(LocalDateTime.now()),Optional.empty(),null, page,pageSize);
     }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsCreatedByCurrentUserPast(int page, int pageSize)throws UserNotFoundException{
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsCreatedByCurrentUserPast(int page, int pageSize)throws UserNotFoundException{
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsCreatedByUserPast(final User user,int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsCreatedByUserPast(final User user,int page, int pageSize){
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    //Da todos los viajes creados por el usuario
-    public PagedContent<Trip> getTripsCreatedByCurrentUser(int page, int pageSize) throws UserNotFoundException{
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    //Da todos los viajes creados por el usuario
+//    public PagedContent<Trip> getTripsCreatedByCurrentUser(int page, int pageSize) throws UserNotFoundException{
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize) {
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsCreatedByUser(final User user, int page, int pageSize) {
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsCreatedByUser(user,Optional.empty(),Optional.empty(),page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerFuture(int page, int pageSize) throws UserNotFoundException{
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null, page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerFuture(int page, int pageSize) throws UserNotFoundException{
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null, page,pageSize);
+//    }
 
     @Transactional
     @Override
@@ -633,34 +631,34 @@ public class TripServiceImpl implements TripService {
         return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null, page,pageSize);
     }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerPast(int page, int pageSize) throws UserNotFoundException{
-        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsWhereCurrentUserIsPassengerPast(int page, int pageSize) throws UserNotFoundException{
+//        final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsWhereUserIsPassengerPast(User user, int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsWhereUserIsPassengerPast(User user, int page, int pageSize){
+//        validatePageAndSize(page,pageSize);
+//        return tripDao.getTripsWhereUserIsPassenger(user,Optional.empty(),Optional.of(LocalDateTime.now()), Passenger.PassengerState.ACCEPTED, page,pageSize);
+//    }
 
 
     //TODO: delete
-    @Transactional
-    @Override
-    public PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize){
-        validatePageAndSize(page,pageSize);
-        Optional<User> user = userService.getCurrentUser();
-        if(!user.isPresent()){
-            return PagedContent.emptyPagedContent();
-        }
-        LocalDateTime start = LocalDateTime.now();
-        return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getRecommendedTripsForCurrentUser(int page, int pageSize){
+//        validatePageAndSize(page,pageSize);
+//        Optional<User> user = userService.getCurrentUser();
+//        if(!user.isPresent()){
+//            return PagedContent.emptyPagedContent();
+//        }
+//        LocalDateTime start = LocalDateTime.now();
+//        return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
+//    }
 
     @Transactional
     @Override
@@ -695,35 +693,35 @@ public class TripServiceImpl implements TripService {
         final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
         final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue:new ArrayList<>();
         //TODO: delete logic of blocked users
-        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
+        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,startDateTime.getDayOfWeek(),endDateTime,OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
 
     }
 
     //TODO: delete
-    @Transactional
-    @Override
-    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
-            long originCityId, long destinationCityId, final LocalDate startDate,
-            final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
-            final BigDecimal minPriceValue, final BigDecimal maxPriceValue, final String sortType, final boolean descending,
-            List<FeatureCar> carFeatures, final int page, final int pageSize){
-        Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
-        Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
-        validatePageAndSize(page,pageSize);
-        LocalDateTime startDateTime = startDate.atTime(startTime);
-        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
-        Optional<User> user = userService.getCurrentUser();
-        carFeatures = carFeatures == null ? new ArrayList<>() : carFeatures;
-        long userId = -1;
-        if(user.isPresent()){
-            userId=user.get().getUserId();
-        }
-        return tripDao.getTripsWithFilters(originCityId, destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,carFeatures,page,pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<Trip> getTripsByDateTimeAndOriginAndDestinationAndPrice(
+//            long originCityId, long destinationCityId, final LocalDate startDate,
+//            final LocalTime startTime, final LocalDate endDate, final LocalTime endTime,
+//            final BigDecimal minPriceValue, final BigDecimal maxPriceValue, final String sortType, final boolean descending,
+//            List<FeatureCar> carFeatures, final int page, final int pageSize){
+//        Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
+//        Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
+//        validatePageAndSize(page,pageSize);
+//        LocalDateTime startDateTime = startDate.atTime(startTime);
+//        LocalDateTime endDateTime = (endDate != null) ? endDate.atTime(endTime) : startDateTime;
+//        Optional<User> user = userService.getCurrentUser();
+//        carFeatures = carFeatures == null ? new ArrayList<>() : carFeatures;
+//        long userId = -1;
+//        if(user.isPresent()){
+//            userId=user.get().getUserId();
+//        }
+//        return tripDao.getTripsWithFilters(originCityId, destinationCityId,startDateTime,Optional.of(startDateTime.getDayOfWeek()),Optional.of(endDateTime),OFFSET_MINUTES,minPrice,maxPrice,getTripSortType(sortType),descending,userId,carFeatures,page,pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException {
+//    @Transactional
+//    @Override
+    private boolean acceptPassenger(final long tripId, final long userId) throws NotAvailableSeatsException {
         User user = userService.findById(userId).orElseThrow(()->new IllegalArgumentException("User not found"));
         Passenger pass = tripDao.getPassenger(tripId, user).orElseThrow(()->new IllegalArgumentException("Passenger not found"));
         if(LocalDateTime.now().compareTo(pass.getStartDateTime())>=0){
@@ -742,9 +740,9 @@ public class TripServiceImpl implements TripService {
         return tripDao.acceptPassenger(pass);
     }
 
-    @Transactional
-    @Override
-    public boolean rejectPassenger(final long tripId, final long userId){
+//    @Transactional
+//    @Override
+    private boolean rejectPassenger(final long tripId, final long userId){
         User user = userService.findById(userId).orElseThrow(()-> new IllegalArgumentException("User not found"));
         Passenger passenger = tripDao.getPassenger(tripId, user).orElseThrow(()-> new IllegalArgumentException("Passanger not found"));
         if(LocalDateTime.now().compareTo(passenger.getStartDateTime())>=0){

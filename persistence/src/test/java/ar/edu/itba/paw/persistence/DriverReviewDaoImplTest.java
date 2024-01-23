@@ -74,13 +74,13 @@ public class DriverReviewDaoImplTest {
         Assert.assertEquals(DRIVER_REVIEW_OPTION,ans.getOption());
     }
 
-    @Test
-    public void testGetDriverRating(){
-        //Execute
-        double ans = driverReviewDao.getDriverRating(USER_1);
-        //Assert
-        Assert.assertEquals(0,Double.compare(RATING,ans));
-    }
+//    @Test
+//    public void testGetDriverRating(){
+//        //Execute
+//        double ans = driverReviewDao.getDriverRating(USER_1);
+//        //Assert
+//        Assert.assertEquals(0,Double.compare(RATING,ans));
+//    }
 
     @Test
     public void testGetDriverReviews(){

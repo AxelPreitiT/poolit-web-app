@@ -4,6 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+/*
 public abstract class ReviewForm {
 
     @Min(value = 1)
@@ -29,3 +30,5 @@ public abstract class ReviewForm {
         this.comment = comment;
     }
 }
+
+ */

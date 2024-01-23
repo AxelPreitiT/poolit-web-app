@@ -1,19 +1,12 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.form.annotations.LastDateIsAfterDate;
-import ar.edu.itba.paw.webapp.form.annotations.LastDateNotNullIfMultitrip;
-import ar.edu.itba.paw.webapp.form.annotations.SameWeekDay;
-import ar.edu.itba.paw.webapp.form.annotations.NowOrLater;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
+/*
 
-@LastDateNotNullIfMultitrip
-@SameWeekDay
-@LastDateIsAfterDate
-@NowOrLater
 public class RecurrentTripForm {
 
     @NotNull
@@ -61,3 +54,5 @@ public class RecurrentTripForm {
         this.lastDate = lastDate;
     }
 }
+
+ */

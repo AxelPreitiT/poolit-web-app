@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/*
 public class EmailForm {
 
     @Size(max = 50)
@@ -17,3 +18,5 @@ public class EmailForm {
         this.email = email;
     }
 }
+
+ */

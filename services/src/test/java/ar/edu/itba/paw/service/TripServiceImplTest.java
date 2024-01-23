@@ -122,51 +122,51 @@ public class TripServiceImplTest {
     }
 
 
-    @Test(expected = TripAlreadyStartedException.class)
-    public void TestIsStartedAddCurrentUSer() throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
-        when(tripDao.findById(anyLong())).thenReturn(Optional.of(trip));
-        when(userService.getCurrentUser()).thenReturn(Optional.of(user));
-        //when(tripDao.getPassenger(any(), any())).thenReturn(Optional.of(passenger));
-        //when(tripDao.addPassenger(any(), any(), any(), any())).thenReturn(true);
+//    @Test(expected = TripAlreadyStartedException.class)
+//    public void TestIsStartedAddCurrentUSer() throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException {
+//        when(tripDao.findById(anyLong())).thenReturn(Optional.of(trip));
+//        when(userService.getCurrentUser()).thenReturn(Optional.of(user));
+//        //when(tripDao.getPassenger(any(), any())).thenReturn(Optional.of(passenger));
+//        //when(tripDao.addPassenger(any(), any(), any(), any())).thenReturn(true);
+//
+//        boolean ans = tripService.addCurrentUser(tripId, "02/05/2023", "10:00", "02/05/2023");
+//
+//        Assert.fail();
+//    }
 
-        boolean ans = tripService.addCurrentUser(tripId, "02/05/2023", "10:00", "02/05/2023");
-
-        Assert.fail();
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void TestRemoveCurrentUserAsPassenger() throws Exception {
-        // precondiciones
-        when(tripDao.findById(anyLong())).thenReturn(Optional.of(trip));
-        when(userService.getCurrentUser()).thenReturn(Optional.of(user));
-        // ejercitar la clase
-        tripService.removeCurrentUserAsPassenger(trip.getTripId());
-
-        // assertions
-        Assert.fail();
-    }
+//    @Test(expected = UserNotFoundException.class)
+//    public void TestRemoveCurrentUserAsPassenger() throws Exception {
+//        // precondiciones
+//        when(tripDao.findById(anyLong())).thenReturn(Optional.of(trip));
+//        when(userService.getCurrentUser()).thenReturn(Optional.of(user));
+//        // ejercitar la clase
+//        tripService.removeCurrentUserAsPassenger(trip.getTripId());
+//
+//        // assertions
+//        Assert.fail();
+//    }
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void TestBadOriginDateGetPassengers() throws Exception {
-        // precondiciones
-        // ejercitar la clase
-        List<Passenger> passengers2 = tripService.getPassengers(trip, dateTime.plusDays(-3));
-        // assertions
-        Assert.fail();
-    }
+//    @Test(expected = IllegalArgumentException.class)
+//    public void TestBadOriginDateGetPassengers() throws Exception {
+//        // precondiciones
+//        // ejercitar la clase
+//        List<Passenger> passengers2 = tripService.getPassengers(trip, dateTime.plusDays(-3));
+//        // assertions
+//        Assert.fail();
+//    }
 
-    @Test
-    public void TestGetPassengers() throws Exception {
-        // precondiciones
-        List<Passenger> passengers = new ArrayList<>();
-        passengers.add(passenger);
-        when(tripDao.getPassengers(eq(trip), eq(dateTime)))
-                .thenReturn(passengers);
-        // ejercitar la clase
-        List<Passenger> passengers2 = tripService.getPassengers(trip, dateTime);
-        // assertions
-        Assert.assertNotNull(passengers2);
-    }
+//    @Test
+//    public void TestGetPassengers() throws Exception {
+//        // precondiciones
+//        List<Passenger> passengers = new ArrayList<>();
+//        passengers.add(passenger);
+//        when(tripDao.getPassengers(eq(trip), eq(dateTime)))
+//                .thenReturn(passengers);
+//        // ejercitar la clase
+//        List<Passenger> passengers2 = tripService.getPassengers(trip, dateTime);
+//        // assertions
+//        Assert.assertNotNull(passengers2);
+//    }
 
 }

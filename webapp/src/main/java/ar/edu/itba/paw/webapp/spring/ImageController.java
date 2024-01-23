@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+/*
 @Controller
 public class ImageController {
 
@@ -33,3 +34,5 @@ public class ImageController {
     }
 
 }
+
+ */

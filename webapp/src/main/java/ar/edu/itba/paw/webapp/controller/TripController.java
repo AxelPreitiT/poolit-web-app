@@ -104,12 +104,13 @@ public class TripController {
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
+    //TODO: revisar si es delete
     @DELETE
     @Path("/{id}")
     public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET

@@ -11,11 +11,11 @@ public interface TokenService {
 
     Optional<VerificationToken> getToken(String token);
 
-    void deleteToken(VerificationToken token);
+//    void deleteToken(VerificationToken token);
 
     boolean isValidToken(VerificationToken token);
 
-    void renewToken(VerificationToken token);
+//    void renewToken(VerificationToken token);
 
     String updateToken(User user);
 }

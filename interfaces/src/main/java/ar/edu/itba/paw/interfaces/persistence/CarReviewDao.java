@@ -15,7 +15,7 @@ public interface CarReviewDao {
 
     CarReview createCarReview(final Trip trip, final Passenger reviewer, final Car car, final int rating, final String comment, CarReviewOptions option);
 
-    double getCarRating(final Car car);
+//    double getCarRating(final Car car);
 
     PagedContent<CarReview> getCarReviews(final Car car, int page, int pageSize);
 

@@ -71,13 +71,13 @@ public class PassengerReviewDaoImplTest {
         Assert.assertEquals(PASSENGER_REVIEW_OPTION,ans.getOption());
     }
 
-    @Test
-    public void testGetPassengerRating(){
-        //Execute
-        double ans = passengerReviewDao.getPassengerRating(USER_1);
-        //Assert
-        Assert.assertEquals(0,Double.compare(RATING,ans));
-    }
+//    @Test
+//    public void testGetPassengerRating(){
+//        //Execute
+//        double ans = passengerReviewDao.getPassengerRating(USER_1);
+//        //Assert
+//        Assert.assertEquals(0,Double.compare(RATING,ans));
+//    }
 
     @Test
     public void testGetPassengerReviews(){

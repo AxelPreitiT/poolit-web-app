@@ -12,6 +12,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/*
 @Constraint(validatedBy = CityIdValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -32,3 +33,5 @@ class CityIdValidator implements ConstraintValidator<CityId, Integer> {
         return cityId==-1 ||  cityService.findCityById(cityId).isPresent();
     }
 }
+
+ */

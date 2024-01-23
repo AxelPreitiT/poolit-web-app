@@ -17,6 +17,7 @@ import java.util.List;
 
 
 //TODO: eliminar
+/*
 @Service
 public class TripReviewServiceImpl implements TripReviewService {
 
@@ -64,3 +65,5 @@ public class TripReviewServiceImpl implements TripReviewService {
     }
 
 }
+
+ */

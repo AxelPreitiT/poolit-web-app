@@ -23,9 +23,9 @@ public interface UserDao {
                               final String password, final City bornCity, final String mailLocale, final String role, long userImageId);
     void modifyUser(long userId, String username, String surname, String phone, City bornCity, Locale mailLocale,long imageId);
 
-    void blockUser(long blockerId, long blockedId);
-    void unblockUser(long blockerId, long blockedId);
-    boolean isBlocked(long blockerId, long blockedId);
+//    void blockUser(long blockerId, long blockedId);
+//    void unblockUser(long blockerId, long blockedId);
+//    boolean isBlocked(long blockerId, long blockedId);
     List<User> getAdmins();
     void banUser(long userId);
 }

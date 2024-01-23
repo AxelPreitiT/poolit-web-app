@@ -13,7 +13,6 @@ import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.reviews.DriverReview;
 import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
-import ar.edu.itba.paw.models.reviews.ItemReview;
 import ar.edu.itba.paw.models.reviews.ReviewState;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.slf4j.Logger;
@@ -62,19 +61,19 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.findById(id);
     }
 
-    @Transactional
-    @Override
-    public double getDriverRating(long userId) throws UserNotFoundException {
-        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
-        return driverReviewDao.getDriverRating(user);
-    }
+//    @Transactional
+//    @Override
+//    public double getDriverRating(long userId) throws UserNotFoundException {
+//        User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
+//        return driverReviewDao.getDriverRating(user);
+//    }
 
-    @Transactional
-    @Override
-    public double getDriverRatingOwnUser() throws UserNotLoggedInException {
-        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        return driverReviewDao.getDriverRating(user);
-    }
+//    @Transactional
+//    @Override
+//    public double getDriverRatingOwnUser() throws UserNotLoggedInException {
+//        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+//        return driverReviewDao.getDriverRating(user);
+//    }
 
     @Transactional
     @Override
@@ -91,16 +90,16 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.getDriverReviewsMadeByUserOnTrip(reviewer,trip,page,pageSize);
     }
 
-    @Transactional
-    @Override
-    public PagedContent<DriverReview> getDriverReviewsOwnUser(int page, int pageSize) throws UserNotLoggedInException {
-        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        return driverReviewDao.getDriverReviews(user, page, pageSize);
-    }
+//    @Transactional
+//    @Override
+//    public PagedContent<DriverReview> getDriverReviewsOwnUser(int page, int pageSize) throws UserNotLoggedInException {
+//        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+//        return driverReviewDao.getDriverReviews(user, page, pageSize);
+//    }
 
-    @Transactional
-    @Override
-    public boolean canReviewDriver(Trip trip, Passenger reviewer, User driver) {
+//    @Transactional
+//    @Override
+    private boolean canReviewDriver(Trip trip, Passenger reviewer, User driver) {
         if(!tripService.userIsDriver(trip.getTripId(), driver)) {
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to review user with id {}, but he's not the driver of the trip with id {}", reviewer.getUserId(), driver.getUserId(), trip.getTripId(), e);
@@ -127,13 +126,13 @@ public class DriverReviewServiceImpl implements DriverReviewService {
         return driverReviewDao.canReviewDriver(trip, reviewer, driver) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
-    @Transactional
-    @Override
-    public ItemReview<User> getDriverReviewState(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        Passenger reviewer = tripService.getPassenger(tripId, user).orElseThrow(PassengerNotFoundException::new);
-        User driver = trip.getDriver();
-        return new ItemReview<>(driver, getReviewState(trip, reviewer, driver));
-    }
+//    @Transactional
+//    @Override
+//    public ItemReview<User> getDriverReviewState(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
+//        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+//        User user = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+//        Passenger reviewer = tripService.getPassenger(tripId, user).orElseThrow(PassengerNotFoundException::new);
+//        User driver = trip.getDriver();
+//        return new ItemReview<>(driver, getReviewState(trip, reviewer, driver));
+//    }
 }
