@@ -47,14 +47,17 @@ class TripsApi extends AxiosApi {
         //console.log("parsedLink" + parsedLinkHeader)
         //console.log("parsedLink.first" + parsedLinkHeader?.first)
         const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
+        const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
+        const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
+        const last = response.headers.link?.match(/<([^>]*)>; rel="last"/)?.[1];
 
         const newResponse: AxiosResponse<PaginationModel<TripModel>> = {
           ...response,
           data:{
             first: first,
-            prev: "hola",
-            next: "hola",
-            last: "hola",
+            prev: prev,
+            next: next,
+            last: last,
             total_pages: 2,
             data: trips
           }
