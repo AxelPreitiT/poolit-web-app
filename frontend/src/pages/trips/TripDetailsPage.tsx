@@ -9,7 +9,6 @@ import {useParams, useSearchParams} from "react-router-dom";
 import CreateUri from "@/functions/CreateUri.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
-import getTripRole from "@/functions/GetTripRole.ts";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
@@ -18,33 +17,34 @@ import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUser from "@/hooks/users/usePublicUser.tsx";
 import usePassangers from "@/hooks/passanger/usePassangers.tsx";
+import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
   const id = useParams();
   const [params,] = useSearchParams();
-  const { isLoading, currentUser } = useCurrentUser();
+
 
   const link = CreateUri(id.tripId, params.toString(), '/trips')
-
+  const { currentUser } = useCurrentUser();
   const {isLoading:isLoadingTrip, trip:trip} = useTripByUri(link);
   const {isLoading:isLoadingCar, car:car} = useCarByUri(trip?.carUri);
   const {isLoading:isLoadingDriver, driver:driver} = usePublicUser(trip?.driverUri)
   const {isLoading:isLoadingPassangers, passangers:passangers} = usePassangers(trip?.passengersUriTemplate)
-
-
-  const {isPassanger, isDriver} = isLoadingPassangers || isLoadingDriver || isLoadingCar ||  isLoadingTrip || isLoading || currentUser == null  || driver == undefined || passangers == undefined ? {isPassanger:false, isDriver:false} : getTripRole(currentUser, driver, passangers);
+  const {isLoading:isLoadingRole, passangersRole:passangerRole, isError:isError} = useRolePassanger(currentUser, trip?.passengersUriTemplate )
+  const isPassanger = !isError
+  const isDriver = trip?.driverUri === currentUser?.selfUri
 
   return (
     <div>
       <MainComponent>
         <MainHeader
           title={t("trip_detail.header")}
-          left_component={ isPassanger && (<StatusTrip status={"ACCEPT"}/>)}
+          left_component={ isPassanger && !isLoadingRole && passangerRole!= undefined && (<StatusTrip status={passangerRole.passengerState}/>)}
         />
 
-        {trip == undefined || car === undefined || driver === undefined ?
+        { isLoadingTrip || trip == undefined || isLoadingCar || car === undefined || isLoadingDriver || driver === undefined ?
           (<SpinnerComponent /> ) :
           (<div>
               <Location
@@ -70,10 +70,11 @@ const TripDetailsPage = () => {
               </div>
             </div>)}
       </MainComponent>
-      { passangers == undefined ?
-          (<SpinnerComponent />) :
-          (<PassangersTripComponent passangers={passangers}/> )
-      }
+      {isDriver && (
+          isLoadingPassangers || passangers === undefined ?
+            (<SpinnerComponent />) :
+            (<PassangersTripComponent passangers={passangers} />)
+      )}
     </div>
   );
 }
