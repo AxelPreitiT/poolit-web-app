@@ -1,0 +1,141 @@
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3rem 2rem;
+  column-gap: 2rem;
+}
+
+.searchContainer {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.contentContainer {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 1rem;
+}
+
+@media (max-width: 1000px) {
+  .mainContainer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    row-gap: 3rem;
+  }
+
+  .searchContainer {
+    width: 60%;
+  }
+
+  .contentContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .searchContainer {
+    width: 100%;
+  }
+}
+
+// --------------- No results found ----------------
+.noResultsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-wrap: nowrap;
+  font-weight: 600;
+  row-gap: 0.5rem;
+}
+
+.noResultsContainer .noResultsHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.25rem;
+  font-size: 2rem;
+}
+
+.noResultsContainer .noResultsHeader svg {
+  width: 4rem;
+  height: 4rem;
+}
+
+.noResultsContainer .moResultsBody {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1400px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1.5rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .noResultsContainer .moResultsBody {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1.5rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .noResultsContainer .moResultsBody {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1.25rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .noResultsContainer .moResultsBody {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .noResultsContainer .noResultsBody {
+    font-size: 0.75rem;
+  }
+}

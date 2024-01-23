@@ -291,7 +291,7 @@
     "GOOD_EXPERIENCE": "Buena experiencia",
     "PROFESSIONAL_DRIVER": "Conductor profesional",
     "EXCELLENT_EXPERIENCE": "Excelente experiencia",
-    "error" : {
+    "error": {
       "title_all": "Un error ocurrió al traer las reseñas."
     }
   },
@@ -448,6 +448,13 @@
         "description": "No solo podrás encontrar viajes, sino que también podrás convertirte en conductor y compartir tus propios viajes. Solo necesitarás agregar la información de tu auto y ya podrás ofrecer viajes a otros. Establecé tu propio horario y ruta, y los usuarios podrán unirse a tu viaje si se ajusta a sus necesidades de viaje. De esta manera, estarás ayudando a reducir el tráfico y las emisiones, al mismo tiempo que ahorrarás dinero en gasolina y peajes.",
         "alt": "Crear viajes"
       }
+    }
+  },
+  "search": {
+    "title": "Buscar viajes",
+    "no_results": {
+      "title": "Parece que no hay viajes disponibles para tu búsqueda",
+      "body": "No te preocupes, seguro encontrás algo pronto"
     }
   },
   "query": {

@@ -13,6 +13,7 @@ import CreatedPage from "./pages/created/CreatedPage";
 import CreateTripPage from "./pages/createTrip/CreateTripPage";
 import AdminPage from "./pages/admin/AdminPage";
 import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
+import SearchPage from "./pages/search/SearchPage";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -73,10 +74,7 @@ const router = createBrowserRouter(
     {
       path: tripDetailsPath,
       element: (
-        <RouteWrapper
-          title="trip_detail.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="trip_detail.title">
           <Navbar />
           <TripDetailsPage />,
         </RouteWrapper>
@@ -163,6 +161,15 @@ const router = createBrowserRouter(
         >
           <Navbar />
           <AdminPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: searchPath,
+      element: (
+        <RouteWrapper title="search.title">
+          <Navbar />
+          <SearchPage />,
         </RouteWrapper>
       ),
     },

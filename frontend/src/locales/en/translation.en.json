@@ -292,7 +292,7 @@
     "GOOD_EXPERIENCE": "Good experience",
     "PROFESSIONAL_DRIVER": "Professional driver",
     "EXCELLENT_EXPERIENCE": "Excellent experience",
-    "error" : {
+    "error": {
       "title_all": "An error occurred while fetching your reviews"
     }
   },
@@ -449,6 +449,13 @@
         "description": "Not only can you find trips, but you can also become a driver and share your own trips. You just need to add your car information and you can offer trips to others. Set your own schedule and route, and users can join your trip if it fits their travel needs. This way, you'll help reduce traffic and emissions while also saving money on gas and tolls.",
         "alt": "Create trips"
       }
+    }
+  },
+  "search": {
+    "title": "Trips search",
+    "no_results": {
+      "title": "It seems that there are no trips that match your search",
+      "body": "Don't worry, you'll find a trip that suits your needs soon"
     }
   },
   "query": {
