@@ -44,9 +44,9 @@ public class CarReviewServiceImplTest {
     private static final User DRIVER = new User(2, "DRIVER", "SURNAME", "driver@gmail.com", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "DRIVER", 1L);
     private static final User USER = new User(1, "USER", "SURNAME", "user@gmail.com", "PHONE", "PASSWORD", new City(1, "Agronomía", 1), new Locale("es"), "USER", 1L);
     private static final Car CAR = new Car(1, "ABC123", "INFO", DRIVER, 1L);
+    private static final Car CAR_2 = new Car(2, "ABC123", "INFO", USER, 1L);
     private static final BigDecimal PRICE = BigDecimal.valueOf(10.0);
     private static final Trip TRIP = new Trip(TRIP_ID, ORIGIN_CITY, ORIGIN_ADDRESS, DESTINATION_CITY, DESTINATION_ADDRESS, DATE_TIME, DATE_TIME.plusDays(7), MAX_SEATS, DRIVER, CAR, 0, PRICE.doubleValue());
-
     private static final User REVIEWER = USER;
     private static final Car REVIEWED = CAR;
     private static final Passenger CURRENT_PASSENGER = new Passenger(USER, TRIP, TRIP.getStartDateTime(), TRIP.getEndDateTime());
@@ -74,7 +74,7 @@ public class CarReviewServiceImplTest {
     private CarReviewServiceImpl carReviewService;
 
     @Test
-    public void CarReviewCreateTest() throws UserNotFoundException, CarNotFoundException, TripNotFoundException, PassengerNotFoundException {
+    public void testCreate() throws UserNotFoundException, CarNotFoundException, TripNotFoundException, PassengerNotFoundException {
         when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));
         when(userService.getCurrentUser()).thenReturn(Optional.of(REVIEWER));
         when(tripService.getPassenger(any(), any())).thenReturn(Optional.of(CURRENT_PASSENGER));
@@ -95,6 +95,50 @@ public class CarReviewServiceImplTest {
         Assert.assertEquals(carReview.getComment(), CAR_REVIEW.getComment());
         Assert.assertEquals(carReview.getOption(), CAR_REVIEW.getOption());
         Assert.assertEquals(carReview.getDate(), CAR_REVIEW.getDate());
+    }
+
+    @Test
+    public void testCreateForOtherCar(){
+        when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));
+        when(userService.getCurrentUser()).thenReturn(Optional.of(REVIEWER));
+        when(tripService.getPassenger(any(), any())).thenReturn(Optional.of(CURRENT_PASSENGER));
+        when(carService.findById(anyLong())).thenReturn(Optional.of(CAR_2));
+
+        Assert.assertThrows(IllegalArgumentException.class,()->carReviewService.createCarReview(TRIP_ID, CAR_2.getCarId(), RATING, COMMENT, CAR_REVIEW_OPTION));
+   }
+
+    @Test
+    public void testCreateWhenNotPassenger(){
+        when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));
+        when(userService.getCurrentUser()).thenReturn(Optional.of(REVIEWER));
+        when(tripService.getPassenger(any(), any())).thenReturn(Optional.of(CURRENT_PASSENGER));
+        when(carService.findById(anyLong())).thenReturn(Optional.of(REVIEWED));
+        when(tripService.userIsPassenger(anyLong(), any(User.class))).thenReturn(false);
+
+        Assert.assertThrows(IllegalArgumentException.class,()->carReviewService.createCarReview(TRIP_ID, REVIEWED.getCarId(), RATING, COMMENT, CAR_REVIEW_OPTION));
+    }
+
+    @Test
+    public void testCreateForOwnCar(){
+        when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));
+        when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
+        when(tripService.getPassenger(any(), any())).thenReturn(Optional.of(CURRENT_PASSENGER));
+        when(carService.findById(anyLong())).thenReturn(Optional.of(REVIEWED));
+        when(tripService.userIsPassenger(anyLong(), any(User.class))).thenReturn(true);
+
+        Assert.assertThrows(IllegalArgumentException.class,()->carReviewService.createCarReview(TRIP_ID, CAR_2.getCarId(), RATING, COMMENT, CAR_REVIEW_OPTION));
+    }
+
+    @Test
+    public void testCreateForAlreadyReviewed(){
+        when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));
+        when(userService.getCurrentUser()).thenReturn(Optional.of(REVIEWER));
+        when(tripService.getPassenger(any(), any())).thenReturn(Optional.of(CURRENT_PASSENGER));
+        when(carService.findById(anyLong())).thenReturn(Optional.of(REVIEWED));
+        when(tripService.userIsPassenger(anyLong(), any(User.class))).thenReturn(true);
+        when(carReviewDao.canReviewCar(any(), any(), any())).thenReturn(false);
+
+        Assert.assertThrows(IllegalArgumentException.class,()->carReviewService.createCarReview(TRIP_ID, CAR_2.getCarId(), RATING, COMMENT, CAR_REVIEW_OPTION));
     }
 
 }
