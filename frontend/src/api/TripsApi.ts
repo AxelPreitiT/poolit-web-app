@@ -43,11 +43,12 @@ class TripsApi extends AxiosApi {
     }).then((response: AxiosResponse<TripModel[]>) => {
         const trips = response.data;
 
-        const pagUri = "hola";
+        const firstLink = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1]; // Extract first link
+
         const newResponse: AxiosResponse<TripPaginationModel> = {
           ...response,
           data:{
-            pagUri: pagUri,
+            pagUri: firstLink || "hola",
             trips: trips
           }
         };
