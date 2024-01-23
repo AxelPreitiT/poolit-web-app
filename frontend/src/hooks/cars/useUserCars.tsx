@@ -5,10 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import useQueryError from "../errors/useQueryError";
 import { useEffect } from "react";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import useAuthentication from "../auth/useAuthentication";
 
 const useUserCars = () => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
+  const isAuthenticated = useAuthentication();
   const {
     isLoading: isCurrentUserLoading,
     currentUser,
@@ -23,7 +25,7 @@ const useUserCars = () => {
       }
       return await CarService.getCarsByUser(currentUser);
     },
-    enabled: !isCurrentUserLoading && !isCurrentUserError,
+    enabled: isAuthenticated && !isCurrentUserLoading && !isCurrentUserError,
     retry: false,
   });
 

@@ -5,16 +5,16 @@ import useQueryError from "../errors/useQueryError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import { useTranslation } from "react-i18next";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import useAuthentication from "../auth/useAuthentication";
 
-export const useCurrentUser = ({
-  enabled = true,
-}: { enabled?: boolean } = {}) => {
+export const useCurrentUser = () => {
   const { t } = useTranslation();
+  const isAuthenticated = useAuthentication();
   const query = useQuery({
     queryKey: ["currentUser"],
     queryFn: UserService.getCurrentUser,
     retry: false,
-    enabled,
+    enabled: isAuthenticated,
   });
 
   const { isLoading, isError, error, data, isPending } = query;

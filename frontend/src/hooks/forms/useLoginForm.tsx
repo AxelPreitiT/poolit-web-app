@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
 import QueryError from "@/errors/QueryError";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
-import useAuthentication from "../auth/useAuthentication";
 import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
 import useQueryError from "../errors/useQueryError";
 import UnknownResponseError from "@/errors/UnknownResponseError";
@@ -22,7 +21,6 @@ const useLoginForm = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const showSuccessToast = useSuccessToast();
-  const { invalidateAuthentication } = useAuthentication();
   const onQueryError = useQueryError();
 
   const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType, void> =
@@ -38,7 +36,6 @@ const useLoginForm = () => {
     navigate(from || homePath, {
       replace: true,
     });
-    await invalidateAuthentication();
   };
 
   const onError = (error: QueryError) => {

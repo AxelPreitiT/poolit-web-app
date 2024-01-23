@@ -107,6 +107,9 @@ class Jwt {
     const claims = jwtDecode<JwtPayload>(token);
     return claims;
   };
+
+  public static isAuthenticated: () => boolean = () =>
+    Jwt.getJwtClaims() !== null;
 }
 
 export default Jwt;

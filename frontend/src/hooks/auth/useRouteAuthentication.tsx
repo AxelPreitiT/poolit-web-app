@@ -15,8 +15,8 @@ const useRouteAuthentication = ({
   showWhenUserIsNotAuthenticated?: boolean;
 }) => {
   const { t } = useTranslation();
-  const { isAuthenticated, isLoading } = useAuthentication();
   const [allowRender, setAllowRender] = useState(false);
+  const isAuthenticated = useAuthentication();
   const addToast = useToastStackStore((state) => state.addToast);
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,32 +42,30 @@ const useRouteAuthentication = ({
   );
 
   useEffect(() => {
-    if (isLoading) {
-      return;
-    }
     if (isAuthenticated && !showWhenUserIsAuthenticated) {
       onInvalid(
         ToastType.WARNING,
         "route.error.already_authenticated",
         homePath
       );
+      setAllowRender(false);
     } else if (!isAuthenticated && !showWhenUserIsNotAuthenticated) {
       onInvalid(ToastType.ERROR, "route.error.not_authenticated", loginPath, {
         state: { from: location.pathname },
       });
+      setAllowRender(false);
     } else {
       setAllowRender(true);
     }
   }, [
-    isLoading,
     isAuthenticated,
-    onInvalid,
     showWhenUserIsAuthenticated,
     showWhenUserIsNotAuthenticated,
+    onInvalid,
     location.pathname,
   ]);
 
-  return { isLoadingAuth: !allowRender };
+  return allowRender;
 };
 
 export default useRouteAuthentication;

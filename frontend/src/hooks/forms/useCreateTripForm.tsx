@@ -31,7 +31,7 @@ const useCreateTripForm = () => {
     isLoading: isTripLoading,
     trip,
     isError: isTripError,
-  } = useTripByUri(tripUri, { enabled: tripUri !== emptyTripUri });
+  } = useTripByUri(tripUri);
 
   const onSubmit: SubmitHandlerReturnModel<
     CreateTripFormSchemaType,

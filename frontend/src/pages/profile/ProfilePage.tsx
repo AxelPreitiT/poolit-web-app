@@ -15,7 +15,9 @@ const ProfilePage = () => {
   const { t } = useTranslation();
 
   const { isLoading, currentUser } = useCurrentUser();
-  const {isLoading: isLoadingCity, city} = useGetCityById(currentUser?.cityUri);
+  const { isLoading: isLoadingCity, city } = useGetCityById(
+    currentUser?.cityUri
+  );
 
   const ProfileInfo = ({ currentUser }: { currentUser: UserPrivateModel }) => (
     <div className={styles.profileCard}>
@@ -80,7 +82,8 @@ const ProfilePage = () => {
               <PassengerList
                 futureReservedTripsUri={currentUser.futureReservedTripsUri}
                 pastReservedTripsUri={currentUser.pastReservedTripsUri}
-                reviewsPassengerUri={currentUser.selfUri}/>
+                reviewsPassengerUri={currentUser.selfUri}
+              />
             }
             left_title={t("roles.driver")}
             left_component={
