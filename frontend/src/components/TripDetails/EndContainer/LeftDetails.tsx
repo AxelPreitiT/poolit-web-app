@@ -40,9 +40,9 @@ const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) =>
                   (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.single_trip")}</span>)}
             </div>
           </div>)}
-          {isPassanger || isDriver &&
+          {(isPassanger || isDriver) &&
               <div className={styles.info_container}>
-                  <h3>Status:</h3>
+                  <h3>{t("trip_detail.status.title")}</h3>
                   <StatusTrip status={status} />
               </div>
           }

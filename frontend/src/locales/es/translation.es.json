@@ -372,6 +372,7 @@
     "title": "Viaje",
     "header": "Detalle de viaje",
     "status": {
+      "title": "Status:",
       "cancelled": "Cancelado",
       "accepted": "Aceptado",
       "waiting": "Esperando",

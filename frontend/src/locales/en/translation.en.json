@@ -373,6 +373,7 @@
     "title": "Trip",
     "header": "Trip details",
     "status": {
+      "title": "Estado:",
       "cancelled": "Cancelled",
       "accepted": "Accepted",
       "waiting": "Waiting",
