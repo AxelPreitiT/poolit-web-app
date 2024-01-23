@@ -27,7 +27,7 @@ const useGetCityById = (uri?: string) => {
         if (isError) {
             onQueryError({
                 error,
-                title: t("city.error.title"),
+                title: t("city.error.unique"),
                 timeout: defaultToastTimeout,
             });
         }

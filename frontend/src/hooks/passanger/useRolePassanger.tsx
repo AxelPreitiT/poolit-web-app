@@ -34,7 +34,7 @@ const useRolePassanger = (currentUser?: UserPrivateModel, uri?: string) => {
         if (isError) {
             onQueryError({
                 error,
-                title: t("city.error.title"),
+                title: t("passanger.error.role_title"),
                 timeout: defaultToastTimeout,
             });
         }

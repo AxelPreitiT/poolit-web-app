@@ -291,7 +291,10 @@
     "SAFE_DRIVER": "Safe driver",
     "GOOD_EXPERIENCE": "Good experience",
     "PROFESSIONAL_DRIVER": "Professional driver",
-    "EXCELLENT_EXPERIENCE": "Excellent experience"
+    "EXCELLENT_EXPERIENCE": "Excellent experience",
+    "error" : {
+      "title_all": "An error occurred while fetching your reviews"
+    }
   },
   "created_trips": {
     "title": "Created trips",
@@ -400,7 +403,9 @@
     "filter_by": "Filter by status: {{status}}",
     "error": {
       "title": "Could not fetch the trip",
-      "default": "An error occurred while fetching the trip"
+      "default": "An error occurred while fetching the trip",
+      "all_title": "Could not fetch all trips",
+      "all_default": "An error occurred while fetching the trips"
     },
     "recurrent_trip": " {{number}} trips",
     "single_trip": "Single trip.",
@@ -496,10 +501,19 @@
       "title": "An error occurred while loading the neighborhoods"
     }
   },
+  "passanger": {
+    "error": {
+      "title": "An error occurred while loading the passangers",
+      "role_title": "An error occurred while loading the RolePassanger"
+    }
+  },
   "car": {
     "error": {
       "yours": "An error occurred while loading your cars",
-      "image": "An error occurred while loading the car image"
+      "your": "An error occurred while loading you car",
+      "image": "An error occurred while loading the car image",
+      "default": "An error occurred while fetching the car features",
+      "title": "Could not fetch the car"
     },
     "image": "Imagen del auto {{car_info}}",
     "brand": "Brand: {{brand}}",

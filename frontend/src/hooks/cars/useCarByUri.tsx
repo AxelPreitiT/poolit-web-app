@@ -32,7 +32,7 @@ const useCarByUri = (uri?: string) => {
         if (isError) {
             const title = t("car.error.title");
             const customMessages = {
-                [UnknownResponseError.ERROR_ID]: "car.error.default",
+                [UnknownResponseError.ERROR_ID]: "car.error.your",
             };
             onQueryError({
                 error: error,

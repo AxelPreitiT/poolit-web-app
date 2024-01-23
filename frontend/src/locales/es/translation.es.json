@@ -290,7 +290,10 @@
     "SAFE_DRIVER": "Conductor seguro",
     "GOOD_EXPERIENCE": "Buena experiencia",
     "PROFESSIONAL_DRIVER": "Conductor profesional",
-    "EXCELLENT_EXPERIENCE": "Excelente experiencia"
+    "EXCELLENT_EXPERIENCE": "Excelente experiencia",
+    "error" : {
+      "title_all": "Un error ocurrió al traer las reseñas."
+    }
   },
   "created_trips": {
     "title": "Viajes creados",
@@ -399,7 +402,9 @@
     "filter_by": "Filtrados por estado: {{priceInt}}",
     "error": {
       "title": "No se pudo obtener el viaje",
-      "default": "Ocurrió un error al obtener el viaje"
+      "default": "Ocurrió un error al obtener el viaje",
+      "all_title": "No se pudieron obtener los viajes",
+      "all_default": "Ocurrió un error al obtener los viajes"
     },
     "recurrent_trip": " {{number}} viajes",
     "single_trip": "Viaje unico.",
@@ -492,13 +497,23 @@
   },
   "city": {
     "error": {
-      "title": "Ocurrió un error al obtener los barrios"
+      "title": "Ocurrió un error al obtener los barrios",
+      "unique": "Ocurrió un error al obtener el barrio"
+    }
+  },
+  "passanger": {
+    "error": {
+      "title": "Ocurrió un error al obtener los pasajeros",
+      "role_title": "Ocurrió un error al obtener el rol del pasajero"
     }
   },
   "car": {
     "error": {
       "yours": "Ocurrió un error al obtener tus autos",
-      "image": "Ocurrió un error al obtener la imagen del auto"
+      "image": "Ocurrió un error al obtener la imagen del auto",
+      "your": "Ocurrió un error al obtener tu auto",
+      "default": "Ocurrió un error al obtener el auto",
+      "title": "No se pudo obtener el auto"
     },
     "image": "Imagen del auto {{car_info}}",
     "brand": "Marca: {{brand}}",

@@ -27,7 +27,7 @@ const usePublicUser = (uri?: string) => {
         if (isError) {
             onQueryError({
                 error,
-                title: t("city.error.title"),
+                title: t("profile.error.title"),
                 timeout: defaultToastTimeout,
             });
         }

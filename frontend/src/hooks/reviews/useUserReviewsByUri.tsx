@@ -24,7 +24,7 @@ const useUserReviewsByUri = (uri: string) => {
         if (isError) {
             onQueryError({
                 error,
-                title: t("car.error.yours"),
+                title: t("reviews.error.title_all"),
                 timeout: defaultToastTimeout,
             });
         }
