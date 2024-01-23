@@ -51,7 +51,7 @@ const PassengerList = ({
               btn_footer_text={t("profile.lists.reserved_next_more")}
               empty_text={t("profile.lists.reserved_next_empty")}
               empty_icon={"car-front-fill"}
-              data={futureReservedTrips.trips}
+              data={futureReservedTrips.data}
               component_name={CardTripProfile}
               link={reservedTripsPath}
           />
@@ -65,7 +65,7 @@ const PassengerList = ({
           btn_footer_text={t("profile.lists.reserved_prev_more")}
           empty_text={t("profile.lists.reserved_prev_empty")}
           empty_icon={"car-front-fill"}
-          data={pastReservedTrips.trips}
+          data={pastReservedTrips.data}
           component_name={CardTripProfile}
           link={reservedTripsPath}
         />

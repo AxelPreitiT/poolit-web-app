@@ -54,7 +54,7 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.created_next_more")}
           empty_text={t("profile.lists.created_next_empty")}
           empty_icon={"car-front-fill"}
-          data={futureCreatedTrips.trips}
+          data={futureCreatedTrips.data}
           component_name={CardTripProfile}
           link={createdTripsPath}
         />
@@ -67,7 +67,7 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.created_prev_more")}
           empty_text={t("profile.lists.created_prev_empty")}
           empty_icon={"car-front-fill"}
-          data={pastCreatedTrips.trips}
+          data={pastCreatedTrips.data}
           component_name={CardTripProfile}
           link={createdTripsPath}
         />

@@ -5,7 +5,8 @@ import {useEffect} from "react";
 import UnknownResponseError from "@/errors/UnknownResponseError.ts";
 import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
-import TripPaginationModel from "@/models/TripPaginationModel.tsx";
+import PaginationModel from "@/models/PaginationModel.tsx";
+import TripModel from "@/models/TripModel.ts";
 
 const useTripsByUri = (tripsUri: string) => {
     const { t } = useTranslation();
@@ -19,7 +20,7 @@ const useTripsByUri = (tripsUri: string) => {
         isPending,
     } = useQuery({
         queryKey: ["trips", tripsUri],
-        queryFn: async ({ queryKey }): Promise<TripPaginationModel> => {
+        queryFn: async ({ queryKey }): Promise<PaginationModel<TripModel>> => {
             const [, tripsUri] = queryKey;
             return await TripsService.getTripsByUri(tripsUri);
         },
