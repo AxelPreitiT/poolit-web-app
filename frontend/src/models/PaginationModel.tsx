@@ -4,6 +4,7 @@ interface PaginationModel<T>{
     prev: string;
     next: string;
     last: string;
+    total_pages: number;
     data: T[];
 }
 

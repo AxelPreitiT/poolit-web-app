@@ -55,6 +55,7 @@ class TripsApi extends AxiosApi {
             prev: "hola",
             next: "hola",
             last: "hola",
+            total_pages: 2,
             data: trips
           }
         };
