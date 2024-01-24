@@ -60,7 +60,9 @@ const SearchPage = () => {
           pagination_component={<h3>Poner paginación</h3>}
           empty_component={<NoResults />}
           data={trips.map((trip) => ({ trip }))}
-          component_name={CardTrip}
+          Item={CardTrip}
+          listClassName={styles.tripsList}
+          itemClassName={styles.tripItem}
         />
       </div>
     </div>

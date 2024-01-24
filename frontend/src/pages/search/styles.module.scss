@@ -1,10 +1,12 @@
+@use "@/colors.module.scss" as colors;
+
 .mainContainer {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  padding: 3rem 2rem;
+  padding: 3rem 1rem;
   column-gap: 2rem;
 }
 
@@ -138,4 +140,20 @@
   .noResultsContainer .noResultsBody {
     font-size: 0.75rem;
   }
+}
+
+// --------------- Items ----------------
+.tripsList {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 100%;
+  align-items: center;
+}
+
+.tripItem {
+  flex-grow: 1;
+  max-width: 50%;
 }

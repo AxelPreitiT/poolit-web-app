@@ -12,7 +12,6 @@ const ListTripsScheduled = ({
   uri,
   empty_component,
 }: ListTripsScheduledProps) => {
-
   const { isLoading: isLoadingTrips, trips } = useTripsByUri(uri);
 
   return (
@@ -24,7 +23,7 @@ const ListTripsScheduled = ({
           pagination_component={<h3>Poner paginación</h3>}
           empty_component={empty_component}
           data={trips.trips}
-          component_name={CardTripScheduled}
+          Item={CardTripScheduled}
         />
       )}
     </div>
