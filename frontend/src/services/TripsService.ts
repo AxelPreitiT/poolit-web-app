@@ -11,11 +11,15 @@ class TripsService extends Service {
     return await this.resolveQuery(TripsApi.getTripById(uri));
   };
 
-  public static getTripsByUser = async (uri: string): Promise<TripPaginationModel> => {
+  public static getTripsByUser = async (
+    uri: string
+  ): Promise<TripPaginationModel> => {
     return await this.resolveQuery(TripsApi.getTripsByUser(uri));
   };
 
-  public static getTripsByUri = async (uri: string): Promise<TripPaginationModel> => {
+  public static getTripsByUri = async (
+    uri: string
+  ): Promise<TripPaginationModel> => {
     return await this.resolveQuery(TripsApi.getTripsByUser(uri));
   };
 

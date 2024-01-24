@@ -9,9 +9,10 @@ const LoginForm = () => {
   const { t } = useTranslation();
   const {
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     handleSubmit,
     tFormError,
+    isFetching,
   } = useLoginForm();
 
   return (
@@ -48,7 +49,7 @@ const LoginForm = () => {
         </div>
       </div>
       <LoadingButton
-        isLoading={isSubmitting}
+        isLoading={isFetching}
         spinnerClassName="text-light"
         type="submit"
         className="btn secondary-btn"

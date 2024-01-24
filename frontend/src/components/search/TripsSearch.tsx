@@ -29,6 +29,8 @@ import { getNextDay } from "@/utils/date/nextDay";
 import { parseInputFloat } from "@/utils/float/parse";
 import LoadingButton from "../buttons/LoadingButton";
 import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
+import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
+import TripModel from "@/models/TripModel";
 
 const uniqueTripId = "unique";
 const recurrentTripId = "recurrent";
@@ -36,6 +38,12 @@ const recurrentTripId = "recurrent";
 interface TripsSearchProps {
   cities?: CityModel[];
   carFeatures?: CarFeatureModel[];
+  onSearchSuccess?: (
+    trips: TripModel[],
+    data: SearchTripsFormSchemaType
+  ) => void;
+  onSearchError?: (error: Error) => void;
+  initialSearch?: Partial<SearchTripsFormSchemaType>;
 }
 
 const useCitiesSwap = (
@@ -72,17 +80,28 @@ const useCitiesSwap = (
   };
 };
 
-const TripsSearch = ({ cities = [], carFeatures = [] }: TripsSearchProps) => {
+const TripsSearch = ({
+  onSearchSuccess,
+  onSearchError,
+  initialSearch,
+  cities = [],
+  carFeatures = [],
+}: TripsSearchProps) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<string>(uniqueTripId);
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     tFormError,
     setValue,
-  } = useSearchTripsForm();
+    isFetching,
+  } = useSearchTripsForm({
+    onSuccess: onSearchSuccess,
+    onError: onSearchError,
+    initialSearch,
+  });
 
   const removeLastDate = useCallback(
     () => setValue("last_date", undefined),
@@ -377,7 +396,7 @@ const TripsSearch = ({ cities = [], carFeatures = [] }: TripsSearchProps) => {
           <LoadingButton
             type="submit"
             className="secondary-btn"
-            isLoading={isSubmitting}
+            isLoading={isFetching}
           >
             <BiSearch className="light-text" />
             <span className="light-text">{t("search_trips.search")}</span>
