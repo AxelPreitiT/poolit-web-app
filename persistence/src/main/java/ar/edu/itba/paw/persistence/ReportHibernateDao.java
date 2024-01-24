@@ -124,7 +124,7 @@ public class ReportHibernateDao implements ReportDao {
     @Override
     public Optional<Report>  getReportByTripAndUsers(long tripId, long reporterId, long reportedId){
         LOGGER.debug("Getting report with tripId {}, reporterId {} and reportedId {}", tripId, reporterId, reportedId);
-        final Optional<Report> result = em.createQuery("from Report where trip_id = :tripId and reporter_id = :reporterId and reported_id = :reportedId", Report.class)
+        final Optional<Report> result = em.createQuery("from Report r where r.trip.id = :tripId and r.reporter.id = :reporterId and r.reported.id = :reportedId", Report.class)
                 .setParameter("tripId", tripId)
                 .setParameter("reporterId", reporterId)
                 .setParameter("reportedId", reportedId).getResultList().stream().findFirst();
