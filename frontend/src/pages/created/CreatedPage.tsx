@@ -18,21 +18,22 @@ const CreatedPage = () => {
 
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? 1 : parseInt(page, 10);
-  const uriTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.futureCreatedTripsUri, currentPage , 2);
+  const uriFutureTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.futureCreatedTripsUri, currentPage , 2);
+  const uriPastTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage , 2);
 
 
-    return (
+  return (
     <MainComponent>
       <MainHeader title={t("created_trips.title")} />
       <div className={styles.container_tab}>
         <TabComponent
           right_title={t("created_trips.future")}
           right_component={
-            uriTrips == null ? (
+              uriFutureTrips == null ? (
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
-                uri={uriTrips}
+                uri={uriFutureTrips}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList
@@ -46,11 +47,11 @@ const CreatedPage = () => {
           }
           left_title={t("created_trips.past")}
           left_component={
-            uriTrips == null ? (
+            uriPastTrips == null ? (
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
-                uri={uriTrips}
+                uri={uriPastTrips}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList
