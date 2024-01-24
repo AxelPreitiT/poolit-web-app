@@ -17,7 +17,7 @@ const CreatedPage = () => {
   const page = new URLSearchParams(search).get("page");
 
   const uriTrips = page == null ? currentUser?.futureCreatedTripsUri : "http://localhost:8080/paw-2023a-07/api/trips?createdBy=10&past=false&pageSize=2&page=1"
-  const page_number = page == null ? 0 : parseInt(page, 10);
+  const page_number = page == null ? 1 : parseInt(page, 10);
 
     return (
     <MainComponent>
