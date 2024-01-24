@@ -10,10 +10,16 @@ import getFormattedDateTime from "@/functions/DateFormat.ts";
 import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
 
-const CardTrip = ({ trip }: { trip: TripModel }) => {
+const CardTrip = ({
+  trip,
+  className,
+}: {
+  trip: TripModel;
+  className?: string;
+}) => {
   const { t } = useTranslation();
-  const date = new Date(trip.startDateTime)
-  const DayOfWeek = date.getDay()
+  const date = new Date(trip.startDateTime);
+  const DayOfWeek = date.getDay();
 
   const [cityOrigin, setCityOrigin] = useState<string | null>(null);
   const [cityDestination, setCityDestination] = useState<string | null>(null);
@@ -39,7 +45,7 @@ const CardTrip = ({ trip }: { trip: TripModel }) => {
   return (
     <Link
       to={extractPathAfterApi(trip.selfUri)}
-      className={styles.link_container}
+      className={styles.link_container + " " + className}
     >
       <div className={styles.card_container}>
         <div className={styles.left_container}>

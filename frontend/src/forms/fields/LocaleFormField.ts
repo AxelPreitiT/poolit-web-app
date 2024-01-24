@@ -1,8 +1,8 @@
-import { ZodDefault, ZodLiteral, ZodUnion, z } from "zod";
+import { ZodLiteral, ZodUnion, z } from "zod";
 import FormField from "./FormField";
 
-export type LocaleZodType = ZodDefault<
-  ZodUnion<readonly [ZodLiteral<string>, ZodLiteral<string>]>
+export type LocaleZodType = ZodUnion<
+  readonly [ZodLiteral<string>, ZodLiteral<string>]
 >;
 const locales: readonly [ZodLiteral<string>, ZodLiteral<string>] = [
   z.literal("en"),
@@ -15,6 +15,6 @@ export default class LocaleFormField extends FormField {
   }
 
   public getSchema(): LocaleZodType {
-    return z.union(locales).default("en");
+    return z.union(locales);
   }
 }

@@ -20,8 +20,9 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     tFormError,
+    isFetching,
   } = useRegisterForm();
 
   return (
@@ -171,7 +172,7 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
         <LoadingButton
           type="submit"
           className="btn secondary-btn"
-          isLoading={isSubmitting}
+          isLoading={isFetching}
         >
           <h5>{t("register.register")}</h5>
         </LoadingButton>

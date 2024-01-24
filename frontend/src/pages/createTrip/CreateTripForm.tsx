@@ -67,9 +67,10 @@ const CreateTripForm = ({
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     tFormError,
     setValue,
+    isFetching,
   } = useCreateTripForm();
 
   const removeLastDate = useCallback(
@@ -379,7 +380,7 @@ const CreateTripForm = ({
         <LoadingButton
           type="submit"
           className="btn secondary-btn"
-          isLoading={isSubmitting}
+          isLoading={isFetching}
         >
           <BiCheck className="light-text h2" />
           <span className="light-text h3">{t("create_trip.create")}</span>

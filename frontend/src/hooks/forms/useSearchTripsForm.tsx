@@ -11,12 +11,22 @@ import TripModel from "@/models/TripModel";
 import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import TripsService from "@/services/TripsService";
 import useForm, { SubmitHandlerReturnModel } from "./useForm";
-import { searchPath } from "@/AppRouter";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
-import { getIsoDate } from "@/utils/date/isoDate";
+import { createTripsSearchParams } from "@/functions/tripsSearchParams";
+import { searchPath } from "@/AppRouter";
 
-const useSearchTripsForm = () => {
+interface useSearchTripsFormProps {
+  initialSearch?: Partial<SearchTripsFormSchemaType>;
+  onSuccess?: (trips: TripModel[], data: SearchTripsFormSchemaType) => void;
+  onError?: (error: Error) => void;
+}
+
+const useSearchTripsForm = ({
+  initialSearch,
+  onSuccess: onSuccessProp,
+  onError: onErrorProp,
+}: useSearchTripsFormProps = {}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const onQueryError = useQueryError();
@@ -33,27 +43,9 @@ const useSearchTripsForm = () => {
   };
 
   const onSuccess = (trips: TripModel[], data: SearchTripsFormSchemaType) => {
-    const searchParams = new URLSearchParams({
-      origin_city: data.origin_city.toString(),
-      destination_city: data.destination_city.toString(),
-      date: getIsoDate(data.date),
-      time: data.time.toString(),
-    });
-    if (data.multitrip && data.last_date) {
-      searchParams.set("last_date", getIsoDate(data.last_date));
-    }
-    if (data.min_price) {
-      searchParams.set("min_price", data.min_price.toString());
-    }
-    if (data.max_price) {
-      searchParams.set("max_price", data.max_price.toString());
-    }
-    if (data.car_features) {
-      data.car_features.forEach((feature) => {
-        searchParams.append("car_features", feature.toString());
-      });
-    }
-    navigate(`${searchPath}?${searchParams.toString()}`, { state: { trips } });
+    const searchParams = createTripsSearchParams(data);
+    navigate(`${searchPath}?${searchParams}`);
+    onSuccessProp?.(trips, data);
   };
 
   const onError = (error: Error) => {
@@ -68,6 +60,7 @@ const useSearchTripsForm = () => {
       timeout,
       customMessages,
     });
+    onErrorProp?.(error);
   };
 
   return useForm({
@@ -76,6 +69,7 @@ const useSearchTripsForm = () => {
     onSubmit,
     onSuccess,
     onError,
+    defaultValues: initialSearch,
   });
 };
 
