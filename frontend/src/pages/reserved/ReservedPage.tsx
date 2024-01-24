@@ -26,6 +26,7 @@ const ReservedPage = () => {
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
+                  current_page={0}
                 uri={currentUser.futureReservedTripsUri}
                 empty_component={
                   <EmptyList
@@ -43,6 +44,7 @@ const ReservedPage = () => {
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
+                  current_page={0}
                 uri={currentUser.pastReservedTripsUri}
                 empty_component={
                   <EmptyList
