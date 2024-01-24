@@ -50,7 +50,7 @@ class TripsApi extends AxiosApi {
         const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
         const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
         const last = response.headers.link?.match(/<([^>]*)>; rel="last"/)?.[1];
-
+        const total = response.headers['x-total-pages']
         const newResponse: AxiosResponse<PaginationModel<TripModel>> = {
           ...response,
           data:{
@@ -58,7 +58,7 @@ class TripsApi extends AxiosApi {
             prev: prev,
             next: next,
             last: last,
-            total_pages: 2,
+            total_pages: total,
             data: trips
           }
         };
