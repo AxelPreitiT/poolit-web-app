@@ -28,6 +28,8 @@ export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
 export const adminPath = "/admin";
 export const searchPath = "/search";
+export const routerBasename = import.meta.env.BASE_URL;
+
 
 const router = createBrowserRouter(
   [
@@ -168,7 +170,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: import.meta.env.BASE_URL,
+    basename: routerBasename,
   }
 );
 

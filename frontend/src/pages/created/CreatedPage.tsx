@@ -8,16 +8,18 @@ import EmptyList from "@/components/emptyList/EmptyList";
 import ListTripsScheduled from "@/components/cardTrip/ListTripsScheduled/ListTripsScheduled";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import SpinnerComponent from "@/components/Spinner/Spinner";
+import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 
 const CreatedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
   const { t } = useTranslation();
   const { search } = useLocation();
   const time = new URLSearchParams(search).get("time");
-  const page = new URLSearchParams(search).get("page");
 
-  const uriTrips = page == null ? currentUser?.futureCreatedTripsUri : "http://localhost:8080/paw-2023a-07/api/trips?createdBy=10&past=false&pageSize=2&page=1"
-  const page_number = page == null ? 1 : parseInt(page, 10);
+  const page = new URLSearchParams(search).get("page");
+  const currentPage = page == null ? 1 : parseInt(page, 10);
+  const uriTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.futureCreatedTripsUri, currentPage , 2);
+
 
     return (
     <MainComponent>
@@ -26,12 +28,12 @@ const CreatedPage = () => {
         <TabComponent
           right_title={t("created_trips.future")}
           right_component={
-            isLoading || currentUser === undefined || uriTrips == null ? (
+            uriTrips == null ? (
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
                 uri={uriTrips}
-                current_page={page_number}
+                current_page={currentPage}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}
@@ -44,12 +46,12 @@ const CreatedPage = () => {
           }
           left_title={t("created_trips.past")}
           left_component={
-            isLoading || currentUser === undefined ? (
+            uriTrips == null ? (
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
-                uri={currentUser.pastCreatedTripsUri}
-                current_page={page_number}
+                uri={uriTrips}
+                current_page={currentPage}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}

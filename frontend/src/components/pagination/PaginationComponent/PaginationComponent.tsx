@@ -1,8 +1,9 @@
 import styles from "./styles.module.scss";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import {useState} from "react";
-import { useLocation } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import {useLocation} from 'react-router-dom';
+import {routerBasename} from "@/AppRouter.tsx";
+import {createBrowserHistory} from 'history';
 import {ButtonGroup, ToggleButton} from "react-bootstrap";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 
@@ -22,11 +23,11 @@ const PaginationComponent = <T,>({
                                      useFuction
                             }: PaginationComponentProps<T>) => {
 
-    const [uriResult, setUriResult] = useState(uri);
+    const [newUri, setNewUri] = useState(uri);
     const [currentPage, setcurrentPage] = useState(current_page);
     const location = useLocation();
     const history = createBrowserHistory();
-    const { isLoading: isLoadingTrips, trips:pageTrips } = useFuction(uriResult);
+    const { isLoading: isLoadingTrips, trips:pageTrips } = useFuction(newUri);
 
     let generateItems = <T,>(data: T[], Component: React.FC<T>) => {
         const items = [];
@@ -41,39 +42,15 @@ const PaginationComponent = <T,>({
         return items;
     };
 
-    const handleNextPage = () => {
-        setUriResult(pageTrips?.next as string);
-        setcurrentPage(currentPage+1)
-        const searchParams = new URLSearchParams(location.search);
-        searchParams.set('page', (currentPage+1).toString());
-        const newUrl = `${location.pathname}?${searchParams.toString()}`;
-        history.push(newUrl);
-    };
+    const handlePage = (uri: string, currentPage:number) => {
+        setNewUri(uri);
+        setcurrentPage(currentPage)
 
-    const handlePrevPage = () => {
-        setUriResult(pageTrips?.prev as string);
-        setcurrentPage(currentPage-1)
+        //PREGUNTAR SI O SI HOY EN VIDEDO
+        const finalRouterBasename = routerBasename=="/" ? "" : routerBasename;
         const searchParams = new URLSearchParams(location.search);
-        searchParams.set('page', (currentPage-1).toString());
-        const newUrl = `${location.pathname}?${searchParams.toString()}`;
-        history.push(newUrl);
-    };
-
-    const handleStartPage = () => {
-        setUriResult(pageTrips?.first as string);
-        setcurrentPage(1)
-        const searchParams = new URLSearchParams(location.search);
-        searchParams.set('page', (1).toString());
-        const newUrl = `${location.pathname}?${searchParams.toString()}`;
-        history.push(newUrl);
-    };
-
-    const handleEndPage = () => {
-        setUriResult(pageTrips?.last as string);
-        setcurrentPage(pageTrips?.total_pages as number)
-        const searchParams = new URLSearchParams(location.search);
-        searchParams.set('page', (pageTrips?.total_pages as number).toString());
-        const newUrl = `${location.pathname}?${searchParams.toString()}`;
+        searchParams.set('page', (currentPage).toString());
+        const newUrl = `${finalRouterBasename}${location.pathname}?${searchParams.toString()}`;
         history.push(newUrl);
     };
 
@@ -92,7 +69,8 @@ const PaginationComponent = <T,>({
                                 <ToggleButton
                                     id={`radio-pepe2`}
                                     value="pepe2"
-                                    onClick={handleStartPage}
+                                    className={styles.btn_pagination}
+                                    onClick={() => handlePage(pageTrips?.first, 1)}
                                     disabled={pageTrips.prev == null}
                                 ><i className="bi bi-chevron-double-left"></i>
                                 </ToggleButton>
@@ -100,6 +78,7 @@ const PaginationComponent = <T,>({
                                     <ToggleButton
                                         id={`radio-pepe2`}
                                         value="pepe2"
+                                        className={styles.btn_pagination}
                                         disabled={true}
                                     ><i className="bi bi-three-dots"></i>
                                     </ToggleButton>
@@ -108,7 +87,8 @@ const PaginationComponent = <T,>({
                                     <ToggleButton
                                         id={`radio-pepe`}
                                         value="pepe"
-                                        onClick={handlePrevPage}
+                                        className={styles.btn_pagination}
+                                        onClick={() => handlePage(pageTrips?.prev, (currentPage-1))}
                                     >{(currentPage-1).toString()}
                                     </ToggleButton>
                                 }
@@ -116,14 +96,15 @@ const PaginationComponent = <T,>({
                                     id={`radio-pepe`}
                                     value="pepe"
                                     variant="warning"
-                                    onClick={handleNextPage}
+                                    className={styles.btn_pagination}
                                 >{currentPage.toString()}
                                 </ToggleButton>
                                 {pageTrips.next != null &&
                                     <ToggleButton
                                         id={`radio-pepe`}
                                         value="pepe"
-                                        onClick={handleNextPage}
+                                        className={styles.btn_pagination}
+                                        onClick={() => handlePage(pageTrips?.next, (currentPage+1))}
                                     >{(currentPage+1).toString()}
                                     </ToggleButton>
                                 }
@@ -132,14 +113,16 @@ const PaginationComponent = <T,>({
                                         id={`radio-pepe2`}
                                         value="pepe2"
                                         disabled={true}
+                                        className={styles.btn_pagination}
                                     ><i className="bi bi-three-dots"></i>
                                     </ToggleButton>
                                 }
                                 <ToggleButton
                                     id={`radio-pepe2`}
                                     value="pepe2"
+                                    className={styles.btn_pagination}
                                     disabled={pageTrips.next == null}
-                                    onClick={handleEndPage}
+                                    onClick={() => handlePage(pageTrips?.last, pageTrips?.total_pages)}
                                 ><i className="bi bi-chevron-double-right"></i>
                                 </ToggleButton>
                             </ButtonGroup>
