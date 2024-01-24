@@ -3,10 +3,12 @@ import PaginationModel from "@/models/PaginationModel.tsx";
 import {useState} from "react";
 import { useLocation } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import {ButtonGroup, ToggleButton} from "react-bootstrap";
 
 interface PaginationComponentProps<T> {
     empty_component: React.ReactNode;
-    uri: string
+    uri: string;
+    current_page: number;
     component_name: React.FC<T>;
     useFuction: (uri:string) => {isLoading: boolean; trips: PaginationModel<T> | undefined; }
 }
@@ -15,10 +17,12 @@ const PaginationComponent = <T,>({
                                 empty_component,
                                 uri,
                                 component_name,
+                                current_page,
                                      useFuction
                             }: PaginationComponentProps<T>) => {
 
     const [uriResult, setUriResult] = useState(uri);
+    const [currentPage, setcurrentPage] = useState(current_page);
     const location = useLocation();
     const history = createBrowserHistory();
     const { isLoading: isLoadingTrips, trips:pageTrips } = useFuction(uriResult);
@@ -38,16 +42,10 @@ const PaginationComponent = <T,>({
 
     const handleNextPage = () => {
         setUriResult(pageTrips?.next as string);
-        // Get the current URL search parameters
+        setcurrentPage(currentPage+1)
         const searchParams = new URLSearchParams(location.search);
-
-        // Add or update the query parameters as needed
-        searchParams.set('page', '2'); // For example, adding a 'page' parameter with value '2'
-
-        // Create a new URL with the updated search parameters
+        searchParams.set('page', currentPage.toString());
         const newUrl = `${location.pathname}?${searchParams.toString()}`;
-
-        // Push the new URL to the history to navigate to the next page
         history.push(newUrl);
     };
 
@@ -61,6 +59,47 @@ const PaginationComponent = <T,>({
                     <button onClick={handleNextPage}>Next Page</button>
                     <h1>{pageTrips?.total_pages}</h1>
                     <h1>{uriResult}</h1>
+                    <h1>{uri}</h1>
+                    <h1>{currentPage}</h1>
+                    <h1>{pageTrips?.prev == null ? "null" : pageTrips?.prev}</h1>
+                    <div>
+                        <ButtonGroup className="mb-2">
+                            <ToggleButton
+                                id={`radio-pepe2`}
+                                value="pepe2"
+                                onClick={handleNextPage}
+                            ><i className="bi bi-chevron-double-left"></i>
+                            </ToggleButton>
+                            <ToggleButton
+                                id={`radio-pepe2`}
+                                value="pepe2"
+                                disabled={true}
+                            ><i className="bi bi-three-dots"></i>
+                            </ToggleButton>
+                            <ToggleButton
+                                id={`radio-pepe`}
+                                value="pepe"
+                                onClick={handleNextPage}
+                            >pepe
+                            </ToggleButton>
+                            <ToggleButton
+                                id={`radio-pepe2`}
+                                value="pepe2"
+                                disabled={true}
+                            ><i className="bi bi-three-dots"></i>
+                            </ToggleButton>
+                            <ToggleButton
+                                key="jose"
+                                id={`radio-"jose"`}
+                                type="radio"
+                                variant="secondary"
+                                value="jose"
+                                name="radio"
+                                onClick={handleNextPage}
+                            ><i className="bi bi-chevron-double-right"></i>
+                            </ToggleButton>
+                        </ButtonGroup>
+                    </div>
                 </div>
             ) : (
                 <div>{empty_component}</div>

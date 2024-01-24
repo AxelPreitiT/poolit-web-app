@@ -5,11 +5,13 @@ import PaginationComponent from "@/components/pagination/PaginationComponent/Pag
 export interface ListTripsScheduledProps {
   uri: string;
   empty_component: React.ReactNode;
+  current_page : number;
 }
 
 const ListTripsScheduled = ({
   uri,
   empty_component,
+  current_page
 }: ListTripsScheduledProps) => {
 
 
@@ -17,6 +19,7 @@ const ListTripsScheduled = ({
     <div>
       <PaginationComponent
         uri = {uri}
+        current_page = {current_page}
         useFuction={useTripsByUri}
         empty_component={empty_component}
         component_name={CardTripScheduled}

@@ -14,19 +14,24 @@ const CreatedPage = () => {
   const { t } = useTranslation();
   const { search } = useLocation();
   const time = new URLSearchParams(search).get("time");
+  const page = new URLSearchParams(search).get("page");
 
-  return (
+  const uriTrips = page == null ? currentUser?.futureCreatedTripsUri : "http://localhost:8080/paw-2023a-07/api/trips?createdBy=10&past=false&pageSize=2&page=1"
+  const page_number = page == null ? 0 : parseInt(page, 10);
+
+    return (
     <MainComponent>
       <MainHeader title={t("created_trips.title")} />
       <div className={styles.container_tab}>
         <TabComponent
           right_title={t("created_trips.future")}
           right_component={
-            isLoading || currentUser === undefined ? (
+            isLoading || currentUser === undefined || uriTrips == null ? (
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
-                uri={currentUser.futureCreatedTripsUri}
+                uri={uriTrips}
+                current_page={page_number}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}
@@ -44,6 +49,7 @@ const CreatedPage = () => {
             ) : (
               <ListTripsScheduled
                 uri={currentUser.pastCreatedTripsUri}
+                current_page={page_number}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}
