@@ -143,12 +143,6 @@ const PaginationComponent = <T,>({
                                 </ToggleButton>
                             </ButtonGroup>
                         </div>
-                        <button onClick={handleNextPage}>Next Page</button>
-                        <h1>{pageTrips?.total_pages}</h1>
-                        <h1>{uriResult}</h1>
-                        <h1>{uri}</h1>
-                        <h1>{currentPage}</h1>
-                        <h1>{pageTrips?.prev == null ? "null" : pageTrips?.prev}</h1>
                     </div>
                 ) : (
                     <div>{empty_component}</div>
