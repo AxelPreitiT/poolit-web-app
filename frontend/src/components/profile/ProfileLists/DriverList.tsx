@@ -6,7 +6,6 @@ import ShortReview from "@/components/review/shorts/ShortReview";
 import { publicsReviewsPath } from "@/AppRouter";
 import CardCar from "@/components/cardCar/CardCar";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
-import UserPrivateModel from "@/models/UserPrivateModel";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import useUserCars from "@/hooks/cars/useUserCars.tsx";
@@ -15,7 +14,6 @@ export interface DriverListProp {
   futureCreatedTripsUri: string;
   pastCreatedTripsUri: string;
   reviewsDriverUri : string;
-  currentUser: UserPrivateModel;
 }
 
 const DriverList = ({

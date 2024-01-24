@@ -10,6 +10,7 @@ import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UserPrivateModel from "@/models/UserPrivateModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useGetCityById from "@/hooks/cities/useGetCityById.tsx";
+import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -80,18 +81,17 @@ const ProfilePage = () => {
             right_title={t("roles.passenger")}
             right_component={
               <PassengerList
-                futureReservedTripsUri={currentUser.futureReservedTripsUri}
-                pastReservedTripsUri={currentUser.pastReservedTripsUri}
-                reviewsPassengerUri={currentUser.selfUri}
+                futureReservedTripsUri={createPaginationUri(currentUser.futureReservedTripsUri, 1 , 3)}
+                pastReservedTripsUri={createPaginationUri(currentUser.pastReservedTripsUri, 1 , 3)}
+                reviewsPassengerUri={createPaginationUri(currentUser.reviewsPassengerUri, 1 , 3)}
               />
             }
             left_title={t("roles.driver")}
             left_component={
               <DriverList
-                futureCreatedTripsUri={currentUser.futureCreatedTripsUri}
-                pastCreatedTripsUri={currentUser.pastCreatedTripsUri}
-                currentUser={currentUser}
-                reviewsDriverUri={currentUser.reviewsDriverUri}
+                futureCreatedTripsUri={createPaginationUri(currentUser.futureCreatedTripsUri, 1 , 3)}
+                pastCreatedTripsUri={createPaginationUri(currentUser.pastCreatedTripsUri, 1 , 3)}
+                reviewsDriverUri={createPaginationUri(currentUser.reviewsDriverUri, 1 , 3)}
               />
             }
           />

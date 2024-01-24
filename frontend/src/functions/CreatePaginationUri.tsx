@@ -1,4 +1,4 @@
-function CreatePaginationUri(baseUri: string , currentPage: number , pageSize: number): string | null {
+function CreatePaginationUri(baseUri: string , currentPage: number , pageSize: number): string {
 
   const queryParams = new URLSearchParams();
   queryParams.append('page', (currentPage-1).toString());
