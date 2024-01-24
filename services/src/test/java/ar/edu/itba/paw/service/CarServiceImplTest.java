@@ -72,7 +72,6 @@ public class CarServiceImplTest {
     public void testCreateCarWithoutUser() throws UserNotFoundException {
         when(userService.getCurrentUser()).thenReturn(Optional.empty());
         carService.createCar(PLATE, INFO_CAR, null, SEATS, BRAND_ID, FEATURES);
-        Assert.fail();
     }
 
     @Test
@@ -112,7 +111,7 @@ public class CarServiceImplTest {
     public void testModifyCarWithoutCar() throws CarNotFoundException {
         when(carService.findById(CAR_ID)).thenReturn(Optional.empty());
         carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
-        Assert.fail();
+
     }
 
 }

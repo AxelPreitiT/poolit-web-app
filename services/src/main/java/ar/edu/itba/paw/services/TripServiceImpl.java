@@ -127,6 +127,7 @@ public class TripServiceImpl implements TripService {
         }
     }
 
+    //TODO: change
     @Transactional
     @Override
     public boolean deleteTrip(final long tripId) throws TripNotFoundException{
@@ -338,7 +339,7 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         if(passengerOptional.get().getEndDateTime().isBefore(LocalDateTime.now())){
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to get out of trip {} after the period has ended", user.getUserId(), trip.getTripId(), e);
             throw e;
         }
@@ -483,19 +484,19 @@ public class TripServiceImpl implements TripService {
 //        }
 //        return tripDao.getPassengers(trip,startDate,endDate);
 //    }
-    private Optional<Passenger.PassengerState> getPassengersState(String status){
-        if(status.equals("accept")){
-            return Optional.of(Passenger.PassengerState.ACCEPTED);
-        }
-        if(status.equals("waiting")){
-            return Optional.of(Passenger.PassengerState.PENDING);
-        }
-        if(status.equals("reject")){
-            return Optional.of(Passenger.PassengerState.REJECTED);
-        }
-        return Optional.empty();
-    }
-
+//    private Optional<Passenger.PassengerState> getPassengersState(String status){
+//        if(status.equals("accept")){
+//            return Optional.of(Passenger.PassengerState.ACCEPTED);
+//        }
+//        if(status.equals("waiting")){
+//            return Optional.of(Passenger.PassengerState.PENDING);
+//        }
+//        if(status.equals("reject")){
+//            return Optional.of(Passenger.PassengerState.REJECTED);
+//        }
+//        return Optional.empty();
+//    }
+//
 
     //TODO: Delete
 //    @Transactional
@@ -671,13 +672,13 @@ public class TripServiceImpl implements TripService {
         LocalDateTime start = LocalDateTime.now();
         return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
     }
-    private Trip.SortType getTripSortType(final String sortType){
-        try{
-            return Trip.SortType.valueOf(sortType.toUpperCase());
-        }catch (Exception e){
-            return Trip.SortType.PRICE;
-        }
-    }
+//    private Trip.SortType getTripSortType(final String sortType){
+//        try{
+//            return Trip.SortType.valueOf(sortType.toUpperCase());
+//        }catch (Exception e){
+//            return Trip.SortType.PRICE;
+//        }
+//    }
 
     @Transactional
     @Override
