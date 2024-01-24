@@ -115,7 +115,7 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     private boolean canDriverReviewPassenger(Trip trip, User reviewer, Passenger reviewed) {
         if(trip.getTripId() != reviewed.getTrip().getTripId()) {
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Driver with id {} tried to review passenger with id {}, but they are not in the same trip", reviewer.getUserId(), reviewed.getUserId(), e);
             throw e;
         }
@@ -132,12 +132,12 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     private boolean canPassengerReviewPassenger(Passenger reviewer, Passenger reviewed) {
         if(reviewer.getTrip().getTripId() != reviewed.getTrip().getTripId()){
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to review passenger with id {}, but they are not in the same trip", reviewer.getUserId(), reviewed.getUserId(), e);
             throw e;
         }
         if(reviewer.getUserId() == reviewed.getUserId()){
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to review himself", reviewer.getUserId(), e);
             throw e;
         }
