@@ -120,7 +120,9 @@ public class DriverReviewServiceImpl implements DriverReviewService {
 
     private ReviewState getReviewState(Trip trip, Passenger reviewer, User driver) {
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
+        //if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
+        //Si el pasajero todavía no terminó o no fue aceptado al viaje
+        if(!reviewer.isTripEnded() || !reviewer.isAccepted()) {
             return ReviewState.DISABLED;
         }
         return driverReviewDao.canReviewDriver(trip, reviewer, driver) ? ReviewState.PENDING : ReviewState.DONE;

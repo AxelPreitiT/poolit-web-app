@@ -48,7 +48,10 @@ public class ReportServiceImpl implements ReportService {
 
         switch (relations){
             case PASSENGER_2_DRIVER:{
-                tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                Passenger passenger = tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                if(!passenger.isAccepted()){
+                    return false;
+                }
                 if(!trip.getDriver().equals(reported)){
                     return false;
                 }
@@ -58,12 +61,18 @@ public class ReportServiceImpl implements ReportService {
                 if(!trip.getDriver().equals(reporter)){
                     return false;
                 }
-                tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
+                Passenger passenger = tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
+                if(!passenger.isAccepted()){
+                    return false;
+                }
                 break;
             }
             case PASSENGER_2_PASSENGER:{
-                tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
-                tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                Passenger p1 = tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
+                Passenger p2 = tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                if(!p1.isAccepted() || !p2.isAccepted()){
+                    return false;
+                }
                 break;
             }
         }
