@@ -282,7 +282,7 @@ public class Trip {
         this.lastOccurrence = lastOccurrence;
     }
 
-    public boolean getDeleted(){
+    public boolean isDeleted(){
         return deleted;
     }
 
