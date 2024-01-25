@@ -1,9 +1,8 @@
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
-import { reservedTripsPath } from "@/AppRouter";
+import {publicsPassangerReviewsPath, reservedTripsPath} from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import ShortReview from "@/components/review/shorts/ShortReview";
-import { publicsReviewsPath } from "@/AppRouter";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
@@ -22,9 +21,9 @@ const PassengerList = ({
 }: PassengerListProp) => {
   const { t } = useTranslation();
 
-  const { isLoading: isLoadingFutureReservedTrips, trips:futureReservedTrips } = useTripsByUri(futureReservedTripsUri);
-  const { isLoading: isLoadingPastReservedTrips, trips:pastReservedTrips } = useTripsByUri(pastReservedTripsUri);
-  const { isLoading: isLoadingReviewsPassenger, reviews:reviewsPassenger } = useUserReviewsByUri(reviewsPassengerUri);
+  const { isLoading: isLoadingFutureReservedTrips, data:futureReservedTrips } = useTripsByUri(futureReservedTripsUri);
+  const { isLoading: isLoadingPastReservedTrips, data:pastReservedTrips } = useTripsByUri(pastReservedTripsUri);
+  const { isLoading: isLoadingReviewsPassenger, data:reviewsPassenger } = useUserReviewsByUri(reviewsPassengerUri);
 
 
   return (
@@ -37,9 +36,9 @@ const PassengerList = ({
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
-        data={reviewsPassenger}
+        data={reviewsPassenger.data}
         component_name={ShortReview}
-        link={publicsReviewsPath.replace(":id", String(5))}
+        link={publicsPassangerReviewsPath.replace(":id", String(5))}
       />)}
       {futureReservedTrips == undefined || isLoadingFutureReservedTrips ? (
           <SpinnerComponent />

@@ -5,7 +5,7 @@ import {useQuery} from "@tanstack/react-query";
 import {useEffect} from "react";
 import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 
-const usePublicUser = (uri?: string) => {
+const usePublicUserByUri = (uri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
 
@@ -40,4 +40,4 @@ const usePublicUser = (uri?: string) => {
     };
 }
 
-export default usePublicUser;
+export default usePublicUserByUri;

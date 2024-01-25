@@ -1,0 +1,91 @@
+@use "@/colors.module" as colors;
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  height: 100vh;
+}
+
+.profileCard {
+  padding: 1em 1.5em;
+  height: fit-content;
+  width: 30%;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+}
+
+.main_container {
+  display: flex;
+  margin: 3% 2% 3% 2%;
+  max-width: none;
+  gap: 2%;
+}
+
+.list_block {
+  flex-grow: 2;
+}
+
+@media (min-width: 1400px) {
+  .mainContainer {
+    row-gap: 3rem;
+  }
+}
+
+.row_data {
+  padding-bottom: 1%;
+  border-bottom: 2px solid #8b8b8b;
+}
+
+.travel_info_list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+}
+
+.list_container {
+  margin-bottom: 2%;
+  padding: 1% 2% 1% 2%;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 20px;
+  box-shadow: 0 7px 15px rgb(0 0 0 / 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.review_empty_container {
+  display: flex;
+  min-height: 70px;
+  padding: 1.5% 1% 1% 1%;
+  flex-direction: row;
+  align-items: center;
+  gap: 3%;
+  justify-content: center;
+}
+
+.review_empty_container i {
+  color: colors.$secondary-color !important;
+}
+
+.plus_btn {
+  display: flex;
+  align-items: center;
+  padding: 1% 2% 1% 2%;
+  justify-content: center;
+  gap: 2%;
+}
+
+.plus_btn:hover {
+  opacity: 0.5;
+}
+

@@ -5,16 +5,16 @@ import {useQuery} from "@tanstack/react-query";
 import {useEffect} from "react";
 import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 
-const useUserReviewsByUri = (uri: string) => {
+const useUserReviewsByUri = (uri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
 
     const query = useQuery({
         queryKey: ["userReviews", uri],
         queryFn: async () => {
-            return await reviewsService.getReviewsByUri(uri);
+            return await reviewsService.getReviewsByUri(uri as string);
         },
-        enabled: true,
+        enabled: !!uri,
         retry: false,
     });
 
@@ -33,7 +33,7 @@ const useUserReviewsByUri = (uri: string) => {
     return {
         ...query,
         isLoading: isLoading || isPending,
-        reviews: data,
+        data: data,
     }
 }
 

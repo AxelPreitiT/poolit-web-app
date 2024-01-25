@@ -5,8 +5,8 @@ import LoginPage from "./pages/login/LoginPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
-import ReviewPage from "./pages/public/reviews/ReviewPage";
-import PublicProfilePage from "./pages/profile/PublicProfilePage";
+import ReviewPageDriver from "./pages/publicReviews/ReviewPageDriver.tsx";
+import PublicProfilePage from "@/pages/publicProfile/PublicProfilePage.tsx";
 import Navbar from "./components/utils/Navbar";
 import ReservedPage from "./pages/reserved/ReservedPage";
 import CreatedPage from "./pages/created/CreatedPage";
@@ -14,15 +14,16 @@ import CreateTripPage from "./pages/createTrip/CreateTripPage";
 import AdminPage from "./pages/admin/AdminPage";
 import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
 import SearchPage from "./pages/search/SearchPage";
+import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
 export const registerPath = "/register";
 export const verifyAccountPath = "/verify";
-export const tripsPath = "/trips";
 export const tripDetailsPath = "/trips/:tripId";
 export const profilePath = "/profile";
-export const publicsReviewsPath = "/reviews/drivers/:id";
+export const publicsDriverReviewsPath = "/reviews/driver/:id";
+export const publicsPassangerReviewsPath = "/reviews/passanger/:id";
 export const publicProfilePath = "/profile/:id";
 export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
@@ -95,15 +96,27 @@ const router = createBrowserRouter(
       ),
     },
     {
-      path: publicsReviewsPath,
+      path: publicsDriverReviewsPath,
       element: (
         <RouteWrapper
           title="reviews.title"
           showWhenUserIsNotAuthenticated={false}
         >
           <Navbar />
-          <ReviewPage />
+          <ReviewPageDriver />
         </RouteWrapper>
+      ),
+    },
+    {
+      path: publicsPassangerReviewsPath,
+      element: (
+          <RouteWrapper
+              title="reviews.title"
+              showWhenUserIsNotAuthenticated={false}
+          >
+              <Navbar />
+              <ReviewPagePassanger />
+          </RouteWrapper>
       ),
     },
     {

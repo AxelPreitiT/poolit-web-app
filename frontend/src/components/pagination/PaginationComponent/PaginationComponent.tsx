@@ -12,7 +12,7 @@ interface PaginationComponentProps<T> {
     uri: string;
     current_page: number;
     component_name: React.FC<T>;
-    useFuction: (uri:string) => {isLoading: boolean; trips: PaginationModel<T> | undefined; }
+    useFuction: (uri?:string) => {isLoading: boolean; data: PaginationModel<T> | undefined; }
 }
 
 const PaginationComponent = <T,>({
@@ -27,7 +27,7 @@ const PaginationComponent = <T,>({
     const [currentPage, setcurrentPage] = useState(current_page);
     const location = useLocation();
     const history = createBrowserHistory();
-    const { isLoading: isLoadingTrips, trips:pageTrips } = useFuction(newUri);
+    const { isLoading: isLoadingTrips, data:pageTrips } = useFuction(newUri);
 
     let generateItems = <T,>(data: T[], Component: React.FC<T>) => {
         const items = [];
