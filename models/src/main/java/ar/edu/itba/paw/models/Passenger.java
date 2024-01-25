@@ -52,6 +52,9 @@ public class Passenger{
     }
 
     public PassengerState getPassengerState() {
+        if(passengerState.equals(PassengerState.PENDING) && startDateTime.compareTo(LocalDateTime.now())<0){
+            return PassengerState.UNCONFIRMED;
+        }
         return passengerState;
     }
 
@@ -178,7 +181,8 @@ public class Passenger{
     public enum PassengerState{
         ACCEPTED("passengerState.accepted"),
         REJECTED("passengerState.rejected"),
-        PENDING("passengerState.pending");
+        PENDING("passengerState.pending"),
+        UNCONFIRMED("passengerState.unconfirmed");
 
         private final String messageCode;
         PassengerState(String messageCode){
