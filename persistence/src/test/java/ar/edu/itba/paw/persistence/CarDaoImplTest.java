@@ -27,12 +27,12 @@ public class CarDaoImplTest {
     @PersistenceContext
     private EntityManager em;
 
-    private static final long KNOWN_USER_ID = 1;
-    private static final long KNOWN_IMAGE_ID=1;
+    private static final long KNOWN_USER_ID = 3;
+    private static final long KNOWN_IMAGE_ID=3;
 
     private static final long KNOWN_CITY_ID = 1;
 
-    private static final long CAR_ID = 1;
+    private static final long CAR_ID = 3;
     private static final String PLATE = "AA000AA";
 
     private static final CarBrand BRAND = CarBrand.UNKNOWN;
@@ -41,15 +41,20 @@ public class CarDaoImplTest {
     private static final String UNKNOWN_PLATE = "CC000CC";
     private static final String INFO_CAR = "Fit azul";
 
-    private final User user = new User(1,"John","Doe","johndoe@mail.com","1234567800","1234",new City(1,"Recoleta",new Province(1,"CABA")),new Locale("en"),"USER",KNOWN_IMAGE_ID);
+    private final User user = new User(3,"John","Doe","johndoe@mail.com","1234567800","1234",new City(1,"Recoleta",new Province(1,"CABA")),new Locale("en"),"USER",KNOWN_IMAGE_ID);
 
 
     @Rollback
     @Test
     public void testCreate(){
-        final Car car = carDaoImpl.create(PLATE_2,INFO_CAR,user,KNOWN_IMAGE_ID,3,BRAND,new ArrayList<>());
+        final Car car = carDaoImpl.create(UNKNOWN_PLATE,INFO_CAR,user,KNOWN_IMAGE_ID,3,BRAND,new ArrayList<>());
 
-        Assert.assertEquals(PLATE_2,car.getPlate());
+        Assert.assertEquals(car.getCarId(),1);
+        TypedQuery<Car> query = em.createQuery("from Car where carId = :carId",Car.class);
+        query.setParameter("carId",car.getCarId());
+        Optional<Car> ans = query.getResultList().stream().findFirst();
+        Assert.assertTrue(ans.isPresent());
+        Assert.assertEquals(UNKNOWN_PLATE,car.getPlate());
         Assert.assertEquals(INFO_CAR,car.getInfoCar());
         Assert.assertEquals(user.getUserId(),car.getUser().getUserId());
         Assert.assertEquals(KNOWN_IMAGE_ID,car.getImageId());
