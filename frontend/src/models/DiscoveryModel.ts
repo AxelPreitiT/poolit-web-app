@@ -8,6 +8,7 @@ interface DiscoveryModel {
   reportsUriTemplate: string; // [baseUrl]/reports{/reportId}
   tripsUriTemplate: string; // [baseUrl]/trips{/tripId}
   usersUriTemplate: string; // [baseUrl]/users/{userId}
+  tripSortTypesUriTemplate: string; // [baseUrl]/trip-sort-types{/sortTypeId}
 }
 
 export default DiscoveryModel;
