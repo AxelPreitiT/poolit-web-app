@@ -307,10 +307,20 @@ public class Trip {
     }
 
     public enum SortType{
-        PRICE(),
-        TIME(),
+        PRICE("price"),
+        TIME("time"),
 
-        DRIVER_RATING(),
-        CAR_RATING(),
+        DRIVER_RATING("driverRating"),
+        CAR_RATING("carRating");
+
+        private final String code;
+
+        private SortType(String code){
+            this.code = code;
+        }
+
+        public String getCode(){
+            return "searchTrip.sortType." + code;
+        }
     }
 }
