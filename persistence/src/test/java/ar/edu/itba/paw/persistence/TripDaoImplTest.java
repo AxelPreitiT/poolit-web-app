@@ -41,9 +41,9 @@ public class TripDaoImplTest {
     private static final long CITY_ID = 1;
     private static final String CITY_NAME = "Recoleta";
     private static final City CITY = new City(CITY_ID,CITY_NAME,PROVINCE_ID);
-    private static final long KNOWN_IMAGE_ID = 1;
-    private static final long USER_ID_1 = 1;
-    private static final long USER_ID_2 = 2;
+    private static final long KNOWN_IMAGE_ID = 3;
+    private static final long USER_ID_1 = 3;
+    private static final long USER_ID_2 = 4;
     private static final String USER_1_EMAIL = "jonhdoe@mail.com";
     private static final String USER_2_EMAIL = "jonhdoe2@mail.com";
     private static final Locale USER_LOCALE = Locale.ENGLISH;
@@ -56,8 +56,8 @@ public class TripDaoImplTest {
     private static final String USER_PASSWORD = "1234";
     private static final User USER_1 = new User(USER_ID_1,USER_NAME,USER_SURNAME,USER_1_EMAIL,USER_PHONE,USER_PASSWORD,CITY,USER_LOCALE,USER_ROLE_1, KNOWN_IMAGE_ID);
     private static final User USER_2 = new User(USER_ID_2,USER_NAME,USER_SURNAME,USER_2_EMAIL,USER_PHONE,USER_PASSWORD,CITY,USER_LOCALE,USER_ROLE_2, KNOWN_IMAGE_ID);
-    private static final long CAR_ID_1 = 1;
-    private static final long CAR_ID_2 = 2;
+    private static final long CAR_ID_1 = 3;
+    private static final long CAR_ID_2 = 4;
     private static final String CAR_PLATE = "BB000BB";
     private static final String CAR_INFO = "Fit Azul";
     private static final Car CAR_1 = new Car(CAR_ID_1,"AA000AA",CAR_INFO,USER_1, KNOWN_IMAGE_ID);
@@ -70,8 +70,8 @@ public class TripDaoImplTest {
     private static final double PRICE = 1200.0;
     private static final int MAX_SEATS = 3;
     private static final int PAGE_SIZE = 10;
-    private static final long KNOWN_SINGLE_TRIP_ID = 1;
-    private static final long KNOWN_RECURRENT_TRIP_ID = 2;
+    private static final long KNOWN_SINGLE_TRIP_ID = 3;
+    private static final long KNOWN_RECURRENT_TRIP_ID = 4;
 
     private static final Trip TRIP_1 = new Trip(KNOWN_SINGLE_TRIP_ID,CITY,ORIGIN_ADDRESS,CITY,DESTINATION_ADDRESS,START,START,MAX_SEATS,USER_1,CAR_1,0,PRICE);
 
@@ -82,23 +82,13 @@ public class TripDaoImplTest {
     private static final Passenger PASSENGER_2 = new Passenger(USER_2,TRIP_2,START,END);
 
     private Trip getTrip(Trip trip){
-//        TypedQuery<Trip> auxTripQuery = em.createQuery("from Trip where tripId = :tripId",Trip.class);
-//        auxTripQuery.setParameter("tripId",trip.getTripId());
-//        return auxTripQuery.getResultList().stream().findFirst().get();
         return em.merge(trip);
     }
     private User getUser(User user){
-//        TypedQuery<User> auxUserQuery = em.createQuery("from User where userId = :userId",User.class);
-//        auxUserQuery.setParameter("userId",user.getUserId());
-//        return auxUserQuery.getResultList().stream().findFirst().get();
         return em.merge(user);
     }
 
     private Passenger getPassenger(Passenger passenger){
-//        TypedQuery<Passenger> auxUserQuery = em.createQuery("from Passenger where user.userId = :userId AND trip.tripId = :tripId",Passenger.class);
-//        auxUserQuery.setParameter("userId",user.getUserId());
-//        auxUserQuery.setParameter("tripId",trip.getTripId());
-//        return auxUserQuery.getResultList().stream().findFirst().get();
         return em.merge(passenger);
     }
 
@@ -109,6 +99,10 @@ public class TripDaoImplTest {
         Trip aux = tripDao.create(CITY,ORIGIN_ADDRESS,CITY,DESTINATION_ADDRESS,CAR_2,START,START,false,PRICE,MAX_SEATS,USER_2);
 
         //Assert
+        TypedQuery<Trip> query = em.createQuery("from Trip where id = :tripId",Trip.class);
+        query.setParameter("tripId",aux.getTripId());
+        Optional<Trip> res = query.getResultList().stream().findFirst();
+        Assert.assertTrue(res.isPresent());
         Assert.assertEquals(CITY_ID,aux.getOriginCity().getId());
         Assert.assertEquals(START,aux.getStartDateTime());
         Assert.assertEquals(START,aux.getEndDateTime());
@@ -134,6 +128,10 @@ public class TripDaoImplTest {
         Trip aux = tripDao.create(CITY,ORIGIN_ADDRESS,CITY,DESTINATION_ADDRESS,CAR_2,START,END,true,PRICE,MAX_SEATS,USER_2);
 
         //Assert
+        TypedQuery<Trip> query = em.createQuery("from Trip where id = :tripId",Trip.class);
+        query.setParameter("tripId",aux.getTripId());
+        Optional<Trip> res = query.getResultList().stream().findFirst();
+        Assert.assertTrue(res.isPresent());
         Assert.assertEquals(CITY_ID,aux.getOriginCity().getId());
         Assert.assertEquals(START,aux.getStartDateTime());
         Assert.assertEquals(END,aux.getEndDateTime());
@@ -272,6 +270,8 @@ public class TripDaoImplTest {
         PagedContent<Passenger> ans = tripDao.getPassengers(auxTrip,START,START,Optional.of(Passenger.PassengerState.ACCEPTED),0,PAGE_SIZE);
         //Assert
         Assert.assertEquals(2,ans.getTotalCount());
+        Assert.assertTrue(ans.getElements().stream().anyMatch(p -> p.getUserId() == USER_ID_1));
+        Assert.assertTrue(ans.getElements().stream().anyMatch(p -> p.getUserId() == USER_ID_2));
     }
 
     @Test
@@ -370,16 +370,5 @@ public class TripDaoImplTest {
         Assert.assertEquals(START,ans.get().getEndDateTime());
     }
 
-//    @Test
-//    public void testGetAcceptedPassengers(){
-//        //Setup
-//        Trip auxTrip = getTrip(TRIP_2);
-//        //Execute
-//        List<Passenger> ans = tripDao.getAcceptedPassengers(auxTrip,auxTrip.getStartDateTime(),auxTrip.getEndDateTime());
-//        //Assert
-//        Assert.assertEquals(2,ans.size());
-//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_1));
-//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_2));
-//    }
 }
 

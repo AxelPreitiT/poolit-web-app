@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,6 +128,7 @@ public class TripServiceImpl implements TripService {
         }
     }
 
+    //TODO: change
     @Transactional
     @Override
     public boolean deleteTrip(final long tripId) throws TripNotFoundException{
@@ -338,7 +340,7 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         if(passengerOptional.get().getEndDateTime().isBefore(LocalDateTime.now())){
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to get out of trip {} after the period has ended", user.getUserId(), trip.getTripId(), e);
             throw e;
         }
@@ -483,19 +485,19 @@ public class TripServiceImpl implements TripService {
 //        }
 //        return tripDao.getPassengers(trip,startDate,endDate);
 //    }
-    private Optional<Passenger.PassengerState> getPassengersState(String status){
-        if(status.equals("accept")){
-            return Optional.of(Passenger.PassengerState.ACCEPTED);
-        }
-        if(status.equals("waiting")){
-            return Optional.of(Passenger.PassengerState.PENDING);
-        }
-        if(status.equals("reject")){
-            return Optional.of(Passenger.PassengerState.REJECTED);
-        }
-        return Optional.empty();
-    }
-
+//    private Optional<Passenger.PassengerState> getPassengersState(String status){
+//        if(status.equals("accept")){
+//            return Optional.of(Passenger.PassengerState.ACCEPTED);
+//        }
+//        if(status.equals("waiting")){
+//            return Optional.of(Passenger.PassengerState.PENDING);
+//        }
+//        if(status.equals("reject")){
+//            return Optional.of(Passenger.PassengerState.REJECTED);
+//        }
+//        return Optional.empty();
+//    }
+//
 
     //TODO: Delete
 //    @Transactional
@@ -671,13 +673,13 @@ public class TripServiceImpl implements TripService {
         LocalDateTime start = LocalDateTime.now();
         return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
     }
-    private Trip.SortType getTripSortType(final String sortType){
-        try{
-            return Trip.SortType.valueOf(sortType.toUpperCase());
-        }catch (Exception e){
-            return Trip.SortType.PRICE;
-        }
-    }
+//    private Trip.SortType getTripSortType(final String sortType){
+//        try{
+//            return Trip.SortType.valueOf(sortType.toUpperCase());
+//        }catch (Exception e){
+//            return Trip.SortType.PRICE;
+//        }
+//    }
 
     @Transactional
     @Override
@@ -691,7 +693,7 @@ public class TripServiceImpl implements TripService {
         final Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
         final Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
         final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
-        final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue:new ArrayList<>();
+        final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue: Collections.emptyList();
         //TODO: delete logic of blocked users
         return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,startDateTime.getDayOfWeek(),endDateTime,OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
 

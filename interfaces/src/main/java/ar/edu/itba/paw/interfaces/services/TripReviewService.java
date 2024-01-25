@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.interfaces.exceptions.*;
-import ar.edu.itba.paw.models.reviews.TripReviewCollection;
+//import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 
 
 //TODO: eliminar

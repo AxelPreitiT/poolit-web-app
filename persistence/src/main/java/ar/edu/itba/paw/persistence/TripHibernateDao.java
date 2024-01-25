@@ -126,7 +126,7 @@ public class TripHibernateDao implements TripDao {
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
         if(ids.isEmpty()){
-            return new PagedContent<>(new ArrayList<>(),page,pageSize,0);
+            return new PagedContent<>(Collections.emptyList(),page,pageSize,0);
         }
         TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.trip = :trip AND p.user.userId in :ids",Passenger.class);
         query.setParameter("trip",trip);
@@ -226,7 +226,7 @@ public class TripHibernateDao implements TripDao {
 
     private List<Trip> getTripsWithIds(List<Long> tripsIds){
         if(tripsIds.isEmpty()){
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         TypedQuery<Trip> query = em.createQuery("from Trip WHERE tripId IN :ids ORDER BY endDateTime DESC, time ASC ",Trip.class);
         query.setParameter("ids",tripsIds);
@@ -234,7 +234,7 @@ public class TripHibernateDao implements TripDao {
     }
     private List<Trip> getTripsForPassengerWithIds(List<Long> tripsIds, User passenger){
         if(tripsIds.isEmpty()){
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         TypedQuery<Passenger> query = em.createQuery("from Passenger WHERE trip.tripId IN :ids and user = :passenger ORDER BY endDateTime desc , trip.time ASC ",Passenger.class);
         query.setParameter("ids",tripsIds);
@@ -462,7 +462,7 @@ public class TripHibernateDao implements TripDao {
         Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
-        List<Trip> result = new ArrayList<>();
+        List<Trip> result = Collections.emptyList();
         if(!ids.isEmpty()){
             String JPLQuery = "from Trip WHERE tripId IN :ids ";
             if(sortType.equals(Trip.SortType.PRICE)){
@@ -521,7 +521,7 @@ public class TripHibernateDao implements TripDao {
         Integer total = ((List<Object>) countQuery.getResultList()).stream().map(elem -> ((Number) elem).intValue()).findFirst().orElseThrow(IllegalStateException::new);
         @SuppressWarnings("unchecked")
         List<Long> ids = ((List<Object>) idQuery.getResultList()).stream().map(elem -> ((Number) elem).longValue()).collect(Collectors.toList());
-        List<Trip> aux = new ArrayList<>();
+        List<Trip> aux = Collections.emptyList();
         if(!ids.isEmpty()){
             TypedQuery<Trip> query = em.createQuery("from Trip WHERE tripId IN :ids ORDER BY time ASC, price ASC",Trip.class);
             query.setParameter("ids",ids);
