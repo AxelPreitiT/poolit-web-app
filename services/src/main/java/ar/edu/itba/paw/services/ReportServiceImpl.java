@@ -94,12 +94,7 @@ public class ReportServiceImpl implements ReportService {
         Report resp = reportDao.createReport(reporter, reported, trip, description, date, relation, reason);
         List<User> admins = userService.getAdmins();
         for ( User admin:  admins) {
-            try {
-                emailService.sendMailNewReport(resp, admin);
-            }
-            catch( Exception e){
-                LOGGER.error("There was an error sending the email", e);
-            }
+            emailService.sendMailNewReport(resp, admin);
         }
         return resp;
     }
@@ -137,12 +132,7 @@ public class ReportServiceImpl implements ReportService {
     private void rejectReport(long reportId, String reason) throws ReportNotFoundException {
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
         reportDao.resolveReport(reportId, reason, ReportState.REJECTED);
-        try {
-            emailService.sendMailRejectReport(report);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
-        }
+        emailService.sendMailRejectReport(report);
     }
 
 //    @Transactional
@@ -150,19 +140,10 @@ public class ReportServiceImpl implements ReportService {
     private void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
-        try {
-            emailService.sendMailAcceptReport(report);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
-        }
-        try {
-            emailService.sendMailBanReport(report);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
-        }
+        emailService.sendMailAcceptReport(report);
+        emailService.sendMailBanReport(report);
         PagedContent<Trip> pgTripDriver = tripService.getTripsCreatedByUserFuture(report.getReported(), 0, 10);
+
         for(int i = 0; i < pgTripDriver.getTotalPages(); i++){
             List<Trip> trips = pgTripDriver.getElements();
             for(Trip trip : trips){

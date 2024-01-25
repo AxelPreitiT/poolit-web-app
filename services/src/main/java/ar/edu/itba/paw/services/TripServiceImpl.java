@@ -81,12 +81,7 @@ public class TripServiceImpl implements TripService {
                 maxSeats,
                 driver
         );
-        try {
-            emailService.sendMailNewTrip(newTrip);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email for the new trip with id {} to the driver with id {}", newTrip.getTripId(), driver.getUserId(), e);
-        }
+        emailService.sendMailNewTrip(newTrip);
         return newTrip;
     }
 //    private Optional<LocalDateTime> getLocalDateTime(final String date, final String time){
@@ -143,21 +138,11 @@ public class TripServiceImpl implements TripService {
         if(!LocalDateTime.now().isAfter(trip.getStartDateTime())){
             for(Passenger passenger : tripPassengers){
                 //Solo notifico a los pasajeros que siguen en el viaje despues de esa ultima fecha donde ocurrio
-                try {
-                    emailService.sendMailTripDeletedToPassenger(trip, passenger);
-                } catch (Exception e) {
-                    LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
-                    throw new IllegalStateException();
-                }
+                emailService.sendMailTripDeletedToPassenger(trip, passenger);
                 //Los marcamos como rechazados para el viaje
                 tripDao.rejectPassenger(passenger);
             }
-            try{
-                emailService.sendMailTripDeletedToDriver(trip);
-            }catch (Exception e){
-                LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
-                throw new IllegalStateException();
-            }
+            emailService.sendMailTripDeletedToDriver(trip);
             //Marcamos el viaje como eliminado para ser consistentes siempre
             return tripDao.markTripAsDeleted(trip,null);
         }
@@ -176,34 +161,19 @@ public class TripServiceImpl implements TripService {
                 //El pasajero terminaba después de la última fecha
                 if(!passenger.getStartDateTime().isAfter(lastOccurrence)){
                     //El pasajero ya habia empezado su periodo -> el viaje tiene que quedar en el historial
-                    try {
-                        emailService.sendMailTripTruncatedToPassenger(trip, passenger, lastOccurrence.plusDays(7));
-                    } catch (Exception e) {
-                        LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
-                        throw new IllegalStateException();
-                    }
+                    emailService.sendMailTripTruncatedToPassenger(trip, passenger, lastOccurrence.plusDays(7));
                     tripDao.truncatePassengerEndDateTime(passenger,lastOccurrence);
                 }else{
                     //El pasajero no habia empezado su periodo -> se lo marca como rechazado para el historial
-                    try {
-                        //Se cancelo la totalidad del viaje que ocupaba
-                        emailService.sendMailTripDeletedToPassenger(trip, passenger);
-                    } catch (Exception e) {
-                        LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
-                        throw new IllegalStateException();
-                    }
+                    //Se cancelo la totalidad del viaje que ocupaba
+                    emailService.sendMailTripDeletedToPassenger(trip, passenger);
                     //Lo sacamos de los pasajeros para
                     tripDao.rejectPassenger(passenger);
                 }
 
             }
         }
-        try{
-            emailService.sendMailTripDeletedToDriver(trip);
-        }catch (Exception e){
-            LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
-            throw new IllegalStateException();
-        }
+        emailService.sendMailTripDeletedToDriver(trip);
         return tripDao.markTripAsDeleted(trip, lastOccurrence);
     }
 
@@ -245,18 +215,8 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("{}, startDateTime '{}' or endDateTime '{}' have invalid values", trip, startDateTime, endDateTime, e);
             throw e;
         }
-        try{
-            emailService.sendMailNewPassengerRequest(trip, passenger);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the driver with id {}", passenger.getUserId(), trip.getTripId(), trip.getDriver().getUserId(), e);
-        }
-        try {
-            emailService.sendMailTripRequest(trip, passenger);
-        }
-        catch (Exception e) {
-            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {} to the passenger with id {}", passenger.getUserId(), trip.getTripId(), passenger.getUserId(), e);
-        }
+        emailService.sendMailNewPassengerRequest(trip, passenger);
+        emailService.sendMailTripRequest(trip, passenger);
         return tripDao.addPassenger(trip,user,startDateTime,endDateTime);
     }
 
@@ -344,11 +304,7 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         final Passenger passenger = passengerOptional.get();
-        try{
-            emailService.sendMailTripCancelledToDriver(trip,passenger);
-        }catch (Exception e){
-            LOGGER.error("There was an error sending the email for the cancelled trip with id {} by the passenger with id {} to the driver with id {}", trip.getTripId(), passenger.getUserId(), trip.getDriver().getUserId(), e);
-        }
+        emailService.sendMailTripCancelledToDriver(trip,passenger);
         return tripDao.removePassenger(trip,passenger);
     }
 
@@ -732,12 +688,7 @@ public class TripServiceImpl implements TripService {
             //No hay asientos disponibles
             throw new NotAvailableSeatsException();
         }
-        try{
-            emailService.sendMailTripConfirmed(pass.getTrip(), pass);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", pass.getUserId(), pass.getTrip().getTripId(), e);
-        }
+        emailService.sendMailTripConfirmed(pass.getTrip(), pass);
         return tripDao.acceptPassenger(pass);
     }
 
@@ -749,12 +700,7 @@ public class TripServiceImpl implements TripService {
         if(LocalDateTime.now().compareTo(passenger.getStartDateTime())>=0){
             throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
         }
-        try{
-            emailService.sendMailTripRejected(passenger.getTrip(), passenger);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email for the new passenger with id {} added to the trip with id {}", passenger.getUserId(), passenger.getTrip().getTripId(), e);
-        }
+        emailService.sendMailTripRejected(passenger.getTrip(), passenger);
         return tripDao.rejectPassenger(passenger);
     }
 
