@@ -29,6 +29,7 @@ public class TripDto {
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
     private long tripId;
+    private Trip.TripStatus tripStatus;
 
 
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
@@ -43,8 +44,9 @@ public class TripDto {
         ans.occupiedSeats = trip.getOccupiedSeats();
         ans.startDateTime = trip.getStartDateTime();
         ans.endDateTime = trip.getEndDateTime();
-        ans.queryEndDateTime = trip.getQueryStartDateTime();
+        ans.queryStartDateTime = trip.getQueryStartDateTime();
         ans.queryEndDateTime = trip.getQueryEndDateTime();
+        ans.tripStatus = trip.getQueryTripStatus();
         ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).toTemplate() + "{/userId}";
         ans.driverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(trip.getDriver().getUserId())).build();
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
@@ -196,5 +198,13 @@ public class TripDto {
 
     public void setTripId(long tripId) {
         this.tripId = tripId;
+    }
+
+    public Trip.TripStatus getTripStatus() {
+        return tripStatus;
+    }
+
+    public void setTripStatus(Trip.TripStatus tripStatus) {
+        this.tripStatus = tripStatus;
     }
 }

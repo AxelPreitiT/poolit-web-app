@@ -305,11 +305,25 @@ public class Trip {
     public double getCarRating() {
         return carRating;
     }
+    public TripStatus getQueryTripStatus(){
+        final LocalDateTime now = LocalDateTime.now();
+        if(queryStartDateTime.compareTo(now)>=0){
+            return TripStatus.NOT_STARTED;
+        }
+        if(now.compareTo(queryEndDateTime)<=0){
+            return TripStatus.IN_PROGRESS;
+        }
+        return TripStatus.FINISHED;
+    }
 
+    public enum TripStatus{
+        NOT_STARTED,
+        IN_PROGRESS,
+        FINISHED
+    }
     public enum SortType{
         PRICE(),
         TIME(),
-
         DRIVER_RATING(),
         CAR_RATING(),
     }
