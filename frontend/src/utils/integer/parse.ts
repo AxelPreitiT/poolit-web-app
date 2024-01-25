@@ -1,6 +1,11 @@
 const integerRegex = /^-?\d+$/;
 
-export const parseInputInteger = (value: string): number | undefined => {
+export const parseInputInteger = (
+  value: string | number
+): number | undefined => {
+  if (typeof value === "number") {
+    return value;
+  }
   if (!integerRegex.test(value)) {
     return undefined;
   }

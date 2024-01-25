@@ -10,6 +10,7 @@ import { useState } from "react";
 import { parseTripsSearchParams } from "@/functions/tripsSearchParams";
 import PaginationList from "@/components/paginationList/paginationList";
 import CardTrip from "@/components/cardTrip/cardTrip/CardTrip";
+import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -18,14 +19,20 @@ const SearchPage = () => {
   const { isLoading: isCarFeaturesLoading, carFeatures } = useCarFeatures();
   const { search } = location;
   const initialSearch = parseTripsSearchParams(search);
-
   const [trips, setTrips] = useState<TripModel[]>([]);
+
   const onSearchSuccess = (trips: TripModel[]) => {
     setTrips(trips || []);
   };
   const onSearchError = () => {
     setTrips([]);
   };
+
+  const searchForm = useSearchTripsForm({
+    onSuccess: onSearchSuccess,
+    onError: onSearchError,
+    initialSearch,
+  });
 
   const NoResults = () => (
     <div className={styles.noResultsContainer}>
@@ -48,9 +55,7 @@ const SearchPage = () => {
     <div className={styles.mainContainer}>
       <div className={styles.searchContainer}>
         <TripsSearch
-          onSearchError={onSearchError}
-          onSearchSuccess={onSearchSuccess}
-          initialSearch={initialSearch}
+          searchForm={searchForm}
           cities={cities}
           carFeatures={carFeatures}
         />

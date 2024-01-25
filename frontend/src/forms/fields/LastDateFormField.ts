@@ -1,10 +1,10 @@
 import { getToday } from "@/utils/date/today";
 import FieldInterpolation from "./interpolations/FieldInterpolation";
 import FormFieldDateBuilder from "./builders/FormFieldDateBuilder";
-import { ZodDate, ZodOptional } from "zod";
+import { ZodDate, ZodNullable, ZodOptional } from "zod";
 import FormField from "./FormField";
 
-export type LastDateZodType = ZodOptional<ZodDate>;
+export type LastDateZodType = ZodOptional<ZodNullable<ZodDate>>;
 const minDate: Date = getToday();
 
 export default class LastDateFormField extends FormField {
@@ -16,7 +16,7 @@ export default class LastDateFormField extends FormField {
     const [schema, interpolations] = new FormFieldDateBuilder(name)
       .hasMinDate(minDate)
       .build();
-    this.schema = schema.optional();
+    this.schema = schema.nullable().optional();
     this.interpolations = interpolations;
   }
 

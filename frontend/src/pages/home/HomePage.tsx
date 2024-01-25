@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import TripsSearch from "@/components/search/TripsSearch";
 import useAllCities from "@/hooks/cities/useAllCities";
 import useCarFeatures from "@/hooks/cars/useCarFeatures";
+import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ const HomePage = () => {
     useRecommendedTrips(currentUser);
   const { isLoading: isLoadingCities, cities } = useAllCities();
   const { isLoading: isLoadingCarFeatures, carFeatures } = useCarFeatures();
+  const searchForm = useSearchTripsForm();
 
   // Todo: Create loading screen
   if (
@@ -56,7 +58,11 @@ const HomePage = () => {
             </div>
           </div>
           <div className={styles.searchContainer}>
-            <TripsSearch cities={cities} carFeatures={carFeatures} />
+            <TripsSearch
+              cities={cities}
+              carFeatures={carFeatures}
+              searchForm={searchForm}
+            />
           </div>
         </div>
       </div>

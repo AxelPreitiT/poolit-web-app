@@ -55,5 +55,6 @@ export const parseTripsSearchParams: (
     min_price: minPrice ? parseInt(minPrice) : undefined,
     max_price: maxPrice ? parseInt(maxPrice) : undefined,
     car_features: carFeatures,
+    multitrip: !!lastDate,
   };
 };

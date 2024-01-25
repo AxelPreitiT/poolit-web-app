@@ -3,12 +3,19 @@ import styles from "./styles.module.scss";
 import { useState } from "react";
 
 interface CarFeaturesPillsProps {
+  initialSelectedCarFeatures?: string[];
   carFeatures: CarFeatureModel[];
   onSelect?: (selectedCarFeatures: string[]) => void;
 }
 
-const CarFeaturesPills = ({ carFeatures, onSelect }: CarFeaturesPillsProps) => {
-  const [selectedCarFeatures, setSelectedCarFeatures] = useState<string[]>([]);
+const CarFeaturesPills = ({
+  carFeatures,
+  onSelect,
+  initialSelectedCarFeatures,
+}: CarFeaturesPillsProps) => {
+  const [selectedCarFeatures, setSelectedCarFeatures] = useState<string[]>(
+    initialSelectedCarFeatures || []
+  );
 
   const toggleCarFeature = (carFeatureId: string) => {
     let newSelectedCarFeatures: string[] = [];

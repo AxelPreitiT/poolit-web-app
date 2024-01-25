@@ -29,21 +29,14 @@ import { getNextDay } from "@/utils/date/nextDay";
 import { parseInputFloat } from "@/utils/float/parse";
 import LoadingButton from "../buttons/LoadingButton";
 import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
-import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
-import TripModel from "@/models/TripModel";
 
 const uniqueTripId = "unique";
 const recurrentTripId = "recurrent";
 
 interface TripsSearchProps {
+  searchForm: ReturnType<typeof useSearchTripsForm>;
   cities?: CityModel[];
   carFeatures?: CarFeatureModel[];
-  onSearchSuccess?: (
-    trips: TripModel[],
-    data: SearchTripsFormSchemaType
-  ) => void;
-  onSearchError?: (error: Error) => void;
-  initialSearch?: Partial<SearchTripsFormSchemaType>;
 }
 
 const useCitiesSwap = (
@@ -81,14 +74,11 @@ const useCitiesSwap = (
 };
 
 const TripsSearch = ({
-  onSearchSuccess,
-  onSearchError,
-  initialSearch,
+  searchForm,
   cities = [],
   carFeatures = [],
 }: TripsSearchProps) => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<string>(uniqueTripId);
   const {
     register,
     handleSubmit,
@@ -97,19 +87,23 @@ const TripsSearch = ({
     tFormError,
     setValue,
     isFetching,
-  } = useSearchTripsForm({
-    onSuccess: onSearchSuccess,
-    onError: onSearchError,
-    initialSearch,
-  });
-
-  const removeLastDate = useCallback(
-    () => setValue("last_date", undefined),
-    [setValue]
+    getValues,
+  } = searchForm;
+  const [activeTab, setActiveTab] = useState<string>(
+    getValues("multitrip") ? recurrentTripId : uniqueTripId
   );
 
-  const { setDate, setIsMultitrip, date, isMultitrip } =
-    useLastDateCollapse(removeLastDate);
+  const removeLastDate = useCallback(() => {
+    setValue("last_date", null);
+  }, [setValue]);
+
+  const { setDate, setIsMultitrip, date, isMultitrip } = useLastDateCollapse(
+    removeLastDate,
+    {
+      initialDate: getValues("date"),
+      initialIsMultitrip: getValues("multitrip"),
+    }
+  );
   const minLastDate = date ? getNextDay(date) : getToday();
 
   const setMultitrip = useCallback(
@@ -388,6 +382,7 @@ const TripsSearch = ({
               <CarFeaturesPills
                 carFeatures={carFeatures}
                 onSelect={setCarFeatures}
+                initialSelectedCarFeatures={getValues("car_features")}
               />
             </div>
           </div>
