@@ -9,8 +9,8 @@ import usePublicUserById from "@/hooks/users/usePublicUserById.tsx";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
-import usePassangerReviewsById from "@/hooks/reviews/usePassangerReviewsById.tsx";
 import ShortReview from "@/components/review/shorts/ShortReview.tsx";
+import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 
 const ReviewPageDriver = () => {
   const { t } = useTranslation();
@@ -44,18 +44,23 @@ const ReviewPageDriver = () => {
 
     {(isLoadingUser || user == undefined) ? <SpinnerComponent/> :
       <div className={styles.list_block}>
-        <PaginationComponent
-            uri = {createPaginationUri(user.reviewsPassengerUri, currentPage , 2)}
+        <div className={styles.list_container}>
+          <div className={styles.row_data}>
+            <h2>{t("profile.lists.review_as_driver")}</h2>
+          </div>
+          <PaginationComponent
+            uri = {createPaginationUri(user.reviewsPassengerUri, currentPage , 3)}
             current_page = {currentPage}
-            useFuction={usePassangerReviewsById}
+            useFuction={useUserReviewsByUri}
             empty_component={
             <EmptyList
-                text={t("created_trips.empty")}
+                text={t("profile.lists.review_as_passanger")}
                 second_text={t("created_trips.more")}
                 icon={"car-front-fill"}
             />}
             component_name={ShortReview}
-        />
+          />
+        </div>
       </div>}
     </div>
   );

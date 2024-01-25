@@ -9,7 +9,7 @@ import usePublicUserById from "@/hooks/users/usePublicUserById.tsx";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer.tsx";
-import {publicsReviewsPath} from "@/AppRouter.tsx";
+import {publicsDriverReviewsPath, publicsPassangerReviewsPath} from "@/AppRouter.tsx";
 
 const PublicProfilePage = () => {
   const { t } = useTranslation();
@@ -48,7 +48,7 @@ const PublicProfilePage = () => {
               empty_icon={"book"}
               data={reviewsDriver.data}
               component_name={ShortReview}
-              link={publicsReviewsPath.replace(":id", String(5))}
+              link={publicsDriverReviewsPath.replace(":id", String(params.id))}
           />)}
           {isLoadingReviewsPassanger || reviewsPassanger == undefined ? (<SpinnerComponent/>) : (
           <ListProfileContainer
@@ -58,7 +58,7 @@ const PublicProfilePage = () => {
               empty_icon={"book"}
               data={reviewsPassanger.data}
               component_name={ShortReview}
-              link={publicsReviewsPath.replace(":id", String(5))}
+              link={publicsPassangerReviewsPath.replace(":id", String(params.id))}
           />)}
         </div>
       </div>

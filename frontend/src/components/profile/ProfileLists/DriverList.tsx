@@ -1,9 +1,8 @@
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
-import { createdTripsPath } from "@/AppRouter";
+import {createdTripsPath, publicsDriverReviewsPath} from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import ShortReview from "@/components/review/shorts/ShortReview";
-import { publicsReviewsPath } from "@/AppRouter";
 import CardCar from "@/components/cardCar/CardCar";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
@@ -41,7 +40,7 @@ const DriverList = ({
           empty_icon={"book"}
           data={reviewsDriver.data}
           component_name={ShortReview}
-          link={publicsReviewsPath.replace(":id", String(5))}
+          link={publicsDriverReviewsPath.replace(":id", String(5))}
         />
       )}
       {futureCreatedTrips == undefined ||  isLoadingFutureCreatedTrips? (

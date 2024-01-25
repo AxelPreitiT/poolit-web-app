@@ -42,7 +42,7 @@ const useDriverReviewsById = (id?: string) => {
     return {
         ...query,
         isLoading: isLoading || isPending,
-        reviews: data
+        data: data
     };
 }
 
