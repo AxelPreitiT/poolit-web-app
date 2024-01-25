@@ -15,7 +15,7 @@ import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx
 import Status from "@/enums/Status.ts";
 import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
-import usePublicUser from "@/hooks/users/usePublicUser.tsx";
+import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import usePassangers from "@/hooks/passanger/usePassangers.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 
@@ -28,7 +28,7 @@ const TripDetailsPage = () => {
   const { currentUser } = useCurrentUser();
   const { isLoading: isLoadingTrip, trip: trip } = useTripByUri(link);
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
-  const { isLoading: isLoadingDriver, driver: driver } = usePublicUser(
+  const { isLoading: isLoadingDriver, driver: driver } = usePublicUserByUri(
     trip?.driverUri
   );
   const { isLoading: isLoadingPassangers, passangers: passangers } =

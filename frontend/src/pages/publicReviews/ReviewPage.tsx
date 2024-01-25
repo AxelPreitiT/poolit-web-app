@@ -1,17 +1,17 @@
-import ProfileImg from "@/components/profile/img/ProfileImg";
+import ProfileImg from "@/components/profile/img/ProfileImg.tsx";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfilePhoto from "@/images/descarga.jpeg";
-import ProfileProp from "@/components/profile/prop/ProfileProp";
-import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
-import ShortReview from "@/components/review/shorts/ShortReview";
-import ProfileStars from "@/components/profile/stars/ProfileStars";
-import { publicsReviewsPath } from "@/AppRouter";
+import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
+import FullReviews from "@/components/review/fullList/fullReviews.tsx";
+import ShortReview from "@/components/review/shorts/ShortReview.tsx";
+import ProfileStars from "@/components/profile/stars/ProfileStars.tsx";
 
-const PublicProfilePage = () => {
+const ReviewPage = () => {
   const { t } = useTranslation();
 
   const user = {
+    id: 3,
     name: "Gaston Francois",
     email: "gfrancois@itba.edu.ar",
     phone: "3424394741",
@@ -21,7 +21,6 @@ const PublicProfilePage = () => {
     rating_driver: 3.5,
     rating_passenger: 1.5,
   };
-
 
   const data2 : ReviewModel[] = [
     {
@@ -53,27 +52,16 @@ const PublicProfilePage = () => {
       </div>
 
       <div className={styles.list_block}>
-        <ListProfileContainer
+        <FullReviews
           title={t("profile.lists.review_as_driver")}
-          btn_footer_text={t("profile.lists.review_more")}
           empty_text={t("profile.lists.review_empty")}
           empty_icon={"book"}
           data={data2}
           component_name={ShortReview}
-          link={publicsReviewsPath.replace(":id", String(5))}
-        />
-        <ListProfileContainer
-          title={t("profile.lists.review_as_passanger")}
-          btn_footer_text={t("profile.lists.review_more")}
-          empty_text={t("profile.lists.review_empty")}
-          empty_icon={"book"}
-          data={data2}
-          component_name={ShortReview}
-          link={publicsReviewsPath.replace(":id", String(5))}
         />
       </div>
     </div>
   );
 };
 
-export default PublicProfilePage;
+export default ReviewPage;
