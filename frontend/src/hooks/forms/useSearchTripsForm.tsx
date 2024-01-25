@@ -8,7 +8,6 @@ import {
   SearchTripsFormSchemaType,
 } from "@/forms/SearchTripsForm";
 import TripModel from "@/models/TripModel";
-import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import TripsService from "@/services/TripsService";
 import useForm, { SubmitHandlerReturnModel } from "./useForm";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
@@ -30,15 +29,13 @@ const useSearchTripsForm = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const onQueryError = useQueryError();
-  const { discovery, isError: isDiscoveryError } = useDiscovery();
+  const { getDiscoveryOnMount } = useDiscovery();
 
   const onSubmit: SubmitHandlerReturnModel<
     SearchTripsFormSchemaType,
     TripModel[]
   > = async (data: SearchTripsFormSchemaType) => {
-    if (!discovery || isDiscoveryError) {
-      throw new DiscoveryMissingError();
-    }
+    const discovery = await getDiscoveryOnMount();
     return await TripsService.searchTrips(discovery.tripsUriTemplate, data);
   };
 

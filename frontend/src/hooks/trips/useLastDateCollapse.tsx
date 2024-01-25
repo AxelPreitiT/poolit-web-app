@@ -19,8 +19,6 @@ const useLastDateCollapse = (
   );
 
   useEffect(() => {
-    console.log("date", date);
-    console.log("isMultitrip", isMultitrip);
     if (date && isMultitrip) {
       setShowLastDate(true);
     } else {

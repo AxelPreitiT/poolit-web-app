@@ -1,11 +1,11 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
-import {CreateTripFormSchemaType} from "@/forms/CreateTripForm";
-import {SearchTripsFormSchemaType} from "@/forms/SearchTripsForm";
+import { CreateTripFormSchemaType } from "@/forms/CreateTripForm";
+import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import CreateTripModel from "@/models/CreateTripModel";
 import TripModel from "@/models/TripModel";
-import {getIsoDate} from "@/utils/date/isoDate";
-import {AxiosPromise, AxiosResponse} from "axios";
-import {parseTemplate} from "url-template";
+import { getIsoDate } from "@/utils/date/isoDate";
+import { AxiosPromise, AxiosResponse } from "axios";
+import { parseTemplate } from "url-template";
 import PaginationModel from "@/models/PaginationModel.tsx";
 
 type CreateTripRequestBody = {
@@ -34,35 +34,35 @@ class TripsApi extends AxiosApi {
     });
   };
 
-  public static getTripsByUser: (uri: string) => AxiosPromise<PaginationModel<TripModel>> = (
+  public static getTripsByUser: (
     uri: string
-  ) => {
-    const uriFinal = uri + '&pageSize=2&page=0';
+  ) => AxiosPromise<PaginationModel<TripModel>> = (uri: string) => {
+    const uriFinal = uri + "&pageSize=2&page=0";
     return this.get<TripModel[]>(uriFinal, {
       headers: {},
     }).then((response: AxiosResponse<TripModel[]>) => {
-        const trips = response.data;
+      const trips = response.data;
 
-        //const parsedLinkHeader = parse(linkHeader);
-        //console.log("parsedLink" + parsedLinkHeader)
-        //console.log("parsedLink.first" + parsedLinkHeader?.first)
-        const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
-        const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
-        const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
-        const last = response.headers.link?.match(/<([^>]*)>; rel="last"/)?.[1];
-        const total = response.headers['x-total-pages']
-        const newResponse: AxiosResponse<PaginationModel<TripModel>> = {
-          ...response,
-          data:{
-            first: first,
-            prev: prev,
-            next: next,
-            last: last,
-            total_pages: total,
-            data: trips
-          }
-        };
-        return newResponse;
+      //const parsedLinkHeader = parse(linkHeader);
+      //console.log("parsedLink" + parsedLinkHeader)
+      //console.log("parsedLink.first" + parsedLinkHeader?.first)
+      const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
+      const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
+      const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
+      const last = response.headers.link?.match(/<([^>]*)>; rel="last"/)?.[1];
+      const total = response.headers["x-total-pages"];
+      const newResponse: AxiosResponse<PaginationModel<TripModel>> = {
+        ...response,
+        data: {
+          first: first,
+          prev: prev,
+          next: next,
+          last: last,
+          total_pages: total,
+          data: trips,
+        },
+      };
+      return newResponse;
     });
   };
 
