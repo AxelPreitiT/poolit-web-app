@@ -22,9 +22,9 @@ const PassengerList = ({
 }: PassengerListProp) => {
   const { t } = useTranslation();
 
-  const { isLoading: isLoadingFutureReservedTrips, trips:futureReservedTrips } = useTripsByUri(futureReservedTripsUri);
-  const { isLoading: isLoadingPastReservedTrips, trips:pastReservedTrips } = useTripsByUri(pastReservedTripsUri);
-  const { isLoading: isLoadingReviewsPassenger, reviews:reviewsPassenger } = useUserReviewsByUri(reviewsPassengerUri);
+  const { isLoading: isLoadingFutureReservedTrips, data:futureReservedTrips } = useTripsByUri(futureReservedTripsUri);
+  const { isLoading: isLoadingPastReservedTrips, data:pastReservedTrips } = useTripsByUri(pastReservedTripsUri);
+  const { isLoading: isLoadingReviewsPassenger, data:reviewsPassenger } = useUserReviewsByUri(reviewsPassengerUri);
 
 
   return (
@@ -37,7 +37,7 @@ const PassengerList = ({
         btn_footer_text={t("profile.lists.review_more")}
         empty_text={t("profile.lists.review_empty")}
         empty_icon={"book"}
-        data={reviewsPassenger}
+        data={reviewsPassenger.data}
         component_name={ShortReview}
         link={publicsReviewsPath.replace(":id", String(5))}
       />)}

@@ -5,7 +5,7 @@ import LoginPage from "./pages/login/LoginPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
-import ReviewPage from "./pages/publicReviews/ReviewPage.tsx";
+import ReviewPageDriver from "./pages/publicReviews/ReviewPageDriver.tsx";
 import PublicProfilePage from "@/pages/publicProfile/PublicProfilePage.tsx";
 import Navbar from "./components/utils/Navbar";
 import ReservedPage from "./pages/reserved/ReservedPage";
@@ -102,7 +102,7 @@ const router = createBrowserRouter(
           showWhenUserIsNotAuthenticated={false}
         >
           <Navbar />
-          <ReviewPage />
+          <ReviewPageDriver />
         </RouteWrapper>
       ),
     },

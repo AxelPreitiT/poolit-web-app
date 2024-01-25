@@ -7,7 +7,7 @@ import FullReviews from "@/components/review/fullList/fullReviews.tsx";
 import ShortReview from "@/components/review/shorts/ShortReview.tsx";
 import ProfileStars from "@/components/profile/stars/ProfileStars.tsx";
 
-const ReviewPage = () => {
+const ReviewPageDriver = () => {
   const { t } = useTranslation();
 
   const user = {
@@ -64,4 +64,4 @@ const ReviewPage = () => {
   );
 };
 
-export default ReviewPage;
+export default ReviewPageDriver;

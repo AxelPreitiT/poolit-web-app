@@ -23,9 +23,9 @@ const DriverList = ({
 }: DriverListProp) => {
   const { t } = useTranslation();
 
-  const { isLoading: isLoadingFutureCreatedTrips, trips:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
-  const { isLoading: isLoadingPastCreatedTrips, trips:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
-  const { isLoading: isLoadingReviewsDriver, reviews:reviewsDriver } = useUserReviewsByUri(reviewsDriverUri);
+  const { isLoading: isLoadingFutureCreatedTrips, data:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
+  const { isLoading: isLoadingPastCreatedTrips, data:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
+  const { isLoading: isLoadingReviewsDriver, data:reviewsDriver } = useUserReviewsByUri(reviewsDriverUri);
   const { isLoading: isLoadingUserCars, cars } = useUserCars();
 
 
@@ -39,7 +39,7 @@ const DriverList = ({
           btn_footer_text={t("profile.lists.review_more")}
           empty_text={t("profile.lists.review_empty")}
           empty_icon={"book"}
-          data={reviewsDriver}
+          data={reviewsDriver.data}
           component_name={ShortReview}
           link={publicsReviewsPath.replace(":id", String(5))}
         />

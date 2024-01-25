@@ -8,23 +8,24 @@ import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import TripModel from "@/models/TripModel.ts";
 
-const useTripsByUri = (tripsUri: string) => {
+const useTripsByUri = (tripsUri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
 
     const {
         isLoading,
         isError,
-        data: trips,
+        data: data,
         error,
         isPending,
     } = useQuery({
         queryKey: ["trips", tripsUri],
         queryFn: async ({ queryKey }): Promise<PaginationModel<TripModel>> => {
             const [, tripsUri] = queryKey;
-            return await TripsService.getTripsByUri(tripsUri);
+            return await TripsService.getTripsByUri(tripsUri as string);
         },
         retry: false,
+        enabled: !!tripsUri,
     });
 
     useEffect(() => {
@@ -44,7 +45,7 @@ const useTripsByUri = (tripsUri: string) => {
 
     return {
         isLoading: isLoading || isPending,
-        trips,
+        data,
     };
 }
 

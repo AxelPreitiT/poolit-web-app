@@ -33,7 +33,7 @@ const useUserReviewsByUri = (uri?: string) => {
     return {
         ...query,
         isLoading: isLoading || isPending,
-        reviews: data,
+        data: data,
     }
 }
 

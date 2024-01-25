@@ -15,12 +15,12 @@ const PublicProfilePage = () => {
   const { t } = useTranslation();
   const params = useParams();
   const { isLoading: isLoadingUser, user: user } = usePublicUserById(params.id);
-  const { isLoading: isLoadingReviewsDriver, reviews:reviewsDriver } = useUserReviewsByUri(user?.reviewsDriverUri);
-  const { isLoading: isLoadingReviewsPassanger, reviews:reviewsPassanger } = useUserReviewsByUri(user?.reviewsPassengerUri);
+  const { isLoading: isLoadingReviewsDriver, data:reviewsDriver } = useUserReviewsByUri(user?.reviewsDriverUri);
+  const { isLoading: isLoadingReviewsPassanger, data:reviewsPassanger } = useUserReviewsByUri(user?.reviewsPassengerUri);
 
   return (
-      (isLoadingUser || user == undefined) ? <SpinnerComponent/> :
       <div className={styles.main_container}>
+      {(isLoadingUser || user == undefined) ? <SpinnerComponent/> :
         <div className={styles.profileCard}>
           <ProfileImg src={user.imageUri} />
           <h3 className="text-center">
@@ -37,7 +37,7 @@ const PublicProfilePage = () => {
               prop={t("profile.props.rating_passenger")}
               rating={user.passengerRating}
           />
-        </div>
+        </div>}
 
         <div className={styles.list_block}>
           {isLoadingReviewsDriver || reviewsDriver == undefined ? (<SpinnerComponent/>) : (
@@ -46,7 +46,7 @@ const PublicProfilePage = () => {
               btn_footer_text={t("profile.lists.review_more")}
               empty_text={t("profile.lists.review_empty")}
               empty_icon={"book"}
-              data={reviewsDriver}
+              data={reviewsDriver.data}
               component_name={ShortReview}
               link={publicsReviewsPath.replace(":id", String(5))}
           />)}
@@ -56,7 +56,7 @@ const PublicProfilePage = () => {
               btn_footer_text={t("profile.lists.review_more")}
               empty_text={t("profile.lists.review_empty")}
               empty_icon={"book"}
-              data={reviewsPassanger}
+              data={reviewsPassanger.data}
               component_name={ShortReview}
               link={publicsReviewsPath.replace(":id", String(5))}
           />)}
