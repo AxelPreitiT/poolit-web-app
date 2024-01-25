@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
@@ -104,7 +103,6 @@ public class TripController {
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
-    //TODO: revisar si es delete
     @DELETE
     @Path("/{id}")
     public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {

@@ -128,15 +128,14 @@ public class TripServiceImpl implements TripService {
         }
     }
 
-    //TODO: change
     @Transactional
     @Override
     public boolean deleteTrip(final long tripId) throws TripNotFoundException{
         final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
-        //Si el viaje ya termino
-        if(trip.getEndDateTime().isBefore(LocalDateTime.now())){
+        //Si el viaje ya termino o ya fue eliminado
+        if(trip.getEndDateTime().isBefore(LocalDateTime.now()) || trip.isDeleted()){
             RuntimeException e = new IllegalStateException();
-            LOGGER.error("Driver {} tried deleting the trip with id {} after it ended", trip.getDriver().getUserId(), trip.getTripId(), e);
+            LOGGER.error("Driver {} tried deleting the trip with id {} after it ended or has been deleted", trip.getDriver().getUserId(), trip.getTripId(), e);
             throw e;
         }
         List<Passenger> tripPassengers = tripDao.getPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
@@ -150,8 +149,8 @@ public class TripServiceImpl implements TripService {
                     LOGGER.error("There was an error sending the email for the deleted trip with id {} to the passenger with id {}", trip.getTripId(), passenger.getUserId(), e);
                     throw new IllegalStateException();
                 }
-                //Lo sacamos del historial del pasajero, el viaje nunca ocurrio
-                tripDao.removePassenger(trip,passenger);
+                //Los marcamos como rechazados para el viaje
+                tripDao.rejectPassenger(passenger);
             }
             try{
                 emailService.sendMailTripDeletedToDriver(trip);
@@ -159,8 +158,8 @@ public class TripServiceImpl implements TripService {
                 LOGGER.error("There was an error sending the email for the deleted trip with id {} to the driver with id {}", trip.getTripId(), trip.getDriver().getUserId(), e);
                 throw new IllegalStateException();
             }
-            //Directamente eliminamos al viaje de la BD, no va a tener reseñas asociadas
-            return tripDao.deleteTrip(trip);
+            //Marcamos el viaje como eliminado para ser consistentes siempre
+            return tripDao.markTripAsDeleted(trip,null);
         }
         //El viaje ya empezo
         //Notificamos a los pasajeros que siguen en el viaje despues de eliminarse
@@ -174,7 +173,7 @@ public class TripServiceImpl implements TripService {
         for(Passenger passenger : tripPassengers){
             //Solo notifico a los pasajeros que siguen en el viaje despues de esa ultima fecha donde ocurrio
             if(passenger.getEndDateTime().isAfter(lastOccurrence)) {
-                //Si ya empezo su periodo en el viaje
+                //El pasajero terminaba después de la última fecha
                 if(!passenger.getStartDateTime().isAfter(lastOccurrence)){
                     //El pasajero ya habia empezado su periodo -> el viaje tiene que quedar en el historial
                     try {
@@ -185,7 +184,7 @@ public class TripServiceImpl implements TripService {
                     }
                     tripDao.truncatePassengerEndDateTime(passenger,lastOccurrence);
                 }else{
-                    //El pasajero no habia empezado su periodo -> el viaje se elemina del historial
+                    //El pasajero no habia empezado su periodo -> se lo marca como rechazado para el historial
                     try {
                         //Se cancelo la totalidad del viaje que ocupaba
                         emailService.sendMailTripDeletedToPassenger(trip, passenger);
@@ -194,7 +193,7 @@ public class TripServiceImpl implements TripService {
                         throw new IllegalStateException();
                     }
                     //Lo sacamos de los pasajeros para
-                    tripDao.removePassenger(trip,passenger);
+                    tripDao.rejectPassenger(passenger);
                 }
 
             }
@@ -334,7 +333,7 @@ public class TripServiceImpl implements TripService {
             throw e;
         }
         final Optional<Passenger> passengerOptional = tripDao.getPassenger(trip,user);
-        if(!passengerOptional.isPresent()) {
+        if(!passengerOptional.isPresent()) {//this will occur in multiple invocations of the method for the same passenger
             PassengerNotFoundException e = new PassengerNotFoundException();
             LOGGER.error("Passenger with id {} is not in trip with id {}", user.getUserId(), trip.getTripId(), e);
             throw e;
