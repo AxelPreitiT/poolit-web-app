@@ -100,7 +100,9 @@ public class CarReviewServiceImpl implements CarReviewService {
 
     private ReviewState getReviewState(final Trip trip, final Passenger reviewer, final Car car) {
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
+        //Si el pasajero todavía no terminó o no fue aceptado al viaje
+        //if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewer.getEndDateTime())) {
+        if(!reviewer.isTripEnded() || !reviewer.isAccepted()) {
             return ReviewState.DISABLED;
         }
         return carReviewDao.canReviewCar(trip, reviewer, car) ? ReviewState.PENDING : ReviewState.DONE;

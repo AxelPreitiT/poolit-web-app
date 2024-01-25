@@ -86,11 +86,7 @@ public class UserServiceImpl implements UserService {
         }
         User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, new Locale(mailLocaleString), finalRole, userImageId);
         VerificationToken token = tokenService.createToken(finalUser);
-        try {
-            emailService.sendVerificationEmail(finalUser, token.getToken());
-        } catch (Exception e) {
-            LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.getUserId(), e);
-        }
+        emailService.sendVerificationEmail(finalUser, token.getToken());
         return finalUser;
     }
 
@@ -224,11 +220,7 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
             String token = tokenService.updateToken(finalUser.get());
-            try {
-                emailService.sendVerificationEmail(finalUser.get(), token);
-            } catch (Exception e) {
-                LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.get().getUserId(), e);
-            }
+            emailService.sendVerificationEmail(finalUser.get(), token);
         }
         return true;
     }

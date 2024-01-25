@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
-import ar.edu.itba.paw.models.Passenger;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
@@ -29,6 +27,9 @@ public class TripDto {
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
     private long tripId;
+    private Trip.TripStatus tripStatus;
+    private boolean isDeleted;
+    private LocalDateTime lastOccurrence;
 
 
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
@@ -43,8 +44,11 @@ public class TripDto {
         ans.occupiedSeats = trip.getOccupiedSeats();
         ans.startDateTime = trip.getStartDateTime();
         ans.endDateTime = trip.getEndDateTime();
-        ans.queryEndDateTime = trip.getQueryStartDateTime();
+        ans.queryStartDateTime = trip.getQueryStartDateTime();
         ans.queryEndDateTime = trip.getQueryEndDateTime();
+        ans.tripStatus = trip.getQueryTripStatus();
+        ans.isDeleted = trip.isDeleted();
+        ans.lastOccurrence = trip.getLastOccurrence();
         ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).toTemplate() + "{/userId}";
         ans.driverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(trip.getDriver().getUserId())).build();
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
@@ -196,5 +200,29 @@ public class TripDto {
 
     public void setTripId(long tripId) {
         this.tripId = tripId;
+    }
+
+    public Trip.TripStatus getTripStatus() {
+        return tripStatus;
+    }
+
+    public void setTripStatus(Trip.TripStatus tripStatus) {
+        this.tripStatus = tripStatus;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public LocalDateTime getLastOccurrence() {
+        return lastOccurrence;
+    }
+
+    public void setLastOccurrence(LocalDateTime lastOccurrence) {
+        this.lastOccurrence = lastOccurrence;
     }
 }

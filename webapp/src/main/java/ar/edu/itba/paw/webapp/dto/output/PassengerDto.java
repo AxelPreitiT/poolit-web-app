@@ -26,13 +26,11 @@ public class PassengerDto {
         ans.passengerState = passenger.getPassengerState();
         ans.startDateTime = passenger.getStartDateTime();
         ans.endDateTime = passenger.getEndDateTime();
-        ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).build();
+        ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).queryParam("startDateTime",passenger.getTrip().getQueryStartDateTime()).queryParam("endDateTime",passenger.getTrip().getQueryEndDateTime()).build();
         ans.userUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(passenger.getUserId())).build();
         if(passenger.getPassengerState().equals(Passenger.PassengerState.ACCEPTED)){
             ans.otherPassengersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).queryParam("startDateTime",passenger.getStartDateTime()).queryParam("endDateTime",passenger.getEndDateTime()).queryParam("passengerState",Passenger.PassengerState.ACCEPTED).build();
         }
-        //TODO: agregar estado del viaje: empezado, ...
-
         return ans;
     }
 

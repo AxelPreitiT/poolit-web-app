@@ -124,7 +124,10 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     private ReviewState getReviewStateForDriver(Trip trip, User reviewer, Passenger reviewed) {
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewed.getEndDateTime())){
+        //if now.isBefore(trip.getEndDateTime()) (termino el viaje) ->now.isBefore(reviewed.getEndDateTime()) para todos los pasajeros
+        //Cambio la primera condición porque sólo me interesa la segunda
+//        if(now.isBefore(trip.getEndDateTime()) && now.isBefore(reviewed.getEndDateTime())){
+        if(!reviewed.isTripEnded() || !reviewed.isAccepted()){
             return ReviewState.DISABLED;
         }
         return passengerReviewDao.canReviewPassenger(trip, reviewer, reviewed) ? ReviewState.PENDING : ReviewState.DONE;
@@ -146,7 +149,9 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
 
     private ReviewState getReviewStateForPassenger(Trip trip, Passenger reviewer, Passenger reviewed) {
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(reviewer.getEndDateTime()) && now.isBefore(reviewed.getEndDateTime())){
+//        if(now.isBefore(reviewer.getEndDateTime()) && now.isBefore(reviewed.getEndDateTime())){
+        //Si el reviewer todavía no terminó su período o no fue aceptado o el pasajero a quien va a reseñar no fue aceptado
+        if(!reviewer.isTripEnded() || !reviewed.isAccepted() || !reviewer.isAccepted()){
             return ReviewState.DISABLED;
         }
         return passengerReviewDao.canReviewPassenger(trip, reviewer.getUser(), reviewed) ? ReviewState.PENDING : ReviewState.DONE;
