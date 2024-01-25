@@ -47,7 +47,7 @@ public class CarDaoImplTest {
     @Rollback
     @Test
     public void testCreate(){
-        final Car car = carDaoImpl.create(UNKNOWN_PLATE,INFO_CAR,user,KNOWN_IMAGE_ID,3,BRAND,new ArrayList<>());
+        final Car car = carDaoImpl.create(UNKNOWN_PLATE,INFO_CAR,user,KNOWN_IMAGE_ID,3,BRAND,Collections.emptyList());
 
         Assert.assertEquals(car.getCarId(),1);
         TypedQuery<Car> query = em.createQuery("from Car where carId = :carId",Car.class);

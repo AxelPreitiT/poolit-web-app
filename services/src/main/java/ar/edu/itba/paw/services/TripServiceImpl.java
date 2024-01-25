@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -692,7 +693,7 @@ public class TripServiceImpl implements TripService {
         final Optional<BigDecimal> minPrice = Optional.ofNullable(minPriceValue);
         final Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
         final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
-        final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue:new ArrayList<>();
+        final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue: Collections.emptyList();
         //TODO: delete logic of blocked users
         return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,startDateTime.getDayOfWeek(),endDateTime,OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
 
