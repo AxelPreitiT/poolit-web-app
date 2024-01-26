@@ -13,6 +13,15 @@ class ReportsApi extends AxiosApi{
                 },
             });
         };
+
+    public static getReport: (uri: string) => AxiosPromise<PrivateReportModel> =
+        (uri: string) => {
+            return this.get<PrivateReportModel>(uri, {
+                headers: {
+                    Accept: ReportsApi.REPORTS_PRIVATE_ACCEPT_HEADER,
+                },
+            });
+        };
 }
 
 export default ReportsApi;
