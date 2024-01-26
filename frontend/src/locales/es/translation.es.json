@@ -452,6 +452,7 @@
   },
   "search": {
     "title": "Buscar viajes",
+    "loading": "Buscando viajes",
     "no_results": {
       "title": "Parece que no hay viajes disponibles para tu búsqueda",
       "body": "No te preocupes, seguro encontrás algo pronto"
@@ -549,6 +550,9 @@
       "title": "No se pudo obtener los tipos de ordenamiento de viajes",
       "default": "Ocurrió un error al obtener los tipos de ordenamiento de viajes"
     }
+  },
+  "loading": {
+    "default": "Calentando motores"
   },
   "spinner": {
     "loading": "Cargando..."

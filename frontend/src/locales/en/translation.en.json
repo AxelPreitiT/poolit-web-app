@@ -453,6 +453,7 @@
   },
   "search": {
     "title": "Trips search",
+    "loading": "Looking for trips",
     "no_results": {
       "title": "It seems that there are no trips that match your search",
       "body": "Don't worry, you'll find a trip that suits your needs soon"
@@ -549,6 +550,9 @@
       "title": "Could not fetch the trip sort types",
       "default": "An error occurred while fetching the trip sort types"
     }
+  },
+  "loading": {
+    "default": "Revving up the engine"
   },
   "spinner": {
     "loading": "Loading..."

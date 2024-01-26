@@ -166,3 +166,18 @@
   justify-content: flex-end;
   width: 100%;
 }
+
+// --------------- Loading spinner ----------------
+.loadingContainer {
+  margin-top: 2rem;
+}
+
+.loadingIcon {
+  height: 6rem;
+  width: 6rem;
+}
+
+.loadingDescription {
+  font-size: 2.5rem;
+  font-weight: 500;
+}

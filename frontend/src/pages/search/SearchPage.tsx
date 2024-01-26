@@ -20,7 +20,9 @@ import TripsService from "@/services/TripsService";
 import { searchPath } from "@/AppRouter";
 import TripsSorter from "@/components/search/TripsSorter/TripsSorter";
 import useTripSortTypes from "@/hooks/trips/useTripSortTypes";
-import SpinnerComponent from "@/components/Spinner/Spinner";
+import { isObjectEmpty } from "@/utils/object/isEmpty";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -39,7 +41,7 @@ const SearchPage = () => {
   const [currentDescending, setCurrentDescending] = useState(
     initialSearch.descending
   );
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(isObjectEmpty(initialSearch));
 
   const onSearchSubmit = async (data: SearchTripsFormSchemaType) => {
     setIsFetching(true);
@@ -91,9 +93,8 @@ const SearchPage = () => {
     </div>
   );
 
-  // TODO: Add loading screen
   if (isCitiesLoading || isCarFeaturesLoading || isTripSortTypesLoading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (
@@ -125,7 +126,12 @@ const SearchPage = () => {
           />
         )}
         {isFetching ? (
-          <SpinnerComponent />
+          <LoadingWheel
+            containerClassName={styles.loadingContainer}
+            iconClassName={styles.loadingIcon}
+            descriptionClassName={styles.loadingDescription}
+            description={t("search.loading")}
+          />
         ) : (
           <PaginationList
             pagination_component={<h3>Poner paginación</h3>}

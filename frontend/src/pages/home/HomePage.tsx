@@ -18,6 +18,7 @@ import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import { searchPath } from "@/AppRouter";
 import { createTripsSearchParams } from "@/functions/tripsSearchParams";
 import { useNavigate } from "react-router-dom";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -49,7 +50,6 @@ const HomePage = () => {
     onSuccess: onSearchSuccess,
   });
 
-  // Todo: Create loading screen
   if (
     isDiscoveryLoading ||
     (isAuthenticated && isLoadingCurrentUser) ||
@@ -57,7 +57,7 @@ const HomePage = () => {
     isLoadingCities ||
     isLoadingCarFeatures
   ) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (
