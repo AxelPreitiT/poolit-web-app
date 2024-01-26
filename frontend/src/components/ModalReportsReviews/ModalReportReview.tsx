@@ -6,6 +6,8 @@ import DriverReportReviewComponent from "@/components/ModalReportsReviews/Driver
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
+import carModel from "@/models/CarModel.ts";
+import CarReportReviewComponent from "@/components/ModalReportsReviews/CarReportReviewComponent.tsx";
 
 export interface ModalReportProps {
     closeModal: () => void;
@@ -13,9 +15,11 @@ export interface ModalReportProps {
     driver: userPublicModel;
     isDriver: boolean;
     selectUser: (user:userPublicModel) => void;
+    car?: carModel;
+    selectCar?: () => void;
 }
 
-const ModalReport = ({ closeModal, passangers, driver, isDriver, selectUser}: ModalReportProps) => {
+const ModalReportReview = ({ closeModal, passangers, driver, car, isDriver, selectUser, selectCar}: ModalReportProps) => {
     const { t } = useTranslation();
 
     return (
@@ -33,6 +37,14 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver, selectUser}: Mo
                         </div>
                         <DriverReportReviewComponent driver={driver} selectDriver={selectUser}/>
                     </div>}
+                    {!isDriver && car != null && selectCar!= null &&
+                    <div className={styles.passangerContainer}>
+                        <div className={styles.titleContainer}>
+                            <i className="bi bi-car-front-fill h3"></i>
+                            <h3>{t('modal.car')}</h3>
+                        </div>
+                        <CarReportReviewComponent car={car} selectCar={selectCar}/>
+                    </div>}
                     {passangers.length != 0 &&
                     <div className={styles.passangerContainer}>
                         <div className={styles.titleContainer}>
@@ -43,7 +55,7 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver, selectUser}: Mo
                             <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
                         ))}
                     </div>}
-                    {isDriver && passangers.length == 0 &&
+                    {isDriver && passangers.length == 0 && car == null &&
                     <EmptyList
                         text={t("modal.report.empty")}
                         icon={"people-fill"}
@@ -59,4 +71,4 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver, selectUser}: Mo
     );
 };
 
-export default ModalReport;
+export default ModalReportReview;

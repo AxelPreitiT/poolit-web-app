@@ -558,6 +558,7 @@
   "modal": {
     "driver": "Conductor",
     "passangers": "Pasajero",
+    "car": "Coche",
     "close" : "Cerrar",
     "submit": "Subir",
     "report": {

@@ -9,7 +9,7 @@ export interface ModalMakeReportProps {
     user: userPublicModel | null;
 }
 
-const ModalMakeReport = ({ closeModal, user}: ModalMakeReportProps) => {
+const ModalMakeReportReview = ({ closeModal, user}: ModalMakeReportProps) => {
     const { t } = useTranslation();
 
     return (
@@ -46,4 +46,4 @@ const ModalMakeReport = ({ closeModal, user}: ModalMakeReportProps) => {
     );
 };
 
-export default ModalMakeReport;
+export default ModalMakeReportReview;

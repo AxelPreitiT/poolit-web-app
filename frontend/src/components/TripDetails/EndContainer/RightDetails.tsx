@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import Status from "@/enums/Status.ts";
 import {useState} from "react";
-import ModalReport from "@/components/ModalReportsReviews/ModalReport.tsx";
+import ModalReportReview from "@/components/ModalReportsReviews/ModalReportReview.tsx";
 import PassangerModel from "@/models/PassangerModel.ts";
-import ModalReview from "@/components/ModalReportsReviews/ModalReview.tsx";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
-import ModalMakeReport from "@/components/ModalReportsReviews/ModalMakeReport.tsx";
+import ModalMakeReportReview from "@/components/ModalReportsReviews/ModalMakeReportReview.tsx";
+import ModalCarMakeReview from "@/components/ModalReportsReviews/ModalCarMakeReview.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -20,16 +20,21 @@ interface RightDetailsProps {
     car: carModel
 }
 
-const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: RightDetailsProps) => {
+const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}: RightDetailsProps) => {
     const { t } = useTranslation();
     const [showModalReport, setModalReport] = useState(false);
     const [showModalMakeReport, setModalMakeReport] = useState(false);
+
     const [showModalReview, setModalReview] = useState(false);
+    const [showModalMakeReview, setModalMakeReview] = useState(false);
+    const [showModalCarMakeReview, setModalCarMakeReview] = useState(false);
+
+
     const [userReviewReport, setuserReviewReport] = useState<userPublicModel| null>(null);
 
     const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
-    const selectUser = (user:userPublicModel) => {
+    const selectUserReport = (user:userPublicModel) => {
         setModalReport(false);
         setuserReviewReport(user);
         setModalMakeReport(true);
@@ -39,6 +44,17 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
 
     const openModalReview = () => {setModalReview(true);};
     const closeModalReview = () => {setModalReview(false);};
+    const selectUserReview = (user:userPublicModel) => {
+        setModalReview(false);
+        setuserReviewReport(user);
+        setModalMakeReview(true);
+    };
+    const selectCarReview = () => {
+        setModalReview(false);
+        setModalCarMakeReview(true);
+    };
+    const closeModalMakeReview = () => {setModalMakeReview(false);};
+    const closeModalCarReview = () => {setModalCarMakeReview(false);};
 
     return (
         (!isPassanger && !isDriver) ?
@@ -72,15 +88,23 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReport} selectUser={selectUser} passangers={passangers} driver={driver} isDriver={isDriver}/>
-                        </Modal>
-
-                        <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReview closeModal={closeModalReview} passangers={passangers} driver={driver} isDriver={isDriver}/>
+                            <ModalReportReview closeModal={closeModalReport} selectUser={selectUserReport} passangers={passangers} driver={driver} isDriver={isDriver}/>
                         </Modal>
 
                         <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReport closeModal={closeModalMakeReport} user={userReviewReport}/>
+                            <ModalMakeReportReview closeModal={closeModalMakeReport} user={userReviewReport}/>
+                        </Modal>
+
+                        <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalReportReview closeModal={closeModalReview} selectUser={selectUserReview} passangers={passangers} driver={driver} isDriver={isDriver} car={car} selectCar={selectCarReview}/>
+                        </Modal>
+
+                        <Modal show={showModalMakeReview} onHide={closeModalMakeReview} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalMakeReportReview closeModal={closeModalMakeReview} user={userReviewReport}/>
+                        </Modal>
+
+                        <Modal show={showModalCarMakeReview} onHide={closeModalCarReview} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalCarMakeReview closeModal={closeModalCarReview} car={car}/>
                         </Modal>
                     </div>
  :

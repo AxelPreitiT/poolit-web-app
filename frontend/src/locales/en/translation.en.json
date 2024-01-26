@@ -558,6 +558,7 @@
   "modal": {
     "driver": "Driver",
     "passangers": "Passangers",
+    "car": "Car",
     "close" : "close",
     "submit": "submit",
     "report": {
