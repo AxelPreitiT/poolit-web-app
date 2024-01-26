@@ -22,7 +22,20 @@ public class Image {
     }
 
     @Column(name = "bytea")
+    @Basic(fetch = FetchType.LAZY)
     private byte[] data;
+
+    @Column(name = "small")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] small;
+
+    @Column(name = "medium")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] medium;
+
+    @Column(name = "large")
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] large;
 
     protected Image() {
 
@@ -51,8 +64,36 @@ public class Image {
         this.data = data;
     }
 
+    public void setData(final byte[] data,final Size size){
+        switch (size){
+            case LARGE:{
+                this.large = data;
+                return;
+            }
+            case MEDIUM:{
+                this.medium = data;
+                return;
+            }
+            case SMALL:{
+                this.small = data;
+                return;
+            }
+            default:{
+                this.data = data;
+            }
+        }
+    }
+
+    public byte[] getData(final Size size){
+        switch (size){
+            case LARGE: return large;
+            case MEDIUM: return medium;
+            case SMALL: return small;
+            default:return data;
+        }
+    }
+
     public enum Size{
-        VERY_SMALL(100,100),
         SMALL(300,200),
         MEDIUM(750,500),
         LARGE(1920,1080),

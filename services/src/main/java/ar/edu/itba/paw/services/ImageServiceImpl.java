@@ -91,7 +91,12 @@ public class ImageServiceImpl implements ImageService {
                 }
                 return input;
             }
-            return resizeImage(img.getData(), size);
+            byte[] ans = img.getData(size);
+            if(ans == null){
+                ans = resizeImage(img.getData(), size);
+                img.setData(ans,size);
+            }
+            return ans;
         }catch (IOException ex){
             throw new ImageNotFoundException();
         }
