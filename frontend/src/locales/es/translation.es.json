@@ -578,5 +578,20 @@
     "4": "Jueves",
     "5": "Viernes",
     "6": "Sabado"
+  },
+  "modal": {
+    "driver": "Conductor",
+    "passangers": "Pasajero",
+    "car": "Coche",
+    "close" : "Cerrar",
+    "submit": "Subir",
+    "report": {
+      "title": "¿A quien quieres reportar?",
+      "empty": "No tienes usuarios para reportar"
+    },
+    "review": {
+      "title": "Tu opinion nos interesa",
+      "empty": "No tienes usuarios para reseñar."
+    }
   }
 }
