@@ -375,7 +375,18 @@
     "error": {
       "title": "Could not search for reports",
       "default": "An error occurred while fetching the reports"
-    }
+    },
+    "report": {
+      "detail": "Report Details",
+      "reported": "Reported",
+      "published": "Published reports",
+      "received": "Received reports",
+      "approved": "Approved reports",
+      "rejected": "Rejected reports",
+      "trip": "Trip where the report happened on",
+      "reason": "Report reason",
+      "passenger": "(Passenger)",
+      "driver": "(Driver)"}
   },
   "trip_detail": {
     "title": "Trip",

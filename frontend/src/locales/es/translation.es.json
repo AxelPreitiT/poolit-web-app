@@ -370,11 +370,22 @@
   },
   "admin": {
     "title": "Administrador",
-    "empty": "No hay reportes todavía",
+    "empty": "No hay denuncias todavía",
     "error": {
-      "title": "No se pudo obtener los reportes",
-      "default": "Ocurrió un error al obtener los reportes"
-    }
+      "title": "No se pudo obtener las denuncias",
+      "default": "Ocurrió un error al obtener las denuncias"
+    },
+    "report": {
+      "detail": "Detalles de la denuncia",
+      "reported": "Denunció a",
+      "published": "Denuncias publicados",
+      "received": "Denuncias recibidos",
+      "approved": "Denuncias aprobados",
+      "rejected": "Denuncias publicados",
+      "trip": "El viaje en el que se produjo la denuncia",
+      "reason": "Motivo del denuncia",
+      "passenger": "(Pasajero)",
+      "driver": "(Conductor)"}
   },
   "trip_detail": {
     "title": "Viaje",

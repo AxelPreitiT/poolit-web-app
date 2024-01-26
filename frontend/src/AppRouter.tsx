@@ -15,6 +15,7 @@ import AdminPage from "./pages/admin/AdminPage";
 import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
 import SearchPage from "./pages/search/SearchPage";
 import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
+import ReportPage from "@/pages/admin/ReportPage.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -29,6 +30,7 @@ export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
 export const adminPath = "/admin";
+export const reportPath = "/reports/:id";
 export const searchPath = "/search";
 export const routerBasename = import.meta.env.BASE_URL;
 
@@ -179,6 +181,18 @@ const router = createBrowserRouter(
         </RouteWrapper>
       ),
     },
+      {
+        path: reportPath,
+        element: (
+          <RouteWrapper
+            title="admin.title"
+            showWhenUserIsNotAuthenticated={false}
+          >
+            <Navbar />
+            <ReportPage />,
+          </RouteWrapper>
+      ),
+  },
     {
       path: searchPath,
       element: (
