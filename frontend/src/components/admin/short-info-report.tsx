@@ -8,7 +8,7 @@ import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import {useTranslation} from "react-i18next";
 
 
-//TODO Rol, formato
+//TODO formato
 const shortInfoReport = ( report : PrivateReportModel) => {
 
 
@@ -50,7 +50,14 @@ const shortInfoReport = ( report : PrivateReportModel) => {
                                     </h4>
                                     <span>{report.description}</span>
                                 </div>
-                                <h6 className="italic-text">rol</h6>
+                                <h6 className="italic-text">
+                                    {report.relation == "PASSENGER_2_DRIVER" || report.relation == "PASSENGER_2_PASSENGER" ?
+                                        (
+                                            <span> {t("admin.report.passenger")}</span>
+                                        ) : (
+                                            <span> {t("admin.report.driver")}</span>
+                                        )}
+                                </h6>
                             </div>
                         </div>)
                     }
@@ -69,7 +76,14 @@ const shortInfoReport = ( report : PrivateReportModel) => {
                                         })}
                                     </h4>
                                 </div>
-                                <h6 className="italic-text">rol reported</h6>
+                                <h6 className="italic-text">
+                                    {report.relation == "DRIVER_2_PASSENGER" || report.relation == "PASSENGER_2_PASSENGER" ?
+                                        (
+                                            <span> {t("admin.report.passenger")}</span>
+                                        ) : (
+                                            <span> {t("admin.report.driver")}</span>
+                                        )}
+                                </h6>
                             </div>
                             <div>
                                 <CircleImg src={UserReported.imageUri} size={70}/>
