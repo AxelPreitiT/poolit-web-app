@@ -560,7 +560,8 @@
       "title": "Who do you want to report?",
       "driver": "Driver",
       "passangers": "Passangers",
-      "close" : "close"
+      "close" : "close",
+      "empty": "You don´t have users to report"
     }
   }
 }

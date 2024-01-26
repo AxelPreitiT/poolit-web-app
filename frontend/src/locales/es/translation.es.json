@@ -560,7 +560,8 @@
       "title": "¿A quien quieres reportar?",
       "driver": "Conductor",
       "passangers": "Pasajero",
-      "close" : "cerrar"
+      "close" : "cerrar",
+      "empty": "No tienes usuarios para reportar"
     }
   }
 }

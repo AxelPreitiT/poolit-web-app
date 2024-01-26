@@ -5,6 +5,7 @@ import PassangerModel from "@/models/PassangerModel.ts";
 import DriverReportReviewComponent from "@/components/ModalReportsReviews/DriverReportReviewComponent.tsx";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
+import EmptyList from "@/components/emptyList/EmptyList.tsx";
 
 export interface ModalReportProps {
     closeModal: () => void;
@@ -31,13 +32,21 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver }: ModalReportPr
                         </div>
                         <DriverReportReviewComponent driver={driver} closeModal={closeModal}/>
                     </div>}
+                    {passangers.length != 0 &&
                     <div className={styles.passangerContainer}>
                         <div className={styles.titleContainer}>
                             <i className="bi bi-people-fill h3"></i>
                             <h3><h3>{t('modal.report.passangers')}</h3></h3>
                         </div>
-                        <PassangerReportReviewComponent passanger={passangers[1]} closeModal={closeModal}/>
-                    </div>
+                        {passangers.map((item, index) => (
+                            <PassangerReportReviewComponent key={index} passanger={item} closeModal={closeModal}/>
+                        ))}
+                    </div>}
+                    {isDriver && passangers.length == 0 &&
+                    <EmptyList
+                        text={t("modal.report.empty")}
+                        icon={"people-fill"}
+                    />}
                 </div>
             </Modal.Body>
             <Modal.Footer>
