@@ -12,10 +12,10 @@ export interface ModalReportProps {
     passangers: PassangerModel[];
     driver: userPublicModel;
     isDriver: boolean;
-    selectPassanger: (user:userPublicModel) => void;
+    selectUser: (user:userPublicModel) => void;
 }
 
-const ModalReport = ({ closeModal, passangers, driver, isDriver, selectPassanger}: ModalReportProps) => {
+const ModalReport = ({ closeModal, passangers, driver, isDriver, selectUser}: ModalReportProps) => {
     const { t } = useTranslation();
 
     return (
@@ -31,7 +31,7 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver, selectPassanger
                             <i className="bi bi-person-fill h3"></i>
                             <h3>{t('modal.driver')}</h3>
                         </div>
-                        <DriverReportReviewComponent driver={driver} closeModal={closeModal}/>
+                        <DriverReportReviewComponent driver={driver} selectDriver={selectUser}/>
                     </div>}
                     {passangers.length != 0 &&
                     <div className={styles.passangerContainer}>
@@ -40,7 +40,7 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver, selectPassanger
                             <h3><h3>{t('modal.passangers')}</h3></h3>
                         </div>
                         {passangers.map((item, index) => (
-                            <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectPassanger}/>
+                            <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
                         ))}
                     </div>}
                     {isDriver && passangers.length == 0 &&

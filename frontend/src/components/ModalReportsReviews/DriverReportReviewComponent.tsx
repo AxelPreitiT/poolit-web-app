@@ -5,16 +5,16 @@ import {useTranslation} from "react-i18next";
 import userPublicModel from "@/models/UserPublicModel.ts";
 
 export interface DriverReportReviewComponentProps {
-    closeModal: () => void;
+    selectDriver: (user:userPublicModel) => void;
     driver: userPublicModel
 }
 
-const DriverReportReviewComponent = ({driver, closeModal}: DriverReportReviewComponentProps) => {
+const DriverReportReviewComponent = ({driver, selectDriver}: DriverReportReviewComponentProps) => {
     const { t } = useTranslation();
 
     return (
         <div className={styles.marginCointainer}>
-            <Button onClick={closeModal} className={styles.userContainer}>
+            <Button onClick={() => selectDriver(driver)} className={styles.userContainer}>
                 <CircleImg src={driver.imageUri} size={50} />
                 <div className={styles.infoContainer}>
                     <h4>

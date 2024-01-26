@@ -559,6 +559,7 @@
     "driver": "Driver",
     "passangers": "Passangers",
     "close" : "close",
+    "submit": "submit",
     "report": {
       "title": "Who do you want to report?",
       "empty": "You don´t have users to report"

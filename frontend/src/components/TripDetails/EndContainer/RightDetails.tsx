@@ -29,7 +29,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
 
     const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
-    const selectPassanger = (user:userPublicModel) => {
+    const selectUser = (user:userPublicModel) => {
         setModalReport(false);
         setuserReviewReport(user);
         setModalMakeReport(true);
@@ -72,14 +72,14 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReport} selectPassanger={selectPassanger} passangers={passangers} driver={driver} isDriver={isDriver}/>
+                            <ModalReport closeModal={closeModalReport} selectUser={selectUser} passangers={passangers} driver={driver} isDriver={isDriver}/>
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
                             <ModalReview closeModal={closeModalReview} passangers={passangers} driver={driver} isDriver={isDriver}/>
                         </Modal>
 
-                        <Modal show={showModalMakeReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
+                        <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>
                             <ModalMakeReport closeModal={closeModalMakeReport} user={userReviewReport}/>
                         </Modal>
                     </div>

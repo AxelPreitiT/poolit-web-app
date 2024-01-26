@@ -558,7 +558,8 @@
   "modal": {
     "driver": "Conductor",
     "passangers": "Pasajero",
-    "close" : "cerrar",
+    "close" : "Cerrar",
+    "submit": "Subir",
     "report": {
       "title": "¿A quien quieres reportar?",
       "empty": "No tienes usuarios para reportar"

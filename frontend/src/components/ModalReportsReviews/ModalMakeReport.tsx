@@ -37,6 +37,9 @@ const ModalMakeReport = ({ closeModal, user}: ModalMakeReportProps) => {
                 <Button className={styles.backBtn} onClick={closeModal}>
                     {t('modal.close')}
                 </Button>
+                <Button className={styles.submitBtn} onClick={closeModal}>
+                    {t('modal.submit')}
+                </Button>
             </Modal.Footer>
         </div>
         )
