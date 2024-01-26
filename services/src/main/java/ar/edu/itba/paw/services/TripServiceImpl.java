@@ -682,7 +682,7 @@ public class TripServiceImpl implements TripService {
         User user = userService.findById(userId).orElseThrow(()->new IllegalArgumentException("User not found"));
         Passenger pass = tripDao.getPassenger(tripId, user).orElseThrow(()->new IllegalArgumentException("Passenger not found"));
         if(LocalDateTime.now().compareTo(pass.getStartDateTime())>=0){
-            throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
+            throw new IllegalArgumentException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
         }
         if(tripDao.getTripSeatCount(tripId,pass.getStartDateTime(),pass.getEndDateTime())>=pass.getTrip().getMaxSeats()){
             //No hay asientos disponibles
@@ -710,7 +710,7 @@ public class TripServiceImpl implements TripService {
         User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
         Passenger passenger = tripDao.getPassenger(tripId,user).orElseThrow(PassengerNotFoundException::new);
         //Passenger was already accepted or rejected
-        if(!passenger.getPassengerState().equals(Passenger.PassengerState.PENDING)){
+        if(passenger.isRejected() || passenger.isAccepted()){
             throw new PassengerAlreadyProcessedException();
         }
         switch (passengerState){

@@ -143,8 +143,6 @@ public class TripServiceImplTest {
         Assert.fail();
     }
 
-    //TODO: change when delete is modified for all soft deletes
-
     @Test
     public void testDeleteTripNotStarted() throws Exception {
         when(tripDao.findById(anyLong())).thenReturn(Optional.of(not_started_trip));
@@ -153,9 +151,9 @@ public class TripServiceImplTest {
         tripService.deleteTrip(tripId);
 
         verify(emailService,times(1)).sendMailTripDeletedToPassenger(any(),any());
-        verify(tripDao,times(1)).removePassenger(any(),any());
+        verify(tripDao,times(1)).rejectPassenger(any());
         verify(emailService,times(1)).sendMailTripDeletedToDriver(any());
-        verify(tripDao,times(1)).deleteTrip(any());
+        verify(tripDao,times(1)).markTripAsDeleted(any(),any());
     }
 
 
@@ -229,7 +227,7 @@ public class TripServiceImplTest {
         Assert.assertFalse(ans);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testAcceptPassengerAlreadyStarted() throws UserNotFoundException, PassengerAlreadyProcessedException, PassengerNotFoundException, NotAvailableSeatsException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(user));
         when(tripDao.getPassenger(anyLong(),any())).thenReturn(Optional.of(passenger));

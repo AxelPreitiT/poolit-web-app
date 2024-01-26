@@ -16,6 +16,7 @@ import ar.edu.itba.paw.models.reviews.DriverReviewOptions;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.services.DriverReviewServiceImpl;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -57,6 +58,11 @@ public class DriverReviewServiceImplTest {
 
     @InjectMocks
     private DriverReviewServiceImpl driverReviewService;
+
+    @Before
+    public void setup(){
+        PASSENGER.setPassengerState(Passenger.PassengerState.ACCEPTED);
+    }
 
     @Test
     public void testCreate() throws UserNotFoundException, PassengerNotFoundException, UserNotLoggedInException, TripNotFoundException {

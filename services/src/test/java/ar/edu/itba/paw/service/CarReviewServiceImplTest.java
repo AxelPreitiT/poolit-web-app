@@ -17,6 +17,7 @@ import ar.edu.itba.paw.models.reviews.CarReviewOptions;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.services.CarReviewServiceImpl;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -73,6 +74,11 @@ public class CarReviewServiceImplTest {
     @InjectMocks
     private CarReviewServiceImpl carReviewService;
 
+
+    @Before
+    public void setup(){
+        CURRENT_PASSENGER.setPassengerState(Passenger.PassengerState.ACCEPTED);
+    }
     @Test
     public void testCreate() throws UserNotFoundException, CarNotFoundException, TripNotFoundException, PassengerNotFoundException {
         when(tripService.findById(anyLong())).thenReturn(Optional.of(TRIP));

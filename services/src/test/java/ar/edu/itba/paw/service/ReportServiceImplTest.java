@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.ReportDao;
+import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.*;
@@ -9,6 +10,7 @@ import ar.edu.itba.paw.models.reports.*;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.services.*;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -55,9 +57,17 @@ public class ReportServiceImplTest {
     private UserService userService;
     @Mock
     private ReportDao reportDao;
+    @Mock
+    private EmailService emailService;
     @InjectMocks
     private ReportServiceImpl reportService;
 
+
+    @Before
+    public void setup(){
+        PASSENGER_1.setPassengerState(Passenger.PassengerState.ACCEPTED);
+        PASSENGER_2.setPassengerState(Passenger.PassengerState.ACCEPTED);
+    }
     @Test
     public void TestCreateReportDriverToPassenger() throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         when(userService.findById(anyLong())).thenReturn(Optional.of(USER_1));
@@ -206,6 +216,9 @@ public class ReportServiceImplTest {
     @Test
     public void testAcceptReport() throws UserNotFoundException, PassengerNotFoundException, TripNotFoundException, ReportAlreadyProcessedException, ReportNotFoundException {
         when(reportDao.findById(anyLong())).thenReturn(Optional.of(REPORT));
+        doNothing().when(reportDao).resolveReport(anyLong(),anyString(),any());
+        doNothing().when(emailService).sendMailAcceptReport(any());
+        doNothing().when(emailService).sendMailBanReport(any());
         when(tripService.getTripsCreatedByUserFuture(any(),eq(0),anyInt())).thenReturn(new PagedContent<>(Collections.singletonList(TRIP),0,10,1));
         when(tripService.getTripsCreatedByUserFuture(any(),eq(1),anyInt())).thenReturn(PagedContent.emptyPagedContent());
         when(tripService.getTripsWhereUserIsPassengerFuture(any(),eq(0),anyInt())).thenReturn(new PagedContent<>(Collections.singletonList(TRIP),0,10,1));
