@@ -41,13 +41,13 @@ interface TripsSearchProps {
 }
 
 const useCitiesSwap = (
-  onSwap: (oldOriginCityId: number, oldDestinationCityId: number) => void
+  onSwap: (oldOriginCityId: number, oldDestinationCityId: number) => void,
+  initialOriginCityId: number = citySelectorDefaultValue,
+  initialDestinationCityId: number = citySelectorDefaultValue
 ) => {
-  const [originCity, setOriginCity] = useState<number>(
-    citySelectorDefaultValue
-  );
+  const [originCity, setOriginCity] = useState<number>(initialOriginCityId);
   const [destinationCity, setDestinationCity] = useState<number>(
-    citySelectorDefaultValue
+    initialDestinationCityId
   );
   const [canSwap, setCanSwap] = useState<boolean>(false);
 
@@ -142,7 +142,11 @@ const TripsSearch = ({
   );
 
   const { setOriginCity, setDestinationCity, swapCities, canSwap } =
-    useCitiesSwap(onSwap);
+    useCitiesSwap(
+      onSwap,
+      getValues("origin_city"),
+      getValues("destination_city")
+    );
 
   return (
     <div className={styles.searchContainer}>
