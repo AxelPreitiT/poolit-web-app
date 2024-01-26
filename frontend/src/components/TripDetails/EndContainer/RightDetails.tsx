@@ -9,6 +9,7 @@ import PassangerModel from "@/models/PassangerModel.ts";
 import ModalReview from "@/components/ModalReportsReviews/ModalReview.tsx";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
+import ModalMakeReport from "@/components/ModalReportsReviews/ModalMakeReport.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -67,7 +68,6 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
                         </div>
                         <div className={styles.report_link}>
                             <span>{t('trip_detail.report.pre_link_text')}</span>
-                            <span>{userReviewReport?.username}</span>
                             <span onClick={openModalReport} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
                         </div>
 
@@ -80,7 +80,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
                         </Modal>
 
                         <Modal show={showModalMakeReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalMakeReport} selectPassanger={selectPassanger} passangers={passangers} driver={driver} isDriver={isDriver}/>
+                            <ModalMakeReport closeModal={closeModalMakeReport} user={userReviewReport}/>
                         </Modal>
                     </div>
  :

@@ -62,3 +62,27 @@
 .titleModal{
   color: colors.$primary-color;
 }
+
+.reportFormHeader{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  column-gap: 1em;
+  position: relative;
+  padding: 2em 2em 0 2em;
+}
+
+.reportFormTitle{
+  color: colors.$secondary-color !important;
+  width: 100%;
+  position: absolute;
+  margin: 0;
+  left: 0;
+  z-index: 1;
+  border-bottom: 4px solid;
+  opacity: 1;
+}
+
+.imgCointainer{
+  z-index: 2;
+}
