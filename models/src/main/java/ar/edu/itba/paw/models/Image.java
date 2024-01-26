@@ -52,9 +52,10 @@ public class Image {
     }
 
     public enum Size{
-        SMALL(300,300),
-        MEDIUM(700,700),
-        LARGE(1400,1400),
+        VERY_SMALL(100,100),
+        SMALL(300,200),
+        MEDIUM(750,500),
+        LARGE(1920,1080),
         FULL(0,0);
 
         private final int  width;
