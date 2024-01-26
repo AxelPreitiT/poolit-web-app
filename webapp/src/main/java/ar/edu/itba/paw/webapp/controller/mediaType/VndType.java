@@ -38,5 +38,8 @@ public class VndType {
     public static final String APPLICATION_REPORT_PRIVATE = BASE + "report.private.v1+json";
     public static final String APPLICATION_REPORT_DECISION = BASE + "report.decision.v1+json";
 
+    //    --------SortType--------
+    public static final String APPLICATION_TRIP_SORT_TYPE = BASE + "trip-sort-type.v1+json";
+
 }
 

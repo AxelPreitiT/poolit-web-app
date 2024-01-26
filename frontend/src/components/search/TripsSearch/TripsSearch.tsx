@@ -14,46 +14,40 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import CitySelector, {
   citySelectorDefaultValue,
-} from "../forms/CitySelector/CitySelector";
-import FormError from "../forms/FormError/FormError";
+} from "../../forms/CitySelector/CitySelector";
+import FormError from "../../forms/FormError/FormError";
 import { BiSearch } from "react-icons/bi";
-import CarFeaturesPills from "../car/CarFeaturesPills/CarFeaturesPills";
+import CarFeaturesPills from "../../car/CarFeaturesPills/CarFeaturesPills";
 import { useTranslation } from "react-i18next";
 import { getDayString } from "@/utils/date/dayString";
 import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
 import { Controller } from "react-hook-form";
-import DatePicker from "../forms/DatePicker/DatePicker";
+import DatePicker from "../../forms/DatePicker/DatePicker";
 import { getToday } from "@/utils/date/today";
-import TimePicker from "../forms/TimePicker/TimePicker";
+import TimePicker from "../../forms/TimePicker/TimePicker";
 import { getNextDay } from "@/utils/date/nextDay";
 import { parseInputFloat } from "@/utils/float/parse";
-import LoadingButton from "../buttons/LoadingButton";
+import LoadingButton from "../../buttons/LoadingButton";
 import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
-import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
-import TripModel from "@/models/TripModel";
 
 const uniqueTripId = "unique";
 const recurrentTripId = "recurrent";
 
 interface TripsSearchProps {
+  searchForm: ReturnType<typeof useSearchTripsForm>;
   cities?: CityModel[];
   carFeatures?: CarFeatureModel[];
-  onSearchSuccess?: (
-    trips: TripModel[],
-    data: SearchTripsFormSchemaType
-  ) => void;
-  onSearchError?: (error: Error) => void;
-  initialSearch?: Partial<SearchTripsFormSchemaType>;
+  showSpinnerOnSubmit?: boolean;
 }
 
 const useCitiesSwap = (
-  onSwap: (oldOriginCityId: number, oldDestinationCityId: number) => void
+  onSwap: (oldOriginCityId: number, oldDestinationCityId: number) => void,
+  initialOriginCityId: number = citySelectorDefaultValue,
+  initialDestinationCityId: number = citySelectorDefaultValue
 ) => {
-  const [originCity, setOriginCity] = useState<number>(
-    citySelectorDefaultValue
-  );
+  const [originCity, setOriginCity] = useState<number>(initialOriginCityId);
   const [destinationCity, setDestinationCity] = useState<number>(
-    citySelectorDefaultValue
+    initialDestinationCityId
   );
   const [canSwap, setCanSwap] = useState<boolean>(false);
 
@@ -81,14 +75,12 @@ const useCitiesSwap = (
 };
 
 const TripsSearch = ({
-  onSearchSuccess,
-  onSearchError,
-  initialSearch,
+  searchForm,
   cities = [],
   carFeatures = [],
+  showSpinnerOnSubmit,
 }: TripsSearchProps) => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<string>(uniqueTripId);
   const {
     register,
     handleSubmit,
@@ -97,19 +89,23 @@ const TripsSearch = ({
     tFormError,
     setValue,
     isFetching,
-  } = useSearchTripsForm({
-    onSuccess: onSearchSuccess,
-    onError: onSearchError,
-    initialSearch,
-  });
-
-  const removeLastDate = useCallback(
-    () => setValue("last_date", undefined),
-    [setValue]
+    getValues,
+  } = searchForm;
+  const [activeTab, setActiveTab] = useState<string>(
+    getValues("multitrip") ? recurrentTripId : uniqueTripId
   );
 
-  const { setDate, setIsMultitrip, date, isMultitrip } =
-    useLastDateCollapse(removeLastDate);
+  const removeLastDate = useCallback(() => {
+    setValue("last_date", null);
+  }, [setValue]);
+
+  const { setDate, setIsMultitrip, date, isMultitrip } = useLastDateCollapse(
+    removeLastDate,
+    {
+      initialDate: getValues("date"),
+      initialIsMultitrip: getValues("multitrip"),
+    }
+  );
   const minLastDate = date ? getNextDay(date) : getToday();
 
   const setMultitrip = useCallback(
@@ -146,7 +142,11 @@ const TripsSearch = ({
   );
 
   const { setOriginCity, setDestinationCity, swapCities, canSwap } =
-    useCitiesSwap(onSwap);
+    useCitiesSwap(
+      onSwap,
+      getValues("origin_city"),
+      getValues("destination_city")
+    );
 
   return (
     <div className={styles.searchContainer}>
@@ -388,6 +388,7 @@ const TripsSearch = ({
               <CarFeaturesPills
                 carFeatures={carFeatures}
                 onSelect={setCarFeatures}
+                initialSelectedCarFeatures={getValues("car_features")}
               />
             </div>
           </div>
@@ -397,6 +398,7 @@ const TripsSearch = ({
             type="submit"
             className="secondary-btn"
             isLoading={isFetching}
+            showSpinner={showSpinnerOnSubmit}
           >
             <BiSearch className="light-text" />
             <span className="light-text">{t("search_trips.search")}</span>

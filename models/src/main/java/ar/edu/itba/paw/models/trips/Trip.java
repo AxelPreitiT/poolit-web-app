@@ -307,10 +307,40 @@ public class Trip {
     }
 
     public enum SortType{
-        PRICE(),
-        TIME(),
+        PRICE("price", true, true),
+        TIME("time", true, true),
 
-        DRIVER_RATING(),
-        CAR_RATING(),
+        DRIVER_RATING("driverRating", false, true),
+        CAR_RATING("carRating", false, true);
+
+        private final String code;
+        private final boolean hasAscendingSort;
+        private final boolean hasDescendingSort;
+
+        private SortType(String code, boolean hasAscendingSort, boolean hasDescendingSort){
+            this.code = code;
+            this.hasAscendingSort = hasAscendingSort;
+            this.hasDescendingSort = hasDescendingSort;
+        }
+
+        private String getCodePrefix() {
+            return "searchTrip.sortType.";
+        }
+
+        public boolean hasAscendingSort(){
+            return hasAscendingSort;
+        }
+
+        public boolean hasDescendingSort(){
+            return hasDescendingSort;
+        }
+
+        public String getAscendingCode(){
+            return hasAscendingSort ? getCodePrefix() + code + ".asc" : null;
+        }
+
+        public String getDescendingCode(){
+            return hasDescendingSort ? getCodePrefix() + code + ".desc" : null;
+        }
     }
 }

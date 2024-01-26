@@ -20,6 +20,7 @@ public class BaseDto {
     private String driverReviewsUri;
     private String passengerReviewsUri;
     private String tripsUri;
+    private String tripSortTypesUri;
     public static BaseDto fromUriInfo(final UriInfo uriInfo){
         //use Spring's builder because of path() method implementation (jersey adds a / all the time)
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(uriInfo.getBaseUriBuilder().build());
@@ -42,6 +43,7 @@ public class BaseDto {
         ans.passengerReviewsUri = builder.cloneBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path("{/reviewId}").build().toString();
 //        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).toTemplate() + "{/tripId}";
         ans.tripsUri = builder.cloneBuilder().path(UrlHolder.TRIPS_BASE).path("{/tripId}").build().toString();
+        ans.tripSortTypesUri = builder.cloneBuilder().path(UrlHolder.TRIP_SORT_TYPE_BASE).path("{/sortTypeId}").build().toString();
         return ans;
     }
 
@@ -115,5 +117,13 @@ public class BaseDto {
 
     public void setCarFeaturesUri(String carFeaturesUri) {
         this.carFeaturesUri = carFeaturesUri;
+    }
+
+    public String getTripSortTypesUri() {
+        return tripSortTypesUri;
+    }
+
+    public void setTripSortTypesUri(String tripSortTypesUri) {
+        this.tripSortTypesUri = tripSortTypesUri;
     }
 }

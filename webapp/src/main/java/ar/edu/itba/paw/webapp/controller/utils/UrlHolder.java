@@ -28,6 +28,9 @@ public class UrlHolder {
 
     public static final String REPORT_BASE = BASE + "/reports";
 
+    //    --------SortType--------
+    public static final String TRIP_SORT_TYPE_BASE = BASE + "/trip-sort-types";
+
     //    --------Others--------
     public static final String IMAGE_ENTITY = "/image";
 

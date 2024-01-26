@@ -1,51 +1,39 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
 import useQueryError from "../errors/useQueryError";
-import useDiscovery from "../discovery/useDiscovery";
 import {
   SearchTripsForm,
   SearchTripsFormSchema,
   SearchTripsFormSchemaType,
 } from "@/forms/SearchTripsForm";
 import TripModel from "@/models/TripModel";
-import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
-import TripsService from "@/services/TripsService";
-import useForm, { SubmitHandlerReturnModel } from "./useForm";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
-import { createTripsSearchParams } from "@/functions/tripsSearchParams";
-import { searchPath } from "@/AppRouter";
+import useForm, { SubmitHandlerReturnModel } from "./useForm";
 
 interface useSearchTripsFormProps {
   initialSearch?: Partial<SearchTripsFormSchemaType>;
-  onSuccess?: (trips: TripModel[], data: SearchTripsFormSchemaType) => void;
+  onSubmit: SubmitHandlerReturnModel<SearchTripsFormSchemaType, TripModel[]>;
+  onSuccess: ({
+    trips,
+    data,
+  }: {
+    trips: TripModel[];
+    data: SearchTripsFormSchemaType;
+  }) => void;
   onError?: (error: Error) => void;
 }
 
 const useSearchTripsForm = ({
   initialSearch,
+  onSubmit,
   onSuccess: onSuccessProp,
   onError: onErrorProp,
-}: useSearchTripsFormProps = {}) => {
+}: useSearchTripsFormProps) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const onQueryError = useQueryError();
-  const { discovery, isError: isDiscoveryError } = useDiscovery();
-
-  const onSubmit: SubmitHandlerReturnModel<
-    SearchTripsFormSchemaType,
-    TripModel[]
-  > = async (data: SearchTripsFormSchemaType) => {
-    if (!discovery || isDiscoveryError) {
-      throw new DiscoveryMissingError();
-    }
-    return await TripsService.searchTrips(discovery.tripsUriTemplate, data);
-  };
 
   const onSuccess = (trips: TripModel[], data: SearchTripsFormSchemaType) => {
-    const searchParams = createTripsSearchParams(data);
-    navigate(`${searchPath}?${searchParams}`);
-    onSuccessProp?.(trips, data);
+    onSuccessProp({ trips, data });
   };
 
   const onError = (error: Error) => {

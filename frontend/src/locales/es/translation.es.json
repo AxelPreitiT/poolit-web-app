@@ -370,11 +370,22 @@
   },
   "admin": {
     "title": "Administrador",
-    "empty": "No hay reportes todavía",
+    "empty": "No hay denuncias todavía",
     "error": {
-      "title": "No se pudo obtener los reportes",
-      "default": "Ocurrió un error al obtener los reportes"
-    }
+      "title": "No se pudo obtener las denuncias",
+      "default": "Ocurrió un error al obtener las denuncias"
+    },
+    "report": {
+      "detail": "Detalles de la denuncia",
+      "reported": "Denunció a",
+      "published": "Denuncias publicados",
+      "received": "Denuncias recibidos",
+      "approved": "Denuncias aprobados",
+      "rejected": "Denuncias publicados",
+      "trip": "El viaje en el que se produjo la denuncia",
+      "reason": "Motivo del denuncia",
+      "passenger": "(Pasajero)",
+      "driver": "(Conductor)"}
   },
   "trip_detail": {
     "title": "Viaje",
@@ -452,6 +463,7 @@
   },
   "search": {
     "title": "Buscar viajes",
+    "loading": "Buscando viajes",
     "no_results": {
       "title": "Parece que no hay viajes disponibles para tu búsqueda",
       "body": "No te preocupes, seguro encontrás algo pronto"
@@ -542,6 +554,16 @@
       "title": "No se pudo comunicar con el servidor",
       "default": "Ocurrió un error al obtener los endpoints del servidor"
     }
+  },
+  "trip_sort_types": {
+    "sort_by": "Ordenar por: {{sort_by}}",
+    "error": {
+      "title": "No se pudo obtener los tipos de ordenamiento de viajes",
+      "default": "Ocurrió un error al obtener los tipos de ordenamiento de viajes"
+    }
+  },
+  "loading": {
+    "default": "Calentando motores"
   },
   "spinner": {
     "loading": "Cargando..."

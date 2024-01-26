@@ -12,7 +12,7 @@ import CitySelector, {
   citySelectorDefaultValue,
 } from "@/components/forms/CitySelector/CitySelector";
 
-const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
+const RegisterForm = ({ cities }: { cities?: CityModel[] }) => {
   const { t, i18n } = useTranslation();
   const [preview, setPreview] = useState<string | undefined>(undefined);
 

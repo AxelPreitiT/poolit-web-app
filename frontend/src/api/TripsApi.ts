@@ -1,12 +1,13 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
-import {CreateTripFormSchemaType} from "@/forms/CreateTripForm";
-import {SearchTripsFormSchemaType} from "@/forms/SearchTripsForm";
+import { CreateTripFormSchemaType } from "@/forms/CreateTripForm";
+import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import CreateTripModel from "@/models/CreateTripModel";
 import TripModel from "@/models/TripModel";
-import {getIsoDate} from "@/utils/date/isoDate";
-import {AxiosPromise, AxiosResponse} from "axios";
-import {parseTemplate} from "url-template";
+import { getIsoDate } from "@/utils/date/isoDate";
+import { AxiosPromise, AxiosResponse } from "axios";
+import { parseTemplate } from "url-template";
 import PaginationModel from "@/models/PaginationModel.tsx";
+import TripSortSearchModel from "@/models/TripSortSearchModel";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -42,6 +43,9 @@ class TripsApi extends AxiosApi {
     }).then((response: AxiosResponse<TripModel[]>) => {
         const trips = response.data;
 
+      //const parsedLinkHeader = parse(linkHeader);
+      //console.log("parsedLink" + parsedLinkHeader)
+      //console.log("parsedLink.first" + parsedLinkHeader?.first)
         const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
         const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
         const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
@@ -104,10 +108,12 @@ class TripsApi extends AxiosApi {
 
   public static searchTrips: (
     uriTemplate: string,
-    search: SearchTripsFormSchemaType
+    search: SearchTripsFormSchemaType,
+    sortOptions?: TripSortSearchModel
   ) => AxiosPromise<TripModel[]> = (
     uriTemplate: string,
-    search: SearchTripsFormSchemaType
+    search: SearchTripsFormSchemaType,
+    sortOptions: TripSortSearchModel = {}
   ) => {
     const baseUri = parseTemplate(uriTemplate).expand({});
     const uri = new URL(baseUri);
@@ -142,6 +148,12 @@ class TripsApi extends AxiosApi {
       search.car_features.forEach((feature) => {
         uri.searchParams.append("carFeatures", feature);
       });
+    }
+    if (sortOptions.sortTypeId) {
+      uri.searchParams.set("sortType", sortOptions.sortTypeId.toString());
+    }
+    if (sortOptions.descending !== undefined) {
+      uri.searchParams.set("descending", sortOptions.descending.toString());
     }
     console.log("uri", uri.toString());
     return this.get<TripModel[]>(uri.toString());

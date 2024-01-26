@@ -7,30 +7,32 @@ import { useTranslation } from "react-i18next";
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import reportService from "@/services/ReportService.ts";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
+import {parseTemplate} from "url-template";
 
-//TODO Agregar al discovery /reports/
-const useAllReports = () => {
+const useReportById = (id?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
 
-    //TODO reports en discovery
     const {
         isLoading,
         isError,
-        data: reports,
+        data: report,
         error,
         isPending,
     } = useQuery({
-        queryKey: ["reports"],
-        queryFn: async (): Promise<PrivateReportModel[]> => {
-            if (!discovery?.reportsUriTemplate) {
-                return [];
+        queryKey: ["report", id],
+        queryFn: async (): Promise<PrivateReportModel | undefined> => {
+            if (!id || !discovery?.usersUriTemplate) {
+                return undefined;
             }
-            return await reportService.getReports("/reports/");
+            const uri = parseTemplate(discovery.reportsUriTemplate).expand({
+                reportId: id,
+            });
+            return await reportService.getReport(uri);
         },
         retry: false,
-        enabled: !isLoadingDiscovery && !!discovery?.reportsUriTemplate,
+        enabled: !isLoadingDiscovery && !!discovery?.reportsUriTemplate && !!id,
     });
 
     useEffect(() => {
@@ -45,8 +47,8 @@ const useAllReports = () => {
 
     return {
         isLoading: isLoading || isPending,
-        reports,
+        report,
     };
 };
 
-export default useAllReports;
+export default useReportById;

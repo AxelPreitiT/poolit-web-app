@@ -50,7 +50,6 @@ const LoginForm = () => {
       </div>
       <LoadingButton
         isLoading={isFetching}
-        spinnerClassName="text-light"
         type="submit"
         className="btn secondary-btn"
       >

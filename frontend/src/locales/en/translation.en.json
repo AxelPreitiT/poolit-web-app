@@ -375,7 +375,18 @@
     "error": {
       "title": "Could not search for reports",
       "default": "An error occurred while fetching the reports"
-    }
+    },
+    "report": {
+      "detail": "Report Details",
+      "reported": "Reported",
+      "published": "Published reports",
+      "received": "Received reports",
+      "approved": "Approved reports",
+      "rejected": "Rejected reports",
+      "trip": "Trip where the report happened on",
+      "reason": "Report reason",
+      "passenger": "(Passenger)",
+      "driver": "(Driver)"}
   },
   "trip_detail": {
     "title": "Trip",
@@ -453,6 +464,7 @@
   },
   "search": {
     "title": "Trips search",
+    "loading": "Looking for trips",
     "no_results": {
       "title": "It seems that there are no trips that match your search",
       "body": "Don't worry, you'll find a trip that suits your needs soon"
@@ -542,6 +554,16 @@
       "title": "Could not communicate with the server",
       "default": "An error occurred while fetching the API's discovery"
     }
+  },
+  "trip_sort_types": {
+    "sort_by": "Sort by: {{sort_by}}",
+    "error": {
+      "title": "Could not fetch the trip sort types",
+      "default": "An error occurred while fetching the trip sort types"
+    }
+  },
+  "loading": {
+    "default": "Revving up the engine"
   },
   "spinner": {
     "loading": "Loading..."
