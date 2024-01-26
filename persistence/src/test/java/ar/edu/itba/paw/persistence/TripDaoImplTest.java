@@ -185,7 +185,7 @@ public class TripDaoImplTest {
         query.setParameter("userId",USER_2.getUserId());
         Optional<Passenger> ans = query.getResultList().stream().findFirst();
         Assert.assertTrue(ans.isPresent());
-        Assert.assertEquals(Passenger.PassengerState.PENDING,ans.get().getPassengerState());
+        Assert.assertEquals(Passenger.PassengerState.UNCONFIRMED,ans.get().getPassengerState());
         Assert.assertEquals(START,ans.get().getStartDateTime());
         Assert.assertEquals(START,ans.get().getEndDateTime());
     }
