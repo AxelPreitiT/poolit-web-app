@@ -16,20 +16,17 @@ interface RightDetailsProps {
 
 const RightDetails = ({ isPassanger, isDriver, status, passangers }: RightDetailsProps) => {
     const { t } = useTranslation();
-    const [showModal, setShowModal] = useState(false);
+    const [showModalReport, setModalReport] = useState(false);
+    const [showModalReview, setModalReview] = useState(false);
 
-    const openModal = () => {
-        setShowModal(true);
-    };
+    const openModalReport = () => {setModalReport(true);};
+    const closeModalReport = () => {setModalReport(false);};
+    const handleSpanClickReport = () => {openModalReport();};
 
-    const closeModal = () => {
-        setShowModal(false);
-    };
+    const openModalReview = () => {setModalReview(true);};
+    const closeModalReview = () => {setModalReview(false);};
+    const handleSpanClickReview = () => {openModalReview();};
 
-    const handleSpanClick = () => {
-        // Lógica para abrir el modal cuando se hace clic en el span
-        openModal();
-    };
     return (
         (!isPassanger && !isDriver) ?
             <div className={styles.btn_container}>
@@ -58,11 +55,16 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers }: RightDetail
                         </div>
                         <div className={styles.report_link}>
                             <span>{t('trip_detail.report.pre_link_text')}</span>
-                            <span onClick={handleSpanClick} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
+                            <span onClick={handleSpanClickReview} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
+                            <span onClick={handleSpanClickReport} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
                         </div>
 
-                        <Modal show={showModal} onHide={closeModal} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModal} passangers={passangers}/>
+                        <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalReport closeModal={closeModalReport} passangers={passangers}/>
+                        </Modal>
+
+                        <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalReport closeModal={closeModalReview} passangers={passangers}/>
                         </Modal>
                     </div>
  :
