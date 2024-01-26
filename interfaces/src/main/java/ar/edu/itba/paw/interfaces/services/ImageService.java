@@ -16,7 +16,7 @@ public interface ImageService {
 
     Image updateImage(final byte[] content, final long imageId) throws ImageNotFoundException;
 
-    byte[] getImageByteaOrDefault(long imageId, InputStream defaultImageInputStream) throws ImageNotFoundException;
+    byte[] getImageByteaOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException;
 
 }
 

@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.CarReviewsQuery;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ImageQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateCarReviewDto;
@@ -99,9 +100,10 @@ public class CarController {
     @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
     @Produces({"image/*"})
     public Response getCarImage(@PathParam("id") final long id,
+                                @Valid @BeanParam final ImageQuery query,
                                 @Context Request request) throws ImageNotFoundException, CarNotFoundException {
         LOGGER.debug("GET request for image of car with carId {}",id);
-        final byte[] image = carService.getCarImage(id);
+        final byte[] image = carService.getCarImage(id,query.getImageSize());
         return ControllerUtils.getConditionalCacheResponse(request,image, Arrays.hashCode(image));
     }
 

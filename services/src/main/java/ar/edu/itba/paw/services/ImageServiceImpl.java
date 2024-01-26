@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
@@ -40,10 +45,40 @@ public class ImageServiceImpl implements ImageService {
         return imageDao.findById(imageId);
     }
 
+    private byte[] resizeImage(final byte[] image, Image.Size imageSize) throws IOException {
+        if(image == null || image.length ==0 || imageSize.equals(Image.Size.FULL)){
+            return image;
+        }
+        int width = imageSize.getWidth();
+        int height = imageSize.getHeight();
+        BufferedImage original = ImageIO.read(new ByteArrayInputStream(image));
+        double aspectRatio = (double) original.getWidth() /original.getHeight();
+        int newWidth = 0;
+        int newHeight = 0;
+        //gana la medida más grande
+        if(aspectRatio>1){
+            newWidth = width;
+            //(width/originalWidth)*originalHeight
+            newHeight = (int)(width/aspectRatio);
+            //newWidth/newHeight = width/((width*originalHeight)/originalWidth) = originalWidth/originalHeight
+        }else{
+            //(height/originalHeight)*originalWidth
+            newWidth = (int)(height*aspectRatio);
+            newHeight = height;
+            //newWidth/newHeight = ((height*originalWidth)/originalHeight)/height = originalWidth/originalHeight
+        }
+        BufferedImage res = new BufferedImage(newWidth,newHeight,BufferedImage.TYPE_INT_RGB);
+        res.createGraphics().drawImage(original,0,0,newWidth,newHeight,null);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(res,"jpg",outputStream);
+
+        return outputStream.toByteArray();
+    }
 
     @Transactional
     @Override
-    public byte[] getImageByteaOrDefault(long imageId, InputStream defaultImageInputStream) throws ImageNotFoundException{
+    public byte[] getImageByteaOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException{
         Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
         try{
             if(img.getData() == null || img.getData().length == 0){
@@ -56,10 +91,10 @@ public class ImageServiceImpl implements ImageService {
                 }
                 return input;
             }
+            return resizeImage(img.getData(), size);
         }catch (IOException ex){
             throw new ImageNotFoundException();
         }
-        return img.getData();
     }
 
     //TODO: que mande el default el servicio que lo llama, asi tenemos la default del auto y de perfil

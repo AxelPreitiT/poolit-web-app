@@ -50,5 +50,28 @@ public class Image {
     public Image(byte[] data) {
         this.data = data;
     }
+
+    public enum Size{
+        SMALL(300,300),
+        MEDIUM(700,700),
+        LARGE(1400,1400),
+        FULL(0,0);
+
+        private final int  width;
+        private final int height;
+
+        Size(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+    }
 }
 

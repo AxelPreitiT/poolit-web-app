@@ -7,10 +7,7 @@ import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.CarBrand;
-import ar.edu.itba.paw.models.FeatureCar;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -108,10 +105,10 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public byte[] getCarImage(final long carId) throws CarNotFoundException, ImageNotFoundException {
+    public byte[] getCarImage(final long carId, final Image.Size size) throws CarNotFoundException, ImageNotFoundException {
         final Car car = findById(carId).orElseThrow(CarNotFoundException::new);
         try {
-            return imageService.getImageByteaOrDefault(car.getImageId(),defaultImg.getInputStream());
+            return imageService.getImageByteaOrDefault(car.getImageId(),size,defaultImg.getInputStream());
         }catch (IOException e){
             return new byte[0];
         }

@@ -93,10 +93,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException {
+    public byte[] getUserImage(final long userId, Image.Size size) throws UserNotFoundException, ImageNotFoundException {
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
         try {
-            return imageService.getImageByteaOrDefault(user.getUserImageId(),defaultImg.getInputStream());
+            return imageService.getImageByteaOrDefault(user.getUserImageId(),size,defaultImg.getInputStream());
         }catch (IOException e){
             return new byte[0];
         }
