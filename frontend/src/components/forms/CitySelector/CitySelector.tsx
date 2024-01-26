@@ -5,14 +5,14 @@ import { Form, FormSelectProps } from "react-bootstrap";
 export const citySelectorDefaultValue = -1;
 
 interface CitySelectorProps {
-  cities: CityModel[];
+  cities?: CityModel[];
   defaultOption: string;
   onChange: ChangeEventHandler<HTMLSelectElement>;
   value: number;
 }
 
 const CitySelector = ({
-  cities,
+  cities = [],
   defaultOption,
   onChange,
   value,
