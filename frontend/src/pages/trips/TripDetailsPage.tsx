@@ -96,6 +96,8 @@ const TripDetailsPage = () => {
                 isDriver={isDriver}
                 status={Status.FINISHED}
                 passangers={passangers}
+                driver={driver}
+                car = {car}
               />
             </div>
           </div>

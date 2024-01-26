@@ -554,5 +554,13 @@
     "4": "thursday",
     "5": "friday",
     "6": "saturday"
+  },
+  "modal": {
+    "report": {
+      "title": "Who do you want to report?",
+      "driver": "Driver",
+      "passangers": "Passangers",
+      "close" : "close"
+    }
   }
 }
