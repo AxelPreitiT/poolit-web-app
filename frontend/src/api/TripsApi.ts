@@ -7,6 +7,7 @@ import { getIsoDate } from "@/utils/date/isoDate";
 import { AxiosPromise, AxiosResponse } from "axios";
 import { parseTemplate } from "url-template";
 import PaginationModel from "@/models/PaginationModel.tsx";
+import TripSortSearchModel from "@/models/TripSortSearchModel";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -108,10 +109,12 @@ class TripsApi extends AxiosApi {
 
   public static searchTrips: (
     uriTemplate: string,
-    search: SearchTripsFormSchemaType
+    search: SearchTripsFormSchemaType,
+    sortOptions?: TripSortSearchModel
   ) => AxiosPromise<TripModel[]> = (
     uriTemplate: string,
-    search: SearchTripsFormSchemaType
+    search: SearchTripsFormSchemaType,
+    sortOptions: TripSortSearchModel = {}
   ) => {
     const baseUri = parseTemplate(uriTemplate).expand({});
     const uri = new URL(baseUri);
@@ -146,6 +149,12 @@ class TripsApi extends AxiosApi {
       search.car_features.forEach((feature) => {
         uri.searchParams.append("carFeatures", feature);
       });
+    }
+    if (sortOptions.sortTypeId) {
+      uri.searchParams.set("sortType", sortOptions.sortTypeId.toString());
+    }
+    if (sortOptions.descending !== undefined) {
+      uri.searchParams.set("descending", sortOptions.descending.toString());
     }
     console.log("uri", uri.toString());
     return this.get<TripModel[]>(uri.toString());

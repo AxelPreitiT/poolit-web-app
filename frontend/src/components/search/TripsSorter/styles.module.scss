@@ -1,0 +1,61 @@
+@use "@/colors.module.scss" as colors;
+
+.dropdown {
+  color: colors.$light-text-color;
+}
+
+.dropdown > button,
+.dropdown > button:focus,
+.dropdown > button:hover,
+.dropdown > button:active {
+  background-color: colors.$secondary-color !important;
+  border: 1px solid colors.$border-color;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  column-gap: 0.25rem;
+  font-weight: bold;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.dropdownMenu {
+  background-color: colors.$container-color !important;
+  border: 1px solid colors.$border-color !important;
+  border-radius: 4px;
+  margin-top: 0;
+  width: 100%;
+}
+
+%dropdownItem {
+  color: colors.$text-color !important;
+  font-weight: normal;
+  &:hover,
+  &:focus,
+  &:active {
+    opacity: 1;
+    color: colors.$text-color !important;
+    background-color: colors.$container-color !important;
+    font-weight: bold;
+  }
+}
+
+.dropdownItem {
+  @extend %dropdownItem;
+}
+
+.dropdownItemActive {
+  @extend %dropdownItem;
+  color: colors.$secondary-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    color: colors.$secondary-color !important;
+  }
+}

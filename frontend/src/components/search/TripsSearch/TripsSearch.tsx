@@ -14,20 +14,20 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import CitySelector, {
   citySelectorDefaultValue,
-} from "../forms/CitySelector/CitySelector";
-import FormError from "../forms/FormError/FormError";
+} from "../../forms/CitySelector/CitySelector";
+import FormError from "../../forms/FormError/FormError";
 import { BiSearch } from "react-icons/bi";
-import CarFeaturesPills from "../car/CarFeaturesPills/CarFeaturesPills";
+import CarFeaturesPills from "../../car/CarFeaturesPills/CarFeaturesPills";
 import { useTranslation } from "react-i18next";
 import { getDayString } from "@/utils/date/dayString";
 import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
 import { Controller } from "react-hook-form";
-import DatePicker from "../forms/DatePicker/DatePicker";
+import DatePicker from "../../forms/DatePicker/DatePicker";
 import { getToday } from "@/utils/date/today";
-import TimePicker from "../forms/TimePicker/TimePicker";
+import TimePicker from "../../forms/TimePicker/TimePicker";
 import { getNextDay } from "@/utils/date/nextDay";
 import { parseInputFloat } from "@/utils/float/parse";
-import LoadingButton from "../buttons/LoadingButton";
+import LoadingButton from "../../buttons/LoadingButton";
 import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
 
 const uniqueTripId = "unique";
@@ -37,6 +37,7 @@ interface TripsSearchProps {
   searchForm: ReturnType<typeof useSearchTripsForm>;
   cities?: CityModel[];
   carFeatures?: CarFeatureModel[];
+  showSpinnerOnSubmit?: boolean;
 }
 
 const useCitiesSwap = (
@@ -77,6 +78,7 @@ const TripsSearch = ({
   searchForm,
   cities = [],
   carFeatures = [],
+  showSpinnerOnSubmit,
 }: TripsSearchProps) => {
   const { t } = useTranslation();
   const {
@@ -392,6 +394,7 @@ const TripsSearch = ({
             type="submit"
             className="secondary-btn"
             isLoading={isFetching}
+            showSpinner={showSpinnerOnSubmit}
           >
             <BiSearch className="light-text" />
             <span className="light-text">{t("search_trips.search")}</span>

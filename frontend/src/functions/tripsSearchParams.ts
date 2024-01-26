@@ -1,4 +1,5 @@
 import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
+import TripSortSearchModel from "@/models/TripSortSearchModel";
 import { getIsoDate, parseIsoDate } from "@/utils/date/isoDate";
 
 const originCityKey = "originCity";
@@ -9,8 +10,13 @@ const lastDateKey = "lastDate";
 const minPriceKey = "minPrice";
 const maxPriceKey = "maxPrice";
 const carFeatureKey = "carFeature";
+const sortTypeIdKey = "sortTypeId";
+const sortDirectionKey = "sortDirection";
 
-export const createTripsSearchParams = (search: SearchTripsFormSchemaType) => {
+export const createTripsSearchParams = (
+  search: SearchTripsFormSchemaType,
+  { sortTypeId, descending }: TripSortSearchModel = {}
+) => {
   const searchParams = new URLSearchParams({
     [originCityKey]: search.origin_city.toString(),
     [destinationCityKey]: search.destination_city.toString(),
@@ -31,12 +37,20 @@ export const createTripsSearchParams = (search: SearchTripsFormSchemaType) => {
       searchParams.append(carFeatureKey, feature);
     });
   }
+  if (sortTypeId) {
+    searchParams.append(sortTypeIdKey, sortTypeId.toString());
+  }
+  if (descending !== undefined) {
+    searchParams.append(sortDirectionKey, descending ? "desc" : "asc");
+  }
   return searchParams.toString();
 };
 
 export const parseTripsSearchParams: (
   search: string
-) => Partial<SearchTripsFormSchemaType> = (search: string) => {
+) => Partial<SearchTripsFormSchemaType> & TripSortSearchModel = (
+  search: string
+) => {
   const params = new URLSearchParams(search);
   const originCity = params.get(originCityKey) || undefined;
   const destinationCity = params.get(destinationCityKey) || undefined;
@@ -46,6 +60,8 @@ export const parseTripsSearchParams: (
   const minPrice = params.get(minPriceKey) || undefined;
   const maxPrice = params.get(maxPriceKey) || undefined;
   const carFeatures = params.getAll(carFeatureKey);
+  const sortTypeId = params.get(sortTypeIdKey) || undefined;
+  const descending = params.get(sortDirectionKey) === "desc";
   return {
     origin_city: originCity ? parseInt(originCity) : undefined,
     destination_city: destinationCity ? parseInt(destinationCity) : undefined,
@@ -56,5 +72,7 @@ export const parseTripsSearchParams: (
     max_price: maxPrice ? parseInt(maxPrice) : undefined,
     car_features: carFeatures,
     multitrip: !!lastDate,
+    sortTypeId: sortTypeId || undefined,
+    descending,
   };
 };

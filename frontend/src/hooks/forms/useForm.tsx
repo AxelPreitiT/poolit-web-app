@@ -37,7 +37,7 @@ const useForm = <
     defaultValues,
   });
 
-  const { trigger } = formProps;
+  const { trigger, getValues } = formProps;
 
   const mutation = useMutation({
     mutationFn: onSubmit,
@@ -53,13 +53,17 @@ const useForm = <
     },
   });
 
+  const executeSubmit = () => {
+    trigger().then((isValid) => {
+      if (isValid) {
+        mutation.mutate(getValues());
+      }
+    });
+  };
+
   useEffect(() => {
     if (defaultValues) {
-      trigger().then((isValid) => {
-        if (isValid) {
-          mutation.mutate(defaultValues as F);
-        }
-      });
+      executeSubmit();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -79,6 +83,7 @@ const useForm = <
     handleSubmit: handleFormSubmit,
     tFormError,
     isFetching,
+    executeSubmit,
     ...formProps,
   };
 };

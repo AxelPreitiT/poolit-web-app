@@ -7,6 +7,7 @@ interface LoadingButtonProps {
   spinnerClassName?: string;
   type: "button" | "submit" | "reset" | undefined;
   spinnerSize?: "sm" | undefined;
+  showSpinner?: boolean;
 }
 
 const LoadingButton = ({
@@ -16,9 +17,10 @@ const LoadingButton = ({
   spinnerClassName,
   type,
   spinnerSize,
+  showSpinner = true,
 }: LoadingButtonProps) => (
   <Button disabled={isLoading} className={className} type={type}>
-    {isLoading ? (
+    {isLoading && showSpinner ? (
       <Spinner
         className={spinnerClassName}
         animation="border"

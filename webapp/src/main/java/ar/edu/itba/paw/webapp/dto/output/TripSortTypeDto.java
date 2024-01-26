@@ -12,14 +12,16 @@ public class TripSortTypeDto {
 
     private String id;
 
-    private String name;
+    private String ascName;
+    private String descName;
 
     private URI selfUri;
 
     public static TripSortTypeDto fromTripSortType(final UriInfo uriInfo, final Trip.SortType sortType, final MessageSource messageSource){
         TripSortTypeDto ans = new TripSortTypeDto();
         ans.id = sortType.name();
-        ans.name = messageSource.getMessage(sortType.getCode(),null, LocaleContextHolder.getLocale());
+        ans.ascName = sortType.hasAscendingSort() ? messageSource.getMessage(sortType.getAscendingCode(),null, LocaleContextHolder.getLocale()) : null;
+        ans.descName = sortType.hasDescendingSort() ? messageSource.getMessage(sortType.getDescendingCode(),null, LocaleContextHolder.getLocale()) : null;
         ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIP_SORT_TYPE_BASE).path(sortType.name()).build();
         return ans;
     }
@@ -32,19 +34,27 @@ public class TripSortTypeDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public URI getSelfUri() {
         return selfUri;
     }
 
     public void setSelfUri(URI selfUri) {
         this.selfUri = selfUri;
+    }
+
+    public String getAscName() {
+        return ascName;
+    }
+
+    public void setAscName(String ascName) {
+        this.ascName = ascName;
+    }
+
+    public String getDescName() {
+        return descName;
+    }
+
+    public void setDescName(String descName) {
+        this.descName = descName;
     }
 }

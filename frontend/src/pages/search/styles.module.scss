@@ -157,3 +157,12 @@
   flex-grow: 1;
   max-width: 50%;
 }
+
+// --------------- Sorter ----------------
+.sorter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}

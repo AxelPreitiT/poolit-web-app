@@ -543,6 +543,13 @@
       "default": "An error occurred while fetching the API's discovery"
     }
   },
+  "trip_sort_types": {
+    "sort_by": "Sort by: {{sort_by}}",
+    "error": {
+      "title": "Could not fetch the trip sort types",
+      "default": "An error occurred while fetching the trip sort types"
+    }
+  },
   "spinner": {
     "loading": "Loading..."
   },

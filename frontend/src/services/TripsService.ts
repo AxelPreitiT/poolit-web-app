@@ -5,17 +5,22 @@ import CreateTripModel from "@/models/CreateTripModel";
 import TripModel from "@/models/TripModel";
 import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import PaginationModel from "@/models/PaginationModel.tsx";
+import TripSortSearchModel from "@/models/TripSortSearchModel";
 
 class TripsService extends Service {
   public static getTripById = async (uri: string): Promise<TripModel> => {
     return await this.resolveQuery(TripsApi.getTripById(uri));
   };
 
-  public static getTripsByUser = async (uri: string): Promise<PaginationModel<TripModel>> => {
+  public static getTripsByUser = async (
+    uri: string
+  ): Promise<PaginationModel<TripModel>> => {
     return await this.resolveQuery(TripsApi.getTripsByUser(uri));
   };
 
-  public static getTripsByUri = async (uri: string): Promise<PaginationModel<TripModel>> => {
+  public static getTripsByUri = async (
+    uri: string
+  ): Promise<PaginationModel<TripModel>> => {
     return await this.resolveQuery(TripsApi.getTripsByUser(uri));
   };
 
@@ -34,9 +39,12 @@ class TripsService extends Service {
 
   public static searchTrips = async (
     uriTemplate: string,
-    search: SearchTripsFormSchemaType
+    search: SearchTripsFormSchemaType,
+    sortOptions?: TripSortSearchModel
   ): Promise<TripModel[]> => {
-    return await this.resolveQuery(TripsApi.searchTrips(uriTemplate, search));
+    return await this.resolveQuery(
+      TripsApi.searchTrips(uriTemplate, search, sortOptions)
+    );
   };
 }
 

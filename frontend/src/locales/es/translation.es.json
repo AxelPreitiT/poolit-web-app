@@ -543,6 +543,13 @@
       "default": "Ocurrió un error al obtener los endpoints del servidor"
     }
   },
+  "trip_sort_types": {
+    "sort_by": "Ordenar por: {{sort_by}}",
+    "error": {
+      "title": "No se pudo obtener los tipos de ordenamiento de viajes",
+      "default": "Ocurrió un error al obtener los tipos de ordenamiento de viajes"
+    }
+  },
   "spinner": {
     "loading": "Cargando..."
   },
