@@ -60,7 +60,9 @@ const TripDetailsPage = () => {
         isLoadingCar ||
         car === undefined ||
         isLoadingDriver ||
-        driver === undefined ? (
+        driver === undefined ||
+        isLoadingPassangers ||
+        passangers === undefined ? (
           <SpinnerComponent />
         ) : (
           <div>
@@ -93,6 +95,7 @@ const TripDetailsPage = () => {
                 isPassanger={isPassanger}
                 isDriver={isDriver}
                 status={Status.FINISHED}
+                passangers={passangers}
               />
             </div>
           </div>

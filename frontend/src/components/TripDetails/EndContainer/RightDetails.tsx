@@ -4,14 +4,17 @@ import { useTranslation } from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import Status from "@/enums/Status.ts";
 import {useState} from "react";
+import ModalReport from "@/components/ModalReportsReviews/ModalReport.tsx";
+import PassangerModel from "@/models/PassangerModel.ts";
 
 interface RightDetailsProps {
     isPassanger: boolean;
     isDriver: boolean;
     status: string;
+    passangers: PassangerModel[];
 }
 
-const RightDetails = ({ isPassanger, isDriver, status }: RightDetailsProps) => {
+const RightDetails = ({ isPassanger, isDriver, status, passangers }: RightDetailsProps) => {
     const { t } = useTranslation();
     const [showModal, setShowModal] = useState(false);
 
@@ -58,21 +61,8 @@ const RightDetails = ({ isPassanger, isDriver, status }: RightDetailsProps) => {
                             <span onClick={handleSpanClick} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
                         </div>
 
-                        <Modal show={showModal} onHide={closeModal}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Your Modal Title</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <p>This is the content of your modal.</p>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="secondary" onClick={closeModal}>
-                                    Close
-                                </Button>
-                                <Button variant="primary" onClick={closeModal}>
-                                    Save Changes
-                                </Button>
-                            </Modal.Footer>
+                        <Modal show={showModal} onHide={closeModal} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalReport closeModal={closeModal} passangers={passangers}/>
                         </Modal>
                     </div>
  :
