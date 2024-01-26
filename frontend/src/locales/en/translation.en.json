@@ -556,12 +556,16 @@
     "6": "saturday"
   },
   "modal": {
+    "driver": "Driver",
+    "passangers": "Passangers",
+    "close" : "close",
     "report": {
       "title": "Who do you want to report?",
-      "driver": "Driver",
-      "passangers": "Passangers",
-      "close" : "close",
       "empty": "You don´t have users to report"
+    },
+    "review": {
+      "title": "Your Opinion Interes Ours.",
+      "empty": "You don´t have users to review"
     }
   }
 }

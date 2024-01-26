@@ -6,20 +6,21 @@ import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import {useTranslation} from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
+import userPublicModel from "@/models/UserPublicModel.ts";
 
-export interface CreateReportComponentProps {
+export interface PassangerReportReviewComponent {
     passanger: PassangerModel;
-    closeModal: () => void;
+    selectPassanger: (user:userPublicModel) => void;
 }
 
-const PassangerReportReviewComponent = ({passanger, closeModal}: CreateReportComponentProps) => {
+const PassangerReportReviewComponent = ({passanger, selectPassanger}: PassangerReportReviewComponent) => {
     const {isLoading, data} = usePublicUserByUri(passanger.userUri);
     const { t } = useTranslation();
 
     return (
         <div className={styles.marginCointainer}>
             {(isLoading || data == undefined) ? <SpinnerComponent/> :
-            <Button onClick={closeModal} className={styles.userContainer}>
+            <Button onClick={() =>selectPassanger(data)} className={styles.userContainer}>
                 <CircleImg src={data.imageUri} size={50} />
                 <div className={styles.infoContainer}>
                     <h4>

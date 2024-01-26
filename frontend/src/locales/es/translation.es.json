@@ -556,12 +556,16 @@
     "6": "Sabado"
   },
   "modal": {
+    "driver": "Conductor",
+    "passangers": "Pasajero",
+    "close" : "cerrar",
     "report": {
       "title": "¿A quien quieres reportar?",
-      "driver": "Conductor",
-      "passangers": "Pasajero",
-      "close" : "cerrar",
       "empty": "No tienes usuarios para reportar"
+    },
+    "review": {
+      "title": "Tu opinion nos interesa",
+      "empty": "No tienes usuarios para reseñar."
     }
   }
 }

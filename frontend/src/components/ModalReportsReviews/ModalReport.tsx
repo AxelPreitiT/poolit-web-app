@@ -12,9 +12,10 @@ export interface ModalReportProps {
     passangers: PassangerModel[];
     driver: userPublicModel;
     isDriver: boolean;
+    selectPassanger: (user:userPublicModel) => void;
 }
 
-const ModalReport = ({ closeModal, passangers, driver, isDriver }: ModalReportProps) => {
+const ModalReport = ({ closeModal, passangers, driver, isDriver, selectPassanger}: ModalReportProps) => {
     const { t } = useTranslation();
 
     return (
@@ -28,7 +29,7 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver }: ModalReportPr
                     <div className={styles.passangerContainer}>
                         <div className={styles.titleContainer}>
                             <i className="bi bi-person-fill h3"></i>
-                            <h3>{t('modal.report.driver')}</h3>
+                            <h3>{t('modal.driver')}</h3>
                         </div>
                         <DriverReportReviewComponent driver={driver} closeModal={closeModal}/>
                     </div>}
@@ -36,10 +37,10 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver }: ModalReportPr
                     <div className={styles.passangerContainer}>
                         <div className={styles.titleContainer}>
                             <i className="bi bi-people-fill h3"></i>
-                            <h3><h3>{t('modal.report.passangers')}</h3></h3>
+                            <h3><h3>{t('modal.passangers')}</h3></h3>
                         </div>
                         {passangers.map((item, index) => (
-                            <PassangerReportReviewComponent key={index} passanger={item} closeModal={closeModal}/>
+                            <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectPassanger}/>
                         ))}
                     </div>}
                     {isDriver && passangers.length == 0 &&
@@ -51,7 +52,7 @@ const ModalReport = ({ closeModal, passangers, driver, isDriver }: ModalReportPr
             </Modal.Body>
             <Modal.Footer>
                 <Button className={styles.backBtn} onClick={closeModal}>
-                    {t('modal.report.close')}
+                    {t('modal.close')}
                 </Button>
             </Modal.Footer>
         </div>

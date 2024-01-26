@@ -1,43 +1,48 @@
 import styles from "./styles.module.scss";
 import {Button, Modal} from "react-bootstrap";
-import PassangerReportReviewComponent from "@/components/ModalReportsReviews/PassangerReportReviewComponent.tsx";
 import PassangerModel from "@/models/PassangerModel.ts";
+import {useTranslation} from "react-i18next";
+import DriverReportReviewComponent from "@/components/ModalReportsReviews/DriverReportReviewComponent.tsx";
+import userPublicModel from "@/models/UserPublicModel.ts";
+import EmptyList from "@/components/emptyList/EmptyList.tsx";
 
 export interface ModalReviewProps {
     closeModal: () => void;
     passangers: PassangerModel[];
+    driver: userPublicModel;
+    isDriver: boolean;
 }
 
-const ModalReview= ({ closeModal, passangers}: ModalReviewProps) => {
+const ModalReview= ({ closeModal, passangers, driver, isDriver}: ModalReviewProps) => {
+    const { t } = useTranslation();
+
     return (
         <div className={styles.propProfile}>
             <Modal.Header closeButton>
-                <Modal.Title><h2>Your Opinion Interes Ours</h2></Modal.Title>
+                <Modal.Title><h2 className={styles.titleModal}>{t('modal.review.title')}</h2></Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className={styles.categoryContainer}>
-                    <div className={styles.passangerContainer}>
-                        <div className={styles.titleContainer}>
-                            <i className="bi bi-person-circle h3"></i>
-                            <h3>DRIVER</h3>
-                        </div>
-                        <PassangerReportReviewComponent passanger={passangers[1]} closeModal={closeModal}/>
-                    </div>
-                    <div className={styles.passangerContainer}>
-                        <div className={styles.titleContainer}>
-                            <i className="bi bi-person-circle h3"></i>
-                            <h3>CAR</h3>
-                        </div>
-                        <PassangerReportReviewComponent passanger={passangers[1]} closeModal={closeModal}/>
-                    </div>
-                    <div className={styles.passangerContainer}>
-                        <div className={styles.titleContainer}>
-                            <i className="bi-fill bi-people h3"></i>
-                            <h3>PASSANGER</h3>
-                        </div>
-                        <PassangerReportReviewComponent passanger={passangers[1]} closeModal={closeModal}/>
-                        <PassangerReportReviewComponent passanger={passangers[1]} closeModal={closeModal}/>
-                    </div>
+                    {!isDriver &&
+                        <div className={styles.passangerContainer}>
+                            <div className={styles.titleContainer}>
+                                <i className="bi bi-person-fill h3"></i>
+                                <h3>{t('modal.driver')}</h3>
+                            </div>
+                            <DriverReportReviewComponent driver={driver} closeModal={closeModal}/>
+                        </div>}
+                    {passangers.length != 0 &&
+                        <div className={styles.passangerContainer}>
+                            <div className={styles.titleContainer}>
+                                <i className="bi bi-people-fill h3"></i>
+                                <h3><h3>{t('modal.passangers')}</h3></h3>
+                            </div>
+                        </div>}
+                    {isDriver && passangers.length == 0 &&
+                        <EmptyList
+                            text={t("modal.report.empty")}
+                            icon={"people-fill"}
+                        />}
                 </div>
             </Modal.Body>
             <Modal.Footer>

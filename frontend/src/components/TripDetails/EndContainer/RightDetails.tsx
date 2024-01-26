@@ -22,15 +22,22 @@ interface RightDetailsProps {
 const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: RightDetailsProps) => {
     const { t } = useTranslation();
     const [showModalReport, setModalReport] = useState(false);
+    const [showModalMakeReport, setModalMakeReport] = useState(false);
     const [showModalReview, setModalReview] = useState(false);
+    const [userReviewReport, setuserReviewReport] = useState<userPublicModel| null>(null);
 
     const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
-    const handleSpanClickReport = () => {openModalReport();};
+    const selectPassanger = (user:userPublicModel) => {
+        setModalReport(false);
+        setuserReviewReport(user);
+        setModalMakeReport(true);
+    };
+    const closeModalMakeReport = () => {setModalMakeReport(false);};
+
 
     const openModalReview = () => {setModalReview(true);};
     const closeModalReview = () => {setModalReview(false);};
-    const handleSpanClickReview = () => {openModalReview();};
 
     return (
         (!isPassanger && !isDriver) ?
@@ -45,7 +52,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
             (status === Status.FINISHED ?
                     <div className={styles.review_btn}>
                         <div className={styles.btn_container}>
-                            <Button className={styles.btn_join} onClick={handleSpanClickReview}>
+                            <Button className={styles.btn_join} onClick={openModalReview}>
                                 <div className={styles.create_trip_btn}>
                                     <i className="bi bi-pencil-square"></i>
                                     <span>{t("trip_detail.btn.reviews")}</span>
@@ -60,15 +67,20 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver }: Rig
                         </div>
                         <div className={styles.report_link}>
                             <span>{t('trip_detail.report.pre_link_text')}</span>
-                            <span onClick={handleSpanClickReport} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
+                            <span>{userReviewReport?.username}</span>
+                            <span onClick={openModalReport} style={{cursor: 'pointer', color:'blue'}}><i className="bi bi-car-front-fill"></i>{t('trip_detail.report.link_text')}</span>
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReport} passangers={passangers} driver={driver} isDriver={isDriver}/>
+                            <ModalReport closeModal={closeModalReport} selectPassanger={selectPassanger} passangers={passangers} driver={driver} isDriver={isDriver}/>
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReview closeModal={closeModalReview} passangers={passangers}/>
+                            <ModalReview closeModal={closeModalReview} passangers={passangers} driver={driver} isDriver={isDriver}/>
+                        </Modal>
+
+                        <Modal show={showModalMakeReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalReport closeModal={closeModalMakeReport} selectPassanger={selectPassanger} passangers={passangers} driver={driver} isDriver={isDriver}/>
                         </Modal>
                     </div>
  :
