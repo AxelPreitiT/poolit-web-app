@@ -385,7 +385,8 @@
       "trip": "El viaje en el que se produjo la denuncia",
       "reason": "Motivo del denuncia",
       "passenger": "(Pasajero)",
-      "driver": "(Conductor)"}
+      "driver": "(Conductor)"
+    }
   },
   "trip_detail": {
     "title": "Viaje",
@@ -464,6 +465,7 @@
   "search": {
     "title": "Buscar viajes",
     "loading": "Buscando viajes",
+    "page_selector": "Mostrando los resultados {{first_result}} - {{last_result}} de {{total_pages}} páginas",
     "no_results": {
       "title": "Parece que no hay viajes disponibles para tu búsqueda",
       "body": "No te preocupes, seguro encontrás algo pronto"

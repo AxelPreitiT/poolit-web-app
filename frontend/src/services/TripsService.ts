@@ -6,6 +6,7 @@ import TripModel from "@/models/TripModel";
 import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
+import TripPageSearchModel from "@/models/TripPageSearchModel";
 
 class TripsService extends Service {
   public static getTripById = async (uri: string): Promise<TripModel> => {
@@ -40,10 +41,13 @@ class TripsService extends Service {
   public static searchTrips = async (
     uriTemplate: string,
     search: SearchTripsFormSchemaType,
-    sortOptions?: TripSortSearchModel
-  ): Promise<TripModel[]> => {
+    options: {
+      pageOptions?: TripPageSearchModel;
+      sortOptions?: TripSortSearchModel;
+    } = {}
+  ): Promise<PaginationModel<TripModel>> => {
     return await this.resolveQuery(
-      TripsApi.searchTrips(uriTemplate, search, sortOptions)
+      TripsApi.searchTrips(uriTemplate, search, options)
     );
   };
 }

@@ -8,6 +8,7 @@ import { AxiosPromise, AxiosResponse } from "axios";
 import { parseTemplate } from "url-template";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
+import TripPageSearchModel from "@/models/TripPageSearchModel";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -59,7 +60,7 @@ class TripsApi extends AxiosApi {
           prev: prev,
           next: next,
           last: last,
-          total_pages: total,
+          totalPages: total,
           data: trips,
         },
       };
@@ -107,15 +108,17 @@ class TripsApi extends AxiosApi {
     return this.get<TripModel[]>(uri);
   };
 
-  public static searchTrips: (
+  public static searchTrips = (
     uriTemplate: string,
     search: SearchTripsFormSchemaType,
-    sortOptions?: TripSortSearchModel
-  ) => AxiosPromise<TripModel[]> = (
-    uriTemplate: string,
-    search: SearchTripsFormSchemaType,
-    sortOptions: TripSortSearchModel = {}
-  ) => {
+    {
+      pageOptions = {},
+      sortOptions = {},
+    }: {
+      pageOptions?: TripPageSearchModel;
+      sortOptions?: TripSortSearchModel;
+    } = {}
+  ): AxiosPromise<PaginationModel<TripModel>> => {
     const baseUri = parseTemplate(uriTemplate).expand({});
     const uri = new URL(baseUri);
     const formatDateTime = (date: Date, time: string) => {
@@ -130,6 +133,13 @@ class TripsApi extends AxiosApi {
       "startDateTime",
       formatDateTime(search.date, search.time)
     );
+    if (pageOptions.page && pageOptions.page > 0) {
+      const page = pageOptions.page - 1;
+      uri.searchParams.set("page", page.toString());
+    }
+    if (pageOptions.pageSize) {
+      uri.searchParams.set("pageSize", pageOptions.pageSize.toString());
+    }
     if (search.min_price) {
       uri.searchParams.set("minPrice", search.min_price.toString());
     }
@@ -157,7 +167,7 @@ class TripsApi extends AxiosApi {
       uri.searchParams.set("descending", sortOptions.descending.toString());
     }
     console.log("uri", uri.toString());
-    return this.get<TripModel[]>(uri.toString());
+    return this.get<TripModel[]>(uri.toString()).then(this.getPaginationModel);
   };
 }
 

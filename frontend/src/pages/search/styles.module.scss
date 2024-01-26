@@ -6,7 +6,7 @@
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  padding: 3rem 1rem;
+  padding: 3rem 1rem 1rem 1rem;
   column-gap: 2rem;
 }
 
@@ -16,6 +16,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  top: 2rem;
+  position: sticky;
+  position: -webkit-sticky;
 }
 
 .contentContainer {
@@ -37,6 +40,8 @@
 
   .searchContainer {
     width: 60%;
+    position: relative;
+    top: 0;
   }
 
   .contentContainer {
@@ -143,6 +148,10 @@
 }
 
 // --------------- Items ----------------
+.resultsContainer {
+  width: 100%;
+}
+
 .tripsList {
   display: flex;
   flex-direction: row;
@@ -150,12 +159,11 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .tripItem {
-  flex-grow: 1;
-  max-width: 50%;
+  width: 49%;
 }
 
 // --------------- Sorter ----------------
@@ -164,7 +172,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  width: 100%;
+  margin-left: auto;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 // --------------- Loading spinner ----------------
@@ -180,4 +189,63 @@
 .loadingDescription {
   font-size: 2.5rem;
   font-weight: 500;
+}
+
+// --------------- Pagination ----------------
+.pageSelectorContainer {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.5rem;
+  width: 100%;
+}
+
+.pageSelectorText {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: colors.$italic-text-color;
+  font-style: italic;
+}
+
+.paginationContainer {
+  margin-bottom: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+}
+
+%paginationItem {
+  font-weight: 500;
+  font-size: 1.25rem;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+%paginationItem:hover {
+  opacity: 0.8;
+}
+
+.paginationItem > * {
+  @extend %paginationItem;
+  background-color: colors.$container-color;
+  color: colors.$secondary-color;
+}
+
+.paginationItem > *:hover,
+.paginationItem > *:focus,
+.paginationItem > *:active {
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+}
+
+.paginationActiveItem > * {
+  @extend %paginationItem;
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+}
+
+.paginationActiveItem > *:hover {
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
 }

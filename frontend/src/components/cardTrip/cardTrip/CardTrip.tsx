@@ -52,7 +52,9 @@ const CardTrip = ({
           {CarTrip === null ? (
             <SpinnerComponent />
           ) : (
-            <img src={CarTrip.imageUri} className={styles.img_container} />
+            <div className={styles.img_container}>
+              <img src={CarTrip.imageUri} />
+            </div>
           )}
         </div>
         <div className={styles.right_container}>

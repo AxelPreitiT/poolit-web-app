@@ -1,6 +1,9 @@
 import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
+import TripPageSearchModel from "@/models/TripPageSearchModel";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
 import { getIsoDate, parseIsoDate } from "@/utils/date/isoDate";
+
+const defaultPageSize = 10;
 
 const originCityKey = "originCity";
 const destinationCityKey = "destinationCity";
@@ -12,10 +15,18 @@ const maxPriceKey = "maxPrice";
 const carFeatureKey = "carFeature";
 const sortTypeIdKey = "sortTypeId";
 const sortDirectionKey = "sortDirection";
+const pageKey = "page";
+const pageSizeKey = "pageSize";
 
 export const createTripsSearchParams = (
   search: SearchTripsFormSchemaType,
-  { sortTypeId, descending }: TripSortSearchModel = {}
+  {
+    pageOptions = {},
+    sortOptions = {},
+  }: {
+    pageOptions?: TripPageSearchModel;
+    sortOptions?: TripSortSearchModel;
+  } = {}
 ) => {
   const searchParams = new URLSearchParams({
     [originCityKey]: search.origin_city.toString(),
@@ -37,6 +48,14 @@ export const createTripsSearchParams = (
       searchParams.append(carFeatureKey, feature);
     });
   }
+  const { page, pageSize } = pageOptions;
+  if (page && page > 1) {
+    searchParams.append(pageKey, page.toString());
+  }
+  if (pageSize && pageSize > 0) {
+    searchParams.append(pageSizeKey, pageSize.toString());
+  }
+  const { sortTypeId, descending } = sortOptions;
   if (sortTypeId) {
     searchParams.append(sortTypeIdKey, sortTypeId.toString());
   }
@@ -48,9 +67,9 @@ export const createTripsSearchParams = (
 
 export const parseTripsSearchParams: (
   search: string
-) => Partial<SearchTripsFormSchemaType> & TripSortSearchModel = (
-  search: string
-) => {
+) => Partial<SearchTripsFormSchemaType> &
+  TripSortSearchModel &
+  Required<TripPageSearchModel> = (search: string) => {
   const params = new URLSearchParams(search);
   const originCity = params.get(originCityKey) || undefined;
   const destinationCity = params.get(destinationCityKey) || undefined;
@@ -62,6 +81,8 @@ export const parseTripsSearchParams: (
   const carFeatures = params.getAll(carFeatureKey);
   const sortTypeId = params.get(sortTypeIdKey) || undefined;
   const descending = params.get(sortDirectionKey) === "desc";
+  const page = params.get(pageKey) || undefined;
+  const pageSize = params.get(pageSizeKey) || undefined;
   return {
     origin_city: originCity ? parseInt(originCity) : undefined,
     destination_city: destinationCity ? parseInt(destinationCity) : undefined,
@@ -74,5 +95,7 @@ export const parseTripsSearchParams: (
     multitrip: !!lastDate,
     sortTypeId: sortTypeId || undefined,
     descending,
+    page: page ? parseInt(page) : 1,
+    pageSize: pageSize ? parseInt(pageSize) : defaultPageSize,
   };
 };
