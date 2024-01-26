@@ -1,6 +1,6 @@
 import MainComponent from "@/components/utils/MainComponent.tsx";
 import MainHeader from "@/components/utils/MainHeader.tsx";
-import styles from "@/pages/created/styles.module.scss";
+import styles from "@/pages/admin/styles.module.scss";
 import ShortInfoReport from "@/components/admin/short-info-report.tsx";
 import { useTranslation } from "react-i18next";
 import useAllReports from "@/hooks/admin/useAllReports.tsx";
@@ -10,7 +10,7 @@ import EmptyList from "@/components/emptyList/EmptyList.tsx";
 
 //TODO como pasar reportsUri
 const AdminPage = () => {
-  const { isLoading: isLoadingReports, reports } = useAllReports("/reports");
+  const { isLoading: isLoadingReports, reports } = useAllReports();
   const { t } = useTranslation();
 
   return (
