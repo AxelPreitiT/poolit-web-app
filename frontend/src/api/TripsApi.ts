@@ -37,8 +37,7 @@ class TripsApi extends AxiosApi {
   public static getTripsByUser: (uri: string) => AxiosPromise<PaginationModel<TripModel>> = (
     uri: string
   ) => {
-    const uriFinal = uri + '&pageSize=2&page=0';
-    return this.get<TripModel[]>(uriFinal, {
+    return this.get<TripModel[]>(uri, {
       headers: {},
     }).then((response: AxiosResponse<TripModel[]>) => {
         const trips = response.data;
