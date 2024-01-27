@@ -6,6 +6,8 @@ import CarModel from "@/models/CarModel.ts";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import {Link} from "react-router-dom";
+import {publicProfilePath} from "@/AppRouter.tsx";
 
 interface TripInfoProps {
     trip: TripModel;
@@ -36,10 +38,10 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
         </div>
       </div>
       <div className={styles.show_row}>
-        <CircleImg
-          src={car.imageUri}
-          size={40}
-        />
+              <CircleImg
+                  src={car.imageUri}
+                  size={40}
+              />
         <div className={styles.info_details}>
           <span className="light-text detail">{car.infoCar}</span>
           <StarRating rating={car.rating} color={"#ffffff"} size="10" />
@@ -54,17 +56,21 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
       </div>
       <hr className="white" />
       <div className={styles.show_row}>
-        <CircleImg
-          src={driver.imageUri}
-          size={40}
-        />
+          <Link to={publicProfilePath.replace(":id", String(driver.userId))}>
+              <CircleImg
+              src={driver.imageUri}
+              size={40}
+            />
+        </Link>
         <div className={styles.info_details}>
-          <span className="light-text detail">
-              {t("format.name", {
-              name: driver.username,
-              surname: driver.surname,
-          })}</span>
-          <StarRating rating={0} color={"#ffffff"} size="10" />
+            <Link to={publicProfilePath.replace(":id", String(driver.userId))}>
+              <span className="light-text detail">
+                  {t("format.name", {
+                  name: driver.username,
+                  surname: driver.surname,
+              })}</span>
+            </Link>
+            <StarRating rating={0} color={"#ffffff"} size="10" />
         </div>
       </div>
       {isDriver &&

@@ -49,7 +49,7 @@ const ReviewPageDriver = () => {
             <h2>{t("profile.lists.review_as_driver")}</h2>
           </div>
           <PaginationComponent
-            uri = {createPaginationUri(user.reviewsPassengerUri, currentPage , 3)}
+            uri = {createPaginationUri(user.reviewsPassengerUri, currentPage , 1)}
             current_page = {currentPage}
             useFuction={useUserReviewsByUri}
             empty_component={

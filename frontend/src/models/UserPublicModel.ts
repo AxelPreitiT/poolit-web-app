@@ -1,4 +1,5 @@
 interface UserPublicModel {
+  userId: number;
   driverRating: number;
   passengerRating: number;
   reviewsDriverUri: string;

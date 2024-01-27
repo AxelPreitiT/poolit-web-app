@@ -5,27 +5,20 @@ import { useTranslation } from "react-i18next";
 import { Button } from "react-bootstrap";
 import StarRating from "../stars/StarsRanking";
 import PassangerModel from "@/models/PassangerModel.ts";
-import {useEffect, useState} from "react";
-import UserService from "@/services/UserService.ts";
-import UserPublicModel from "@/models/UserPublicModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
-
+import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
+import PassangerStatus from "@/enums/PassangerStatus.ts";
 
 
 const PassangerComponent = (passanger: PassangerModel) => {
   const { t } = useTranslation();
-  const [UserTrip, setUserTrip] = useState<UserPublicModel | null>(null);
+  const {isLoading, data:UserTrip} =  usePublicUserByUri(passanger.userUri);
+  //const {onSubmit } = useAcceptPassangerByUri("http://localhost:8080/paw-2023a-07/api/145/passengers/2");
 
-
-  useEffect(() => {
-    UserService.getUserById(passanger.userUri).then((response) => {
-      setUserTrip(response);
-    });
-  });
 
   return (
     <div className={styles.passanger_container}>
-      { UserTrip === null ?
+      {isLoading ||  UserTrip === undefined ?
           (<SpinnerComponent /> ) :
           (<div className={styles.left_container}>
             <CircleImg src={UserTrip.imageUri} size={70} />
@@ -47,18 +40,21 @@ const PassangerComponent = (passanger: PassangerModel) => {
         <StarRating rating={0} size="x-large" />
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
-            <Button className={styles.btn_delete}>
+            <Button className={styles.btn_delete} disabled={passanger.passengerState != PassangerStatus.PENDING}>
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.accept")}</span>
               </div>
             </Button>
-            <Button className={styles.btn_accept}>
+            <Button className={styles.btn_accept} disabled={passanger.passengerState != PassangerStatus.PENDING}>
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.reject")}</span>
               </div>
             </Button>
           </div>
-          <span style={{ color: "gray", fontStyle: "italic" }}>PONER</span>
+          {passanger.passengerState == PassangerStatus.ACCEPTED &&
+          <span style={{ color: "gray", fontStyle: "italic" }}>{t('trip_detail.passengers.passsanger_accepted')}</span>}
+          {passanger.passengerState == PassangerStatus.REJECTED &&
+          <span style={{ color: "gray", fontStyle: "italic" }}>{t('trip_detail.passengers.passsanger_rejected')}</span>}
         </div>
       </div>
     </div>

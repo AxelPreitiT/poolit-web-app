@@ -16,7 +16,6 @@ import Status from "@/enums/Status.ts";
 import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
-import usePassangers from "@/hooks/passanger/usePassangers.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 
 const TripDetailsPage = () => {
@@ -31,15 +30,15 @@ const TripDetailsPage = () => {
   const { isLoading: isLoadingDriver, driver: driver } = usePublicUserByUri(
     trip?.driverUri
   );
-  const { isLoading: isLoadingPassangers, passangers: passangers } =
-    usePassangers(trip?.passengersUriTemplate);
+  const isDriver = trip?.driverUri === currentUser?.selfUri;
+
   const {
     isLoading: isLoadingRole,
     passangersRole: passangerRole,
     isError: isError,
-  } = useRolePassanger(currentUser, trip?.passengersUriTemplate);
+  } = useRolePassanger(isDriver, currentUser, trip?.passengersUriTemplate);
   const isPassanger = !isError;
-  const isDriver = trip?.driverUri === currentUser?.selfUri;
+
 
   return (
     <div>
@@ -60,9 +59,7 @@ const TripDetailsPage = () => {
         isLoadingCar ||
         car === undefined ||
         isLoadingDriver ||
-        driver === undefined ||
-        isLoadingPassangers ||
-        passangers === undefined ? (
+        driver === undefined ? (
           <SpinnerComponent />
         ) : (
           <div>
@@ -89,13 +86,12 @@ const TripDetailsPage = () => {
                 trip={trip}
                 isPassanger={isPassanger}
                 isDriver={isDriver}
-                status={Status.FINISHED}
               />
               <RightDetails
                 isPassanger={isPassanger}
                 isDriver={isDriver}
                 status={Status.FINISHED}
-                passangers={passangers}
+                passangers={[]}
                 driver={driver}
                 car = {car}
               />
@@ -103,12 +99,7 @@ const TripDetailsPage = () => {
           </div>
         )}
       </MainComponent>
-      {isDriver &&
-        (isLoadingPassangers || passangers === undefined ? (
-          <SpinnerComponent />
-        ) : (
-          <PassangersTripComponent passangers={passangers} />
-        ))}
+      {isDriver && trip != undefined && <PassangersTripComponent uri={trip.passengersUriTemplate} />}
     </div>
   );
 };

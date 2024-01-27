@@ -17,12 +17,14 @@ export interface DriverListProp {
   futureCreatedTripsUri: string;
   pastCreatedTripsUri: string;
   reviewsDriverUri: string;
+  id: number;
 }
 
 const DriverList = ({
   futureCreatedTripsUri,
   pastCreatedTripsUri,
   reviewsDriverUri,
+  id,
 }: DriverListProp) => {
   const { t } = useTranslation();
 
@@ -46,7 +48,7 @@ const DriverList = ({
           empty_icon={"book"}
           data={reviewsDriver.data}
           component_name={ShortReview}
-          link={publicsDriverReviewsPath.replace(":id", String(5))}
+          link={publicsDriverReviewsPath.replace(":id", String(id))}
         />
       )}
       {futureCreatedTrips == undefined || isLoadingFutureCreatedTrips ? (
