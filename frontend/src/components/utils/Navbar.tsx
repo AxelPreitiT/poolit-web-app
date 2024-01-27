@@ -22,6 +22,7 @@ import useAuthentication from "@/hooks/auth/useAuthentication";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UsersRoles from "@/enums/UsersRoles";
+import ImageService from "@/services/ImageService.ts";
 
 interface Section {
   path: string;
@@ -35,9 +36,7 @@ const Navbar = () => {
   const location = useLocation();
   const pathname = location?.pathname;
   const { isLoading, currentUser } = useCurrentUser({enabled: !isLoadingAuth && isAuthenticated});
-
   const isLoged = isAuthenticated;
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -110,7 +109,7 @@ const Navbar = () => {
                       {isLoading || currentUser === undefined ? (
                           <SpinnerComponent />
                       ) : (
-                          <CircleImg src={currentUser.imageUri} size={50} />
+                          <CircleImg src={ImageService.getSmallImageUrl(currentUser.imageUri)} size={50} />
                       )}
                     </div>
                   </Dropdown.Toggle>
@@ -125,7 +124,7 @@ const Navbar = () => {
                           </div>
                       ) : (
                           <div className={styles.item_dropdown}>
-                            <CircleImg src={currentUser.imageUri} size={28} />
+                            <CircleImg src={ImageService.getSmallImageUrl(currentUser.imageUri)} size={28} />
                             <h3 className={styles.dropdown_text}>
                               {t("format.name", {
                                 name: currentUser.username,
