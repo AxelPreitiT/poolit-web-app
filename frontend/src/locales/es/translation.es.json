@@ -404,7 +404,10 @@
       "btn_accept": "Aceptar",
       "btn_delete": "Rechazar",
       "reservation_started": "La reserva ya ha empezado.",
-      "empty": "Todavía no tienes pasajeros interesandos."
+      "empty": "Todavía no tienes pasajeros interesandos.",
+      "passsanger_accepted": "Pasajero aceptado",
+      "passsanger_rejected": "Pasajero rechazado",
+      "trip_started": "El viaje ah comenzado"
     },
     "btn": {
       "accept": "Aceptar",

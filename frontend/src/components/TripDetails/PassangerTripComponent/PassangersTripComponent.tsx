@@ -11,6 +11,7 @@ import {useLocation} from "react-router-dom";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import createStatusPaginationUri from "@/functions/CreateStatusPaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
+import PassangerStatus from "@/enums/PassangerStatus.ts";
 
 interface PassangersTripComponentProps {
   uri: string;
@@ -26,8 +27,8 @@ const PassangersTripComponent = ({
     const currentPage = page == null ? 1 : parseInt(page, 10);
 
 
-  const options = ["ALL", "ACCEPTED", "REJECTED", "PENDING"];
-  const [selectedOption, setSelectedOption] = useState<string>("ALL");
+  const options = Object.values(PassangerStatus);
+  const [selectedOption, setSelectedOption] = useState<string>(PassangerStatus.ALL);
   const handleSelect = (eventKey: string | null) => {
     if (eventKey !== null) {
       setSelectedOption(eventKey)
@@ -66,7 +67,6 @@ const PassangersTripComponent = ({
               current_page={currentPage}
               component_name={PassangerComponent}
               useFuction={usePassangerByUri} />
-          <h1>{createStatusPaginationUri(createPaginationUri(uri, currentPage , 1, true), selectedOption)}</h1>
       </div>
     </MainComponent>
   );

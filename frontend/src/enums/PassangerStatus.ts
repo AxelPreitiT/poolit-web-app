@@ -1,4 +1,4 @@
-const enum PassangerStatus {
+enum PassangerStatus {
     PENDING = "PENDING",
     ACCEPTED = "ACCEPTED",
     REJECTED = "REJECTED",

@@ -3,6 +3,11 @@ import {AxiosPromise, AxiosResponse} from "axios";
 import PassangerModel from "@/models/PassangerModel.ts";
 import PaginationModel from "@/models/PaginationModel.ts";
 import {parseTemplate} from "url-template";
+import PassangerStatus from "@/enums/PassangerStatus.ts";
+
+type AcceptRejecPassangerBody = {
+    passengerState: string;
+};
 
 class PassangerApi extends AxiosApi{
     public static getPassangerByUri: (uri: string) => AxiosPromise<PaginationModel<PassangerModel>> =
@@ -42,6 +47,14 @@ class PassangerApi extends AxiosApi{
             });
         };
 
+    public static postAcceptPassangerByUri: (uri: string) => AxiosPromise<PassangerModel> =
+        (uri: string) => {
+            return this.post<AcceptRejecPassangerBody, PassangerModel>(
+                uri,
+                { passengerState: PassangerStatus.ACCEPTED as string }
+                // O simplemente { passengerState: "ACCEPTED" } si el tipo de "ACCEPTED" en tu enum es cadena
+            );
+        };
 
     public static getPassangerRole: (uri: string) => AxiosPromise<PassangerModel> =
         (uri: string) => {

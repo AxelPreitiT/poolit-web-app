@@ -405,7 +405,10 @@
       "btn_accept": "Accept",
       "btn_delete": "Delete",
       "reservation_started": "The reservation has started.",
-      "empty": "You still do not have interested passengers."
+      "empty": "You still do not have interested passengers.",
+      "passsanger_accepted": "Passanger accepted",
+      "passsanger_rejected": "Passanger rejected",
+      "trip_started": "The trip has started"
     },
     "btn": {
       "accept": "Accept",

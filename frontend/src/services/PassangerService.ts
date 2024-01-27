@@ -16,6 +16,10 @@ class PassangerService extends Service {
     public static getPassangersTripsByUri = async (uri: string): Promise<PaginationModel<PassangerModel>> => {
         return await this.resolveQuery(PassangerApi.getPassangerByUri(uri));
     };
+
+    public static postAcceptPassangersByUri = async (uri: string) => {
+        return await this.resolveQuery(PassangerApi.postAcceptPassangerByUri(uri));
+    };
 }
 
 export default PassangerService;
