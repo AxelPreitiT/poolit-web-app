@@ -16,6 +16,7 @@ import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
 import SearchPage from "./pages/search/SearchPage";
 import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
 import ReportPage from "@/pages/admin/ReportPage.tsx";
+import PublicCarPage from "@/pages/publicCar/publicCar.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -26,6 +27,7 @@ export const profilePath = "/profile";
 export const publicsDriverReviewsPath = "/reviews/driver/:id";
 export const publicsPassangerReviewsPath = "/reviews/passanger/:id";
 export const publicProfilePath = "/profile/:id";
+export const publicCarPath = "/cars/:id";
 export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
@@ -132,6 +134,18 @@ const router = createBrowserRouter(
           <PublicProfilePage />
         </RouteWrapper>
       ),
+    },
+    {
+     path: publicCarPath,
+     element: (
+         <RouteWrapper
+             title="profile.title"
+             showWhenUserIsNotAuthenticated={false}
+         >
+             <Navbar />
+             <PublicCarPage />
+         </RouteWrapper>
+        )
     },
     {
       path: reservedTripsPath,

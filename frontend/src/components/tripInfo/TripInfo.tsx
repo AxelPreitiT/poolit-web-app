@@ -7,7 +7,7 @@ import UserPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import {Link} from "react-router-dom";
-import {publicProfilePath} from "@/AppRouter.tsx";
+import {publicCarPath, publicProfilePath} from "@/AppRouter.tsx";
 
 interface TripInfoProps {
     trip: TripModel;
@@ -38,12 +38,16 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
         </div>
       </div>
       <div className={styles.show_row}>
+          <Link to={publicCarPath.replace(":id", String(car.carId))}>
               <CircleImg
                   src={car.imageUri}
                   size={40}
               />
+          </Link>
         <div className={styles.info_details}>
-          <span className="light-text detail">{car.infoCar}</span>
+            <Link to={publicCarPath.replace(":id", String(car.carId))}>
+                <span className={styles.link_trip_details}>{car.infoCar}</span>
+            </Link>
           <StarRating rating={car.rating} color={"#ffffff"} size="10" />
         </div>
       </div>
@@ -63,8 +67,8 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
             />
         </Link>
         <div className={styles.info_details}>
-            <Link to={publicProfilePath.replace(":id", String(driver.userId))}>
-              <span className="light-text detail">
+            <Link to={publicProfilePath.replace(":id", String(driver.userId))} style={{ textDecoration: 'underline' }}>
+              <span className={styles.link_trip_details}>
                   {t("format.name", {
                   name: driver.username,
                   surname: driver.surname,
