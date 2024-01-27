@@ -51,4 +51,11 @@ public class ImageHibernateDao implements ImageDao {
         return em.merge(image);
     }
 
+    @Override
+    public void delete(final Image image){
+        LOGGER.debug("Deleting image with id {} in the database",image.getImageId());
+        Image imageMerge = em.merge(image);
+        em.remove(imageMerge);
+    }
+
 }

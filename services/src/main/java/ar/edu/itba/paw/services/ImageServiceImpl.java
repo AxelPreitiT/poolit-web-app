@@ -4,11 +4,14 @@ import ar.edu.itba.paw.interfaces.exceptions.ImageNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.ImageDao;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.models.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,6 +24,8 @@ import java.util.Optional;
 @Service
 public class ImageServiceImpl implements ImageService {
     private final ImageDao imageDao;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageServiceImpl.class);
 
 //    @Value("classpath:images/profile.jpeg")
 //    private Resource defaultImg;
@@ -78,29 +83,56 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public byte[] getImageByteaOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException{
+    public Image getImageOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException {
         Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
-        try{
-            if(img.getData() == null || img.getData().length == 0){
-                //TODO: revisar esto, dice que no esta bien resrevar espacio con available
-                byte[] input = new byte[defaultImageInputStream.available()];
-                for (int i = 0; i < input.length; i++) {
-                    int byteRead = defaultImageInputStream.read();
-                    if (byteRead == -1) break;
-                    input[i] = (byte)byteRead;
+        if(img.getData() != null && img.getData().length != 0){
+            if(img.getData(size)==null){
+                //we need to resize the image
+                try {
+                    img.setData(resizeImage(img.getData(),size),size);
+                }catch (Exception e){
+                    LOGGER.error("There was an error when trying to resize image with id {} for size {}",imageId,size,e);
+                    return img;
                 }
-                return input;
             }
-            byte[] ans = img.getData(size);
-            if(ans == null){
-                ans = resizeImage(img.getData(), size);
-                img.setData(ans,size);
-            }
+            return img;
+        }
+        //we return the default provided image
+        try {
+            byte[] bytes = StreamUtils.copyToByteArray(defaultImageInputStream);
+            Image ans =  new Image(img.getImageId(),bytes);//return a dummy image with the default contents
+            ans.setData(bytes,size);//set the data at the wanted size
             return ans;
-        }catch (IOException ex){
+        }catch (Exception e){
             throw new ImageNotFoundException();
         }
     }
+
+//    @Transactional
+//    @Override
+//    public byte[] getImageByteaOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException{
+//        Image img = findById(imageId).orElseThrow(ImageNotFoundException::new);
+//        try{
+//            if(img.getData() == null || img.getData().length == 0){
+//                //TODO: revisar esto, dice que no esta bien resrevar espacio con available
+//                byte[] input = new byte[defaultImageInputStream.available()];
+//                for (int i = 0; i < input.length; i++) {
+//                    int byteRead = defaultImageInputStream.read();
+//                    if (byteRead == -1) break;
+//                    input[i] = (byte)byteRead;
+//                }
+//                return input;
+//            }
+//            byte[] ans = img.getData(size);
+//            if(ans == null){
+//                ans = resizeImage(img.getData(), size);
+//                img.setData(ans,size);
+//            }
+//            return ans;
+//        }catch (IOException ex){
+//            throw new ImageNotFoundException();
+//        }
+//    }
 
     //TODO: que mande el default el servicio que lo llama, asi tenemos la default del auto y de perfil
 //    @Transactional
@@ -125,16 +157,22 @@ public class ImageServiceImpl implements ImageService {
 //    }
 
 
-
-
-
-
     @Transactional
     @Override
-    public Image updateImage(final byte[] content, final long imageId) throws ImageNotFoundException{
+    public void deleteImage(final long imageId) throws ImageNotFoundException {
         final Image image = findById(imageId).orElseThrow(ImageNotFoundException::new);
-        return imageDao.update(image,content);
+        imageDao.delete(image);
     }
+
+
+
+
+//    @Transactional
+//    @Override
+//    public Image updateImage(final byte[] content, final long imageId) throws ImageNotFoundException{
+//        final Image image = findById(imageId).orElseThrow(ImageNotFoundException::new);
+//        return imageDao.update(image,content);
+//    }
 
 
 // TODO: delete

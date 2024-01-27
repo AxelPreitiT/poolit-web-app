@@ -24,7 +24,7 @@ public interface CarService {
 
 //    boolean currentUserIsCarOwner(Car car);
 
-    byte[] getCarImage(final long carId,final Image.Size size) throws CarNotFoundException, ImageNotFoundException;
+    Image getCarImage(final long carId,final Image.Size size) throws CarNotFoundException, ImageNotFoundException;
 
     void updateCarImage(final long carId, final byte[] content) throws CarNotFoundException, ImageNotFoundException;
 
