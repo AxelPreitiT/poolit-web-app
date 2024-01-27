@@ -342,6 +342,7 @@
     "number_of_seats": "Cantidad de asientos",
     "price_per_trip": "Precio por viaje",
     "create": "Crear viaje",
+    "create_car": "Crear auto",
     "success": {
       "title": "¡Viaje creado!",
       "message": "¡Tu viaje fue creado correctamente!"
@@ -570,7 +571,8 @@
       "image": "Ocurrió un error al obtener la imagen del auto",
       "your": "Ocurrió un error al obtener tu auto",
       "default": "Ocurrió un error al obtener el auto",
-      "title": "No se pudo obtener el auto"
+      "title": "No se pudo obtener el auto",
+      "none": "Crea un auto para poder empezar a ofrecer viajes"
     },
     "image": "Imagen del auto {{car_info}}",
     "brand": "Marca: {{brand}}",

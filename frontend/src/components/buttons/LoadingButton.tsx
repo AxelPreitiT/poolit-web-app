@@ -8,6 +8,7 @@ interface LoadingButtonProps {
   className?: string;
   type: "button" | "submit" | "reset" | undefined;
   showSpinner?: boolean;
+  disabled?: boolean;
 }
 
 const LoadingButton = ({
@@ -16,8 +17,9 @@ const LoadingButton = ({
   className,
   type,
   showSpinner = true,
+  disabled = false,
 }: LoadingButtonProps) => (
-  <Button disabled={isLoading} className={className} type={type}>
+  <Button disabled={isLoading || disabled} className={className} type={type}>
     {isLoading && showSpinner ? (
       <LoadingWheel
         iconClassName={styles.loadingIcon}

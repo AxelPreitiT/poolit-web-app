@@ -36,6 +36,7 @@ const useCreateCarForm = () => {
     showSuccessToast({
       title: t("create_car.success.title"),
       message: t("create_car.success.message"),
+      timeout: defaultToastTimeout,
     });
     navigateOnCarCreation(profilePath);
   };

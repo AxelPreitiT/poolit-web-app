@@ -343,6 +343,7 @@
     "number_of_seats": "Number of seats",
     "price_per_trip": "Price per trip",
     "create": "Create trip",
+    "create_car": "Create car",
     "success": {
       "title": "Trip created!",
       "message": "The trip was created successfully!"
@@ -570,7 +571,8 @@
       "your": "An error occurred while loading you car",
       "image": "An error occurred while loading the car image",
       "default": "An error occurred while fetching the car features",
-      "title": "Could not fetch the car"
+      "title": "Could not fetch the car",
+      "none": "Create a car to start offering trips"
     },
     "image": "Imagen del auto {{car_info}}",
     "brand": "Brand: {{brand}}",
