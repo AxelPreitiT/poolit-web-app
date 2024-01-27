@@ -91,13 +91,12 @@ const Navbar = () => {
         </div>
         {isLoged && !isLoading ? (
           <div className="right-container">
-            <div>
+            <div className="create-trip-btn-container">
               <Link to={createTripsPath}>
                 <Button
-                  variant="primary"
                   size="lg"
                   active
-                  className="create-trip-btn"
+                  className="secondary-btn create-trip-btn"
                 >
                   <i className="bi bi-plus-lg light-text h4"></i>
                   <span className="button-text-style light-text h4">
@@ -160,7 +159,12 @@ const Navbar = () => {
         ) : (
           <div className="right-container">
             <Link to={registerPath}>
-              <Button variant="primary" size="lg" active className="logout-btn">
+              <Button
+                variant="primary"
+                size="lg"
+                active
+                className="secondary-btn logout-btn"
+              >
                 <i className="bi bi-person-circle light-text h5"></i>
                 <span className="button-text-style light-text h5">
                   {t("navbar.register")}
@@ -168,7 +172,12 @@ const Navbar = () => {
               </Button>
             </Link>
             <Link to={loginPath}>
-              <Button variant="primary" size="lg" active className="logout-btn">
+              <Button
+                variant="primary"
+                size="lg"
+                active
+                className="secondary-btn logout-btn"
+              >
                 <i className="bi bi-box-arrow-in-right h5"></i>
                 <span className="button-text-style h5">
                   {t("navbar.log_in")}
