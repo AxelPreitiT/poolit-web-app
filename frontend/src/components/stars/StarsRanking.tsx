@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
-import { BiSolidStar, BiSolidStarHalf } from "react-icons/bi";
+import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
 
 interface StarRatingProps {
   rating: number;
@@ -22,7 +22,7 @@ const StarRating = ({ rating, className }: StarRatingProps) => {
         ></BiSolidStarHalf>
       );
     } else {
-      return <BiSolidStar className={starClassName} key={index}></BiSolidStar>;
+      return <BiStar className={starClassName} key={index}></BiStar>;
     }
   };
 
