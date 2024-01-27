@@ -14,8 +14,7 @@ const usePassangerByUri = (uri?: string) => {
         queryFn: async () => {
             return await passangerService.getPassangersTripsByUri(uri as string);
         },
-        enabled: !!uri,
-        retry: false,
+        enabled: !!uri
     });
 
     const { isLoading, isPending, isError, error, data } = query;

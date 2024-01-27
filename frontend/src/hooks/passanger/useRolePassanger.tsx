@@ -19,7 +19,7 @@ const useRolePassanger = ( isDriver:boolean, currentUser?: UserPrivateModel, uri
             return await PassangerService.getPassangerRole(uriAllPassangers);
         },
         retry: false,
-        enabled: !!uri || isDriver,
+        enabled: !!uri && !isDriver,
     });
 
     const { isError, data, isLoading, isPending } = query;

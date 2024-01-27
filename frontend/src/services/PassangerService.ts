@@ -17,8 +17,8 @@ class PassangerService extends Service {
         return await this.resolveQuery(PassangerApi.getPassangerByUri(uri));
     };
 
-    public static postAcceptPassangersByUri = async (uri: string) => {
-        return await this.resolveQuery(PassangerApi.postAcceptPassangerByUri(uri));
+    public static patchAcceptPassangersByUri = async (uri: string) => {
+        return await this.resolveQuery(PassangerApi.patchAcceptPassangerByUri(uri));
     };
 }
 

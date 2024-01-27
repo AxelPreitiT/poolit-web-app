@@ -8,12 +8,13 @@ import PassangerModel from "@/models/PassangerModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
+import useAcceptPassangerByUri from "@/hooks/passanger/useAcceptPassangerByUri.tsx";
 
 
 const PassangerComponent = (passanger: PassangerModel) => {
   const { t } = useTranslation();
   const {isLoading, data:UserTrip} =  usePublicUserByUri(passanger.userUri);
-  //const {onSubmit } = useAcceptPassangerByUri("http://localhost:8080/paw-2023a-07/api/145/passengers/2");
+  const {onSubmit } = useAcceptPassangerByUri();
 
 
   return (
@@ -29,6 +30,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
                   surname: UserTrip.surname,
                 })}
               </h4>
+              <h4>{passanger.selfUri}</h4>
               <span style={{ color: "gray", fontStyle: "italic" }}>
             {t("format.date", {
               date: passanger.startDateTime,
@@ -40,7 +42,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
         <StarRating rating={0} size="x-large" />
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
-            <Button className={styles.btn_delete} disabled={passanger.passengerState != PassangerStatus.PENDING}>
+            <Button className={styles.btn_delete} disabled={passanger.passengerState != PassangerStatus.PENDING} onClick={() => onSubmit(passanger.selfUri)}>
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.accept")}</span>
               </div>

@@ -10,6 +10,9 @@ type AcceptRejecPassangerBody = {
 };
 
 class PassangerApi extends AxiosApi{
+
+    private static readonly PASSANGER_CONTENT_TYPE_HEADER: string = "application/vnd.trip.passenger.state.v1+json";
+
     public static getPassangerByUri: (uri: string) => AxiosPromise<PaginationModel<PassangerModel>> =
         (uri: string) => {
             const newUri = parseTemplate(uri).expand({});
@@ -47,12 +50,16 @@ class PassangerApi extends AxiosApi{
             });
         };
 
-    public static postAcceptPassangerByUri: (uri: string) => AxiosPromise<PassangerModel> =
+    public static patchAcceptPassangerByUri: (uri: string) => AxiosPromise<void> =
         (uri: string) => {
-            return this.post<AcceptRejecPassangerBody, PassangerModel>(
+            return this.patch<AcceptRejecPassangerBody, void>(
                 uri,
-                { passengerState: PassangerStatus.ACCEPTED as string }
-                // O simplemente { passengerState: "ACCEPTED" } si el tipo de "ACCEPTED" en tu enum es cadena
+                { passengerState: PassangerStatus.ACCEPTED as string },
+                {
+                    headers: {
+                        "Content-Type": PassangerApi.PASSANGER_CONTENT_TYPE_HEADER,
+                    },
+                }
             );
         };
 
