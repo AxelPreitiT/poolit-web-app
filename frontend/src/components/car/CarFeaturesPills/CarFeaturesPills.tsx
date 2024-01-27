@@ -6,12 +6,16 @@ interface CarFeaturesPillsProps {
   initialSelectedCarFeatures?: string[];
   carFeatures: CarFeatureModel[];
   onSelect?: (selectedCarFeatures: string[]) => void;
+  pillClassName?: string;
+  activePillClassName?: string;
 }
 
 const CarFeaturesPills = ({
   carFeatures,
   onSelect,
   initialSelectedCarFeatures,
+  pillClassName,
+  activePillClassName,
 }: CarFeaturesPillsProps) => {
   const [selectedCarFeatures, setSelectedCarFeatures] = useState<string[]>(
     initialSelectedCarFeatures || []
@@ -35,14 +39,13 @@ const CarFeaturesPills = ({
       {carFeatures.map((carFeature) => (
         <div
           key={carFeature.id}
-          className={styles.pillContainer}
           onClick={() => toggleCarFeature(carFeature.id)}
         >
           <label
             className={
               selectedCarFeatures.includes(carFeature.id)
-                ? styles.activePill
-                : styles.pill
+                ? styles.activePill + " " + activePillClassName
+                : styles.pill + " " + pillClassName
             }
           >
             {carFeature.name}

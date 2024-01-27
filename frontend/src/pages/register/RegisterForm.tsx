@@ -36,7 +36,6 @@ const RegisterForm = ({ cities }: { cities?: CityModel[] }) => {
           control={control}
           render={({ field: { onChange } }) => (
             <ImageInput
-              id="image"
               preview={preview}
               previewAlt={t("register.profile_image")}
               onImageUpload={(image: File) => {

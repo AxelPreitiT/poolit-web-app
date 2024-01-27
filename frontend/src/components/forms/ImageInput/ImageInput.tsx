@@ -3,7 +3,6 @@ import styles from "./styles.module.scss";
 import { useRef } from "react";
 
 interface ImageInputProps {
-  id: string;
   preview?: string;
   previewAlt: string;
   onImageUpload: (image: File) => void;
@@ -12,7 +11,6 @@ interface ImageInputProps {
 }
 
 const ImageInput = ({
-  id,
   preview,
   previewAlt,
   onImageUpload,
@@ -36,7 +34,6 @@ const ImageInput = ({
     >
       <Form.Control
         type="file"
-        id={id}
         className={styles.inputFile}
         onChange={onChange}
         ref={fileInputRef}

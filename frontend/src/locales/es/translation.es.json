@@ -352,6 +352,15 @@
     }
   },
   "create_car": {
+    "title": "Crear auto",
+    "car_info": "Información del auto",
+    "car_brand": "Marca del auto",
+    "car_description": "Descripción del auto",
+    "car_plate": "Patente del auto",
+    "available_seats": "Asientos disponibles",
+    "car_image": "Imagen del auto",
+    "car_features": "Características del auto",
+    "create": "Crear auto",
     "success": {
       "title": "¡Auto creado!",
       "message": "¡Tu auto fue creado correctamente!"
@@ -571,6 +580,13 @@
     "error": {
       "title": "No se pudo obtener las características del auto",
       "default": "Ocurrió un error al obtener las características del auto"
+    }
+  },
+  "car_brands": {
+    "unknown": "Desconocida",
+    "error": {
+      "title": "No se pudo obtener las marcas de autos",
+      "default": "Ocurrió un error al obtener las marcas de autos"
     }
   },
   "discovery": {

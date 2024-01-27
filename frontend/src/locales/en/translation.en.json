@@ -353,6 +353,15 @@
     }
   },
   "create_car": {
+    "title": "Create a car",
+    "car_info": "Car information",
+    "car_brand": "Car brand",
+    "car_description": "Car description",
+    "car_plate": "Car plate",
+    "available_seats": "Available seats",
+    "car_image": "Car image",
+    "car_features": "Car features",
+    "create": "Create car",
     "success": {
       "title": "Car created!",
       "message": "The car was created successfully!"
@@ -571,6 +580,13 @@
     "error": {
       "title": "Could not fetch the car features",
       "default": "An error occurred while fetching the car features"
+    }
+  },
+  "car_brands": {
+    "unknown": "Unknown",
+    "error": {
+      "title": "Could not fetch the car brands",
+      "default": "An error occurred while fetching the car brands"
     }
   },
   "discovery": {
