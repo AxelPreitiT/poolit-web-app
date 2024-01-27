@@ -276,6 +276,14 @@
       "cars_create": "Create new car",
       "cars_empty": "You have no created cars"
     },
+    "loading": {
+      "profile": "Loading profile",
+      "passenger": "Loading passenger information",
+      "driver": "Loading driver information",
+      "reviews": "Loading reviews",
+      "trips": "Loading trips",
+      "cars": "Loading cars"
+    },
     "error": {
       "title": "Could not fetch your profile",
       "default": "An error occurred while fetching your profile"
@@ -612,7 +620,7 @@
     }
   },
   "loading": {
-    "default": "Revving up the engine"
+    "default": "Revving up"
   },
   "spinner": {
     "loading": "Loading..."

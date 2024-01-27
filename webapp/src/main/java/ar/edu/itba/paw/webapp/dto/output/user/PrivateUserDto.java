@@ -12,6 +12,7 @@ import java.net.URI;
 //Avoid 'type' field from being added to response on JSON
 @XmlType(name = "")
 public class PrivateUserDto extends PublicUserDto{
+    private long userId;
 
     private String email;
 
@@ -39,6 +40,7 @@ public class PrivateUserDto extends PublicUserDto{
 
     protected PrivateUserDto(final UriInfo uriInfo, final User user){
         super(uriInfo,user);
+        this.userId = user.getUserId();
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.cityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(user.getBornCity().getId())).build();
@@ -54,6 +56,16 @@ public class PrivateUserDto extends PublicUserDto{
     }
     public static PrivateUserDto fromUser(final UriInfo uriInfo, final User user){
         return new PrivateUserDto(uriInfo,user);
+    }
+
+    @Override
+    public long getUserId() {
+        return userId;
+    }
+
+    @Override
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {

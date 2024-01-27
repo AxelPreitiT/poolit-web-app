@@ -8,10 +8,11 @@ import {
 import { useTranslation } from "react-i18next";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import CardCar from "@/components/cardCar/CardCar";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import useUserCars from "@/hooks/cars/useUserCars.tsx";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import styles from "./styles.module.scss";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
@@ -39,7 +40,12 @@ const DriverList = ({
   return (
     <div>
       {reviewsDriver == undefined || isLoadingReviewsDriver ? (
-        <SpinnerComponent />
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.reviews")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.review_as_driver")}
@@ -48,11 +54,16 @@ const DriverList = ({
           empty_icon={"book"}
           data={reviewsDriver.data}
           component_name={ShortReview}
-          link={publicsDriverReviewsPath.replace(":id", String(id))}
+          link={publicsDriverReviewsPath.replace(":id", id.toString())}
         />
       )}
       {futureCreatedTrips == undefined || isLoadingFutureCreatedTrips ? (
-        <SpinnerComponent />
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.trips")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.created_next_title")}
@@ -65,7 +76,12 @@ const DriverList = ({
         />
       )}
       {pastCreatedTrips == undefined || isLoadingPastCreatedTrips ? (
-        <SpinnerComponent />
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.trips")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.created_prev_title")}
@@ -78,7 +94,12 @@ const DriverList = ({
         />
       )}
       {cars == undefined || isLoadingUserCars ? (
-        <SpinnerComponent />
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.cars")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.cars")}

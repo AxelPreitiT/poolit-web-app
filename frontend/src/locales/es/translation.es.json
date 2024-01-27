@@ -275,6 +275,14 @@
       "cars_create": "Crear nuevo auto",
       "cars_empty": "No tienes autos creados"
     },
+    "loading": {
+      "profile": "Cargando perfil",
+      "passenger": "Cargando información como pasajero",
+      "driver": "Cargando información como conductor",
+      "reviews": "Cargando opiniones",
+      "trips": "Cargando viajes",
+      "cars": "Cargando autos"
+    },
     "error": {
       "title": "No se pudo obtener tu perfil",
       "default": "Ocurrió un error al obtener tu perfil"
