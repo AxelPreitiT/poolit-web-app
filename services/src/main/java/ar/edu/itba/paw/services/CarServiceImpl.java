@@ -27,7 +27,6 @@ public class CarServiceImpl implements CarService {
 
     private final UserService userService;
 
-    //TODO: cambiar la imagen a la default para el auto
     @Value("classpath:images/car.jpeg")
     private Resource defaultImg;
 
