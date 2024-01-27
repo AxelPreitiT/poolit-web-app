@@ -149,7 +149,7 @@ const Navbar = () => {
                     <div className={styles.dropdown_text}>
                       <i className="bi bi-box-arrow-right light-text h5"></i>
                     </div>
-                    <h5 className={styles.dropdown_text}>
+                    <h5 className={styles.dropdown_text + " ms-2"}>
                       {t("navbar.log_out")}
                     </h5>
                   </div>
