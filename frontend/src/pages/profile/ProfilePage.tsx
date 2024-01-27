@@ -84,6 +84,7 @@ const ProfilePage = () => {
                 futureReservedTripsUri={createPaginationUri(currentUser.futureReservedTripsUri, 1 , 3)}
                 pastReservedTripsUri={createPaginationUri(currentUser.pastReservedTripsUri, 1 , 3)}
                 reviewsPassengerUri={createPaginationUri(currentUser.reviewsPassengerUri, 1 , 3)}
+                id = {currentUser.id}
               />
             }
             left_title={t("roles.driver")}
@@ -92,6 +93,7 @@ const ProfilePage = () => {
                 futureCreatedTripsUri={createPaginationUri(currentUser.futureCreatedTripsUri, 1 , 3)}
                 pastCreatedTripsUri={createPaginationUri(currentUser.pastCreatedTripsUri, 1 , 3)}
                 reviewsDriverUri={createPaginationUri(currentUser.reviewsDriverUri, 1 , 3)}
+                id = {currentUser.id}
               />
             }
           />

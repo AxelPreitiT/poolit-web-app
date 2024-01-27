@@ -12,12 +12,14 @@ export interface PassengerListProp {
   futureReservedTripsUri: string;
   pastReservedTripsUri: string;
   reviewsPassengerUri : string;
+  id: number;
 }
 
 const PassengerList = ({
   futureReservedTripsUri,
   pastReservedTripsUri,
-  reviewsPassengerUri
+  reviewsPassengerUri,
+  id
 }: PassengerListProp) => {
   const { t } = useTranslation();
 
@@ -38,7 +40,7 @@ const PassengerList = ({
         empty_icon={"book"}
         data={reviewsPassenger.data}
         component_name={ShortReview}
-        link={publicsPassangerReviewsPath.replace(":id", String(5))}
+        link={publicsPassangerReviewsPath.replace(":id", String(id))}
       />)}
       {futureReservedTrips == undefined || isLoadingFutureReservedTrips ? (
           <SpinnerComponent />
