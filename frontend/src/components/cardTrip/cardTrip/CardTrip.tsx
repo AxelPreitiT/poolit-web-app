@@ -90,9 +90,7 @@ const CardTrip = ({
             </div>
             <h3>
               {t("format.price", {
-                priceInt: trip.pricePerTrip,
-                princeFloat: 0,
-              })}
+                priceInt: trip.pricePerTrip})}
             </h3>
           </div>
         </div>

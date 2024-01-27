@@ -60,7 +60,7 @@ const Navbar = () => {
               />
             </Link>
           </div>
-          {isLoged &&
+          {!isLoading && isLoged &&
             sections.map((section) => (
               <div
                 className={`nav-section-item ${
@@ -73,7 +73,7 @@ const Navbar = () => {
                 </Link>
               </div>
             ))}
-          {isLoged &&
+          {!isLoading && isLoged &&
             !isLoading &&
             !(currentUser === undefined) &&
             currentUser.role == UsersRoles.ADMIN && (

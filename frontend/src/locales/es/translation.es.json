@@ -1,6 +1,6 @@
 {
   "format": {
-    "price": "$ {{priceInt}}.{{princeFloat}}",
+    "price": "$ {{priceInt}}",
     "plate": "Patente:{{carPlate}}",
     "name": "{{name}} {{surname}}",
     "date": "( {{date}} )"
