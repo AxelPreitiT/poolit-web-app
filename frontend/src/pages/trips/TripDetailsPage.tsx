@@ -30,14 +30,15 @@ const TripDetailsPage = () => {
   const { isLoading: isLoadingDriver, driver: driver } = usePublicUserByUri(
     trip?.driverUri
   );
+  const isDriver = trip?.driverUri === currentUser?.selfUri;
 
   const {
     isLoading: isLoadingRole,
     passangersRole: passangerRole,
     isError: isError,
-  } = useRolePassanger(currentUser, trip?.passengersUriTemplate);
+  } = useRolePassanger(isDriver, currentUser, trip?.passengersUriTemplate);
   const isPassanger = !isError;
-  const isDriver = trip?.driverUri === currentUser?.selfUri;
+
 
   return (
     <div>
@@ -85,7 +86,6 @@ const TripDetailsPage = () => {
                 trip={trip}
                 isPassanger={isPassanger}
                 isDriver={isDriver}
-                status={Status.FINISHED}
               />
               <RightDetails
                 isPassanger={isPassanger}

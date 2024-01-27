@@ -1,15 +1,9 @@
-import {useTranslation} from "react-i18next";
-import useQueryError from "@/hooks/errors/useQueryError.tsx";
-import {useEffect} from "react";
-import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 import {useQuery} from "@tanstack/react-query";
 import PassangerService from "@/services/PassangerService.ts";
 import {parseTemplate} from "url-template";
 import UserPrivateModel from "@/models/UserPrivateModel.ts";
 
-const useRolePassanger = (currentUser?: UserPrivateModel, uri?: string) => {
-    const { t } = useTranslation();
-    const onQueryError = useQueryError();
+const useRolePassanger = ( isDriver:boolean, currentUser?: UserPrivateModel, uri?: string) => {
 
     const query = useQuery({
         queryKey: ["rolePassanger"],
@@ -25,20 +19,10 @@ const useRolePassanger = (currentUser?: UserPrivateModel, uri?: string) => {
             return await PassangerService.getPassangerRole(uriAllPassangers);
         },
         retry: false,
-        enabled: !!uri,
+        enabled: !!uri || isDriver,
     });
 
-    const { isError, error, data, isLoading, isPending } = query;
-
-    useEffect(() => {
-        if (isError) {
-            onQueryError({
-                error,
-                title: t("passanger.error.role_title"),
-                timeout: defaultToastTimeout,
-            });
-        }
-    }, [isError, error, onQueryError, t]);
+    const { isError, data, isLoading, isPending } = query;
 
     return {
         ...query,
