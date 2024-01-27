@@ -10,7 +10,7 @@ const usePassangerByUri = (uri?: string) => {
     const onQueryError = useQueryError();
 
     const query = useQuery({
-        queryKey: ["passangers", uri],
+        queryKey: ["passangers"],
         queryFn: async () => {
             return await passangerService.getPassangersTripsByUri(uri as string);
         },
