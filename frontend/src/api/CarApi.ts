@@ -1,9 +1,10 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
-import { AxiosPromise, AxiosResponse } from "axios";
+import { AxiosPromise } from "axios";
 import CarModel from "@/models/CarModel.ts";
 import UserPrivateModel from "@/models/UserPrivateModel";
 import { CreateCarFormSchemaType } from "@/forms/CreateCarForm";
 import { parseTemplate } from "url-template";
+import CreateCarModel from "@/models/CreateCarModel";
 
 class CarApi extends AxiosApi {
   public static getCarsByUser: (
@@ -12,7 +13,7 @@ class CarApi extends AxiosApi {
     return this.get<CarModel[]>(user.carsUri);
   };
 
-  public static getCarById: (uri: string) => AxiosPromise<CarModel> = (
+  public static getCarByUri: (uri: string) => AxiosPromise<CarModel> = (
     uri: string
   ) => {
     return this.get<CarModel>(uri, {
@@ -23,9 +24,9 @@ class CarApi extends AxiosApi {
   public static createCar: (
     uriTemplate: string,
     data: CreateCarFormSchemaType
-  ) => AxiosPromise<void> = (
+  ) => AxiosPromise<CreateCarModel> = async (
     uriTemplate: string,
-    { car_plate, car_brand, car_description, seats, car_features = [], image }
+    { car_plate, car_brand, car_description, seats, car_features = [] }
   ) => {
     const uri = parseTemplate(uriTemplate).expand({});
     return this.post(
@@ -42,23 +43,23 @@ class CarApi extends AxiosApi {
           "Content-Type": "application/vnd.car.v1+json",
         },
       }
-    ).then((response: AxiosResponse) => {
-      const carUri = response.headers.location as string;
-      if (carUri && image) {
-        return this.updateCarImageWithCarUri(carUri, image);
-      }
-      return response;
+    ).then((response) => {
+      return {
+        ...response,
+        data: {
+          carUri: response.headers.location,
+        },
+      };
     });
   };
 
-  private static updateCarImageWithCarUri: (
+  public static updateCarImage: (
     carUri: string,
     image: File
-  ) => AxiosPromise<void> = (carUri: string, image: File) => {
+  ) => AxiosPromise<void> = (imageUri: string, image: File) => {
     const formData = new FormData();
     formData.append("image", image);
-    // TODO: Do not concatenate the uri
-    return this.put(`${carUri}/image`, formData, {
+    return this.put(imageUri, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

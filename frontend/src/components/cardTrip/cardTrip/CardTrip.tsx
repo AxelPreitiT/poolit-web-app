@@ -35,7 +35,7 @@ const CardTrip = ({
       );
       setCityDestination(destinationCity.name);
 
-      const car = await CarService.getCarById(trip.carUri);
+      const car = await CarService.getCarByUri(trip.carUri);
       setCarTrip(car);
     };
 

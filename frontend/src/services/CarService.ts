@@ -11,15 +11,21 @@ class CarService extends Service {
     return await this.resolveQuery(CarApi.getCarsByUser(user));
   };
 
-  public static getCarById = async (uri: string): Promise<CarModel> => {
-    return await this.resolveQuery(CarApi.getCarById(uri));
+  public static getCarByUri = async (uri: string): Promise<CarModel> => {
+    return await this.resolveQuery(CarApi.getCarByUri(uri));
   };
 
   public static createCar = async (
     uriTemplate: string,
     data: CreateCarFormSchemaType
   ): Promise<void> => {
-    await this.resolveQuery(CarApi.createCar(uriTemplate, data));
+    const { carUri } = await this.resolveQuery(
+      CarApi.createCar(uriTemplate, data)
+    );
+    if (data.image) {
+      const car = await this.resolveQuery(CarApi.getCarByUri(carUri));
+      await this.resolveQuery(CarApi.updateCarImage(car.imageUri, data.image));
+    }
   };
 }
 
