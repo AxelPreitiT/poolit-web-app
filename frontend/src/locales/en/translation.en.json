@@ -584,9 +584,12 @@
   },
   "car_brands": {
     "unknown": "Unknown",
+    "searching_one": "Searching car brand",
     "error": {
       "title": "Could not fetch the car brands",
-      "default": "An error occurred while fetching the car brands"
+      "default": "An error occurred while fetching the car brands",
+      "title_one": "Could not fetch the car brand",
+      "default_one": "An error occurred while fetching the car brand"
     }
   },
   "discovery": {

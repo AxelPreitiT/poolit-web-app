@@ -4,8 +4,6 @@ import CarBrandModel from "@/models/CarBrandModel";
 import { parseTemplate } from "url-template";
 
 class CarBrandsApi extends AxiosApi {
-  private static readonly BRAND_ID_TEMPLATE_KEY: string = "/brandId";
-
   public static getCarBrands: (
     uriTemplate: string
   ) => AxiosPromise<CarBrandModel[]> = (uriTemplate: string) => {
@@ -13,15 +11,10 @@ class CarBrandsApi extends AxiosApi {
     return this.get<CarBrandModel[]>(uri);
   };
 
-  public static getCarBrandById: (
-    uriTemplate: string,
-    brandId: string
-  ) => AxiosPromise<CarBrandModel> = (uriTemplate: string, brandId: string) => {
-    const uri = parseTemplate(uriTemplate).expand({
-      [this.BRAND_ID_TEMPLATE_KEY]: brandId,
-    });
-    return this.get<CarBrandModel>(uri);
-  };
+  public static getCarBrandByUri: (uri: string) => AxiosPromise<CarBrandModel> =
+    (uri: string) => {
+      return this.get<CarBrandModel>(uri);
+    };
 }
 
 export default CarBrandsApi;

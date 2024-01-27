@@ -584,9 +584,12 @@
   },
   "car_brands": {
     "unknown": "Desconocida",
+    "searching_one": "Buscando la marca del auto",
     "error": {
       "title": "No se pudo obtener las marcas de autos",
-      "default": "Ocurrió un error al obtener las marcas de autos"
+      "default": "Ocurrió un error al obtener las marcas de autos",
+      "title_one": "No se pudo obtener la marca del auto",
+      "default_one": "Ocurrió un error al obtener la marca del auto"
     }
   },
   "discovery": {

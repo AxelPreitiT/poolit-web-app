@@ -9,17 +9,10 @@ class CarBrandsService extends Service {
     return await this.resolveQuery(CarBrandsApi.getCarBrands(uriTemplate));
   };
 
-  public static getCarBrandById: (
-    uriTemplate: string,
-    brandId: string
-  ) => Promise<CarBrandModel> = async (
-    uriTemplate: string,
-    brandId: string
-  ) => {
-    return await this.resolveQuery(
-      CarBrandsApi.getCarBrandById(uriTemplate, brandId)
-    );
-  };
+  public static getCarBrandById: (uri: string) => Promise<CarBrandModel> =
+    async (uri: string) => {
+      return await this.resolveQuery(CarBrandsApi.getCarBrandByUri(uri));
+    };
 }
 
 export default CarBrandsService;
