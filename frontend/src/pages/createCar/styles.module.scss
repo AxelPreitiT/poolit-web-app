@@ -40,6 +40,7 @@
 .formColumn .formHeader > * {
   font-size: 1.5rem;
   font-weight: 600;
+  text-wrap: nowrap;
 }
 
 .formGroup {
@@ -124,4 +125,29 @@
 
 .activePill {
   @extend %pill;
+}
+
+@media (max-width: 1000px) {
+  .formRow {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 1rem;
+  }
+
+  .formRow {
+    width: 100%;
+  }
+
+  .formImage {
+    width: 100%;
+  }
+
+  .imageInput {
+    position: relative;
+    max-height: 10rem;
+  }
+
+  %pill {
+    font-size: 0.8rem;
+  }
 }
