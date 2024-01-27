@@ -237,7 +237,7 @@
     },
     "car_plate": {
       "required": "La patente del auto es requerida",
-      "invalid": "La patente es inválida, debe tener alguno de los siguientes formatos: {{formats}}"
+      "invalid": "La patente es inválida, debe tener alguno de los siguientes formatos: {{- format}}"
     }
   },
   "profile": {
@@ -496,7 +496,7 @@
   "search": {
     "title": "Buscar viajes",
     "loading": "Buscando viajes",
-    "page_selector": "Mostrando los resultados {{first_result}} - {{last_result}} de {{total_pages}} páginas",
+    "page_selector": "Mostrando los resultados {{first_result}} - {{last_result}} de {{total_pages}} página{{plural}}",
     "no_results": {
       "title": "Parece que no hay viajes disponibles para tu búsqueda",
       "body": "No te preocupes, seguro encontrás algo pronto"

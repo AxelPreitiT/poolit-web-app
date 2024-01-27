@@ -238,7 +238,7 @@
     },
     "car_plate": {
       "required": "The car plate is required",
-      "invalid": "The car plate is in invalid, it should follow one of the following formats: {{formats}}"
+      "invalid": "The car plate is in invalid, it should follow one of the following formats: {{- format}}"
     }
   },
   "profile": {
@@ -497,7 +497,7 @@
   "search": {
     "title": "Trips search",
     "loading": "Looking for trips",
-    "page_selector": "Shoowing {{first_result}} - {{last_result}} found results of {{total_pages}} pages",
+    "page_selector": "Showing {{first_result}} - {{last_result}} found results of {{total_pages}} page{{plural}}",
     "no_results": {
       "title": "It seems that there are no trips that match your search",
       "body": "Don't worry, you'll find a trip that suits your needs soon"

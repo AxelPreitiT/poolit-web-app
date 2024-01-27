@@ -100,6 +100,11 @@
   width: 100%;
 }
 
+.submit i,
+.submit svg {
+  font-size: 2rem;
+}
+
 %pill {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   font-size: 1rem;
