@@ -36,8 +36,8 @@ const ReservedPage = () => {
       <MainHeader title={t("reserved_trips.title")} />
       <div className={styles.container_tab}>
         <TabComponent
-          right_title={t("reserved_trips.future")}
-          right_component={
+          left_title={t("reserved_trips.future")}
+          left_component={
             uriFutureTrips == null ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
@@ -59,8 +59,8 @@ const ReservedPage = () => {
               />
             )
           }
-          left_title={t("reserved_trips.past")}
-          left_component={
+          right_title={t("reserved_trips.past")}
+          right_component={
             uriPastTrips == null ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}

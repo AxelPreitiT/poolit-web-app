@@ -7,7 +7,7 @@ interface TabComponentProps {
   left_component: React.ReactNode;
   right_title: string;
   left_title: string;
-  active?: string;
+  active?: "left" | "right";
 }
 
 const TabComponent = ({
@@ -17,26 +17,26 @@ const TabComponent = ({
   left_title,
   active,
 }: TabComponentProps) => {
-  const defaultActiveKey = active ? active : "right";
+  const defaultActiveKey = active ? active : "left";
 
   return (
     <Tab.Container id="center-tabs-example" defaultActiveKey={defaultActiveKey}>
       <div>
         <Nav variant="pills" className={styles.nav_prop}>
           <Nav.Item className={styles.fulltab}>
-            <Nav.Link eventKey="right" className={styles.custom_tab}>
-              <h3>{right_title}</h3>
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item className={styles.fulltab}>
             <Nav.Link eventKey="left" className={styles.custom_tab}>
               <h3>{left_title}</h3>
             </Nav.Link>
           </Nav.Item>
+          <Nav.Item className={styles.fulltab}>
+            <Nav.Link eventKey="right" className={styles.custom_tab}>
+              <h3>{right_title}</h3>
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
         <Tab.Content>
-          <Tab.Pane eventKey="right">{right_component}</Tab.Pane>
           <Tab.Pane eventKey="left">{left_component}</Tab.Pane>
+          <Tab.Pane eventKey="right">{right_component}</Tab.Pane>
         </Tab.Content>
       </div>
     </Tab.Container>
