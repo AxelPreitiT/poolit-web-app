@@ -36,6 +36,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
                   surname: UserTrip.surname,
                 })}
               </h4>
+              <h4>{passanger.passengerState}</h4>
               <span style={{ color: "gray", fontStyle: "italic" }}>
             {t("format.date", {
               date: passanger.startDateTime,
