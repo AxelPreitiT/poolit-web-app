@@ -1,4 +1,4 @@
-INSERT INTO images values (3,null);
+INSERT INTO images values (3,null,null,null,null);
 INSERT INTO provinces values (1,'CABA');
 INSERT INTO provinces values (2,'Buenos Aires');
 INSERT INTO provinces values (3,'Santa Fe');

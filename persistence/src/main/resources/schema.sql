@@ -1,7 +1,10 @@
 CREATE TABLE IF NOT EXISTS images(
     image_id SERIAL PRIMARY KEY,
-    bytea BYTEA
-);
+    bytea BYTEA,
+    small BYTEA,
+    medium BYTEA,
+    large BYTEA
+                                 );
 
 CREATE TABLE IF NOT EXISTS provinces (
                                          province_id SERIAL NOT NULL,

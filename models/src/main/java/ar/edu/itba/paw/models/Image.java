@@ -22,7 +22,6 @@ public class Image {
     }
 
     @Column(name = "bytea")
-    @Basic(fetch = FetchType.LAZY)
     private byte[] data;
 
     @Column(name = "small")
