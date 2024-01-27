@@ -48,7 +48,7 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
             <Link to={publicCarPath.replace(":id", String(car.carId))}>
                 <span className={styles.link_trip_details}>{car.infoCar}</span>
             </Link>
-          <StarRating rating={car.rating} color={"#ffffff"} size="10" />
+          <StarRating rating={car.rating} color={"#ffffff"}/>
         </div>
       </div>
       <div className={styles.show_row}>

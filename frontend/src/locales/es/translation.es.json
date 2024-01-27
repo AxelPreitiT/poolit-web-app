@@ -272,6 +272,7 @@
     "passenger": "Pasajero"
   },
   "reviews": {
+    "no_raiting" : "No reviews",
     "title": "opiniones",
     "NOT_FRIENDLY": "No amigable",
     "DANGEROUS_DRIVER": "Conductor peligroso",

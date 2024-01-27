@@ -274,6 +274,7 @@
   },
 
   "reviews": {
+    "no_raiting" : "Sin reseñas",
     "title": "Reviews",
     "DISRESPECTFUL": "Irrespetuoso",
     "INAPPROPRIATE_BEHAVIOUR": "Comportamiento inapropiado",
