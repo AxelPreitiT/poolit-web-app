@@ -12,7 +12,7 @@ public interface UserService {
     User createUser(final String username, final String surname, final String email,
                     final String phone, final String password, final long bornCityId, final String mailLocaleString, String role, byte[] imgData) throws EmailAlreadyExistsException, CityNotFoundException;
 
-    byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException;
+    Image getUserImage(final long userId,final Image.Size size) throws UserNotFoundException, ImageNotFoundException;
 
     void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException;
 

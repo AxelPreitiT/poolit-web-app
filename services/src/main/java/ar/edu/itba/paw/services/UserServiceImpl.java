@@ -93,12 +93,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public byte[] getUserImage(final long userId) throws UserNotFoundException, ImageNotFoundException {
+    public Image getUserImage(final long userId, Image.Size size) throws UserNotFoundException, ImageNotFoundException {
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
         try {
-            return imageService.getImageByteaOrDefault(user.getUserImageId(),defaultImg.getInputStream());
+            return imageService.getImageOrDefault(user.getUserImageId(),size,defaultImg.getInputStream());
+//            return imageService.getImageByteaOrDefault(user.getUserImageId(),size,defaultImg.getInputStream());
         }catch (IOException e){
-            return new byte[0];
+            throw new ImageNotFoundException();
         }
     }
 
@@ -106,13 +107,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException{
         final User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        if(user.getUserImageId() == DEFAULT_IMAGE_ID){ //fix migration in pawserver
-            //creamos una imagen para no pisar la default
-            final long imageId = imageService.createImage(content).getImageId();
-            userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
-            return;
+        final long oldImageId = user.getUserImageId();
+        final long imageId = imageService.createImage(content).getImageId();
+        if(oldImageId != DEFAULT_IMAGE_ID){
+            try {
+                imageService.deleteImage(oldImageId);
+            }catch (Exception e){
+                LOGGER.error("There was an error trying to delete image with id {} for user {}",oldImageId,userId,e);
+            }
         }
-        imageService.updateImage(content,user.getUserImageId());
+        userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
+//        if(user.getUserImageId() == DEFAULT_IMAGE_ID){ //fix migration in pawserver
+//            //creamos una imagen para no pisar la default
+//            final long imageId = imageService.createImage(content).getImageId();
+//            userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
+//            return;
+//        }
+//        imageService.updateImage(content,user.getUserImageId());
     }
 
 //    @Transactional

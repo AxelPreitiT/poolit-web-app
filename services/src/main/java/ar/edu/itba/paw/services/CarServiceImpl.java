@@ -7,10 +7,9 @@ import ar.edu.itba.paw.interfaces.persistence.CarDao;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.ImageService;
 import ar.edu.itba.paw.interfaces.services.UserService;
-import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.CarBrand;
-import ar.edu.itba.paw.models.FeatureCar;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -30,7 +30,8 @@ public class CarServiceImpl implements CarService {
 
     private final UserService userService;
 
-    //TODO: cambiar la imagen a la default para el auto
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarServiceImpl.class);
+
     @Value("classpath:images/car.jpeg")
     private Resource defaultImg;
 
@@ -108,12 +109,12 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public byte[] getCarImage(final long carId) throws CarNotFoundException, ImageNotFoundException {
+    public Image getCarImage(final long carId, final Image.Size size) throws CarNotFoundException, ImageNotFoundException {
         final Car car = findById(carId).orElseThrow(CarNotFoundException::new);
         try {
-            return imageService.getImageByteaOrDefault(car.getImageId(),defaultImg.getInputStream());
+            return imageService.getImageOrDefault(car.getImageId(),size,defaultImg.getInputStream());
         }catch (IOException e){
-            return new byte[0];
+            throw new ImageNotFoundException();
         }
     }
 
@@ -121,12 +122,22 @@ public class CarServiceImpl implements CarService {
     @Override
     public void updateCarImage(final long carId, final byte[] content) throws CarNotFoundException, ImageNotFoundException{
         final Car car = findById(carId).orElseThrow(CarNotFoundException::new);
-        if(car.getImageId() == DEFAULT_IMAGE_ID){
-            //creamos una imagen para no pisar la default
-            final long imageId = imageService.createImage(content).getImageId();
-            carDao.modifyCar(carId, car.getInfoCar(), car.getSeats(), car.getFeatures(), imageId);
-            return;
+        final long oldImageId = car.getImageId();
+        final long imageId = imageService.createImage(content).getImageId();
+        if(oldImageId != DEFAULT_IMAGE_ID){
+            try {
+                imageService.deleteImage(oldImageId);
+            }catch (Exception e){
+                LOGGER.error("There was an error trying to delete image with id {} for car {}",oldImageId,car.getCarId(),e);
+            }
         }
-        imageService.updateImage(content,car.getImageId());
+        carDao.modifyCar(carId, car.getInfoCar(), car.getSeats(), car.getFeatures(), imageId);
+//        if(car.getImageId() == DEFAULT_IMAGE_ID){
+//            //creamos una imagen para no pisar la default
+//            final long imageId = imageService.createImage(content).getImageId();
+//            carDao.modifyCar(carId, car.getInfoCar(), car.getSeats(), car.getFeatures(), imageId);
+//            return;
+//        }
+//        imageService.updateImage(content,car.getImageId());
     }
 }
