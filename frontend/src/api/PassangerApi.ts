@@ -31,7 +31,7 @@ class PassangerApi extends AxiosApi{
                         prev: prev,
                         next: next,
                         last: last,
-                        total_pages: total,
+                        totalPages: total,
                         data: passangers
                     }
                 };
