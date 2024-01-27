@@ -8,8 +8,8 @@ export interface ProfilePropProps {
 const ProfileProp = ({ prop, text }: ProfilePropProps) => {
   return (
     <div>
-      <h6 className={styles.propProfile}>{prop}</h6>
-      <h4>{text}</h4>
+      <p className={styles.propHeader}>{prop}</p>
+      <p className={styles.propValue}>{text}</p>
     </div>
   );
 };

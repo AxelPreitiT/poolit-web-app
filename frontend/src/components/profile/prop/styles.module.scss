@@ -1,5 +1,21 @@
 @use "@/colors.module.scss" as colors;
 
-.propProfile {
-  color: #6c757d;
+.propHeader {
+  color: colors.$italic-text-color;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.propValue {
+  color: colors.$text-color;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rating {
+  @extend .propValue;
+  color: colors.$secondary-color;
+  font-size: 2rem;
 }

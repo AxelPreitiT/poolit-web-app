@@ -251,6 +251,7 @@
       "trips": "Trips created",
       "rating_driver": "Driver rating",
       "rating_passenger": "Passenger rating",
+      "no_rating": "No reviews yet",
       "es": "Spanish",
       "en": "English"
     },

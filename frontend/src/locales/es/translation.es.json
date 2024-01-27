@@ -250,6 +250,7 @@
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
       "rating_passenger": "Valoración como pasajero",
+      "no_rating": "No tiene opiniones aún",
       "es": "Español",
       "en": "Ingles"
     },
