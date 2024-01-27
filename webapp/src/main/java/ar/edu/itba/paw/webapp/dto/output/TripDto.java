@@ -30,6 +30,10 @@ public class TripDto {
     private Trip.TripStatus tripStatus;
     private boolean isDeleted;
     private LocalDateTime lastOccurrence;
+    private String driverReviewsUriTemplate;
+    private String passengerReviewsUriTemplate;
+    private String carReviewsUriTemplate;
+    private String reportsUriTemplate;
 
 
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
@@ -49,6 +53,10 @@ public class TripDto {
         ans.tripStatus = trip.getQueryTripStatus();
         ans.isDeleted = trip.isDeleted();
         ans.lastOccurrence = trip.getLastOccurrence();
+        ans.driverReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.passengerReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.carReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).path(UrlHolder.REVIEWS_ENTITY).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.reportsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
         ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).toTemplate() + "{/userId}";
         ans.driverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(trip.getDriver().getUserId())).build();
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
@@ -224,5 +232,37 @@ public class TripDto {
 
     public void setLastOccurrence(LocalDateTime lastOccurrence) {
         this.lastOccurrence = lastOccurrence;
+    }
+
+    public String getDriverReviewsUriTemplate() {
+        return driverReviewsUriTemplate;
+    }
+
+    public void setDriverReviewsUriTemplate(String driverReviewsUriTemplate) {
+        this.driverReviewsUriTemplate = driverReviewsUriTemplate;
+    }
+
+    public String getPassengerReviewsUriTemplate() {
+        return passengerReviewsUriTemplate;
+    }
+
+    public void setPassengerReviewsUriTemplate(String passengerReviewsUriTemplate) {
+        this.passengerReviewsUriTemplate = passengerReviewsUriTemplate;
+    }
+
+    public String getCarReviewsUriTemplate() {
+        return carReviewsUriTemplate;
+    }
+
+    public void setCarReviewsUriTemplate(String carReviewsUriTemplate) {
+        this.carReviewsUriTemplate = carReviewsUriTemplate;
+    }
+
+    public String getReportsUriTemplate() {
+        return reportsUriTemplate;
+    }
+
+    public void setReportsUriTemplate(String reportsUriTemplate) {
+        this.reportsUriTemplate = reportsUriTemplate;
     }
 }
