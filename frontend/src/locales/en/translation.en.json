@@ -227,6 +227,18 @@
       "invalid": "The maximum price must be a number",
       "min": "The maximum price must be at least {{min}}",
       "lower_than_min": "The maximum price must be greater than the minimum price"
+    },
+    "car_brand": {
+      "required": "The car brand is required"
+    },
+    "car_description": {
+      "required": "The car description is required",
+      "min": "The car description must have at least {{min}} characters",
+      "max": "The car description must have at most {{max}} characters"
+    },
+    "car_plate": {
+      "required": "The car plate is required",
+      "invalid": "The car plate is in invalid, it should follow one of the following formats: {{formats}}"
     }
   },
   "profile": {
@@ -338,6 +350,16 @@
     "error": {
       "title": "Trip creation failed",
       "default": "An error occurred while creating the trip"
+    }
+  },
+  "create_car": {
+    "success": {
+      "title": "Car created!",
+      "message": "The car was created successfully!"
+    },
+    "error": {
+      "title": "Car creation failed",
+      "default": "An error occurred while creating the car"
     }
   },
   "recommended_trips": {
@@ -583,7 +605,7 @@
     "driver": "Driver",
     "passangers": "Passangers",
     "car": "Car",
-    "close" : "close",
+    "close": "close",
     "submit": "submit",
     "report": {
       "title": "Who do you want to report?",

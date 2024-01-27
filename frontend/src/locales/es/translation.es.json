@@ -226,6 +226,18 @@
       "invalid": "El precio máximo debe ser un número",
       "min": "El precio máximo debe ser al menos {{min}}",
       "lower_than_min": "El precio máximo debe ser mayor o igual al precio mínimo"
+    },
+    "car_brand": {
+      "required": "La marca del auto es requerida"
+    },
+    "car_description": {
+      "required": "La descripción del auto es requerida",
+      "min": "La descripción del auto debe tener al menos {{min}} caracteres",
+      "max": "La descripción del auto debe tener como máximo {{max}} caracteres"
+    },
+    "car_plate": {
+      "required": "La patente del auto es requerida",
+      "invalid": "La patente es inválida, debe tener alguno de los siguientes formatos: {{formats}}"
     }
   },
   "profile": {
@@ -335,8 +347,25 @@
       "message": "¡Tu viaje fue creado correctamente!"
     },
     "error": {
-      "title": "Inicio de sesión fallido",
+      "title": "Creación de viaje fallida",
       "default": "Ocurrió un error al crear el viaje"
+    }
+  },
+  "create_car": {
+    "success": {
+      "title": "¡Auto creado!",
+      "message": "¡Tu auto fue creado correctamente!"
+    },
+    "error": {
+      "title": "Creación de auto fallida",
+      "default": "Ocurrió un error al crear el auto"
+    }
+  },
+  "recommended_trips": {
+    "title": "Viajes recomendados",
+    "error": {
+      "title": "No se pudo obtener los viajes recomendados",
+      "default": "Ocurrió un error al obtener los viajes recomendados"
     }
   },
   "search_trips": {
@@ -359,13 +388,6 @@
     "error": {
       "title": "Could not search for trips",
       "default": "An error occurred while fetching the trips"
-    }
-  },
-  "recommended_trips": {
-    "title": "Viajes recomendados",
-    "error": {
-      "title": "No se pudo obtener los viajes recomendados",
-      "default": "Ocurrió un error al obtener los viajes recomendados"
     }
   },
   "admin": {
@@ -583,7 +605,7 @@
     "driver": "Conductor",
     "passangers": "Pasajero",
     "car": "Coche",
-    "close" : "Cerrar",
+    "close": "Cerrar",
     "submit": "Subir",
     "report": {
       "title": "¿A quien quieres reportar?",
