@@ -40,3 +40,26 @@
   }
 }
 
+// --------------- Loading spinner ----------------
+.loadingContainer {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.loadingIcon {
+  height: 6rem;
+  width: 6rem;
+}
+
+.loadingSmallIcon {
+  height: 3rem;
+  width: 3rem;
+}
+
+.loadingDescription {
+  font-size: 2rem;
+}
+
+.loadingSmallDescription {
+  font-size: 1.5rem;
+}

@@ -411,6 +411,7 @@
   },
   "admin": {
     "title": "Administrador",
+    "loading": "Cargando reportes",
     "empty": "No hay denuncias todavía",
     "error": {
       "title": "No se pudo obtener las denuncias",
@@ -418,6 +419,7 @@
     },
     "report": {
       "detail": "Detalles de la denuncia",
+      "loading": "Cargando denuncia",
       "reported": "Denunció a",
       "published": "Denuncias publicados",
       "received": "Denuncias recibidos",
@@ -427,6 +429,9 @@
       "reason": "Motivo del denuncia",
       "passenger": "(Pasajero)",
       "driver": "(Conductor)"
+    },
+    "user": {
+      "loading": "Cargando usuario"
     }
   },
   "trip_detail": {
@@ -443,6 +448,7 @@
     },
     "passengers": {
       "header": "Pasajeros",
+      "loading": "Cargando pasajeros",
       "btn_accept": "Aceptar",
       "btn_delete": "Rechazar",
       "reservation_started": "La reserva ya ha empezado.",
@@ -577,6 +583,11 @@
       "role_title": "Ocurrió un error al obtener el rol del pasajero"
     }
   },
+  "trip": {
+    "title": "Viajes",
+    "loading": "Cargando viajes",
+    "loading_one": "Cargando viaje"
+  },
   "car": {
     "error": {
       "yours": "Ocurrió un error al obtener tus autos",
@@ -586,6 +597,7 @@
       "title": "No se pudo obtener el auto",
       "none": "Crea un auto para poder empezar a ofrecer viajes"
     },
+    "loading": "Cargando auto",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Marca: {{brand}}",
     "license_plate": "Patente: {{license_plate}}"
@@ -620,7 +632,8 @@
     }
   },
   "loading": {
-    "default": "Calentando motores"
+    "default": "Calentando motores",
+    "items": "Cargando {{items}}"
   },
   "spinner": {
     "loading": "Cargando..."

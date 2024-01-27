@@ -89,3 +89,17 @@
   opacity: 0.5;
 }
 
+// --------------- Loading spinner ----------------
+.loadingContainer {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.loadingIcon {
+  height: 6rem;
+  width: 6rem;
+}
+
+.loadingDescription {
+  font-size: 2rem;
+}

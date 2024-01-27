@@ -23,7 +23,7 @@ const LoadingButton = ({
     {isLoading && showSpinner ? (
       <LoadingWheel
         iconClassName={styles.loadingIcon}
-        description=""
+        description={null}
         descriptionClassName="visually-hidden"
       />
     ) : (

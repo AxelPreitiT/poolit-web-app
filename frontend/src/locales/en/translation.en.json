@@ -412,6 +412,7 @@
   },
   "admin": {
     "title": "Admin",
+    "loading": "Loading reports",
     "empty": "There aren't any reports yet",
     "error": {
       "title": "Could not search for reports",
@@ -419,6 +420,7 @@
     },
     "report": {
       "detail": "Report Details",
+      "loading": "Loading report",
       "reported": "Reported",
       "published": "Published reports",
       "received": "Received reports",
@@ -428,6 +430,9 @@
       "reason": "Report reason",
       "passenger": "(Passenger)",
       "driver": "(Driver)"
+    },
+    "user": {
+      "loading": "Loading user"
     }
   },
   "trip_detail": {
@@ -444,6 +449,7 @@
     },
     "passengers": {
       "header": "Passengers",
+      "loading": "Loading passengers",
       "btn_accept": "Accept",
       "btn_delete": "Delete",
       "reservation_started": "The reservation has started.",
@@ -577,6 +583,11 @@
       "role_title": "An error occurred while loading the RolePassanger"
     }
   },
+  "trip": {
+    "title": "Trips",
+    "loading": "Loading trips",
+    "loading_one": "Loading trip"
+  },
   "car": {
     "error": {
       "yours": "An error occurred while loading your cars",
@@ -586,6 +597,7 @@
       "title": "Could not fetch the car",
       "none": "Create a car to start offering trips"
     },
+    "loading": "Loading car",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Brand: {{brand}}",
     "license_plate": "License plate: {{license_plate}}"
@@ -620,7 +632,8 @@
     }
   },
   "loading": {
-    "default": "Revving up"
+    "default": "Revving up",
+    "items": "Loading {{items}}"
   },
   "spinner": {
     "loading": "Loading..."

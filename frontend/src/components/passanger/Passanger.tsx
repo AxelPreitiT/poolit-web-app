@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { Button } from "react-bootstrap";
 import StarRating from "../stars/StarsRanking";
 import PassangerModel from "@/models/PassangerModel.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
+import LoadingWheel from "../loading/LoadingWheel";
 
 const PassangerComponent = (passanger: PassangerModel) => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
   return (
     <div className={styles.passanger_container}>
       {isLoading || UserTrip === undefined ? (
-        <SpinnerComponent />
+        <LoadingWheel description={t("trip_detail.passengers.loading")} />
       ) : (
         <div className={styles.left_container}>
           <CircleImg src={UserTrip.imageUri} size={70} />

@@ -2,7 +2,6 @@ import MainComponent from "@/components/utils/MainComponent.tsx";
 import MainHeader from "@/components/utils/MainHeader.tsx";
 import styles from "@/pages/admin/styles.module.scss";
 import { useTranslation } from "react-i18next";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import { useEffect, useState } from "react";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import UserService from "@/services/UserService.ts";
@@ -12,6 +11,8 @@ import CardTrip from "@/components/cardTrip/cardTrip/CardTrip.tsx";
 import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useReportById from "@/hooks/admin/useReportById.tsx";
 import { useParams } from "react-router-dom";
+import LoadingScreen from "@/components/loading/LoadingScreen";
+import LoadingWheel from "@/components/loading/LoadingWheel";
 
 //TODO rating y cantidad de reportes en los usuarios. Como traducir reportOptions. Como obtener el Report.
 
@@ -54,7 +55,7 @@ const ReportPage = () => {
           UserReporter == undefined ||
           UserReported == undefined ||
           isReportLoading ? (
-            <SpinnerComponent />
+            <LoadingScreen description={t("admin.report.loading_one")} />
           ) : (
             <div className={styles.report_content_container2}>
               <div className={styles.report_users_content_container}>
@@ -245,7 +246,7 @@ const ReportPage = () => {
                 </div>
                 <div className={styles.content_container_info}>
                   {trip == undefined || isTripLoading || isTripError ? (
-                    <SpinnerComponent />
+                    <LoadingWheel description={t("trip.loading")} />
                   ) : (
                     <CardTrip trip={trip} />
                   )}

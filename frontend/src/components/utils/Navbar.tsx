@@ -19,9 +19,9 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
 import useLogout from "@/hooks/auth/useLogout";
 import useAuthentication from "@/hooks/auth/useAuthentication";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UsersRoles from "@/enums/UsersRoles";
+import LoadingWheel from "../loading/LoadingWheel";
 
 interface Section {
   path: string;
@@ -111,7 +111,10 @@ const Navbar = () => {
               <Dropdown.Toggle variant="link" id="profile-dropdown">
                 <div className="img-profile-container">
                   {isLoading || currentUser === undefined ? (
-                    <SpinnerComponent />
+                    <LoadingWheel
+                      description={null}
+                      iconClassName="h2 secondary-text"
+                    />
                   ) : (
                     <CircleImg src={currentUser.imageUri} size={50} />
                   )}
@@ -121,7 +124,10 @@ const Navbar = () => {
                 <Dropdown.Item as={Link} to={profilePath}>
                   {isLoading || currentUser === undefined ? (
                     <div className={styles.item_dropdown}>
-                      <SpinnerComponent />
+                      <LoadingWheel
+                        description={null}
+                        iconClassName="h2 secondary-text"
+                      />
                       <h3 className={styles.dropdown_text}>
                         {t("spinner.loading")}
                       </h3>
