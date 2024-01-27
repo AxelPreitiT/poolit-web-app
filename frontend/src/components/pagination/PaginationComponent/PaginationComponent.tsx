@@ -70,7 +70,7 @@ const PaginationComponent = <T,>({
       {props && props.length > 0 ? (
         <div>
           <div>{props}</div>
-          {pageTrips.total_pages > 1 && (
+          {pageTrips.totalPages > 1 && (
             <div className={styles.pagination_btn_container}>
               <ButtonGroup className="mb-2">
                 <ToggleButton
@@ -136,7 +136,7 @@ const PaginationComponent = <T,>({
                   className={styles.btn_pagination}
                   disabled={pageTrips.next == null}
                   onClick={() =>
-                    handlePage(pageTrips?.last, pageTrips?.total_pages)
+                    handlePage(pageTrips?.last, pageTrips?.totalPages)
                   }
                 >
                   <i className="bi bi-chevron-double-right"></i>

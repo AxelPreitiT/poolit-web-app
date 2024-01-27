@@ -9,15 +9,19 @@ import TripModel from "@/models/TripModel";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import useForm, { SubmitHandlerReturnModel } from "./useForm";
+import PaginationModel from "@/models/PaginationModel";
 
 interface useSearchTripsFormProps {
   initialSearch?: Partial<SearchTripsFormSchemaType>;
-  onSubmit: SubmitHandlerReturnModel<SearchTripsFormSchemaType, TripModel[]>;
+  onSubmit: SubmitHandlerReturnModel<
+    SearchTripsFormSchemaType,
+    PaginationModel<TripModel>
+  >;
   onSuccess: ({
-    trips,
+    paginatedTrips,
     data,
   }: {
-    trips: TripModel[];
+    paginatedTrips: PaginationModel<TripModel>;
     data: SearchTripsFormSchemaType;
   }) => void;
   onError?: (error: Error) => void;
@@ -32,8 +36,11 @@ const useSearchTripsForm = ({
   const { t } = useTranslation();
   const onQueryError = useQueryError();
 
-  const onSuccess = (trips: TripModel[], data: SearchTripsFormSchemaType) => {
-    onSuccessProp({ trips, data });
+  const onSuccess = (
+    paginatedTrips: PaginationModel<TripModel>,
+    data: SearchTripsFormSchemaType
+  ) => {
+    onSuccessProp({ paginatedTrips, data });
   };
 
   const onError = (error: Error) => {

@@ -1,4 +1,9 @@
-import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from "axios";
+import {
+  AxiosInstance,
+  AxiosPromise,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
 import Axios from "./axios";
 import {
   AxiosRequestErrorInterceptor,
@@ -8,6 +13,7 @@ import {
   AxiosResponseErrorInterceptor,
   AxiosResponseInterceptor,
 } from "./responseInterceptor";
+import PaginationModel from "@/models/PaginationModel";
 
 class AxiosApi {
   private static readonly AXIOS_INSTANCE: AxiosInstance = Axios;
@@ -31,6 +37,27 @@ class AxiosApi {
         this.AXIOS_INSTANCE.interceptors.response.eject(responseId);
       }
     });
+  };
+
+  protected static getPaginationModel = <Model>(
+    response: AxiosResponse<Model[]>
+  ): AxiosResponse<PaginationModel<Model>> => {
+    const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
+    const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
+    const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
+    const last = response.headers.link?.match(/<([^>]*)>; rel="last"/)?.[1];
+    const totalPages = response.headers["x-total-pages"];
+    return {
+      ...response,
+      data: {
+        first: first,
+        prev: prev,
+        next: next,
+        last: last,
+        totalPages: totalPages,
+        data: response.data,
+      },
+    };
   };
 
   protected static get = <Response>(

@@ -386,7 +386,8 @@
       "trip": "Trip where the report happened on",
       "reason": "Report reason",
       "passenger": "(Passenger)",
-      "driver": "(Driver)"}
+      "driver": "(Driver)"
+    }
   },
   "trip_detail": {
     "title": "Trip",
@@ -468,6 +469,7 @@
   "search": {
     "title": "Trips search",
     "loading": "Looking for trips",
+    "page_selector": "Shoowing {{first_result}} - {{last_result}} found results of {{total_pages}} pages",
     "no_results": {
       "title": "It seems that there are no trips that match your search",
       "body": "Don't worry, you'll find a trip that suits your needs soon"

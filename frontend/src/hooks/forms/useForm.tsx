@@ -53,9 +53,12 @@ const useForm = <
     },
   });
 
-  const executeSubmit = () => {
+  const executeSubmit = (onValid?: () => void) => {
     trigger().then((isValid) => {
       if (isValid) {
+        if (onValid) {
+          onValid();
+        }
         mutation.mutate(getValues());
       }
     });
