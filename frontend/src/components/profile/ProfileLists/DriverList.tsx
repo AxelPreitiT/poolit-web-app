@@ -1,6 +1,10 @@
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
-import {createdTripsPath, publicsDriverReviewsPath} from "@/AppRouter";
+import {
+  createCarsPath,
+  createdTripsPath,
+  publicsDriverReviewsPath,
+} from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import CardCar from "@/components/cardCar/CardCar";
@@ -12,21 +16,23 @@ import useUserCars from "@/hooks/cars/useUserCars.tsx";
 export interface DriverListProp {
   futureCreatedTripsUri: string;
   pastCreatedTripsUri: string;
-  reviewsDriverUri : string;
+  reviewsDriverUri: string;
 }
 
 const DriverList = ({
   futureCreatedTripsUri,
   pastCreatedTripsUri,
-  reviewsDriverUri
+  reviewsDriverUri,
 }: DriverListProp) => {
   const { t } = useTranslation();
 
-  const { isLoading: isLoadingFutureCreatedTrips, data:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
-  const { isLoading: isLoadingPastCreatedTrips, data:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
-  const { isLoading: isLoadingReviewsDriver, data:reviewsDriver } = useUserReviewsByUri(reviewsDriverUri);
+  const { isLoading: isLoadingFutureCreatedTrips, data: futureCreatedTrips } =
+    useTripsByUri(futureCreatedTripsUri);
+  const { isLoading: isLoadingPastCreatedTrips, data: pastCreatedTrips } =
+    useTripsByUri(pastCreatedTripsUri);
+  const { isLoading: isLoadingReviewsDriver, data: reviewsDriver } =
+    useUserReviewsByUri(reviewsDriverUri);
   const { isLoading: isLoadingUserCars, cars } = useUserCars();
-
 
   return (
     <div>
@@ -43,7 +49,7 @@ const DriverList = ({
           link={publicsDriverReviewsPath.replace(":id", String(5))}
         />
       )}
-      {futureCreatedTrips == undefined ||  isLoadingFutureCreatedTrips? (
+      {futureCreatedTrips == undefined || isLoadingFutureCreatedTrips ? (
         <SpinnerComponent />
       ) : (
         <ListProfileContainer
@@ -56,7 +62,7 @@ const DriverList = ({
           link={createdTripsPath}
         />
       )}
-      {pastCreatedTrips == undefined ||  isLoadingPastCreatedTrips? (
+      {pastCreatedTrips == undefined || isLoadingPastCreatedTrips ? (
         <SpinnerComponent />
       ) : (
         <ListProfileContainer
@@ -79,7 +85,7 @@ const DriverList = ({
           empty_icon={"car-front-fill"}
           data={cars}
           component_name={CardCar}
-          link={createdTripsPath}
+          link={createCarsPath}
         />
       )}
     </div>
