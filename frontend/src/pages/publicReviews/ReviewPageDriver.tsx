@@ -77,11 +77,7 @@ const ReviewPageDriver = () => {
               current_page={currentPage}
               useFuction={useUserReviewsByUri}
               empty_component={
-                <EmptyList
-                  text={t("created_trips.empty")}
-                  second_text={t("created_trips.more")}
-                  icon={"car-front-fill"}
-                />
+                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
               }
               component_name={ShortReview}
               itemsName={t("reviews.title")}

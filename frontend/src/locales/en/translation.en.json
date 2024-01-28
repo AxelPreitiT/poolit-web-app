@@ -306,6 +306,7 @@
     "OTHER": "Other reason"
   },
   "reviews": {
+    "none": "No reviews",
     "stars_title": "How would you rate this passenger?",
     "option_title": "What would you like to highlight about this passenger?",
     "text_title": "Leave an additional comment",

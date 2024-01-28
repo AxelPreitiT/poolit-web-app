@@ -66,7 +66,7 @@ const ReviewPageDriver = () => {
         <div className={styles.list_block}>
           <div className={styles.list_container}>
             <div className={styles.row_data}>
-              <h2>{t("profile.lists.review_as_driver")}</h2>
+              <h2>{t("profile.lists.review_as_passanger")}</h2>
             </div>
             <PaginationComponent
               uri={createPaginationUri(
@@ -77,11 +77,7 @@ const ReviewPageDriver = () => {
               current_page={currentPage}
               useFuction={useUserReviewsByUri}
               empty_component={
-                <EmptyList
-                  text={t("profile.lists.review_as_passanger")}
-                  second_text={t("created_trips.more")}
-                  icon={"car-front-fill"}
-                />
+                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
               }
               component_name={ShortReview}
               itemsName={t("reviews.title")}

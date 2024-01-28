@@ -141,7 +141,7 @@ const CarPage = () => {
             current_page={currentPage}
             useFuction={useCarReviewsByUri}
             empty_component={
-              <EmptyList text="No reviews" icon="bi-solid bi-book" />
+              <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
             }
             component_name={ShortReview}
             itemsName={t("reviews.title")}
