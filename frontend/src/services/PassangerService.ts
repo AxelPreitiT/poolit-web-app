@@ -20,6 +20,10 @@ class PassangerService extends Service {
     public static patchAcceptPassangersByUri = async (uri: string) => {
         return await this.resolveQuery(PassangerApi.patchAcceptPassangerByUri(uri));
     };
+
+    public static getReviewPassanger = async (uri: string): Promise<boolean> => {
+        return await PassangerApi.getReviewPassanger(uri);
+    }
 }
 
 export default PassangerService;

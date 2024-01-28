@@ -6,6 +6,7 @@ interface PassangerModel {
     tripUri:  string;
     userUri: string;
     otherPassengersUri: string;
+    passengerReviewsForTripUriTemplate: string;
 }
 
 export default PassangerModel;

@@ -42,6 +42,16 @@ class PassangerApi extends AxiosApi{
             });
         };
 
+    public static getReviewPassanger: (uri: string) => Promise<boolean> =
+        (uri: string) => {
+            return this.get<PassangerModel>(uri, {
+                headers: {
+                },
+            }).then((response: AxiosResponse<PassangerModel>) => {
+                return response.status === 204;
+            });
+        };
+
     public static getPassangers: (uri: string) => AxiosPromise<PassangerModel[]> =
         (uri: string) => {
             return this.get<PassangerModel[]>(uri, {

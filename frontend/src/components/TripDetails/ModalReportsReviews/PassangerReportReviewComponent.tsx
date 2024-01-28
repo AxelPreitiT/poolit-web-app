@@ -7,6 +7,7 @@ import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
+import useReviewsPassangers from "@/hooks/passanger/useReviewsPassangers.tsx";
 
 export interface PassangerReportReviewComponent {
   passanger: PassangerModel;
@@ -19,10 +20,11 @@ const PassangerReportReviewComponent = ({
 }: PassangerReportReviewComponent) => {
   const { isLoading, data } = usePublicUserByUri(passanger.userUri);
   const { t } = useTranslation();
+  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsPassangers(passanger.passengerReviewsForTripUriTemplate)
 
   return (
     <div className={styles.marginCointainer}>
-      {isLoading || data == undefined ? (
+      {isLoading || data == undefined || isLoadingReview ? (
         <LoadingWheel description={t("admin.user.loading")} />
       ) : (
         <Button
@@ -37,6 +39,7 @@ const PassangerReportReviewComponent = ({
                 surname: data.surname,
               })}
             </h4>
+            {isReviewed && <h4>ESTAA</h4>}
             <span className={styles.spanStyle}>
               <i className="bi bi-calendar light-text"> </i>
               {passanger.startDateTime === passanger.endDateTime
