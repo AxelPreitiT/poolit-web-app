@@ -24,6 +24,7 @@ const useForm = <
   onSuccess,
   onError,
   defaultValues,
+  executeOnMount = false,
 }: {
   form: Form<T>;
   formSchema: ZodSchema<F>;
@@ -31,6 +32,7 @@ const useForm = <
   onSuccess?: (data: Model, form: F) => void;
   onError?: (error: QueryError) => void;
   defaultValues?: DefaultValues<F>;
+  executeOnMount?: boolean;
 }) => {
   const { handleSubmit, ...formProps } = useReactHookForm<F>({
     resolver: zodResolver(formSchema),
@@ -65,7 +67,7 @@ const useForm = <
   };
 
   useEffect(() => {
-    if (defaultValues) {
+    if (defaultValues && executeOnMount) {
       executeSubmit();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

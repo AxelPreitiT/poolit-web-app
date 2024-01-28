@@ -96,6 +96,7 @@ const SearchPage = () => {
     onSuccess: onSearchSuccess,
     onError: onSearchError,
     initialSearch,
+    submitOnMount: true,
   });
   const { executeSubmit } = searchForm;
 

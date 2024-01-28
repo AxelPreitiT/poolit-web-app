@@ -1,4 +1,3 @@
-import ProfileImg from "@/components/profile/img/ProfileImg.tsx";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
@@ -11,7 +10,8 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
-import {INITIALPAGE, REVIEWPAGESIZE} from "@/enums/PaginationConstants.ts";
+import { INITIALPAGE, REVIEWPAGESIZE } from "@/enums/PaginationConstants.ts";
+import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
 
 const ReviewPageDriver = () => {
   const { t } = useTranslation();
@@ -33,7 +33,7 @@ const ReviewPageDriver = () => {
         />
       ) : (
         <div className={styles.profileCard}>
-          <ProfileImg src={user.imageUri} />
+          <ViewableProfileImg src={user.imageUri} />
           <h3 className="text-center">
             {t("format.name", {
               name: user.username,
@@ -69,7 +69,11 @@ const ReviewPageDriver = () => {
               <h2>{t("profile.lists.review_as_driver")}</h2>
             </div>
             <PaginationComponent
-              uri={createPaginationUri(user.reviewsDriverUri, currentPage, REVIEWPAGESIZE)}
+              uri={createPaginationUri(
+                user.reviewsDriverUri,
+                currentPage,
+                REVIEWPAGESIZE
+              )}
               current_page={currentPage}
               useFuction={useUserReviewsByUri}
               empty_component={

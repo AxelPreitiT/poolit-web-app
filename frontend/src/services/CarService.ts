@@ -5,6 +5,7 @@ import UserPrivateModel from "@/models/UserPrivateModel";
 import { CreateCarFormSchemaType } from "@/forms/CreateCarForm";
 import CarReviewModel from "@/models/CarReviewModel";
 import PaginationModel from "@/models/PaginationModel";
+import { EditCarFormSchemaType } from "@/forms/EditCarForm";
 
 class CarService extends Service {
   public static getCarsByUser = async (
@@ -31,6 +32,16 @@ class CarService extends Service {
     return await this.resolveQuery(CarApi.getCarReviews(uri));
   };
 
+  private static updateCarImage = async (
+    uri: string,
+    image: File
+  ): Promise<void> => {
+    if (!image || image.size === 0) {
+      return;
+    }
+    await this.resolveQuery(CarApi.updateCarImage(uri, image));
+  };
+
   public static createCar = async (
     uriTemplate: string,
     data: CreateCarFormSchemaType
@@ -38,10 +49,18 @@ class CarService extends Service {
     const { carUri } = await this.resolveQuery(
       CarApi.createCar(uriTemplate, data)
     );
-    if (data.image) {
+    if (data.image && data.image.size > 0) {
       const car = await this.resolveQuery(CarApi.getCarByUri(carUri));
-      await this.resolveQuery(CarApi.updateCarImage(car.imageUri, data.image));
+      await this.updateCarImage(car.imageUri, data.image);
     }
+  };
+
+  public static updateCar = async (
+    car: CarModel,
+    data: EditCarFormSchemaType
+  ): Promise<void> => {
+    await this.resolveQuery(CarApi.updateCar(car.selfUri, data));
+    await this.updateCarImage(car.imageUri, data.image);
   };
 }
 

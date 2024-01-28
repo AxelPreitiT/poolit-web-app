@@ -1,15 +1,12 @@
-import Image from "react-bootstrap/Image";
 import styles from "./styles.module.scss";
 
 interface ProfileImgProps {
-  src: string;
+  children: React.ReactNode;
 }
 
-const ProfileImg = ({ src }: ProfileImgProps) => (
+const ProfileImg = ({ children }: ProfileImgProps) => (
   <div className={styles.avatar_img}>
-    <div className={styles.circular__landscape}>
-      <Image src={src} />
-    </div>
+    <div className={styles.circular__landscape}>{children}</div>
   </div>
 );
 

@@ -1,7 +1,7 @@
 import CarFeaturesPills from "@/components/car/CarFeaturesPills/CarFeaturesPills";
 import CarFeatureModel from "@/models/CarFeatureModel";
 import styles from "./styles.module.scss";
-import propStyles from "../prop/styles.module.scss";
+import ProfilePropHeader from "../prop/ProfilePropHeader";
 
 interface CarFeaturesProp {
   prop: string;
@@ -15,7 +15,7 @@ const CarFeaturesProp = ({ prop, carFeatures }: CarFeaturesProp) => {
 
   return (
     <div>
-      <p className={propStyles.propHeader}>{prop}</p>
+      <ProfilePropHeader prop={prop} />
       <CarFeaturesPills
         carFeatures={carFeatures}
         viewOnly={true}

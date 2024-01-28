@@ -431,6 +431,14 @@
       "default": "An error occurred while creating the car"
     }
   },
+  "edit_car": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "error": {
+      "title": "Car update failed",
+      "default": "An error occurred while updating the car"
+    }
+  },
   "recommended_trips": {
     "title": "Available trips",
     "error": {
@@ -664,6 +672,7 @@
     "brand": "Brand: {{brand}}",
     "license_plate": "License plate: {{license_plate}}",
     "prop": {
+      "description": "Car description",
       "brand": "Car brand",
       "plate": "Car plate",
       "seats": "Available seats",

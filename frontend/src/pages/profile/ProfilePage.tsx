@@ -1,4 +1,3 @@
-import ProfileImg from "@/components/profile/img/ProfileImg";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfileProp from "@/components/profile/prop/ProfileProp";
@@ -13,7 +12,8 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import UsersRoles from "@/enums/UsersRoles";
-import {INITIALPAGE, PROFILEPAGESIZE} from "@/enums/PaginationConstants.ts";
+import { INITIALPAGE, PROFILEPAGESIZE } from "@/enums/PaginationConstants.ts";
+import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ const ProfilePage = () => {
 
   const ProfileInfo = ({ currentUser }: { currentUser: UserPrivateModel }) => (
     <div className={styles.profileCard}>
-      <ProfileImg src={currentUser.imageUri} />
+      <ViewableProfileImg src={currentUser.imageUri} />
       <h3 className="text-center">
         {t("format.name", {
           name: currentUser.username,
@@ -90,18 +90,18 @@ const ProfilePage = () => {
               <PassengerList
                 futureReservedTripsUri={createPaginationUri(
                   currentUser.futureReservedTripsUri,
-                    INITIALPAGE,
-                    PROFILEPAGESIZE
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
                 )}
                 pastReservedTripsUri={createPaginationUri(
                   currentUser.pastReservedTripsUri,
-                    INITIALPAGE,
-                    PROFILEPAGESIZE
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
                 )}
                 reviewsPassengerUri={createPaginationUri(
                   currentUser.reviewsPassengerUri,
-                    INITIALPAGE,
-                    PROFILEPAGESIZE
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
                 )}
                 id={currentUser.userId}
               />
@@ -111,18 +111,18 @@ const ProfilePage = () => {
               <DriverList
                 futureCreatedTripsUri={createPaginationUri(
                   currentUser.futureCreatedTripsUri,
-                    INITIALPAGE,
-                    PROFILEPAGESIZE
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
                 )}
                 pastCreatedTripsUri={createPaginationUri(
                   currentUser.pastCreatedTripsUri,
-                    INITIALPAGE,
-                    PROFILEPAGESIZE
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
                 )}
                 reviewsDriverUri={createPaginationUri(
                   currentUser.reviewsDriverUri,
-                    INITIALPAGE,
-                    PROFILEPAGESIZE
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
                 )}
                 id={currentUser.userId}
               />
@@ -133,18 +133,18 @@ const ProfilePage = () => {
           <PassengerList
             futureReservedTripsUri={createPaginationUri(
               currentUser.futureReservedTripsUri,
-                INITIALPAGE,
-                PROFILEPAGESIZE
+              INITIALPAGE,
+              PROFILEPAGESIZE
             )}
             pastReservedTripsUri={createPaginationUri(
               currentUser.pastReservedTripsUri,
-                INITIALPAGE,
-                PROFILEPAGESIZE
+              INITIALPAGE,
+              PROFILEPAGESIZE
             )}
             reviewsPassengerUri={createPaginationUri(
               currentUser.reviewsPassengerUri,
-                INITIALPAGE,
-                PROFILEPAGESIZE
+              INITIALPAGE,
+              PROFILEPAGESIZE
             )}
             id={currentUser.userId}
           />

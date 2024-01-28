@@ -2,7 +2,7 @@ import { Form } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import { useRef } from "react";
 
-interface ImageInputProps {
+export interface ImageInputProps {
   preview?: string;
   previewAlt: string;
   onImageUpload: (image: File) => void;

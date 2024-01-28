@@ -430,6 +430,14 @@
       "default": "Ocurrió un error al crear el auto"
     }
   },
+  "edit_car": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "error": {
+      "title": "La actualización del auto falló",
+      "default": "Ocurrió un error al actualizar el auto"
+    }
+  },
   "recommended_trips": {
     "title": "Viajes recomendados",
     "error": {
@@ -663,6 +671,7 @@
     "brand": "Marca: {{brand}}",
     "license_plate": "Patente: {{license_plate}}",
     "prop": {
+      "description": "Descripción del auto",
       "brand": "Marca del auto",
       "plate": "Patente del auto",
       "seats": "Asientos disponibles",
