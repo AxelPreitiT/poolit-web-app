@@ -6,6 +6,8 @@ import { CreateCarFormSchemaType } from "@/forms/CreateCarForm";
 import CarReviewModel from "@/models/CarReviewModel";
 import PaginationModel from "@/models/PaginationModel";
 import { EditCarFormSchemaType } from "@/forms/EditCarForm";
+import { getCarReviewOptionsByRating } from "@/enums/CarReviewsOptions";
+import CarReviewOptionModel from "@/models/CarReviewOptionModel";
 
 class CarService extends Service {
   public static getCarsByUser = async (
@@ -61,6 +63,12 @@ class CarService extends Service {
   ): Promise<void> => {
     await this.resolveQuery(CarApi.updateCar(car.selfUri, data));
     await this.updateCarImage(car.imageUri, data.image);
+  };
+
+  public static getCarReviewOptionsByRating = async (
+    rating: number
+  ): Promise<CarReviewOptionModel[]> => {
+    return getCarReviewOptionsByRating(rating);
   };
 }
 

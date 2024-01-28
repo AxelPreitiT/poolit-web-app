@@ -12,6 +12,8 @@ import { EditCarFormSchemaType } from "@/forms/EditCarForm";
 class CarApi extends AxiosApi {
   private static readonly CAR_ID_URI_KEY = "carId";
   private static readonly CAR_CONTENT_TYPE = "application/vnd.car.v1+json";
+  private static readonly CAR_REVIEW_CONTENT_TYPE =
+    "application/vnd.car.review.v1+json";
 
   public static getCarsByUser: (
     uriTemplate: string,
