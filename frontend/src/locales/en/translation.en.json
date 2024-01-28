@@ -696,6 +696,9 @@
     "edit": "Edit",
     "opinions": "Opinions about the car"
   },
+  "location": {
+    "loading": "Loading route"
+  },
   "car_features": {
     "error": {
       "title": "Could not fetch the car features",

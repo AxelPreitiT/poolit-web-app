@@ -695,6 +695,9 @@
     "edit": "Editar",
     "opinions": "Opiniones sobre el auto"
   },
+  "location": {
+    "loading": "Cargando ruta"
+  },
   "car_features": {
     "error": {
       "title": "No se pudo obtener las características del auto",

@@ -7,7 +7,7 @@ import PassengerList from "@/components/profile/ProfileLists/PassangerList";
 import TabComponent from "@/components/tab/TabComponent";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UserPrivateModel from "@/models/UserPrivateModel.ts";
-import useGetCityById from "@/hooks/cities/useGetCityById.tsx";
+import useCityByUri from "@/hooks/cities/useCityByUri";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import LoadingWheel from "@/components/loading/LoadingWheel";
@@ -28,9 +28,7 @@ const ProfilePage = () => {
     currentUser,
     invalidate: invalidateCurrentUser,
   } = useCurrentUser();
-  const { isLoading: isLoadingCity, city } = useGetCityById(
-    currentUser?.cityUri
-  );
+  const { isLoading: isLoadingCity, city } = useCityByUri(currentUser?.cityUri);
   const { isLoading: isAllCitiesLoading, cities } = useAllCities();
   const [editMode, setEditMode] = useState(false);
 

@@ -1,15 +1,13 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import CityService from "@/services/CityService.ts";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
 import LoadingWheel from "@/components/loading/LoadingWheel";
-import {getDayString} from "@/utils/date/dayString.ts";
+import { getDayString } from "@/utils/date/dayString.ts";
+import useCityByUri from "@/hooks/cities/useCityByUri";
+import useCarByUri from "@/hooks/cars/useCarByUri";
 
 const CardTrip = ({
   trip,
@@ -21,26 +19,32 @@ const CardTrip = ({
   const { t } = useTranslation();
   const date = new Date(trip.startDateTime);
 
-  const [cityOrigin, setCityOrigin] = useState<string | null>(null);
-  const [cityDestination, setCityDestination] = useState<string | null>(null);
-  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
+  const {
+    isLoading: isOriginCityLoading,
+    city: originCity,
+    isError: isOriginCityError,
+  } = useCityByUri(trip.originCityUri);
+  const {
+    isLoading: isDestinationCityLoading,
+    city: destinationCity,
+    isError: isDestinationCityError,
+  } = useCityByUri(trip.destinationCityUri);
+  const {
+    isLoading: isCarLoading,
+    car,
+    isError: isCarError,
+  } = useCarByUri(trip.carUri);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const originCity = await CityService.getCityById(trip.originCityUri);
-      setCityOrigin(originCity.name);
-
-      const destinationCity = await CityService.getCityById(
-        trip.destinationCityUri
-      );
-      setCityDestination(destinationCity.name);
-
-      const car = await CarService.getCarByUri(trip.carUri);
-      setCarTrip(car);
-    };
-
-    fetchData();
-  }, [trip]); // Add trip as a dependency to avoid unnecessary calls
+  if (
+    isOriginCityLoading ||
+    isDestinationCityLoading ||
+    isCarLoading ||
+    isOriginCityError ||
+    isDestinationCityError ||
+    isCarError
+  ) {
+    return <LoadingWheel description={t("trip.loading_one")} />;
+  }
 
   return (
     <Link
@@ -49,14 +53,14 @@ const CardTrip = ({
     >
       <div className={styles.card_container}>
         <div className={styles.left_container}>
-          {CarTrip === null ? (
+          {!car ? (
             <LoadingWheel
               description={t("car.loading")}
               containerClassName={styles.loadingContainer}
             />
           ) : (
             <div className={styles.img_container}>
-              <img src={CarTrip.imageUri} />
+              <img src={car.imageUri} />
             </div>
           )}
         </div>
@@ -65,7 +69,7 @@ const CardTrip = ({
             <div className={styles.route_info_row}>
               <i className="bi bi-geo-alt secondary-color route-info-icon h4"></i>
               <div className={styles.route_info_text}>
-                <h4>{cityOrigin}</h4>
+                <h4>{originCity?.name}</h4>
                 <h6>{trip.originAddress}</h6>
               </div>
             </div>
@@ -73,7 +77,7 @@ const CardTrip = ({
             <div className={styles.route_info_row}>
               <i className="bi bi-geo-alt-fill secondary-color route-info-icon h4"></i>
               <div className={styles.route_info_text}>
-                <h4>{cityDestination}</h4>
+                <h4>{destinationCity?.name}</h4>
                 <h6>{trip.destinationAddress}</h6>
               </div>
             </div>
@@ -82,8 +86,11 @@ const CardTrip = ({
             <div className={styles.footer_details}>
               <i className="bi bi-calendar text"></i>
               {trip.totalTrips > 1 ? (
-                <span>{t(`day.full.${getDayString(date).toLowerCase()}`, {
-                  plural: "s",})}</span>
+                <span>
+                  {t(`day.full.${getDayString(date).toLowerCase()}`, {
+                    plural: "s",
+                  })}
+                </span>
               ) : (
                 <span>{getFormattedDateTime(trip.startDateTime).date}</span>
               )}
@@ -94,7 +101,8 @@ const CardTrip = ({
             </div>
             <h3>
               {t("format.price", {
-                priceInt: trip.pricePerTrip})}
+                priceInt: trip.pricePerTrip,
+              })}
             </h3>
           </div>
         </div>

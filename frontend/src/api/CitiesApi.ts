@@ -4,8 +4,7 @@ import AxiosApi from "./axios/AxiosApi";
 import { parseTemplate } from "url-template";
 
 class CitiesApi extends AxiosApi {
-  // TODO: Use uri template
-  public static getCityById: (uri: string) => AxiosPromise<CityModel> = (
+  public static getCityByUri: (uri: string) => AxiosPromise<CityModel> = (
     uri: string
   ) => this.get<CityModel>(uri);
 
