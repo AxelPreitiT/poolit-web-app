@@ -11,6 +11,7 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import ShortReview from "@/components/review/shorts/ShortReview.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
+import {INITIALPAGE, REVIEWPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 const ReviewPageDriver = () => {
   const { t } = useTranslation();
@@ -19,7 +20,7 @@ const ReviewPageDriver = () => {
 
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? 1 : parseInt(page, 10);
+  const currentPage = page == null ? INITIALPAGE: parseInt(page, 10);
 
   return (
     <div className={styles.main_container}>
@@ -49,7 +50,7 @@ const ReviewPageDriver = () => {
             <h2>{t("profile.lists.review_as_driver")}</h2>
           </div>
           <PaginationComponent
-            uri = {createPaginationUri(user.reviewsPassengerUri, currentPage , 1)}
+            uri = {createPaginationUri(user.reviewsPassengerUri, currentPage , REVIEWPAGESIZE)}
             current_page = {currentPage}
             useFuction={useUserReviewsByUri}
             empty_component={

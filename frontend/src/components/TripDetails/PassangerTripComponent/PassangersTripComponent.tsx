@@ -12,6 +12,7 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import createStatusPaginationUri from "@/functions/CreateStatusPaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
+import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 interface PassangersTripComponentProps {
   uri: string;
@@ -24,7 +25,7 @@ const PassangersTripComponent = ({
 
     const { search } = useLocation();
     const page = new URLSearchParams(search).get("page");
-    const currentPage = page == null ? 1 : parseInt(page, 10);
+    const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
 
 
   const options = Object.values(PassangerStatus);
@@ -63,7 +64,7 @@ const PassangersTripComponent = ({
                           {t("trip_detail.passengers.empty")}
                       </h3>
                   </div>}
-              uri={createStatusPaginationUri(createPaginationUri(uri, currentPage , 1, true), selectedOption)}
+              uri={createStatusPaginationUri(createPaginationUri(uri, currentPage , PASSANGERPAGESIZE, true), selectedOption)}
               current_page={currentPage}
               component_name={PassangerComponent}
               useFuction={usePassangerByUri} />

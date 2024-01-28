@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 
 public class PassengerDto {
 
+    private URI selfUri;
+
     private URI userUri;
 
     private URI tripUri;
@@ -23,6 +25,7 @@ public class PassengerDto {
 
     public static PassengerDto fromPassenger(final UriInfo uriInfo, final Passenger passenger){
         final PassengerDto ans = new PassengerDto();
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).path(String.valueOf(passenger.getUserId())).build();
         ans.passengerState = passenger.getPassengerState();
         ans.startDateTime = passenger.getStartDateTime();
         ans.endDateTime = passenger.getEndDateTime();
@@ -34,6 +37,14 @@ public class PassengerDto {
         //TODO: agregar estado del viaje: empezado, ...
 
         return ans;
+    }
+
+    public URI getSelfUri() {
+        return selfUri;
+    }
+
+    public void setSelfUri(URI selfUri) {
+        this.selfUri = selfUri;
     }
 
     public URI getUserUri() {

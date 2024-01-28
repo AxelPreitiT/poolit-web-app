@@ -9,6 +9,7 @@ import ListTripsScheduled from "@/components/cardTrip/ListTripsScheduled/ListTri
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import SpinnerComponent from "@/components/Spinner/Spinner";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
+import {INITIALPAGE, TRIPSPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 const CreatedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
@@ -17,7 +18,7 @@ const CreatedPage = () => {
   const time = new URLSearchParams(search).get("time");
 
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? 1 : parseInt(page, 10);
+  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
 
   return (
     <MainComponent>
@@ -30,7 +31,7 @@ const CreatedPage = () => {
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
-                uri={createPaginationUri(currentUser.futureCreatedTripsUri, currentPage , 2)}
+                uri={createPaginationUri(currentUser.futureCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList
@@ -48,7 +49,7 @@ const CreatedPage = () => {
               <SpinnerComponent />
             ) : (
               <ListTripsScheduled
-                uri={createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage , 2)}
+                uri={createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList

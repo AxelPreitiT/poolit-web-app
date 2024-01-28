@@ -11,6 +11,7 @@ import UserPrivateModel from "@/models/UserPrivateModel.ts";
 import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useGetCityById from "@/hooks/cities/useGetCityById.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
+import {INITIALPAGE, PROFILEPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -81,18 +82,18 @@ const ProfilePage = () => {
             right_title={t("roles.passenger")}
             right_component={
               <PassengerList
-                futureReservedTripsUri={createPaginationUri(currentUser.futureReservedTripsUri, 1 , 3)}
-                pastReservedTripsUri={createPaginationUri(currentUser.pastReservedTripsUri, 1 , 3)}
-                reviewsPassengerUri={createPaginationUri(currentUser.reviewsPassengerUri, 1 , 3)}
+                futureReservedTripsUri={createPaginationUri(currentUser.futureReservedTripsUri, INITIALPAGE , PROFILEPAGESIZE)}
+                pastReservedTripsUri={createPaginationUri(currentUser.pastReservedTripsUri, INITIALPAGE , PROFILEPAGESIZE)}
+                reviewsPassengerUri={createPaginationUri(currentUser.reviewsPassengerUri, INITIALPAGE , PROFILEPAGESIZE)}
                 id = {currentUser.userId}
               />
             }
             left_title={t("roles.driver")}
             left_component={
               <DriverList
-                futureCreatedTripsUri={createPaginationUri(currentUser.futureCreatedTripsUri, 1 , 3)}
-                pastCreatedTripsUri={createPaginationUri(currentUser.pastCreatedTripsUri, 1 , 3)}
-                reviewsDriverUri={createPaginationUri(currentUser.reviewsDriverUri, 1 , 3)}
+                futureCreatedTripsUri={createPaginationUri(currentUser.futureCreatedTripsUri, INITIALPAGE , PROFILEPAGESIZE)}
+                pastCreatedTripsUri={createPaginationUri(currentUser.pastCreatedTripsUri, INITIALPAGE , PROFILEPAGESIZE)}
+                reviewsDriverUri={createPaginationUri(currentUser.reviewsDriverUri, INITIALPAGE , PROFILEPAGESIZE)}
                 id = {currentUser.userId}
               />
             }
