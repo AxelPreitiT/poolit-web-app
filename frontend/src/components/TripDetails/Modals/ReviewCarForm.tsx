@@ -2,17 +2,16 @@ import {useState} from "react";
 import styles from "./styles.module.scss";
 import {Form, FormSelect} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
-import ReviewsOptions from "@/enums/ReviewsOptions.ts";
+import carReviewsOptions from "@/enums/carReviewsOptions.ts";
 
 
-const ReviewForm = () => {
+const ReviewCarForm = () => {
     const { t } = useTranslation();
-    const [selectedOption, setSelectedOption] = useState<ReviewsOptions>(ReviewsOptions.ACCEPTABLE_ATTITUDE);
+    const [selectedOption, setSelectedOption] = useState<carReviewsOptions>(carReviewsOptions.BAD_STATE);
     const [selectedStarsOption, setSelectedStarsOption] = useState(1);
 
-
     const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedOption(e.target.value as ReviewsOptions);
+        setSelectedOption(e.target.value as carReviewsOptions);
     };
 
     const handleStarsOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -23,7 +22,7 @@ const ReviewForm = () => {
         <div className={styles.picker_style}>
             <div>
                 <label className="report-option-label">
-                    <strong className="text">{t("reviews.stars_title")}</strong>
+                    <strong className="text">{t("reviews.stars_car_title")}</strong>
                 </label>
                 <FormSelect
                     id="passenger-38"
@@ -41,14 +40,14 @@ const ReviewForm = () => {
             </div>
             <div>
                 <label className="report-option-label">
-                    <strong className="text">{t('reviews.option_title')}</strong>
+                    <strong className="text">{t('reviews.option_car_title')}</strong>
                 </label>
                 <FormSelect
-                    id="reviewPicker"
+                    id="reviewCarPicker"
                     value={selectedOption}
                     onChange={handleOptionChange}
                 >
-                    {Object.values(ReviewsOptions).map((option) => (
+                    {Object.values(carReviewsOptions).map((option) => (
                         <option key={option} value={option}>
                             {t(`reviews.${option}`)}
                         </option>
@@ -65,4 +64,4 @@ const ReviewForm = () => {
     );
 };
 
-export default ReviewForm;
+export default ReviewCarForm;

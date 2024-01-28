@@ -305,6 +305,11 @@
     "OTHER" : "Otro motivo"
   },
   "reviews": {
+    "stars_title": "¿Cómo calificarías a este pasajero?",
+    "option_title": "¿Qué te gustaría destacar sobre este pasajero?",
+    "text_title": "Deja un comentario adicional",
+    "stars_car_title": "¿Cómo calificarías a este pasajero?",
+    "option_car_title": "¿Qué te gustaría destacar sobre este pasajero?",
     "no_raiting" : "No reviews",
     "title": "opiniones",
     "VERY_BAD_STATE": "Estaba en muy mal estado",

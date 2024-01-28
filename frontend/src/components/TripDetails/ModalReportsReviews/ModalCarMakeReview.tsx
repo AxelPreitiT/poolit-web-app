@@ -7,9 +7,10 @@ import carModel from "@/models/CarModel.ts";
 export interface ModalCarMakeReviewProps {
     closeModal: () => void;
     car: carModel | null;
+    reportForm: React.ReactNode;
 }
 
-const ModalCarMakeReview = ({ closeModal, car}: ModalCarMakeReviewProps) => {
+const ModalCarMakeReview = ({ closeModal, car, reportForm}: ModalCarMakeReviewProps) => {
     const { t } = useTranslation();
 
     return (
@@ -26,7 +27,7 @@ const ModalCarMakeReview = ({ closeModal, car}: ModalCarMakeReviewProps) => {
                 </div>
                 <Modal.Body>
                     <div className={styles.categoryContainer}>
-                        <h1>poner las cosas aca</h1>
+                        {reportForm}
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

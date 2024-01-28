@@ -14,6 +14,7 @@ import {Link} from "react-router-dom";
 import {createdTripsPath, reservedTripsPath} from "@/AppRouter.tsx";
 import ReportForm from "@/components/TripDetails/Modals/ReportForm.tsx";
 import ReviewForm from "@/components/TripDetails/Modals/ReviewForm.tsx";
+import ReviewCarForm from "@/components/TripDetails/Modals/ReviewCarForm.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -110,7 +111,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                         </Modal>
 
                         <Modal show={showModalCarMakeReview} onHide={closeModalCarReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalCarMakeReview closeModal={closeModalCarReview} car={car}/>
+                            <ModalCarMakeReview closeModal={closeModalCarReview} car={car} reportForm={<ReviewCarForm/>}/>
                         </Modal>
                     </div>
  :
