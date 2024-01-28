@@ -90,6 +90,16 @@ public class PassengerReviewServiceImpl implements PassengerReviewService {
         return passengerReviewDao.getPassengerReviewsMadeByUserOnTrip(reviewer,trip,page,pageSize);
     }
 
+    @Transactional
+    @Override
+    public PagedContent<PassengerReview> getPassengerReview(final long reviewedId,final long reviewerId, final  long tripId) throws UserNotFoundException, TripNotFoundException {
+        final User reviewed = userService.findById(reviewedId).orElseThrow(UserNotFoundException::new);
+        final User reviewer = userService.findById(reviewerId).orElseThrow(UserNotFoundException::new);
+        final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+        Optional<PassengerReview> ans = passengerReviewDao.getPassengerReview(reviewed,reviewer,trip);
+        return PagedContent.fromOptional(ans);
+    }
+
 //    @Transactional
 //    @Override
 //    public PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) throws UserNotLoggedInException {

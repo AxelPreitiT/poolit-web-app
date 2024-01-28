@@ -19,6 +19,7 @@ public interface PassengerReviewDao {
 //    double getPassengerRating(final User user);
 
     PagedContent<PassengerReview> getPassengerReviews(final User user, int page, int pageSize);
+    Optional<PassengerReview> getPassengerReview(final User reviewed, final User reviewer, final Trip trip);
 
     PagedContent<PassengerReview> getPassengerReviewsMadeByUserOnTrip(final User reviewer, final Trip trip, final int page, final int pageSize);
 

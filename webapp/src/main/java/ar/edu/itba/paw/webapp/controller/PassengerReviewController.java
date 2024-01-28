@@ -63,8 +63,14 @@ public class PassengerReviewController {
     @Produces(value = VndType.APPLICATION_REVIEW_PASSENGER)
     public Response getReviews(@Valid @BeanParam final ReviewsQuery query) throws UserNotFoundException, TripNotFoundException {
         if(query.getMadeBy()!=null || query.getForTrip()!=null){
-            LOGGER.debug("GET request for passenger reviews made by user {} for passengers on trip {}",query.getMadeBy(),query.getForTrip());
-            final PagedContent<PassengerReview> ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(query.getMadeBy(),query.getForTrip(),query.getPage(),query.getPageSize());
+            final PagedContent<PassengerReview> ans;
+            if(query.getForUser()!=null){
+                LOGGER.debug("GET request for passenger reviews made by user {} for passenger {} on trip {}",query.getMadeBy(),query.getForUser(),query.getForTrip());
+                ans = passengerReviewService.getPassengerReview(query.getForUser(),query.getMadeBy(),query.getForTrip());
+            }else {
+                LOGGER.debug("GET request for passenger reviews made by user {} for passengers on trip {}",query.getMadeBy(),query.getForTrip());
+                ans = passengerReviewService.getPassengerReviewsMadeByUserOnTrip(query.getMadeBy(),query.getForTrip(),query.getPage(),query.getPageSize());
+            }
             return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PassengerReviewDto::fromPassengerReview,PassengerReviewDto.class);
         }
         LOGGER.debug("GET request for passenger reviews for user {}",query.getForUser());

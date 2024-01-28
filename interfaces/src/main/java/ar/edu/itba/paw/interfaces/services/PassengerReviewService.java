@@ -25,6 +25,7 @@ public interface PassengerReviewService {
     PagedContent<PassengerReview> getPassengerReviews(final long userId, int page, int pageSize) throws UserNotFoundException;
 
     PagedContent<PassengerReview> getPassengerReviewsMadeByUserOnTrip(final long reviewerUserid, final long tripId, final int page, final  int pageSize) throws UserNotFoundException, TripNotFoundException;
+    PagedContent<PassengerReview> getPassengerReview(final long reviewedId,final long reviewerId, final  long tripId) throws UserNotFoundException, TripNotFoundException;
 
 //    PagedContent<PassengerReview> getPassengerReviewsOwnUser( int page, int pageSize) throws UserNotLoggedInException;
 
