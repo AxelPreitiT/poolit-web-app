@@ -1,5 +1,5 @@
 import useCarById from "@/hooks/cars/useCarById";
-// import useUserCars from "@/hooks/cars/useUserCars";
+import useUserCars from "@/hooks/cars/useUserCars";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "react-router-dom";
 import styles from "./styles.module.scss";
@@ -13,16 +13,21 @@ import EmptyList from "@/components/emptyList/EmptyList";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent";
 import ProfileImg from "@/components/profile/img/ProfileImg";
+import useCarFeaturesByUri from "@/hooks/cars/useCarFeaturesByUri";
+import { Button } from "react-bootstrap";
+import { BsPencilSquare } from "react-icons/bs";
+import CarFeaturesProp from "@/components/profile/carFeatures/CarFeaturesProp";
+import { INITIALPAGE, REVIEWPAGESIZE } from "@/enums/PaginationConstants";
 
 const CarPage = () => {
   const { t } = useTranslation();
   const { search } = useLocation();
   const { carId } = useParams();
-  // const {
-  //   isLoading: isUserCarsLoading,
-  //   cars: userCars,
-  //   isError: isUserCarsError,
-  // } = useUserCars();
+  const {
+    isLoading: isUserCarsLoading,
+    cars: userCars,
+    isError: isUserCarsError,
+  } = useUserCars();
   const {
     isLoading: isCarLoading,
     car,
@@ -33,17 +38,24 @@ const CarPage = () => {
     carBrand,
     isError: isCarBrandError,
   } = useCarBrandByUri(car?.brandUri);
+  const {
+    isLoading: isCarFeaturesLoading,
+    carFeatures,
+    isError: isCarFeaturesError,
+  } = useCarFeaturesByUri(car?.featuresUri || []);
 
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? 1 : parseInt(page, 10);
+  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
 
   if (
-    // isUserCarsLoading ||
+    isUserCarsLoading ||
     isCarLoading ||
     isCarBrandLoading ||
     isCarError ||
-    // isUserCarsError ||
+    isCarFeaturesLoading ||
+    isUserCarsError ||
     isCarBrandError ||
+    isCarFeaturesError ||
     !car
   ) {
     return <LoadingScreen description={t("car.loading")} />;
@@ -59,22 +71,44 @@ const CarPage = () => {
           </div>
           <div className={styles.carInfo}>
             <ProfileProp
-              prop="Car brand"
+              prop={t("car.prop.brand")}
               text={carBrand?.name || t("car_brands.unknown")}
             />
-            <ProfileProp prop="Available seats" text={car.seats.toString()} />
-            <ProfileProp prop="Car plate" text={car.plate} />
-            <ProfileStars prop="Car rating" rating={car.rating} />
+            <ProfileProp
+              prop={t("car.prop.seats")}
+              text={car.seats.toString()}
+            />
+            <ProfileProp prop={t("car.prop.plate")} text={car.plate} />
+            <CarFeaturesProp
+              prop={t("car.prop.features")}
+              carFeatures={carFeatures}
+            />
+            <ProfileStars prop={t("car.prop.rating")} rating={car.rating} />
           </div>
+          {userCars &&
+            userCars.length > 0 &&
+            userCars.some((userCar) => userCar.carId === car.carId) && (
+              <div className={styles.editButtonContainer}>
+                <Button className="secondary-btn">
+                  <BsPencilSquare className="light-text h4" />
+                  <span className="light-text h4">{t("car.edit")}</span>
+                </Button>
+              </div>
+            )}
         </div>
       </div>
       <div className={styles.reviewsContainer}>
         <div className={styles.reviewsList}>
           <div className={styles.title}>
-            <h2>Opinions about the car</h2>
+            <h2>{t("car.opinions")}</h2>
           </div>
           <PaginationComponent
-            uri={createPaginationUri(car.reviewsUri, currentPage, 10, true)}
+            uri={createPaginationUri(
+              car.reviewsUri,
+              currentPage,
+              REVIEWPAGESIZE,
+              true
+            )}
             current_page={currentPage}
             useFuction={useCarReviewsByUri}
             empty_component={

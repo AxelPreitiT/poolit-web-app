@@ -30,6 +30,17 @@
   gap: 2%;
 }
 
+@media (max-width: 768px) {
+  .main_container {
+    flex-direction: column;
+    row-gap: 2rem;
+  }
+
+  .profileCard {
+    width: 100%;
+  }
+}
+
 .list_block {
   flex-grow: 2;
 }

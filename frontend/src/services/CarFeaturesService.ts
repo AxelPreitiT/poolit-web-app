@@ -8,6 +8,14 @@ class CarFeaturesService extends Service {
   ): Promise<CarFeatureModel[]> => {
     return await this.resolveQuery(CarFeaturesApi.getCarFeatures(uriTemplate));
   };
+
+  public static getCarFeatureByUri = async (
+    featureUri: string
+  ): Promise<CarFeatureModel> => {
+    return await this.resolveQuery(
+      CarFeaturesApi.getCarFeatureByUri(featureUri)
+    );
+  };
 }
 
 export default CarFeaturesService;

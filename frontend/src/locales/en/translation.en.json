@@ -295,15 +295,15 @@
   },
   "reports": {
     "option_selector": "Why do you want to report it?",
-    "control_label" : "Add information that helps make a decision faster",
+    "control_label": "Add information that helps make a decision faster",
     "HARASSMENT": "Harassment or violent act",
     "MISCONDUCT": "Inappropriate conduct",
-    "IDENTITY_FRAUD" : "Identity fraud",
-    "CANNOT_DRIVE" : "Does not have the permits or age to drive",
-    "DANGEROUS_DRIVING" : "Drives dangerously",
-    "DID_NOT_PAY" : "Did not pay for the trip",
-    "WRECK_CAR" : "Damaged the car",
-    "OTHER" : "Other reason"
+    "IDENTITY_FRAUD": "Identity fraud",
+    "CANNOT_DRIVE": "Does not have the permits or age to drive",
+    "DANGEROUS_DRIVING": "Drives dangerously",
+    "DID_NOT_PAY": "Did not pay for the trip",
+    "WRECK_CAR": "Damaged the car",
+    "OTHER": "Other reason"
   },
   "reviews": {
     "stars_title": "How would you rate this passenger?",
@@ -311,7 +311,7 @@
     "text_title": "Leave an additional comment",
     "stars_car_title": "How would you rate the car?",
     "option_car_title": "What would you like to highlight about the car?",
-    "no_raiting" : "Sin reseñas",
+    "no_raiting": "Sin reseñas",
     "title": "Reviews",
     "VERY_BAD_STATE": "Very bad state",
     "VERY_DIRTY": "Very dirty",
@@ -502,7 +502,7 @@
       "title": "Estado:",
       "cancelled": "Cancelled",
       "accepted": "Accepted",
-      "rejected" : "Rejected",
+      "rejected": "Rejected",
       "waiting": "Waiting",
       "finished": "Finished",
       "not_started": "Not started",
@@ -662,7 +662,16 @@
     "loading": "Loading car",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Brand: {{brand}}",
-    "license_plate": "License plate: {{license_plate}}"
+    "license_plate": "License plate: {{license_plate}}",
+    "prop": {
+      "brand": "Car brand",
+      "plate": "Car plate",
+      "seats": "Available seats",
+      "features": "Car features",
+      "rating": "Car rating"
+    },
+    "edit": "Edit",
+    "opinions": "Opinions about the car"
   },
   "car_features": {
     "error": {

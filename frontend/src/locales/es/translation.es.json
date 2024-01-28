@@ -294,15 +294,15 @@
   },
   "reports": {
     "option_selector": "¿Porque quieres reportar este viaje?",
-    "control_label" : "Agrega información para resolver el conflicto.",
+    "control_label": "Agrega información para resolver el conflicto.",
     "HARASSMENT": "Acoso o hecho violento",
     "MISCONDUCT": "Conducta inapropiada",
-    "IDENTITY_FRAUD" : "Suplantación de identidad",
-    "CANNOT_DRIVE" : "No cuenta con los permisos o edad para manejar",
-    "DANGEROUS_DRIVING" : "Maneja de manera peligrosa",
-    "DID_NOT_PAY" : "No pagó por el viaje",
-    "WRECK_CAR" : "Dañó el auto",
-    "OTHER" : "Otro motivo"
+    "IDENTITY_FRAUD": "Suplantación de identidad",
+    "CANNOT_DRIVE": "No cuenta con los permisos o edad para manejar",
+    "DANGEROUS_DRIVING": "Maneja de manera peligrosa",
+    "DID_NOT_PAY": "No pagó por el viaje",
+    "WRECK_CAR": "Dañó el auto",
+    "OTHER": "Otro motivo"
   },
   "reviews": {
     "stars_title": "¿Cómo calificarías a este pasajero?",
@@ -310,7 +310,7 @@
     "text_title": "Deja un comentario adicional",
     "stars_car_title": "¿Cómo calificarías a este pasajero?",
     "option_car_title": "¿Qué te gustaría destacar sobre este pasajero?",
-    "no_raiting" : "No reviews",
+    "no_raiting": "No reviews",
     "title": "opiniones",
     "VERY_BAD_STATE": "Estaba en muy mal estado",
     "VERY_DIRTY": "Estaba muy sucio",
@@ -661,7 +661,16 @@
     "loading": "Cargando auto",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Marca: {{brand}}",
-    "license_plate": "Patente: {{license_plate}}"
+    "license_plate": "Patente: {{license_plate}}",
+    "prop": {
+      "brand": "Marca del auto",
+      "plate": "Patente del auto",
+      "seats": "Asientos disponibles",
+      "features": "Características del auto",
+      "rating": "Valoración del auto"
+    },
+    "edit": "Editar",
+    "opinions": "Opiniones sobre el auto"
   },
   "car_features": {
     "error": {

@@ -48,3 +48,7 @@
   background-color: colors.$secondary-color;
   border-color: colors.$secondary-color;
 }
+
+.disabledPill {
+  cursor: default;
+}
