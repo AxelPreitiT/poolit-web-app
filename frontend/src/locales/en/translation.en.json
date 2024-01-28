@@ -410,6 +410,7 @@
       "title": "Estado:",
       "cancelled": "Cancelled",
       "accepted": "Accepted",
+      "rejected" : "Rejected",
       "waiting": "Waiting",
       "finished": "Finished",
       "not_started": "Not started",

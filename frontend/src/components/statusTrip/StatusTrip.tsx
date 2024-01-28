@@ -20,7 +20,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
         </div>
       );
       break;
-    case Status.ACCEPT:
+    case Status.ACCEPTED:
       componentToRender = (
         <div className={styles.success}>
             <i className={"bi bi-check-lg"}></i>
@@ -28,6 +28,14 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
         </div>
       );
       break;
+      case Status.REJECTED:
+          componentToRender = (
+              <div className={styles.danger}>
+                  <i className={"bi bi-x"}></i>
+                  <h3>{t("trip_detail.status.rejected")}</h3>
+              </div>
+          );
+          break;
     case Status.CANCEL:
       componentToRender = (
         <div className={styles.danger}>

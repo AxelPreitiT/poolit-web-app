@@ -34,9 +34,9 @@ const TripDetailsPage = () => {
 
   const {
     isLoading: isLoadingRole,
-    passangersRole: passangerRole,
+    currentPassanger: currentPassanger,
     isError: isError,
-  } = useRolePassanger(isDriver, currentUser, trip?.passengersUriTemplate);
+  } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
 
 
@@ -48,8 +48,8 @@ const TripDetailsPage = () => {
           left_component={
             isPassanger &&
             !isLoadingRole &&
-            passangerRole != undefined && (
-              <StatusTrip status={passangerRole.passengerState} />
+              currentPassanger != undefined && (
+              <StatusTrip status={currentPassanger.passengerState} />
             )
           }
         />

@@ -1,22 +1,19 @@
 import {useQuery} from "@tanstack/react-query";
 import PassangerService from "@/services/PassangerService.ts";
 import {parseTemplate} from "url-template";
-import UserPrivateModel from "@/models/UserPrivateModel.ts";
+import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 
-const useRolePassanger = ( isDriver:boolean, currentUser?: UserPrivateModel, uri?: string) => {
+const useRolePassanger = ( isDriver:boolean, uri?: string) => {
+    const { data:user} = useCurrentUser();
 
     const query = useQuery({
         queryKey: ["rolePassanger"],
         queryFn: async () => {
-            if (!uri || currentUser === undefined) {
-                return undefined;
-            }
-            const params = currentUser.selfUri.split("/");
-            const id = params[params.length - 1];
-            const uriAllPassangers = parseTemplate(uri).expand({
-                userId: id  ,
+            const id = String(user?.userId as number)
+            const uriPassangers = parseTemplate(uri as string).expand({
+                userId: id,
             });
-            return await PassangerService.getPassangerRole(uriAllPassangers);
+            return await PassangerService.getPassangerRole(uriPassangers);
         },
         retry: false,
         enabled: !!uri && !isDriver,
@@ -28,7 +25,7 @@ const useRolePassanger = ( isDriver:boolean, currentUser?: UserPrivateModel, uri
         ...query,
         isError,
         isLoading: isLoading || isPending,
-        passangersRole: data,
+        currentPassanger: data,
     };
 };
 
