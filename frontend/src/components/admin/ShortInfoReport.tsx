@@ -1,54 +1,51 @@
 import PrivateReportModel from "@/models/PrivateReportModel";
 import styles from "./styles.module.scss";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
-import { useEffect, useState } from "react";
-import UserService from "@/services/UserService.ts";
-import UserPublicModel from "@/models/UserPublicModel.ts";
 import { useTranslation } from "react-i18next";
 import LoadingWheel from "../loading/LoadingWheel";
 import ReportReason from "@/components/reportReason/ReportReason.tsx";
-
+import usePublicUserByUri from "@/hooks/users/usePublicUserByUri";
 
 const ShortInfoReport = (report: PrivateReportModel) => {
   const { t } = useTranslation();
-  const [UserReporter, setUserReporter] = useState<UserPublicModel | null>(
-    null
-  );
-  const [UserReported, setUserReported] = useState<UserPublicModel | null>(
-    null
-  );
+  const {
+    isLoading: isLoadingUserReporter,
+    user: userReporter,
+    isError: isErrorUserReporter,
+  } = usePublicUserByUri(report.reporterUri);
+  const {
+    isLoading: isLoadingUserReported,
+    user: userReported,
+    isError: isErrorUserReported,
+  } = usePublicUserByUri(report.reportedUri);
 
-  useEffect(() => {
-    UserService.getUserById(report.reporterUri).then((response) => {
-      setUserReporter(response);
-    });
-    UserService.getUserById(report.reportedUri).then((response) => {
-      setUserReported(response);
-    });
-  });
-
-  if (!report) {
-    return null;
+  if (
+    isLoadingUserReporter ||
+    isLoadingUserReported ||
+    isErrorUserReporter ||
+    isErrorUserReported
+  ) {
+    return <LoadingWheel description={t("admin.report.loading")} />;
   }
 
   return (
     <div>
       <div className={styles.row_report}>
         <div className={styles.profiles_info}>
-          {UserReporter === null ? (
+          {!userReporter ? (
             <LoadingWheel description={t("admin.user.loading")} />
           ) : (
             <div className={styles.info_profile_img}>
               <div>
-                <CircleImg src={UserReporter.imageUri} size={70} />
+                <CircleImg src={userReporter.imageUri} size={70} />
                 {/* <img src={"/"} alt="user image" className={styles.image_photo_admin} /> */}
               </div>
               <div className={styles.short_info_profile}>
                 <div className={styles.inline_text}>
                   <h4>
                     {t("format.name", {
-                      name: UserReporter.username,
-                      surname: UserReporter.surname,
+                      name: userReporter.username,
+                      surname: userReporter.surname,
                     })}
                   </h4>
                   <span>{report.description}</span>
@@ -67,7 +64,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
           <div className={styles.secondary_color}>
             <i className="bi bi-megaphone-fill secondary-color h1 "></i>
           </div>
-          {UserReported === null ? (
+          {!userReported ? (
             <LoadingWheel description={t("admin.user.loading")} />
           ) : (
             <div className={styles.info_profile_img_right}>
@@ -75,8 +72,8 @@ const ShortInfoReport = (report: PrivateReportModel) => {
                 <div className={styles.inline_text}>
                   <h4>
                     {t("format.name", {
-                      name: UserReported.username,
-                      surname: UserReported.surname,
+                      name: userReported.username,
+                      surname: userReported.surname,
                     })}
                   </h4>
                 </div>
@@ -90,7 +87,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
                 </h6>
               </div>
               <div>
-                <CircleImg src={UserReported.imageUri} size={70} />
+                <CircleImg src={userReported.imageUri} size={70} />
                 {/*<img src={"/"} alt="user image" className={styles.info_profile_img_right} />*/}
               </div>
             </div>
@@ -99,7 +96,9 @@ const ShortInfoReport = (report: PrivateReportModel) => {
         <div className={styles.trip_short_info}>
           <h4>
             <span className="secondary-color italic-text">
-              <h4><ReportReason reason={report.reportOption}/></h4>
+              <h4>
+                <ReportReason reason={report.reportOption} />
+              </h4>
             </span>
           </h4>
           <h5>

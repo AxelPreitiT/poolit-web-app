@@ -28,7 +28,7 @@ const TripDetailsPage = () => {
   const { currentUser } = useCurrentUser();
   const { isLoading: isLoadingTrip, trip: trip } = useTripByUri(link);
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
-  const { isLoading: isLoadingDriver, driver: driver } = usePublicUserByUri(
+  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
     trip?.driverUri
   );
   const isDriver = trip?.driverUri === currentUser?.selfUri;
@@ -40,8 +40,12 @@ const TripDetailsPage = () => {
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
 
-  const {isLoading, passangers} = useGetPassangers(isDriver , isPassanger, currentPassanger, trip);
-
+  const { isLoading, passangers } = useGetPassangers(
+    isDriver,
+    isPassanger,
+    currentPassanger,
+    trip
+  );
 
   if (
     isLoadingTrip ||
@@ -64,7 +68,7 @@ const TripDetailsPage = () => {
           left_component={
             isPassanger &&
             !isLoadingRole &&
-              currentPassanger != undefined && (
+            currentPassanger && (
               <StatusTrip status={currentPassanger.passengerState} />
             )
           }
@@ -105,9 +109,7 @@ const TripDetailsPage = () => {
           </div>
         </div>
       </MainComponent>
-      {isDriver && (
-        <PassangersTripComponent uri={trip.passengersUriTemplate} />
-      )}
+      {isDriver && <PassangersTripComponent uri={trip.passengersUriTemplate} />}
     </div>
   );
 };
