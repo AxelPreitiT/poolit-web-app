@@ -467,6 +467,16 @@
       "title": "No se pudo obtener las denuncias",
       "default": "Ocurrió un error al obtener las denuncias"
     },
+    "reason": {
+      "cannot_drive": "No sabe manejar",
+      "dangerous_driving": "Manejo riesgoso",
+      "did_not_pay": "No pago",
+      "harassment": "Acoso",
+      "identity_fraud": "Fraude de identidad",
+      "misconduct": "Mala conducta",
+      "wreck_car": "Auto en mal estado",
+      "other": "Otro"
+    },
     "report": {
       "detail": "Detalles de la denuncia",
       "loading": "Cargando denuncia",

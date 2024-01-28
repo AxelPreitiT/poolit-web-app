@@ -7,14 +7,15 @@ import { useTranslation } from "react-i18next";
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import reportService from "@/services/ReportService.ts";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
+import {parseTemplate} from "url-template";
 
-//TODO Agregar al discovery /reports/
+
 const useAllReports = () => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
 
-    //TODO reports en discovery
+
     const {
         isLoading,
         isError,
@@ -27,7 +28,11 @@ const useAllReports = () => {
             if (!discovery?.reportsUriTemplate) {
                 return [];
             }
-            return await reportService.getReports("/reports/");
+            //TODO testear que funcione asi
+            const uri = parseTemplate(discovery.reportsUriTemplate).expand({
+
+            });
+            return await reportService.getReports(uri);
         },
         retry: false,
         enabled: !isLoadingDiscovery && !!discovery?.reportsUriTemplate,

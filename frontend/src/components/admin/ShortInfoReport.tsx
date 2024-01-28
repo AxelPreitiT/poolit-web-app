@@ -6,8 +6,9 @@ import UserService from "@/services/UserService.ts";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import { useTranslation } from "react-i18next";
 import LoadingWheel from "../loading/LoadingWheel";
+import ReportReason from "@/components/reportReason/ReportReason.tsx";
 
-//TODO formato
+
 const ShortInfoReport = (report: PrivateReportModel) => {
   const { t } = useTranslation();
   const [UserReporter, setUserReporter] = useState<UserPublicModel | null>(
@@ -37,7 +38,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
           {UserReporter === null ? (
             <LoadingWheel description={t("admin.user.loading")} />
           ) : (
-            <div className={styles.info_profile_imgrofileImg}>
+            <div className={styles.info_profile_img}>
               <div>
                 <CircleImg src={UserReporter.imageUri} size={70} />
                 {/* <img src={"/"} alt="user image" className={styles.image_photo_admin} /> */}
@@ -69,7 +70,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
           {UserReported === null ? (
             <LoadingWheel description={t("admin.user.loading")} />
           ) : (
-            <div className={styles.short_info_profile_right}>
+            <div className={styles.info_profile_img_right}>
               <div className={styles.short_info_profile_right}>
                 <div className={styles.inline_text}>
                   <h4>
@@ -98,7 +99,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
         <div className={styles.trip_short_info}>
           <h4>
             <span className="secondary-color italic-text">
-              {report.reportOption}
+              <h4><ReportReason reason={report.reportOption}/></h4>
             </span>
           </h4>
           <h5>
