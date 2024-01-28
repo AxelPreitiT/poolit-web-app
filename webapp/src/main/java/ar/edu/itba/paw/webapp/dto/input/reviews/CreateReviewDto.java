@@ -10,7 +10,7 @@ public class CreateReviewDto {
     @Max(value = 5)
     private int rating;
 
-    @Size(min = 10,max = 200)
+    @Max(value = 200)
     private String comment;
 
     public int getRating() {
