@@ -1,14 +1,15 @@
 import "./MovingCar.css";
 import MovingCar from "./MovingCar";
 import styles from "./styles.module.scss";
-import {useEffect, useState} from "react";
-import CityService from "@/services/CityService.ts";
+import useCityByUri from "@/hooks/cities/useCityByUri";
+import LoadingWheel from "../loading/LoadingWheel";
+import { useTranslation } from "react-i18next";
 
 export interface LocationProps {
-    startCityUri: string;
-    startAddress: string;
-    endAddress: string;
-    endCityUri: string;
+  startCityUri: string;
+  startAddress: string;
+  endAddress: string;
+  endCityUri: string;
 }
 
 const Location = ({
@@ -17,23 +18,31 @@ const Location = ({
   endAddress,
   endCityUri,
 }: LocationProps) => {
+  const { t } = useTranslation();
+  const {
+    isLoading: isOriginCityLoading,
+    city: originCity,
+    isError: isOriginCityError,
+  } = useCityByUri(startCityUri);
+  const {
+    isLoading: isDestinationCityLoading,
+    city: destinationCity,
+    isError: isDestinationCityError,
+  } = useCityByUri(endCityUri);
 
-    const [cityOrigin, setCityOrigin] = useState<string | null>(null);
-    const [cityDestination, setCityDestination] = useState<string | null>(null);
+  if (
+    isOriginCityLoading ||
+    isDestinationCityLoading ||
+    isOriginCityError ||
+    isDestinationCityError
+  ) {
+    return <LoadingWheel description={t("location.loading")} />;
+  }
 
-    useEffect(() => {
-        CityService.getCityById(startCityUri).then((response) => {
-            setCityOrigin(response.name);
-        });
-        CityService.getCityById(endCityUri).then((response) => {
-            setCityDestination(response.name);
-        });
-    });
-
-    return (
+  return (
     <div className={styles.location_container}>
       <div className={styles.direction_container_r}>
-        <h1>{cityOrigin}</h1>
+        <h1>{originCity?.name}</h1>
         <h5>{startAddress}</h5>
       </div>
       <div className={styles.car_container}>
@@ -42,7 +51,7 @@ const Location = ({
         <i className="bi bi-geo-alt-fill h2"></i>
       </div>
       <div className={styles.direction_container_l}>
-        <h1>{cityDestination}</h1>
+        <h1>{destinationCity?.name}</h1>
         <h5>{endAddress}</h5>
       </div>
     </div>

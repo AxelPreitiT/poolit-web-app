@@ -6,7 +6,7 @@ export const citySelectorDefaultValue = -1;
 
 interface CitySelectorProps {
   cities?: CityModel[];
-  defaultOption: string;
+  defaultOption: string | null;
   onChange: ChangeEventHandler<HTMLSelectElement>;
   value: number;
 }
@@ -19,9 +19,11 @@ const CitySelector = ({
   ...props
 }: CitySelectorProps & FormSelectProps) => (
   <Form.Select {...props} onChange={onChange} value={value}>
-    <option value={citySelectorDefaultValue} disabled>
-      {defaultOption}
-    </option>
+    {defaultOption && (
+      <option value={citySelectorDefaultValue} disabled>
+        {defaultOption}
+      </option>
+    )}
     {cities.map((city) => (
       <option key={city.id} value={city.id}>
         {city.name}

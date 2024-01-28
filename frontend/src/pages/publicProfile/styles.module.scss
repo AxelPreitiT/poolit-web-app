@@ -43,6 +43,10 @@
 
 .list_block {
   flex-grow: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
 }
 
 @media (min-width: 1400px) {

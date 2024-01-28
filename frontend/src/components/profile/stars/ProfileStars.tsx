@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import styles from "./../prop/styles.module.scss";
 import StarRating from "@/components/stars/StarsRanking";
+import ProfilePropHeader from "../prop/ProfilePropHeader";
 
 interface ProfileStarsProps {
   prop: string;
@@ -12,7 +13,7 @@ const ProfileStars = ({ prop, rating }: ProfileStarsProps) => {
 
   return (
     <div>
-      <p className={styles.propHeader}>{prop}</p>
+      <ProfilePropHeader prop={prop} />
       {rating && rating > 0 ? (
         <StarRating rating={rating} className={styles.rating} />
       ) : (

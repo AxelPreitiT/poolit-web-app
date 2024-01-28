@@ -1,5 +1,5 @@
 import UserService from "@/services/UserService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import useQueryError from "../errors/useQueryError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
@@ -9,6 +9,7 @@ import useAuthentication from "../auth/useAuthentication";
 
 export const useCurrentUser = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const isAuthenticated = useAuthentication();
   const query = useQuery({
     queryKey: ["currentUser"],
@@ -36,9 +37,16 @@ export const useCurrentUser = () => {
     }
   }, [isError, error, onQueryError, t]);
 
+  const invalidate = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["currentUser"],
+    });
+  };
+
   return {
     ...query,
     currentUser: data,
     isLoading: isLoading || isPending,
+    invalidate,
   };
 };

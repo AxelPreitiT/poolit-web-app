@@ -39,7 +39,7 @@ const DriverList = ({
 
   return (
     <div>
-      {reviewsDriver == undefined || isLoadingReviewsDriver ? (
+      {reviewsDriver === undefined || isLoadingReviewsDriver ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -57,7 +57,7 @@ const DriverList = ({
           link={publicsDriverReviewsPath.replace(":id", id.toString())}
         />
       )}
-      {futureCreatedTrips == undefined || isLoadingFutureCreatedTrips ? (
+      {futureCreatedTrips === undefined || isLoadingFutureCreatedTrips ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -75,7 +75,7 @@ const DriverList = ({
           link={createdTripsPath}
         />
       )}
-      {pastCreatedTrips == undefined || isLoadingPastCreatedTrips ? (
+      {pastCreatedTrips === undefined || isLoadingPastCreatedTrips ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -93,7 +93,7 @@ const DriverList = ({
           link={createdTripsPath}
         />
       )}
-      {cars == undefined || isLoadingUserCars ? (
+      {cars === undefined || isLoadingUserCars ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}

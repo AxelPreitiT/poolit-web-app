@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import useQueryError from "../errors/useQueryError";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useDiscovery from "../discovery/useDiscovery";
 import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import CarService from "@/services/CarService";
@@ -10,6 +10,7 @@ import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 
 const useCarById = (carId?: string) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const onQueryError = useQueryError();
   const {
     discovery,
@@ -49,10 +50,19 @@ const useCarById = (carId?: string) => {
     }
   }, [isError, error, onQueryError, t]);
 
+  const invalidate = () => {
+    if (carId) {
+      queryClient.invalidateQueries({
+        queryKey: ["carId", carId],
+      });
+    }
+  };
+
   return {
     ...query,
     isLoading: isLoading || isPending,
     car,
+    invalidate,
   };
 };
 

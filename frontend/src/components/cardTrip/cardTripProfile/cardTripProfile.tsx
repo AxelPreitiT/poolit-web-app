@@ -1,40 +1,46 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import CityService from "@/services/CityService.ts";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import TripModel from "@/models/TripModel.ts";
 import extractPathAfterApi from "@/functions/extractPathAfterApi.ts";
 import { Link } from "react-router-dom";
 import LoadingWheel from "@/components/loading/LoadingWheel";
+import useCityByUri from "@/hooks/cities/useCityByUri";
+import useCarByUri from "@/hooks/cars/useCarByUri";
 
-const CardTripProfile = (Trip: TripModel) => {
+const CardTripProfile = (trip: TripModel) => {
   const { t } = useTranslation();
 
-  const [cityOrigin, setCityOrigin] = useState<string | null>(null);
-  const [cityDestination, setCityDestination] = useState<string | null>(null);
-  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
+  const {
+    isLoading: isOriginCityLoading,
+    city: originCity,
+    isError: isOriginCityError,
+  } = useCityByUri(trip.originCityUri);
+  const {
+    isLoading: isDestinationCityLoading,
+    city: destinationCity,
+    isError: isDestinationCityError,
+  } = useCityByUri(trip.destinationCityUri);
+  const {
+    isLoading: isCarLoading,
+    car,
+    isError: isCarError,
+  } = useCarByUri(trip.carUri);
 
-  useEffect(() => {
-    CityService.getCityById(Trip.originCityUri).then((response) => {
-      setCityOrigin(response.name);
-    });
-    CityService.getCityById(Trip.destinationCityUri).then((response) => {
-      setCityDestination(response.name);
-    });
-  });
-
-  useEffect(() => {
-    CarService.getCarByUri(Trip.carUri).then((response) => {
-      setCarTrip(response);
-    });
-  });
+  if (
+    isOriginCityLoading ||
+    isDestinationCityLoading ||
+    isCarLoading ||
+    isOriginCityError ||
+    isDestinationCityError ||
+    isCarError
+  ) {
+    return <LoadingWheel description={t("trip.loading_one")} />;
+  }
 
   return (
     <Link
-      to={extractPathAfterApi(Trip.selfUri)}
+      to={extractPathAfterApi(trip.selfUri)}
       className={styles.link_container}
     >
       <div className={styles.card_info}>
@@ -46,24 +52,24 @@ const CardTripProfile = (Trip: TripModel) => {
           </div>
           <div className={styles.address_container}>
             <div className={styles.route_info_text}>
-              <h3>{cityOrigin}</h3>
-              <span className="text">{Trip.originAddress}</span>
+              <h3>{originCity?.name}</h3>
+              <span className="text">{trip.originAddress}</span>
             </div>
             <div className={styles.route_info_text}>
-              <h3>{cityDestination}</h3>
+              <h3>{destinationCity?.name}</h3>
               <span style={{ textAlign: "right" }}>
-                {Trip.destinationAddress}
+                {trip.destinationAddress}
               </span>
             </div>
           </div>
           <div className={styles.extra_info_container}>
             <div className={styles.calendar_container}>
               <i className="bi bi-calendar text"></i>
-              {Trip.totalTrips == 1 ? (
+              {trip.totalTrips == 1 ? (
                 <div className={styles.format_date}>
                   <span className="text">PONER DIA</span>
                   <span className={styles.date_text}>
-                    {getFormattedDateTime(Trip.startDateTime).date}
+                    {getFormattedDateTime(trip.startDateTime).date}
                   </span>
                 </div>
               ) : (
@@ -71,9 +77,9 @@ const CardTripProfile = (Trip: TripModel) => {
                   <span className="text">PONER DIA</span>
                   <span className={styles.date_text}>
                     {t("format.recurrent_date", {
-                      initial_date: getFormattedDateTime(Trip.startDateTime)
+                      initial_date: getFormattedDateTime(trip.startDateTime)
                         .date,
-                      final_date: getFormattedDateTime(Trip.endDateTime).date,
+                      final_date: getFormattedDateTime(trip.endDateTime).date,
                     })}
                   </span>
                 </div>
@@ -81,12 +87,12 @@ const CardTripProfile = (Trip: TripModel) => {
             </div>
             <div className={styles.calendar_container}>
               <i className="bi bi-clock"></i>
-              <span>{getFormattedDateTime(Trip.startDateTime).time}</span>
+              <span>{getFormattedDateTime(trip.startDateTime).time}</span>
             </div>
             <div>
               <h2 className={styles.price_format}>
                 {t("format.price", {
-                  priceInt: Trip.pricePerTrip,
+                  priceInt: trip.pricePerTrip,
                   princeFloat: 0,
                 })}
               </h2>
@@ -94,7 +100,7 @@ const CardTripProfile = (Trip: TripModel) => {
           </div>
         </div>
         <div className={styles.img_container}>
-          {CarTrip === null ? (
+          {!car ? (
             <LoadingWheel
               description={t("car.loading")}
               containerClassName={styles.loadingContainer}
@@ -102,7 +108,7 @@ const CardTripProfile = (Trip: TripModel) => {
               descriptionClassName={styles.loadingDescription}
             />
           ) : (
-            <img className={styles.car_container} src={CarTrip.imageUri} />
+            <img className={styles.car_container} src={car.imageUri} />
           )}
         </div>
       </div>

@@ -1,3 +1,4 @@
+import ProfilePropHeader from "./ProfilePropHeader";
 import styles from "./styles.module.scss";
 
 export interface ProfilePropProps {
@@ -8,7 +9,7 @@ export interface ProfilePropProps {
 const ProfileProp = ({ prop, text }: ProfilePropProps) => {
   return (
     <div>
-      <p className={styles.propHeader}>{prop}</p>
+      <ProfilePropHeader prop={prop} />
       <p className={styles.propValue}>{text}</p>
     </div>
   );

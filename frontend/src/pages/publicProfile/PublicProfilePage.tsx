@@ -1,4 +1,3 @@
-import ProfileImg from "@/components/profile/img/ProfileImg.tsx";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
@@ -13,6 +12,7 @@ import {
   publicsPassangerReviewsPath,
 } from "@/AppRouter.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
+import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
 
 const PublicProfilePage = () => {
   const { t } = useTranslation();
@@ -34,7 +34,7 @@ const PublicProfilePage = () => {
         />
       ) : (
         <div className={styles.profileCard}>
-          <ProfileImg src={user.imageUri} />
+          <ViewableProfileImg src={user.imageUri} />
           <h3 className="text-center">
             {t("format.name", {
               name: user.username,

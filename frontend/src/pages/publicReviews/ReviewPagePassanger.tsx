@@ -1,4 +1,3 @@
-import ProfileImg from "@/components/profile/img/ProfileImg.tsx";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
@@ -11,7 +10,8 @@ import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import ShortReview from "@/components/review/shorts/ShortReview.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
-import {INITIALPAGE, REVIEWPAGESIZE} from "@/enums/PaginationConstants.ts";
+import { INITIALPAGE, REVIEWPAGESIZE } from "@/enums/PaginationConstants.ts";
+import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
 
 const ReviewPageDriver = () => {
   const { t } = useTranslation();
@@ -20,7 +20,7 @@ const ReviewPageDriver = () => {
 
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? INITIALPAGE: parseInt(page, 10);
+  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
 
   return (
     <div className={styles.main_container}>
@@ -33,7 +33,7 @@ const ReviewPageDriver = () => {
         />
       ) : (
         <div className={styles.profileCard}>
-          <ProfileImg src={user.imageUri} />
+          <ViewableProfileImg src={user.imageUri} />
           <h3 className="text-center">
             {t("format.name", {
               name: user.username,
@@ -66,22 +66,18 @@ const ReviewPageDriver = () => {
         <div className={styles.list_block}>
           <div className={styles.list_container}>
             <div className={styles.row_data}>
-              <h2>{t("profile.lists.review_as_driver")}</h2>
+              <h2>{t("profile.lists.review_as_passanger")}</h2>
             </div>
             <PaginationComponent
               uri={createPaginationUri(
                 user.reviewsPassengerUri,
                 currentPage,
-                  REVIEWPAGESIZE
+                REVIEWPAGESIZE
               )}
               current_page={currentPage}
               useFuction={useUserReviewsByUri}
               empty_component={
-                <EmptyList
-                  text={t("profile.lists.review_as_passanger")}
-                  second_text={t("created_trips.more")}
-                  icon={"car-front-fill"}
-                />
+                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
               }
               component_name={ShortReview}
               itemsName={t("reviews.title")}

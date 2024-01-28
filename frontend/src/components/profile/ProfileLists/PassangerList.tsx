@@ -32,7 +32,7 @@ const PassengerList = ({
 
   return (
     <div>
-      {reviewsPassenger == undefined || isLoadingReviewsPassenger ? (
+      {reviewsPassenger === undefined || isLoadingReviewsPassenger ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -50,7 +50,7 @@ const PassengerList = ({
           link={publicsPassangerReviewsPath.replace(":id", id.toString())}
         />
       )}
-      {futureReservedTrips == undefined || isLoadingFutureReservedTrips ? (
+      {futureReservedTrips === undefined || isLoadingFutureReservedTrips ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -70,7 +70,7 @@ const PassengerList = ({
           />
         </div>
       )}
-      {pastReservedTrips == undefined || isLoadingPastReservedTrips ? (
+      {pastReservedTrips === undefined || isLoadingPastReservedTrips ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}

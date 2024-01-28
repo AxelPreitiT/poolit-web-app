@@ -3,8 +3,8 @@ import CitiesApi from "@/api/CitiesApi.ts";
 import CityModel from "@/models/CityModel.ts";
 
 class CityService extends Service {
-  public static getCityById = async (uri: string): Promise<CityModel> =>
-    await this.resolveQuery(CitiesApi.getCityById(uri));
+  public static getCityByUri = async (uri: string): Promise<CityModel> =>
+    await this.resolveQuery(CitiesApi.getCityByUri(uri));
 
   public static getAllCities = async (
     uriTemplate: string

@@ -7,9 +7,11 @@ import { parseTemplate } from "url-template";
 import CreateCarModel from "@/models/CreateCarModel";
 import CarReviewModel from "@/models/CarReviewModel";
 import PaginationModel from "@/models/PaginationModel";
+import { EditCarFormSchemaType } from "@/forms/EditCarForm";
 
 class CarApi extends AxiosApi {
   private static readonly CAR_ID_URI_KEY = "carId";
+  private static readonly CAR_CONTENT_TYPE = "application/vnd.car.v1+json";
 
   public static getCarsByUser: (
     uriTemplate: string,
@@ -67,7 +69,7 @@ class CarApi extends AxiosApi {
       },
       {
         headers: {
-          "Content-Type": "application/vnd.car.v1+json",
+          "Content-Type": this.CAR_CONTENT_TYPE,
         },
       }
     ).then((response) => {
@@ -91,6 +93,28 @@ class CarApi extends AxiosApi {
         "Content-Type": "multipart/form-data",
       },
     });
+  };
+
+  public static updateCar: (
+    carUri: string,
+    data: EditCarFormSchemaType
+  ) => AxiosPromise<void> = (
+    carUri: string,
+    { car_description, seats, car_features = [] }
+  ) => {
+    return this.put(
+      carUri,
+      {
+        carInfo: car_description,
+        seats: seats,
+        features: car_features,
+      },
+      {
+        headers: {
+          "Content-Type": this.CAR_CONTENT_TYPE,
+        },
+      }
+    );
   };
 }
 

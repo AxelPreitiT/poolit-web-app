@@ -13,6 +13,7 @@ import PaginationModel from "@/models/PaginationModel";
 
 interface useSearchTripsFormProps {
   initialSearch?: Partial<SearchTripsFormSchemaType>;
+  submitOnMount?: boolean;
   onSubmit: SubmitHandlerReturnModel<
     SearchTripsFormSchemaType,
     PaginationModel<TripModel>
@@ -29,6 +30,7 @@ interface useSearchTripsFormProps {
 
 const useSearchTripsForm = ({
   initialSearch,
+  submitOnMount,
   onSubmit,
   onSuccess: onSuccessProp,
   onError: onErrorProp,
@@ -65,6 +67,7 @@ const useSearchTripsForm = ({
     onSuccess,
     onError,
     defaultValues: initialSearch,
+    executeOnMount: submitOnMount,
   });
 };
 
