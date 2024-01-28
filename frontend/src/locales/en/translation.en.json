@@ -295,9 +295,44 @@
   },
   "reviews": {
     "title": "Reviews",
-    "NOT_FRIENDLY": "Not friendly",
-    "DANGEROUS_DRIVER": "Dangerous driver",
-    "UNPUNCTUAL": "Unpunctual",
+    "VERY_BAD_STATE": "Very bad state",
+    "VERY_DIRTY": "Very dirty",
+    "REDUCED_TRUNK_SPACE": "The trunk space is reduced",
+    "NO_SEATBELTS": "Had no seatbelts or airbags",
+    "NO_AIR_CONDITIONING": "The air conditioning did not work",
+    "UNCOMFORTABLE_SEATS": "The seats are uncomfortable",
+    "BAD_STATE": "Bad state",
+    "DIRTY": "Dirty",
+    "AIR_CONDITIONING_WORKING_BADLY": "The air conditioning worked badly",
+    "SEATBELTS_MISSING": "Some seatbelts or airbags were missing",
+    "GOOD_STATE": "Good state",
+    "CLEAN": "Clean",
+    "GOOD_TRUNK_SPACE": "The trunk has good space",
+    "COMFORTABLE_SEATS": "The seats are comfortable",
+    "AIR_CONDITIONING_WORKING_WELL": "The air conditioning worked well",
+    "SEATBELTS": "Had all the seatbelts and airbags",
+    "VERY_GOOD_STATE": "Very good state",
+    "VERY_CLEAN": "Very clean",
+    "IMPECCABLE": "Impeccable",
+    "BIG_TRUNK_SPACE": "The trunk has a lot of space",
+    "VERY_COMFORTABLE_SEATS": "The seats are very comfortable",
+    "AIR_CONDITIONING_WORKING_PERFECTLY": "The air conditioning worked perfectly",
+    "DISRESPECTFUL": "Disrespectful",
+    "INAPPROPRIATE_BEHAVIOUR": "Inappropriate behaviour",
+    "UNPUNCTUAL": "Was unpunctual",
+    "NOT_FRIENDLY": "Was not friendly",
+    "UNCOMMUNICATIVE": "Was uncommunicative",
+    "BAD_BEHAVIOUR": "Bad behaviour",
+    "BAD_ATTITUDE": "Bad attitude",
+    "ACCEPTABLE_BEHAVIOUR": "Acceptable behaviour",
+    "FRIENDLY": "Was friendly",
+    "PUNCTUAL": "Was punctual",
+    "ACCEPTABLE_ATTITUDE": "Acceptable attitude",
+    "VERY_FRIENDLY": "Was very friendly",
+    "CONSIDERATE": "Showed consideration and respect",
+    "RESPONSIBLE": "Behaved responsibly",
+    "GOOD_COMPANY": "Made good company",
+    "DANGEROUS_DRIVER": "Drives dangerously",
     "DISTRACTED_DRIVER": "Distracted driver",
     "NOT_RESPECTED_TRAFFIC_RULES": "Does not respect traffic rules",
     "UNCOMFORTABLE_EXPERIENCE": "Uncomfortable experience",
@@ -306,9 +341,6 @@
     "RESPECTED_TRAFFIC_RULES": "Respects traffic rules",
     "ACCEPTABLE_DRIVER": "Acceptable driver",
     "ACCEPTABLE_EXPERIENCE": "Acceptable experience",
-    "FRIENDLY": "Friendly",
-    "PUNCTUAL": "Punctual",
-    "VERY_FRIENDLY": "Very friendly",
     "SAFE_DRIVER": "Safe driver",
     "GOOD_EXPERIENCE": "Good experience",
     "PROFESSIONAL_DRIVER": "Professional driver",
@@ -589,6 +621,7 @@
     "loading_one": "Loading trip"
   },
   "car": {
+    "title": "Car",
     "error": {
       "yours": "An error occurred while loading your cars",
       "your": "An error occurred while loading you car",
@@ -616,6 +649,12 @@
       "default": "An error occurred while fetching the car brands",
       "title_one": "Could not fetch the car brand",
       "default_one": "An error occurred while fetching the car brand"
+    }
+  },
+  "car_reviews": {
+    "error": {
+      "title": "Could not fetch the car reviews",
+      "default": "An error occurred while fetching the car reviews"
     }
   },
   "discovery": {

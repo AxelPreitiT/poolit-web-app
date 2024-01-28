@@ -8,6 +8,7 @@ interface CarModel {
   rating: number;
   seats: number;
   selfUri: string;
+  reviewsUri: string;
 }
 
 export default CarModel;

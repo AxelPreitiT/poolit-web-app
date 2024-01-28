@@ -17,6 +17,7 @@ import SearchPage from "./pages/search/SearchPage";
 import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
 import ReportPage from "@/pages/admin/ReportPage.tsx";
 import CreateCarPage from "./pages/createCar/CreateCarPage.tsx";
+import CarPage from "./pages/car/CarPage.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -34,6 +35,7 @@ export const adminPath = "/admin";
 export const reportPath = "/reports/:id";
 export const searchPath = "/search";
 export const createCarsPath = "/cars/create";
+export const carPath = "/cars/:carId";
 export const routerBasename = import.meta.env.BASE_URL;
 
 const router = createBrowserRouter(
@@ -212,6 +214,15 @@ const router = createBrowserRouter(
         >
           <Navbar />
           <CreateCarPage />
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: carPath,
+      element: (
+        <RouteWrapper title="car.title" showWhenUserIsNotAuthenticated={false}>
+          <Navbar />
+          <CarPage />,
         </RouteWrapper>
       ),
     },

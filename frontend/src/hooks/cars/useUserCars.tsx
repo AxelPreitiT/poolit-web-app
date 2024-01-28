@@ -1,11 +1,13 @@
-import {useTranslation} from "react-i18next";
-import {useCurrentUser} from "../users/useCurrentUser";
+import { useTranslation } from "react-i18next";
+import { useCurrentUser } from "../users/useCurrentUser";
 import CarService from "@/services/CarService";
-import {useQuery} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import useQueryError from "../errors/useQueryError";
 import { useEffect } from "react";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import useAuthentication from "../auth/useAuthentication";
+import useDiscovery from "../discovery/useDiscovery";
+import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 
 const useUserCars = () => {
   const { t } = useTranslation();
@@ -16,6 +18,11 @@ const useUserCars = () => {
     currentUser,
     isError: isCurrentUserError,
   } = useCurrentUser();
+  const {
+    isLoading: isDiscoveryLoading,
+    discovery,
+    isError: isDiscoveryError,
+  } = useDiscovery();
 
   const query = useQuery({
     queryKey: ["userCars"],
@@ -23,9 +30,19 @@ const useUserCars = () => {
       if (currentUser === undefined) {
         return;
       }
-      return await CarService.getCarsByUser(currentUser);
+      if (!discovery || isDiscoveryError) {
+        throw new DiscoveryMissingError();
+      }
+      return await CarService.getCarsByUser(
+        discovery.carsUriTemplate,
+        currentUser
+      );
     },
-    enabled: isAuthenticated && !isCurrentUserLoading && !isCurrentUserError,
+    enabled:
+      isAuthenticated &&
+      !isCurrentUserLoading &&
+      !isCurrentUserError &&
+      !isDiscoveryLoading,
     retry: false,
   });
 

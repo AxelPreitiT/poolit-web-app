@@ -8,7 +8,7 @@ interface ProfileImgProps {
 const ProfileImg = ({ src }: ProfileImgProps) => (
   <div className={styles.avatar_img}>
     <div className={styles.circular__landscape}>
-      <Image src={src} roundedCircle />
+      <Image src={src} />
     </div>
   </div>
 );

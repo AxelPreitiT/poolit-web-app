@@ -17,7 +17,7 @@ const useCarByUri = (uri?: string) => {
     error,
     isPending,
   } = useQuery({
-    queryKey: ["car"],
+    queryKey: ["carUri", uri],
     queryFn: async () => {
       if (!uri) {
         return undefined;

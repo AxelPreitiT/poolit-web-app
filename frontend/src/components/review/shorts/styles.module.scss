@@ -15,8 +15,18 @@
   color: colors.$secondary-color !important;
 }
 
+.review_info_comment {
+  font-size: 1.2rem;
+  word-break: break-word;
+}
+
 .date_review {
   font-style: italic;
   display: flex;
   justify-content: right;
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: colors.$italic-text-color;
+  font-style: italic;
 }

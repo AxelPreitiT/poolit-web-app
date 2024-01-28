@@ -5,20 +5,47 @@ import UserPrivateModel from "@/models/UserPrivateModel";
 import { CreateCarFormSchemaType } from "@/forms/CreateCarForm";
 import { parseTemplate } from "url-template";
 import CreateCarModel from "@/models/CreateCarModel";
+import CarReviewModel from "@/models/CarReviewModel";
+import PaginationModel from "@/models/PaginationModel";
 
 class CarApi extends AxiosApi {
+  private static readonly CAR_ID_URI_KEY = "carId";
+
   public static getCarsByUser: (
+    uriTemplate: string,
     user: UserPrivateModel
-  ) => AxiosPromise<CarModel[]> = (user: UserPrivateModel) => {
-    return this.get<CarModel[]>(user.carsUri);
+  ) => AxiosPromise<CarModel[]> = (
+    uriTemplate: string,
+    user: UserPrivateModel
+  ) => {
+    const uri = parseTemplate(uriTemplate).expand({});
+    const searchParams = new URLSearchParams({
+      fromUser: user.userId.toString(),
+    }).toString();
+    // Todo: Concat url
+    return this.get<CarModel[]>(`${uri}?${searchParams}`);
   };
 
   public static getCarByUri: (uri: string) => AxiosPromise<CarModel> = (
     uri: string
   ) => {
-    return this.get<CarModel>(uri, {
-      headers: {},
+    return this.get<CarModel>(uri);
+  };
+
+  public static getCarById: (
+    uriTemplate: string,
+    id: string
+  ) => AxiosPromise<CarModel> = (uriTemplate: string, id: string) => {
+    const uri = parseTemplate(uriTemplate).expand({
+      [this.CAR_ID_URI_KEY]: id,
     });
+    return this.getCarByUri(uri);
+  };
+
+  public static getCarReviews: (
+    uri: string
+  ) => AxiosPromise<PaginationModel<CarReviewModel>> = (uri: string) => {
+    return this.get<CarReviewModel[]>(uri).then(this.getPaginationModel);
   };
 
   public static createCar: (

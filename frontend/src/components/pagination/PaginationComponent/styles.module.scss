@@ -2,14 +2,56 @@
 
 .pagination_btn_container {
   display: flex;
-  padding: 5%;
+  padding: 2em 0 0.5em 0;
   justify-content: center;
   align-content: center;
 }
 
-.btn_pagination {
-  background-color: colors.$secondary-color !important;
-  border-color: colors.$secondary-color !important;
+.paginationContainer {
+  margin-bottom: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  background-color: colors.$container-color;
+}
+
+%paginationItem {
+  font-weight: 500;
+  font-size: 1.25rem;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+  background-color: colors.$container-color;
+}
+
+%paginationItem:hover {
+  opacity: 0.8;
+}
+
+.paginationItem > *,
+.paginationItem > *:focus,
+.paginationItem > *:active {
+  @extend %paginationItem;
+  background-color: colors.$container-color;
+  color: colors.$secondary-color;
+  box-shadow: none;
+}
+
+.paginationItem > *:hover {
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+}
+
+.paginationActiveItem > * {
+  @extend %paginationItem;
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+}
+
+.paginationActiveItem > *:hover,
+.paginationActiveItem > *:focus,
+.paginationActiveItem > *:active {
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+  box-shadow: none;
 }
 
 .loadingContainer {
