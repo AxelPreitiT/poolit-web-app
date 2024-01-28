@@ -1,24 +1,34 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import StarRating from "@/components/stars/StarsRanking";
-import {useTranslation} from "react-i18next";
-import getFormattedDateTime from "@/functions/DateFormat.ts";
+import { useTranslation } from "react-i18next";
+import ReviewModel from "@/models/ReviewModel";
+import { capitalize } from "@/utils/string/capitalize";
 
+const formatDateTime = (dateTime: string) => {
+  const [date, time] = dateTime.split("T");
+  const [year, month, day] = date.split("-");
+  const [hour, minutes] = time.split(":");
+
+  return `${day}/${month}/${year} ${hour}:${minutes}`;
+};
 
 const ShortReview = (review: ReviewModel) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return (
+  return (
     <div className={styles.short_review}>
       <div className={styles.row_content}>
         <div>
           <h4 className={styles.type}>{t(`reviews.${review.option}`)}</h4>
-          <span className={styles.review_info_comment}>{review.comment}</span>
+          <span className={styles.review_info_comment}>
+            {capitalize(review.comment)}
+          </span>
         </div>
-        <StarRating rating={review.rating} />
+        <StarRating rating={review.rating} className="h4" />
       </div>
       <div className={styles.date_review}>
-        <span>{getFormattedDateTime(review.reviewDateTime).date}</span>
+        <span>{formatDateTime(review.reviewDateTime)}</span>
       </div>
     </div>
   );

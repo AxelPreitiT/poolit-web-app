@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { routerBasename } from "@/AppRouter.tsx";
 import { createBrowserHistory } from "history";
-import { ButtonGroup, ToggleButton } from "react-bootstrap";
+import { Pagination } from "react-bootstrap";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { useTranslation } from "react-i18next";
 
@@ -83,76 +83,72 @@ const PaginationComponent = <T,>({
           <div>{props}</div>
           {pageTrips.totalPages > 1 && (
             <div className={styles.pagination_btn_container}>
-              <ButtonGroup className="mb-2">
-                <ToggleButton
-                  id={`radio-pepe2`}
-                  value="pepe2"
-                  className={styles.btn_pagination}
+              <Pagination className={styles.paginationContainer}>
+                <Pagination.First
+                  as="button"
+                  className={styles.paginationItem}
                   onClick={() => handlePage(pageTrips?.first, 1)}
-                  disabled={pageTrips.prev == null}
-                >
-                  <i className="bi bi-chevron-double-left"></i>
-                </ToggleButton>
-                {pageTrips.prev != null && (
-                  <ToggleButton
-                    id={`radio-pepe2`}
-                    value="pepe2"
-                    className={styles.btn_pagination}
+                  disabled={!pageTrips.prev}
+                />
+                <Pagination.Prev
+                  as="button"
+                  className={styles.paginationItem}
+                  onClick={() => handlePage(pageTrips?.prev, currentPage - 1)}
+                  disabled={!pageTrips.prev}
+                />
+                {currentPage > 2 && (
+                  <Pagination.Ellipsis
+                    as="button"
+                    className={styles.paginationItem}
                     disabled={true}
-                  >
-                    <i className="bi bi-three-dots"></i>
-                  </ToggleButton>
+                  />
                 )}
                 {pageTrips.prev != null && (
-                  <ToggleButton
-                    id={`radio-pepe`}
-                    value="pepe"
-                    className={styles.btn_pagination}
+                  <Pagination.Item
+                    as="button"
+                    className={styles.paginationItem}
                     onClick={() => handlePage(pageTrips?.prev, currentPage - 1)}
                   >
                     {(currentPage - 1).toString()}
-                  </ToggleButton>
+                  </Pagination.Item>
                 )}
-                <ToggleButton
-                  id={`radio-pepe`}
-                  value="pepe"
-                  variant="warning"
-                  className={styles.btn_pagination}
+                <Pagination.Item
+                  as="button"
+                  className={styles.paginationActiveItem}
                 >
                   {currentPage.toString()}
-                </ToggleButton>
+                </Pagination.Item>
                 {pageTrips.next != null && (
-                  <ToggleButton
-                    id={`radio-pepe`}
-                    value="pepe"
-                    className={styles.btn_pagination}
+                  <Pagination.Item
+                    as="button"
+                    className={styles.paginationItem}
                     onClick={() => handlePage(pageTrips?.next, currentPage + 1)}
                   >
                     {(currentPage + 1).toString()}
-                  </ToggleButton>
+                  </Pagination.Item>
                 )}
-                {pageTrips.next != null && (
-                  <ToggleButton
-                    id={`radio-pepe2`}
-                    value="pepe2"
+                {currentPage < pageTrips.totalPages - 1 && (
+                  <Pagination.Ellipsis
+                    as="button"
+                    className={styles.paginationItem}
                     disabled={true}
-                    className={styles.btn_pagination}
-                  >
-                    <i className="bi bi-three-dots"></i>
-                  </ToggleButton>
+                  />
                 )}
-                <ToggleButton
-                  id={`radio-pepe2`}
-                  value="pepe2"
-                  className={styles.btn_pagination}
-                  disabled={pageTrips.next == null}
+                <Pagination.Next
+                  as="button"
+                  className={styles.paginationItem}
+                  onClick={() => handlePage(pageTrips?.next, currentPage + 1)}
+                  disabled={!pageTrips.next}
+                />
+                <Pagination.Last
+                  as="button"
+                  className={styles.paginationItem}
+                  disabled={!pageTrips.next}
                   onClick={() =>
                     handlePage(pageTrips?.last, pageTrips?.totalPages)
                   }
-                >
-                  <i className="bi bi-chevron-double-right"></i>
-                </ToggleButton>
-              </ButtonGroup>
+                />
+              </Pagination>
             </div>
           )}
         </div>

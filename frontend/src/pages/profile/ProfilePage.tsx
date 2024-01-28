@@ -85,8 +85,8 @@ const ProfilePage = () => {
           <LoadingScreen description={t("profile.loading.profile")} />
         ) : currentUser.role !== UsersRoles.USER ? (
           <TabComponent
-            right_title={t("roles.passenger")}
-            right_component={
+            left_title={t("roles.passenger")}
+            left_component={
               <PassengerList
                 futureReservedTripsUri={createPaginationUri(
                   currentUser.futureReservedTripsUri,
@@ -106,8 +106,8 @@ const ProfilePage = () => {
                 id={currentUser.userId}
               />
             }
-            left_title={t("roles.driver")}
-            left_component={
+            right_title={t("roles.driver")}
+            right_component={
               <DriverList
                 futureCreatedTripsUri={createPaginationUri(
                   currentUser.futureCreatedTripsUri,
@@ -127,6 +127,7 @@ const ProfilePage = () => {
                 id={currentUser.userId}
               />
             }
+            active="right"
           />
         ) : (
           <PassengerList

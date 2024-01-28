@@ -1,6 +1,7 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
 import { AxiosPromise, AxiosResponse } from "axios";
 import PaginationModel from "@/models/PaginationModel.tsx";
+import ReviewModel from "@/models/ReviewModel";
 
 class ReviewsApi extends AxiosApi {
   public static getReviewsByUser: (

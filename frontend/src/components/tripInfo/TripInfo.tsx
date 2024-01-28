@@ -7,7 +7,7 @@ import UserPublicModel from "@/models/UserPublicModel.ts";
 import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import {Link} from "react-router-dom";
-import {publicCarPath, publicProfilePath} from "@/AppRouter.tsx";
+import {carPath, publicProfilePath} from "@/AppRouter.tsx";
 import {getDayString} from "@/utils/date/dayString.ts";
 
 interface TripInfoProps {
@@ -43,14 +43,14 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
         </div>
       </div>
       <div className={styles.show_row}>
-          <Link to={publicCarPath.replace(":id", String(car.carId))}>
+          <Link to={carPath.replace(":carId", String(car.carId))}>
               <CircleImg
                   src={car.imageUri}
                   size={40}
               />
           </Link>
         <div className={styles.info_details}>
-            <Link to={publicCarPath.replace(":id", String(car.carId))}>
+            <Link to={carPath.replace(":carId", String(car.carId))}>
                 <span className={styles.link_trip_details}>{car.infoCar}</span>
             </Link>
             <StarRating rating={car.rating} className="light-text h6" />

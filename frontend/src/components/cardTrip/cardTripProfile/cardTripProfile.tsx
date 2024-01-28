@@ -27,7 +27,7 @@ const CardTripProfile = (Trip: TripModel) => {
   });
 
   useEffect(() => {
-    CarService.getCarById(Trip.carUri).then((response) => {
+    CarService.getCarByUri(Trip.carUri).then((response) => {
       setCarTrip(response);
     });
   });

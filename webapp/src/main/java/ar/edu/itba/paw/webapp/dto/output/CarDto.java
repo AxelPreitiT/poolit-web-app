@@ -23,6 +23,7 @@ public class CarDto {
     private URI selfUri;
     private URI imageUri;
     private long carId;
+    private URI reviewsUri;
 
     public CarDto(){}
 
@@ -36,6 +37,7 @@ public class CarDto {
         this.rating = car.getCarRating();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).build();
         this.imageUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).path(UrlHolder.IMAGE_ENTITY).build();
+        this.reviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(car.getCarId())).path(UrlHolder.REVIEWS_ENTITY).build();
     }
 
     public static CarDto fromCar(final UriInfo uriInfo, final Car car){
@@ -103,5 +105,13 @@ public class CarDto {
 
     public void setCarId(long carId) {
         this.carId = carId;
+    }
+
+    public URI getReviewsUri() {
+        return reviewsUri;
+    }
+
+    public void setReviewsUri(URI reviewsUri) {
+        this.reviewsUri = reviewsUri;
     }
 }

@@ -17,7 +17,7 @@ import SearchPage from "./pages/search/SearchPage";
 import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
 import ReportPage from "@/pages/admin/ReportPage.tsx";
 import CreateCarPage from "./pages/createCar/CreateCarPage.tsx";
-import PublicCarPage from "@/pages/publicCar/publicCar.tsx";
+import CarPage from "./pages/car/CarPage.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -28,7 +28,6 @@ export const profilePath = "/profile";
 export const publicsDriverReviewsPath = "/reviews/driver/:id";
 export const publicsPassangerReviewsPath = "/reviews/passanger/:id";
 export const publicProfilePath = "/profile/:id";
-export const publicCarPath = "/cars/:id";
 export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
@@ -36,6 +35,7 @@ export const adminPath = "/admin";
 export const reportPath = "/reports/:id";
 export const searchPath = "/search";
 export const createCarsPath = "/cars/create";
+export const carPath = "/cars/:carId";
 export const routerBasename = import.meta.env.BASE_URL;
 
 const router = createBrowserRouter(
@@ -137,18 +137,6 @@ const router = createBrowserRouter(
       ),
     },
     {
-     path: publicCarPath,
-     element: (
-         <RouteWrapper
-             title="profile.title"
-             showWhenUserIsNotAuthenticated={false}
-         >
-             <Navbar />
-             <PublicCarPage />
-         </RouteWrapper>
-        )
-    },
-    {
       path: reservedTripsPath,
       element: (
         <RouteWrapper
@@ -226,6 +214,15 @@ const router = createBrowserRouter(
         >
           <Navbar />
           <CreateCarPage />
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: carPath,
+      element: (
+        <RouteWrapper title="car.title" showWhenUserIsNotAuthenticated={false}>
+          <Navbar />
+          <CarPage />,
         </RouteWrapper>
       ),
     },

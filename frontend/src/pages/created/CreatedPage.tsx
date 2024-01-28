@@ -25,8 +25,8 @@ const CreatedPage = () => {
       <MainHeader title={t("created_trips.title")} />
       <div className={styles.container_tab}>
         <TabComponent
-          right_title={t("created_trips.future")}
-          right_component={
+          left_title={t("created_trips.future")}
+          left_component={
             isLoading || currentUser === undefined ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
@@ -48,8 +48,8 @@ const CreatedPage = () => {
               />
             )
           }
-          left_title={t("created_trips.past")}
-          left_component={
+          right_title={t("created_trips.past")}
+          right_component={
             isLoading || currentUser === undefined ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
