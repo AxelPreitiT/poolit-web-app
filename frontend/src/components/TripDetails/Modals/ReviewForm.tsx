@@ -1,17 +1,18 @@
-import ReportsOptions from "@/enums/ReportsOptions.ts";
 import {useState} from "react";
 import styles from "./styles.module.scss";
 import {Form, FormSelect} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
+import ReportsOptions from "@/enums/ReportsOptions.ts";
 
 
-const ReportForm = () => {
+const ReviewForm = () => {
     const { t } = useTranslation();
     const [selectedOption, setSelectedOption] = useState<ReportsOptions>(ReportsOptions.HARASSMENT);
 
     const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedOption(e.target.value as ReportsOptions);
     };
+
 
     return (
         <div className={styles.picker_style}>
@@ -33,6 +34,12 @@ const ReportForm = () => {
             </div>
             <div>
                 <label className="report-option-label">
+                    <strong className="text">{t("reviews.rating")}</strong>
+                </label>
+
+            </div>
+            <div>
+                <label className="report-option-label">
                     <strong className="text">{t('reports.control_label')}</strong>
                 </label>
                 <Form.Control as="textarea" rows={3}/>
@@ -41,4 +48,4 @@ const ReportForm = () => {
     );
 };
 
-export default ReportForm;
+export default ReviewForm;

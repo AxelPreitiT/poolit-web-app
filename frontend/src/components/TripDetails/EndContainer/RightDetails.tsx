@@ -4,14 +4,16 @@ import { useTranslation } from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import Status from "@/enums/Status.ts";
 import {useState} from "react";
-import ModalReportReview from "@/components/ModalReportsReviews/ModalReportReview.tsx";
+import ModalReportReview from "@/components/TripDetails/ModalReportsReviews/ModalReportReview.tsx";
 import PassangerModel from "@/models/PassangerModel.ts";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
-import ModalMakeReportReview from "@/components/ModalReportsReviews/ModalMakeReportReview.tsx";
-import ModalCarMakeReview from "@/components/ModalReportsReviews/ModalCarMakeReview.tsx";
+import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
+import ModalCarMakeReview from "@/components/TripDetails/ModalReportsReviews/ModalCarMakeReview.tsx";
 import {Link} from "react-router-dom";
 import {createdTripsPath, reservedTripsPath} from "@/AppRouter.tsx";
+import ReportForm from "@/components/TripDetails/Modals/ReportForm.tsx";
+import ReviewForm from "@/components/TripDetails/Modals/ReviewForm.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -96,7 +98,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                         </Modal>
 
                         <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReportReview closeModal={closeModalMakeReport} user={userReviewReport}/>
+                            <ModalMakeReportReview closeModal={closeModalMakeReport} user={userReviewReport} reportForm={<ReportForm/>}/>
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -104,7 +106,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                         </Modal>
 
                         <Modal show={showModalMakeReview} onHide={closeModalMakeReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReportReview closeModal={closeModalMakeReview} user={userReviewReport}/>
+                            <ModalMakeReportReview closeModal={closeModalMakeReview} user={userReviewReport} reportForm={<ReviewForm/>}/>
                         </Modal>
 
                         <Modal show={showModalCarMakeReview} onHide={closeModalCarReview} aria-labelledby="contained-modal-title-vcenter" centered>

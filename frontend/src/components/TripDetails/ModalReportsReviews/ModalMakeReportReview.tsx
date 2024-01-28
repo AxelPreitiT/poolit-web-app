@@ -3,14 +3,14 @@ import {Button, Modal} from "react-bootstrap";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
-import ReportForm from "@/components/TripDetails/Modals/ReportForm.tsx";
 
 export interface ModalMakeReportProps {
     closeModal: () => void;
     user: userPublicModel | null;
+    reportForm: React.ReactNode;
 }
 
-const ModalMakeReportReview = ({ closeModal, user}: ModalMakeReportProps) => {
+const ModalMakeReportReview = ({ closeModal, user, reportForm}: ModalMakeReportProps) => {
     const { t } = useTranslation();
 
     return (
@@ -31,7 +31,7 @@ const ModalMakeReportReview = ({ closeModal, user}: ModalMakeReportProps) => {
             </div>
             <Modal.Body>
                 <div className={styles.categoryContainer}>
-                    <ReportForm />
+                    {reportForm}
                 </div>
             </Modal.Body>
             <Modal.Footer>

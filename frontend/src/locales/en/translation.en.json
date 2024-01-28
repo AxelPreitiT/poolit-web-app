@@ -293,6 +293,18 @@
     "driver": "Driver",
     "passenger": "Passenger"
   },
+  "reports": {
+    "option_selector": "Why do you want to report it?",
+    "control_label" : "Add information that helps make a decision faster",
+    "HARASSMENT": "Harassment or violent act",
+    "MISCONDUCT": "Inappropriate conduct",
+    "IDENTITY_FRAUD" : "Identity fraud",
+    "CANNOT_DRIVE" : "Does not have the permits or age to drive",
+    "DANGEROUS_DRIVING" : "Drives dangerously",
+    "DID_NOT_PAY" : "Did not pay for the trip",
+    "WRECK_CAR" : "Damaged the car",
+    "OTHER" : "Other reason"
+  },
   "reviews": {
     "no_raiting" : "Sin reseñas",
     "title": "Reviews",

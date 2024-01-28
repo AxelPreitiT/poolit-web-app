@@ -1,13 +1,13 @@
 import styles from "./styles.module.scss";
 import {Button, Modal} from "react-bootstrap";
-import PassangerReportReviewComponent from "@/components/ModalReportsReviews/PassangerReportReviewComponent.tsx";
+import PassangerReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
 import PassangerModel from "@/models/PassangerModel.ts";
-import DriverReportReviewComponent from "@/components/ModalReportsReviews/DriverReportReviewComponent.tsx";
+import DriverReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/DriverReportReviewComponent.tsx";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import carModel from "@/models/CarModel.ts";
-import CarReportReviewComponent from "@/components/ModalReportsReviews/CarReportReviewComponent.tsx";
+import CarReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/CarReportReviewComponent.tsx";
 
 export interface ModalReportProps {
     closeModal: () => void;

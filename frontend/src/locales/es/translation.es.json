@@ -292,6 +292,18 @@
     "driver": "Conductor",
     "passenger": "Pasajero"
   },
+  "reports": {
+    "option_selector": "¿Porque quieres reportar este viaje?",
+    "control_label" : "Agrega información para resolver el conflicto.",
+    "HARASSMENT": "Acoso o hecho violento",
+    "MISCONDUCT": "Conducta inapropiada",
+    "IDENTITY_FRAUD" : "Suplantación de identidad",
+    "CANNOT_DRIVE" : "No cuenta con los permisos o edad para manejar",
+    "DANGEROUS_DRIVING" : "Maneja de manera peligrosa",
+    "DID_NOT_PAY" : "No pagó por el viaje",
+    "WRECK_CAR" : "Dañó el auto",
+    "OTHER" : "Otro motivo"
+  },
   "reviews": {
     "no_raiting" : "No reviews",
     "title": "opiniones",

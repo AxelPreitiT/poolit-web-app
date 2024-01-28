@@ -1,4 +1,4 @@
-@use "@/colors.module.scss" as colors;
+@use "@/colors.module" as colors;
 
 .userContainer {
   background-color: colors.$secondary-color !important;

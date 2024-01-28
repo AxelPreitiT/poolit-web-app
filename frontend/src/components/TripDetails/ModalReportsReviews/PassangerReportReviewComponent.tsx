@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 import userPublicModel from "@/models/UserPublicModel.ts";
-import LoadingWheel from "../loading/LoadingWheel";
+import LoadingWheel from "../../loading/LoadingWheel.tsx";
 
 export interface PassangerReportReviewComponent {
   passanger: PassangerModel;
