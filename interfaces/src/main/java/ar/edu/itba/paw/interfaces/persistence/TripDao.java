@@ -56,7 +56,7 @@ public interface TripDao {
 
     PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime, long searchUserId, int page, int pageSize);
     //
-//    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
 //    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime dateTime);
     //

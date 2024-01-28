@@ -25,7 +25,7 @@ public class TripServiceImpl implements TripService {
 
     private static final int OFFSET_MINUTES = 30;
 
-//    private static final double DEFAULT_EARNINGS = 0.0;
+    private static final double DEFAULT_EARNINGS = 0.0;
 
     private final EmailService emailService;
 
@@ -362,14 +362,13 @@ public class TripServiceImpl implements TripService {
         return tripDao.getPassenger(tripId,user).isPresent();
     }
 
-    //TODO: agregar al viaje
-//    @Transactional
-//    @Override
-//    public double getTotalTripEarnings(final long tripId) throws TripNotFoundException{
-//        final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
-//        List<Passenger> acceptedPassengers = getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
-//        return acceptedPassengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(DEFAULT_EARNINGS);
-//    }
+    @Transactional
+    @Override
+    public double getTotalTripEarnings(final long tripId) throws TripNotFoundException{
+        final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
+        List<Passenger> acceptedPassengers = tripDao.getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());
+        return acceptedPassengers.stream().map(Passenger::getTotalPrice).reduce(Double::sum).orElse(DEFAULT_EARNINGS);
+    }
 
     @Transactional
     @Override

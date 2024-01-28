@@ -36,7 +36,7 @@ public interface TripService {
 
     boolean userIsPassenger(final long tripId, final User user);
 
-//    double getTotalTripEarnings(final long tripId) throws TripNotFoundException;
+    double getTotalTripEarnings(final long tripId) throws TripNotFoundException;
 
     Optional<Passenger> getPassenger(final long tripId, final User user);
 

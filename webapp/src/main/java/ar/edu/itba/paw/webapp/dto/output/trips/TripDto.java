@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto.output;
+package ar.edu.itba.paw.webapp.dto.output.trips;
 
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;

@@ -159,17 +159,17 @@ public class TripHibernateDao implements TripDao {
 //        return getAcceptedPassengers(trip,dateTime,dateTime);
 //    }
 
-//    @Override
-//    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
-//        LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
-//        TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.passengerState = 'ACCEPTED' AND p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime= :endDate) OR (p.startDateTime >= :startDate AND p.endDateTime <= :endDate))",Passenger.class);
-//        query.setParameter("trip",trip);
-//        query.setParameter("startDate", startDateTime);
-//        query.setParameter("endDate",endDateTime);
-//        List<Passenger> result = query.getResultList();
-//        LOGGER.debug("Found {} in the database", result);
-//        return result;
-//    }
+    @Override
+    public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
+        LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
+        TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.passengerState = 'ACCEPTED' AND p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime= :endDate) OR (p.startDateTime >= :startDate AND p.endDateTime <= :endDate))",Passenger.class);
+        query.setParameter("trip",trip);
+        query.setParameter("startDate", startDateTime);
+        query.setParameter("endDate",endDateTime);
+        List<Passenger> result = query.getResultList();
+        LOGGER.debug("Found {} in the database", result);
+        return result;
+    }
 
     @Override
     public Optional<Passenger> getPassenger(Trip trip, User user) {
