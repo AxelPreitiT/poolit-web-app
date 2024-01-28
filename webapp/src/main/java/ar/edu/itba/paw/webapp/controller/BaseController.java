@@ -24,6 +24,7 @@ public class BaseController {
 
     @GET
     public Response getDiscovery(){
+        LOGGER.debug("GET request for Base Controller");
         return Response.ok(BaseDto.fromUriInfo(uriInfo)).build();
     }
 }
