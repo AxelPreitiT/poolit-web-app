@@ -3,6 +3,7 @@ import {Button, Modal} from "react-bootstrap";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
+import ReportForm from "@/components/TripDetails/Modals/ReportForm.tsx";
 
 export interface ModalMakeReportProps {
     closeModal: () => void;
@@ -30,7 +31,7 @@ const ModalMakeReportReview = ({ closeModal, user}: ModalMakeReportProps) => {
             </div>
             <Modal.Body>
                 <div className={styles.categoryContainer}>
-                    <h1>poner las cosas aca</h1>
+                    <ReportForm />
                 </div>
             </Modal.Body>
             <Modal.Footer>

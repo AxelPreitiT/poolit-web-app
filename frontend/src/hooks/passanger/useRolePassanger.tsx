@@ -21,6 +21,7 @@ const useRolePassanger = ( isDriver:boolean, uri?: string) => {
 
     const { isError, data, isLoading, isPending } = query;
 
+
     return {
         ...query,
         isError,

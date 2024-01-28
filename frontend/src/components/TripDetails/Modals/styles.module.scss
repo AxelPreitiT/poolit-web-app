@@ -1,0 +1,7 @@
+@use "@/colors.module.scss" as colors;
+
+.picker_style{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

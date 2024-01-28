@@ -5,6 +5,7 @@ interface PassangerModel {
     startDateTime: string;
     tripUri:  string;
     userUri: string;
+    otherPassengersUri: string;
 }
 
 export default PassangerModel;
