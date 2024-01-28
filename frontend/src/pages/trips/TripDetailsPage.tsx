@@ -44,7 +44,6 @@ const TripDetailsPage = () => {
 
   const {isLoading, passangers} = useGetPassangers(isDriver , isPassanger, params, currentPassanger, trip);
 
-
   if (
     isLoadingTrip ||
     trip == undefined ||
