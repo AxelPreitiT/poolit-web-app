@@ -19,9 +19,9 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
 import useLogout from "@/hooks/auth/useLogout";
 import useAuthentication from "@/hooks/auth/useAuthentication";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UsersRoles from "@/enums/UsersRoles";
+import LoadingWheel from "../loading/LoadingWheel";
 
 interface Section {
   path: string;
@@ -91,13 +91,12 @@ const Navbar = () => {
         </div>
         {isLoged && !isLoading ? (
           <div className="right-container">
-            <div>
+            <div className="create-trip-btn-container">
               <Link to={createTripsPath}>
                 <Button
-                  variant="primary"
                   size="lg"
                   active
-                  className="create-trip-btn"
+                  className="secondary-btn create-trip-btn"
                 >
                   <i className="bi bi-plus-lg light-text h4"></i>
                   <span className="button-text-style light-text h4">
@@ -111,7 +110,10 @@ const Navbar = () => {
               <Dropdown.Toggle variant="link" id="profile-dropdown">
                 <div className="img-profile-container">
                   {isLoading || currentUser === undefined ? (
-                    <SpinnerComponent />
+                    <LoadingWheel
+                      description={null}
+                      iconClassName="h2 secondary-text"
+                    />
                   ) : (
                     <CircleImg src={currentUser.imageUri} size={50} />
                   )}
@@ -121,7 +123,10 @@ const Navbar = () => {
                 <Dropdown.Item as={Link} to={profilePath}>
                   {isLoading || currentUser === undefined ? (
                     <div className={styles.item_dropdown}>
-                      <SpinnerComponent />
+                      <LoadingWheel
+                        description={null}
+                        iconClassName="h2 secondary-text"
+                      />
                       <h3 className={styles.dropdown_text}>
                         {t("spinner.loading")}
                       </h3>
@@ -143,7 +148,7 @@ const Navbar = () => {
                     <div className={styles.dropdown_text}>
                       <i className="bi bi-box-arrow-right light-text h5"></i>
                     </div>
-                    <h5 className={styles.dropdown_text}>
+                    <h5 className={styles.dropdown_text + " ms-2"}>
                       {t("navbar.log_out")}
                     </h5>
                   </div>
@@ -154,7 +159,12 @@ const Navbar = () => {
         ) : (
           <div className="right-container">
             <Link to={registerPath}>
-              <Button variant="primary" size="lg" active className="logout-btn">
+              <Button
+                variant="primary"
+                size="lg"
+                active
+                className="secondary-btn logout-btn"
+              >
                 <i className="bi bi-person-circle light-text h5"></i>
                 <span className="button-text-style light-text h5">
                   {t("navbar.register")}
@@ -162,7 +172,12 @@ const Navbar = () => {
               </Button>
             </Link>
             <Link to={loginPath}>
-              <Button variant="primary" size="lg" active className="logout-btn">
+              <Button
+                variant="primary"
+                size="lg"
+                active
+                className="secondary-btn logout-btn"
+              >
                 <i className="bi bi-box-arrow-in-right h5"></i>
                 <span className="button-text-style h5">
                   {t("navbar.log_in")}

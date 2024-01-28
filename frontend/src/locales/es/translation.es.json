@@ -226,6 +226,18 @@
       "invalid": "El precio máximo debe ser un número",
       "min": "El precio máximo debe ser al menos {{min}}",
       "lower_than_min": "El precio máximo debe ser mayor o igual al precio mínimo"
+    },
+    "car_brand": {
+      "required": "La marca del auto es requerida"
+    },
+    "car_description": {
+      "required": "La descripción del auto es requerida",
+      "min": "La descripción del auto debe tener al menos {{min}} caracteres",
+      "max": "La descripción del auto debe tener como máximo {{max}} caracteres"
+    },
+    "car_plate": {
+      "required": "La patente del auto es requerida",
+      "invalid": "La patente es inválida, debe tener alguno de los siguientes formatos: {{- format}}"
     }
   },
   "profile": {
@@ -238,6 +250,7 @@
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
       "rating_passenger": "Valoración como pasajero",
+      "no_rating": "No tiene opiniones aún",
       "es": "Español",
       "en": "Ingles"
     },
@@ -261,6 +274,14 @@
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
       "cars_empty": "No tienes autos creados"
+    },
+    "loading": {
+      "profile": "Cargando perfil",
+      "passenger": "Cargando información como pasajero",
+      "driver": "Cargando información como conductor",
+      "reviews": "Cargando opiniones",
+      "trips": "Cargando viajes",
+      "cars": "Cargando autos"
     },
     "error": {
       "title": "No se pudo obtener tu perfil",
@@ -331,13 +352,40 @@
     "number_of_seats": "Cantidad de asientos",
     "price_per_trip": "Precio por viaje",
     "create": "Crear viaje",
+    "create_car": "Crear auto",
     "success": {
       "title": "¡Viaje creado!",
       "message": "¡Tu viaje fue creado correctamente!"
     },
     "error": {
-      "title": "Inicio de sesión fallido",
+      "title": "Creación de viaje fallida",
       "default": "Ocurrió un error al crear el viaje"
+    }
+  },
+  "create_car": {
+    "title": "Crear auto",
+    "car_info": "Información del auto",
+    "car_brand": "Marca del auto",
+    "car_description": "Descripción del auto",
+    "car_plate": "Patente del auto",
+    "available_seats": "Asientos disponibles",
+    "car_image": "Imagen del auto",
+    "car_features": "Características del auto",
+    "create": "Crear auto",
+    "success": {
+      "title": "¡Auto creado!",
+      "message": "¡Tu auto fue creado correctamente!"
+    },
+    "error": {
+      "title": "Creación de auto fallida",
+      "default": "Ocurrió un error al crear el auto"
+    }
+  },
+  "recommended_trips": {
+    "title": "Viajes recomendados",
+    "error": {
+      "title": "No se pudo obtener los viajes recomendados",
+      "default": "Ocurrió un error al obtener los viajes recomendados"
     }
   },
   "search_trips": {
@@ -362,15 +410,9 @@
       "default": "An error occurred while fetching the trips"
     }
   },
-  "recommended_trips": {
-    "title": "Viajes recomendados",
-    "error": {
-      "title": "No se pudo obtener los viajes recomendados",
-      "default": "Ocurrió un error al obtener los viajes recomendados"
-    }
-  },
   "admin": {
     "title": "Administrador",
+    "loading": "Cargando reportes",
     "empty": "No hay denuncias todavía",
     "error": {
       "title": "No se pudo obtener las denuncias",
@@ -378,6 +420,7 @@
     },
     "report": {
       "detail": "Detalles de la denuncia",
+      "loading": "Cargando denuncia",
       "reported": "Denunció a",
       "published": "Denuncias publicados",
       "received": "Denuncias recibidos",
@@ -387,6 +430,9 @@
       "reason": "Motivo del denuncia",
       "passenger": "(Pasajero)",
       "driver": "(Conductor)"
+    },
+    "user": {
+      "loading": "Cargando usuario"
     }
   },
   "trip_detail": {
@@ -403,6 +449,7 @@
     },
     "passengers": {
       "header": "Pasajeros",
+      "loading": "Cargando pasajeros",
       "btn_accept": "Aceptar",
       "btn_delete": "Rechazar",
       "reservation_started": "La reserva ya ha empezado.",
@@ -469,7 +516,7 @@
   "search": {
     "title": "Buscar viajes",
     "loading": "Buscando viajes",
-    "page_selector": "Mostrando los resultados {{first_result}} - {{last_result}} de {{total_pages}} páginas",
+    "page_selector": "Mostrando los resultados {{first_result}} - {{last_result}} de {{total_pages}} página{{plural}}",
     "no_results": {
       "title": "Parece que no hay viajes disponibles para tu búsqueda",
       "body": "No te preocupes, seguro encontrás algo pronto"
@@ -537,14 +584,21 @@
       "role_title": "Ocurrió un error al obtener el rol del pasajero"
     }
   },
+  "trip": {
+    "title": "Viajes",
+    "loading": "Cargando viajes",
+    "loading_one": "Cargando viaje"
+  },
   "car": {
     "error": {
       "yours": "Ocurrió un error al obtener tus autos",
       "image": "Ocurrió un error al obtener la imagen del auto",
       "your": "Ocurrió un error al obtener tu auto",
       "default": "Ocurrió un error al obtener el auto",
-      "title": "No se pudo obtener el auto"
+      "title": "No se pudo obtener el auto",
+      "none": "Crea un auto para poder empezar a ofrecer viajes"
     },
+    "loading": "Cargando auto",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Marca: {{brand}}",
     "license_plate": "Patente: {{license_plate}}"
@@ -553,6 +607,16 @@
     "error": {
       "title": "No se pudo obtener las características del auto",
       "default": "Ocurrió un error al obtener las características del auto"
+    }
+  },
+  "car_brands": {
+    "unknown": "Desconocida",
+    "searching_one": "Buscando la marca del auto",
+    "error": {
+      "title": "No se pudo obtener las marcas de autos",
+      "default": "Ocurrió un error al obtener las marcas de autos",
+      "title_one": "No se pudo obtener la marca del auto",
+      "default_one": "Ocurrió un error al obtener la marca del auto"
     }
   },
   "discovery": {
@@ -569,7 +633,8 @@
     }
   },
   "loading": {
-    "default": "Calentando motores"
+    "default": "Calentando motores",
+    "items": "Cargando {{items}}"
   },
   "spinner": {
     "loading": "Cargando..."
@@ -578,7 +643,7 @@
     "driver": "Conductor",
     "passangers": "Pasajero",
     "car": "Coche",
-    "close" : "Cerrar",
+    "close": "Cerrar",
     "submit": "Subir",
     "report": {
       "title": "¿A quien quieres reportar?",

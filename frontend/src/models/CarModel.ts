@@ -1,7 +1,7 @@
 interface CarModel {
   carId: number;
-  brand: string;
-  features: string[];
+  brandUri: string;
+  featuresUri: string[];
   imageUri: string;
   infoCar: string;
   plate: string;

@@ -1,18 +1,23 @@
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
-import {createdTripsPath, publicsDriverReviewsPath} from "@/AppRouter";
+import {
+  createCarsPath,
+  createdTripsPath,
+  publicsDriverReviewsPath,
+} from "@/AppRouter";
 import { useTranslation } from "react-i18next";
 import ShortReview from "@/components/review/shorts/ShortReview";
 import CardCar from "@/components/cardCar/CardCar";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import useUserCars from "@/hooks/cars/useUserCars.tsx";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import styles from "./styles.module.scss";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
   pastCreatedTripsUri: string;
-  reviewsDriverUri : string;
+  reviewsDriverUri: string;
   id: number;
 }
 
@@ -20,20 +25,27 @@ const DriverList = ({
   futureCreatedTripsUri,
   pastCreatedTripsUri,
   reviewsDriverUri,
-  id
+  id,
 }: DriverListProp) => {
   const { t } = useTranslation();
 
-  const { isLoading: isLoadingFutureCreatedTrips, data:futureCreatedTrips } = useTripsByUri(futureCreatedTripsUri);
-  const { isLoading: isLoadingPastCreatedTrips, data:pastCreatedTrips } = useTripsByUri(pastCreatedTripsUri);
-  const { isLoading: isLoadingReviewsDriver, data:reviewsDriver } = useUserReviewsByUri(reviewsDriverUri);
+  const { isLoading: isLoadingFutureCreatedTrips, data: futureCreatedTrips } =
+    useTripsByUri(futureCreatedTripsUri);
+  const { isLoading: isLoadingPastCreatedTrips, data: pastCreatedTrips } =
+    useTripsByUri(pastCreatedTripsUri);
+  const { isLoading: isLoadingReviewsDriver, data: reviewsDriver } =
+    useUserReviewsByUri(reviewsDriverUri);
   const { isLoading: isLoadingUserCars, cars } = useUserCars();
-
 
   return (
     <div>
       {reviewsDriver == undefined || isLoadingReviewsDriver ? (
-        <SpinnerComponent />
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.reviews")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.review_as_driver")}
@@ -42,11 +54,16 @@ const DriverList = ({
           empty_icon={"book"}
           data={reviewsDriver.data}
           component_name={ShortReview}
-          link={publicsDriverReviewsPath.replace(":id", String(id))}
+          link={publicsDriverReviewsPath.replace(":id", id.toString())}
         />
       )}
-      {futureCreatedTrips == undefined ||  isLoadingFutureCreatedTrips? (
-        <SpinnerComponent />
+      {futureCreatedTrips == undefined || isLoadingFutureCreatedTrips ? (
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.trips")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.created_next_title")}
@@ -58,8 +75,13 @@ const DriverList = ({
           link={createdTripsPath}
         />
       )}
-      {pastCreatedTrips == undefined ||  isLoadingPastCreatedTrips? (
-        <SpinnerComponent />
+      {pastCreatedTrips == undefined || isLoadingPastCreatedTrips ? (
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.trips")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.created_prev_title")}
@@ -72,7 +94,12 @@ const DriverList = ({
         />
       )}
       {cars == undefined || isLoadingUserCars ? (
-        <SpinnerComponent />
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.cars")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.cars")}
@@ -81,7 +108,7 @@ const DriverList = ({
           empty_icon={"car-front-fill"}
           data={cars}
           component_name={CardCar}
-          link={createdTripsPath}
+          link={createCarsPath}
         />
       )}
     </div>

@@ -1,11 +1,16 @@
 import LoadingWheel from "./LoadingWheel";
 import styles from "./styles.module.scss";
 
-const LoadingScreen = () => (
+interface LoadingScreenProps {
+  description?: string;
+}
+
+const LoadingScreen = ({ description }: LoadingScreenProps) => (
   <LoadingWheel
     containerClassName={styles.screen}
     iconClassName={styles.icon}
     descriptionClassName={styles.description}
+    description={description}
   />
 );
 

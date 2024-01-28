@@ -5,7 +5,7 @@ import FormFieldStringBuilder from "./builders/FormFieldStringBuilder";
 
 export type TelephoneZodType = ZodString;
 const telephoneRegExp: RegExp = /^(\+\d{1,3}\s?)?\d{2,4}\s?\d{4}\s?\d{4}$/;
-const telephoneFormat: string = "+XX XXX XXXX XXXX";
+const telephoneFormat: string = "+5491123456789";
 
 export default class TelephoneFormField extends FormField {
   private interpolations: FieldInterpolation[];

@@ -5,7 +5,8 @@ import { useLocation } from "react-router-dom";
 import { routerBasename } from "@/AppRouter.tsx";
 import { createBrowserHistory } from "history";
 import { ButtonGroup, ToggleButton } from "react-bootstrap";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import { useTranslation } from "react-i18next";
 
 interface PaginationComponentProps<T> {
   empty_component: React.ReactNode;
@@ -16,6 +17,7 @@ interface PaginationComponentProps<T> {
     isLoading: boolean;
     data: PaginationModel<T> | undefined;
   };
+  itemsName: string;
 }
 
 const PaginationComponent = <T,>({
@@ -24,7 +26,9 @@ const PaginationComponent = <T,>({
   component_name,
   current_page,
   useFuction,
+  itemsName,
 }: PaginationComponentProps<T>) => {
+  const { t } = useTranslation();
   const [newUri, setNewUri] = useState(uri);
   const [currentPage, setcurrentPage] = useState(current_page);
   const location = useLocation();
@@ -64,7 +68,14 @@ const PaginationComponent = <T,>({
       : generateItems(pageTrips.data, component_name);
 
   return isLoadingTrips || pageTrips === undefined ? (
-    <SpinnerComponent />
+    <LoadingWheel
+      containerClassName={styles.loadingContainer}
+      iconClassName={styles.loadingIcon}
+      descriptionClassName={styles.loadingDescription}
+      description={t("loading.items", {
+        items: itemsName.toLowerCase(),
+      })}
+    />
   ) : (
     <div className={styles.list_container}>
       {props && props.length > 0 ? (

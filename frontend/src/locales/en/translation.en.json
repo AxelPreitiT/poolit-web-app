@@ -227,6 +227,18 @@
       "invalid": "The maximum price must be a number",
       "min": "The maximum price must be at least {{min}}",
       "lower_than_min": "The maximum price must be greater than the minimum price"
+    },
+    "car_brand": {
+      "required": "The car brand is required"
+    },
+    "car_description": {
+      "required": "The car description is required",
+      "min": "The car description must have at least {{min}} characters",
+      "max": "The car description must have at most {{max}} characters"
+    },
+    "car_plate": {
+      "required": "The car plate is required",
+      "invalid": "The car plate is in invalid, it should follow one of the following formats: {{- format}}"
     }
   },
   "profile": {
@@ -239,6 +251,7 @@
       "trips": "Trips created",
       "rating_driver": "Driver rating",
       "rating_passenger": "Passenger rating",
+      "no_rating": "No reviews yet",
       "es": "Spanish",
       "en": "English"
     },
@@ -262,6 +275,14 @@
       "cars": "My cars",
       "cars_create": "Create new car",
       "cars_empty": "You have no created cars"
+    },
+    "loading": {
+      "profile": "Loading profile",
+      "passenger": "Loading passenger information",
+      "driver": "Loading driver information",
+      "reviews": "Loading reviews",
+      "trips": "Loading trips",
+      "cars": "Loading cars"
     },
     "error": {
       "title": "Could not fetch your profile",
@@ -345,6 +366,7 @@
     "number_of_seats": "Number of seats",
     "price_per_trip": "Price per trip",
     "create": "Create trip",
+    "create_car": "Create car",
     "success": {
       "title": "Trip created!",
       "message": "The trip was created successfully!"
@@ -352,6 +374,25 @@
     "error": {
       "title": "Trip creation failed",
       "default": "An error occurred while creating the trip"
+    }
+  },
+  "create_car": {
+    "title": "Create a car",
+    "car_info": "Car information",
+    "car_brand": "Car brand",
+    "car_description": "Car description",
+    "car_plate": "Car plate",
+    "available_seats": "Available seats",
+    "car_image": "Car image",
+    "car_features": "Car features",
+    "create": "Create car",
+    "success": {
+      "title": "Car created!",
+      "message": "The car was created successfully!"
+    },
+    "error": {
+      "title": "Car creation failed",
+      "default": "An error occurred while creating the car"
     }
   },
   "recommended_trips": {
@@ -385,6 +426,7 @@
   },
   "admin": {
     "title": "Admin",
+    "loading": "Loading reports",
     "empty": "There aren't any reports yet",
     "error": {
       "title": "Could not search for reports",
@@ -392,6 +434,7 @@
     },
     "report": {
       "detail": "Report Details",
+      "loading": "Loading report",
       "reported": "Reported",
       "published": "Published reports",
       "received": "Received reports",
@@ -401,6 +444,9 @@
       "reason": "Report reason",
       "passenger": "(Passenger)",
       "driver": "(Driver)"
+    },
+    "user": {
+      "loading": "Loading user"
     }
   },
   "trip_detail": {
@@ -418,6 +464,7 @@
     },
     "passengers": {
       "header": "Passengers",
+      "loading": "Loading passengers",
       "btn_accept": "Accept",
       "btn_delete": "Delete",
       "reservation_started": "The reservation has started.",
@@ -484,7 +531,7 @@
   "search": {
     "title": "Trips search",
     "loading": "Looking for trips",
-    "page_selector": "Shoowing {{first_result}} - {{last_result}} found results of {{total_pages}} pages",
+    "page_selector": "Showing {{first_result}} - {{last_result}} found results of {{total_pages}} page{{plural}}",
     "no_results": {
       "title": "It seems that there are no trips that match your search",
       "body": "Don't worry, you'll find a trip that suits your needs soon"
@@ -551,14 +598,21 @@
       "role_title": "An error occurred while loading the RolePassanger"
     }
   },
+  "trip": {
+    "title": "Trips",
+    "loading": "Loading trips",
+    "loading_one": "Loading trip"
+  },
   "car": {
     "error": {
       "yours": "An error occurred while loading your cars",
       "your": "An error occurred while loading you car",
       "image": "An error occurred while loading the car image",
       "default": "An error occurred while fetching the car features",
-      "title": "Could not fetch the car"
+      "title": "Could not fetch the car",
+      "none": "Create a car to start offering trips"
     },
+    "loading": "Loading car",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Brand: {{brand}}",
     "license_plate": "License plate: {{license_plate}}"
@@ -567,6 +621,16 @@
     "error": {
       "title": "Could not fetch the car features",
       "default": "An error occurred while fetching the car features"
+    }
+  },
+  "car_brands": {
+    "unknown": "Unknown",
+    "searching_one": "Searching car brand",
+    "error": {
+      "title": "Could not fetch the car brands",
+      "default": "An error occurred while fetching the car brands",
+      "title_one": "Could not fetch the car brand",
+      "default_one": "An error occurred while fetching the car brand"
     }
   },
   "discovery": {
@@ -583,7 +647,8 @@
     }
   },
   "loading": {
-    "default": "Revving up the engine"
+    "default": "Revving up",
+    "items": "Loading {{items}}"
   },
   "spinner": {
     "loading": "Loading..."
@@ -592,7 +657,7 @@
     "driver": "Driver",
     "passangers": "Passangers",
     "car": "Car",
-    "close" : "close",
+    "close": "close",
     "submit": "submit",
     "report": {
       "title": "Who do you want to report?",

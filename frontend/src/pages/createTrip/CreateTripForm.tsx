@@ -1,4 +1,4 @@
-import { Collapse, Form, InputGroup } from "react-bootstrap";
+import { Button, Collapse, Form, InputGroup } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import {
   BsArrowRepeat,
@@ -10,7 +10,7 @@ import {
 } from "react-icons/bs";
 import FormError from "@/components/forms/FormError/FormError";
 import { FaDollarSign } from "react-icons/fa";
-import { BiCheck } from "react-icons/bi";
+import { BiCheck, BiPlus } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 import CitySelector, {
   citySelectorDefaultValue,
@@ -34,6 +34,7 @@ import CarImage from "@/components/car/CarImage/CarImage";
 import DatePicker from "@/components/forms/DatePicker/DatePicker";
 import TimePicker from "@/components/forms/TimePicker/TimePicker";
 import useLastDateCollapse from "@/hooks/trips/useLastDateCollapse";
+import { useReturnOnCarCreation } from "@/hooks/cars/useReturnOnCarCreation";
 
 const useCarInfoCollapse = () => {
   const [showCarInfo, setShowCarInfo] = useState<boolean>(false);
@@ -62,6 +63,7 @@ const CreateTripForm = ({
   cars?: CarModel[];
 }) => {
   const { t } = useTranslation();
+  const navigateOnCarCreation = useReturnOnCarCreation();
 
   const {
     register,
@@ -291,48 +293,66 @@ const CreateTripForm = ({
           <h2 className="secondary-text">{t("create_trip.details")}</h2>
         </div>
         <div className={styles.formContainer}>
-          <div className={styles.formRow}>
-            <div className={styles.formItem}>
-              <InputGroup size="sm" className={styles.formItemGroup}>
-                <InputGroup.Text>
-                  <BsCarFrontFill className="text" />
-                </InputGroup.Text>
-                <Controller
-                  name="car"
-                  control={control}
-                  defaultValue={carSelectorDefaultValue}
-                  render={({ field: { onChange, value } }) => (
-                    <CarSelector
-                      cars={cars}
-                      defaultOption={t("create_trip.select_car")}
-                      onChange={(event) => {
-                        const carId = parseInt(event.target.value);
-                        onChange(carId);
-                        const car = cars.find((car) => car.carId === carId);
-                        setCar(car);
-                        setCarSeats(car?.seats || 0);
-                      }}
-                      value={value}
-                    />
-                  )}
+          {cars && cars.length > 0 ? (
+            <div className={styles.formRow}>
+              <div className={styles.formItem}>
+                <InputGroup size="sm" className={styles.formItemGroup}>
+                  <InputGroup.Text>
+                    <BsCarFrontFill className="text" />
+                  </InputGroup.Text>
+                  <Controller
+                    name="car"
+                    control={control}
+                    defaultValue={carSelectorDefaultValue}
+                    render={({ field: { onChange, value } }) => (
+                      <CarSelector
+                        cars={cars}
+                        defaultOption={t("create_trip.select_car")}
+                        onChange={(event) => {
+                          const carId = parseInt(event.target.value);
+                          onChange(carId);
+                          const car = cars.find((car) => car.carId === carId);
+                          setCar(car);
+                          setCarSeats(car?.seats || 0);
+                        }}
+                        value={value}
+                      />
+                    )}
+                  />
+                </InputGroup>
+                <Collapse in={showCarInfo}>
+                  <div>
+                    <CarInfoCard car={car} />
+                  </div>
+                </Collapse>
+                <FormError
+                  error={tFormError(errors.car)}
+                  className={styles.formItemError}
                 />
-              </InputGroup>
-              <Collapse in={showCarInfo}>
-                <div>
-                  <CarInfoCard car={car} />
+              </div>
+              <Collapse in={showCarInfo} dimension="width">
+                <div className={styles.formItem}>
+                  <CarImage car={car} className={styles.carImage} rounded />
                 </div>
               </Collapse>
-              <FormError
-                error={tFormError(errors.car)}
-                className={styles.formItemError}
-              />
             </div>
-            <Collapse in={showCarInfo} dimension="width">
+          ) : (
+            <div className={styles.formRow}>
               <div className={styles.formItem}>
-                <CarImage car={car} className={styles.carImage} rounded />
+                <Button
+                  className={"secondary-btn " + styles.createCarButton}
+                  onClick={() => navigateOnCarCreation()}
+                >
+                  <BiPlus className="light-text h4" />
+                  {t("create_trip.create_car")}
+                </Button>
+                <FormError
+                  error={t("car.error.none")}
+                  className={styles.formItemError}
+                />
               </div>
-            </Collapse>
-          </div>
+            </div>
+          )}
           <div className={styles.formRow}>
             <div className={styles.formItem}>
               <InputGroup size="sm" className={styles.formItemGroup}>
@@ -381,6 +401,9 @@ const CreateTripForm = ({
           type="submit"
           className="btn secondary-btn"
           isLoading={isFetching}
+          disabled={
+            !cars || !cities || cars.length === 0 || cities.length === 0
+          }
         >
           <BiCheck className="light-text h2" />
           <span className="light-text h3">{t("create_trip.create")}</span>

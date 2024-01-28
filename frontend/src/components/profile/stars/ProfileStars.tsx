@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./../prop/styles.module.scss";
 import StarRating from "@/components/stars/StarsRanking";
 
@@ -7,10 +8,16 @@ interface ProfileStarsProps {
 }
 
 const ProfileStars = ({ prop, rating }: ProfileStarsProps) => {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <h6 className={styles.propProfile}>{prop}</h6>
-      <StarRating rating={rating} size={"x-large"}/>
+      <p className={styles.propHeader}>{prop}</p>
+      {rating && rating > 0 ? (
+        <StarRating rating={rating} className={styles.rating} />
+      ) : (
+        <p className={styles.propValue}>{t("profile.props.no_rating")}</p>
+      )}
     </div>
   );
 };

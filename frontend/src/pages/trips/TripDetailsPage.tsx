@@ -7,7 +7,6 @@ import StatusTrip from "@/components/statusTrip/StatusTrip";
 import TripInfo from "@/components/tripInfo/TripInfo";
 import { useParams, useSearchParams } from "react-router-dom";
 import CreateUri from "@/functions/CreateUri.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
@@ -17,6 +16,7 @@ import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -39,6 +39,16 @@ const TripDetailsPage = () => {
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
 
+  if (
+    isLoadingTrip ||
+    trip == undefined ||
+    isLoadingCar ||
+    car === undefined ||
+    isLoadingDriver ||
+    driver === undefined
+  ) {
+    return <LoadingScreen description={t("trip.loading_one")} />;
+  }
 
   return (
     <div>
@@ -53,53 +63,45 @@ const TripDetailsPage = () => {
             )
           }
         />
-
-        {isLoadingTrip ||
-        trip == undefined ||
-        isLoadingCar ||
-        car === undefined ||
-        isLoadingDriver ||
-        driver === undefined ? (
-          <SpinnerComponent />
-        ) : (
-          <div>
-            <Location
-              startAddress={trip.originAddress}
-              startCityUri={trip.originCityUri}
-              endAddress={trip.destinationAddress}
-              endCityUri={trip.destinationCityUri}
+        <div>
+          <Location
+            startAddress={trip.originAddress}
+            startCityUri={trip.originCityUri}
+            endAddress={trip.destinationAddress}
+            endCityUri={trip.destinationCityUri}
+          />
+          <div className={styles.middle_content}>
+            <TripInfo
+              trip={trip}
+              car={car}
+              driver={driver}
+              isDriver={isDriver}
             />
-            <div className={styles.middle_content}>
-              <TripInfo
-                trip={trip}
-                car={car}
-                driver={driver}
-                isDriver={isDriver}
-              />
-              <div className={styles.img_container}>
-                <img src={car?.imageUri} className={styles.img_style} alt="" />
-              </div>
-            </div>
-
-            <div className={styles.end_container}>
-              <LeftDetails
-                trip={trip}
-                isPassanger={isPassanger}
-                isDriver={isDriver}
-              />
-              <RightDetails
-                isPassanger={isPassanger}
-                isDriver={isDriver}
-                status={Status.FINISHED}
-                passangers={[]}
-                driver={driver}
-                car = {car}
-              />
+            <div className={styles.img_container}>
+              <img src={car?.imageUri} className={styles.img_style} alt="" />
             </div>
           </div>
-        )}
+
+          <div className={styles.end_container}>
+            <LeftDetails
+              trip={trip}
+              isPassanger={isPassanger}
+              isDriver={isDriver}
+            />
+            <RightDetails
+              isPassanger={isPassanger}
+              isDriver={isDriver}
+              status={Status.FINISHED}
+              passangers={[]}
+              driver={driver}
+              car={car}
+            />
+          </div>
+        </div>
       </MainComponent>
-      {isDriver && trip != undefined && <PassangersTripComponent uri={trip.passengersUriTemplate} />}
+      {isDriver && trip != undefined && (
+        <PassangersTripComponent uri={trip.passengersUriTemplate} />
+      )}
     </div>
   );
 };

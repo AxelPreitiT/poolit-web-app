@@ -1,7 +1,9 @@
 const commaFloatRegex = /^-?\d+(,\d+)?$/;
 const dotFloatRegex = /^-?\d+(\.\d+)?$/;
 
-export const parseInputFloat = (value: string | number): number | undefined => {
+export const parseInputFloat = (
+  value: string | number
+): number | string | undefined => {
   if (typeof value === "number") {
     return value;
   }
@@ -11,5 +13,5 @@ export const parseInputFloat = (value: string | number): number | undefined => {
   if (dotFloatRegex.test(value)) {
     return parseFloat(value);
   }
-  return undefined;
+  return value || undefined;
 };

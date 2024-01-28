@@ -6,7 +6,7 @@ interface LoadingWheelProps {
   containerClassName?: string;
   iconClassName?: string;
   descriptionClassName?: string;
-  description?: string;
+  description?: string | null;
 }
 
 const LoadingWheel = ({
@@ -21,9 +21,11 @@ const LoadingWheel = ({
   return (
     <div className={styles.container + " " + containerClassName}>
       <GiCarWheel className={styles.rotate + " " + iconClassName} />
-      <span className={styles.ellipsis + " " + descriptionClassName}>
-        {description || defaultDescription}
-      </span>
+      {description !== null && (
+        <span className={styles.ellipsis + " " + descriptionClassName}>
+          {description || defaultDescription}
+        </span>
+      )}
     </div>
   );
 };

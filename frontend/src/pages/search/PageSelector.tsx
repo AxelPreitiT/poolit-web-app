@@ -23,102 +23,106 @@ const PageSelector = ({
     (currentPage - 1) * pageSize +
       Math.min(pageSize, paginatedTrips.data.length),
   ];
+  const totalPages = paginatedTrips.totalPages;
   return (
     <div className={styles.pageSelectorContainer}>
       <span className={styles.pageSelectorText}>
         {t("search.page_selector", {
           first_result: firstResult,
           last_result: lastResult,
-          total_pages: paginatedTrips.totalPages,
+          total_pages: totalPages,
+          plural: totalPages > 1 ? "s" : "",
         })}
       </span>
-      <Pagination className={styles.paginationContainer}>
-        {currentPage > 1 && (
-          <>
-            <Pagination.First
-              as="button"
-              className={styles.paginationItem}
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(1)}
-            />
-            <Pagination.Prev
-              as="button"
-              className={styles.paginationItem}
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            />
-            {currentPage > 2 && (
-              <>
-                <Pagination.Item
-                  as="button"
-                  className={styles.paginationItem}
-                  onClick={() => setCurrentPage(1)}
-                >
-                  {1}
-                </Pagination.Item>
-                {currentPage > 3 && (
-                  <Pagination.Ellipsis
+      {totalPages > 1 && (
+        <Pagination className={styles.paginationContainer}>
+          {currentPage > 1 && (
+            <>
+              <Pagination.First
+                as="button"
+                className={styles.paginationItem}
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(1)}
+              />
+              <Pagination.Prev
+                as="button"
+                className={styles.paginationItem}
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              />
+              {currentPage > 2 && (
+                <>
+                  <Pagination.Item
                     as="button"
                     className={styles.paginationItem}
-                    onClick={() => setCurrentPage(currentPage - 2)}
-                  />
-                )}
-              </>
-            )}
-            <Pagination.Item
-              as="button"
-              className={styles.paginationItem}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              {currentPage - 1}
-            </Pagination.Item>
-          </>
-        )}
-        <Pagination.Item as="button" className={styles.paginationActiveItem}>
-          {currentPage}
-        </Pagination.Item>
-        {currentPage < paginatedTrips.totalPages && (
-          <>
-            <Pagination.Item
-              as="button"
-              className={styles.paginationItem}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              {currentPage + 1}
-            </Pagination.Item>
-            {currentPage < paginatedTrips.totalPages - 1 && (
-              <>
-                {currentPage < paginatedTrips.totalPages - 2 && (
-                  <Pagination.Ellipsis
+                    onClick={() => setCurrentPage(1)}
+                  >
+                    {1}
+                  </Pagination.Item>
+                  {currentPage > 3 && (
+                    <Pagination.Ellipsis
+                      as="button"
+                      className={styles.paginationItem}
+                      onClick={() => setCurrentPage(currentPage - 2)}
+                    />
+                  )}
+                </>
+              )}
+              <Pagination.Item
+                as="button"
+                className={styles.paginationItem}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                {currentPage - 1}
+              </Pagination.Item>
+            </>
+          )}
+          <Pagination.Item as="button" className={styles.paginationActiveItem}>
+            {currentPage}
+          </Pagination.Item>
+          {currentPage < paginatedTrips.totalPages && (
+            <>
+              <Pagination.Item
+                as="button"
+                className={styles.paginationItem}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                {currentPage + 1}
+              </Pagination.Item>
+              {currentPage < paginatedTrips.totalPages - 1 && (
+                <>
+                  {currentPage < paginatedTrips.totalPages - 2 && (
+                    <Pagination.Ellipsis
+                      as="button"
+                      className={styles.paginationItem}
+                      onClick={() => setCurrentPage(currentPage + 2)}
+                    />
+                  )}
+                  <Pagination.Item
                     as="button"
                     className={styles.paginationItem}
                     onClick={() => setCurrentPage(currentPage + 2)}
-                  />
-                )}
-                <Pagination.Item
-                  as="button"
-                  className={styles.paginationItem}
-                  onClick={() => setCurrentPage(currentPage + 2)}
-                >
-                  {paginatedTrips.totalPages}
-                </Pagination.Item>
-              </>
-            )}
-            <Pagination.Next
-              as="button"
-              className={styles.paginationItem}
-              disabled={currentPage === paginatedTrips.totalPages}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            />
-            <Pagination.Last
-              as="button"
-              className={styles.paginationItem}
-              disabled={currentPage === paginatedTrips.totalPages}
-              onClick={() => setCurrentPage(paginatedTrips.totalPages)}
-            />
-          </>
-        )}
-      </Pagination>
+                  >
+                    {paginatedTrips.totalPages}
+                  </Pagination.Item>
+                </>
+              )}
+              <Pagination.Next
+                as="button"
+                className={styles.paginationItem}
+                disabled={currentPage === paginatedTrips.totalPages}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              />
+              <Pagination.Last
+                as="button"
+                className={styles.paginationItem}
+                disabled={currentPage === paginatedTrips.totalPages}
+                onClick={() => setCurrentPage(paginatedTrips.totalPages)}
+              />
+            </>
+          )}
+        </Pagination>
+      )}
     </div>
   );
 };

@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import CityService from "@/services/CityService.ts";
 import CarService from "@/services/CarService.ts";
 import CarModel from "@/models/CarModel.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
+import LoadingWheel from "@/components/loading/LoadingWheel";
 import {getDayString} from "@/utils/date/dayString.ts";
 
 const CardTrip = ({
@@ -50,7 +50,10 @@ const CardTrip = ({
       <div className={styles.card_container}>
         <div className={styles.left_container}>
           {CarTrip === null ? (
-            <SpinnerComponent />
+            <LoadingWheel
+              description={t("car.loading")}
+              containerClassName={styles.loadingContainer}
+            />
           ) : (
             <div className={styles.img_container}>
               <img src={CarTrip.imageUri} />

@@ -7,8 +7,8 @@ import { useLocation } from "react-router-dom";
 import EmptyList from "@/components/emptyList/EmptyList";
 import ListTripsScheduled from "@/components/cardTrip/ListTripsScheduled/ListTripsScheduled";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
-import SpinnerComponent from "@/components/Spinner/Spinner";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
+import LoadingWheel from "@/components/loading/LoadingWheel";
 import {INITIALPAGE, TRIPSPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 const CreatedPage = () => {
@@ -27,8 +27,13 @@ const CreatedPage = () => {
         <TabComponent
           right_title={t("created_trips.future")}
           right_component={
-              isLoading || currentUser === undefined? (
-              <SpinnerComponent />
+            isLoading || currentUser === undefined ? (
+              <LoadingWheel
+                containerClassName={styles.loadingContainer}
+                iconClassName={styles.loadingIcon}
+                descriptionClassName={styles.loadingDescription}
+                description={t("trip.loading")}
+              />
             ) : (
               <ListTripsScheduled
                 uri={createPaginationUri(currentUser.futureCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
@@ -45,8 +50,13 @@ const CreatedPage = () => {
           }
           left_title={t("created_trips.past")}
           left_component={
-              isLoading || currentUser === undefined ? (
-              <SpinnerComponent />
+            isLoading || currentUser === undefined ? (
+              <LoadingWheel
+                containerClassName={styles.loadingContainer}
+                iconClassName={styles.loadingIcon}
+                descriptionClassName={styles.loadingDescription}
+                description={t("trip.loading")}
+              />
             ) : (
               <ListTripsScheduled
                 uri={createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage , TRIPSPAGESIZE)}

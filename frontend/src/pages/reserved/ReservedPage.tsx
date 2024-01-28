@@ -7,8 +7,8 @@ import { useLocation } from "react-router-dom";
 import EmptyList from "@/components/emptyList/EmptyList";
 import ListTripsScheduled from "@/components/cardTrip/ListTripsScheduled/ListTripsScheduled";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
-import SpinnerComponent from "@/components/Spinner/Spinner";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
+import LoadingWheel from "@/components/loading/LoadingWheel";
 
 const ReservedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
@@ -18,9 +18,18 @@ const ReservedPage = () => {
 
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? 1 : parseInt(page, 10);
-  const uriFutureTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.futureReservedTripsUri, currentPage , 2);
-  const uriPastTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage , 2);
-
+  const uriFutureTrips =
+    isLoading || currentUser === undefined
+      ? null
+      : createPaginationUri(
+          currentUser?.futureReservedTripsUri,
+          currentPage,
+          2
+        );
+  const uriPastTrips =
+    isLoading || currentUser === undefined
+      ? null
+      : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
 
   return (
     <MainComponent>
@@ -29,8 +38,13 @@ const ReservedPage = () => {
         <TabComponent
           right_title={t("reserved_trips.future")}
           right_component={
-              uriFutureTrips == null? (
-              <SpinnerComponent />
+            uriFutureTrips == null ? (
+              <LoadingWheel
+                containerClassName={styles.loadingContainer}
+                iconClassName={styles.loadingIcon}
+                descriptionClassName={styles.loadingDescription}
+                description={t("trip.loading")}
+              />
             ) : (
               <ListTripsScheduled
                 uri={uriFutureTrips}
@@ -47,8 +61,13 @@ const ReservedPage = () => {
           }
           left_title={t("reserved_trips.past")}
           left_component={
-              uriPastTrips == null ? (
-              <SpinnerComponent />
+            uriPastTrips == null ? (
+              <LoadingWheel
+                containerClassName={styles.loadingContainer}
+                iconClassName={styles.loadingIcon}
+                descriptionClassName={styles.loadingDescription}
+                description={t("trip.loading")}
+              />
             ) : (
               <ListTripsScheduled
                 uri={uriPastTrips}

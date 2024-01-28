@@ -16,6 +16,7 @@ import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
 import SearchPage from "./pages/search/SearchPage";
 import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
 import ReportPage from "@/pages/admin/ReportPage.tsx";
+import CreateCarPage from "./pages/createCar/CreateCarPage.tsx";
 import PublicCarPage from "@/pages/publicCar/publicCar.tsx";
 
 export const homePath = "/";
@@ -34,8 +35,8 @@ export const createTripsPath = "/trips/create";
 export const adminPath = "/admin";
 export const reportPath = "/reports/:id";
 export const searchPath = "/search";
+export const createCarsPath = "/cars/create";
 export const routerBasename = import.meta.env.BASE_URL;
-
 
 const router = createBrowserRouter(
   [
@@ -114,13 +115,13 @@ const router = createBrowserRouter(
     {
       path: publicsPassangerReviewsPath,
       element: (
-          <RouteWrapper
-              title="reviews.title"
-              showWhenUserIsNotAuthenticated={false}
-          >
-              <Navbar />
-              <ReviewPagePassanger />
-          </RouteWrapper>
+        <RouteWrapper
+          title="reviews.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
+          <Navbar />
+          <ReviewPagePassanger />
+        </RouteWrapper>
       ),
     },
     {
@@ -195,24 +196,36 @@ const router = createBrowserRouter(
         </RouteWrapper>
       ),
     },
-      {
-        path: reportPath,
-        element: (
-          <RouteWrapper
-            title="admin.title"
-            showWhenUserIsNotAuthenticated={false}
-          >
-            <Navbar />
-            <ReportPage />,
-          </RouteWrapper>
+    {
+      path: reportPath,
+      element: (
+        <RouteWrapper
+          title="admin.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
+          <Navbar />
+          <ReportPage />,
+        </RouteWrapper>
       ),
-  },
+    },
     {
       path: searchPath,
       element: (
         <RouteWrapper title="search.title">
           <Navbar />
           <SearchPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: createCarsPath,
+      element: (
+        <RouteWrapper
+          title="create_car.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
+          <Navbar />
+          <CreateCarPage />
         </RouteWrapper>
       ),
     },

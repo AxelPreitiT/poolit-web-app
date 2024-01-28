@@ -1,5 +1,9 @@
 @use "@/colors.module.scss" as colors;
 
+.container_tab {
+  margin: 2% 0;
+}
+
 .title {
   text-align: center;
 }
@@ -174,4 +178,17 @@
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+.loadingContainer {
+  margin-top: 1rem;
+}
+
+.loadingIcon {
+  height: 4rem;
+  width: 4rem;
+}
+
+.loadingDescription {
+  font-size: 2rem;
 }
