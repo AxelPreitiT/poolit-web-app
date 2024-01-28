@@ -587,15 +587,6 @@
   "spinner": {
     "loading": "Loading..."
   },
-  "day_week": {
-    "0": "sunday",
-    "1": "Monday",
-    "2": "tuesday",
-    "3": "wednesday",
-    "4": "thursday",
-    "5": "friday",
-    "6": "saturday"
-  },
   "modal": {
     "driver": "Driver",
     "passangers": "Passangers",

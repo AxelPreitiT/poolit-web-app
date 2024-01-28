@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import {Link} from "react-router-dom";
 import {publicCarPath, publicProfilePath} from "@/AppRouter.tsx";
+import {getDayString} from "@/utils/date/dayString.ts";
 
 interface TripInfoProps {
     trip: TripModel;
@@ -20,7 +21,6 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
     const availableSeats = parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10);
     const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
-    const DayOfWeek = date.getDay()
 
     return (
     <div className={styles.info_trip}>
@@ -33,7 +33,10 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
       <div className={styles.show_row}>
         <i className="bi bi-calendar light-text"></i>
         <div className={styles.info_details}>
-          <span className="light-text detail">{t(`day_week.${DayOfWeek}`)}</span>
+          <span className="light-text detail">
+              {t(`day.full.${getDayString(date).toLowerCase()}`, {
+              plural: "s",})}
+          </span>
           <span className={styles.subtitle_info}>{getFormattedDateTime(trip.startDateTime).date}</span>
         </div>
       </div>

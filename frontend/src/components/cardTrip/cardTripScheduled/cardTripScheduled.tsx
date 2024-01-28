@@ -3,11 +3,11 @@ import CardTrip from "../cardTrip/CardTrip";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import { useTranslation } from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
+import {getDayString} from "@/utils/date/dayString.ts";
 
 const CardTripScheduled = (trip: TripModel) => {
   const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
-    const DayOfWeek = date.getDay()
 
   return (
     <div>
@@ -15,7 +15,10 @@ const CardTripScheduled = (trip: TripModel) => {
         <div className={styles.calendar_container}>
           <i className="bi bi-calendar text h1"></i>
           <div className={styles.text_calendar}>
-            <h3 className={styles.day_week_style}>{t(`day_week.${DayOfWeek}`)}</h3>
+            <h3 className={styles.day_week_style}>
+                {t(`day.full.${getDayString(date).toLowerCase()}`, {
+                    plural: "s",})}
+            </h3>
             {trip.totalTrips > 1 ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {

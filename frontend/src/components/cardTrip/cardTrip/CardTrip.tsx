@@ -9,6 +9,7 @@ import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
+import {getDayString} from "@/utils/date/dayString.ts";
 
 const CardTrip = ({
   trip,
@@ -19,7 +20,6 @@ const CardTrip = ({
 }) => {
   const { t } = useTranslation();
   const date = new Date(trip.startDateTime);
-  const DayOfWeek = date.getDay();
 
   const [cityOrigin, setCityOrigin] = useState<string | null>(null);
   const [cityDestination, setCityDestination] = useState<string | null>(null);
@@ -79,7 +79,8 @@ const CardTrip = ({
             <div className={styles.footer_details}>
               <i className="bi bi-calendar text"></i>
               {trip.totalTrips > 1 ? (
-                <span>{t(`day_week.${DayOfWeek}`)}</span>
+                <span>{t(`day.full.${getDayString(date).toLowerCase()}`, {
+                  plural: "s",})}</span>
               ) : (
                 <span>{getFormattedDateTime(trip.startDateTime).date}</span>
               )}
