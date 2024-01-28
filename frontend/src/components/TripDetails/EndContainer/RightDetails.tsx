@@ -10,6 +10,8 @@ import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
 import ModalMakeReportReview from "@/components/ModalReportsReviews/ModalMakeReportReview.tsx";
 import ModalCarMakeReview from "@/components/ModalReportsReviews/ModalCarMakeReview.tsx";
+import {Link} from "react-router-dom";
+import {createdTripsPath, reservedTripsPath} from "@/AppRouter.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -75,12 +77,14 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                                     <span>{t("trip_detail.btn.reviews")}</span>
                                 </div>
                             </Button>
-                            <Button className={styles.btn_trips}>
-                                <div className={styles.create_trip_btn}>
-                                    <i className="bi bi-car-front-fill light-text"></i>
-                                    <span>{t("trip_detail.btn.my_trips")}</span>
-                                </div>
-                            </Button>
+                            <Link to={isDriver? createdTripsPath : reservedTripsPath} >
+                                <Button className={styles.btn_trips}>
+                                    <div className={styles.create_trip_btn}>
+                                        <i className="bi bi-car-front-fill light-text"></i>
+                                        <span>{t("trip_detail.btn.my_trips")}</span>
+                                    </div>
+                                </Button>
+                            </Link>
                         </div>
                         <div className={styles.report_link}>
                             <span>{t('trip_detail.report.pre_link_text')}</span>
@@ -109,27 +113,31 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                     </div>
  :
                     (isDriver ?
-                            <div className={styles.btn_container}>
+                        <div className={styles.btn_container}>
+                            <Link to={createdTripsPath} >
                                 <Button className={styles.btn_trips}>
                                     <div className={styles.create_trip_btn}>
                                         <i className="bi bi-car-front-fill light-text"></i>
                                         <span>{t("trip_detail.btn.my_trips")}</span>
                                     </div>
                                 </Button>
+                            </Link>
                                 <Button className={styles.btn_cancel}>
                                     <div className={styles.create_trip_btn}>
                                         <i className="bi bi-x light-text"></i>
                                         <span>{t("trip_detail.btn.delete")}</span>
                                     </div>
                                 </Button>
-                            </div> :
-                            <div className={styles.btn_container}>
+                        </div> :
+                        <div className={styles.btn_container}>
+                            <Link to={reservedTripsPath} >
                                 <Button className={styles.btn_trips}>
                                     <div className={styles.create_trip_btn}>
                                         <i className="bi bi-car-front-fill light-text"></i>
                                         <span>{t("trip_detail.btn.my_trips")}</span>
                                     </div>
                                 </Button>
+                            </Link>
                                 <Button className={styles.btn_cancel}>
                                     <div className={styles.create_trip_btn}>
                                         <i className="bi bi-x light-text"></i>
