@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.reviews.PassengerReviewOptions;
 
 import javax.validation.constraints.NotNull;
 
+/*
 public class PassengerReviewForm extends ReviewForm {
 
     @NotNull
@@ -17,3 +18,5 @@ public class PassengerReviewForm extends ReviewForm {
         this.option = option;
     }
 }
+
+ */

@@ -48,7 +48,10 @@ public class ReportServiceImpl implements ReportService {
 
         switch (relations){
             case PASSENGER_2_DRIVER:{
-                tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                Passenger passenger = tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                if(!passenger.isAccepted()){
+                    return false;
+                }
                 if(!trip.getDriver().equals(reported)){
                     return false;
                 }
@@ -58,12 +61,18 @@ public class ReportServiceImpl implements ReportService {
                 if(!trip.getDriver().equals(reporter)){
                     return false;
                 }
-                tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
+                Passenger passenger = tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
+                if(!passenger.isAccepted()){
+                    return false;
+                }
                 break;
             }
             case PASSENGER_2_PASSENGER:{
-                tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
-                tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                Passenger p1 = tripService.getPassenger(trip,reported).orElseThrow(PassengerNotFoundException::new);
+                Passenger p2 = tripService.getPassenger(trip,reporter).orElseThrow(PassengerNotFoundException::new);
+                if(!p1.isAccepted() || !p2.isAccepted()){
+                    return false;
+                }
                 break;
             }
         }
@@ -85,12 +94,7 @@ public class ReportServiceImpl implements ReportService {
         Report resp = reportDao.createReport(reporter, reported, trip, description, date, relation, reason);
         List<User> admins = userService.getAdmins();
         for ( User admin:  admins) {
-            try {
-                emailService.sendMailNewReport(resp, admin);
-            }
-            catch( Exception e){
-                LOGGER.error("There was an error sending the email", e);
-            }
+            emailService.sendMailNewReport(resp, admin);
         }
         return resp;
     }
@@ -124,36 +128,22 @@ public class ReportServiceImpl implements ReportService {
     }
     //TODO: make private
 //    @Transactional
-    @Override
-    public void rejectReport(long reportId, String reason) throws ReportNotFoundException {
+//    @Override
+    private void rejectReport(long reportId, String reason) throws ReportNotFoundException {
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
         reportDao.resolveReport(reportId, reason, ReportState.REJECTED);
-        try {
-            emailService.sendMailRejectReport(report);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
-        }
+        emailService.sendMailRejectReport(report);
     }
 
 //    @Transactional
-    @Override
-    public void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException {
+//    @Override
+    private void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
-        try {
-            emailService.sendMailAcceptReport(report);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
-        }
-        try {
-            emailService.sendMailBanReport(report);
-        }
-        catch( Exception e){
-            LOGGER.error("There was an error sending the email", e);
-        }
+        emailService.sendMailAcceptReport(report);
+        emailService.sendMailBanReport(report);
         PagedContent<Trip> pgTripDriver = tripService.getTripsCreatedByUserFuture(report.getReported(), 0, 10);
+
         for(int i = 0; i < pgTripDriver.getTotalPages(); i++){
             List<Trip> trips = pgTripDriver.getElements();
             for(Trip trip : trips){
@@ -177,46 +167,46 @@ public class ReportServiceImpl implements ReportService {
         return reportDao.getReportByTripAndUsers(tripId, reporterId, reportedId);
     }
 
-    @Transactional
-    @Override
-    public TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
-        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-        User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-        ItemReport<User> driverToReport;
-        List<ItemReport<Passenger>> passengersToReport;
-        if(tripService.userIsDriver(tripId, currentUser)) {
-            driverToReport = null;
-            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, trip.getStartDateTime(), trip.getEndDateTime());
-            passengersToReport = passengers.stream().filter(
-                    passenger -> !passenger.getUser().equals(currentUser)
-            ).map(
-                    passenger -> new ItemReport<>(passenger, ReportRelations.DRIVER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
-            ).sorted(
-                    Comparator.comparing(ItemReport::getState)
-            ).collect(Collectors.toList());
-        }
-        else if(tripService.userIsPassenger(tripId, currentUser)) {
-            Passenger currentPassenger = tripService.getPassenger(tripId, currentUser).orElseThrow(PassengerNotFoundException::new);
-            if(!currentPassenger.getAccepted()) {
-                return TripReportCollection.empty();
-            }
-            driverToReport = new ItemReport<>(trip.getDriver(), ReportRelations.PASSENGER_2_DRIVER, getDriverReportState(trip, currentPassenger));
-            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
-            passengersToReport = passengers.stream().filter(
-                    passenger -> !passenger.getUser().equals(currentUser)
-            ).map(
-                    passenger -> new ItemReport<>(passenger, ReportRelations.PASSENGER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
-            ).sorted(
-                    Comparator.comparing(ItemReport::getState)
-            ).collect(Collectors.toList());
-        }
-        else {
-            IllegalStateException e = new IllegalStateException();
-            LOGGER.error("The user with id {} is not passenger neither the driver of the trip with id {}", currentUser.getUserId(), tripId);
-            throw e;
-        }
-        return new TripReportCollection(driverToReport, passengersToReport);
-    }
+//    @Transactional
+//    @Override
+//    public TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
+//        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
+//        User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
+//        ItemReport<User> driverToReport;
+//        List<ItemReport<Passenger>> passengersToReport;
+//        if(tripService.userIsDriver(tripId, currentUser)) {
+//            driverToReport = null;
+//            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, trip.getStartDateTime(), trip.getEndDateTime());
+//            passengersToReport = passengers.stream().filter(
+//                    passenger -> !passenger.getUser().equals(currentUser)
+//            ).map(
+//                    passenger -> new ItemReport<>(passenger, ReportRelations.DRIVER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
+//            ).sorted(
+//                    Comparator.comparing(ItemReport::getState)
+//            ).collect(Collectors.toList());
+//        }
+//        else if(tripService.userIsPassenger(tripId, currentUser)) {
+//            Passenger currentPassenger = tripService.getPassenger(tripId, currentUser).orElseThrow(PassengerNotFoundException::new);
+//            if(!currentPassenger.getAccepted()) {
+//                return TripReportCollection.empty();
+//            }
+//            driverToReport = new ItemReport<>(trip.getDriver(), ReportRelations.PASSENGER_2_DRIVER, getDriverReportState(trip, currentPassenger));
+//            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
+//            passengersToReport = passengers.stream().filter(
+//                    passenger -> !passenger.getUser().equals(currentUser)
+//            ).map(
+//                    passenger -> new ItemReport<>(passenger, ReportRelations.PASSENGER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
+//            ).sorted(
+//                    Comparator.comparing(ItemReport::getState)
+//            ).collect(Collectors.toList());
+//        }
+//        else {
+//            IllegalStateException e = new IllegalStateException();
+//            LOGGER.error("The user with id {} is not passenger neither the driver of the trip with id {}", currentUser.getUserId(), tripId);
+//            throw e;
+//        }
+//        return new TripReportCollection(driverToReport, passengersToReport);
+//    }
 
     @Transactional
     @Override
@@ -236,29 +226,29 @@ public class ReportServiceImpl implements ReportService {
 
 
     //TODO: delete
-    private ReportState getDriverReportState(Trip trip, Passenger reporter) {
-        LocalDateTime now = LocalDateTime.now();
-        if(reporter.getStartDateTime().isAfter(now)) {
-            return ReportState.DISABLED;
-        }
-        Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), trip.getDriver().getUserId());
-        if(!maybeReport.isPresent()) {
-            return ReportState.AVAILABLE;
-        }
-        return maybeReport.get().getStatus();
-    }
+//    private ReportState getDriverReportState(Trip trip, Passenger reporter) {
+//        LocalDateTime now = LocalDateTime.now();
+//        if(reporter.getStartDateTime().isAfter(now)) {
+//            return ReportState.DISABLED;
+//        }
+//        Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), trip.getDriver().getUserId());
+//        if(!maybeReport.isPresent()) {
+//            return ReportState.AVAILABLE;
+//        }
+//        return maybeReport.get().getStatus();
+//    }
 
-    private ReportState getPassengerReportState(Trip trip, User reporter, Passenger reported) {
-        LocalDateTime now = LocalDateTime.now();
-        if(reported.getStartDateTime().isAfter(now)) {
-            return ReportState.DISABLED;
-        }
-        Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), reported.getUserId());
-        if (!maybeReport.isPresent()) {
-            return ReportState.AVAILABLE;
-        }
-        return maybeReport.get().getStatus();
-    }
+//    private ReportState getPassengerReportState(Trip trip, User reporter, Passenger reported) {
+//        LocalDateTime now = LocalDateTime.now();
+//        if(reported.getStartDateTime().isAfter(now)) {
+//            return ReportState.DISABLED;
+//        }
+//        Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), reported.getUserId());
+//        if (!maybeReport.isPresent()) {
+//            return ReportState.AVAILABLE;
+//        }
+//        return maybeReport.get().getStatus();
+//    }
 
 
 }

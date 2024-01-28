@@ -10,34 +10,34 @@ import java.time.LocalDateTime;
 
 public interface EmailService {
 
-    void sendMailNewPassenger(Trip trip, Passenger passenger) throws Exception;
+    void sendMailNewPassenger(Trip trip, Passenger passenger);
 
-    void sendMailNewTrip(Trip trip) throws Exception;
+    void sendMailNewTrip(Trip trip);
 
-    void sendMailTripCancelledToDriver(Trip trip,Passenger passenger) throws Exception;
+    void sendMailTripCancelledToDriver(Trip trip,Passenger passenger);
 
-    void sendMailTripConfirmation(Trip trip, Passenger passenger) throws Exception;
+    void sendMailTripConfirmation(Trip trip, Passenger passenger);
 
-    void sendMailTripDeletedToPassenger(Trip trip, Passenger passenger) throws Exception;
+    void sendMailTripDeletedToPassenger(Trip trip, Passenger passenger);
 
-    void sendMailTripDeletedToDriver(Trip trip) throws Exception;
+    void sendMailTripDeletedToDriver(Trip trip);
 
-    void sendMailTripTruncatedToPassenger(Trip trip, Passenger passenger, LocalDateTime nextOccurrence)  throws Exception ;
+    void sendMailTripTruncatedToPassenger(Trip trip, Passenger passenger, LocalDateTime nextOccurrence)  ;
 
-    void sendVerificationEmail(User user, String token) throws Exception;
+    void sendVerificationEmail(User user, String token);
 
     //Se manda al driver indicando que alguien quiere ser pasajero
-    void sendMailNewPassengerRequest(Trip trip, Passenger passenger) throws Exception;
+    void sendMailNewPassengerRequest(Trip trip, Passenger passenger);
     //Se manda al pasajero indicando que se recibio su solicitud
-    void sendMailTripRequest(Trip trip, Passenger passenger) throws Exception;
+    void sendMailTripRequest(Trip trip, Passenger passenger);
     //Se manda al pasajero indicando que fue aceptado en el viaje
-    void sendMailTripConfirmed(Trip trip, Passenger passenger) throws  Exception;
+    void sendMailTripConfirmed(Trip trip, Passenger passenger);
     //Se manda al pasajero indicando que fue rechazado en el viaje
-    void sendMailTripRejected(Trip trip, Passenger passenger) throws Exception;
+    void sendMailTripRejected(Trip trip, Passenger passenger);
 
-    public void sendMailRejectReport(Report report) throws Exception;
-    public void sendMailAcceptReport(Report report) throws Exception;
-    public void sendMailBanReport(Report report) throws Exception;
-    public void sendMailNewReport(Report report, User admin) throws Exception;
+    public void sendMailRejectReport(Report report);
+    public void sendMailAcceptReport(Report report);
+    public void sendMailBanReport(Report report);
+    public void sendMailNewReport(Report report, User admin);
 
 }

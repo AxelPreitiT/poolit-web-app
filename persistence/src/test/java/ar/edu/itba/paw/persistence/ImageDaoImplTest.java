@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,7 +32,14 @@ public class ImageDaoImplTest {
     private  ImageHibernateDao imageDao;
 
     private static final byte[] BYTE_ARRAY = new byte[]{1,2,3,4,5,6,7,8,9,10};
-    private static final long IMAGE_ID = 1;
+    private static final long IMAGE_ID = 3;
+    private static final long IMAGE_ID_2 = 4;
+
+    private static final Image IMAGE = new Image(IMAGE_ID,BYTE_ARRAY);
+    private static final Image IMAGE_2 = new Image(IMAGE_ID_2,BYTE_ARRAY);
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Rollback
     @Test
@@ -42,7 +50,11 @@ public class ImageDaoImplTest {
         final Image image = imageDao.create(BYTE_ARRAY);
 
         //Assert
-        Assert.assertArrayEquals(BYTE_ARRAY,image.getData());
+        TypedQuery<Image> query = em.createQuery("from Image where id = :imageId",Image.class);
+        query.setParameter("imageId",image.getImageId());
+        Optional<Image> res = query.getResultList().stream().findFirst();
+        Assert.assertTrue(res.isPresent());
+        Assert.assertArrayEquals(BYTE_ARRAY,res.get().getData());
         Assert.assertTrue(image.getImageId()>0);
     }
 
@@ -63,20 +75,40 @@ public class ImageDaoImplTest {
         //No setup
 
         //Execute
-        final Optional<Image> image = imageDao.findById(4);
+        final Optional<Image> image = imageDao.findById(200);
 
         //Assert
         Assert.assertFalse(image.isPresent());
     }
 
+    @Rollback
     @Test
-    public void testFindByIdOfOther(){
-
+    public void testUpdate(){
+        //Setup
+        Image auxImage = em.merge(IMAGE);
         //Execute
-        final Optional<Image> image = imageDao.findById(IMAGE_ID+1);
-
+        Image ans = imageDao.update(auxImage,BYTE_ARRAY);
         //Assert
-        Assert.assertFalse(image.isPresent());
+        TypedQuery<Image> query = em.createQuery("from Image where id = :imageId",Image.class);
+        query.setParameter("imageId",auxImage.getImageId());
+        Optional<Image> res = query.getResultList().stream().findFirst();
+        Assert.assertTrue(res.isPresent());
+        Assert.assertArrayEquals(BYTE_ARRAY,res.get().getData());
+        Assert.assertEquals(auxImage.getImageId(),ans.getImageId());
+    }
+
+    @Rollback
+    @Test
+    public void testDelete(){
+        //Setup
+        Image auxImage = em.merge(IMAGE_2);
+        //Execute
+        imageDao.delete(auxImage);
+        //Assert
+        TypedQuery<Image> query = em.createQuery("from Image where id = :imageId",Image.class);
+        query.setParameter("imageId",auxImage.getImageId());
+        Optional<Image> res = query.getResultList().stream().findFirst();
+        Assert.assertFalse(res.isPresent());
     }
 
 }

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.User;
 
 import java.util.List;
 
+/*
 public class TripReportCollection {
 
     final private ItemReport<User> driver;
@@ -39,3 +40,5 @@ public class TripReportCollection {
         return getCanReportDriver() || getCanReportPassengers();
     }
 }
+
+ */

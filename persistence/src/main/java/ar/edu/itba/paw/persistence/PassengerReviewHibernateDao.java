@@ -45,15 +45,15 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
         return result;
     }
 
-    @Override
-    public double getPassengerRating(User user) {
-        LOGGER.debug("Looking for the average passenger rating of the user with id {}", user.getUserId());
-        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(pr.rating), 0.0) FROM PassengerReview pr WHERE pr.reviewed = :user", Double.class);
-        avgRatingQuery.setParameter("user", user);
-        Double result = avgRatingQuery.getSingleResult();
-        LOGGER.debug("Average passenger rating of the user with id {} is {}", user.getUserId(), result);
-        return result;
-    }
+//    @Override
+//    public double getPassengerRating(User user) {
+//        LOGGER.debug("Looking for the average passenger rating of the user with id {}", user.getUserId());
+//        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(pr.rating), 0.0) FROM PassengerReview pr WHERE pr.reviewed = :user", Double.class);
+//        avgRatingQuery.setParameter("user", user);
+//        Double result = avgRatingQuery.getSingleResult();
+//        LOGGER.debug("Average passenger rating of the user with id {} is {}", user.getUserId(), result);
+//        return result;
+//    }
 
     @Override
     public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
@@ -126,14 +126,20 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
     }
 
     @Override
-    public boolean canReviewPassenger(Trip trip, User reviewer, Passenger reviewed) {
-        LOGGER.debug("Checking if the user with id {} can review the passenger with id {} in the trip with id {}", reviewer.getUserId(), reviewed.getUserId(), trip.getTripId());
+    public Optional<PassengerReview> getPassengerReview(final User reviewed, final User reviewer, final Trip trip){
+        LOGGER.debug("Looking for passenger review from user with id {} to passenger with id {} in the trip with id {}", reviewer.getUserId(), reviewed.getUserId(), trip.getTripId());
         final TypedQuery<PassengerReview> passengerReviewQuery = em.createQuery("FROM PassengerReview pr WHERE pr.trip = :trip AND pr.reviewer = :reviewer AND pr.reviewed = :reviewed", PassengerReview.class);
         passengerReviewQuery.setParameter("trip", trip);
         passengerReviewQuery.setParameter("reviewer", reviewer);
-        passengerReviewQuery.setParameter("reviewed", reviewed.getUser());
-        boolean result = passengerReviewQuery.getResultList().isEmpty();
-        LOGGER.debug("User with id {} can{} review the passenger with id {} in the trip with id {}", reviewer.getUserId(), result ? "" : " not", reviewed.getUserId(), trip.getTripId());
+        passengerReviewQuery.setParameter("reviewed", reviewed);
+        Optional<PassengerReview> result = passengerReviewQuery.getResultList().stream().findFirst();
+        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
         return result;
+    }
+
+    @Override
+    public boolean canReviewPassenger(Trip trip, User reviewer, Passenger reviewed) {
+        LOGGER.debug("Checking if the user with id {} can review the passenger with id {} in the trip with id {}", reviewer.getUserId(), reviewed.getUserId(), trip.getTripId());
+        return !getPassengerReview(reviewed.getUser(),reviewer,trip).isPresent();
     }
 }

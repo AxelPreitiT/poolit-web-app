@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.webapp.dto.validation.constraints;
 
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
-import ar.edu.itba.paw.webapp.form.annotations.LastDateNotNullIfMultitrip;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.LastDateNotNullIfMultitrip;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

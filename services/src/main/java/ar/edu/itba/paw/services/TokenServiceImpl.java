@@ -42,11 +42,11 @@ public class TokenServiceImpl implements TokenService {
         return tokenDao.getToken(token);
     }
 
-    @Transactional
-    @Override
-    public void deleteToken(VerificationToken token) {
-        tokenDao.deleteToken(token);
-    }
+//    @Transactional
+//    @Override
+//    public void deleteToken(VerificationToken token) {
+//        tokenDao.deleteToken(token);
+//    }
 
     @Transactional
     @Override
@@ -54,11 +54,11 @@ public class TokenServiceImpl implements TokenService {
         return token.getDate().compareTo(LocalDate.now())>=0;
     }
 
-    @Transactional
-    @Override
-    public void renewToken(VerificationToken token) {
-        token.setExpiryDate(calculateExpiryDate(EXPIRATION));
-    }
+//    @Transactional
+//    @Override
+//    public void renewToken(VerificationToken token) {
+//        token.setExpiryDate(calculateExpiryDate(EXPIRATION));
+//    }
 
     @Transactional
     @Override

@@ -2,6 +2,8 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
 import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
+import ar.edu.itba.paw.interfaces.exceptions.RoleAlreadyChangedException;
+import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
@@ -43,7 +45,7 @@ public class UserServiceImplTest {
     private static final String TOKEN = "Token";
     private static final long USER_IMAGE_ID = 1;
     private static final long USER_ID = 8;
-    private static User USER;
+    private static User USER = new User(NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), ROLE, USER_IMAGE_ID);
     private static final Image IMAGEN = new Image(0L, null);
     private static final LocalDate EXPIRY_DATE = LocalDate.now();
 
@@ -59,15 +61,9 @@ public class UserServiceImplTest {
     private TokenServiceImpl tokenService;
     @Mock
     private EmailServiceImpl emailService;
-    //@Mock
-    //private UserServiceImpl userService;
+
     @InjectMocks
     private UserServiceImpl us;
-
-    @Before
-    public void setup() {
-        USER = new User(NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), ROLE, USER_IMAGE_ID);
-    }
 
     @Test
     public void testCreateUser() throws EmailAlreadyExistsException, CityNotFoundException, MessagingException, IOException {
@@ -101,12 +97,8 @@ public class UserServiceImplTest {
     @Test(expected = EmailAlreadyExistsException.class)
     public void testAlreadyExistUserCreateUser() throws EmailAlreadyExistsException, CityNotFoundException, MessagingException, IOException {
         // precondiciones
-        //when(userDao.create(eq(NAME), eq(SURNAME), eq(MAIL), eq(PHONE), eq(PASSWORD), eq(BORN_CITY), eq(new Locale(MAIL_LOCALE)), eq(ROLE), anyLong())).thenReturn(new User(USER_ID, NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), ROLE, USER_IMAGE_ID));
-        //when(passwordEncoder.encode(Mockito.anyString())).thenReturn(PASSWORD);
         when(cityService.findCityById(Mockito.anyLong())).thenReturn(Optional.of(BORN_CITY));
         when(userDao.findByEmail(any())).thenReturn(Optional.of(USER));
-        //when(tokenService.createToken(any())).thenReturn(new VerificationToken(USER, TOKEN, EXPIRY_DATE));
-        //doNothing().when(emailService).sendVerificationEmail(any(), any());
         when(imageService.createImage(any())).thenReturn(IMAGEN);
 
         // ejercitar la clase
@@ -116,18 +108,19 @@ public class UserServiceImplTest {
         Assert.fail();
     }
 
-    /*
-    @Test(expected = UserNotFoundException.class)
-    public void testNotUserChangeToDriver() throws UserNotFoundException {
-        // precondiciones
-        when(us.getCurrentUser()).thenReturn(Optional.empty());
+    @Test(expected = RoleAlreadyChangedException.class)
+    public void testChangeRoleAlreadyChanged() throws UserNotFoundException, RoleAlreadyChangedException {
+        User aux =new User(NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), "DRIVER", USER_IMAGE_ID);
+        when(userDao.findById(anyLong())).thenReturn(Optional.of(aux));
 
-        // ejercitar la clase
-        us.changeToDriver();
-
-        // assertions
-        Assert.fail();
+        us.changeRole(1,"DRIVER");
     }
-    */
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testChangeRoleInvalidRole() throws UserNotFoundException, RoleAlreadyChangedException {
+        when(userDao.findById(anyLong())).thenReturn(Optional.of(USER));
+
+        us.changeRole(1,"ADMIN");
+    }
 
 }

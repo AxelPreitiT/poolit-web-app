@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.form;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
+/*
 public class CreateTripForm extends RecurrentTripForm {
 
     @Min(value = 1)
@@ -85,3 +86,6 @@ public class CreateTripForm extends RecurrentTripForm {
         this.maxSeats = maxSeats;
     }
 }
+
+
+ */

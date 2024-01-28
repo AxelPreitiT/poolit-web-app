@@ -1,11 +1,15 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.PagedQuery;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ReviewsQuery;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripsQuery;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 //https://datatracker.ietf.org/doc/html/rfc6570
 //https://datatracker.ietf.org/doc/html/rfc6570#section-3.2.8
@@ -30,19 +34,22 @@ public class BaseDto {
 //        ans.citiesUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).toTemplate() + "{/cityId}"; //prevent builder from adding '/' in front of variable
         ans.citiesUri = builder.cloneBuilder().path(UrlHolder.CITY_BASE).path("{/cityId}").build().toString();
 //        ans.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).toTemplate() + "{/carId}";
-        ans.carsUri = builder.cloneBuilder().path(UrlHolder.CAR_BASE).path("{/carId}").build().toString();
+        ans.carsUri = builder.cloneBuilder().path(UrlHolder.CAR_BASE).path("{/carId}").path("{?fromUser}").build().toString();
         ans.carBrandsUri = builder.cloneBuilder().path(UrlHolder.CAR_BRAND_BASE).path("{/brandId}").build().toString();
         ans.carFeaturesUri = builder.cloneBuilder().path(UrlHolder.CAR_FEATURE_BASE).path("{/featureId}").build().toString();
 //        ans.usersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path("{userId}").toTemplate();
         ans.usersUri = builder.cloneBuilder().path(UrlHolder.USER_BASE).pathSegment("{userId}").build().toString();
 //        ans.reportsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).toTemplate() + "{/reportId}";
-        ans.reportsUri = builder.cloneBuilder().path(UrlHolder.REPORT_BASE).path("{/reportId}").build().toString();
+        ans.reportsUri = builder.cloneBuilder().path(UrlHolder.REPORT_BASE).path("{/reportId}").path("{?madeBy,forTrip}").build().toString();
+        final String pageQueryParams =","+Arrays.stream(PagedQuery.class.getDeclaredFields()).map(Field::getName).collect(Collectors.joining(","));
+        final String reviewsQueryParams = Arrays.stream(ReviewsQuery.class.getDeclaredFields()).map(Field::getName).collect(Collectors.joining(","));
 //        ans.driverReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
-        ans.driverReviewsUri = builder.cloneBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).path("{/reviewId}").build().toString();
+        ans.driverReviewsUri = builder.cloneBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).path("{/reviewId}").path("{?"+reviewsQueryParams+pageQueryParams+"}").build().toString();
 //        ans.passengerReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
-        ans.passengerReviewsUri = builder.cloneBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path("{/reviewId}").build().toString();
+        ans.passengerReviewsUri = builder.cloneBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path("{/reviewId}").path("{?"+reviewsQueryParams+pageQueryParams+"}").build().toString();
 //        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).toTemplate() + "{/tripId}";
-        ans.tripsUri = builder.cloneBuilder().path(UrlHolder.TRIPS_BASE).path("{/tripId}").build().toString();
+        final String tripsQueryParams = Arrays.stream(TripsQuery.class.getDeclaredFields()).map(Field::getName).collect(Collectors.joining(","));
+        ans.tripsUri = builder.cloneBuilder().path(UrlHolder.TRIPS_BASE).path("{/tripId}").path("{?"+tripsQueryParams+pageQueryParams+"}").build().toString();
         ans.tripSortTypesUri = builder.cloneBuilder().path(UrlHolder.TRIP_SORT_TYPE_BASE).path("{/sortTypeId}").build().toString();
         return ans;
     }

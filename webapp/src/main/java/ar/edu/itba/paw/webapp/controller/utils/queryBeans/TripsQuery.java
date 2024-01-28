@@ -22,6 +22,10 @@ import java.util.List;
 //Cuando se usa el de creados, no se pueden usar el de reservados
 @Exclusive(group1 = {"createdBy"},group2 = {"reservedBy"})
 //No quiero que se use la intersección de los grupos, y no ponemos los casos análogos (g1=g2, g2=g1) porque con eso se repite el error
+//TODO: add validations
+//@SameWeekDay
+//@LastDateIsAfterDate
+//@MinPriceLessThanMaxPrice (@Price)
 public class TripsQuery extends PagedQuery{
     @QueryParam("originCityId")
     @CityId

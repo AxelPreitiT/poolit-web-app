@@ -15,6 +15,8 @@ import java.time.LocalTime;
 @SameWeekDay
 @EndDateIsAfterStartDate(start = "date",end = "lastDate")
 @NowOrLater
+//TODO: add
+//@LastDateIsAfterDate
 public class CreateTripDto {
 
     @CityId

@@ -38,15 +38,15 @@ public class CarReviewHibernateDao implements CarReviewDao {
         return carReview;
     }
 
-    @Override
-    public double getCarRating(Car car) {
-        LOGGER.debug("Looking for the average car rating of the car with id {}", car.getCarId());
-        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(cr.rating), 0.0) FROM CarReview cr WHERE cr.car = :car", Double.class);
-        avgRatingQuery.setParameter("car", car);
-        Double result = avgRatingQuery.getSingleResult();
-        LOGGER.debug("Average car rating of the car with id {} is {}", car.getCarId(), result);
-        return result;
-    }
+//    @Override
+//    public double getCarRating(Car car) {
+//        LOGGER.debug("Looking for the average car rating of the car with id {}", car.getCarId());
+//        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(cr.rating), 0.0) FROM CarReview cr WHERE cr.car = :car", Double.class);
+//        avgRatingQuery.setParameter("car", car);
+//        Double result = avgRatingQuery.getSingleResult();
+//        LOGGER.debug("Average car rating of the car with id {} is {}", car.getCarId(), result);
+//        return result;
+//    }
 
     @Override
     public PagedContent<CarReview> getCarReviews(Car car, int page, int pageSize) {

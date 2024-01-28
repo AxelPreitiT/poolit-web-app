@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.auth;
 import ar.edu.itba.paw.interfaces.services.CarService;
 import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.UserRole;
@@ -88,13 +89,28 @@ public class AuthValidator {
         return tripService.checkIfUserCanGetPassengers(tripId,optionalUser.get(),startDateTime,endDateTime,passengerState);
     }
 
-    public boolean checkIfCarIsOwn(long carId){
+    public boolean checkIfUserIsPassengerOf(final long userId){
         final Optional<User> user = userService.getCurrentUser();
         if(!user.isPresent()){
             return false;
         }
-        return user.get().getUserId() == carService.findById(carId).get().getUser().getUserId();
-
-
+        final Optional<User> driver = userService.findById(userId);
+        if(!driver.isPresent()){
+            return true; //NOT FOUND
+        }
+        return tripService.userIsAcceptedPassengerOfDriver(user.get(),driver.get());
     }
+
+    public boolean checkIfCarIsOwn(long carId){
+        final Optional<Car> car = carService.findById(carId);
+        if(!car.isPresent()){
+            return true;//BAD REQUEST will be the status
+        }
+        final Optional<User> user = userService.getCurrentUser();
+        if(!user.isPresent()){
+            return false;
+        }
+        return user.get().getUserId() == car.get().getUser().getUserId();
+    }
+
 }

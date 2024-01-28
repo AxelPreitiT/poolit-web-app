@@ -3,13 +3,16 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.services.UserService;
+import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ImageQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateUserDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.UserRoleDto;
+import ar.edu.itba.paw.webapp.dto.output.user.DriverUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PrivateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PublicUserDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageSize;
@@ -59,6 +62,16 @@ public class UserController {
         return Response.ok(PublicUserDto.fromUser(uriInfo,user)).build();
     }
 
+    @GET
+    @Path("/{id}")
+    @Produces(VndType.APPLICATION_USER_DRIVER)
+    @PreAuthorize("@authValidator.checkIfUserIsPassengerOf(#id) or @authValidator.checkIfWantedIsSelf(#id)")
+    public Response getByIdDriver(@PathParam("id") final long id){
+        LOGGER.debug("GET request for public userId {}",id);
+        final User user = userService.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return Response.ok(DriverUserDto.fromUser(uriInfo,user)).build();
+    }
+
 
     @GET
     @Path("/{id}")
@@ -101,10 +114,11 @@ public class UserController {
     @Path("/{id}/image")
     @Produces({"image/*"})
     public Response getUserImage(@PathParam("id") final long id,
+                                 @Valid @BeanParam final ImageQuery query,
                                  @Context Request request) throws ImageNotFoundException, UserNotFoundException {
         LOGGER.debug("GET request for image of user with userId {}",id);
-        final byte[] image = userService.getUserImage(id);
-        return ControllerUtils.getConditionalCacheResponse(request,image, Arrays.hashCode(image));
+        final Image image = userService.getUserImage(id,query.getImageSize());
+        return ControllerUtils.getConditionalCacheResponse(request,image.getData(query.getImageSize()), image.getImageId());
 //        return Response.ok(image).build();
     }
 
