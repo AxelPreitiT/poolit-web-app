@@ -1,4 +1,5 @@
 import ReportOptionModel from "@/models/ReportOptionModel";
+import ReportRelation from "./ReportRelation";
 
 enum ReportsOptions {
   HARASSMENT = "HARASSMENT",
@@ -11,8 +12,35 @@ enum ReportsOptions {
   OTHER = "OTHER",
 }
 
-export const getReportsOptions = (): ReportOptionModel[] => {
-  const options = Object.values(ReportsOptions).map((option) => ({
+const reportOptionsByRelation: Record<string, ReportsOptions[]> = {
+  [ReportRelation.DRIVER_2_PASSENGER]: [
+    ReportsOptions.HARASSMENT,
+    ReportsOptions.MISCONDUCT,
+    ReportsOptions.IDENTITY_FRAUD,
+    ReportsOptions.DID_NOT_PAY,
+    ReportsOptions.WRECK_CAR,
+    ReportsOptions.OTHER,
+  ],
+  [ReportRelation.PASSENGER_2_DRIVER]: [
+    ReportsOptions.HARASSMENT,
+    ReportsOptions.MISCONDUCT,
+    ReportsOptions.IDENTITY_FRAUD,
+    ReportsOptions.CANNOT_DRIVE,
+    ReportsOptions.DANGEROUS_DRIVING,
+    ReportsOptions.OTHER,
+  ],
+  [ReportRelation.PASSENGER_2_PASSENGER]: [
+    ReportsOptions.HARASSMENT,
+    ReportsOptions.MISCONDUCT,
+    ReportsOptions.IDENTITY_FRAUD,
+    ReportsOptions.OTHER,
+  ],
+};
+
+export const getReportsOptionsByRelation = (
+  relation: ReportRelation
+): ReportOptionModel[] => {
+  const options = reportOptionsByRelation[relation].map((option) => ({
     id: option,
   }));
   return options;

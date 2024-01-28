@@ -2,7 +2,10 @@ import Service from "@/services/Service.ts";
 import ReportsApi from "@/api/ReportsApi.ts";
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import ReportOptionModel from "@/models/ReportOptionModel";
-import { getReportsOptions } from "@/enums/ReportsOptions";
+import { getReportsOptionsByRelation } from "@/enums/ReportsOptions";
+import ReportRelation from "@/enums/ReportRelation";
+import { ReportFormSchemaType } from "@/forms/ReportForm";
+import { DecideReportFormSchemaType } from "@/forms/DecideReportForm";
 
 class ReportService extends Service {
   public static getReports = async (
@@ -17,8 +20,36 @@ class ReportService extends Service {
     return await this.resolveQuery(ReportsApi.getReport(uri));
   };
 
-  public static getReportOptions = async (): Promise<ReportOptionModel[]> => {
-    return getReportsOptions();
+  public static getReportOptionsByRelation = async (
+    reportRelation: ReportRelation
+  ): Promise<ReportOptionModel[]> => {
+    return getReportsOptionsByRelation(reportRelation);
+  };
+
+  public static createReport = async (
+    uri: string,
+    tripId: number,
+    reportedId: number,
+    relation: ReportRelation,
+    data: ReportFormSchemaType
+  ): Promise<void> => {
+    await this.resolveQuery(
+      ReportsApi.createReport(uri, tripId, reportedId, relation, data)
+    );
+  };
+
+  public static approveReport = async (
+    uri: string,
+    data: DecideReportFormSchemaType
+  ): Promise<void> => {
+    await this.resolveQuery(ReportsApi.approveReport(uri, data));
+  };
+
+  public static rejectReport = async (
+    uri: string,
+    data: DecideReportFormSchemaType
+  ): Promise<void> => {
+    await this.resolveQuery(ReportsApi.rejectReport(uri, data));
   };
 }
 

@@ -248,6 +248,23 @@
     "car_plate": {
       "required": "The car plate is required",
       "invalid": "The car plate is in invalid, it should follow one of the following formats: {{- format}}"
+    },
+    "rating": {
+      "required": "The rating is required",
+      "invalid": "The rating must be a number",
+      "min": "The rating must be at least {{min}}",
+      "max": "The rating must be at most {{max}}"
+    },
+    "option": {
+      "required": "You must select an option"
+    },
+    "comment": {
+      "max": "The comment must have at most {{max}} characters"
+    },
+    "reason": {
+      "required": "The reason is required",
+      "min": "The reason must have at least {{min}} characters",
+      "max": "The reason must have at most {{max}} characters"
     }
   },
   "profile": {
@@ -317,6 +334,42 @@
     "WRECK_CAR": "Damaged the car",
     "OTHER": "Other reason"
   },
+  "report_options": {
+    "error": {
+      "title": "Could not fetch the report options",
+      "default": "An error occurred while fetching the report options"
+    }
+  },
+  "report": {
+    "success": {
+      "title": "Report created!",
+      "message": "The report was created successfully! We will notify you as soon as the report is resolved"
+    },
+    "error": {
+      "title": "Report creation failed",
+      "default": "An error occurred while creating the report"
+    }
+  },
+  "approve_report": {
+    "success": {
+      "title": "Report approved!",
+      "message": "The report was approved successfully! An email was sent to both users"
+    },
+    "error": {
+      "title": "Report approval failed",
+      "default": "An error occurred while approving the report"
+    }
+  },
+  "reject_report": {
+    "success": {
+      "title": "Report rejected!",
+      "message": "The report was rejected successfully! An email was sent to the reporter"
+    },
+    "error": {
+      "title": "Report rejection failed",
+      "default": "An error occurred while rejecting the report"
+    }
+  },
   "reviews": {
     "none": "No reviews",
     "stars_title": "How would you rate this passenger?",
@@ -378,6 +431,54 @@
     "EXCELLENT_EXPERIENCE": "Excellent experience",
     "error": {
       "title_all": "An error occurred while fetching your reviews"
+    }
+  },
+  "car_review": {
+    "success": {
+      "title": "Car review created!",
+      "message": "The car review was created successfully!"
+    },
+    "error": {
+      "title": "Car review creation failed",
+      "default": "An error occurred while creating the car review"
+    }
+  },
+  "car_review_options": {
+    "error": {
+      "title": "Could not fetch the car review options",
+      "default": "An error occurred while fetching the car review options"
+    }
+  },
+  "passenger_review": {
+    "success": {
+      "title": "Passenger review created!",
+      "message": "The passenger review was created successfully!"
+    },
+    "error": {
+      "title": "Passenger review creation failed",
+      "default": "An error occurred while creating the passenger review"
+    }
+  },
+  "passenger_review_options": {
+    "error": {
+      "title": "Could not fetch the passenger review options",
+      "default": "An error occurred while fetching the passenger review options"
+    }
+  },
+  "driver_review": {
+    "success": {
+      "title": "Driver review created!",
+      "message": "The driver review was created successfully!"
+    },
+    "error": {
+      "title": "Driver review creation failed",
+      "default": "An error occurred while creating the driver review"
+    }
+  },
+  "driver_review_options": {
+    "error": {
+      "title": "Could not fetch the driver review options",
+      "default": "An error occurred while fetching the driver review options"
     }
   },
   "created_trips": {

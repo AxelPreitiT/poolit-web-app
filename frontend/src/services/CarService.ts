@@ -8,6 +8,7 @@ import PaginationModel from "@/models/PaginationModel";
 import { EditCarFormSchemaType } from "@/forms/EditCarForm";
 import { getCarReviewOptionsByRating } from "@/enums/CarReviewsOptions";
 import CarReviewOptionModel from "@/models/CarReviewOptionModel";
+import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 
 class CarService extends Service {
   public static getCarsByUser = async (
@@ -69,6 +70,14 @@ class CarService extends Service {
     rating: number
   ): Promise<CarReviewOptionModel[]> => {
     return getCarReviewOptionsByRating(rating);
+  };
+
+  public static createCarReview = async (
+    uri: string,
+    tripId: number,
+    data: ReviewFormSchemaType
+  ): Promise<void> => {
+    await this.resolveQuery(CarApi.createCarReview(uri, tripId, data));
   };
 }
 
