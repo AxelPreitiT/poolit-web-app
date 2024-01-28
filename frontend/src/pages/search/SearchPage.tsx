@@ -68,10 +68,10 @@ const SearchPage = () => {
     }
   };
   const onSearchSuccess = ({
-    paginatedTrips,
+    result: paginatedTrips,
     data,
   }: {
-    paginatedTrips: PaginationModel<TripModel>;
+    result: PaginationModel<TripModel>;
     data: SearchTripsFormSchemaType;
   }) => {
     const searchParams = createTripsSearchParams(data, {
