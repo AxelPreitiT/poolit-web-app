@@ -23,6 +23,7 @@ public interface ReportService {
 //    TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException;
 
     PagedContent<Report> getReports(int page, int pageSize);
+    PagedContent<Report> getReport(final long reporterUserId, final long reportedUserId, final long tripId);
 
     PagedContent<Report> getReportsMadeByUserOnTrip(final long reporterUserId, final long tripId, final int page, final int pageSize) throws UserNotFoundException, TripNotFoundException;
 

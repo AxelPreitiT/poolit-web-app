@@ -19,6 +19,7 @@ public class PassengerDto {
 
     private Passenger.PassengerState passengerState;
     private String passengerReviewsForTripUriTemplate;
+    private String passengerReportsForTripUriTemplate;
 
     private URI otherPassengersUri;
 
@@ -30,6 +31,7 @@ public class PassengerDto {
         ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).queryParam("startDateTime",passenger.getTrip().getQueryStartDateTime()).queryParam("endDateTime",passenger.getTrip().getQueryEndDateTime()).build();
         ans.userUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(passenger.getUserId())).build();
         ans.passengerReviewsForTripUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).queryParam("forTrip",passenger.getTrip().getTripId()).queryParam("forUser",passenger.getUserId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.passengerReportsForTripUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).queryParam("forTrip",passenger.getTrip().getTripId()).queryParam("forUser",passenger.getUserId()).queryParam("madeBy","{userId}").toTemplate();
         if(passenger.getPassengerState().equals(Passenger.PassengerState.ACCEPTED)){
             ans.otherPassengersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).queryParam("startDateTime",passenger.getStartDateTime()).queryParam("endDateTime",passenger.getEndDateTime()).queryParam("passengerState",Passenger.PassengerState.ACCEPTED).build();
         }
@@ -90,5 +92,13 @@ public class PassengerDto {
 
     public void setPassengerReviewsForTripUriTemplate(String passengerReviewsForTripUriTemplate) {
         this.passengerReviewsForTripUriTemplate = passengerReviewsForTripUriTemplate;
+    }
+
+    public String getPassengerReportsForTripUriTemplate() {
+        return passengerReportsForTripUriTemplate;
+    }
+
+    public void setPassengerReportsForTripUriTemplate(String passengerReportsForTripUriTemplate) {
+        this.passengerReportsForTripUriTemplate = passengerReportsForTripUriTemplate;
     }
 }
