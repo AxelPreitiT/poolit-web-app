@@ -8,6 +8,7 @@ import UserService from "@/services/UserService.ts";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import StarRating from "@/components/stars/StarsRanking.tsx";
 import CardTrip from "@/components/cardTrip/cardTrip/CardTrip.tsx";
+import ReportReason from "@/components/reportReason/ReportReason.tsx";
 import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useReportById from "@/hooks/admin/useReportById.tsx";
 import { useParams } from "react-router-dom";
@@ -269,7 +270,7 @@ const ReportPage = () => {
                     <div className={styles.bubble}>
                       <div className={styles.report_info}>
                         <h4 className={styles.secondary_color}>
-                          {report.reportOption}
+                          <ReportReason reason={report.reportOption}/>
                         </h4>
                         <span className="text">{report.description}</span>
                       </div>

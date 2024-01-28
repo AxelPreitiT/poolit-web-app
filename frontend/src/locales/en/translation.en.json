@@ -451,6 +451,16 @@
       "title": "Could not search for reports",
       "default": "An error occurred while fetching the reports"
     },
+    "reason": {
+      "cannot_drive": "Can't drive",
+      "dangerous_driving": "Dangerous driving",
+      "did_not_pay": "Did not pay",
+      "harassment": "Harassment",
+      "identity_fraud": "Identity fraud",
+      "misconduct": "Misconduct",
+      "wreck_car": "Car in poor state",
+      "other": "Other"
+    },
     "report": {
       "detail": "Report Details",
       "loading": "Loading report",

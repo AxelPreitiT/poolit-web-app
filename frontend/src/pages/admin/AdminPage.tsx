@@ -4,11 +4,11 @@ import styles from "@/pages/admin/styles.module.scss";
 import ShortInfoReport from "@/components/admin/ShortInfoReport";
 import { useTranslation } from "react-i18next";
 import useAllReports from "@/hooks/admin/useAllReports.tsx";
-import PaginationList from "@/components/paginationList/paginationList.tsx";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
+import ReportPaginationList from "@/components/reportPaginationList/reportPaginationList.tsx";
 
-//TODO como pasar reportsUri
+
 const AdminPage = () => {
   const { isLoading: isLoadingReports, reports } = useAllReports();
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ const AdminPage = () => {
       <div className={styles.container_tab}>
         <div>
           {/* TODO: Use PaginationComponent */}
-          <PaginationList
+          <ReportPaginationList
             pagination_component={<h3>Poner paginación</h3>}
             empty_component={
               <EmptyList
