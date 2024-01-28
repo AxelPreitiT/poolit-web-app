@@ -41,10 +41,10 @@ public class TokenHibernateDao implements TokenDao {
         return query.getResultList().stream().findFirst();
     }
 
-    @Override
-    public void deleteToken(VerificationToken token) {
-        em.remove(token);
-    }
+//    @Override
+//    public void deleteToken(VerificationToken token) {
+//        em.remove(token);
+//    }
 
     @Override
     public void updateToken(String token, User user, LocalDate date) {

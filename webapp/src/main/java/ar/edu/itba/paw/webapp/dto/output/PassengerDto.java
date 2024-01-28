@@ -20,6 +20,7 @@ public class PassengerDto {
     private LocalDateTime endDateTime;
 
     private Passenger.PassengerState passengerState;
+    private String passengerReviewsForTripUriTemplate;
 
     private URI otherPassengersUri;
 
@@ -29,13 +30,12 @@ public class PassengerDto {
         ans.passengerState = passenger.getPassengerState();
         ans.startDateTime = passenger.getStartDateTime();
         ans.endDateTime = passenger.getEndDateTime();
-        ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).build();
+        ans.tripUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).queryParam("startDateTime",passenger.getTrip().getQueryStartDateTime()).queryParam("endDateTime",passenger.getTrip().getQueryEndDateTime()).build();
         ans.userUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(passenger.getUserId())).build();
+        ans.passengerReviewsForTripUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).queryParam("forTrip",passenger.getTrip().getTripId()).queryParam("forUser",passenger.getUserId()).queryParam("madeBy","{userId}").toTemplate();
         if(passenger.getPassengerState().equals(Passenger.PassengerState.ACCEPTED)){
             ans.otherPassengersUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).queryParam("startDateTime",passenger.getStartDateTime()).queryParam("endDateTime",passenger.getEndDateTime()).queryParam("passengerState",Passenger.PassengerState.ACCEPTED).build();
         }
-        //TODO: agregar estado del viaje: empezado, ...
-
         return ans;
     }
 
@@ -93,5 +93,13 @@ public class PassengerDto {
 
     public void setOtherPassengersUri(URI otherPassengersUri) {
         this.otherPassengersUri = otherPassengersUri;
+    }
+
+    public String getPassengerReviewsForTripUriTemplate() {
+        return passengerReviewsForTripUriTemplate;
+    }
+
+    public void setPassengerReviewsForTripUriTemplate(String passengerReviewsForTripUriTemplate) {
+        this.passengerReviewsForTripUriTemplate = passengerReviewsForTripUriTemplate;
     }
 }

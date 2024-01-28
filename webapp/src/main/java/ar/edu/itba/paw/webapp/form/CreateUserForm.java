@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.form.annotations.*;
+//import ar.edu.itba.paw.webapp.form.annotations.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-@FieldMatches(first = "password", second = "repeatPassword")
+/*
 public class CreateUserForm {
 
     @Pattern(regexp = ".+")
@@ -153,3 +153,5 @@ public class CreateUserForm {
         this.imageFile = imageFile;
     }
 }
+
+ */

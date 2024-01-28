@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.CarReviewsQuery;
+import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ImageQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateCarDto;
 import ar.edu.itba.paw.webapp.dto.input.reviews.CreateCarReviewDto;
@@ -88,7 +89,6 @@ public class CarController {
     @Path("/{id}")
     @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
     @Consumes(value = VndType.APPLICATION_CAR)
-    //TODO: revisar @Produces en estos casos
     public Response modifyCar(@PathParam("id") final long id, @Valid final UpdateCarDto updateCarDto) throws CarNotFoundException {
         LOGGER.debug("PUT request to update car with carId {}",id);
         carService.modifyCar(id, updateCarDto.getCarInfo(), updateCarDto.getSeats(), updateCarDto.getFeatures(), new byte[0]);
@@ -99,10 +99,11 @@ public class CarController {
     @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
     @Produces({"image/*"})
     public Response getCarImage(@PathParam("id") final long id,
+                                @Valid @BeanParam final ImageQuery query,
                                 @Context Request request) throws ImageNotFoundException, CarNotFoundException {
         LOGGER.debug("GET request for image of car with carId {}",id);
-        final byte[] image = carService.getCarImage(id);
-        return ControllerUtils.getConditionalCacheResponse(request,image, Arrays.hashCode(image));
+        final Image image = carService.getCarImage(id,query.getImageSize());
+        return ControllerUtils.getConditionalCacheResponse(request,image.getData(query.getImageSize()), image.getImageId());
     }
 
     @PUT

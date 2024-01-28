@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.form;
 
 
 import ar.edu.itba.paw.models.FeatureCar;
-import ar.edu.itba.paw.webapp.form.annotations.MPFile;
+//import ar.edu.itba.paw.webapp.form.annotations.MPFile;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+/*
 public class UpdateCarForm {
 
     @Size(min = 5, max = 100)
@@ -48,5 +49,5 @@ public class UpdateCarForm {
     public void setCarInfo(String carInfo) {
         this.carInfo = carInfo;
     }
-
 }
+ */

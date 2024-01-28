@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.services.TripService;
 import ar.edu.itba.paw.interfaces.services.UserService;
 import ar.edu.itba.paw.models.PagedContent;
 import ar.edu.itba.paw.models.Passenger;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
@@ -17,7 +16,8 @@ import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
 import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
-import ar.edu.itba.paw.webapp.dto.output.TripDto;
+import ar.edu.itba.paw.webapp.dto.output.trips.TripDto;
+import ar.edu.itba.paw.webapp.dto.output.trips.TripEarningsDto;
 import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,8 +85,15 @@ public class TripController {
         return Response.created(uri).build();
     }
 
-    //TODO: ver de hacer con otro content type el recaudado, y que lo pueda acceder sólo el conductor
-
+    @GET
+    @Path("{id}")
+    @Produces(value = VndType.APPLICATION_TRIP_EARNINGS)
+    @PreAuthorize("@authValidator.checkIfUserIsTripCreator(#id)")
+    public Response getByIdEarnings(@PathParam("id") final long id) throws TripNotFoundException {
+        LOGGER.debug("GET request to earnings for trip with id {}",id);
+        final double ans = tripService.getTotalTripEarnings(id);
+        return Response.ok(TripEarningsDto.fromTripEarnings(ans)).build();
+    }
     @GET
     @Path("/{id}")
     @Produces(value = VndType.APPLICATION_TRIP)
@@ -109,7 +116,7 @@ public class TripController {
     public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 
     @GET

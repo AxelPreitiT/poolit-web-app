@@ -24,7 +24,9 @@ const TripDetailsPage = () => {
   const id = useParams();
   const [params] = useSearchParams();
 
+  // CAMBIAR
   const link = CreateUri(id.tripId, params.toString(), "/trips");
+
   const { currentUser } = useCurrentUser();
   const { isLoading: isLoadingTrip, trip: trip } = useTripByUri(link);
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
@@ -43,6 +45,7 @@ const TripDetailsPage = () => {
   const { isLoading, passangers } = useGetPassangers(
     isDriver,
     isPassanger,
+    params,
     currentPassanger,
     trip
   );

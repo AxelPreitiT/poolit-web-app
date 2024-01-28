@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models.reviews;
 
 import ar.edu.itba.paw.models.reports.ReportRelations;
 
+/*
 
 //TODO: sacar esto, era cuando teníamos frontend
 public class ItemReview<T> {
@@ -34,3 +35,5 @@ public class ItemReview<T> {
         return state == ReviewState.DISABLED;
     }
 }
+
+ */

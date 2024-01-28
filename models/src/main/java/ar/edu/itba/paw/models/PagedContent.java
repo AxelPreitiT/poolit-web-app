@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class PagedContent<T>{
 
@@ -11,6 +12,10 @@ public class PagedContent<T>{
     private final int currentPage;
     private final int pageSize;
     private final int totalCount;
+
+    public static <E> PagedContent<E> fromOptional(final Optional<E> optional){
+        return optional.map(e -> new PagedContent<>(Collections.singletonList(e), 0, 1, 1)).orElseGet(PagedContent::emptyPagedContent);
+    }
     public static <E> PagedContent<E> emptyPagedContent(){
         return new PagedContent<>(Collections.emptyList(),0,0,0);
     }

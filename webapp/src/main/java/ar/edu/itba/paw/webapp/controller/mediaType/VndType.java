@@ -12,6 +12,7 @@ public class VndType {
 
     //    --------Users--------
     public static final String APPLICATION_USER_PUBLIC = BASE + "user.public.v1+json";
+    public static final String APPLICATION_USER_DRIVER = BASE + "user.driver.v1+json";
     public static final String APPLICATION_USER_PRIVATE = BASE + "user.private.v1+json";
     public static final String APPLICATION_USER = BASE + "user.v1+json";
     public static final String APPLICATION_USER_ROLE = BASE + "user.role.v1+json";
@@ -30,6 +31,7 @@ public class VndType {
     public static final String APPLICATION_REVIEW_PASSENGER = BASE + "passenger-review.v1+json";
     //    --------Trips--------
     public static final String APPLICATION_TRIP = BASE + "trip.v1+json";
+    public static final String APPLICATION_TRIP_EARNINGS = BASE + "trip.earnings.v1+json";
     public static final String APPLICATION_TRIP_PASSENGER = BASE + "trip.passenger.v1+json";
     public static final String APPLICATION_TRIP_PASSENGER_STATE = BASE + "trip.passenger.state.v1+json";
     //    --------Reports--------

@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.form.constraints;
 
-import ar.edu.itba.paw.webapp.form.CreateUserForm;
-import ar.edu.itba.paw.webapp.form.annotations.PasswordMatches;
+//import ar.edu.itba.paw.webapp.form.CreateUserForm;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/*
 public class PasswordMatchesValidatorConstraint implements ConstraintValidator<PasswordMatches, CreateUserForm> {
     @Override
     public void initialize(PasswordMatches passwordMatches) {
@@ -16,3 +16,5 @@ public class PasswordMatchesValidatorConstraint implements ConstraintValidator<P
         return createUserForm.getPassword().equals(createUserForm.getRepeatPassword());
     }
 }
+
+ */

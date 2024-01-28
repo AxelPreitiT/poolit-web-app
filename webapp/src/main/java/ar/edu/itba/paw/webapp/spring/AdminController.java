@@ -1,24 +1,25 @@
 package ar.edu.itba.paw.webapp.spring;
 
-import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
-import ar.edu.itba.paw.interfaces.services.ReportService;
-import ar.edu.itba.paw.models.PagedContent;
-import ar.edu.itba.paw.models.reports.Report;
-import ar.edu.itba.paw.interfaces.exceptions.ReportNotFoundException;
-import ar.edu.itba.paw.webapp.form.ReportAdminForm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.ModelAndView;
+//import ar.edu.itba.paw.interfaces.exceptions.PassengerNotFoundException;
+//import ar.edu.itba.paw.interfaces.exceptions.TripNotFoundException;
+//import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+//import ar.edu.itba.paw.interfaces.services.ReportService;
+//import ar.edu.itba.paw.models.PagedContent;
+//import ar.edu.itba.paw.models.reports.Report;
+//import ar.edu.itba.paw.interfaces.exceptions.ReportNotFoundException;
+//import ar.edu.itba.paw.webapp.form.ReportAdminForm;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.web.bind.annotation.*;
+//import org.springframework.validation.BindingResult;
+//import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
 
+/*
 @Controller
 public class AdminController {
 
@@ -90,3 +91,5 @@ public class AdminController {
         return new ModelAndView("redirect:/admin?rejectReport=true");
     }
 }
+
+ */

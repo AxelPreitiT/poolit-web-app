@@ -1,7 +1,5 @@
-package ar.edu.itba.paw.webapp.dto.output;
+package ar.edu.itba.paw.webapp.dto.output.trips;
 
-import ar.edu.itba.paw.models.Passenger;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
@@ -29,6 +27,12 @@ public class TripDto {
     private LocalDateTime queryEndDateTime;
     private URI selfUri;
     private long tripId;
+    private Trip.TripStatus tripStatus;
+    private boolean isDeleted;
+    private LocalDateTime lastOccurrence;
+    private String driverReviewsUriTemplate;
+    private String carReviewsUriTemplate;
+    private String reportsUriTemplate;
 
 
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
@@ -43,9 +47,15 @@ public class TripDto {
         ans.occupiedSeats = trip.getOccupiedSeats();
         ans.startDateTime = trip.getStartDateTime();
         ans.endDateTime = trip.getEndDateTime();
-        ans.queryEndDateTime = trip.getQueryStartDateTime();
+        ans.queryStartDateTime = trip.getQueryStartDateTime();
         ans.queryEndDateTime = trip.getQueryEndDateTime();
-        ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).toTemplate() + "{/userId}";
+        ans.tripStatus = trip.getQueryTripStatus();
+        ans.isDeleted = trip.isDeleted();
+        ans.lastOccurrence = trip.getLastOccurrence();
+        ans.driverReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.carReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).path(UrlHolder.REVIEWS_ENTITY).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.reportsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).toTemplate() + "{/userId}{?startDateTime,endDateTime,passengerState}";
         ans.driverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(trip.getDriver().getUserId())).build();
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
         ans.originCityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(trip.getOriginCity().getId())).build();
@@ -196,5 +206,53 @@ public class TripDto {
 
     public void setTripId(long tripId) {
         this.tripId = tripId;
+    }
+
+    public Trip.TripStatus getTripStatus() {
+        return tripStatus;
+    }
+
+    public void setTripStatus(Trip.TripStatus tripStatus) {
+        this.tripStatus = tripStatus;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public LocalDateTime getLastOccurrence() {
+        return lastOccurrence;
+    }
+
+    public void setLastOccurrence(LocalDateTime lastOccurrence) {
+        this.lastOccurrence = lastOccurrence;
+    }
+
+    public String getDriverReviewsUriTemplate() {
+        return driverReviewsUriTemplate;
+    }
+
+    public void setDriverReviewsUriTemplate(String driverReviewsUriTemplate) {
+        this.driverReviewsUriTemplate = driverReviewsUriTemplate;
+    }
+
+    public String getCarReviewsUriTemplate() {
+        return carReviewsUriTemplate;
+    }
+
+    public void setCarReviewsUriTemplate(String carReviewsUriTemplate) {
+        this.carReviewsUriTemplate = carReviewsUriTemplate;
+    }
+
+    public String getReportsUriTemplate() {
+        return reportsUriTemplate;
+    }
+
+    public void setReportsUriTemplate(String reportsUriTemplate) {
+        this.reportsUriTemplate = reportsUriTemplate;
     }
 }

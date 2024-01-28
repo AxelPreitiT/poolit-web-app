@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form.annotations;
 
-import ar.edu.itba.paw.webapp.form.constraints.FieldMatchesValidator;
+//import ar.edu.itba.paw.webapp.form.constraints.FieldMatchesValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -11,6 +11,7 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/*
 @Target({TYPE, ANNOTATION_TYPE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = FieldMatchesValidator.class)
@@ -25,3 +26,5 @@ public @interface FieldMatches {
 
     Class<? extends Payload>[] payload() default {};
 }
+
+ */

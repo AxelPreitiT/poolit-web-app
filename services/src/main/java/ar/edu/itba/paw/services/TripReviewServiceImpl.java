@@ -6,8 +6,8 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.Car;
 import ar.edu.itba.paw.models.Passenger;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.reviews.ItemReview;
-import ar.edu.itba.paw.models.reviews.TripReviewCollection;
+//import ar.edu.itba.paw.models.reviews.ItemReview;
+//import ar.edu.itba.paw.models.reviews.TripReviewCollection;
 import ar.edu.itba.paw.models.trips.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import java.util.List;
 
 
 //TODO: eliminar
+/*
 @Service
 public class TripReviewServiceImpl implements TripReviewService {
 
@@ -64,3 +65,5 @@ public class TripReviewServiceImpl implements TripReviewService {
     }
 
 }
+
+ */

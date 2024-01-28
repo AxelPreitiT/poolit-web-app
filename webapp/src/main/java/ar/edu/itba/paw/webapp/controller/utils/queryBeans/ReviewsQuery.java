@@ -8,7 +8,7 @@ import javax.ws.rs.QueryParam;
 
 @NotAllNull
 @NotNullTogether(fields = {"madeBy","forTrip"})
-@Exclusive(group1 = {"forUser"}, group2 = {"forTrip","madeBy"})
+//@Exclusive(group1 = {"forUser"}, group2 = {"forTrip","madeBy"})
 public class ReviewsQuery extends PagedQuery{
     @QueryParam("forUser")
     private Integer forUser;

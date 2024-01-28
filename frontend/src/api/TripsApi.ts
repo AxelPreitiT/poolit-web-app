@@ -32,7 +32,9 @@ class TripsApi extends AxiosApi {
     uri: string
   ) => {
     return this.get<TripModel>(uri, {
-      headers: {},
+      headers: {
+        "Accept": TripsApi.TRIPS_CONTENT_TYPE_HEADER,
+      },
     });
   };
 

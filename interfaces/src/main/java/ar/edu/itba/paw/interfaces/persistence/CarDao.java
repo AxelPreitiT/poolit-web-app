@@ -14,7 +14,7 @@ public interface CarDao {
 
     Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, long imageId);
 
-    Optional<Car> findByPlate(String plate);
+//    Optional<Car> findByPlate(String plate);
 
     Optional<Car> findById(long carId);
 

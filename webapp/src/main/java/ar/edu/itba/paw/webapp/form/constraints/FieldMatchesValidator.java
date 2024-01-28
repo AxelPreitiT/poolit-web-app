@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.form.constraints;
 
-import ar.edu.itba.paw.webapp.form.annotations.FieldMatches;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.util.FieldUtils;
@@ -8,6 +7,7 @@ import org.springframework.security.util.FieldUtils;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/*
 public class FieldMatchesValidator implements ConstraintValidator<FieldMatches, Object> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldMatchesValidator.class);
@@ -33,4 +33,6 @@ public class FieldMatchesValidator implements ConstraintValidator<FieldMatches, 
         }
     }
 }
+
+ */
 

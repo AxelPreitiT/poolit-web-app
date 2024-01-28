@@ -12,5 +12,7 @@ public interface ImageDao {
 
     Image update(Image image, byte[] data);
 
+    void delete(final Image image);
+
 }
 

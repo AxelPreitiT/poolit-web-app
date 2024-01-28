@@ -4,13 +4,20 @@ import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import {parseTemplate} from "url-template";
 
-const useGetPassangers = ( isDriver:boolean, isPassanger: boolean, passanger?:passangerModel,  trip?:tripModel,) => {
+const useGetPassangers = ( isDriver:boolean, isPassanger: boolean, params:URLSearchParams, passanger?:passangerModel,  trip?:tripModel,) => {
 
     const query = useQuery({
         queryKey: ["allPassangers"],
         queryFn: async () => {
             if (isDriver) {
-                const uri = parseTemplate(trip?.passengersUriTemplate as string).expand({});
+                const startDateTime = params.get("startDateTime") || "";
+                const endDateTime = params.get("endDateTime") || "";
+                const uri = parseTemplate(trip?.passengersUriTemplate as string).expand({
+                    userId: null,
+                    startDateTime: startDateTime,
+                    endDateTime: endDateTime,
+                    passengerState: "ACCEPTED",
+                });
                 return await PassangerService.getPassangersTrips(uri);
             }
             if(isPassanger){

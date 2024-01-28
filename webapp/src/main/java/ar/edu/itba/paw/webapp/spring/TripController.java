@@ -1,21 +1,21 @@
 package ar.edu.itba.paw.webapp.spring;
 
-import ar.edu.itba.paw.interfaces.exceptions.*;
-import ar.edu.itba.paw.interfaces.services.*;
-import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.reviews.TripReviewCollection;
-import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.webapp.form.*;
-import ar.edu.itba.paw.webapp.utils.DefaultBoolean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+//import ar.edu.itba.paw.interfaces.exceptions.*;
+//import ar.edu.itba.paw.interfaces.services.*;
+//import ar.edu.itba.paw.models.*;
+//import ar.edu.itba.paw.models.reviews.TripReviewCollection;
+//import ar.edu.itba.paw.models.trips.Trip;
+//import ar.edu.itba.paw.webapp.form.*;
+//import ar.edu.itba.paw.webapp.utils.DefaultBoolean;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.i18n.LocaleContextHolder;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.validation.BindingResult;
+//import org.springframework.web.bind.annotation.*;
+//import org.springframework.web.servlet.ModelAndView;
+//import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/*
 @Controller
 public class TripController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TripController.class);
@@ -284,3 +285,5 @@ public class TripController {
         return new ModelAndView(String.format("redirect:/trips/%d", tripId));
     }
 }
+
+ */
