@@ -17,7 +17,6 @@ import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
-//import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -42,7 +41,6 @@ const TripDetailsPage = () => {
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
 
-  //const {isLoading, passangers} = useGetPassangers(isDriver , isPassanger, params, currentPassanger, trip);
 
   if (
     isLoadingTrip ||
@@ -50,9 +48,8 @@ const TripDetailsPage = () => {
     isLoadingCar ||
     car === undefined ||
     isLoadingDriver ||
-    driver === undefined
-    //isLoading ||
-    //passangers === undefined
+    driver === undefined ||
+      isLoadingRole
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
@@ -99,7 +96,8 @@ const TripDetailsPage = () => {
               isPassanger={isPassanger}
               isDriver={isDriver}
               status={Status.FINISHED}
-              passangers={[]}
+              trip={trip}
+              passanger={currentPassanger}
               driver={driver}
               car={car}
             />

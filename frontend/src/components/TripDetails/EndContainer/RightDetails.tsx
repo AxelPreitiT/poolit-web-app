@@ -5,7 +5,6 @@ import {Button, Modal} from "react-bootstrap";
 import Status from "@/enums/Status.ts";
 import {useState} from "react";
 import ModalReportReview from "@/components/TripDetails/ModalReportsReviews/ModalReportReview.tsx";
-import PassangerModel from "@/models/PassangerModel.ts";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
 import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
@@ -15,17 +14,21 @@ import {createdTripsPath, reservedTripsPath} from "@/AppRouter.tsx";
 import ReportForm from "@/components/TripDetails/Modals/ReportForm.tsx";
 import ReviewForm from "@/components/TripDetails/Modals/ReviewForm.tsx";
 import ReviewCarForm from "@/components/TripDetails/Modals/ReviewCarForm.tsx";
+import tripModel from "@/models/TripModel.ts";
+import passangerModel from "@/models/PassangerModel.ts";
+import passangerStatus from "@/enums/PassangerStatus.ts";
 
 interface RightDetailsProps {
     isPassanger: boolean;
     isDriver: boolean;
     status: string;
-    passangers: PassangerModel[];
+    trip: tripModel;
+    passanger: passangerModel | undefined;
     driver: userPublicModel;
     car: carModel
 }
 
-const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}: RightDetailsProps) => {
+const RightDetails = ({ isPassanger, isDriver, status, trip, passanger, driver , car}: RightDetailsProps) => {
     const { t } = useTranslation();
     const [showModalReport, setModalReport] = useState(false);
     const [showModalMakeReport, setModalMakeReport] = useState(false);
@@ -72,6 +75,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                 </Button>
             </div> :
             (status === Status.FINISHED ?
+                ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
                     <div className={styles.review_btn}>
                         <div className={styles.btn_container}>
                             <Button className={styles.btn_join} onClick={openModalReview}>
@@ -95,7 +99,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReportReview closeModal={closeModalReport} selectUser={selectUserReport} passangers={passangers} driver={driver} isDriver={isDriver}/>
+                            <ModalReportReview closeModal={closeModalReport} selectUser={selectUserReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger}/>
                         </Modal>
 
                         <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -103,7 +107,7 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReportReview closeModal={closeModalReview} selectUser={selectUserReview} passangers={passangers} driver={driver} isDriver={isDriver} car={car} selectCar={selectCarReview}/>
+                            <ModalReportReview closeModal={closeModalReview} selectUser={selectUserReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} selectCar={selectCarReview}/>
                         </Modal>
 
                         <Modal show={showModalMakeReview} onHide={closeModalMakeReview} aria-labelledby="contained-modal-title-vcenter" centered>
@@ -113,7 +117,18 @@ const RightDetails = ({ isPassanger, isDriver, status, passangers, driver , car}
                         <Modal show={showModalCarMakeReview} onHide={closeModalCarReview} aria-labelledby="contained-modal-title-vcenter" centered>
                             <ModalCarMakeReview closeModal={closeModalCarReview} car={car} reportForm={<ReviewCarForm/>}/>
                         </Modal>
+                    </div> :
+                    <div className={styles.btn_container}>
+                        <Link to={reservedTripsPath} >
+                            <Button className={styles.btn_trips}>
+                                <div className={styles.create_trip_btn}>
+                                    <i className="bi bi-car-front-fill light-text"></i>
+                                    <span>{t("trip_detail.btn.my_trips")}</span>
+                                </div>
+                            </Button>
+                        </Link>
                     </div>
+                )
  :
                     (isDriver ?
                         <div className={styles.btn_container}>

@@ -5,7 +5,6 @@ import tripModel from "@/models/TripModel.ts";
 import {parseTemplate} from "url-template";
 
 const useGetPassangers = ( isDriver:boolean, isPassanger: boolean, params:URLSearchParams, passanger?:passangerModel,  trip?:tripModel,) => {
-
     const query = useQuery({
         queryKey: ["allPassangers"],
         queryFn: async () => {
