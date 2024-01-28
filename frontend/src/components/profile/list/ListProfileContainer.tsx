@@ -41,20 +41,20 @@ const ListProfileContainer = <T,>({
       <div className={styles.row_data}>
         <h2>{title}</h2>
       </div>
-      {props == null ? (
+      {!props ? (
         <div className={styles.review_empty_container}>
           <i className={`bi-solid bi-${empty_icon} h2`}></i>
           <h3 className="italic-text placeholder-text">{empty_text}</h3>
         </div>
       ) : (
-          <div>
-            <div className={styles.list_prop_container}>{props}</div>
-            <Link to={link} className={styles.logoContainer}>
-              <div className={styles.plus_btn}>
-                <h3 className="text">{btn_footer_text}</h3>
-              </div>
-            </Link>
-          </div>
+        <div>
+          <div className={styles.list_prop_container}>{props}</div>
+          <Link to={link} className={styles.logoContainer}>
+            <div className={styles.plus_btn}>
+              <h3 className="text">{btn_footer_text}</h3>
+            </div>
+          </Link>
+        </div>
       )}
       <div></div>
     </div>

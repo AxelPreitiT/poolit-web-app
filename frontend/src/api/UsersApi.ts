@@ -8,6 +8,7 @@ import AuthApi from "./AuthApi";
 import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import RegisterModel from "@/models/RegisterModel";
+import { EditProfileFormSchemaType } from "@/forms/EditProfileForm";
 
 class UsersApi extends AxiosApi {
   private static readonly USERS_BASE_URI: string = "/users";
@@ -112,6 +113,30 @@ class UsersApi extends AxiosApi {
         Accept: UsersApi.USERS_PRIVATE_ACCEPT_HEADER,
       },
     });
+  };
+
+  public static updateUser: (
+    userUri: string,
+    data: EditProfileFormSchemaType
+  ) => AxiosPromise<void> = (
+    userUri: string,
+    { name, last_name, telephone, city, locale }
+  ) => {
+    return this.patch(
+      userUri,
+      {
+        username: name,
+        surname: last_name,
+        phone: telephone,
+        bornCityId: city,
+        mailLocale: locale,
+      },
+      {
+        headers: {
+          "Content-Type": UsersApi.USERS_CONTENT_TYPE_HEADER,
+        },
+      }
+    );
   };
 }
 

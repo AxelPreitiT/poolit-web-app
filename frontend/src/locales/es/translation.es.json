@@ -120,6 +120,15 @@
       "message": "¡Ya estás registrado! Te enviamos un correo electrónico para que verifiques tu cuenta"
     }
   },
+  "edit_profile": {
+    "name": "Nombre",
+    "surname": "Apellido",
+    "image": "Imagen de perfil",
+    "error": {
+      "title": "La actualización del perfil falló",
+      "default": "Ocurrió un error al actualizar tu perfil"
+    }
+  },
   "verify_account": {
     "title": "Verificar cuenta",
     "success": {
@@ -257,23 +266,23 @@
     "lists": {
       "review_as_driver": "Opiniones como conductor",
       "review_as_passanger": "Opiniones como pasajero",
-      "review_empty": "No tiene opiniones",
+      "review_empty": "No tenés reseñas",
       "review_more": "Mostrar mas opiniones",
       "created_next_title": "Creados - Próximos viajes",
       "created_next_more": "Ver todos los proximos viajes",
-      "created_next_empty": "No tienes proximos viajes",
+      "created_next_empty": "No tenés proximos viajes",
       "created_prev_title": "Creados - viajes realizados",
       "created_prev_more": "Ver todos los viajes realizados",
-      "created_prev_empty": "No tienes viajes realizados",
+      "created_prev_empty": "No tenés viajes realizados",
       "reserved_next_title": "Reservados - Próximos",
       "reserved_next_more": "Ver todos los proximos viajes",
-      "reserved_next_empty": "No tienes proximos viajes",
+      "reserved_next_empty": "No tenés proximos viajes",
       "reserved_prev_title": "Reservados - Historial",
       "reserved_prev_more": "Ver todos los viajes realizados",
-      "reserved_prev_empty": "No tienes viajes realizados",
+      "reserved_prev_empty": "No tenés viajes realizados",
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
-      "cars_empty": "No tienes autos creados"
+      "cars_empty": "No tenés autos creados"
     },
     "loading": {
       "profile": "Cargando perfil",
@@ -286,7 +295,10 @@
     "error": {
       "title": "No se pudo obtener tu perfil",
       "default": "Ocurrió un error al obtener tu perfil"
-    }
+    },
+    "edit": "Editar",
+    "cancel": "Cancelar",
+    "save": "Guardar"
   },
   "roles": {
     "driver": "Conductor",
@@ -434,6 +446,7 @@
   "edit_car": {
     "cancel": "Cancelar",
     "save": "Guardar",
+    "image": "Imagen del auto",
     "error": {
       "title": "La actualización del auto falló",
       "default": "Ocurrió un error al actualizar el auto"
@@ -521,7 +534,7 @@
       "btn_accept": "Aceptar",
       "btn_delete": "Rechazar",
       "reservation_started": "La reserva ya ha empezado.",
-      "empty": "Todavía no tienes pasajeros interesandos.",
+      "empty": "Todavía no tenés pasajeros interesandos.",
       "passsanger_accepted": "Pasajero aceptado",
       "passsanger_rejected": "Pasajero rechazado",
       "trip_started": "El viaje ah comenzado"
@@ -732,11 +745,11 @@
     "submit": "Subir",
     "report": {
       "title": "¿A quien quieres reportar?",
-      "empty": "No tienes usuarios para reportar"
+      "empty": "No tenés usuarios para reportar"
     },
     "review": {
       "title": "Tu opinion nos interesa",
-      "empty": "No tienes usuarios para reseñar."
+      "empty": "No tenés usuarios para reseñar."
     }
   }
 }

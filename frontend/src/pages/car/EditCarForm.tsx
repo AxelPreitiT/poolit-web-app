@@ -75,7 +75,7 @@ const EditCarForm = ({
                 onChange(image);
               }}
               preview={preview}
-              previewAlt="Car image"
+              previewAlt={t("edit_car.image")}
               placeholder={<BsCarFrontFill className="light-text" />}
             />
           )}

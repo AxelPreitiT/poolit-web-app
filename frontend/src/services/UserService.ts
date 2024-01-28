@@ -4,6 +4,7 @@ import UserPrivateModel from "@/models/UserPrivateModel";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import { LoginFormSchemaType } from "@/forms/LoginForm";
 import UserPublicModel from "@/models/UserPublicModel.ts";
+import { EditProfileFormSchemaType } from "@/forms/EditProfileForm";
 
 class UserService extends Service {
   public static login = async (data: LoginFormSchemaType) => {
@@ -35,8 +36,23 @@ class UserService extends Service {
   public static getCurrentUser = async (): Promise<UserPrivateModel> =>
     await this.resolveQuery(UsersApi.getCurrentUser());
 
-  public static getUserById = async  (uri : string): Promise<UserPublicModel> =>
-      await this.resolveQuery(UsersApi.getPublicUser(uri));
+  public static getUserById = async (uri: string): Promise<UserPublicModel> =>
+    await this.resolveQuery(UsersApi.getPublicUser(uri));
+
+  private static updateUserImage = async (uri: string, image: File) => {
+    if (!image || image.size === 0) {
+      return;
+    }
+    await this.resolveQuery(UsersApi.updateUserImage(uri, image));
+  };
+
+  public static updateUser = async (
+    user: UserPrivateModel,
+    data: EditProfileFormSchemaType
+  ): Promise<void> => {
+    await this.resolveQuery(UsersApi.updateUser(user.selfUri, data));
+    await this.updateUserImage(user.imageUri, data.image);
+  };
 }
 
 export default UserService;

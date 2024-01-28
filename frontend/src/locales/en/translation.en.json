@@ -121,6 +121,15 @@
       "message": "You have successfully registered! Please check your email inbox to verify your account"
     }
   },
+  "edit_profile": {
+    "name": "Name",
+    "surname": "Surname",
+    "image": "Profile image",
+    "error": {
+      "title": "Profile update failed",
+      "default": "An error occurred while updating your profile"
+    }
+  },
   "verify_account": {
     "title": "Verify your account",
     "success": {
@@ -287,7 +296,10 @@
     "error": {
       "title": "Could not fetch your profile",
       "default": "An error occurred while fetching your profile"
-    }
+    },
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "roles": {
     "driver": "Driver",
@@ -435,6 +447,7 @@
   "edit_car": {
     "cancel": "Cancel",
     "save": "Save",
+    "image": "Car image",
     "error": {
       "title": "Car update failed",
       "default": "An error occurred while updating the car"
