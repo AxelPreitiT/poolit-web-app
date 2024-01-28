@@ -160,6 +160,16 @@ public class TripHibernateDao implements TripDao {
 //    }
 
     @Override
+    public boolean userIsAcceptedPassengerOfDriver(final User user, final User driver){
+        LOGGER.debug("Looking if user {} is an accepted passenger of driver {} for a trip",user.getUserId(),driver.getUserId());
+        Query query = em.createNativeQuery("SELECT distinct 1 "+
+                "FROM trips JOIN passengers ON trips.trip_id = passengers.trip_id " +
+                "WHERE trips.driver_id = :driverId AND passengers.user_id = :userId AND passengers.passenger_state = 'ACCEPTED'");
+        query.setParameter("driverId",driver.getUserId());
+        query.setParameter("userId",user.getUserId());
+        return !query.getResultList().isEmpty();
+    }
+    @Override
     public List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime){
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         TypedQuery<Passenger> query = em.createQuery("from Passenger p WHERE p.passengerState = 'ACCEPTED' AND p.trip = :trip AND ((p.startDateTime<=:startDate AND p.endDateTime>=:startDate) OR (p.startDateTime<= :endDate AND p.endDateTime= :endDate) OR (p.startDateTime >= :startDate AND p.endDateTime <= :endDate))",Passenger.class);

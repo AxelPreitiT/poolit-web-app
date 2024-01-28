@@ -11,12 +11,7 @@ import java.net.URI;
 
 //Avoid 'type' field from being added to response on JSON
 @XmlType(name = "")
-public class PrivateUserDto extends PublicUserDto{
-
-    private String email;
-
-    private String phone;
-
+public class PrivateUserDto extends DriverUserDto{
     private String role;
 
     private URI cityUri;
@@ -39,8 +34,6 @@ public class PrivateUserDto extends PublicUserDto{
 
     protected PrivateUserDto(final UriInfo uriInfo, final User user){
         super(uriInfo,user);
-        this.email = user.getEmail();
-        this.phone = user.getPhone();
         this.cityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(user.getBornCity().getId())).build();
         this.mailLocale = user.getMailLocale().getLanguage();
         this.role = user.getRole();
@@ -54,22 +47,6 @@ public class PrivateUserDto extends PublicUserDto{
     }
     public static PrivateUserDto fromUser(final UriInfo uriInfo, final User user){
         return new PrivateUserDto(uriInfo,user);
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public URI getCityUri() {

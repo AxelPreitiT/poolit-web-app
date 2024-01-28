@@ -364,6 +364,12 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
+    public boolean userIsAcceptedPassengerOfDriver(final User user, final User driver){
+        return tripDao.userIsAcceptedPassengerOfDriver(user,driver);
+    }
+
+    @Transactional
+    @Override
     public double getTotalTripEarnings(final long tripId) throws TripNotFoundException{
         final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         List<Passenger> acceptedPassengers = tripDao.getAcceptedPassengers(trip,trip.getStartDateTime(),trip.getEndDateTime());

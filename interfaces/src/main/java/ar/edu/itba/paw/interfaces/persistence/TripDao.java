@@ -19,6 +19,7 @@ public interface TripDao {
 //    List<Passenger> getPassengers(final TripInstance tripInstance);
     //
 //    List<Passenger> getPassengers(final Trip trip, final LocalDateTime dateTime);
+    boolean userIsAcceptedPassengerOfDriver(final User user, final User driver);
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //

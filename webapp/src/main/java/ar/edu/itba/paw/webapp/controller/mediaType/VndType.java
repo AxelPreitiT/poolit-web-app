@@ -12,6 +12,7 @@ public class VndType {
 
     //    --------Users--------
     public static final String APPLICATION_USER_PUBLIC = BASE + "user.public.v1+json";
+    public static final String APPLICATION_USER_DRIVER = BASE + "user.driver.v1+json";
     public static final String APPLICATION_USER_PRIVATE = BASE + "user.private.v1+json";
     public static final String APPLICATION_USER = BASE + "user.v1+json";
     public static final String APPLICATION_USER_ROLE = BASE + "user.role.v1+json";

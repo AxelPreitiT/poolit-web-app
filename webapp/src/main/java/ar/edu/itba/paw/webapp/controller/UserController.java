@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ImageQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateUserDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.UserRoleDto;
+import ar.edu.itba.paw.webapp.dto.output.user.DriverUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PrivateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PublicUserDto;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.ImageSize;
@@ -59,6 +60,16 @@ public class UserController {
         LOGGER.debug("GET request for public userId {}",id);
         final User user = userService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(PublicUserDto.fromUser(uriInfo,user)).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces(VndType.APPLICATION_USER_DRIVER)
+    @PreAuthorize("@authValidator.checkIfUserIsPassengerOf(#id) or @authValidator.checkIfWantedIsSelf(#id)")
+    public Response getByIdDriver(@PathParam("id") final long id){
+        LOGGER.debug("GET request for public userId {}",id);
+        final User user = userService.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return Response.ok(DriverUserDto.fromUser(uriInfo,user)).build();
     }
 
 
