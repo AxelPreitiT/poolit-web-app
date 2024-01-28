@@ -1,5 +1,5 @@
 import useCarById from "@/hooks/cars/useCarById";
-import useUserCars from "@/hooks/cars/useUserCars";
+// import useUserCars from "@/hooks/cars/useUserCars";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "react-router-dom";
 import styles from "./styles.module.scss";
@@ -18,11 +18,11 @@ const CarPage = () => {
   const { t } = useTranslation();
   const { search } = useLocation();
   const { carId } = useParams();
-  const {
-    isLoading: isUserCarsLoading,
-    cars: userCars,
-    isError: isUserCarsError,
-  } = useUserCars();
+  // const {
+  //   isLoading: isUserCarsLoading,
+  //   cars: userCars,
+  //   isError: isUserCarsError,
+  // } = useUserCars();
   const {
     isLoading: isCarLoading,
     car,
@@ -38,11 +38,11 @@ const CarPage = () => {
   const currentPage = page == null ? 1 : parseInt(page, 10);
 
   if (
-    isUserCarsLoading ||
+    // isUserCarsLoading ||
     isCarLoading ||
     isCarBrandLoading ||
     isCarError ||
-    isUserCarsError ||
+    // isUserCarsError ||
     isCarBrandError ||
     !car
   ) {
@@ -74,7 +74,7 @@ const CarPage = () => {
             <h2>Opinions about the car</h2>
           </div>
           <PaginationComponent
-            uri={createPaginationUri(car.reviewsUri, currentPage, 1, true)}
+            uri={createPaginationUri(car.reviewsUri, currentPage, 10, true)}
             current_page={currentPage}
             useFuction={useCarReviewsByUri}
             empty_component={

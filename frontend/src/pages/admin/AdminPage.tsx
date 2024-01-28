@@ -22,6 +22,7 @@ const AdminPage = () => {
       <MainHeader title={t("admin.title")} />
       <div className={styles.container_tab}>
         <div>
+          {/* TODO: Use PaginationComponent */}
           <PaginationList
             pagination_component={<h3>Poner paginación</h3>}
             empty_component={

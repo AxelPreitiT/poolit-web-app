@@ -67,9 +67,6 @@ const PaginationComponent = <T,>({
       ? generateItems([], component_name)
       : generateItems(pageTrips.data, component_name);
 
-  console.log("pageTrips", pageTrips);
-  console.log("currentPage", currentPage);
-
   return isLoadingTrips || pageTrips === undefined ? (
     <LoadingWheel
       containerClassName={styles.loadingContainer}
