@@ -13,7 +13,7 @@ import LoadingScreen from "@/components/loading/LoadingScreen";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri";
 import {useState} from "react";
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import ModalReportAccept from "@/components/admin/DecideReportModal/ModalReportAccept.tsx";
 import ReportApproveForm from "@/components/admin/DecideReportModal/ReportApproveForm.tsx";
 import ModalReportReject from "@/components/admin/DecideReportModal/ModalReportReject.tsx";
@@ -300,23 +300,23 @@ const ReportPage = () => {
               </div>
               <div className={styles.report_content_container}>
                 <div className={styles.decision_content_container}>
-                  <h5>Poner mensaje de decision</h5>
+                  <h6 className={styles.secondary_color}>{t('admin.report.decision')}</h6>
                   <div className={styles.button_container}>
                     //TODO como hacer href
                     <a href="/admin/">
-                      <button className={styles.later_btn}>
+                      <Button variant="primary" className="later-btn">
                         <span className="light-text h5">{t('admin.report.laterBtn')}</span>
-                      </button>
+                      </Button>
                     </a>
                     <div className={styles.reject_container}>
-                      <button className={styles.reject_btn} onClick={openModalReportReject}>
+                      <Button variant="danger" className="danger-btn" onClick={openModalReportReject}>
                         <span className="light-text h5">{t('admin.report.rejectBtn')}</span>
-                      </button>
+                      </Button>
                     </div>
                     <div className={styles.approve_container}>
-                      <button className={styles.approve_btn} onClick={openModalReportApprove}>
+                      <Button variant="secondary" className="secondary-btn" onClick={openModalReportApprove}>
                         <span className="light-text h5">{t('admin.report.approveBtn')}</span>
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

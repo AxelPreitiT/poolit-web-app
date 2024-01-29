@@ -619,9 +619,11 @@
       "notifyReject": "The user who made the report will be notified with the reason for rejection",
       "accept" : "Approve report",
       "reject" : "Reject report",
-      "acceptBtn" : "Approve",
-      "RejectBtn" : "Reject",
-      "laterBtn" : "Decide later"
+      "approveBtn" : "Approve",
+      "rejectBtn" : "Reject",
+      "laterBtn" : "Decide later",
+      "approveWarning": "This action cancels trips where they are drivers and removes them on trips where they are passengers",
+      "decision": "What decision do you want to make?"
     },
     "user": {
       "loading": "Loading user"

@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+
 import {Form} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 
@@ -13,7 +13,7 @@ const ReportRejectForm = () => {
             <div>
                 <label className="report-option-label">
                     <strong className="text">{t('admin.report.explainReject')}</strong>
-                    <span className={styles.italic_text}>{t('admin.report.notifyReject')}</span>
+                    <div><span className="italic-text">{t('admin.report.notifyReject')}</span></div>
                 </label>
                 <Form.Control as="textarea" rows={3}/>
             </div>
