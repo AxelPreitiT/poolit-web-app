@@ -14,6 +14,11 @@ import PassangerReportReviewComponent from "@/components/TripDetails/ModalReport
 import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 import useReviewsDriver from "@/hooks/passanger/useReviewsDriver.tsx";
 import getUriPassangers from "@/functions/getUriPassangers.tsx";
+import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
+import PassangerComponent from "@/components/passanger/Passanger.tsx";
+import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
+import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
+import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 //import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 
 export interface ModalReportProps {
@@ -31,10 +36,10 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, selec
     const { t } = useTranslation();
     const {data:isReviewed, isLoading:isLoadingReview} = useReviewsDriver(trip.driverReviewsUriTemplate)
 
-    const uri = getUriPassangers(isDriver, isDriver, passanger, trip);
+    const uri = getUriPassangers(isDriver, passanger, trip);
 
     return (
-        (!isLoadingReview && isReviewed!=undefined &&
+        (!isLoadingReview && isReviewed!=undefined ?
             <div className={styles.propProfile}>
                 <Modal.Header closeButton>
                     <Modal.Title><h2 className={styles.titleModal}>{t('modal.report.title')}</h2></Modal.Title>
@@ -62,7 +67,22 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, selec
                                     <i className="bi bi-people-fill h3"></i>
                                     <h3>{t('modal.passangers')}</h3>
                                 </div>
-
+                                <PaginationComponentExtraData
+                                    CardComponent={PassangerReportReviewComponent}
+                                    extraData={() => console.log("Hola")}
+                                    uri={createPaginationUri(uri, INITIALPAGE, PASSANGERPAGESIZE)}
+                                    current_page={INITIALPAGE}
+                                    useFuction={usePassangerByUri}
+                                    empty_component={
+                                        <div className={styles.review_empty_container}>
+                                            <i className={`bi-solid bi-people h2`}></i>
+                                            <h3 className="italic-text placeholder-text">
+                                                {t("trip_detail.passengers.empty")}
+                                            </h3>
+                                        </div>
+                                    }
+                                    itemsName={t("trip_detail.passengers.header")}
+                                />
                                 {passangers.map((item, index) => (
                                     <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
                                 ))}

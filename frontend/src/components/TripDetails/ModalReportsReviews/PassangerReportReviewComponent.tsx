@@ -5,18 +5,17 @@ import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
-import userPublicModel from "@/models/UserPublicModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
 import useReviewsPassangers from "@/hooks/passanger/useReviewsPassangers.tsx";
 
 export interface PassangerReportReviewComponent {
-  passanger: PassangerModel;
-  selectPassanger: (user: userPublicModel) => void;
+  data: PassangerModel;
+  extraData?: () => void;
 }
 
 const PassangerReportReviewComponent = ({
-  passanger,
-  selectPassanger,
+  data: passanger,
+  extraData: selectPassanger,
 }: PassangerReportReviewComponent) => {
   const { isLoading, data } = usePublicUserByUri(passanger.userUri);
   const { t } = useTranslation();
@@ -28,12 +27,12 @@ const PassangerReportReviewComponent = ({
 
   return (
     <div className={styles.marginCointainer}>
-      {isLoading || data == undefined || isLoadingReview ? (
+      {isLoading || data == undefined || isLoadingReview || selectPassanger == undefined ? (
         <LoadingWheel description={t("admin.user.loading")} />
       ) : (
           <div>
         <Button
-          onClick={() => selectPassanger(data)}
+          onClick={() => selectPassanger()}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}

@@ -2,8 +2,9 @@ import {parseTemplate} from "url-template";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import {useSearchParams} from "react-router-dom";
+import passangerStatus from "@/enums/PassangerStatus.ts";
 
-const getUriPassangers = ( isDriver:boolean, isPassanger: boolean, passanger?: passangerModel, trip?:tripModel,) => {
+const getUriPassangers = ( isDriver:boolean, passanger?: passangerModel, trip?:tripModel,) => {
     const [params] = useSearchParams();
 
     if (isDriver) {
@@ -13,13 +14,10 @@ const getUriPassangers = ( isDriver:boolean, isPassanger: boolean, passanger?: p
             userId: null,
             startDateTime: startDateTime,
             endDateTime: endDateTime,
-            passengerState: null,
+            passengerState: passangerStatus.ACCEPTED,
         });
     }
-    if(isPassanger){
-        return passanger?.otherPassengersUri as string;
-    }
-    return [];
+    return passanger?.otherPassengersUri as string;
 }
 
 export default getUriPassangers;
