@@ -1,5 +1,5 @@
 const enum Status {
-    WAITING = "PENDING",
+    WAITING = "UNCONFIRMED",
     ACCEPTED = "ACCEPTED",
     CANCEL = "CANCEL",
     REJECTED = "REJECTED",

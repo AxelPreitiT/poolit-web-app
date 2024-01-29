@@ -23,15 +23,12 @@ interface RightDetailsProps {
     isDriver: boolean;
     trip: tripModel;
     passanger: passangerModel | undefined;
+    status: string;
     driver: userPublicModel;
     car: carModel;
 }
 
-const RightDetails = ({ isPassanger, isDriver, trip, passanger, driver , car}: RightDetailsProps) => {
-    const startDate = new Date(trip.startDateTime)
-    const currentDate = new Date();
-    const endDate = new Date(trip.endDateTime)
-    const getStatusByDates = (currentDate < startDate ? Status.NOT_STARTED : (currentDate > endDate ? Status.FINISHED : Status.IN_PROGRESS) )
+const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
 
     const { t } = useTranslation();
     const [showModalReport, setModalReport] = useState(false);
@@ -78,7 +75,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, driver , car}: R
                     </div>
                 </Button>
             </div> :
-            (getStatusByDates === Status.FINISHED ?
+            (status === Status.FINISHED ?
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
                     <div className={styles.review_btn}>
                         <div className={styles.btn_container}>

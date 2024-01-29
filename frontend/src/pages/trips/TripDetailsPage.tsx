@@ -90,12 +90,14 @@ const TripDetailsPage = () => {
               trip={trip}
               isPassanger={isPassanger}
               isDriver={isDriver}
+              status={trip.tripStatus}
             />
             <RightDetails
               isPassanger={isPassanger}
               isDriver={isDriver}
               trip={trip}
               passanger={currentPassanger}
+              status={trip.tripStatus}
               driver={driver}
               car={car}
             />

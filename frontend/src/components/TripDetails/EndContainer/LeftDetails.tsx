@@ -3,20 +3,16 @@ import styles from "./styles.module.scss";
 import StatusTrip from "@/components/statusTrip/StatusTrip.tsx";
 import {useTranslation} from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
-import Status from "@/enums/Status.ts";
 
 interface LeftDetailsProps {
   trip : TripModel;
   isPassanger:boolean;
   isDriver:boolean;
+  status: string;
 }
 
-const LeftDetails = ({trip, isPassanger, isDriver}: LeftDetailsProps) => {
+const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) => {
   const { t } = useTranslation();
-  const startDate = new Date(trip.startDateTime)
-  const currentDate = new Date();
-  const endDate = new Date(trip.endDateTime)
-  const getStatusByDates = (currentDate < startDate ? Status.NOT_STARTED : (currentDate > endDate ? Status.FINISHED : Status.IN_PROGRESS) )
 
   return (
       <div className={styles.status_trip}>
@@ -47,7 +43,7 @@ const LeftDetails = ({trip, isPassanger, isDriver}: LeftDetailsProps) => {
           {(isPassanger || isDriver) &&
               <div className={styles.info_container}>
                   <h3>{t("trip_detail.status.title")}</h3>
-                  <StatusTrip status={getStatusByDates}/>
+                  <StatusTrip status={status}/>
               </div>
           }
       </div>

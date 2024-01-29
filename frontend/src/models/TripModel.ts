@@ -18,6 +18,7 @@ interface TripModel {
   tripId: number;
   driverReviewsUriTemplate: string;
   carReviewsUriTemplate: string;
+  tripStatus: string;
 }
 
 export default TripModel;
