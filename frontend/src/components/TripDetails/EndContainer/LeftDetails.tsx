@@ -10,7 +10,7 @@ interface LeftDetailsProps {
   isPassanger:boolean;
   isDriver:boolean;
   status: string;
-  earning: tripEarningModel;
+  earning?: tripEarningModel;
 }
 
 const LeftDetails = ({trip, isPassanger, isDriver, status, earning}: LeftDetailsProps) => {

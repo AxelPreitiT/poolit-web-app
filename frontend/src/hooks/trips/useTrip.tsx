@@ -1,45 +1,51 @@
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import useQueryError from "../errors/useQueryError";
-import TripsService from "@/services/TripsService.ts";
-import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
+import TripsService from "@/services/TripsService";
+import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import UnknownResponseError from "@/errors/UnknownResponseError.ts";
-import tripEarningModel from "@/models/tripEarningModel.ts";
-import {useParams, useSearchParams} from "react-router-dom";
+import UnknownResponseError from "@/errors/UnknownResponseError";
+import TripModel from "@/models/TripModel";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import {parseTemplate} from "url-template";
+import {useParams, useSearchParams} from "react-router-dom";
 
-const useGetEarning = (isDriver?:boolean) => {
+const useTrip = () => {
     const { t } = useTranslation();
     const param = useParams();
     const id = param.tripId;
     const onQueryError = useQueryError();
+    const queryClient = useQueryClient();
     const { isLoading: isLoadingDiscovery, discovery } = useDiscovery()
     const [params] = useSearchParams();
 
     const startDateTime = params.get("startDateTime") || "";
     const endDateTime = params.get("endDateTime") || "";
 
+    const retryPassangersTrips = () => {
+        queryClient.invalidateQueries({ queryKey: ['allPassangers'] });
+    }
+
     const {
         isLoading,
         isError,
-        data: earning,
+        data: trip,
         error,
         isPending,
     } = useQuery({
-        queryKey: ["getEargning"],
-        queryFn: async (): Promise<tripEarningModel | undefined> => {
+        queryKey: ["trip"],
+        queryFn: async (): Promise<TripModel> => {
+            retryPassangersTrips()
             const uri = parseTemplate(discovery?.tripsUriTemplate as string).expand({
                 tripId: id as string,
                 startDateTime : startDateTime,
                 endDateTime : endDateTime
             });
 
-            return await TripsService.getAmountByUri(uri as string);
+            return await TripsService.getTripById(uri);
         },
         retry: false,
-        enabled: !isLoadingDiscovery && !!isDriver,
+        enabled: !isLoadingDiscovery,
     });
 
     useEffect(() => {
@@ -59,9 +65,10 @@ const useGetEarning = (isDriver?:boolean) => {
 
     return {
         isLoading: isLoading || isPending,
-        earning,
+        trip,
         isError,
+        error,
     };
 };
 
-export default useGetEarning;
+export default useTrip;

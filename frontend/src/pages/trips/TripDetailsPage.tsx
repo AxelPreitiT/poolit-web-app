@@ -5,37 +5,32 @@ import { useTranslation } from "react-i18next";
 import Location from "@/components/location/Location";
 import StatusTrip from "@/components/statusTrip/StatusTrip";
 import TripInfo from "@/components/tripInfo/TripInfo";
-import { useParams, useSearchParams } from "react-router-dom";
-import CreateUri from "@/functions/CreateUri.ts";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
-import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import useGetEarning from "@/hooks/trips/useGetAmount.tsx";
+import useTrip from "@/hooks/trips/useTrip.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
-  const id = useParams();
-  const [params] = useSearchParams();
 
   // CAMBIAR
-  const link = CreateUri(id.tripId, params.toString(), "/trips");
 
   const { currentUser } = useCurrentUser();
-  const { isLoading: isLoadingTrip, trip: trip } = useTripByUri(link);
+  const { isLoading: isLoadingTrip, trip: trip } = useTrip();
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
   const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
     trip?.driverUri
   );
-  const {isLoading:isLoadingEarning, earning} = useGetEarning(link);
-
-
   const isDriver = trip?.driverUri === currentUser?.selfUri;
+
+  const {isLoading:isLoadingEarning, earning} = useGetEarning(isDriver);
+
 
   const {
     isLoading: isLoadingRole,
@@ -52,8 +47,7 @@ const TripDetailsPage = () => {
     car === undefined ||
     isLoadingDriver ||
     driver === undefined ||
-      isLoadingEarning ||
-      earning === undefined
+      isLoadingEarning
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
