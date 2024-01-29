@@ -10,7 +10,6 @@ import CreateUri from "@/functions/CreateUri.ts";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
-import Status from "@/enums/Status.ts";
 import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
@@ -95,7 +94,6 @@ const TripDetailsPage = () => {
             <RightDetails
               isPassanger={isPassanger}
               isDriver={isDriver}
-              status={Status.FINISHED}
               trip={trip}
               passanger={currentPassanger}
               driver={driver}

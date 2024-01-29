@@ -21,14 +21,18 @@ import passangerStatus from "@/enums/PassangerStatus.ts";
 interface RightDetailsProps {
     isPassanger: boolean;
     isDriver: boolean;
-    status: string;
     trip: tripModel;
     passanger: passangerModel | undefined;
     driver: userPublicModel;
     car: carModel
 }
 
-const RightDetails = ({ isPassanger, isDriver, status, trip, passanger, driver , car}: RightDetailsProps) => {
+const RightDetails = ({ isPassanger, isDriver, trip, passanger, driver , car}: RightDetailsProps) => {
+    const startDate = new Date(trip.startDateTime)
+    const currentDate = new Date();
+    const endDate = new Date(trip.endDateTime)
+    const getStatusByDates = (currentDate < startDate ? Status.NOT_STARTED : (currentDate > endDate ? Status.FINISHED : Status.IN_PROGRESS) )
+
     const { t } = useTranslation();
     const [showModalReport, setModalReport] = useState(false);
     const [showModalMakeReport, setModalMakeReport] = useState(false);
@@ -74,7 +78,7 @@ const RightDetails = ({ isPassanger, isDriver, status, trip, passanger, driver ,
                     </div>
                 </Button>
             </div> :
-            (status === Status.FINISHED ?
+            (getStatusByDates === Status.FINISHED ?
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
                     <div className={styles.review_btn}>
                         <div className={styles.btn_container}>
