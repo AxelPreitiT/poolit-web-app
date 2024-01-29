@@ -7,7 +7,7 @@ import {parseTemplate} from "url-template";
 import PassangerService from "@/services/PassangerService.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 
-const useReviewsDriver = (uri?: string) => {
+const useReviewsDriver = ( uri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();

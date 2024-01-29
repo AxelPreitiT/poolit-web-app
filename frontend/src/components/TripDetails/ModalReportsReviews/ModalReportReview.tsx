@@ -26,7 +26,7 @@ export interface ModalReportProps {
     selectCar?: () => void;
 }
 
-const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger , selectUser, selectCar}: ModalReportProps) => {
+const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger, selectUser, selectCar}: ModalReportProps) => {
     const { t } = useTranslation();
     const [params] = useSearchParams();
     const {data:isReviewed, isLoading:isLoadingReview} = useReviewsDriver(trip.driverReviewsUriTemplate)
@@ -67,7 +67,7 @@ const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger 
                                 <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
                             ))}
                         </div>}
-                    {isDriver && car == null &&
+                    {isDriver && passangers.length != 0 && car == null &&
                     <EmptyList
                         text={t("modal.report.empty")}
                         icon={"people-fill"}
