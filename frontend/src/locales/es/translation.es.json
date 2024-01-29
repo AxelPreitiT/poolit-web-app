@@ -247,6 +247,23 @@
     "car_plate": {
       "required": "La patente del auto es requerida",
       "invalid": "La patente es inválida, debe tener alguno de los siguientes formatos: {{- format}}"
+    },
+    "rating": {
+      "required": "La valoración es requerida",
+      "invalid": "La valoración debe ser un número",
+      "min": "La valoración debe ser al menos {{min}}",
+      "max": "La valoración debe ser como máximo {{max}}"
+    },
+    "option": {
+      "required": "Debe seleccionar una opción"
+    },
+    "comment": {
+      "max": "El comentario debe tener como máximo {{max}} caracteres"
+    },
+    "reason": {
+      "required": "La razón es requerida",
+      "min": "La razón debe tener al menos {{min}} caracteres",
+      "max": "La razón debe tener como máximo {{max}} caracteres"
     }
   },
   "profile": {
@@ -316,6 +333,42 @@
     "WRECK_CAR": "Dañó el auto",
     "OTHER": "Otro motivo"
   },
+  "report_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones para reportar",
+      "default": "Ocurrió un error al obtener las opciones para reportar"
+    }
+  },
+  "report": {
+    "success": {
+      "title": "¡Reporte creado!",
+      "message": "¡Tu reporte fue creado correctamente! Te enviaremos un correo electrónico cuando se resuelva el reporte."
+    },
+    "error": {
+      "title": "Creación de reporte fallida",
+      "default": "Ocurrió un error al crear el reporte"
+    }
+  },
+  "approve_report": {
+    "success": {
+      "title": "¡Reporte aprobado!",
+      "message": "¡El reporte fue aprobado correctamente! Se envió un correo electrónico a ambos usuarios"
+    },
+    "error": {
+      "title": "Aprobación de reporte fallida",
+      "default": "Ocurrió un error al aprobar el reporte"
+    }
+  },
+  "reject_report": {
+    "success": {
+      "title": "¡Reporte rechazado!",
+      "message": "¡El reporte fue rechazado correctamente! Se envió un correo electrónico al denunciante"
+    },
+    "error": {
+      "title": "Rechazo de reporte fallido",
+      "default": "Ocurrió un error al rechazar el reporte"
+    }
+  },
   "reviews": {
     "none": "No hay reseñas",
     "stars_title": "¿Cómo calificarías a este pasajero?",
@@ -377,6 +430,54 @@
     "EXCELLENT_EXPERIENCE": "Fue una experiencia excelente",
     "error": {
       "title_all": "Un error ocurrió al traer las reseñas."
+    }
+  },
+  "car_review": {
+    "success": {
+      "title": "¡Reseña de auto creada!",
+      "message": "¡Tu reseña de auto fue creada correctamente!"
+    },
+    "error": {
+      "title": "Creación de reseña de auto fallida",
+      "default": "Ocurrió un error al crear la reseña de auto"
+    }
+  },
+  "car_review_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones de reseña para autos",
+      "default": "Ocurrió un error al obtener las opciones de reseña para autos"
+    }
+  },
+  "passenger_review": {
+    "success": {
+      "title": "¡Reseña de pasajero creada!",
+      "message": "¡Tu reseña de pasajero fue creada correctamente!"
+    },
+    "error": {
+      "title": "Creación de reseña de pasajero fallida",
+      "default": "Ocurrió un error al crear la reseña de pasajero"
+    }
+  },
+  "passenger_review_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones de reseña para pasajeros",
+      "default": "Ocurrió un error al obtener las opciones de reseña para pasajeros"
+    }
+  },
+  "driver_review": {
+    "success": {
+      "title": "¡Reseña de conductor creada!",
+      "message": "¡Tu reseña de conductor fue creada correctamente!"
+    },
+    "error": {
+      "title": "Creación de reseña de conductor fallida",
+      "default": "Ocurrió un error al crear la reseña de conductor"
+    }
+  },
+  "driver_review_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones de reseña para conductores",
+      "default": "Ocurrió un error al obtener las opciones de reseña para conductores"
     }
   },
   "created_trips": {

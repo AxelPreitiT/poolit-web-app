@@ -1,0 +1,7 @@
+enum ReportRelation {
+  DRIVER_2_PASSENGER = "DRIVER_2_PASSENGER",
+  PASSENGER_2_DRIVER = "PASSENGER_2_DRIVER",
+  PASSENGER_2_PASSENGER = "PASSENGER_2_PASSENGER",
+}
+
+export default ReportRelation;

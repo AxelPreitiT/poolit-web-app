@@ -13,7 +13,7 @@ const useReviewsPassangers = (uri?: string) => {
     const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();
 
     const query = useQuery({
-        queryKey: ["passangers"],
+        queryKey: ["passangers", uri],
         queryFn: async () => {
             const parseUri = parseTemplate(uri as string).expand({
                 userId: currentUser?.userId as number,
@@ -26,15 +26,15 @@ const useReviewsPassangers = (uri?: string) => {
 
     const { isLoading, isPending, isError, error, data } = query;
 
-    useEffect(() => {
-        if (isError) {
-            onQueryError({
-                error,
-                title: t("passangers.error.title"),
-                timeout: defaultToastTimeout,
-            });
-        }
-    }, [isError, error, onQueryError, t]);
+  useEffect(() => {
+    if (isError) {
+      onQueryError({
+        error,
+        title: t("passanger.error.title"),
+        timeout: defaultToastTimeout,
+      });
+    }
+  }, [isError, error, onQueryError, t]);
 
     return {
         ...query,

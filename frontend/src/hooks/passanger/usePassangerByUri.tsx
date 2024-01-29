@@ -8,8 +8,8 @@ import PaginationModel from "@/models/PaginationModel.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 
 const usePassangerByUri = (uri?: string) => {
-    const { t } = useTranslation();
-    const onQueryError = useQueryError();
+  const { t } = useTranslation();
+  const onQueryError = useQueryError();
 
     const {
         isLoading,
@@ -27,15 +27,15 @@ const usePassangerByUri = (uri?: string) => {
         enabled: !!uri,
     });
 
-    useEffect(() => {
-        if (isError) {
-            onQueryError({
-                error,
-                title: t("passangers.error.title"),
-                timeout: defaultToastTimeout,
-            });
-        }
-    }, [isError, error, onQueryError, t]);
+  useEffect(() => {
+    if (isError) {
+      onQueryError({
+        error,
+        title: t("passangers.error.title"),
+        timeout: defaultToastTimeout,
+      });
+    }
+  }, [isError, error, onQueryError, t]);
 
     return {
         isLoading: isLoading || isPending,

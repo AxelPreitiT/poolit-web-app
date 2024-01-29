@@ -28,7 +28,7 @@ const TripDetailsPage = () => {
   const { currentUser } = useCurrentUser();
   const { isLoading: isLoadingTrip, trip: trip } = useTripByUri(link);
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
-  const { isLoading: isLoadingDriver, driver: driver } = usePublicUserByUri(
+  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
     trip?.driverUri
   );
   const isDriver = trip?.driverUri === currentUser?.selfUri;
@@ -40,6 +40,13 @@ const TripDetailsPage = () => {
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
 
+  const { isLoading, passangers } = useGetPassangers(
+    isDriver,
+    isPassanger,
+    params,
+    currentPassanger,
+    trip
+  );
 
   if (
     isLoadingTrip ||

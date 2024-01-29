@@ -5,44 +5,37 @@ import {
   SearchTripsFormSchema,
   SearchTripsFormSchemaType,
 } from "@/forms/SearchTripsForm";
-import TripModel from "@/models/TripModel";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import useForm, { SubmitHandlerReturnModel } from "./useForm";
-import PaginationModel from "@/models/PaginationModel";
+import { ModelType } from "@/models/ModelType";
 
-interface useSearchTripsFormProps {
+interface useSearchTripsFormProps<R extends ModelType> {
   initialSearch?: Partial<SearchTripsFormSchemaType>;
   submitOnMount?: boolean;
-  onSubmit: SubmitHandlerReturnModel<
-    SearchTripsFormSchemaType,
-    PaginationModel<TripModel>
-  >;
+  onSubmit?: SubmitHandlerReturnModel<SearchTripsFormSchemaType, R>;
   onSuccess: ({
-    paginatedTrips,
+    result,
     data,
   }: {
-    paginatedTrips: PaginationModel<TripModel>;
+    result: R;
     data: SearchTripsFormSchemaType;
   }) => void;
   onError?: (error: Error) => void;
 }
 
-const useSearchTripsForm = ({
+const useSearchTripsForm = <R extends ModelType>({
   initialSearch,
   submitOnMount,
-  onSubmit,
+  onSubmit = () => Promise.resolve({} as R),
   onSuccess: onSuccessProp,
   onError: onErrorProp,
-}: useSearchTripsFormProps) => {
+}: useSearchTripsFormProps<R>) => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
 
-  const onSuccess = (
-    paginatedTrips: PaginationModel<TripModel>,
-    data: SearchTripsFormSchemaType
-  ) => {
-    onSuccessProp({ paginatedTrips, data });
+  const onSuccess = (result: R, data: SearchTripsFormSchemaType) => {
+    onSuccessProp({ result, data });
   };
 
   const onError = (error: Error) => {

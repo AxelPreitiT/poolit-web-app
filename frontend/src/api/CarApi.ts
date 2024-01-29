@@ -8,10 +8,13 @@ import CreateCarModel from "@/models/CreateCarModel";
 import CarReviewModel from "@/models/CarReviewModel";
 import PaginationModel from "@/models/PaginationModel";
 import { EditCarFormSchemaType } from "@/forms/EditCarForm";
+import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 
 class CarApi extends AxiosApi {
   private static readonly CAR_ID_URI_KEY = "carId";
   private static readonly CAR_CONTENT_TYPE = "application/vnd.car.v1+json";
+  private static readonly CAR_REVIEW_CONTENT_TYPE =
+    "application/vnd.car.review.v1+json";
 
   public static getCarsByUser: (
     uriTemplate: string,
@@ -112,6 +115,31 @@ class CarApi extends AxiosApi {
       {
         headers: {
           "Content-Type": this.CAR_CONTENT_TYPE,
+        },
+      }
+    );
+  };
+
+  public static createCarReview: (
+    uri: string,
+    tripId: number,
+    data: ReviewFormSchemaType
+  ) => AxiosPromise<void> = (
+    uri: string,
+    tripId: number,
+    { rating, comment, option }
+  ) => {
+    return this.post(
+      uri,
+      {
+        tripId,
+        rating,
+        option,
+        comment,
+      },
+      {
+        headers: {
+          "Content-Type": this.CAR_REVIEW_CONTENT_TYPE,
         },
       }
     );
