@@ -2,8 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import StarRating from "@/components/stars/StarsRanking";
 import { useTranslation } from "react-i18next";
-import ReviewModel from "@/models/ReviewModel";
 import { capitalize } from "@/utils/string/capitalize";
+import reviewModel from "@/models/ReviewModel";
 
 const formatDateTime = (dateTime: string) => {
   const [date, time] = dateTime.split("T");
@@ -13,7 +13,11 @@ const formatDateTime = (dateTime: string) => {
   return `${day}/${month}/${year} ${hour}:${minutes}`;
 };
 
-const ShortReview = (review: ReviewModel) => {
+interface ShortReviewProps {
+    data: reviewModel;
+}
+
+const ShortReview = ({data: review} : ShortReviewProps) => {
   const { t } = useTranslation();
 
   return (

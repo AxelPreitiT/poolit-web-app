@@ -6,13 +6,13 @@ import TripModel from "@/models/TripModel.ts";
 import {getDayString} from "@/utils/date/dayString.ts";
 
 interface CardTripScheduledProps {
-    trip: TripModel;
-    status?: string;
+    data: TripModel;
+    extraData?: string;
 }
 
-const CardTripScheduledStatus = ({trip, status} : CardTripScheduledProps) => {
+const CardTripScheduledStatus = ({data: trip , extraData: status} : CardTripScheduledProps) => {
     const { t } = useTranslation();
-    const date = new Date(trip.startDateTime)
+    const date = new Date(trip.startDateTime);
 
     return (
         <div>

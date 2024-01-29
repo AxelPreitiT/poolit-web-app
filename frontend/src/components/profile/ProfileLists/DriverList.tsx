@@ -6,13 +6,13 @@ import {
   publicsDriverReviewsPath,
 } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
-import ShortReview from "@/components/review/shorts/ShortReview";
 import CardCar from "@/components/cardCar/CardCar";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import useUserCars from "@/hooks/cars/useUserCars.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import styles from "./styles.module.scss";
+import ShortReviewProfile from "@/components/review/shorts/ShortReviewProfile.tsx";
 
 export interface DriverListProp {
   futureCreatedTripsUri: string;
@@ -53,7 +53,7 @@ const DriverList = ({
           empty_text={t("profile.lists.review_empty")}
           empty_icon={"book"}
           data={reviewsDriver.data}
-          component_name={ShortReview}
+          component_name={ShortReviewProfile}
           link={publicsDriverReviewsPath.replace(":id", id.toString())}
         />
       )}

@@ -5,13 +5,13 @@ import MainComponent from "@/components/utils/MainComponent.tsx";
 import MainHeader from "@/components/utils/MainHeader.tsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent.tsx";
 import {useLocation, useSearchParams} from "react-router-dom";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
 import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
 import {parseTemplate} from "url-template";
+import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
 
 interface PassangersTripComponentProps {
   uri: string;
@@ -64,20 +64,20 @@ const PassangersTripComponent = ({ uri }: PassangersTripComponentProps) => {
         </Dropdown>
       </div>
       <div className={styles.passangers_container}>
-        <PaginationComponent
-          empty_component={
-            <div className={styles.review_empty_container}>
-              <i className={`bi-solid bi-people h2`}></i>
-              <h3 className="italic-text placeholder-text">
-                {t("trip_detail.passengers.empty")}
-              </h3>
-            </div>
-          }
-          uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
-          current_page={currentPage}
-          component_name={PassangerComponent}
-          useFuction={usePassangerByUri}
-          itemsName={t("trip_detail.passengers.header")}
+        <PaginationComponentExtraData
+            CardComponent={PassangerComponent}
+            uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
+            current_page={currentPage}
+            useFuction={usePassangerByUri}
+            empty_component={
+              <div className={styles.review_empty_container}>
+                <i className={`bi-solid bi-people h2`}></i>
+                <h3 className="italic-text placeholder-text">
+                    {t("trip_detail.passengers.empty")}
+                </h3>
+              </div>
+            }
+            itemsName={t("trip_detail.passengers.header")}
         />
       </div>
     </MainComponent>

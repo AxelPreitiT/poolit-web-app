@@ -17,25 +17,25 @@ interface PaginationComponentProps<T, U> {
         data: PaginationModel<T> | undefined;
     };
     itemsName: string;
-    CardComponent: React.ComponentType<{ key: number; status?: U; trip: T }>; // Componente con argumentos genéricos
-    status?: U;
+    CardComponent: React.ComponentType<{ key: number; extraData?: U; data: T }>; // Componente con argumentos genéricos
+    extraData?: U;
 }
 
 const PaginationComponentExtraData = <T, U>({
-                                                            empty_component,
-                                                            uri,
-                                                            current_page,
-                                                            useFuction,
-                                                            itemsName,
-                                          status,
-                                          CardComponent
-                                      }: PaginationComponentProps<T, U>) => {
+      empty_component,
+      uri,
+      current_page,
+      useFuction,
+      itemsName,
+      extraData,
+      CardComponent
+    }: PaginationComponentProps<T, U>) => {
     const { t } = useTranslation();
     const [newUri, setNewUri] = useState(uri);
     const [currentPage, setcurrentPage] = useState(current_page);
     const location = useLocation();
     const history = createBrowserHistory();
-    const { isLoading: isLoadingTrips, data: pageTrips } = useFuction(newUri);
+    const { isLoading: isLoadingTrips, data: FullData } = useFuction(newUri);
 
 
     const handlePage = (uri: string, currentPage: number) => {
@@ -53,7 +53,7 @@ const PaginationComponentExtraData = <T, U>({
     };
 
 
-    return isLoadingTrips || pageTrips === undefined ? (
+    return isLoadingTrips || FullData === undefined ? (
         <LoadingWheel
             containerClassName={styles.loadingContainer}
             iconClassName={styles.loadingIcon}
@@ -64,27 +64,27 @@ const PaginationComponentExtraData = <T, U>({
         />
     ) : (
         <div className={styles.list_container}>
-            {pageTrips.data && pageTrips.data.length > 0 ? (
+            {FullData.data && FullData.data.length > 0 ? (
                 <div>
                     <div>
-                        {pageTrips.data.map((trip, index) => (
-                            <CardComponent key={index} trip={trip} status={status} />
+                        {FullData.data.map((data, index) => (
+                            <CardComponent key={index} data={data} extraData={extraData} />
                         ))}
                     </div>
-                    {pageTrips.totalPages > 1 && (
+                    {FullData.totalPages > 1 && (
                         <div className={styles.pagination_btn_container}>
                             <Pagination className={styles.paginationContainer}>
                                 <Pagination.First
                                     as="button"
                                     className={styles.paginationItem}
-                                    onClick={() => handlePage(pageTrips?.first, 1)}
-                                    disabled={!pageTrips.prev}
+                                    onClick={() => handlePage(FullData?.first, 1)}
+                                    disabled={!FullData.prev}
                                 />
                                 <Pagination.Prev
                                     as="button"
                                     className={styles.paginationItem}
-                                    onClick={() => handlePage(pageTrips?.prev, currentPage - 1)}
-                                    disabled={!pageTrips.prev}
+                                    onClick={() => handlePage(FullData?.prev, currentPage - 1)}
+                                    disabled={!FullData.prev}
                                 />
                                 {currentPage > 2 && (
                                     <Pagination.Ellipsis
@@ -93,11 +93,11 @@ const PaginationComponentExtraData = <T, U>({
                                         disabled={true}
                                     />
                                 )}
-                                {pageTrips.prev != null && (
+                                {FullData.prev != null && (
                                     <Pagination.Item
                                         as="button"
                                         className={styles.paginationItem}
-                                        onClick={() => handlePage(pageTrips?.prev, currentPage - 1)}
+                                        onClick={() => handlePage(FullData?.prev, currentPage - 1)}
                                     >
                                         {(currentPage - 1).toString()}
                                     </Pagination.Item>
@@ -108,16 +108,16 @@ const PaginationComponentExtraData = <T, U>({
                                 >
                                     {currentPage.toString()}
                                 </Pagination.Item>
-                                {pageTrips.next != null && (
+                                {FullData.next != null && (
                                     <Pagination.Item
                                         as="button"
                                         className={styles.paginationItem}
-                                        onClick={() => handlePage(pageTrips?.next, currentPage + 1)}
+                                        onClick={() => handlePage(FullData?.next, currentPage + 1)}
                                     >
                                         {(currentPage + 1).toString()}
                                     </Pagination.Item>
                                 )}
-                                {currentPage < pageTrips.totalPages - 1 && (
+                                {currentPage < FullData.totalPages - 1 && (
                                     <Pagination.Ellipsis
                                         as="button"
                                         className={styles.paginationItem}
@@ -127,15 +127,15 @@ const PaginationComponentExtraData = <T, U>({
                                 <Pagination.Next
                                     as="button"
                                     className={styles.paginationItem}
-                                    onClick={() => handlePage(pageTrips?.next, currentPage + 1)}
-                                    disabled={!pageTrips.next}
+                                    onClick={() => handlePage(FullData?.next, currentPage + 1)}
+                                    disabled={!FullData.next}
                                 />
                                 <Pagination.Last
                                     as="button"
                                     className={styles.paginationItem}
-                                    disabled={!pageTrips.next}
+                                    disabled={!FullData.next}
                                     onClick={() =>
-                                        handlePage(pageTrips?.last, pageTrips?.totalPages)
+                                        handlePage(FullData?.last, FullData?.totalPages)
                                     }
                                 />
                             </Pagination>

@@ -11,7 +11,11 @@ import LoadingWheel from "../loading/LoadingWheel";
 import useAcceptPassangerByUri from "@/hooks/passanger/useAcceptPassangerByUri.tsx";
 import useRejectPassangerByUri from "@/hooks/passanger/useRejectPassangerByUri.tsx";
 
-const PassangerComponent = (passanger: PassangerModel) => {
+interface PassangerComponentProps {
+  data: PassangerModel
+}
+
+const PassangerComponent = ({data: passanger} : PassangerComponentProps) => {
   const { t } = useTranslation();
   const {isLoading, data:UserTrip} =  usePublicUserByUri(passanger.userUri);
   const {onSubmit:onSubmitAccept } = useAcceptPassangerByUri();
