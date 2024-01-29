@@ -29,11 +29,6 @@ export interface ModalReportProps {
 const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger , selectUser, selectCar}: ModalReportProps) => {
     const { t } = useTranslation();
     const [params] = useSearchParams();
-    //const { search } = useLocation();
-    //const page = new URLSearchParams(search).get("page");
-    //const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
-
-    //const {isLoading, passangers} = useGetPassangers(isDriver , isPassanger, params, currentPassanger, trip);
 
     const {isLoading, passangers} = useGetPassangers(isDriver , !isDriver, params, passanger, trip);
 

@@ -9,6 +9,7 @@ const useGetPassangers = ( isDriver:boolean, isPassanger: boolean, params:URLSea
         queryKey: ["allPassangers"],
         queryFn: async () => {
             if (isDriver) {
+                console.log("ESTOY EN EL USE GET PASSANGERS")
                 const startDateTime = params.get("startDateTime") || "";
                 const endDateTime = params.get("endDateTime") || "";
                 const uri = parseTemplate(trip?.passengersUriTemplate as string).expand({
@@ -17,15 +18,18 @@ const useGetPassangers = ( isDriver:boolean, isPassanger: boolean, params:URLSea
                     endDateTime: endDateTime,
                     passengerState: null,
                 });
+                console.log("ESTOY EN EL USE GET PASSANGERS")
                 return await PassangerService.getPassangersTrips(uri);
             }
             if(isPassanger){
+                console.log("ESTOY EN EL USE GET PASSANGERS22222")
                 return await PassangerService.getPassangersTrips(passanger?.otherPassengersUri as string);
             }
+            console.log("ESTOY EN EL USE GET PASSANGERS22444444222")
             return [];
         },
         retry: false,
-        enabled: !!trip  && !!passanger,
+        enabled: !!trip,
     });
 
     const { isError, data, isLoading, isPending } = query;

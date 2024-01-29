@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import useQueryError from "../errors/useQueryError";
 import TripsService from "@/services/TripsService";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
@@ -10,6 +10,11 @@ import TripModel from "@/models/TripModel";
 const useTripByUri = (tripUri?: string) => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
+  const queryClient = useQueryClient();
+
+  const retryPassangersTrips = () => {
+    queryClient.invalidateQueries({ queryKey: ['allPassangers'] });
+  }
 
   const {
     isLoading,
@@ -20,6 +25,7 @@ const useTripByUri = (tripUri?: string) => {
   } = useQuery({
     queryKey: ["trip", tripUri],
     queryFn: async (): Promise<TripModel> => {
+      retryPassangersTrips()
       return await TripsService.getTripById(tripUri as string);
     },
     retry: false,
