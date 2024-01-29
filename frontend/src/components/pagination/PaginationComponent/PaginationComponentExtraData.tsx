@@ -17,8 +17,8 @@ interface PaginationComponentProps<T, U> {
         data: PaginationModel<T> | undefined;
     };
     itemsName: string;
-    status: U;
     CardComponent: React.ComponentType<{ key: number; status?: U; trip: T }>; // Componente con argumentos genéricos
+    status?: U;
 }
 
 const PaginationComponentExtraData = <T, U>({

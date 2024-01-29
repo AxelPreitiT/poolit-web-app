@@ -22,7 +22,6 @@ const ListTripsScheduled = ({
       <PaginationComponentExtraData
         CardComponent={CardTripScheduled}
         uri={uri}
-        status={"genial"}
         current_page={current_page}
         useFuction={useTripsByUri}
         empty_component={empty_component}
