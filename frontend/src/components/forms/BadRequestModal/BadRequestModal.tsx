@@ -11,6 +11,12 @@ const formatErrors = (
   errors: BadRequestModel,
   defaultKey: string
 ): BadRequestModalOutput => {
+  if (!Array.isArray(errors)) {
+    const { field = defaultKey, message } = errors;
+    return {
+      [field]: [message],
+    };
+  }
   const output: BadRequestModalOutput = {};
   for (const { field, message } of errors) {
     const key = field || defaultKey;
