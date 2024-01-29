@@ -20,7 +20,6 @@ const useTripByUri = (tripUri?: string) => {
   } = useQuery({
     queryKey: ["trip", tripUri],
     queryFn: async (): Promise<TripModel> => {
-
       return await TripsService.getTripById(tripUri as string);
     },
     retry: false,

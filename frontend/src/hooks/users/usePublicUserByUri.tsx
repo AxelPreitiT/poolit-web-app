@@ -10,7 +10,7 @@ const usePublicUserByUri = (uri?: string) => {
   const onQueryError = useQueryError();
 
   const query = useQuery({
-    queryKey: ["public-user", uri],
+    queryKey: ["publicUser", uri],
     queryFn: async () => {
       if (!uri) {
         return undefined;
