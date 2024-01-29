@@ -122,6 +122,36 @@ hr {
   }
 }
 
+.danger-btn {
+  @extend %button-style;
+  @extend %shadow-btn;
+  background-color: colors.$danger-color !important;
+  color: colors.$light-text-color !important;
+  border-color: colors.$danger-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: colors.$danger-color-dark !important;
+    color: colors.$light-text-color !important;
+    border-color: colors.$danger-color-dark !important;
+  }
+}
+
+.later-btn {
+  @extend %button-style;
+  @extend %shadow-btn;
+  background-color: colors.$primary-color !important;
+  color: colors.$light-text-color !important;
+  border-color: colors.$primary-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: colors.$primary-color-dark !important;
+    color: colors.$light-text-color !important;
+    border-color: colors.$primary-color-dark !important;
+  }
+}
+
 .form-check-input:checked {
   background-color: colors.$secondary-color !important;
   border-color: colors.$secondary-color !important;

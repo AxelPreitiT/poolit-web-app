@@ -13,9 +13,15 @@ const ReportApproveForm = () => {
             <div>
                 <label className="report-option-label">
                     <strong className="text">{t('admin.report.explainApprove')}</strong>
-                    <span className={styles.italic_text}>{t('admin.report.notifyApprove')}</span>
+                    <div><span className="italic-text">{t('admin.report.notifyApprove')}</span></div>
                 </label>
                 <Form.Control as="textarea" rows={3}/>
+                <div className={styles.danger}>
+                    <i className="bi bi-exclamation-diamond-fill  h6"></i>
+                    <span className="h6 mx-1">
+                  {t("admin.report.approveWarning")}
+                    </span>
+                </div>
             </div>
         </div>
     );
