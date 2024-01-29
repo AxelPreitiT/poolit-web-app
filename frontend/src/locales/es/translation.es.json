@@ -611,7 +611,16 @@
       "trip": "El viaje en el que se produjo la denuncia",
       "reason": "Motivo del denuncia",
       "passenger": "(Pasajero)",
-      "driver": "(Conductor)"
+      "driver": "(Conductor)",
+      "explainApprove": "Indique el motivo de aprobación de la denuncia",
+      "explainReject": "Indique el motivo de rechazo de la denuncia",
+      "notifyApprove": "Se notificará al usuario denunciado con el motivo de aprobación",
+      "notifyReject": "Se notificará al denunciante con el motivo de rechazo",
+      "accept" : "Aprobar denuncia",
+      "reject" : "Rechazar denuncia",
+      "acceptBtn" : "Aprobar",
+      "RejectBtn" : "Rechazar",
+      "laterBtn" : "Decidir luego"
     },
     "user": {
       "loading": "Cargando usuario"

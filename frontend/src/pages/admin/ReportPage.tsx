@@ -12,6 +12,12 @@ import { useParams } from "react-router-dom";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri";
+import {useState} from "react";
+import {Modal} from "react-bootstrap";
+import ModalReportAccept from "@/components/admin/DecideReportModal/ModalReportAccept.tsx";
+import ReportApproveForm from "@/components/admin/DecideReportModal/ReportApproveForm.tsx";
+import ModalReportReject from "@/components/admin/DecideReportModal/ModalReportReject.tsx";
+import ReportRejectForm from "@/components/admin/DecideReportModal/ReportRejectForm.tsx";
 
 //TODO rating y cantidad de reportes en los usuarios. Como traducir reportOptions. Como obtener el Report.
 
@@ -38,6 +44,13 @@ const ReportPage = () => {
     trip,
     isError: isTripError,
   } = useTripByUri(report?.tripUri);
+
+  const [showModalReportReject, setModalReportReject] = useState(false);
+  const [showModalReportApprove, setModalReportApprove] = useState(false);
+  const openModalReportApprove = () => {setModalReportApprove(true);};
+  const closeModalReportApprove = () => {setModalReportApprove(false);};
+  const openModalReportReject = () => {setModalReportReject(true);};
+  const closeModalReportReject = () => {setModalReportReject(false);};
 
   if (
     isReportLoading ||
@@ -285,7 +298,36 @@ const ReportPage = () => {
                   </div>
                 </div>
               </div>
-              <span>Poner botones</span>
+              <div className={styles.report_content_container}>
+                <div className={styles.decision_content_container}>
+                  <h5>Poner mensaje de decision</h5>
+                  <div className={styles.button_container}>
+                    //TODO como hacer href
+                    <a href="/admin/">
+                      <button className={styles.later_btn}>
+                        <span className="light-text h5">{t('admin.report.laterBtn')}</span>
+                      </button>
+                    </a>
+                    <div className={styles.reject_container}>
+                      <button className={styles.reject_btn} onClick={openModalReportReject}>
+                        <span className="light-text h5">{t('admin.report.rejectBtn')}</span>
+                      </button>
+                    </div>
+                    <div className={styles.approve_container}>
+                      <button className={styles.approve_btn} onClick={openModalReportApprove}>
+                        <span className="light-text h5">{t('admin.report.approveBtn')}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <Modal show={showModalReportApprove} onHide={closeModalReportApprove} aria-labelledby="contained-modal-title-vcenter" centered>
+                <ModalReportAccept closeModal={closeModalReportApprove} reportProcessForm={<ReportApproveForm/>}/>
+              </Modal>
+
+              <Modal show={showModalReportReject} onHide={closeModalReportReject} aria-labelledby="contained-modal-title-vcenter" centered>
+                <ModalReportReject closeModal={closeModalReportReject} reportProcessForm={<ReportRejectForm/>}/>
+              </Modal>
             </div>
           </div>
         </div>
