@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import Dropdown from "react-bootstrap/Dropdown";
 import PassangerComponent from "@/components/passanger/Passanger.tsx";
@@ -7,12 +6,12 @@ import MainHeader from "@/components/utils/MainHeader.tsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent.tsx";
-import { useLocation } from "react-router-dom";
+import {useLocation, useSearchParams} from "react-router-dom";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
-import createStatusPaginationUri from "@/functions/CreateStatusPaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
 import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
+import {parseTemplate} from "url-template";
 
 interface PassangersTripComponentProps {
   uri: string;
@@ -21,19 +20,29 @@ interface PassangersTripComponentProps {
 const PassangersTripComponent = ({ uri }: PassangersTripComponentProps) => {
   const { t } = useTranslation();
 
-    const { search } = useLocation();
-    const page = new URLSearchParams(search).get("page");
-    const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+  const { search } = useLocation();
+  const page = new URLSearchParams(search).get("page");
+  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+
+  const [params] = useSearchParams();
+  const startDateTime = params.get("startDateTime") || "";
+  const endDateTime = params.get("endDateTime") || "";
+  const newUri = parseTemplate(uri as string).expand({
+    userId: null,
+    startDateTime: startDateTime,
+    endDateTime: endDateTime,
+    passengerState: null,
+  });
 
   const options = Object.values(PassangerStatus);
-  const [selectedOption, setSelectedOption] = useState<string>(
-    PassangerStatus.ALL
-  );
+  const [selectedOption, setSelectedOption] = useState<string>(PassangerStatus.ALL);
+
   const handleSelect = (eventKey: string | null) => {
     if (eventKey !== null) {
       setSelectedOption(eventKey);
     }
   };
+
 
   return (
     <MainComponent>
@@ -64,10 +73,7 @@ const PassangersTripComponent = ({ uri }: PassangersTripComponentProps) => {
               </h3>
             </div>
           }
-          uri={createStatusPaginationUri(
-            createPaginationUri(uri, currentPage, PASSANGERPAGESIZE, true),
-            selectedOption
-          )}
+          uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
           current_page={currentPage}
           component_name={PassangerComponent}
           useFuction={usePassangerByUri}

@@ -6,15 +6,13 @@ import {useTranslation} from "react-i18next";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import carModel from "@/models/CarModel.ts";
 import CarReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/CarReportReviewComponent.tsx";
-import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent.tsx";
-import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
-import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
-import PassangerComponent from "@/components/passanger/Passanger.tsx";
-import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
-import {parseTemplate} from "url-template";
-import {useLocation, useSearchParams} from "react-router-dom";
+//import {INITIALPAGE} from "@/enums/PaginationConstants.ts";
+import { useSearchParams} from "react-router-dom";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
+import PassangerReportReviewComponent
+    from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
+import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 //import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 
 export interface ModalReportProps {
@@ -31,24 +29,16 @@ export interface ModalReportProps {
 const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger , selectUser, selectCar}: ModalReportProps) => {
     const { t } = useTranslation();
     const [params] = useSearchParams();
-    const { search } = useLocation();
-    const page = new URLSearchParams(search).get("page");
-    const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+    //const { search } = useLocation();
+    //const page = new URLSearchParams(search).get("page");
+    //const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
 
     //const {isLoading, passangers} = useGetPassangers(isDriver , isPassanger, params, currentPassanger, trip);
 
-    const startDateTime = params.get("startDateTime") || "";
-    const endDateTime = params.get("endDateTime") || "";
-    const uri = parseTemplate(trip?.passengersUriTemplate as string).expand({
-        userId: null,
-        startDateTime: startDateTime,
-        endDateTime: endDateTime,
-        passengerState: "ACCEPTED",
-    });
-
-    const finalUri = isDriver? uri : passanger?.otherPassengersUri as string;
+    const {isLoading, passangers} = useGetPassangers(isDriver , !isDriver, params, passanger, trip);
 
     return (
+        (!isLoading && passangers != undefined &&
         <div className={styles.propProfile}>
             <Modal.Header closeButton>
                 <Modal.Title><h2 className={styles.titleModal}>{t('modal.report.title')}</h2></Modal.Title>
@@ -71,21 +61,16 @@ const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger 
                         </div>
                         <CarReportReviewComponent car={car} selectCar={selectCar}/>
                     </div>}
-                    <PaginationComponent
-                        empty_component={
-                            <div className={styles.review_empty_container}>
-                                <i className={`bi-solid bi-people h2`}></i>
-                                <h3 className="italic-text placeholder-text">
-                                    {t("trip_detail.passengers.empty")}
-                                </h3>
+                    {passangers.length != 0 &&
+                        <div className={styles.passangerContainer}>
+                            <div className={styles.titleContainer}>
+                                <i className="bi bi-people-fill h3"></i>
+                                <h3>{t('modal.passangers')}</h3>
                             </div>
-                        }
-                        uri={createPaginationUri(finalUri, currentPage, PASSANGERPAGESIZE)}
-                        current_page={currentPage}
-                        component_name={PassangerComponent}
-                        useFuction={usePassangerByUri}
-                        itemsName={t("trip_detail.passengers.header")}
-                    />
+                            {passangers.map((item, index) => (
+                                <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
+                            ))}
+                        </div>}
                     {isDriver && car == null &&
                     <EmptyList
                         text={t("modal.report.empty")}
@@ -98,7 +83,7 @@ const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger 
                     {t('modal.close')}
                 </Button>
             </Modal.Footer>
-        </div>
+        </div>)
     );
 };
 

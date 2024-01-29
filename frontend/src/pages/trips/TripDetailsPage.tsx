@@ -8,7 +8,6 @@ import TripInfo from "@/components/tripInfo/TripInfo";
 import { useParams, useSearchParams } from "react-router-dom";
 import CreateUri from "@/functions/CreateUri.ts";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
-import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
 import Status from "@/enums/Status.ts";
@@ -17,6 +16,7 @@ import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
+import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();

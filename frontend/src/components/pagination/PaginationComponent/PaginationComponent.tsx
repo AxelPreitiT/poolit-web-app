@@ -37,15 +37,19 @@ const PaginationComponent = <T,>({
 
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
     const items = [];
-    for (let i = 0; i < data.length; i++) {
-      const item = <Component key={i} {...data[i]} />;
-      items.push(
-        <div className={styles.travel_info_list} key={i}>
-          {item}
-        </div>
-      );
+    if(data) {
+      for (let i = 0; i < data.length; i++) {
+        const item = <Component key={i} {...data[i]} />;
+        items.push(
+            <div className={styles.travel_info_list} key={i}>
+              {item}
+            </div>
+        );
+      }
+      return items;
+    }else{
+      return null;
     }
-    return items;
   };
 
   const handlePage = (uri: string, currentPage: number) => {

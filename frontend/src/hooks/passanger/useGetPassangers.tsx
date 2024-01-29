@@ -15,7 +15,7 @@ const useGetPassangers = ( isDriver:boolean, isPassanger: boolean, params:URLSea
                     userId: null,
                     startDateTime: startDateTime,
                     endDateTime: endDateTime,
-                    passengerState: "ACCEPTED",
+                    passengerState: null,
                 });
                 return await PassangerService.getPassangersTrips(uri);
             }
