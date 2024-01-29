@@ -17,6 +17,7 @@ import ReviewCarForm from "@/components/TripDetails/Modals/ReviewCarForm.tsx";
 import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
+import ModalReport from "@/components/TripDetails/ModalsRR/ModalReport.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -100,7 +101,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReportReview closeModal={closeModalReport} selectUser={selectUserReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger}/>
+                            <ModalReport closeModal={closeModalReport} selectUser={selectUserReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger}/>
                         </Modal>
 
                         <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>

@@ -7,15 +7,12 @@ import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import carModel from "@/models/CarModel.ts";
 import CarReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/CarReportReviewComponent.tsx";
 //import {INITIALPAGE} from "@/enums/PaginationConstants.ts";
-import { useSearchParams} from "react-router-dom";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import PassangerReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
-import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 import useReviewsDriver from "@/hooks/passanger/useReviewsDriver.tsx";
 import getUriPassangers from "@/functions/getUriPassangers.tsx";
 import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
-import PassangerComponent from "@/components/passanger/Passanger.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
@@ -39,7 +36,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, selec
     const uri = getUriPassangers(isDriver, passanger, trip);
 
     return (
-        (!isLoadingReview && isReviewed!=undefined ?
+        (!isLoadingReview && isReviewed!=undefined &&
             <div className={styles.propProfile}>
                 <Modal.Header closeButton>
                     <Modal.Title><h2 className={styles.titleModal}>{t('modal.report.title')}</h2></Modal.Title>
@@ -83,11 +80,8 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, selec
                                     }
                                     itemsName={t("trip_detail.passengers.header")}
                                 />
-                                {passangers.map((item, index) => (
-                                    <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
-                                ))}
                             </div>
-                        {isDriver && passangers.length != 0 && car == null &&
+                        {isDriver && car == null &&
                             <EmptyList
                                 text={t("modal.report.empty")}
                                 icon={"people-fill"}

@@ -10,7 +10,6 @@ import CarReportReviewComponent from "@/components/TripDetails/ModalReportsRevie
 import { useSearchParams} from "react-router-dom";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
-import PassangerReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
 import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 import useReviewsDriver from "@/hooks/passanger/useReviewsDriver.tsx";
 //import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
@@ -63,9 +62,6 @@ const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger,
                                 <i className="bi bi-people-fill h3"></i>
                                 <h3>{t('modal.passangers')}</h3>
                             </div>
-                            {passangers.map((item, index) => (
-                                <PassangerReportReviewComponent key={index} passanger={item} selectPassanger={selectUser}/>
-                            ))}
                         </div>}
                     {isDriver && passangers.length != 0 && car == null &&
                     <EmptyList
