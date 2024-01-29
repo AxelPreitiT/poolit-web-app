@@ -2,17 +2,17 @@ import { useState } from "react";
 import styles from "./styles.module.scss";
 import { Form, FormSelect } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import CarReviewsOptions from "@/enums/CarReviewsOptions";
+import previoCarReviewOptions from "@/enums/previoCarReviewOptions.ts";
 
 const ReviewCarForm = () => {
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState<CarReviewsOptions>(
-    CarReviewsOptions.BAD_STATE
+  const [selectedOption, setSelectedOption] = useState<previoCarReviewOptions>(
+      previoCarReviewOptions.BAD_STATE
   );
   const [selectedStarsOption, setSelectedStarsOption] = useState(1);
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value as CarReviewsOptions);
+    setSelectedOption(e.target.value as previoCarReviewOptions);
   };
 
   const handleStarsOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,7 +58,7 @@ const ReviewCarForm = () => {
           value={selectedOption}
           onChange={handleOptionChange}
         >
-          {Object.values(CarReviewsOptions).map((option) => (
+          {Object.values(previoCarReviewOptions).map((option) => (
             <option key={option} value={option}>
               {t(`reviews.${option}`)}
             </option>
