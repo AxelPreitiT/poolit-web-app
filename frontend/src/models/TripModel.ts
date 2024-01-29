@@ -16,6 +16,8 @@ interface TripModel {
   totalPrice: number;
   totalTrips: number;
   tripId: number;
+  driverReviewsUriTemplate: string;
+  carReviewsUriTemplate: string;
 }
 
 export default TripModel;

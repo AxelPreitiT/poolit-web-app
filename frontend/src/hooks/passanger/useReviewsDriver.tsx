@@ -7,34 +7,34 @@ import {parseTemplate} from "url-template";
 import PassangerService from "@/services/PassangerService.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 
-const useReviewsPassangers = (uri?: string) => {
+const useReviewsDriver = (uri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();
 
     const query = useQuery({
-        queryKey: ["passangersReviews", uri],
+        queryKey: ["driversReviews", uri],
         queryFn: async () => {
             const parseUri = parseTemplate(uri as string).expand({
                 userId: currentUser?.userId as number,
             });
             return await PassangerService.getReview(parseUri);
-            },
+        },
         enabled: !!uri && !isLoadingUser,
         retry: true
     });
 
     const { isLoading, isPending, isError, error, data } = query;
 
-  useEffect(() => {
-    if (isError) {
-      onQueryError({
-        error,
-        title: t("passanger.error.title"),
-        timeout: defaultToastTimeout,
-      });
-    }
-  }, [isError, error, onQueryError, t]);
+    useEffect(() => {
+        if (isError) {
+            onQueryError({
+                error,
+                title: t("passanger.error.title"),
+                timeout: defaultToastTimeout,
+            });
+        }
+    }, [isError, error, onQueryError, t]);
 
     return {
         ...query,
@@ -44,4 +44,4 @@ const useReviewsPassangers = (uri?: string) => {
 
 }
 
-export default useReviewsPassangers;
+export default useReviewsDriver;

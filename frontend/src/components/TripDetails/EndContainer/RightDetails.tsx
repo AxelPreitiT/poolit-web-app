@@ -24,7 +24,7 @@ interface RightDetailsProps {
     trip: tripModel;
     passanger: passangerModel | undefined;
     driver: userPublicModel;
-    car: carModel
+    car: carModel;
 }
 
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, driver , car}: RightDetailsProps) => {

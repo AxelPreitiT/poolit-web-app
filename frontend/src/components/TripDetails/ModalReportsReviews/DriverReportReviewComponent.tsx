@@ -7,14 +7,19 @@ import userPublicModel from "@/models/UserPublicModel.ts";
 export interface DriverReportReviewComponentProps {
     selectDriver: (user:userPublicModel) => void;
     driver: userPublicModel
+    isReviewed: boolean;
 }
 
-const DriverReportReviewComponent = ({driver, selectDriver}: DriverReportReviewComponentProps) => {
+const DriverReportReviewComponent = ({driver, selectDriver, isReviewed}: DriverReportReviewComponentProps) => {
     const { t } = useTranslation();
+
+    const buttonStyle = {
+        backgroundColor: isReviewed ? "green" : "orange",
+    };
 
     return (
         <div className={styles.marginCointainer}>
-            <Button onClick={() => selectDriver(driver)} className={styles.userContainer}>
+            <Button onClick={() => selectDriver(driver)} disabled={isReviewed} style={buttonStyle} className={styles.userContainer}>
                 <CircleImg src={driver.imageUri} size={50} />
                 <div className={styles.infoContainer}>
                     <h4>
@@ -24,6 +29,10 @@ const DriverReportReviewComponent = ({driver, selectDriver}: DriverReportReviewC
                     </h4>
                 </div>
             </Button>
+            {isReviewed &&
+                <div className={styles.aclaration_text}>
+                    <span>conductor reseñado</span>
+                </div>}
         </div>
     );
 };

@@ -10,9 +10,9 @@ import CarReportReviewComponent from "@/components/TripDetails/ModalReportsRevie
 import { useSearchParams} from "react-router-dom";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
-import PassangerReportReviewComponent
-    from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
+import PassangerReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
 import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
+import useReviewsDriver from "@/hooks/passanger/useReviewsDriver.tsx";
 //import useGetPassangers from "@/hooks/passanger/useGetPassangers.tsx";
 
 export interface ModalReportProps {
@@ -29,11 +29,12 @@ export interface ModalReportProps {
 const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger , selectUser, selectCar}: ModalReportProps) => {
     const { t } = useTranslation();
     const [params] = useSearchParams();
+    const {data:isReviewed, isLoading:isLoadingReview} = useReviewsDriver(trip.driverReviewsUriTemplate)
 
     const {isLoading, passangers} = useGetPassangers(isDriver , !isDriver, params, passanger, trip);
 
     return (
-        (!isLoading && passangers != undefined &&
+        (!isLoading && passangers != undefined && !isLoadingReview && isReviewed!=undefined &&
         <div className={styles.propProfile}>
             <Modal.Header closeButton>
                 <Modal.Title><h2 className={styles.titleModal}>{t('modal.report.title')}</h2></Modal.Title>
@@ -46,7 +47,7 @@ const ModalReportReview = ({ closeModal, driver, car, isDriver, trip, passanger 
                             <i className="bi bi-person-fill h3"></i>
                             <h3>{t('modal.driver')}</h3>
                         </div>
-                        <DriverReportReviewComponent driver={driver} selectDriver={selectUser}/>
+                        <DriverReportReviewComponent driver={driver} selectDriver={selectUser} isReviewed={isReviewed}/>
                     </div>}
                     {!isDriver && car != null && selectCar!= null &&
                     <div className={styles.passangerContainer}>
