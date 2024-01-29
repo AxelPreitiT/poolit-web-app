@@ -73,6 +73,19 @@ class PassangerApi extends AxiosApi{
             );
         };
 
+    public static patchRejectPassangerByUri: (uri: string) => AxiosPromise<void> =
+        (uri: string) => {
+            return this.patch<AcceptRejecPassangerBody, void>(
+                uri,
+                { passengerState: PassangerStatus.REJECTED as string },
+                {
+                    headers: {
+                        "Content-Type": PassangerApi.PASSANGER_CONTENT_TYPE_HEADER,
+                    },
+                }
+            );
+        };
+
     public static getPassangerRole: (uri: string) => AxiosPromise<PassangerModel> =
         (uri: string) => {
             return this.get<PassangerModel>(uri, {

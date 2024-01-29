@@ -9,12 +9,14 @@ import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
 import LoadingWheel from "../loading/LoadingWheel";
 import useAcceptPassangerByUri from "@/hooks/passanger/useAcceptPassangerByUri.tsx";
-
+import useRejectPassangerByUri from "@/hooks/passanger/useRejectPassangerByUri.tsx";
 
 const PassangerComponent = (passanger: PassangerModel) => {
   const { t } = useTranslation();
   const {isLoading, data:UserTrip} =  usePublicUserByUri(passanger.userUri);
-  const {onSubmit } = useAcceptPassangerByUri();
+  const {onSubmit:onSubmitAccept } = useAcceptPassangerByUri();
+  const {onSubmit:onSubmitReject } = useRejectPassangerByUri();
+
 
   return (
     <div className={styles.passanger_container}>
@@ -42,7 +44,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
         <StarRating rating={0} />
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
-            <Button className={styles.btn_delete} disabled={passanger.passengerState != PassangerStatus.PENDING} onClick={() => onSubmit(passanger.selfUri)}>
+            <Button className={styles.btn_delete} disabled={passanger.passengerState != PassangerStatus.PENDING} onClick={() => onSubmitAccept(passanger.selfUri)}>
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.accept")}</span>
               </div>
@@ -50,6 +52,7 @@ const PassangerComponent = (passanger: PassangerModel) => {
             <Button
               className={styles.btn_accept}
               disabled={passanger.passengerState != PassangerStatus.PENDING}
+              onClick={() => onSubmitReject(passanger.selfUri)}
             >
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.reject")}</span>
