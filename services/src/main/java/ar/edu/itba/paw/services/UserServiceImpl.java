@@ -240,30 +240,31 @@ public class UserServiceImpl implements UserService {
         }
         //verificationToken != null and it is a valid token
 
-        user.setEnabled(true);
-        authWithoutPassword(user);
+        tokenUser.setEnabled(true);
+        //TODO: delete
+//        authWithoutPassword(user);
     }
 
 
-    void authWithoutPassword(User user) {
-        final Collection<GrantedAuthority> authorities = new HashSet<>();
-
-        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
-            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
-        }else{
-            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
-                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
-            } else {
-                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
-            }
-        }
-
-        //TODO: revisar usos, y ver si hay que poner lo de banned acá
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), authorities);
-        Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authRequest);
-    }
+//    void authWithoutPassword(User user) {
+//        final Collection<GrantedAuthority> authorities = new HashSet<>();
+//
+//        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
+//            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
+//        }else{
+//            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
+//                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
+//            } else {
+//                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
+//            }
+//        }
+//
+//        //TODO: revisar usos, y ver si hay que poner lo de banned acá
+//        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+//                user.getEmail(), user.getPassword(), authorities);
+//        Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+//        SecurityContextHolder.getContext().setAuthentication(authRequest);
+//    }
 
 //    @Transactional
 //    @Override

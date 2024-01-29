@@ -41,9 +41,6 @@ public class PawUserDetailsService implements UserDetailsService {
             LOGGER.error("No user found for email {}", email, e);
             throw e;
         }
-
-
-
         final Collection<GrantedAuthority> authorities = new HashSet<>();
 
         final User user = userOptional.get();
