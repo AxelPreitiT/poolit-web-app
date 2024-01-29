@@ -12,10 +12,11 @@ import useAcceptPassangerByUri from "@/hooks/passanger/useAcceptPassangerByUri.t
 import useRejectPassangerByUri from "@/hooks/passanger/useRejectPassangerByUri.tsx";
 
 interface PassangerComponentProps {
-  data: PassangerModel
+  data: PassangerModel;
+  extraData?: boolean;
 }
 
-const PassangerComponent = ({data: passanger} : PassangerComponentProps) => {
+const PassangerComponent = ({data: passanger, extraData: fullSeats} : PassangerComponentProps) => {
   const { t } = useTranslation();
   const {isLoading, data:UserTrip} =  usePublicUserByUri(passanger.userUri);
   const {onSubmit:onSubmitAccept } = useAcceptPassangerByUri();
@@ -48,13 +49,15 @@ const PassangerComponent = ({data: passanger} : PassangerComponentProps) => {
         <StarRating rating={0} />
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
-            <Button className={styles.btn_delete} disabled={passanger.passengerState != PassangerStatus.PENDING} onClick={() => onSubmitAccept(passanger.selfUri)}>
+            <Button className={styles.btn_accept}
+                  disabled={passanger.passengerState != PassangerStatus.PENDING || fullSeats}
+                  onClick={() => onSubmitAccept(passanger.selfUri)}>
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.accept")}</span>
               </div>
             </Button>
             <Button
-              className={styles.btn_accept}
+              className={styles.btn_delete}
               disabled={passanger.passengerState != PassangerStatus.PENDING}
               onClick={() => onSubmitReject(passanger.selfUri)}
             >
@@ -71,6 +74,11 @@ const PassangerComponent = ({data: passanger} : PassangerComponentProps) => {
           {passanger.passengerState == PassangerStatus.REJECTED && (
             <span style={{ color: "gray", fontStyle: "italic" }}>
               {t("trip_detail.passengers.passsanger_rejected")}
+            </span>
+          )}
+          {fullSeats && passanger.passengerState == PassangerStatus.PENDING && (
+              <span style={{ color: "gray", fontStyle: "italic" }}>
+                {t("trip_detail.passengers.fullSeats")}
             </span>
           )}
         </div>

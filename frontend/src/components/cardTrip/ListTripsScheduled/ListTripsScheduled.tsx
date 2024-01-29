@@ -1,7 +1,7 @@
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import { useTranslation } from "react-i18next";
 import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
-import CardTripScheduledStatus from "@/components/cardTrip/cardTripScheduled/cardTripScheduleStatus.tsx";
+import CardTripScheduled from "@/components/cardTrip/cardTripScheduled/cardTripScheduled.tsx";
 
 export interface ListTripsScheduledProps {
   uri: string;
@@ -19,9 +19,8 @@ const ListTripsScheduled = ({
   return (
     <div>
       <PaginationComponentExtraData
-          CardComponent={CardTripScheduledStatus}
+          CardComponent={CardTripScheduled}
           uri={uri}
-          extraData={"genial"}
           current_page={current_page}
           useFuction={useTripsByUri}
           empty_component={empty_component}

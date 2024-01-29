@@ -641,6 +641,7 @@
       "in_progress": "In progress"
     },
     "passengers": {
+      "fullSeats": "Full seats",
       "header": "Passengers",
       "loading": "Loading passengers",
       "btn_accept": "Accept",

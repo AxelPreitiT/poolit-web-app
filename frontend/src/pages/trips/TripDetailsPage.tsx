@@ -106,7 +106,7 @@ const TripDetailsPage = () => {
         </div>
       </MainComponent>
       {isDriver && (
-        <PassangersTripComponent uri={trip.passengersUriTemplate} />
+        <PassangersTripComponent uri={trip.passengersUriTemplate} fullSeats={0 == parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10)} />
       )}
     </div>
   );

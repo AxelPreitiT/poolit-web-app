@@ -639,6 +639,7 @@
       "in_progress": "En progreso"
     },
     "passengers": {
+      "fullSeats": "Asientos llenos",
       "header": "Pasajeros",
       "loading": "Cargando pasajeros",
       "btn_accept": "Aceptar",

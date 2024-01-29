@@ -15,9 +15,10 @@ import PaginationComponentExtraData from "@/components/pagination/PaginationComp
 
 interface PassangersTripComponentProps {
   uri: string;
+  fullSeats: boolean;
 }
 
-const PassangersTripComponent = ({ uri }: PassangersTripComponentProps) => {
+const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProps) => {
   const { t } = useTranslation();
 
   const { search } = useLocation();
@@ -66,6 +67,7 @@ const PassangersTripComponent = ({ uri }: PassangersTripComponentProps) => {
       <div className={styles.passangers_container}>
         <PaginationComponentExtraData
             CardComponent={PassangerComponent}
+            extraData={fullSeats}
             uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
             current_page={currentPage}
             useFuction={usePassangerByUri}
