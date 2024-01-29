@@ -18,7 +18,7 @@ const usePassangerByUri = (uri?: string) => {
         error,
         isPending,
     } = useQuery({
-        queryKey: ["passangers", uri],
+        queryKey: ["passangersPagination", uri],
         queryFn: async ({ queryKey }): Promise<PaginationModel<PassangerModel>> => {
             const [, uri] = queryKey;
             return await passangerService.getPassangersTripsByUri(uri as string);
