@@ -1,7 +1,7 @@
 @use "@/colors.module" as colors;
 
 .userContainer {
-  background-color: colors.$secondary-color !important;
+  background-color: colors.$secondary-color;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-color: transparent !important;
   border-radius: 5px;
@@ -79,7 +79,7 @@
 }
 
 .reportFormTitle{
-  color: colors.$secondary-color !important;
+  color: colors.$secondary-color;
   width: 100%;
   position: absolute;
   margin: 0;
@@ -91,4 +91,11 @@
 
 .imgCointainer{
   z-index: 2;
+}
+
+.aclaration_text{
+  display: flex;
+  justify-content: flex-end;
+  color: gray;
+  font-style: italic;
 }

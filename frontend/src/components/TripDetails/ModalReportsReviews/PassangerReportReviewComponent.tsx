@@ -22,13 +22,20 @@ const PassangerReportReviewComponent = ({
   const { t } = useTranslation();
   const {data:isReviewed, isLoading:isLoadingReview} = useReviewsPassangers(passanger.passengerReviewsForTripUriTemplate)
 
+  const buttonStyle = {
+    backgroundColor: isReviewed ? "green" : "orange",
+  };
+
   return (
     <div className={styles.marginCointainer}>
       {isLoading || data == undefined || isLoadingReview ? (
         <LoadingWheel description={t("admin.user.loading")} />
       ) : (
+          <div>
         <Button
           onClick={() => selectPassanger(data)}
+          style={buttonStyle}
+          disabled={isReviewed}
           className={styles.userContainer}
         >
           <CircleImg src={data.imageUri} size={50} />
@@ -39,7 +46,6 @@ const PassangerReportReviewComponent = ({
                 surname: data.surname,
               })}
             </h4>
-            {isReviewed && <h4>ESTAA</h4>}
             <span className={styles.spanStyle}>
               <i className="bi bi-calendar light-text"> </i>
               {passanger.startDateTime === passanger.endDateTime
@@ -53,7 +59,12 @@ const PassangerReportReviewComponent = ({
             </span>
           </div>
         </Button>
-      )}
+       {isReviewed &&
+           <div className={styles.aclaration_text}>
+              <span>Pasajero reseñado</span>
+           </div>}
+          </div>
+        )}
     </div>
   );
 };

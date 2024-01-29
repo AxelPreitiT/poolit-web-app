@@ -48,7 +48,7 @@ class PassangerApi extends AxiosApi{
                 headers: {
                 },
             }).then((response: AxiosResponse<PassangerModel>) => {
-                return response.status === 204;
+                return !(response.status === 204);
             });
         };
 
