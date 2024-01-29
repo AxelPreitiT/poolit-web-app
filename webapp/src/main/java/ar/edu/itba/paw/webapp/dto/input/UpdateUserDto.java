@@ -6,28 +6,28 @@ import ar.edu.itba.paw.webapp.dto.validation.annotations.Phone;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UpdateUserDto {
     @Size(min = 2, max = 20)
-    @NotNull
     private String username;
 
     @Size(min = 2, max = 30)
-    @NotNull
     private String surname;
 
-    @NotNull
     @Phone
     private String phone;
 
     @Min(value = 1)
     @CityId
-    private int bornCityId;
+    private Integer bornCityId;
 
-    @NotNull
     @Locale
     private String mailLocale;
+
+    @Pattern(regexp = "DRIVER|USER",message = "{dto.validation.role}")
+    private String role;
 
     public String getUsername() {
         return username;
@@ -53,11 +53,10 @@ public class UpdateUserDto {
         this.phone = phone;
     }
 
-    public int getBornCityId() {
+    public Integer getBornCityId() {
         return bornCityId;
     }
-
-    public void setBornCityId(int bornCityId) {
+    public void setBornCityId(Integer bornCityId) {
         this.bornCityId = bornCityId;
     }
 
@@ -67,5 +66,13 @@ public class UpdateUserDto {
 
     public void setMailLocale(String mailLocale) {
         this.mailLocale = mailLocale;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

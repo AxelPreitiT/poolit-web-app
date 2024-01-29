@@ -16,7 +16,7 @@ public interface UserService {
 
     void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException;
 
-    void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString) throws CityNotFoundException, UserNotFoundException;
+    void modifyUser(final long userId, final String username, final String surname, final String phone, final Integer bornCityId, final String mailLocaleString, final String role) throws CityNotFoundException, UserNotFoundException, RoleAlreadyChangedException;
 
     Optional<User> getCurrentUser();
     Optional<User> findById(long userId);
@@ -26,7 +26,7 @@ public interface UserService {
 
 //    void changeToDriver() throws UserNotFoundException;
 
-    void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException;
+//    void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException;
 
     void confirmRegister(String token, final User user)throws InvalidTokenException;
 

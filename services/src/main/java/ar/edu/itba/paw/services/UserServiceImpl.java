@@ -177,19 +177,7 @@ public class UserServiceImpl implements UserService {
 //        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
 //    }
 
-    @Transactional
-    @Override
-    public void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException {
-        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        if(!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())){
-            throw new IllegalArgumentException();
-        }
-        if(!user.getRole().equals(UserRole.USER.getText())){
-            //role has already been changed
-            throw new RoleAlreadyChangedException();
-        }
-        userDao.changeRole(user.getUserId(), role);
-    }
+
 
 //    @Transactional
 //    @Override
@@ -291,10 +279,40 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString) throws CityNotFoundException, UserNotFoundException{
+    public void modifyUser(final long userId, final String username, final String surname, final String phone, final Integer bornCityId, final String mailLocaleString, final String role) throws CityNotFoundException, UserNotFoundException, RoleAlreadyChangedException {
         User user = findById(userId).orElseThrow(UserNotFoundException::new);
-        userDao.modifyUser(userId,username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.getUserImageId());
+        if(role!=null) {
+            if (!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())) {
+                throw new IllegalArgumentException();
+            }
+            if (!user.getRole().equals(UserRole.USER.getText())) {
+                //role has already been changed
+                throw new RoleAlreadyChangedException();
+            }
+            userDao.changeRole(user.getUserId(), role);
+        }
+        userDao.modifyUser(userId,
+                username!=null?username:user.getName(),
+                surname!=null?surname:user.getSurname(),
+                phone!=null?phone:user.getPhone(),
+                bornCityId!=null?cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new):user.getBornCity(),
+                mailLocaleString!=null?new Locale(mailLocaleString):user.getMailLocale(),
+                user.getUserImageId());
     }
+
+//    @Transactional
+//    @Override
+//    public void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException {
+//        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+//        if(!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())){
+//            throw new IllegalArgumentException();
+//        }
+//        if(!user.getRole().equals(UserRole.USER.getText())){
+//            //role has already been changed
+//            throw new RoleAlreadyChangedException();
+//        }
+//        userDao.changeRole(user.getUserId(), role);
+//    }
 
     @Transactional
     @Override

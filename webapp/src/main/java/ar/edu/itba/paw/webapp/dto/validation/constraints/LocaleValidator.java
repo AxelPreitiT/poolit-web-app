@@ -13,6 +13,9 @@ public class LocaleValidator implements ConstraintValidator<Locale,String> {
     private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING);
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if(value == null){
+            return true;
+        }
         return PATTERN.matcher(value).matches();
     }
 }
