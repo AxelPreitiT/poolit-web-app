@@ -7,10 +7,9 @@ import {getDayString} from "@/utils/date/dayString.ts";
 
 interface CardTripScheduledProps {
     trip: TripModel;
-    status: string;
 }
 
-const CardTripScheduled = ({trip, status} : CardTripScheduledProps) => {
+const CardTripScheduled = ({trip} : CardTripScheduledProps) => {
   const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
 
@@ -24,7 +23,6 @@ const CardTripScheduled = ({trip, status} : CardTripScheduledProps) => {
                 {t(`day.full.${getDayString(date).toLowerCase()}`, {
                     plural: "s",})}
             </h3>
-            <h1>{status}</h1>
               {trip.totalTrips > 1 ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {
