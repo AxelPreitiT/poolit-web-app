@@ -48,8 +48,7 @@ const TripDetailsPage = () => {
     isLoadingCar ||
     car === undefined ||
     isLoadingDriver ||
-    driver === undefined ||
-      isLoadingRole
+    driver === undefined
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
@@ -60,6 +59,7 @@ const TripDetailsPage = () => {
         <MainHeader
           title={t("trip_detail.header")}
           left_component={
+            !isDriver &&
             isPassanger &&
             !isLoadingRole &&
               currentPassanger != undefined && (
