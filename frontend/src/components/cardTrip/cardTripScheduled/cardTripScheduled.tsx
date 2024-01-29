@@ -5,7 +5,12 @@ import { useTranslation } from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
 import {getDayString} from "@/utils/date/dayString.ts";
 
-const CardTripScheduled = (trip: TripModel) => {
+interface CardTripScheduledProps {
+    trip: TripModel;
+    status: string;
+}
+
+const CardTripScheduled = ({trip, status} : CardTripScheduledProps) => {
   const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
 
@@ -19,7 +24,8 @@ const CardTripScheduled = (trip: TripModel) => {
                 {t(`day.full.${getDayString(date).toLowerCase()}`, {
                     plural: "s",})}
             </h3>
-            {trip.totalTrips > 1 ? (
+            <h1>{status}</h1>
+              {trip.totalTrips > 1 ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {
                   initial_date: getFormattedDateTime(trip.startDateTime).date,
