@@ -9,6 +9,7 @@ import { parseTemplate } from "url-template";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
+import tripEarningModel from "@/models/tripEarningModel.ts";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -28,6 +29,8 @@ class TripsApi extends AxiosApi {
   private static readonly TRIPS_CONTENT_TYPE_HEADER: string =
     "application/vnd.trip.v1+json";
 
+  //private static readonly TRIPS_EARNING_TYPE_HEADER: string ="trip.earnings.v1+json"
+
   public static getTripById: (uri: string) => AxiosPromise<TripModel> = (
     uri: string
   ) => {
@@ -35,6 +38,14 @@ class TripsApi extends AxiosApi {
       headers: {
         "Accept": TripsApi.TRIPS_CONTENT_TYPE_HEADER,
       },
+    });
+  };
+
+  public static getAmountByUri: (uri: string) => AxiosPromise<tripEarningModel> = (
+      uri: string
+  ) => {
+    return this.get<tripEarningModel>(uri, {
+      headers: {},
     });
   };
 

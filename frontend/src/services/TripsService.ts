@@ -7,11 +7,16 @@ import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
+import tripEarningModel from "@/models/tripEarningModel.ts";
 
 class TripsService extends Service {
   public static getTripById = async (uri: string): Promise<TripModel> => {
     return await this.resolveQuery(TripsApi.getTripById(uri));
   };
+
+  public static getAmountByUri = async (uri: string): Promise<tripEarningModel> => {
+    return await this.resolveQuery(TripsApi.getAmountByUri(uri));
+  }
 
   public static getTripsByUser = async (
     uri: string
