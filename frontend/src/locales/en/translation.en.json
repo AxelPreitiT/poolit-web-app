@@ -612,7 +612,16 @@
       "trip": "Trip where the report happened on",
       "reason": "Report reason",
       "passenger": "(Passenger)",
-      "driver": "(Driver)"
+      "driver": "(Driver)",
+      "explainApprove": "Specify the reason for approving the report",
+      "explainReject": "Specify the reason for rejecting the report",
+      "notifyApprove": "The reported user will be notified with the reason for approval",
+      "notifyReject": "The user who made the report will be notified with the reason for rejection",
+      "accept" : "Approve report",
+      "reject" : "Reject report",
+      "acceptBtn" : "Approve",
+      "RejectBtn" : "Reject",
+      "laterBtn" : "Decide later"
     },
     "user": {
       "loading": "Loading user"
