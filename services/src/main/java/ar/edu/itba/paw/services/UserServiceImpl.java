@@ -229,11 +229,11 @@ public class UserServiceImpl implements UserService {
     public void confirmRegister(String token, final User tokenUser) throws InvalidTokenException {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
         if(verificationToken == null){
-            throw new IllegalArgumentException();
+            throw new InvalidTokenException();
         }
         final User user = verificationToken.getUser();
         if(user.getUserId() != tokenUser.getUserId()){
-            throw new IllegalArgumentException();
+            throw new InvalidTokenException();
         }
         if (!tokenService.isValidToken(verificationToken)){
             throw new InvalidTokenException();

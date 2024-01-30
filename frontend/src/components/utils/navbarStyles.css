@@ -4,9 +4,10 @@
   background-color: #1c4c96; /* Assuming cyanDark is a variable or valid color value */
   color: white;
   display: flex;
-  align-items: left;
   height: 70px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-title {
