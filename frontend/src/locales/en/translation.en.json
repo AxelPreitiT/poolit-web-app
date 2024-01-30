@@ -640,6 +640,9 @@
       "user_reported": "Passanger reported"
     },
     "status": {
+      "not_started_review": "trip not started",
+      "started_review": "trip started",
+      "finished_review": "trip finished",
       "title": "Estado:",
       "cancelled": "Cancelled",
       "accepted": "Accepted",

@@ -639,6 +639,9 @@
       "user_reported": "Pasajero reportado"
     },
     "status": {
+      "not_started_review": "viaje no comenzado",
+      "started_review": "reserva comenzada",
+      "finished_review": "reserva terminada",
       "title": "Status:",
       "cancelled": "Cancelado",
       "accepted": "Aceptado",

@@ -11,6 +11,8 @@ import LoadingWheel from "../loading/LoadingWheel";
 import useAcceptPassangerByUri from "@/hooks/passanger/useAcceptPassangerByUri.tsx";
 import useRejectPassangerByUri from "@/hooks/passanger/useRejectPassangerByUri.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
+import reserveStatus from "@/enums/ReserveStatus.ts";
 
 interface PassangerComponentProps {
   data: PassangerModel;
@@ -22,6 +24,7 @@ const PassangerComponent = ({data: passanger, extraData: fullSeats} : PassangerC
   const {isLoading, data:UserTrip} =  usePublicUserByUri(passanger.userUri);
   const {onSubmit:onSubmitAccept } = useAcceptPassangerByUri();
   const {onSubmit:onSubmitReject } = useRejectPassangerByUri();
+  const statusPassanger = getStatusPassanger(passanger)
 
 
   return (
@@ -46,12 +49,15 @@ const PassangerComponent = ({data: passanger, extraData: fullSeats} : PassangerC
           </div>
         </div>
       )}
+      {isLoading || UserTrip === undefined ? (
+          <LoadingWheel description={t("trip_detail.passengers.loading")} />
+      ) : (
       <div className={styles.right_container}>
-        <StarRating rating={0} />
+        <StarRating rating={UserTrip.passengerRating} />
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
             <Button className={styles.btn_accept}
-                  disabled={passanger.passengerState != PassangerStatus.PENDING || fullSeats}
+                  disabled={passanger.passengerState != PassangerStatus.PENDING || fullSeats || statusPassanger != reserveStatus.NOT_STARTED}
                   onClick={() => onSubmitAccept(passanger.selfUri)}>
               <div className={styles.create_trip_btn}>
                 <span>{t("trip_detail.btn.accept")}</span>
@@ -67,23 +73,30 @@ const PassangerComponent = ({data: passanger, extraData: fullSeats} : PassangerC
               </div>
             </Button>
           </div>
-          {passanger.passengerState == PassangerStatus.ACCEPTED && (
+          {passanger.passengerState === PassangerStatus.ACCEPTED ? (
             <span style={{ color: "gray", fontStyle: "italic" }}>
               {t("trip_detail.passengers.passsanger_accepted")}
             </span>
-          )}
-          {passanger.passengerState == PassangerStatus.REJECTED && (
-            <span style={{ color: "gray", fontStyle: "italic" }}>
-              {t("trip_detail.passengers.passsanger_rejected")}
-            </span>
-          )}
-          {fullSeats && passanger.passengerState == PassangerStatus.PENDING && (
-              <span style={{ color: "gray", fontStyle: "italic" }}>
-                {t("trip_detail.passengers.fullSeats")}
-            </span>
-          )}
-        </div>
+            ) : passanger.passengerState === PassangerStatus.REJECTED ? (
+                <span style={{ color: "gray", fontStyle: "italic" }}>
+                    {t("trip_detail.passengers.passsanger_rejected")}
+                </span>
+                ) : fullSeats ? (
+                  <span style={{ color: "gray", fontStyle: "italic" }}>
+                    {t("trip_detail.passengers.fullSeats")}
+                  </span>
+                ) : statusPassanger === reserveStatus.STARTED ? (
+                    <span style={{ color: "gray", fontStyle: "italic" }}>
+                      {t("trip_detail.status.started_review")}
+                    </span>
+                ) : statusPassanger === reserveStatus.FINISHED &&
+                    <span style={{ color: "gray", fontStyle: "italic" }}>
+                      {t("trip_detail.status.finished_review")}
+                    </span>
+                }
+          </div>
       </div>
+      )}
     </div>
   );
 };

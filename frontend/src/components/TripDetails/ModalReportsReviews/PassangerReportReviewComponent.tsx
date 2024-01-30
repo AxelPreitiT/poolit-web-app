@@ -2,7 +2,7 @@ import styles from "./styles.module.scss";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import {Button} from "react-bootstrap";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
@@ -11,6 +11,8 @@ import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
 import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
 import {ReactNode} from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
+import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
+import ReserveStatus from "@/enums/ReserveStatus.ts";
 
 export interface PassangerReportReviewComponent {
   data: PassangerModel;
@@ -28,6 +30,8 @@ const PassangerReportReviewComponent = ({
   const { isLoading, data } = usePublicUserByUri(passanger.userUri);
   const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportPassangers(passanger, extraData?.reporting)
 
+  const statusPassanger = getStatusPassanger(passanger)
+
   const buttonStyle = {
     backgroundColor: isReviewed ? "green" : "orange",
   };
@@ -42,7 +46,7 @@ const PassangerReportReviewComponent = ({
         <Button
           onClick={() => extraData.openModalMake(data, extraData.reporting, extraData.reporting? <ReportForm/> : <ReviewForm/>)}
           style={buttonStyle}
-          disabled={isReviewed}
+          disabled={isReviewed || statusPassanger == ReserveStatus.NOT_STARTED}
           className={styles.userContainer}
         >
           <CircleImg src={data.imageUri} size={50} />
@@ -73,6 +77,10 @@ const PassangerReportReviewComponent = ({
         {isReviewed && extraData?.reporting &&
             <div className={styles.aclaration_text}>
               <span>{t('trip_detail.review.user_reviewed')}</span>
+            </div>}
+        {statusPassanger == ReserveStatus.NOT_STARTED &&
+            <div className={styles.aclaration_text}>
+              <span>{t('trip_detail.review.not_started_review')}</span>
             </div>}
           </div>)}
     </div>
