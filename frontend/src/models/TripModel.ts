@@ -19,6 +19,9 @@ interface TripModel {
   driverReviewsUriTemplate: string;
   carReviewsUriTemplate: string;
   tripStatus: string;
+  deleted: false;
+  driverReportsUriTemplate: string;
+  queryStartDateTime: string;
 }
 
 export default TripModel;
