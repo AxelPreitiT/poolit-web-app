@@ -27,7 +27,6 @@ const CarReportReviewComponent = ({trip, car, openModalCar}: CarReportReviewComp
                     style={buttonStyle}>
                 <CircleImg src={car.imageUri} size={50} />
                 <div className={styles.infoContainer}>
-                    <h4>{trip.tripStatus}</h4>
                     <h4>{car.infoCar}</h4>
                 </div>
             </Button>

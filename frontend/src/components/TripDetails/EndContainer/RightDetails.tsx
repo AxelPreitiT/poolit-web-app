@@ -44,7 +44,10 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
     // Modals car
     const [showModalCar, setModalCar] = useState(false);
     const closeModalCar = () => {setModalCar(false);};
-    const openModalCar = () => {setModalCar(true);};
+    const openModalCar = () => {
+        closeModalReview()
+        setModalCar(true);
+    };
 
 
     // Modals User

@@ -3,7 +3,6 @@ import {Button, Modal} from "react-bootstrap";
 import DriverReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/DriverReportReviewComponent.tsx";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
-import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import carModel from "@/models/CarModel.ts";
 import CarReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/CarReportReviewComponent.tsx";
 import passangerModel from "@/models/PassangerModel.ts";
@@ -68,20 +67,14 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                     useFuction={usePassangerByUri}
                                     empty_component={
                                         <div className={styles.review_empty_container}>
-                                            <i className={`bi-solid bi-people h2`}></i>
                                             <h3 className="italic-text placeholder-text">
-                                                {t("trip_detail.passengers.empty")}
+                                                Not have passengers.
                                             </h3>
                                         </div>
                                     }
                                     itemsName={t("trip_detail.passengers.header")}
                                 />
                             </div>
-                        {isDriver && car == null &&
-                            <EmptyList
-                                text={t("modal.report.empty")}
-                                icon={"people-fill"}
-                            />}
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
