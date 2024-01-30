@@ -59,7 +59,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                 </div>
                                 <PaginationComponentExtraData
                                     CardComponent={PassangerReportReviewComponent}
-                                    extraData={reporting}
+                                    extraData={{reporting, closeModal}}
                                     uri={createPaginationUri(uri, INITIALPAGE, PASSANGERPAGESIZE)}
                                     current_page={INITIALPAGE}
                                     useFuction={usePassangerByUri}

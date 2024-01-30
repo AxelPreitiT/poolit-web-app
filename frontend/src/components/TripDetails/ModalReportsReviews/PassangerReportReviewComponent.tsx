@@ -1,29 +1,52 @@
 import styles from "./styles.module.scss";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
-import { Button } from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
 import useReviewsReportPassangers from "@/hooks/reportReview/useReviewsPassangers.tsx";
+import {useState} from "react";
+import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
+import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
+import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
 
 export interface PassangerReportReviewComponent {
   data: PassangerModel;
-  extraData?: boolean;
+  extraData?: {
+    reporting: boolean;
+    closeModal: () => void;
+  };
 }
 
 const PassangerReportReviewComponent = ({
   data: passanger,
-  extraData: reporting,
+  extraData: extraData,
 }: PassangerReportReviewComponent) => {
   const { t } = useTranslation();
   const { isLoading, data } = usePublicUserByUri(passanger.userUri);
-  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportPassangers(passanger, reporting)
+  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportPassangers(passanger, extraData?.reporting)
 
   const buttonStyle = {
     backgroundColor: isReviewed ? "green" : "orange",
   };
+
+
+  const [showModalMakeReview, setModalMakeReview] = useState(false);
+
+  const openModalMakeReview = () => {
+    if (extraData && extraData.closeModal && typeof extraData.closeModal === 'function') {
+      extraData.closeModal(); // Ejecuta la función closeModal
+    }
+    setModalMakeReview(true);
+    };
+  const closeModalMakeReview = () => {setModalMakeReview(false);};
+
+
+  const [showModalReport, setModalReport] = useState(false);
+  const openModalReport = () => {setModalReport(true);};
+  const closeModalReport = () => {setModalReport(false);};
 
   return (
     <div className={styles.marginCointainer}>
@@ -32,7 +55,7 @@ const PassangerReportReviewComponent = ({
       ) : (
           <div>
         <Button
-          onClick={() => console.log("hola")}
+          onClick={() => extraData?.reporting ? openModalReport() : openModalReview()}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}
@@ -58,16 +81,24 @@ const PassangerReportReviewComponent = ({
             </span>
           </div>
         </Button>
-       {isReviewed && !reporting &&
+       {isReviewed && !extraData?.reporting &&
            <div className={styles.aclaration_text}>
               <span>Pasajero reseñado</span>
            </div>}
-        {isReviewed && reporting &&
+        {isReviewed && extraData?.reporting &&
             <div className={styles.aclaration_text}>
               <span>Pasajero reportado</span>
             </div>}
-          </div>
-        )}
+
+            <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>
+              <ModalMakeReportReview closeModal={closeModalMakeReport} user={data} reportForm={<ReportForm/>}/>
+            </Modal>
+
+            <Modal show={showModalMakeReview} onHide={closeModalMakeReview} aria-labelledby="contained-modal-title-vcenter" centered>
+              <ModalMakeReportReview closeModal={closeModalMakeReport} user={data} reportForm={<ReviewForm/>}/>
+            </Modal>
+
+          </div>)}
     </div>
   );
 };
