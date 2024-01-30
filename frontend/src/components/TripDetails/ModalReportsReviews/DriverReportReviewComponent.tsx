@@ -4,7 +4,7 @@ import {Button} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import tripModel from "@/models/TripModel.ts";
-import useReviewsReportsDriver from "@/hooks/passanger/useReviewsReportsDriver.tsx";
+import useReviewsReportsDriver from "@/hooks/reportReview/useReviewsReportsDriver.tsx";
 
 export interface DriverReportReviewComponentProps {
     driver: userPublicModel
@@ -26,7 +26,7 @@ const DriverReportReviewComponent = ({driver, reporting, trip}: DriverReportRevi
         (!isLoadingReview &&
         <div className={styles.marginCointainer}>
             <Button onClick={() => console.log("click")}
-                    disabled={isReviewed && reporting}
+                    disabled={isReviewed}
                     style={buttonStyle}
                     className={styles.userContainer}>
                 <CircleImg src={driver.imageUri} size={50} />
@@ -39,6 +39,10 @@ const DriverReportReviewComponent = ({driver, reporting, trip}: DriverReportRevi
                 </div>
             </Button>
             {isReviewed && reporting &&
+                <div className={styles.aclaration_text}>
+                    <span>conductor reportado</span>
+                </div>}
+            {isReviewed && !reporting &&
                 <div className={styles.aclaration_text}>
                     <span>conductor reseñado</span>
                 </div>}

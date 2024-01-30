@@ -71,7 +71,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={true}/>
+                            <ModalReport closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} reporting={true}/>
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>

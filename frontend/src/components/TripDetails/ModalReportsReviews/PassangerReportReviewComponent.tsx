@@ -6,20 +6,20 @@ import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
-import useReviewsPassangers from "@/hooks/passanger/useReviewsPassangers.tsx";
+import useReviewsReportPassangers from "@/hooks/reportReview/useReviewsPassangers.tsx";
 
 export interface PassangerReportReviewComponent {
   data: PassangerModel;
-  extraData?: () => void;
+  extraData?: boolean;
 }
 
 const PassangerReportReviewComponent = ({
   data: passanger,
-  extraData: selectPassanger,
+  extraData: reporting,
 }: PassangerReportReviewComponent) => {
-  const { isLoading, data } = usePublicUserByUri(passanger.userUri);
   const { t } = useTranslation();
-  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsPassangers(passanger.passengerReviewsForTripUriTemplate)
+  const { isLoading, data } = usePublicUserByUri(passanger.userUri);
+  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportPassangers(passanger, reporting)
 
   const buttonStyle = {
     backgroundColor: isReviewed ? "green" : "orange",
@@ -27,12 +27,12 @@ const PassangerReportReviewComponent = ({
 
   return (
     <div className={styles.marginCointainer}>
-      {isLoading || data == undefined || isLoadingReview || selectPassanger == undefined ? (
+      {isLoading || data == undefined || isLoadingReview ? (
         <LoadingWheel description={t("admin.user.loading")} />
       ) : (
           <div>
         <Button
-          onClick={() => selectPassanger()}
+          onClick={() => console.log("hola")}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}
@@ -58,10 +58,14 @@ const PassangerReportReviewComponent = ({
             </span>
           </div>
         </Button>
-       {isReviewed &&
+       {isReviewed && !reporting &&
            <div className={styles.aclaration_text}>
               <span>Pasajero reseñado</span>
            </div>}
+        {isReviewed && reporting &&
+            <div className={styles.aclaration_text}>
+              <span>Pasajero reportado</span>
+            </div>}
           </div>
         )}
     </div>

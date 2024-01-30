@@ -6,45 +6,43 @@ import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 import {parseTemplate} from "url-template";
 import PassangerService from "@/services/PassangerService.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
-import tripModel from "@/models/TripModel.ts";
+import passangerModel from "@/models/PassangerModel.ts";
 
-const useReviewsReportsDriver = (reporting:boolean, trip: tripModel) => {
+const useReviewsReportPassangers = (passanger: passangerModel, reporting?:boolean) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();
 
     const query = useQuery({
-        queryKey: ["driversReviews", trip, reporting],
+        queryKey: ["passangersReviews", passanger],
         queryFn: async () => {
-            if (reporting){
-                console.log("ESTOY REPORT")
-                const parseUri = parseTemplate(trip.driverReportsUriTemplate as string).expand({
+            if(reporting){
+                const reportUri = parseTemplate(passanger.passengerReportsForTripUriTemplate as string).expand({
                     userId: currentUser?.userId as number,
                 });
-                return await PassangerService.getReport(parseUri);
+                return await PassangerService.getReport(reportUri);
             }else{
-                console.log("ESTOY REVIEW")
-                const parseUri = parseTemplate(trip.driverReviewsUriTemplate as string).expand({
+                const reviewUri = parseTemplate(passanger.passengerReviewsForTripUriTemplate as string).expand({
                     userId: currentUser?.userId as number,
                 });
-                return await PassangerService.getReview(parseUri);
+                return await PassangerService.getReview(reviewUri);
             }
-        },
-        enabled: !!trip && !isLoadingUser,
-        retry: false
+            },
+        enabled: !!reporting && !!passanger && !isLoadingUser,
+        retry: true
     });
 
     const { isLoading, isPending, isError, error, data } = query;
 
-    useEffect(() => {
-        if (isError) {
-            onQueryError({
-                error,
-                title: t("passanger.error.title"),
-                timeout: defaultToastTimeout,
-            });
-        }
-    }, [isError, error, onQueryError, t]);
+  useEffect(() => {
+    if (isError) {
+      onQueryError({
+        error,
+        title: t("passanger.error.title"),
+        timeout: defaultToastTimeout,
+      });
+    }
+  }, [isError, error, onQueryError, t]);
 
     return {
         ...query,
@@ -53,4 +51,5 @@ const useReviewsReportsDriver = (reporting:boolean, trip: tripModel) => {
     }
 
 }
-export default useReviewsReportsDriver;
+
+export default useReviewsReportPassangers;

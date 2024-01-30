@@ -50,7 +50,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                     <i className="bi bi-car-front-fill h3"></i>
                                     <h3>{t('modal.car')}</h3>
                                 </div>
-                                <CarReportReviewComponent car={car} trip={trip} reporting={true}/>
+                                <CarReportReviewComponent car={car} trip={trip}/>
                             </div>}
                             <div className={styles.passangerContainer}>
                                 <div className={styles.titleContainer}>
@@ -59,7 +59,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                 </div>
                                 <PaginationComponentExtraData
                                     CardComponent={PassangerReportReviewComponent}
-                                    extraData={() => console.log("Hola")}
+                                    extraData={reporting}
                                     uri={createPaginationUri(uri, INITIALPAGE, PASSANGERPAGESIZE)}
                                     current_page={INITIALPAGE}
                                     useFuction={usePassangerByUri}

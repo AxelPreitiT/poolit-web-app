@@ -3,25 +3,38 @@ import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import {Button} from "react-bootstrap";
 import carModel from "@/models/CarModel.ts";
 import tripModel from "@/models/TripModel.ts";
+import useReviewsCar from "@/hooks/reportReview/useReviewsCar.tsx";
 
 export interface CarReportReviewComponentProps {
     car: carModel;
     trip: tripModel;
-    reporting: boolean;
 }
 
-const CarReportReviewComponent = ({trip, car, reporting}: CarReportReviewComponentProps) => {
+const CarReportReviewComponent = ({trip, car}: CarReportReviewComponentProps) => {
+
+    const {data:isReviewed, isLoading:isLoadingReview} = useReviewsCar(trip);
+
+    const buttonStyle = {
+        backgroundColor: isReviewed ? "green" : "orange",
+    };
 
     return (
+        (!isLoadingReview &&
         <div className={styles.marginCointainer}>
-            <Button onClick={() => console.log(reporting)} className={styles.userContainer}>
+            <Button onClick={() => console.log("HOLA")}
+                    className={styles.userContainer}
+                    style={buttonStyle}>
                 <CircleImg src={car.imageUri} size={50} />
                 <div className={styles.infoContainer}>
                     <h4>{trip.tripStatus}</h4>
                     <h4>{car.infoCar}</h4>
                 </div>
             </Button>
-        </div>
+            {isReviewed &&
+                <div className={styles.aclaration_text}>
+                    <span>AUTO RESEÑADO</span>
+                </div>}
+        </div>)
     );
 };
 
