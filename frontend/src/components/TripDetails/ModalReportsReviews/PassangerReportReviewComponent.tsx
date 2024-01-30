@@ -36,17 +36,20 @@ const PassangerReportReviewComponent = ({
   const [showModalMakeReview, setModalMakeReview] = useState(false);
 
   const openModalMakeReview = () => {
-    if (extraData && extraData.closeModal && typeof extraData.closeModal === 'function') {
-      extraData.closeModal(); // Ejecuta la función closeModal
-    }
     setModalMakeReview(true);
     };
+
   const closeModalMakeReview = () => {setModalMakeReview(false);};
 
 
-  const [showModalReport, setModalReport] = useState(false);
-  const openModalReport = () => {setModalReport(true);};
-  const closeModalReport = () => {setModalReport(false);};
+  const [showModalMakeReport, setModalMakeReport] = useState(false);
+  const openModalMakeReport = () => {
+    setModalMakeReport(true);
+    if (extraData && extraData.closeModal && typeof extraData.closeModal === 'function') {
+      extraData.closeModal();
+    }
+  };
+  const closeModalMakeReport = () => {setModalMakeReport(false);};
 
   return (
     <div className={styles.marginCointainer}>
@@ -55,7 +58,7 @@ const PassangerReportReviewComponent = ({
       ) : (
           <div>
         <Button
-          onClick={() => extraData?.reporting ? openModalReport() : openModalReview()}
+          onClick={() => extraData?.reporting ? openModalMakeReport() : openModalMakeReview()}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}
@@ -95,7 +98,7 @@ const PassangerReportReviewComponent = ({
             </Modal>
 
             <Modal show={showModalMakeReview} onHide={closeModalMakeReview} aria-labelledby="contained-modal-title-vcenter" centered>
-              <ModalMakeReportReview closeModal={closeModalMakeReport} user={data} reportForm={<ReviewForm/>}/>
+              <ModalMakeReportReview closeModal={closeModalMakeReview} user={data} reportForm={<ReviewForm/>}/>
             </Modal>
 
           </div>)}

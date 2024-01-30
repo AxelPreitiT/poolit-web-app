@@ -34,7 +34,9 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
     const [showModalReview, setModalReview] = useState(false);
 
     const openModalReview = () => {setModalReview(true);};
-    const closeModalReview = () => {setModalReview(false);};
+    const closeModalReview = () => {
+        setModalReview(false);
+    };
 
     return (
         (!isPassanger && !isDriver) ?
@@ -77,6 +79,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
                             <ModalReport closeModal={closeModalReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={false}/>
                         </Modal>
+
 
                     </div> :
                     <div className={styles.btn_container}>
