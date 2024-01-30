@@ -74,7 +74,6 @@ const PassangerReportReviewComponent = ({
             <div className={styles.aclaration_text}>
               <span>{t('trip_detail.review.user_reviewed')}</span>
             </div>}
-
           </div>)}
     </div>
   );

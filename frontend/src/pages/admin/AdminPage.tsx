@@ -3,7 +3,6 @@ import MainHeader from "@/components/utils/MainHeader.tsx";
 import styles from "@/pages/admin/styles.module.scss";
 import ShortInfoReport from "@/components/admin/ShortInfoReport";
 import { useTranslation } from "react-i18next";
-import useAllReports from "@/hooks/admin/useAllReports.tsx";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 //import ReportPaginationList from "@/components/reportPaginationList/reportPaginationList.tsx";
@@ -14,7 +13,6 @@ import LoadingWheel from "@/components/loading/LoadingWheel.tsx";
 import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent.tsx";
 import UseAllReports from "@/hooks/admin/useAllReports.tsx";
 import {parseTemplate} from "url-template";
-import ListReportsProps from "@/components/admin/ListReportsProps.tsx";
 
 
 const AdminPage = () => {
