@@ -3,23 +3,32 @@ import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import {Button} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import userPublicModel from "@/models/UserPublicModel.ts";
+import tripModel from "@/models/TripModel.ts";
+import useReviewsReportsDriver from "@/hooks/passanger/useReviewsReportsDriver.tsx";
 
 export interface DriverReportReviewComponentProps {
-    selectDriver: (user:userPublicModel) => void;
     driver: userPublicModel
-    isReviewed: boolean;
+    reporting: boolean;
+    trip: tripModel
 }
 
-const DriverReportReviewComponent = ({driver, selectDriver, isReviewed}: DriverReportReviewComponentProps) => {
+const DriverReportReviewComponent = ({driver, reporting, trip}: DriverReportReviewComponentProps) => {
     const { t } = useTranslation();
+
+    const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportsDriver(!reporting, trip.driverReportsUriTemplate);
+
 
     const buttonStyle = {
         backgroundColor: isReviewed ? "green" : "orange",
     };
 
     return (
+        (!isLoadingReview &&
         <div className={styles.marginCointainer}>
-            <Button onClick={() => selectDriver(driver)} disabled={isReviewed} style={buttonStyle} className={styles.userContainer}>
+            <Button onClick={() => console.log("click")}
+                    disabled={isReviewed && reporting}
+                    style={buttonStyle}
+                    className={styles.userContainer}>
                 <CircleImg src={driver.imageUri} size={50} />
                 <div className={styles.infoContainer}>
                     <h4>
@@ -29,11 +38,11 @@ const DriverReportReviewComponent = ({driver, selectDriver, isReviewed}: DriverR
                     </h4>
                 </div>
             </Button>
-            {isReviewed &&
+            {isReviewed && reporting &&
                 <div className={styles.aclaration_text}>
                     <span>conductor reseñado</span>
                 </div>}
-        </div>
+        </div>)
     );
 };
 
