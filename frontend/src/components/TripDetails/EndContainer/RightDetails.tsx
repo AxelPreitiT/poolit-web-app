@@ -12,6 +12,9 @@ import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
 import ModalReport from "@/components/TripDetails/ModalsRR/ModalReport.tsx";
+import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
+import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
+import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -26,17 +29,36 @@ interface RightDetailsProps {
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
 
     const { t } = useTranslation();
-    const [showModalReport, setModalReport] = useState(false);
 
+    // Modals Review
+    const [showModalReport, setModalReport] = useState(false);
     const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
 
+    // Modals Report
     const [showModalReview, setModalReview] = useState(false);
-
     const openModalReview = () => {setModalReview(true);};
     const closeModalReview = () => {
         setModalReview(false);
     };
+
+    // Modals Make Report-Review
+    const [showModalMake, setModalMake] = useState(false);
+    const openModalMake = () => {setModalMake(true);};
+    const closeModalMake = () => {
+        setModalMake(false);
+    };
+
+    // Modals Make ReviewCar
+
+    const [showModalCar, setModalCar] = useState(false);
+    const openModalCar = (user: userPublicModel) => {
+        setModalCar(true);
+    };
+    const closeModalCar = () => {
+        setModalCar(false);
+    };
+
 
     return (
         (!isPassanger && !isDriver) ?
@@ -80,6 +102,13 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                             <ModalReport closeModal={closeModalReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={false}/>
                         </Modal>
 
+                        <Modal show={showModalMake} onHide={closeModalMake} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalMakeReportReview closeModal={closeModalMake} user={data} reportForm={<ReportForm/>}/>
+                        </Modal>
+
+                        <Modal show={showModalCar} onHide={closeModalCar} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalMakeReportReview closeModal={closeModalCar} user={data} reportForm={<ReviewForm/>}/>
+                        </Modal>
 
                     </div> :
                     <div className={styles.btn_container}>
