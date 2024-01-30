@@ -10,7 +10,8 @@ public class CreateDriverReviewDto extends CreateReviewDto{
     @NotNull
     private DriverReviewOptions option;
 
-    private int driverId;
+    @NotNull
+    private Integer driverId;
 
     public DriverReviewOptions getOption() {
         return option;
@@ -20,11 +21,11 @@ public class CreateDriverReviewDto extends CreateReviewDto{
         this.option = option;
     }
 
-    public int getDriverId() {
+    public Integer getDriverId() {
         return driverId;
     }
 
-    public void setDriverId(int driverId) {
+    public void setDriverId(Integer driverId) {
         this.driverId = driverId;
     }
 }

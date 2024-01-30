@@ -66,7 +66,6 @@ const PaginationComponentExtraData = <T, U>({
         />
     ) : (
         <div className={styles.list_container}>
-            <h1>{newUri}</h1>
             {FullData.data && FullData.data.length > 0 ? (
                 <div>
                     <div>

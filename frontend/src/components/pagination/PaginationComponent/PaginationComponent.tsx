@@ -56,7 +56,6 @@ const PaginationComponent = <T,>({
     setNewUri(uri);
     setcurrentPage(currentPage);
 
-    //PREGUNTAR SI O SI HOY EN VIDEDO
     const finalRouterBasename = routerBasename == "/" ? "" : routerBasename;
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", currentPage.toString());

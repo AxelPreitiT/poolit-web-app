@@ -97,15 +97,24 @@ public class BasicAuthFilter extends OncePerRequestFilter {
             httpServletResponse.setHeader(VERIFICATION_HEADER,"true");
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
+//            SecurityContextHolder.clearContext();
+//            filterChain.doFilter(httpServletRequest,httpServletResponse);
+//            return;
         }catch (AuthenticationException e){
             //use same handler when credentials are invalid
             authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,e);
             return;
+//            SecurityContextHolder.clearContext();
+//            filterChain.doFilter(httpServletRequest,httpServletResponse);
+//            return;
         } catch (Exception e){
 //            Si no manda las credenciales, alguna operación provoca ArrayIndexOutOfBoundsException y cae aca
 //            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,new BadCredentialsException(""));
             return;
+//            SecurityContextHolder.clearContext();
+//            filterChain.doFilter(httpServletRequest,httpServletResponse);
+//            return;
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }

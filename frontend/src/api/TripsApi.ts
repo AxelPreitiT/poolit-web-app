@@ -31,7 +31,7 @@ class TripsApi extends AxiosApi {
     "application/vnd.trip.v1+json";
 
   private static readonly TRIPS_CONTENT_TYPE_JOIN: string =
-      "application/vnd.trip.passenger.state.v1+json";
+      "application/vnd.trip.passenger.v1+json";
 
   //private static readonly TRIPS_EARNING_TYPE_HEADER: string ="trip.earnings.v1+json"
 

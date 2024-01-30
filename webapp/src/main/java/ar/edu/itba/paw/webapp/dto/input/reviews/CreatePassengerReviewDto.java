@@ -10,7 +10,8 @@ public class CreatePassengerReviewDto extends CreateReviewDto{
     @NotNull
     private PassengerReviewOptions option;
 
-    private int passengerId;
+    @NotNull
+    private Integer passengerId;
 
     public PassengerReviewOptions getOption() {
         return option;
@@ -20,11 +21,11 @@ public class CreatePassengerReviewDto extends CreateReviewDto{
         this.option = option;
     }
 
-    public int getPassengerId() {
+    public Integer getPassengerId() {
         return passengerId;
     }
 
-    public void setPassengerId(int passengerId) {
+    public void setPassengerId(Integer passengerId) {
         this.passengerId = passengerId;
     }
 }

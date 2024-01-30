@@ -3,6 +3,7 @@ import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import {useSearchParams} from "react-router-dom";
 import passangerStatus from "@/enums/PassangerStatus.ts";
+import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 
 const getUriPassangers = ( isDriver:boolean, passanger?: passangerModel, trip?:tripModel,) => {
     const [params] = useSearchParams();
@@ -17,7 +18,10 @@ const getUriPassangers = ( isDriver:boolean, passanger?: passangerModel, trip?:t
             passengerState: passangerStatus.ACCEPTED,
         });
     }
-    return passanger?.otherPassengersUri as string;
+    const { currentUser } = useCurrentUser();
+    return parseTemplate(passanger?.otherPassengersUriTemplate as string).expand({
+        excluding: currentUser?.userId as number,
+    });
 }
 
 export default getUriPassangers;

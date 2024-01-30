@@ -12,14 +12,14 @@ import {parseTemplate} from "url-template";
 const useJoinTrip = (trip: tripModel) => {
     const onQueryError = useQueryError();
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
     const [params] = useSearchParams();
     const startDateTime = params.get("startDateTime") || "";
     const endDateTime = params.get("endDateTime") || "";
+    const queryClient = useQueryClient();
 
-    const invalidatePassangersState = () => {
-        queryClient.invalidateQueries({ queryKey: ['passangers'] });
+    const invalidateTripState = () => {
         queryClient.invalidateQueries({ queryKey: ['tripDetails'] });
+        queryClient.invalidateQueries({ queryKey: ['rolePassanger'] });
     }
 
     const mutation = useMutation({
@@ -27,7 +27,7 @@ const useJoinTrip = (trip: tripModel) => {
             const data: joinTripModel = {
                 startDate: getFormattedDateTime(startDateTime).date ,
                 startTime: getFormattedDateTime(startDateTime).time,
-                endDate: endDateTime==startDateTime? undefined : getFormattedDateTime(startDateTime).date
+                endDate: endDateTime==startDateTime? undefined : getFormattedDateTime(endDateTime).date
             }
             const uri = parseTemplate(trip?.passengersUriTemplate as string).expand({
                 userId: null,
@@ -45,8 +45,7 @@ const useJoinTrip = (trip: tripModel) => {
             });
         },
         onSuccess: () => {
-            invalidatePassangersState()
-            console.log("passenger accepted")
+            invalidateTripState()
         }
     })
 
@@ -54,7 +53,7 @@ const useJoinTrip = (trip: tripModel) => {
         mutation.mutate()
     }
 
-    return {onSubmit, invalidatePassangersState, ...mutation}
+    return {onSubmit, invalidateTripState, ...mutation}
 
 }
 

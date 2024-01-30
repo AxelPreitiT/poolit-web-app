@@ -107,6 +107,14 @@ class PassangerApi extends AxiosApi{
                 },
             });
         };
+
+    public static deleteCancelTrip: (uri: string) => AxiosPromise<void> =
+        (uri: string) => {
+            return this.delete<void>(uri, {
+                headers: {
+                },
+            });
+        }
 }
 
 export default PassangerApi;
