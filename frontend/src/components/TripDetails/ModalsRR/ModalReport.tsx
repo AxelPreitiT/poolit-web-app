@@ -22,9 +22,10 @@ export interface ModalReportProps {
     trip: tripModel;
     passanger: passangerModel | undefined;
     car?: carModel;
+    reporting: boolean;
 }
 
-const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger}: ModalReportProps) => {
+const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, reporting}: ModalReportProps) => {
     const { t } = useTranslation();
     const uri = getUriPassangers(isDriver, passanger, trip);
 
@@ -41,7 +42,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger}: Moda
                                     <i className="bi bi-person-fill h3"></i>
                                     <h3>{t('modal.driver')}</h3>
                                 </div>
-                                <DriverReportReviewComponent driver={driver} trip={trip} reporting={true}/>
+                                <DriverReportReviewComponent driver={driver} trip={trip} reporting={reporting}/>
                             </div>}
                         {!isDriver && car != null &&
                             <div className={styles.passangerContainer}>

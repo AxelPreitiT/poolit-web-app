@@ -31,6 +31,11 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
     const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
 
+    const [showModalReview, setModalReview] = useState(false);
+
+    const openModalReview = () => {setModalReview(true);};
+    const closeModalReview = () => {setModalReview(false);};
+
     return (
         (!isPassanger && !isDriver) ?
             <div className={styles.btn_container}>
@@ -45,7 +50,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
                     <div className={styles.review_btn}>
                         <div className={styles.btn_container}>
-                            <Button className={styles.btn_join} onClick={openModalReport}>
+                            <Button className={styles.btn_join} onClick={openModalReview}>
                                 <div className={styles.create_trip_btn}>
                                     <i className="bi bi-pencil-square"></i>
                                     <span>{t("trip_detail.btn.reviews")}</span>
@@ -66,7 +71,11 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car}/>
+                            <ModalReport closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={true}/>
+                        </Modal>
+
+                        <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalReport closeModal={closeModalReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={false}/>
                         </Modal>
 
                     </div> :
