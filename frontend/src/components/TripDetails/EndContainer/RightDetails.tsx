@@ -15,6 +15,7 @@ import ModalReport from "@/components/TripDetails/ModalsRR/ModalReport.tsx";
 import ModalMake from "@/components/TripDetails/ModalsForms/ModalMake.tsx";
 import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.tsx";
 import ModalMakeCar from "@/components/TripDetails/ModalsForms/ModalMakeCar.tsx";
+import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -25,6 +26,21 @@ interface RightDetailsProps {
     driver: userPublicModel;
     car: carModel;
 }
+
+const BtnJoin = ( { trip }: { trip: tripModel }) => {
+    const { t } = useTranslation();
+    const {onSubmit:onSubmitAccept } = useJoinTrip(trip);
+
+    return (
+        <Button className={styles.btn_join} onClick={() => onSubmitAccept()}>
+            <div className={styles.create_trip_btn}>
+                <i className="bi bi-check-lg light-text"></i>
+                <span>{t("trip_detail.btn.join")}</span>
+            </div>
+        </Button>
+    );
+}
+
 
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
     const { t } = useTranslation();
@@ -66,12 +82,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
     return (
         (!isPassanger && !isDriver) ?
             <div className={styles.btn_container}>
-                <Button className={styles.btn_join}>
-                    <div className={styles.create_trip_btn}>
-                        <i className="bi bi-check-lg light-text"></i>
-                        <span>{t("trip_detail.btn.join")}</span>
-                    </div>
-                </Button>
+                <BtnJoin trip={trip}/>
             </div> :
             (status === Status.FINISHED ?
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?

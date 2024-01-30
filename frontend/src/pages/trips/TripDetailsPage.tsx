@@ -18,8 +18,6 @@ import useTrip from "@/hooks/trips/useTrip.tsx";
 const TripDetailsPage = () => {
   const { t } = useTranslation();
 
-  // CAMBIAR
-
   const { currentUser } = useCurrentUser();
   const { isLoading: isLoadingTrip, trip: trip } = useTrip();
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);

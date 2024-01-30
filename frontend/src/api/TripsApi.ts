@@ -10,6 +10,7 @@ import PaginationModel from "@/models/PaginationModel.tsx";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
 import tripEarningModel from "@/models/tripEarningModel.ts";
+import JoinTripModel from "@/models/JoinTripModel.ts";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -29,7 +30,25 @@ class TripsApi extends AxiosApi {
   private static readonly TRIPS_CONTENT_TYPE_HEADER: string =
     "application/vnd.trip.v1+json";
 
+  private static readonly TRIPS_CONTENT_TYPE_JOIN: string =
+      "application/vnd.trip.passenger.state.v1+json";
+
   //private static readonly TRIPS_EARNING_TYPE_HEADER: string ="trip.earnings.v1+json"
+
+  public static postJoinTrip: (
+      uri: string,
+      data: JoinTripModel
+  ) => AxiosPromise<void> =
+    (uri: string, data:JoinTripModel) => {
+      return this.post<JoinTripModel, void>(
+        uri, data,
+        {
+          headers: {
+            "Content-Type": TripsApi.TRIPS_CONTENT_TYPE_JOIN,
+          },
+        }
+    );
+  };
 
   public static getTripById: (uri: string) => AxiosPromise<TripModel> = (
     uri: string

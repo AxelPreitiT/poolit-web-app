@@ -8,6 +8,7 @@ import PaginationModel from "@/models/PaginationModel.tsx";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
 import tripEarningModel from "@/models/tripEarningModel.ts";
+import JoinTripModel from "@/models/JoinTripModel.ts";
 
 class TripsService extends Service {
   public static getTripById = async (uri: string): Promise<TripModel> => {
@@ -55,6 +56,15 @@ class TripsService extends Service {
       TripsApi.searchTrips(uriTemplate, search, options)
     );
   };
+
+  public static postJoinTrip = async (
+    uri: string,
+    data : JoinTripModel
+    ): Promise<void> => {
+        return await this.resolveQuery(TripsApi.postJoinTrip(uri, data));
+    };
+
+
 }
 
 export default TripsService;
