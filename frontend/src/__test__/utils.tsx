@@ -24,7 +24,11 @@ const AllProviders = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const customRender = (ui: ReactElement, options?: RenderOptions) => {
+export const customRender = (
+  ui: ReactElement,
+  { route = "/", ...options }: RenderOptions & { route?: string } = {}
+) => {
+  window.history.pushState({}, "Test page", route);
   return {
     user: userEvent.setup(),
     ...render(ui, { wrapper: AllProviders, ...options }),

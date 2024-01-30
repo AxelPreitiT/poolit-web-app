@@ -5,13 +5,14 @@ import LoginPage from "@/pages/login/LoginPage";
 
 describe("Login", () => {
   it("Should render the login page", () => {
-    customRender(<LoginPage />);
+    customRender(<LoginPage />, { route: "/login" });
 
     expect(
       screen.getByRole("heading", {
         level: 3,
       })
     ).toHaveTextContent(/log in/i);
+    expect(window.location.pathname).toBe("/login");
   });
 
   it("Should show form error when submitting empty form", async () => {
@@ -68,9 +69,9 @@ describe("Login", () => {
     expect(rememberMeCheckbox).not.toBeChecked();
   });
 
-  it("When logged in, should redirect to home", async () => {
+  it("When logged in, should redirect to home and show success message", async () => {
     server.use(LoginMock.mockLogin());
-    const { user } = customRender(<LoginPage />);
+    const { user } = customRender(<LoginPage />, { route: "/login" });
 
     const emailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -82,6 +83,7 @@ describe("Login", () => {
 
     expect(await screen.findByText(/ready to ride/i)).toBeVisible();
     expect(await screen.findByText(/successfully logged in/i)).toBeVisible();
+    expect(window.location.pathname).toBe("/");
   });
 
   it("When credentials are invalid, should show error", async () => {
