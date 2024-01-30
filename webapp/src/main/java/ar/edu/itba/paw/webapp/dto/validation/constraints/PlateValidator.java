@@ -15,6 +15,9 @@ public class PlateValidator implements ConstraintValidator<Plate,String>{
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if(value == null){
+            return true;
+        }
         return PATTERN.matcher(value).matches();
     }
 }
