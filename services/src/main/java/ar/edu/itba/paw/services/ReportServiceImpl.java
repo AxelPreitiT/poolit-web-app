@@ -162,9 +162,15 @@ public class ReportServiceImpl implements ReportService {
         }
         userService.banUser(report.getReported());
     }
-
     private Optional<Report> getReportByTripAndUsers(long tripId, long reporterId, long reportedId){
         return reportDao.getReportByTripAndUsers(tripId, reporterId, reportedId);
+    }
+
+    @Transactional
+    @Override
+    public PagedContent<Report> getReport(final long reporterUserId, final long reportedUserId, final long tripId){
+        final Optional<Report> ans = reportDao.getReportByTripAndUsers(tripId,reporterUserId,reportedUserId);
+        return PagedContent.fromOptional(ans);
     }
 
 //    @Transactional

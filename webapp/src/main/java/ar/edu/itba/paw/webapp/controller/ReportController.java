@@ -80,14 +80,23 @@ public class ReportController {
         final PagedContent<Report> ans = reportService.getReports(query.getPage(),query.getPageSize());
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PrivateReportDto::fromReport,PrivateReportDto.class);
     }
+
+    //TODO: hacer que se pueda buscar por reportado también, para pasajeros
     @GET
     @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reporterUserId)")
     public Response getReports(@QueryParam("madeBy") final @Valid @NotNull Integer reporterUserId,
                                @QueryParam("forTrip") final @Valid @NotNull Integer tripId,
+                               @QueryParam("forUser") final Integer reportedUserId,
                                @Valid @BeanParam final PagedQuery query) throws UserNotFoundException, TripNotFoundException {
-        LOGGER.debug("GET request for public reports made by user {} for trip {}",reporterUserId, tripId);
-        final PagedContent<Report> ans = reportService.getReportsMadeByUserOnTrip(reporterUserId,tripId,query.getPage(),query.getPageSize());
+        final PagedContent<Report> ans;
+        if(reportedUserId!=null){
+            LOGGER.debug("GET request for public reports made by user {} for trip {} and user {}",reporterUserId, tripId, reportedUserId);
+            ans = reportService.getReport(reporterUserId,reportedUserId,tripId);
+        }else{
+            LOGGER.debug("GET request for public reports made by user {} for trip {}",reporterUserId, tripId);
+            ans = reportService.getReportsMadeByUserOnTrip(reporterUserId,tripId,query.getPage(),query.getPageSize());
+        }
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PublicReportDto::fromReport,PrivateReportDto.class);
     }
 

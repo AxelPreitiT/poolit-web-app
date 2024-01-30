@@ -56,6 +56,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private EmailAuthenticationProvider emailAuthenticationProvider;
+
+    @Autowired
     private BasicAuthFilter basicAuthFilter;
 
     @Autowired
@@ -76,6 +79,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(emailAuthenticationProvider);
     }
 
     @Bean
