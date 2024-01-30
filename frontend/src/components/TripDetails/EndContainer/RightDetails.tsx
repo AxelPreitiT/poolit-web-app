@@ -12,10 +12,9 @@ import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
 import ModalReport from "@/components/TripDetails/ModalsRR/ModalReport.tsx";
-import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
-import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
-import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
+import ModalMake from "@/components/TripDetails/ModalsForms/ModalMake.tsx";
 import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.tsx";
+import ModalMakeCar from "@/components/TripDetails/ModalsForms/ModalMakeCar.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -104,7 +103,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         </Modal>
 
                         <Modal show={showModalMake} onHide={closeModalMake} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeUser closeModal={closeModalMake} user={userMake} reportForm={formMake}/>
+                            <ModalMake closeModal={closeModalMake} user={userMake} reportForm={formMake}/>
                         </Modal>
 
                         <Modal show={showModalCar} onHide={closeModalCar} aria-labelledby="contained-modal-title-vcenter" centered>

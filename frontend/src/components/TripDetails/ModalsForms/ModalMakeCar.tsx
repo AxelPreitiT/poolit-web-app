@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from "../ModalReportsReviews/styles.module.scss";
 import {Button, Modal} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
@@ -10,7 +10,7 @@ export interface ModalCarMakeReviewProps {
     reportForm: React.ReactNode;
 }
 
-const ModalCarMakeReview = ({ closeModal, car, reportForm}: ModalCarMakeReviewProps) => {
+const ModalMakeCar = ({ closeModal, car, reportForm}: ModalCarMakeReviewProps) => {
     const { t } = useTranslation();
 
     return (
@@ -43,4 +43,4 @@ const ModalCarMakeReview = ({ closeModal, car, reportForm}: ModalCarMakeReviewPr
     );
 };
 
-export default ModalCarMakeReview;
+export default ModalMakeCar;

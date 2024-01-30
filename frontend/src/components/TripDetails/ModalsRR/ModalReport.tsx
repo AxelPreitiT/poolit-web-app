@@ -18,7 +18,7 @@ import {ReactNode} from "react";
 
 export interface ModalReportProps {
     openModalMake: (user: userPublicModel, reporting:boolean, form:ReactNode) => void;
-    openModalCar: () => void;
+    openModalCar?: () => void;
     closeModal: () => void;
     driver: userPublicModel;
     isDriver: boolean;
@@ -47,7 +47,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                 </div>
                                 <DriverReportReviewComponent driver={driver} trip={trip} reporting={reporting} openModalMake={openModalMake}/>
                             </div>}
-                        {!isDriver && car != null &&
+                        {!isDriver && car != null && openModalCar!= undefined &&
                             <div className={styles.passangerContainer}>
                                 <div className={styles.titleContainer}>
                                     <i className="bi bi-car-front-fill h3"></i>

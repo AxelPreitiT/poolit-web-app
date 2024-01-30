@@ -10,12 +10,13 @@ import useReviewsReportPassangers from "@/hooks/reportReview/useReviewsPassanger
 import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
 import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
 import {ReactNode} from "react";
+import userPublicModel from "@/models/UserPublicModel.ts";
 
 export interface PassangerReportReviewComponent {
   data: PassangerModel;
   extraData?: {
     reporting: boolean;
-    openModalMake: (user: PassangerModel, reporting: boolean, form:ReactNode) => void;
+    openModalMake: (user: userPublicModel, reporting: boolean, form:ReactNode) => void;
   };
 }
 
@@ -32,8 +33,6 @@ const PassangerReportReviewComponent = ({
   };
 
 
-  let formToRender = extraData?.reporting ? <ReportForm/> : <ReviewForm/>;
-
   return (
     <div className={styles.marginCointainer}>
       {isLoading || data == undefined || isLoadingReview || extraData == undefined ? (
@@ -41,7 +40,7 @@ const PassangerReportReviewComponent = ({
       ) : (
           <div>
         <Button
-          onClick={() => extraData.openModalMake(data, extraData.reporting, reporting? <ReportForm/> : <ReviewForm/>)}
+          onClick={() => extraData.openModalMake(data, extraData.reporting, extraData.reporting? <ReportForm/> : <ReviewForm/>)}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}
