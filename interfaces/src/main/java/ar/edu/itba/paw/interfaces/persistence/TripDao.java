@@ -53,9 +53,9 @@ public interface TripDao {
             long originCityId, long destinationCityId,
             LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
             Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-            long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize);
+            /*long searchUserId,*/ List<FeatureCar> carFeatures, int page, int pageSize);
 
-    PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime, long searchUserId, int page, int pageSize);
+    PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime,/* long searchUserId,*/ int page, int pageSize);
     //
     List<Passenger> getAcceptedPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //

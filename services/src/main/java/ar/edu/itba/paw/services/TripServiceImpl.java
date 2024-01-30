@@ -631,7 +631,7 @@ public class TripServiceImpl implements TripService {
             return PagedContent.emptyPagedContent();
         }
         LocalDateTime start = LocalDateTime.now();
-        return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,user.get().getUserId(),page,pageSize);
+        return tripDao.getTripsByOriginAndStart(user.get().getBornCity().getId(),start,page,pageSize);
     }
 //    private Trip.SortType getTripSortType(final String sortType){
 //        try{
@@ -654,8 +654,7 @@ public class TripServiceImpl implements TripService {
         final Optional<BigDecimal> maxPrice = Optional.ofNullable(maxPriceValue);
         final LocalDateTime endDateTime = endDateTimeValue!=null?endDateTimeValue:startDateTime;
         final List<FeatureCar> carFeatures = carFeaturesValue!=null?carFeaturesValue: Collections.emptyList();
-        //TODO: delete logic of blocked users
-        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,startDateTime.getDayOfWeek(),endDateTime,OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,-1,carFeatures,page,pageSize);
+        return tripDao.getTripsWithFilters(originCityId,destinationCityId,startDateTime,startDateTime.getDayOfWeek(),endDateTime,OFFSET_MINUTES,minPrice,maxPrice,sortType,descending,carFeatures,page,pageSize);
 
     }
 
