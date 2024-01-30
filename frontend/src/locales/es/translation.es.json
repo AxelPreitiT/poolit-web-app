@@ -636,7 +636,7 @@
       "driver_reviewed" : "Conductor reseñado",
       "user_reviewed" : "Pasajero reseñado",
       "driver_reported": "Conductor reportado",
-      "user_reported": "Pasajero reportado",
+      "user_reported": "Pasajero reportado"
     },
     "status": {
       "title": "Status:",

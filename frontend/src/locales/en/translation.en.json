@@ -633,7 +633,11 @@
     "title": "Trip",
     "header": "Trip details",
     "review": {
-      "reviewed" : "Car Reviewed"
+      "reviewed" : "Car Reviewed",
+      "driver_reviewed" : "driver reviewed",
+      "user_reviewed" : "Passanger reviewed",
+      "driver_reported": "Driver reported",
+      "user_reported": "Passanger reported"
     },
     "status": {
       "title": "Estado:",
