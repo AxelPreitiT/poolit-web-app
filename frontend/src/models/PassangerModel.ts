@@ -5,7 +5,7 @@ interface PassangerModel {
     startDateTime: string;
     tripUri:  string;
     userUri: string;
-    otherPassengersUri: string;
+    otherPassengersUriTemplate: string;
     passengerReviewsForTripUriTemplate: string;
     passengerReportsForTripUriTemplate: string;
 }
