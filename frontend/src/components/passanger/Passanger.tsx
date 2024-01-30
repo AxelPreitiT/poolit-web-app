@@ -53,7 +53,11 @@ const PassangerComponent = ({data: passanger, extraData: fullSeats} : PassangerC
           <LoadingWheel description={t("trip_detail.passengers.loading")} />
       ) : (
       <div className={styles.right_container}>
-        <StarRating rating={UserTrip.passengerRating} />
+        {UserTrip.passengerRating && UserTrip.passengerRating > 0 ? (
+            <StarRating rating={UserTrip.passengerRating}/>
+        ) : (
+            <p className={styles.propValue}>{t("profile.props.no_rating")}</p>
+        )}
         <div className={styles.info_passanger_style}>
           <div className={styles.btn_container}>
             <Button className={styles.btn_accept}
