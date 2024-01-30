@@ -100,12 +100,15 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,int page, int pageSize) {
+    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,List<Integer> excludedPassengers,int page, int pageSize) {
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         String queryString = "FROM passengers p " +
                 "WHERE p.trip_id = :tripId  AND ((p.start_date<=:startDate AND p.end_date>=:startDate) OR (p.start_date<= :endDate AND p.end_date>= :endDate) OR (p.start_date >= :startDate AND p.end_date <= :endDate)) "; //la ultima condicion es por si el pasajero esta adentro del intervalo buscado
         if(passengerState.isPresent()){
             queryString += "AND p.passenger_state = :passengerStateString ";
+        }
+        if(excludedPassengers!=null && !excludedPassengers.isEmpty()){
+            queryString += "AND p.user_id NOT IN :excludedList ";
         }
         Query countQuery = em.createNativeQuery( "SELECT count(distinct user_id) "+ queryString);
         Query idQuery = em.createNativeQuery("SELECT user_id " + queryString);
@@ -115,6 +118,11 @@ public class TripHibernateDao implements TripDao {
         countQuery.setParameter("endDate",endDateTime);
         idQuery.setParameter("startDate", startDateTime);
         idQuery.setParameter("endDate",endDateTime);
+        if(excludedPassengers!=null && !excludedPassengers.isEmpty()){
+            countQuery.setParameter("excludedList",excludedPassengers);
+            idQuery.setParameter("excludedList",excludedPassengers);
+        }
+
         passengerState.ifPresent(passengerState1 -> {
             countQuery.setParameter("passengerStateString", passengerState1.toString());
             idQuery.setParameter("passengerStateString", passengerState1.toString());
@@ -389,7 +397,7 @@ public class TripHibernateDao implements TripDao {
     public PagedContent<Trip> getTripsWithFilters(long originCityId, long destinationCityId,
                                                   LocalDateTime startDateTime, DayOfWeek dayOfWeek, LocalDateTime endDateTime, int minutes,
                                                   Optional<BigDecimal> minPrice, Optional<BigDecimal> maxPrice, Trip.SortType sortType, boolean descending,
-                                                  long searchUserId, List<FeatureCar> carFeatures, int page, int pageSize) {
+                                                  /*long searchUserId,*/ List<FeatureCar> carFeatures, int page, int pageSize) {
         LOGGER.debug("Looking for the trips with originCity with id {}, destinationCity with id {}, startDateTime '{}',dayOfWeek {}, endDateTime {} range of {} minutes,{}{} sortType '{}' ({}) page {} and size {} in the database",
                 originCityId, destinationCityId, startDateTime, dayOfWeek,
                 endDateTime, minutes,
@@ -414,11 +422,11 @@ public class TripHibernateDao implements TripDao {
                 "GROUP BY days.days,passengers.trip_id) aux "+
                 "LEFT JOIN (SELECT coalesce(avg(user_reviews.rating),0) as driver_rating, reviewed_id as driver_id FROM user_reviews JOIN driver_reviews ON user_reviews.review_id = driver_reviews.review_id GROUP BY user_reviews.reviewed_id ) driver_rating ON driver_rating.driver_id = trips.driver_id "+
                 "LEFT JOIN (SELECT coalesce(avg(car_reviews.rating),0) as car_rating, car_id as car_id FROM car_reviews GROUP BY car_id) car_rating ON car_rating.car_id = trips.car_id "+
-                "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
-                "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
+//                "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
+//                "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
                 "WHERE aux.days >= :startDateTime AND end_date_time >= :startDateTime AND  origin_city_id = :originCityId AND cast(trips.start_date_time as time) >= :minTime AND trips.deleted = false AND start_date_time <= :startMaximum " +
                 "AND cast(trips.start_date_time as time) <= :maxTime AND destination_city_id = :destinationCityId AND aux.days <= :endDateTimePlus AND end_date_time >= :endDateTimeMinus "+
-                "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
+//                "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
                 "AND trips.day_of_week = :dayOfWeek ";
         arguments.put("startMaximum",Timestamp.valueOf(startDateTime.plusMinutes(minutes)));
         arguments.put("startDateTime",Timestamp.valueOf(startDateTime.minusMinutes(minutes)));
@@ -429,7 +437,7 @@ public class TripHibernateDao implements TripDao {
         arguments.put("endDateTimePlus",Timestamp.valueOf(endDateTime.plusMinutes(minutes)));
         arguments.put("endDateTimeMinus", Timestamp.valueOf(endDateTime.minusMinutes(minutes)));
         arguments.put("dayOfWeek",dayOfWeek.getValue());
-        arguments.put("searchUserId", searchUserId);
+//        arguments.put("searchUserId", searchUserId);
         if(startDateTime.toLocalDate().equals(LocalDate.now())){
             queryString += "AND cast (trips.start_date_time as time) >= :auxTime ";
             arguments.put("auxTime",Timestamp.valueOf(LocalDateTime.now()));
@@ -498,16 +506,16 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime, long searchUserId, int page, int pageSize) {
+    public PagedContent<Trip> getTripsByOriginAndStart(long originCityId, LocalDateTime startDateTime, /*long searchUserId,*/ int page, int pageSize) {
         LOGGER.debug("Looking for the trips with originCity with id {} and startDateTime '{}' in page {} with size {} in the database",originCityId,startDateTime,page,pageSize);
         String queryString = " FROM trips trips NATURAL LEFT OUTER JOIN LATERAL(  "+
                 "SELECT trips.trip_id as trip_id,days.days, count(passengers.user_id) as passenger_count " +
                 "FROM generate_series(trips.start_date_time,trips.end_date_time, interval'7 day') days LEFT OUTER JOIN passengers ON passengers.trip_id = trips.trip_id AND passengers.start_date<=days.days AND passengers.end_date>=days.days AND passengers.passenger_state = 'ACCEPTED' "+
                 "GROUP BY days.days,passengers.trip_id) aux "+
-                "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
-                "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
+//                "LEFT JOIN blocks AS b1 ON trips.driver_id = b1.blockedid AND b1.blockedbyid = :searchUserId " +
+//                "LEFT JOIN blocks AS b2 ON trips.driver_id = b2.blockedbyid AND b2.blockedid = :searchUserId " +
                 "WHERE origin_city_id = :originCityId AND day_of_week = :dayOfWeek AND end_date_time >= :startDateTime AND trips.deleted = false AND cast(start_date_time as date) <= :startDate AND cast(start_date_time as time) >= :startTime " +
-                "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
+//                "AND b1.blockedid IS NULL AND b2.blockedbyid IS NULL " +
                 "GROUP BY trips.trip_id, trips.max_passengers, trips.price "+
                 "HAVING coalesce(max(aux.passenger_count),0)<trips.max_passengers " +
                 "ORDER BY cast(trips.start_date_time as time) ASC, trips.price ASC ";
@@ -518,13 +526,13 @@ public class TripHibernateDao implements TripDao {
         countQuery.setParameter("originCityId",originCityId);
         countQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         countQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
-        countQuery.setParameter("searchUserId", searchUserId);
+//        countQuery.setParameter("searchUserId", searchUserId);
         idQuery.setParameter("originCityId",originCityId);
         idQuery.setParameter("dayOfWeek",startDateTime.getDayOfWeek().getValue());
         idQuery.setParameter("startDateTime",Timestamp.valueOf(startDateTime));
         idQuery.setParameter("startTime",startDateTime.toLocalTime());
         idQuery.setParameter("startDate",startDateTime.toLocalDate());
-        idQuery.setParameter("searchUserId", searchUserId);
+//        idQuery.setParameter("searchUserId", searchUserId);
         idQuery.setMaxResults(pageSize);//Offset
         idQuery.setFirstResult(page*pageSize);//Limit
         @SuppressWarnings("unchecked")

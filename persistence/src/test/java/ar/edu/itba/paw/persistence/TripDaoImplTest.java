@@ -261,7 +261,7 @@ public class TripDaoImplTest {
         //Setup
         Trip auxTrip = getTrip(TRIP_2);
         //Execute
-        PagedContent<Passenger> ans = tripDao.getPassengers(auxTrip,START,START,Optional.of(Passenger.PassengerState.ACCEPTED),0,PAGE_SIZE);
+        PagedContent<Passenger> ans = tripDao.getPassengers(auxTrip,START,START,Optional.of(Passenger.PassengerState.ACCEPTED),Collections.emptyList(),0,PAGE_SIZE);
         //Assert
         Assert.assertEquals(2,ans.getTotalCount());
         Assert.assertTrue(ans.getElements().stream().anyMatch(p -> p.getUserId() == USER_ID_1));
@@ -273,7 +273,7 @@ public class TripDaoImplTest {
         //Setup
         Trip auxTrip = getTrip(TRIP_2);
         //Execute
-        PagedContent<Passenger> ans = tripDao.getPassengers(auxTrip,START,START,Optional.of(Passenger.PassengerState.PENDING),0,PAGE_SIZE);
+        PagedContent<Passenger> ans = tripDao.getPassengers(auxTrip,START,START,Optional.of(Passenger.PassengerState.PENDING),Collections.emptyList(),0,PAGE_SIZE);
         //Assert
         Assert.assertEquals(0,ans.getTotalCount());
     }

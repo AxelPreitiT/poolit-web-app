@@ -24,6 +24,9 @@ public class NotSamePlateValidator implements ConstraintValidator<NotSamePlate,S
     }
     @Override
     public boolean isValid(String plate, ConstraintValidatorContext constraintValidatorContext){
+        if(plate == null){
+            return true;
+        }
         final User user = userService.getCurrentUser().orElseThrow(IllegalStateException::new);
         final Optional<Car> car = carService.findByUserAndPlate(user,plate);
         return !car.isPresent();

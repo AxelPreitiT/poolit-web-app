@@ -60,6 +60,9 @@ public class JwtFilter extends OncePerRequestFilter {
         if(!jwtUtils.validateToken(token)){
             authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,new BadCredentialsException(""));
             return;
+//            SecurityContextHolder.clearContext();
+//            filterChain.doFilter(httpServletRequest,httpServletResponse);
+//            return;
         }
         try {
             final Authentication authentication = authenticationManager.authenticate(new EmailAuthenticationToken(jwtUtils.getEmail(token)));
@@ -67,6 +70,9 @@ public class JwtFilter extends OncePerRequestFilter {
         }catch (AuthenticationException e){
             authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,e);
             return;
+//            SecurityContextHolder.clearContext();
+//            filterChain.doFilter(httpServletRequest,httpServletResponse);
+//            return;
         }
 
         //User is already authenticated, in the case of a refresh token, the new token is sent

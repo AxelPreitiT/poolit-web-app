@@ -2,10 +2,12 @@ package ar.edu.itba.paw.webapp.dto.input.reviews;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CreateReviewDto {
-    private int tripId;
+    @NotNull
+    private Integer tripId;
     @Min(value = 1)
     @Max(value = 5)
     private int rating;
@@ -29,11 +31,11 @@ public class CreateReviewDto {
         this.comment = comment;
     }
 
-    public int getTripId() {
+    public Integer getTripId() {
         return tripId;
     }
 
-    public void setTripId(int tripId) {
+    public void setTripId(Integer tripId) {
         this.tripId = tripId;
     }
 }

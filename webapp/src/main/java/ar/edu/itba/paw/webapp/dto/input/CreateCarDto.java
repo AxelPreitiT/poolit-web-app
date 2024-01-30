@@ -13,11 +13,13 @@ import java.util.List;
 
 public class CreateCarDto {
 
+    @NotNull
     @Size(min = 1)
     @Plate
     @NotSamePlate
     private String plate;
 
+    @NotNull
     @Size(min = 5, max = 100)
     private String carInfo;
 
