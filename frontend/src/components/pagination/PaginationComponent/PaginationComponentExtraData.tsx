@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import PaginationModel from "@/models/PaginationModel.tsx";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useLocation } from "react-router-dom";
 import { routerBasename } from "@/AppRouter.tsx";
 import { createBrowserHistory } from "history";
@@ -37,12 +37,14 @@ const PaginationComponentExtraData = <T, U>({
     const history = createBrowserHistory();
     const { isLoading: isLoadingTrips, data: FullData } = useFuction(newUri);
 
+    useEffect(() => {
+        // Este efecto se ejecutará cada vez que la prop 'uri' cambie
+        setNewUri(uri);
+    }, [uri]);
 
     const handlePage = (uri: string, currentPage: number) => {
         setNewUri(uri);
         setcurrentPage(currentPage);
-
-        //PREGUNTAR SI O SI HOY EN VIDEDO
         const finalRouterBasename = routerBasename == "/" ? "" : routerBasename;
         const searchParams = new URLSearchParams(location.search);
         searchParams.set("page", currentPage.toString());
@@ -64,6 +66,7 @@ const PaginationComponentExtraData = <T, U>({
         />
     ) : (
         <div className={styles.list_container}>
+            <h1>{newUri}</h1>
             {FullData.data && FullData.data.length > 0 ? (
                 <div>
                     <div>
