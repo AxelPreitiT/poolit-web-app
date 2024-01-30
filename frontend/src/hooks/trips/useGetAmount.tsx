@@ -10,7 +10,7 @@ import {useParams, useSearchParams} from "react-router-dom";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import {parseTemplate} from "url-template";
 
-const useGetEarning = (isDriver?:boolean) => {
+const useGetEarning = () => {
     const { t } = useTranslation();
     const param = useParams();
     const id = param.tripId;
@@ -39,7 +39,7 @@ const useGetEarning = (isDriver?:boolean) => {
             return await TripsService.getAmountByUri(uri as string);
         },
         retry: false,
-        enabled: !isLoadingDiscovery && !!isDriver,
+        enabled: !isLoadingDiscovery,
     });
 
     useEffect(() => {

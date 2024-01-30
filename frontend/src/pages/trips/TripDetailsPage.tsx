@@ -13,7 +13,6 @@ import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
-import useGetEarning from "@/hooks/trips/useGetAmount.tsx";
 import useTrip from "@/hooks/trips/useTrip.tsx";
 
 const TripDetailsPage = () => {
@@ -29,7 +28,6 @@ const TripDetailsPage = () => {
   );
   const isDriver = trip?.driverUri === currentUser?.selfUri;
 
-  const {isLoading:isLoadingEarning, earning} = useGetEarning(isDriver);
 
 
   const {
@@ -46,8 +44,7 @@ const TripDetailsPage = () => {
     isLoadingCar ||
     car === undefined ||
     isLoadingDriver ||
-    driver === undefined ||
-      isLoadingEarning
+    driver === undefined
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
@@ -91,7 +88,6 @@ const TripDetailsPage = () => {
               isPassanger={isPassanger}
               isDriver={isDriver}
               status={trip.tripStatus}
-              earning = {earning}
             />
             <RightDetails
               isPassanger={isPassanger}
