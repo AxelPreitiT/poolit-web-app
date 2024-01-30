@@ -618,9 +618,11 @@
       "notifyReject": "Se notificará al denunciante con el motivo de rechazo",
       "accept" : "Aprobar denuncia",
       "reject" : "Rechazar denuncia",
-      "acceptBtn" : "Aprobar",
-      "RejectBtn" : "Rechazar",
-      "laterBtn" : "Decidir luego"
+      "approveBtn" : "Aprobar",
+      "rejectBtn" : "Rechazar",
+      "laterBtn" : "Decidir luego",
+      "approveWarning": "Esta acción cancela los viajes donde es conductor y lo quita de donde es pasajero",
+      "decision": "¿Qué decisión querés tomar?"
     },
     "user": {
       "loading": "Cargando usuario"

@@ -16,6 +16,12 @@ a {
   color: colors.$secondary-color
 }
 
+.secondary_color_title {
+  color: colors.$secondary-color;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
 .row_report {
   display: flex;
   flex-direction: row;
@@ -119,4 +125,21 @@ a {
   align-items: center;
   min-width: fit-content;
   justify-content: end;
+}
+
+.danger {
+  color: colors.$danger-color;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.shadow-btn {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-color: transparent !important;
+  background-color: #1C4C96 !important;
+}
+
+.shadow-btn:active {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
+  border-color: transparent !important;
 }

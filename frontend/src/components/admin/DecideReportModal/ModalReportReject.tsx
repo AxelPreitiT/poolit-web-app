@@ -13,13 +13,10 @@ const ModalReportReject = ({ closeModal, reportProcessForm}: ModalReportRejectPr
     return (
         <div>
             <Modal.Header>
-            <div className={styles.reportFormHeader}>
-                <div className={styles.reportFormTitle}>
-                    <h4>{t('admin.report.reject')}</h4>
-                    <button type="button" className={styles.close_btn} onClick={closeModal} aria-label="Close"></button>
-                    <hr></hr>
-                </div>
-            </div>
+
+            <h4 className={styles.danger}>{t('admin.report.reject')}</h4>
+            <button type="button" className="btn-close" onClick={closeModal} aria-label="Close"></button>
+
             </Modal.Header>
             <Modal.Body>
                 <div>
@@ -27,10 +24,10 @@ const ModalReportReject = ({ closeModal, reportProcessForm}: ModalReportRejectPr
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button className={styles.backBtn} onClick={closeModal}>
+                <Button variant="primary" onClick={closeModal}>
                     {t('modal.close')}
                 </Button>
-                <Button className={styles.rejectBtn} onClick={closeModal}>
+                <Button variant="danger" onClick={closeModal}>
                     {t('modal.submit')}
                 </Button>
             </Modal.Footer>
