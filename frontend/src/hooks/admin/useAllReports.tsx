@@ -24,7 +24,7 @@ const useAllReports = (uri?: string) => {
         error,
         isPending,
     } = useQuery({
-        queryKey: ["reports"],
+        queryKey: ["reports", uri],
         queryFn: async (): Promise<PaginationModel<PrivateReportModel>> => {
 
             return await reportService.getReports(uri as string);
