@@ -789,7 +789,9 @@
   "trip": {
     "title": "Viajes",
     "loading": "Cargando viajes",
-    "loading_one": "Cargando viaje"
+    "loading_one": "Cargando viaje",
+    "error_title_delete": "Error al eliminar el viaje",
+    "error_title_join": "Error al unirse al viaje"
   },
   "car": {
     "title": "Auto",

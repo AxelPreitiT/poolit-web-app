@@ -790,7 +790,9 @@
   "trip": {
     "title": "Trips",
     "loading": "Loading trips",
-    "loading_one": "Loading trip"
+    "loading_one": "Loading trip",
+    "error_title_delete": "Error in delete Trip",
+    "error_title_join": "Error in join Trip"
   },
   "car": {
     "title": "Car",

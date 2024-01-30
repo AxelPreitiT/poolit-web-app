@@ -40,7 +40,7 @@ const useJoinTrip = (trip: tripModel) => {
         onError: (error: Error) => {
             onQueryError({
                 error,
-                title: t("passangers.error.title"),
+                title: t("trips.error_title_join"),
                 timeout: defaultToastTimeout,
             });
         },

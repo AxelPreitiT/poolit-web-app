@@ -7,7 +7,7 @@ import tripsService from "@/services/TripsService.ts";
 import {parseTemplate} from "url-template";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 
-const useJoinTrip = (trip: tripModel) => {
+const useDeleteTrip = (trip: tripModel) => {
     const onQueryError = useQueryError();
     const { t } = useTranslation();
     const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ const useJoinTrip = (trip: tripModel) => {
         onError: (error: Error) => {
             onQueryError({
                 error,
-                title: t("passangers.error.title"),
+                title: t("trip.error_title_delete"),
                 timeout: defaultToastTimeout,
             });
         },
@@ -45,4 +45,4 @@ const useJoinTrip = (trip: tripModel) => {
 
 }
 
-export default useJoinTrip;
+export default useDeleteTrip;
