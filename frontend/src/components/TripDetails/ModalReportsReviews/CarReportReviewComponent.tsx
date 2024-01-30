@@ -24,6 +24,7 @@ const CarReportReviewComponent = ({trip, car, openModalCar}: CarReportReviewComp
         (!isLoadingReview &&
         <div className={styles.marginCointainer}>
             <Button onClick={() => openModalCar()}
+                    disabled={isReviewed}
                     className={styles.userContainer}
                     style={buttonStyle}>
                 <CircleImg src={car.imageUri} size={50} />
