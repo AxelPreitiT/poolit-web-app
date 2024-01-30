@@ -34,7 +34,7 @@ const useDeleteTrip = (trip: tripModel) => {
         onSuccess: () => {
             invalidatePassangersState()
             console.log("passenger accepted")
-        }
+        },
     })
 
     const onSubmit = () => {
