@@ -4,6 +4,7 @@ import PassangerModel from "@/models/PassangerModel.ts";
 import PaginationModel from "@/models/PaginationModel.ts";
 import {parseTemplate} from "url-template";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
+import ReportModel from "@/models/ReportModel.ts";
 
 type AcceptRejecPassangerBody = {
     passengerState: string;
@@ -12,6 +13,8 @@ type AcceptRejecPassangerBody = {
 class PassangerApi extends AxiosApi{
 
     private static readonly PASSANGER_CONTENT_TYPE_HEADER: string = "application/vnd.trip.passenger.state.v1+json";
+
+    private static readonly REPORT_HEADER: string = "application/vnd.report.public.v1+json";
 
     public static getPassangerByUri: (uri: string) => AxiosPromise<PaginationModel<PassangerModel>> =
         (uri: string) => {
@@ -41,6 +44,17 @@ class PassangerApi extends AxiosApi{
                 return newResponse;
             });
         };
+
+    public static getReport: (uri: string) => Promise<boolean> =
+        (uri: string) => {
+            return this.get<ReportModel>(uri, {
+                headers: {
+                    "Accept": PassangerApi.REPORT_HEADER,
+                },
+            }).then((response: AxiosResponse<ReportModel>) => {
+                return !(response.status === 204);
+            });
+        }
 
     public static getReviewPassanger: (uri: string) => Promise<boolean> =
         (uri: string) => {

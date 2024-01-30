@@ -15,7 +15,7 @@ export interface DriverReportReviewComponentProps {
 const DriverReportReviewComponent = ({driver, reporting, trip}: DriverReportReviewComponentProps) => {
     const { t } = useTranslation();
 
-    const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportsDriver(!reporting, trip.driverReportsUriTemplate);
+    const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportsDriver(reporting, trip.driverReportsUriTemplate);
 
 
     const buttonStyle = {

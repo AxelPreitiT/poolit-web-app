@@ -13,20 +13,19 @@ const useReviewsReportsDriver = (reporting:boolean, uri?: string) => {
     const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();
 
     const query = useQuery({
-        queryKey: ["driversReviews", uri],
+        queryKey: ["driversReviews", uri, reporting],
         queryFn: async () => {
             if (reporting){
                 const parseUri = parseTemplate(uri as string).expand({
                     userId: currentUser?.userId as number,
                 });
-                return await PassangerService.getReview(parseUri);
+                return await PassangerService.getReport(parseUri);
             }else{
                 const parseUri = parseTemplate(uri as string).expand({
                     userId: currentUser?.userId as number,
                 });
                 return await PassangerService.getReview(parseUri);
             }
-
         },
         enabled: !!uri && !isLoadingUser,
         retry: false
