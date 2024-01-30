@@ -11,7 +11,7 @@ import passangerModel from "@/models/PassangerModel.ts";
 const useReviewsReportPassangers = (passanger: passangerModel, reporting?:boolean) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
-    const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();
+    const {data:currentUser} = useCurrentUser();
 
     const query = useQuery({
         queryKey: ["passangersReviews", passanger],
@@ -28,7 +28,6 @@ const useReviewsReportPassangers = (passanger: passangerModel, reporting?:boolea
                 return await PassangerService.getReview(reviewUri);
             }
             },
-        enabled: !!reporting && !!passanger && !isLoadingUser,
         retry: true
     });
 
