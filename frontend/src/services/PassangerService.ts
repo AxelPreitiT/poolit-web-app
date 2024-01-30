@@ -5,6 +5,9 @@ import PaginationModel from "@/models/PaginationModel.ts";
 
 class PassangerService extends Service {
 
+    public static deleteCancelTrip = async (uri: string): Promise<void> => {
+        return await this.resolveQuery(PassangerApi.deleteCancelTrip(uri));
+    }
     public static getReport = async (uri: string): Promise<boolean> => {
         return await PassangerApi.getReport(uri);
     }

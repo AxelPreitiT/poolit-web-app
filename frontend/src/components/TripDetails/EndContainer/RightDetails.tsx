@@ -17,6 +17,8 @@ import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.ts
 import ModalMakeCar from "@/components/TripDetails/ModalsForms/ModalMakeCar.tsx";
 import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
 import useDeleteTrip from "@/hooks/trips/useDeleteTrip.tsx";
+import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
+import useCancelTrip from "@/hooks/trips/useCancelTrip.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -42,12 +44,16 @@ const BtnJoin = ( { trip }: { trip: tripModel }) => {
     );
 }
 
-const BtnDelete = ( { trip }: { trip: tripModel }) => {
+const BtnDelete = ( { uri, id }: { uri: string, id:number}) => {
     const { t } = useTranslation();
-    const {onSubmit } = useDeleteTrip(trip);
+    const {onSubmit:onSubmitDelete } = useDeleteTrip(uri, id);
 
     return (
-        <Button className={styles.btn_cancel} onClick={() => onSubmit()}>
+        <Button className={styles.btn_cancel}
+                onClick={() => {
+                    onSubmitDelete();
+                    window.location.href = createdTripsPath ;
+                }}>
             <div className={styles.create_trip_btn}>
                 <i className="bi bi-x light-text"></i>
                 <span>{t("trip_detail.btn.delete")}</span>
@@ -56,8 +62,28 @@ const BtnDelete = ( { trip }: { trip: tripModel }) => {
     );
 }
 
+const CancelBtn = ( { passanger }: { passanger?: passangerModel }) => {
+    const { t } = useTranslation();
+    const {onSubmit:onSubmitCancel } = useCancelTrip(passanger?.selfUri as string);
+
+    return (
+        <Button className={styles.btn_cancel}
+                onClick={
+                    () => {
+                        onSubmitCancel()
+                        window.location.href = reservedTripsPath ;}
+                    }>
+            <div className={styles.create_trip_btn}>
+                <i className="bi bi-x light-text"></i>
+                <span>{t("trip_detail.btn.cancel")}</span>
+            </div>
+        </Button>
+    )
+}
+
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
     const { t } = useTranslation();
+    const {isLoading:isLoadingDiscovery, discovery} = useDiscovery()
 
     // Modals Review
     const [showModalReport, setModalReport] = useState(false);
@@ -94,6 +120,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
 
 
     return (
+        (! isLoadingDiscovery && discovery != undefined && (
         (!isPassanger && !isDriver) ?
             <div className={styles.btn_container}>
                 <BtnJoin trip={trip}/>
@@ -161,7 +188,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                                     </div>
                                 </Button>
                             </Link>
-                                <BtnDelete trip={trip}/>
+                            <BtnDelete uri={discovery?.tripsUriTemplate as string} id={trip.tripId}/>
                         </div> :
                         <div className={styles.btn_container}>
                             <Link to={reservedTripsPath} >
@@ -172,15 +199,11 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                                     </div>
                                 </Button>
                             </Link>
-                                <Button className={styles.btn_cancel}>
-                                    <div className={styles.create_trip_btn}>
-                                        <i className="bi bi-x light-text"></i>
-                                        <span>{t("trip_detail.btn.cancel")}</span>
-                                    </div>
-                                </Button>
+                            <CancelBtn passanger={passanger}/>
                             </div>
                     )
             )
+        ))
     );
 };
 

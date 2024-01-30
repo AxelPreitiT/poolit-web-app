@@ -10,6 +10,7 @@ import PassangerStatus from "@/enums/PassangerStatus.ts";
 import LoadingWheel from "../loading/LoadingWheel";
 import useAcceptPassangerByUri from "@/hooks/passanger/useAcceptPassangerByUri.tsx";
 import useRejectPassangerByUri from "@/hooks/passanger/useRejectPassangerByUri.tsx";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 interface PassangerComponentProps {
   data: PassangerModel;
@@ -39,7 +40,7 @@ const PassangerComponent = ({data: passanger, extraData: fullSeats} : PassangerC
             </h4>
             <span style={{ color: "gray", fontStyle: "italic" }}>
               {t("format.date", {
-                date: passanger.startDateTime,
+                date: getFormattedDateTime(passanger.startDateTime).date,
               })}
             </span>
           </div>

@@ -62,6 +62,9 @@ const TripDetailsPage = () => {
           }
         />
         <div>
+          {isDriver && <h1>DRIVER</h1>}
+          {isPassanger && <h1>PASSANGER</h1>}
+          {!isDriver && !isPassanger && <h1>NOTHING</h1>}
           <Location
             startAddress={trip.originAddress}
             startCityUri={trip.originCityUri}

@@ -2,19 +2,15 @@ import {useMutation} from "@tanstack/react-query";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 import {useTranslation} from "react-i18next";
-import tripsService from "@/services/TripsService.ts";
-import {parseTemplate} from "url-template";
+import passangerService from "@/services/PassangerService.ts";
 
-const useDeleteTrip = (uri: string, id: number) => {
+const usecancelTrip = (uri?: string) => {
     const onQueryError = useQueryError();
     const { t } = useTranslation();
 
     const mutation = useMutation({
         mutationFn: async () => {
-            const newUri = parseTemplate(uri as string).expand({
-                tripId: id,
-            });
-            return await tripsService.postDeleteTrip(newUri as string)
+            return await passangerService.deleteCancelTrip(uri as string)
         },
         onError: (error: Error) => {
             onQueryError({
@@ -36,4 +32,4 @@ const useDeleteTrip = (uri: string, id: number) => {
 
 }
 
-export default useDeleteTrip;
+export default usecancelTrip;
