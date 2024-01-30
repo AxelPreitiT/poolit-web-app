@@ -18,7 +18,7 @@ import useTrip from "@/hooks/trips/useTrip.tsx";
 const TripDetailsPage = () => {
   const { t } = useTranslation();
 
-  const { isLoading:isLoadingCurrentUser, currentUser } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { isLoading: isLoadingTrip, trip: trip } = useTrip();
   const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
   const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
@@ -42,8 +42,7 @@ const TripDetailsPage = () => {
     isLoadingCar ||
     car === undefined ||
     isLoadingDriver ||
-    driver === undefined ||
-      isLoadingCurrentUser
+    driver === undefined
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }

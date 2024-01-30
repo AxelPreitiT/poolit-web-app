@@ -25,7 +25,7 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
-  const [selectedOption, setSelectedOption] = useState<string>(PassangerStatus.PENDING);
+  const [selectedOption, setSelectedOption] = useState<string>(PassangerStatus.ALL);
 
 
   const [params] = useSearchParams();
@@ -35,7 +35,7 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
     userId: null,
     startDateTime: startDateTime,
     endDateTime: endDateTime,
-    passengerState: selectedOption,
+    passengerState: selectedOption == PassangerStatus.ALL? null : selectedOption,
   });
   const queryClient = useQueryClient();
 
@@ -70,9 +70,6 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
         </Dropdown>
       </div>
       <div className={styles.passangers_container}>
-        <h1>{selectedOption}</h1>
-        <h1>{newUri}</h1>
-        <h1>{createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}</h1>
         <PaginationComponentExtraData
             CardComponent={PassangerComponent}
             extraData={fullSeats}
