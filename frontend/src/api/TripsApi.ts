@@ -35,6 +35,15 @@ class TripsApi extends AxiosApi {
 
   //private static readonly TRIPS_EARNING_TYPE_HEADER: string ="trip.earnings.v1+json"
 
+  public static postDeleteTrip: (
+    uri: string
+    ) => AxiosPromise<void> = (uri: string) => {
+    return this.delete<void>(uri, {
+      headers: {
+      },
+    });
+  }
+
   public static postJoinTrip: (
       uri: string,
       data: JoinTripModel

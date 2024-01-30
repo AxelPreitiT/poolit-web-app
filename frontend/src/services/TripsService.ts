@@ -64,6 +64,11 @@ class TripsService extends Service {
         return await this.resolveQuery(TripsApi.postJoinTrip(uri, data));
     };
 
+  public static postDeleteTrip = async (
+    uri: string
+    ): Promise<void> => {
+        return await this.resolveQuery(TripsApi.postDeleteTrip(uri));
+    };
 
 }
 

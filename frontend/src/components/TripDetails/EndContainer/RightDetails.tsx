@@ -16,6 +16,7 @@ import ModalMake from "@/components/TripDetails/ModalsForms/ModalMake.tsx";
 import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.tsx";
 import ModalMakeCar from "@/components/TripDetails/ModalsForms/ModalMakeCar.tsx";
 import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
+import useDeleteTrip from "@/hooks/trips/useDeleteTrip.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -41,6 +42,19 @@ const BtnJoin = ( { trip }: { trip: tripModel }) => {
     );
 }
 
+const BtnDelete = ( { trip }: { trip: tripModel }) => {
+    const { t } = useTranslation();
+    const {onSubmit } = useDeleteTrip(trip);
+
+    return (
+        <Button className={styles.btn_cancel} onClick={() => onSubmit()}>
+            <div className={styles.create_trip_btn}>
+                <i className="bi bi-x light-text"></i>
+                <span>{t("trip_detail.btn.delete")}</span>
+            </div>
+        </Button>
+    );
+}
 
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
     const { t } = useTranslation();
@@ -147,12 +161,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                                     </div>
                                 </Button>
                             </Link>
-                                <Button className={styles.btn_cancel}>
-                                    <div className={styles.create_trip_btn}>
-                                        <i className="bi bi-x light-text"></i>
-                                        <span>{t("trip_detail.btn.delete")}</span>
-                                    </div>
-                                </Button>
+                                <BtnDelete trip={trip}/>
                         </div> :
                         <div className={styles.btn_container}>
                             <Link to={reservedTripsPath} >
