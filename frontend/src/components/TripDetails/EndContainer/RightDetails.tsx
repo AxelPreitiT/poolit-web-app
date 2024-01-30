@@ -6,7 +6,7 @@ import Status from "@/enums/Status.ts";
 import {ReactNode, useState} from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {createdTripsPath, reservedTripsPath} from "@/AppRouter.tsx";
 import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
@@ -32,10 +32,14 @@ interface RightDetailsProps {
 
 const BtnJoin = ( { trip }: { trip: tripModel }) => {
     const { t } = useTranslation();
-    const {onSubmit:onSubmitAccept } = useJoinTrip(trip);
+    const {onSubmit:onSubmitAccept, invalidateTripState } = useJoinTrip(trip);
 
     return (
-        <Button className={styles.btn_join} onClick={() => onSubmitAccept()}>
+        <Button className={styles.btn_join} onClick={
+            () => {
+                onSubmitAccept();
+                invalidateTripState();}
+            }>
             <div className={styles.create_trip_btn}>
                 <i className="bi bi-check-lg light-text"></i>
                 <span>{t("trip_detail.btn.join")}</span>
@@ -47,12 +51,13 @@ const BtnJoin = ( { trip }: { trip: tripModel }) => {
 const BtnDelete = ( { uri, id }: { uri: string, id:number}) => {
     const { t } = useTranslation();
     const {onSubmit:onSubmitDelete } = useDeleteTrip(uri, id);
+    const navigate = useNavigate();
 
     return (
         <Button className={styles.btn_cancel}
                 onClick={() => {
                     onSubmitDelete();
-                    window.location.href = createdTripsPath ;
+                    navigate(createdTripsPath);
                 }}>
             <div className={styles.create_trip_btn}>
                 <i className="bi bi-x light-text"></i>
@@ -65,13 +70,14 @@ const BtnDelete = ( { uri, id }: { uri: string, id:number}) => {
 const CancelBtn = ( { passanger }: { passanger?: passangerModel }) => {
     const { t } = useTranslation();
     const {onSubmit:onSubmitCancel } = useCancelTrip(passanger?.selfUri as string);
+    const navigate = useNavigate();
 
     return (
         <Button className={styles.btn_cancel}
                 onClick={
                     () => {
                         onSubmitCancel()
-                        window.location.href = reservedTripsPath ;}
+                        navigate(reservedTripsPath) ;}
                     }>
             <div className={styles.create_trip_btn}>
                 <i className="bi bi-x light-text"></i>
