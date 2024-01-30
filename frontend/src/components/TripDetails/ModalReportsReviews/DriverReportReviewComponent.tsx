@@ -44,11 +44,11 @@ const DriverReportReviewComponent = ({driver, reporting, trip, openModalMake}: D
             </Button>
             {isReviewed && reporting &&
                 <div className={styles.aclaration_text}>
-                    <span>conductor reportado</span>
+                    <span>{t('trip_detail.review.driver_reported')}</span>
                 </div>}
             {isReviewed && !reporting &&
                 <div className={styles.aclaration_text}>
-                    <span>conductor reseñado</span>
+                    <span>{t('trip_detail.review.driver_reviewed')}</span>
                 </div>}
         </div>)
     );

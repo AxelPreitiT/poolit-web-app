@@ -68,7 +68,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                     empty_component={
                                         <div className={styles.review_empty_container}>
                                             <h3 className="italic-text placeholder-text">
-                                                Not have passengers.
+                                                {t('trip_detail.passengers.empty_modal')}
                                             </h3>
                                         </div>
                                     }

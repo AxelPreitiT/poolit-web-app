@@ -632,6 +632,9 @@
   "trip_detail": {
     "title": "Trip",
     "header": "Trip details",
+    "review": {
+      "reviewed" : "Car Reviewed"
+    },
     "status": {
       "title": "Estado:",
       "cancelled": "Cancelled",
@@ -643,6 +646,7 @@
       "in_progress": "In progress"
     },
     "passengers": {
+      "empty_modal": "Not have passengers.",
       "fullSeats": "Full seats",
       "header": "Passengers",
       "loading": "Loading passengers",

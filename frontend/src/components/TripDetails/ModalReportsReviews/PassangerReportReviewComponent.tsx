@@ -68,11 +68,11 @@ const PassangerReportReviewComponent = ({
         </Button>
        {isReviewed && !extraData?.reporting &&
            <div className={styles.aclaration_text}>
-              <span>Pasajero reseñado</span>
+              <span>{t('trip_detail.review.user_reported')}</span>
            </div>}
         {isReviewed && extraData?.reporting &&
             <div className={styles.aclaration_text}>
-              <span>Pasajero reportado</span>
+              <span>{t('trip_detail.review.user_reviewed')}</span>
             </div>}
 
           </div>)}

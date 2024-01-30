@@ -81,9 +81,8 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
             useFuction={usePassangerByUri}
             empty_component={
               <div className={styles.review_empty_container}>
-                <i className={`bi-solid bi-people h2`}></i>
                 <h3 className="italic-text placeholder-text">
-                    {t("trip_detail.passengers.empty")}
+                    {t("trip_detail.passengers.empty_modal")}
                 </h3>
               </div>
             }

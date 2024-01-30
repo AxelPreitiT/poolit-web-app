@@ -4,6 +4,7 @@ import {Button} from "react-bootstrap";
 import carModel from "@/models/CarModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import useReviewsCar from "@/hooks/reportReview/useReviewsCar.tsx";
+import {useTranslation} from "react-i18next";
 
 export interface CarReportReviewComponentProps {
     car: carModel;
@@ -12,7 +13,7 @@ export interface CarReportReviewComponentProps {
 }
 
 const CarReportReviewComponent = ({trip, car, openModalCar}: CarReportReviewComponentProps) => {
-
+    const { t } = useTranslation();
     const {data:isReviewed, isLoading:isLoadingReview} = useReviewsCar(trip);
 
     const buttonStyle = {
@@ -32,7 +33,7 @@ const CarReportReviewComponent = ({trip, car, openModalCar}: CarReportReviewComp
             </Button>
             {isReviewed &&
                 <div className={styles.aclaration_text}>
-                    <span>AUTO RESEÑADO</span>
+                    <span>{t('trip_detail.review.reviewed')}</span>
                 </div>}
         </div>)
     );
