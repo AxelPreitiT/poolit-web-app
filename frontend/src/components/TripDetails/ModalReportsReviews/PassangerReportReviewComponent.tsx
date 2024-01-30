@@ -1,39 +1,46 @@
 import styles from "./styles.module.scss";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
-import { Button } from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
-import userPublicModel from "@/models/UserPublicModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
-import useReviewsPassangers from "@/hooks/passanger/useReviewsPassangers.tsx";
+import useReviewsReportPassangers from "@/hooks/reportReview/useReviewsPassangers.tsx";
+import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
+import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
+import {ReactNode} from "react";
+import userPublicModel from "@/models/UserPublicModel.ts";
 
 export interface PassangerReportReviewComponent {
-  passanger: PassangerModel;
-  selectPassanger: (user: userPublicModel) => void;
+  data: PassangerModel;
+  extraData?: {
+    reporting: boolean;
+    openModalMake: (user: userPublicModel, reporting: boolean, form:ReactNode) => void;
+  };
 }
 
 const PassangerReportReviewComponent = ({
-  passanger,
-  selectPassanger,
+  data: passanger,
+  extraData: extraData,
 }: PassangerReportReviewComponent) => {
-  const { isLoading, data } = usePublicUserByUri(passanger.userUri);
   const { t } = useTranslation();
-  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsPassangers(passanger.passengerReviewsForTripUriTemplate)
+  const { isLoading, data } = usePublicUserByUri(passanger.userUri);
+  const {data:isReviewed, isLoading:isLoadingReview} = useReviewsReportPassangers(passanger, extraData?.reporting)
 
   const buttonStyle = {
     backgroundColor: isReviewed ? "green" : "orange",
   };
 
+
   return (
     <div className={styles.marginCointainer}>
-      {isLoading || data == undefined || isLoadingReview ? (
+      {isLoading || data == undefined || isLoadingReview || extraData == undefined ? (
         <LoadingWheel description={t("admin.user.loading")} />
       ) : (
           <div>
         <Button
-          onClick={() => selectPassanger(data)}
+          onClick={() => extraData.openModalMake(data, extraData.reporting, extraData.reporting? <ReportForm/> : <ReviewForm/>)}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}
@@ -59,12 +66,15 @@ const PassangerReportReviewComponent = ({
             </span>
           </div>
         </Button>
-       {isReviewed &&
+       {isReviewed && !extraData?.reporting &&
            <div className={styles.aclaration_text}>
-              <span>Pasajero reseñado</span>
+              <span>{t('trip_detail.review.user_reported')}</span>
            </div>}
-          </div>
-        )}
+        {isReviewed && extraData?.reporting &&
+            <div className={styles.aclaration_text}>
+              <span>{t('trip_detail.review.user_reviewed')}</span>
+            </div>}
+          </div>)}
     </div>
   );
 };

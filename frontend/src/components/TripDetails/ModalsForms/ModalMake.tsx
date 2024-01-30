@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from "../ModalReportsReviews/styles.module.scss";
 import {Button, Modal} from "react-bootstrap";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import {useTranslation} from "react-i18next";
@@ -10,7 +10,7 @@ export interface ModalMakeReportProps {
     reportForm: React.ReactNode;
 }
 
-const ModalMakeReportReview = ({ closeModal, user, reportForm}: ModalMakeReportProps) => {
+const ModalMake = ({ closeModal, user, reportForm}: ModalMakeReportProps) => {
     const { t } = useTranslation();
 
     return (
@@ -47,4 +47,4 @@ const ModalMakeReportReview = ({ closeModal, user, reportForm}: ModalMakeReportP
     );
 };
 
-export default ModalMakeReportReview;
+export default ModalMake;

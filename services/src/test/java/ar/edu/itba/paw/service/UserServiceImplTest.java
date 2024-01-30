@@ -109,18 +109,18 @@ public class UserServiceImplTest {
     }
 
     @Test(expected = RoleAlreadyChangedException.class)
-    public void testChangeRoleAlreadyChanged() throws UserNotFoundException, RoleAlreadyChangedException {
+    public void testChangeRoleAlreadyChanged() throws UserNotFoundException, RoleAlreadyChangedException, CityNotFoundException {
         User aux =new User(NAME, SURNAME, MAIL, PHONE, PASSWORD, BORN_CITY, new Locale(MAIL_LOCALE), "DRIVER", USER_IMAGE_ID);
         when(userDao.findById(anyLong())).thenReturn(Optional.of(aux));
 
-        us.changeRole(1,"DRIVER");
+        us.modifyUser(1,null,null,null,null,null,"DRIVER");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testChangeRoleInvalidRole() throws UserNotFoundException, RoleAlreadyChangedException {
+    public void testChangeRoleInvalidRole() throws UserNotFoundException, RoleAlreadyChangedException, CityNotFoundException {
         when(userDao.findById(anyLong())).thenReturn(Optional.of(USER));
 
-        us.changeRole(1,"ADMIN");
+        us.modifyUser(1,null,null,null,null,null,"ADMIN");
     }
 
 }

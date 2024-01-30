@@ -1,7 +1,6 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
-import ShortReview from "@/components/review/shorts/ShortReview.tsx";
 import ProfileStars from "@/components/profile/stars/ProfileStars.tsx";
 import { useParams } from "react-router-dom";
 import usePublicUserById from "@/hooks/users/usePublicUserById.tsx";
@@ -13,6 +12,7 @@ import {
 } from "@/AppRouter.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
+import ShortReviewProfile from "@/components/review/shorts/ShortReviewProfile.tsx";
 
 const PublicProfilePage = () => {
   const { t } = useTranslation();
@@ -71,7 +71,7 @@ const PublicProfilePage = () => {
             empty_text={t("profile.lists.review_empty")}
             empty_icon={"book"}
             data={reviewsDriver.data}
-            component_name={ShortReview}
+            component_name={ShortReviewProfile}
             link={publicsDriverReviewsPath.replace(":id", String(params.id))}
           />
         )}
@@ -89,7 +89,7 @@ const PublicProfilePage = () => {
             empty_text={t("profile.lists.review_empty")}
             empty_icon={"book"}
             data={reviewsPassanger.data}
-            component_name={ShortReview}
+            component_name={ShortReviewProfile}
             link={publicsPassangerReviewsPath.replace(":id", String(params.id))}
           />
         )}

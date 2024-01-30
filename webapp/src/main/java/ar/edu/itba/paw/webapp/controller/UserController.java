@@ -11,7 +11,6 @@ import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.ImageQuery;
 import ar.edu.itba.paw.webapp.dto.input.CreateUserDto;
 import ar.edu.itba.paw.webapp.dto.input.UpdateUserDto;
-import ar.edu.itba.paw.webapp.dto.output.UserRoleDto;
 import ar.edu.itba.paw.webapp.dto.output.user.DriverUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PrivateUserDto;
 import ar.edu.itba.paw.webapp.dto.output.user.PublicUserDto;
@@ -96,17 +95,9 @@ public class UserController {
     @PATCH
     @Path("/{id}")
     @Consumes(value = VndType.APPLICATION_USER)
-    public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserDto userForm) throws UserNotFoundException, CityNotFoundException {
+    public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserDto userForm) throws UserNotFoundException, CityNotFoundException, RoleAlreadyChangedException {
         LOGGER.debug("PUT request to update user with userId {}",id);
-        userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale());
-        return Response.noContent().build();
-    }
-    @PATCH
-    @Path("/{id}/")
-    @Consumes( value = { VndType.APPLICATION_USER_ROLE } )
-    public Response modifyRole(@PathParam("id") final long id, @Valid final UserRoleDto userRoleDto) throws UserNotFoundException, RoleAlreadyChangedException {
-        LOGGER.debug("PUT request for role of user with userId {}",id);
-        userService.changeRole(id,userRoleDto.getRole());
+        userService.modifyUser(id, userForm.getUsername(),userForm.getSurname(),userForm.getPhone(),userForm.getBornCityId(),userForm.getMailLocale(),userForm.getRole());
         return Response.noContent().build();
     }
 

@@ -32,7 +32,7 @@ public class TripDto {
     private LocalDateTime lastOccurrence;
     private String driverReviewsUriTemplate;
     private String carReviewsUriTemplate;
-    private String reportsUriTemplate;
+    private String driverReportsUriTemplate;
 
 
     public static TripDto fromTrip(final UriInfo uriInfo, final Trip trip){
@@ -54,7 +54,7 @@ public class TripDto {
         ans.lastOccurrence = trip.getLastOccurrence();
         ans.driverReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
         ans.carReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).path(UrlHolder.REVIEWS_ENTITY).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
-        ans.reportsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
+        ans.driverReportsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).queryParam("forTrip",trip.getTripId()).queryParam("forUser",trip.getDriver().getUserId()).queryParam("madeBy","{userId}").toTemplate();
         ans.passengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).path(UrlHolder.TRIPS_PASSENGERS).toTemplate() + "{/userId}{?startDateTime,endDateTime,passengerState}";
         ans.driverUri = uriInfo.getBaseUriBuilder().path(UrlHolder.USER_BASE).path(String.valueOf(trip.getDriver().getUserId())).build();
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
@@ -248,11 +248,11 @@ public class TripDto {
         this.carReviewsUriTemplate = carReviewsUriTemplate;
     }
 
-    public String getReportsUriTemplate() {
-        return reportsUriTemplate;
+    public String getDriverReportsUriTemplate() {
+        return driverReportsUriTemplate;
     }
 
-    public void setReportsUriTemplate(String reportsUriTemplate) {
-        this.reportsUriTemplate = reportsUriTemplate;
+    public void setDriverReportsUriTemplate(String driverReportsUriTemplate) {
+        this.driverReportsUriTemplate = driverReportsUriTemplate;
     }
 }

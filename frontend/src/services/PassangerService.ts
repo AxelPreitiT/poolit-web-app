@@ -5,6 +5,9 @@ import PaginationModel from "@/models/PaginationModel.ts";
 
 class PassangerService extends Service {
 
+    public static getReport = async (uri: string): Promise<boolean> => {
+        return await PassangerApi.getReport(uri);
+    }
     public static getPassangersTrips = async (uri: string): Promise<PassangerModel[]> => {
         return await this.resolveQuery(PassangerApi.getPassangers(uri));
     };

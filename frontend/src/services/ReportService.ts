@@ -6,11 +6,12 @@ import { getReportsOptionsByRelation } from "@/enums/ReportsOptions";
 import ReportRelation from "@/enums/ReportRelation";
 import { ReportFormSchemaType } from "@/forms/ReportForm";
 import { DecideReportFormSchemaType } from "@/forms/DecideReportForm";
+import PaginationModel from "@/models/PaginationModel.tsx";
 
 class ReportService extends Service {
   public static getReports = async (
     uri: string
-  ): Promise<PrivateReportModel[]> => {
+  ): Promise<PaginationModel<PrivateReportModel>> => {
     return await this.resolveQuery(ReportsApi.getReports(uri));
   };
 

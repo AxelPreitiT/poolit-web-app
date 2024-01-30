@@ -6,22 +6,23 @@ import {defaultToastTimeout} from "@/components/toasts/ToastProps.ts";
 import {parseTemplate} from "url-template";
 import PassangerService from "@/services/PassangerService.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
+import tripModel from "@/models/TripModel.ts";
 
-const useReviewsDriver = ( uri?: string) => {
+const useReviewsCar = (trip: tripModel) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const {isLoading:isLoadingUser, data:currentUser} = useCurrentUser();
 
     const query = useQuery({
-        queryKey: ["driversReviews", uri],
+        queryKey: ["driversReviews", trip],
         queryFn: async () => {
-            const parseUri = parseTemplate(uri as string).expand({
+            const parseUri = parseTemplate(trip.carReviewsUriTemplate as string).expand({
                 userId: currentUser?.userId as number,
             });
             return await PassangerService.getReview(parseUri);
         },
-        enabled: !!uri && !isLoadingUser,
-        retry: true
+        enabled: !!trip && !isLoadingUser,
+        retry: false
     });
 
     const { isLoading, isPending, isError, error, data } = query;
@@ -43,5 +44,4 @@ const useReviewsDriver = ( uri?: string) => {
     }
 
 }
-
-export default useReviewsDriver;
+export default useReviewsCar;

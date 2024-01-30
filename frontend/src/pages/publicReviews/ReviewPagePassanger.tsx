@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
 import ProfileStars from "@/components/profile/stars/ProfileStars.tsx";
 import { useLocation, useParams } from "react-router-dom";
-import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent.tsx";
 import usePublicUserById from "@/hooks/users/usePublicUserById.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
@@ -12,6 +11,7 @@ import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { INITIALPAGE, REVIEWPAGESIZE } from "@/enums/PaginationConstants.ts";
 import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
+import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
 
 const ReviewPageDriver = () => {
   const { t } = useTranslation();
@@ -68,19 +68,18 @@ const ReviewPageDriver = () => {
             <div className={styles.row_data}>
               <h2>{t("profile.lists.review_as_passanger")}</h2>
             </div>
-            <PaginationComponent
-              uri={createPaginationUri(
-                user.reviewsPassengerUri,
-                currentPage,
-                REVIEWPAGESIZE
-              )}
-              current_page={currentPage}
-              useFuction={useUserReviewsByUri}
-              empty_component={
-                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
-              }
-              component_name={ShortReview}
-              itemsName={t("reviews.title")}
+            <PaginationComponentExtraData
+                CardComponent={ShortReview}
+                uri={createPaginationUri(
+                    user.reviewsPassengerUri,
+                    currentPage,
+                    REVIEWPAGESIZE
+                )}
+                current_page={currentPage}
+                useFuction={useUserReviewsByUri}
+                empty_component={<EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
+                }
+                itemsName={t("reviews.title")}
             />
           </div>
         </div>

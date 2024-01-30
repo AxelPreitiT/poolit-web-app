@@ -3,20 +3,20 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import Status from "@/enums/Status.ts";
-import {useState} from "react";
-import ModalReportReview from "@/components/TripDetails/ModalReportsReviews/ModalReportReview.tsx";
+import {ReactNode, useState} from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
-import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
-import ModalCarMakeReview from "@/components/TripDetails/ModalReportsReviews/ModalCarMakeReview.tsx";
 import {Link} from "react-router-dom";
 import {createdTripsPath, reservedTripsPath} from "@/AppRouter.tsx";
-import ReportForm from "@/components/TripDetails/Modals/ReportForm.tsx";
-import ReviewForm from "@/components/TripDetails/Modals/ReviewForm.tsx";
-import ReviewCarForm from "@/components/TripDetails/Modals/ReviewCarForm.tsx";
 import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
+import ModalReport from "@/components/TripDetails/ModalsRR/ModalReport.tsx";
+import ModalMake from "@/components/TripDetails/ModalsForms/ModalMake.tsx";
+import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.tsx";
+import ModalMakeCar from "@/components/TripDetails/ModalsForms/ModalMakeCar.tsx";
+import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
+import useDeleteTrip from "@/hooks/trips/useDeleteTrip.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -28,52 +28,75 @@ interface RightDetailsProps {
     car: carModel;
 }
 
-const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
-
+const BtnJoin = ( { trip }: { trip: tripModel }) => {
     const { t } = useTranslation();
+    const {onSubmit:onSubmitAccept } = useJoinTrip(trip);
+
+    return (
+        <Button className={styles.btn_join} onClick={() => onSubmitAccept()}>
+            <div className={styles.create_trip_btn}>
+                <i className="bi bi-check-lg light-text"></i>
+                <span>{t("trip_detail.btn.join")}</span>
+            </div>
+        </Button>
+    );
+}
+
+const BtnDelete = ( { trip }: { trip: tripModel }) => {
+    const { t } = useTranslation();
+    const {onSubmit } = useDeleteTrip(trip);
+
+    return (
+        <Button className={styles.btn_cancel} onClick={() => onSubmit()}>
+            <div className={styles.create_trip_btn}>
+                <i className="bi bi-x light-text"></i>
+                <span>{t("trip_detail.btn.delete")}</span>
+            </div>
+        </Button>
+    );
+}
+
+const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
+    const { t } = useTranslation();
+
+    // Modals Review
     const [showModalReport, setModalReport] = useState(false);
-    const [showModalMakeReport, setModalMakeReport] = useState(false);
-
-    const [showModalReview, setModalReview] = useState(false);
-    const [showModalMakeReview, setModalMakeReview] = useState(false);
-    const [showModalCarMakeReview, setModalCarMakeReview] = useState(false);
-
-
-    const [userReviewReport, setuserReviewReport] = useState<userPublicModel| null>(null);
-
-    const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
-    const selectUserReport = (user:userPublicModel) => {
-        setModalReport(false);
-        setuserReviewReport(user);
-        setModalMakeReport(true);
-    };
-    const closeModalMakeReport = () => {setModalMakeReport(false);};
+    const openModalReport = () => {setModalReport(true);};
 
 
-    const openModalReview = () => {setModalReview(true);};
+    // Modals Report
+    const [showModalReview, setModalReview] = useState(false);
     const closeModalReview = () => {setModalReview(false);};
-    const selectUserReview = (user:userPublicModel) => {
-        setModalReview(false);
-        setuserReviewReport(user);
-        setModalMakeReview(true);
+    const openModalReview = () => {setModalReview(true);};
+
+
+    // Modals car
+    const [showModalCar, setModalCar] = useState(false);
+    const closeModalCar = () => {setModalCar(false);};
+    const openModalCar = () => {
+        closeModalReview()
+        setModalCar(true);
     };
-    const selectCarReview = () => {
-        setModalReview(false);
-        setModalCarMakeReview(true);
+
+
+    // Modals User
+    const [formMake, setFormMake] = useState<ReactNode| null>(null);
+    const [userMake, setUserMake] = useState<userPublicModel| null>(null);
+    const [showModalMake, setModalMake] = useState(false);
+    const closeModalMake = () => {setModalMake(false);};
+    const openModalMake = (user: userPublicModel, reporting:boolean, form:ReactNode) => {
+        reporting ? closeModalReport() : closeModalReview();
+        setFormMake(form)
+        setUserMake(user);
+        setModalMake(true);
     };
-    const closeModalMakeReview = () => {setModalMakeReview(false);};
-    const closeModalCarReview = () => {setModalCarMakeReview(false);};
+
 
     return (
         (!isPassanger && !isDriver) ?
             <div className={styles.btn_container}>
-                <Button className={styles.btn_join}>
-                    <div className={styles.create_trip_btn}>
-                        <i className="bi bi-check-lg light-text"></i>
-                        <span>{t("trip_detail.btn.join")}</span>
-                    </div>
-                </Button>
+                <BtnJoin trip={trip}/>
             </div> :
             (status === Status.FINISHED ?
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
@@ -100,24 +123,21 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReportReview closeModal={closeModalReport} selectUser={selectUserReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger}/>
-                        </Modal>
-
-                        <Modal show={showModalMakeReport} onHide={closeModalMakeReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReportReview closeModal={closeModalMakeReport} user={userReviewReport} reportForm={<ReportForm/>}/>
+                            <ModalReport openModalMake={openModalMake} closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} reporting={true}/>
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReportReview closeModal={closeModalReview} selectUser={selectUserReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} selectCar={selectCarReview}/>
+                            <ModalReport openModalMake={openModalMake} closeModal={closeModalReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={false} openModalCar={openModalCar}/>
                         </Modal>
 
-                        <Modal show={showModalMakeReview} onHide={closeModalMakeReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReportReview closeModal={closeModalMakeReview} user={userReviewReport} reportForm={<ReviewForm/>}/>
+                        <Modal show={showModalMake} onHide={closeModalMake} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalMake closeModal={closeModalMake} user={userMake} reportForm={formMake}/>
                         </Modal>
 
-                        <Modal show={showModalCarMakeReview} onHide={closeModalCarReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalCarMakeReview closeModal={closeModalCarReview} car={car} reportForm={<ReviewCarForm/>}/>
+                        <Modal show={showModalCar} onHide={closeModalCar} aria-labelledby="contained-modal-title-vcenter" centered>
+                            <ModalMakeCar closeModal={closeModalCar} car={car} reportForm={<ReviewCarForm/>}/>
                         </Modal>
+
                     </div> :
                     <div className={styles.btn_container}>
                         <Link to={reservedTripsPath} >
@@ -141,12 +161,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                                     </div>
                                 </Button>
                             </Link>
-                                <Button className={styles.btn_cancel}>
-                                    <div className={styles.create_trip_btn}>
-                                        <i className="bi bi-x light-text"></i>
-                                        <span>{t("trip_detail.btn.delete")}</span>
-                                    </div>
-                                </Button>
+                                <BtnDelete trip={trip}/>
                         </div> :
                         <div className={styles.btn_container}>
                             <Link to={reservedTripsPath} >

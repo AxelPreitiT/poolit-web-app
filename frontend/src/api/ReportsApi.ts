@@ -1,10 +1,11 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
-import { AxiosPromise } from "axios";
+import {AxiosPromise, AxiosResponse} from "axios";
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import ReportRelation from "@/enums/ReportRelation";
 import { ReportFormSchemaType } from "@/forms/ReportForm";
 import { DecideReportFormSchemaType } from "@/forms/DecideReportForm";
 import ReportState from "@/enums/ReportState";
+import PaginationModel from "@/models/PaginationModel.tsx";
 
 class ReportsApi extends AxiosApi {
   private static readonly REPORTS_PRIVATE_ACCEPT_HEADER: string =
@@ -18,11 +19,31 @@ class ReportsApi extends AxiosApi {
 
   public static getReports: (
     uri: string
-  ) => AxiosPromise<PrivateReportModel[]> = (uri: string) => {
+  ) => AxiosPromise<PaginationModel<PrivateReportModel>> = (uri: string) => {
     return this.get<PrivateReportModel[]>(uri, {
       headers: {
         Accept: ReportsApi.REPORTS_PRIVATE_ACCEPT_HEADER,
       },
+    }).then((response: AxiosResponse<PrivateReportModel[]>) => {
+      const reports = response.data;
+
+      const first = response.headers.link?.match(/<([^>]*)>; rel="first"/)?.[1];
+      const prev = response.headers.link?.match(/<([^>]*)>; rel="prev"/)?.[1];
+      const next = response.headers.link?.match(/<([^>]*)>; rel="next"/)?.[1];
+      const last = response.headers.link?.match(/<([^>]*)>; rel="last"/)?.[1];
+      const total = response.headers["x-total-pages"];
+      const newResponse: AxiosResponse<PaginationModel<PrivateReportModel>> = {
+        ...response,
+        data: {
+          first: first,
+          prev: prev,
+          next: next,
+          last: last,
+          totalPages: total,
+          data: reports,
+        },
+      };
+      return newResponse;
     });
   };
 

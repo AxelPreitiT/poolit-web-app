@@ -56,6 +56,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private EmailAuthenticationProvider emailAuthenticationProvider;
+
+    @Autowired
     private BasicAuthFilter basicAuthFilter;
 
     @Autowired
@@ -76,6 +79,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(emailAuthenticationProvider);
     }
 
     @Bean
@@ -191,7 +195,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader(CorsConfiguration.ALL);
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         // TODO: Update to JWT token headers
-        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER, "X-Total-Pages", "Link", "Location"));
+        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER, "Accept", "X-Total-Pages", "Link", "Location"));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

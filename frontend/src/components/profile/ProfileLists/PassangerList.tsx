@@ -2,11 +2,11 @@ import ListProfileContainer from "@/components/profile/list/ListProfileContainer
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
 import { publicsPassangerReviewsPath, reservedTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
-import ShortReview from "@/components/review/shorts/ShortReview";
 import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import styles from "./styles.module.scss";
+import ShortReviewProfile from "@/components/review/shorts/ShortReviewProfile.tsx";
 
 export interface PassengerListProp {
   futureReservedTripsUri: string;
@@ -46,7 +46,7 @@ const PassengerList = ({
           empty_text={t("profile.lists.review_empty")}
           empty_icon={"book"}
           data={reviewsPassenger.data}
-          component_name={ShortReview}
+          component_name={ShortReviewProfile}
           link={publicsPassangerReviewsPath.replace(":id", id.toString())}
         />
       )}

@@ -11,16 +11,16 @@ import useCarReviewsByUri from "@/hooks/cars/useCarReviewsByUri";
 import createPaginationUri from "@/functions/CreatePaginationUri";
 import EmptyList from "@/components/emptyList/EmptyList";
 import ShortReview from "@/components/review/shorts/ShortReview";
-import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent";
 import useCarFeaturesByUri from "@/hooks/cars/useCarFeaturesByUri";
 import { Button } from "react-bootstrap";
 import { BsPencilSquare } from "react-icons/bs";
 import CarFeaturesProp from "@/components/profile/carFeatures/CarFeaturesProp";
-import { INITIALPAGE, REVIEWPAGESIZE } from "@/enums/PaginationConstants";
+import {INITIALPAGE, REVIEWPAGESIZE} from "@/enums/PaginationConstants";
 import { useState } from "react";
 import EditCarForm from "./EditCarForm";
 import useCarFeatures from "@/hooks/cars/useCarFeatures";
 import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
+import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
 
 const CarPage = () => {
   const { t } = useTranslation();
@@ -131,20 +131,20 @@ const CarPage = () => {
           <div className={styles.title}>
             <h2>{t("car.opinions")}</h2>
           </div>
-          <PaginationComponent
-            uri={createPaginationUri(
-              car.reviewsUri,
-              currentPage,
-              REVIEWPAGESIZE,
-              true
-            )}
-            current_page={currentPage}
-            useFuction={useCarReviewsByUri}
-            empty_component={
-              <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
-            }
-            component_name={ShortReview}
-            itemsName={t("reviews.title")}
+          <PaginationComponentExtraData
+              CardComponent={ShortReview}
+              uri={createPaginationUri(
+                  car.reviewsUri,
+                  currentPage,
+                  REVIEWPAGESIZE,
+                  true
+              )}
+              current_page={currentPage}
+              useFuction={useCarReviewsByUri}
+              empty_component={
+                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
+              }
+              itemsName={t("reviews.title")}
           />
         </div>
       </div>

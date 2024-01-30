@@ -631,6 +631,13 @@
   "trip_detail": {
     "title": "Viaje",
     "header": "Detalle de viaje",
+    "review": {
+      "reviewed" : "Auto reseñado",
+      "driver_reviewed" : "Conductor reseñado",
+      "user_reviewed" : "Pasajero reseñado",
+      "driver_reported": "Conductor reportado",
+      "user_reported": "Pasajero reportado"
+    },
     "status": {
       "title": "Status:",
       "cancelled": "Cancelado",
@@ -641,6 +648,8 @@
       "in_progress": "En progreso"
     },
     "passengers": {
+      "empty_modal": "Sin pasajeros",
+      "fullSeats": "Asientos llenos",
       "header": "Pasajeros",
       "loading": "Cargando pasajeros",
       "btn_accept": "Aceptar",
@@ -780,7 +789,9 @@
   "trip": {
     "title": "Viajes",
     "loading": "Cargando viajes",
-    "loading_one": "Cargando viaje"
+    "loading_one": "Cargando viaje",
+    "error_title_delete": "Error al eliminar el viaje",
+    "error_title_join": "Error al unirse al viaje"
   },
   "car": {
     "title": "Auto",

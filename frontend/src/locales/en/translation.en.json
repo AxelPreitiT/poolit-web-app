@@ -632,6 +632,13 @@
   "trip_detail": {
     "title": "Trip",
     "header": "Trip details",
+    "review": {
+      "reviewed" : "Car Reviewed",
+      "driver_reviewed" : "driver reviewed",
+      "user_reviewed" : "Passanger reviewed",
+      "driver_reported": "Driver reported",
+      "user_reported": "Passanger reported"
+    },
     "status": {
       "title": "Estado:",
       "cancelled": "Cancelled",
@@ -643,6 +650,8 @@
       "in_progress": "In progress"
     },
     "passengers": {
+      "empty_modal": "Not have passengers.",
+      "fullSeats": "Full seats",
       "header": "Passengers",
       "loading": "Loading passengers",
       "btn_accept": "Accept",
@@ -781,7 +790,9 @@
   "trip": {
     "title": "Trips",
     "loading": "Loading trips",
-    "loading_one": "Loading trip"
+    "loading_one": "Loading trip",
+    "error_title_delete": "Error in delete Trip",
+    "error_title_join": "Error in join Trip"
   },
   "car": {
     "title": "Car",

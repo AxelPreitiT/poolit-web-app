@@ -7,10 +7,11 @@ import { useTranslation } from "react-i18next";
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import reportService from "@/services/ReportService.ts";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
-import {parseTemplate} from "url-template";
+//import {parseTemplate} from "url-template";
+import PaginationModel from "@/models/PaginationModel.tsx";
 
 
-const useAllReports = () => {
+const useAllReports = (uri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
     const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
@@ -23,16 +24,10 @@ const useAllReports = () => {
         error,
         isPending,
     } = useQuery({
-        queryKey: ["reports"],
-        queryFn: async (): Promise<PrivateReportModel[]> => {
-            if (!discovery?.reportsUriTemplate) {
-                return [];
-            }
-            //TODO testear que funcione asi
-            const uri = parseTemplate(discovery.reportsUriTemplate).expand({
+        queryKey: ["reports", uri],
+        queryFn: async (): Promise<PaginationModel<PrivateReportModel>> => {
 
-            });
-            return await reportService.getReports(uri);
+            return await reportService.getReports(uri as string);
         },
         retry: false,
         enabled: !isLoadingDiscovery && !!discovery?.reportsUriTemplate,
@@ -50,7 +45,7 @@ const useAllReports = () => {
 
     return {
         isLoading: isLoading || isPending,
-        reports,
+        data: reports,
     };
 };
 
