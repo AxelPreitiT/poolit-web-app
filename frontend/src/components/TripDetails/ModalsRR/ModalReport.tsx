@@ -14,8 +14,11 @@ import PaginationComponentExtraData from "@/components/pagination/PaginationComp
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
+import {ReactNode} from "react";
 
 export interface ModalReportProps {
+    openModalMake: (user: userPublicModel, reporting:boolean, form:ReactNode) => void;
+    openModalCar: () => void;
     closeModal: () => void;
     driver: userPublicModel;
     isDriver: boolean;
@@ -25,7 +28,7 @@ export interface ModalReportProps {
     reporting: boolean;
 }
 
-const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, reporting}: ModalReportProps) => {
+const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, reporting, openModalMake, openModalCar}: ModalReportProps) => {
     const { t } = useTranslation();
     const uri = getUriPassangers(isDriver, passanger, trip);
 
@@ -42,7 +45,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                     <i className="bi bi-person-fill h3"></i>
                                     <h3>{t('modal.driver')}</h3>
                                 </div>
-                                <DriverReportReviewComponent driver={driver} trip={trip} reporting={reporting}/>
+                                <DriverReportReviewComponent driver={driver} trip={trip} reporting={reporting} openModalMake={openModalMake}/>
                             </div>}
                         {!isDriver && car != null &&
                             <div className={styles.passangerContainer}>
@@ -50,7 +53,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                     <i className="bi bi-car-front-fill h3"></i>
                                     <h3>{t('modal.car')}</h3>
                                 </div>
-                                <CarReportReviewComponent car={car} trip={trip}/>
+                                <CarReportReviewComponent car={car} trip={trip} openModalCar={openModalCar}/>
                             </div>}
                             <div className={styles.passangerContainer}>
                                 <div className={styles.titleContainer}>
@@ -59,7 +62,7 @@ const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, repor
                                 </div>
                                 <PaginationComponentExtraData
                                     CardComponent={PassangerReportReviewComponent}
-                                    extraData={{reporting, closeModal}}
+                                    extraData={{reporting, openModalMake}}
                                     uri={createPaginationUri(uri, INITIALPAGE, PASSANGERPAGESIZE)}
                                     current_page={INITIALPAGE}
                                     useFuction={usePassangerByUri}

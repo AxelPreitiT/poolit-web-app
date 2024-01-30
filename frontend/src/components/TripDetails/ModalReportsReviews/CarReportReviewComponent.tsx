@@ -8,9 +8,10 @@ import useReviewsCar from "@/hooks/reportReview/useReviewsCar.tsx";
 export interface CarReportReviewComponentProps {
     car: carModel;
     trip: tripModel;
+    openModalCar: () => void;
 }
 
-const CarReportReviewComponent = ({trip, car}: CarReportReviewComponentProps) => {
+const CarReportReviewComponent = ({trip, car, openModalCar}: CarReportReviewComponentProps) => {
 
     const {data:isReviewed, isLoading:isLoadingReview} = useReviewsCar(trip);
 
@@ -21,7 +22,7 @@ const CarReportReviewComponent = ({trip, car}: CarReportReviewComponentProps) =>
     return (
         (!isLoadingReview &&
         <div className={styles.marginCointainer}>
-            <Button onClick={() => console.log("HOLA")}
+            <Button onClick={() => openModalCar}
                     className={styles.userContainer}
                     style={buttonStyle}>
                 <CircleImg src={car.imageUri} size={50} />

@@ -7,12 +7,15 @@ import getFormattedDateTime from "@/functions/DateFormat.ts";
 import PassangerModel from "@/models/PassangerModel.ts";
 import LoadingWheel from "../../loading/LoadingWheel.tsx";
 import useReviewsReportPassangers from "@/hooks/reportReview/useReviewsPassangers.tsx";
+import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
+import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
+import {ReactNode} from "react";
 
 export interface PassangerReportReviewComponent {
   data: PassangerModel;
   extraData?: {
     reporting: boolean;
-    closeModal: () => void;
+    openModalMake: (user: PassangerModel, reporting: boolean, form:ReactNode) => void;
   };
 }
 
@@ -28,14 +31,17 @@ const PassangerReportReviewComponent = ({
     backgroundColor: isReviewed ? "green" : "orange",
   };
 
+
+  let formToRender = extraData?.reporting ? <ReportForm/> : <ReviewForm/>;
+
   return (
     <div className={styles.marginCointainer}>
-      {isLoading || data == undefined || isLoadingReview ? (
+      {isLoading || data == undefined || isLoadingReview || extraData == undefined ? (
         <LoadingWheel description={t("admin.user.loading")} />
       ) : (
           <div>
         <Button
-          onClick={() => }
+          onClick={() => extraData.openModalMake(data, extraData.reporting, reporting? <ReportForm/> : <ReviewForm/>)}
           style={buttonStyle}
           disabled={isReviewed}
           className={styles.userContainer}

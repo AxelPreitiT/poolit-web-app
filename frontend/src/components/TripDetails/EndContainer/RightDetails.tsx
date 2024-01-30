@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import {Button, Modal} from "react-bootstrap";
 import Status from "@/enums/Status.ts";
-import {useState} from "react";
+import {ReactNode, useState} from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
 import {Link} from "react-router-dom";
@@ -15,6 +15,7 @@ import ModalReport from "@/components/TripDetails/ModalsRR/ModalReport.tsx";
 import ModalMakeReportReview from "@/components/TripDetails/ModalReportsReviews/ModalMakeReportReview.tsx";
 import ReportForm from "@/components/TripDetails/ModalsForms/ReportForm.tsx";
 import ReviewForm from "@/components/TripDetails/ModalsForms/ReviewForm.tsx";
+import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -27,36 +28,36 @@ interface RightDetailsProps {
 }
 
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
-
     const { t } = useTranslation();
 
     // Modals Review
     const [showModalReport, setModalReport] = useState(false);
-    const openModalReport = () => {setModalReport(true);};
     const closeModalReport = () => {setModalReport(false);};
+    const openModalReport = () => {setModalReport(true);};
+
 
     // Modals Report
     const [showModalReview, setModalReview] = useState(false);
+    const closeModalReview = () => {setModalReview(false);};
     const openModalReview = () => {setModalReview(true);};
-    const closeModalReview = () => {
-        setModalReview(false);
-    };
 
-    // Modals Make Report-Review
-    const [showModalMake, setModalMake] = useState(false);
-    const openModalMake = () => {setModalMake(true);};
-    const closeModalMake = () => {
-        setModalMake(false);
-    };
 
-    // Modals Make ReviewCar
-
+    // Modals car
     const [showModalCar, setModalCar] = useState(false);
-    const openModalCar = (user: userPublicModel) => {
-        setModalCar(true);
-    };
-    const closeModalCar = () => {
-        setModalCar(false);
+    const closeModalCar = () => {setModalCar(false);};
+    const openModalCar = () => {setModalCar(true);};
+
+
+    // Modals User
+    const [formMake, setFormMake] = useState<ReactNode| null>(null);
+    const [userMake, setUserMake] = useState<userPublicModel| null>(null);
+    const [showModalMake, setModalMake] = useState(false);
+    const closeModalMake = () => {setModalMake(false);};
+    const openModalMake = (user: userPublicModel, reporting:boolean, form:ReactNode) => {
+        reporting ? closeModalReport() : closeModalReview();
+        setFormMake(form)
+        setUserMake(user);
+        setModalMake(true);
     };
 
 
@@ -95,19 +96,19 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
                         </div>
 
                         <Modal show={showModalReport} onHide={closeModalReport} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} reporting={true}/>
+                            <ModalReport openModalMake={openModalMake} closeModal={closeModalReport} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} reporting={true}/>
                         </Modal>
 
                         <Modal show={showModalReview} onHide={closeModalReview} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalReport closeModal={closeModalReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={false}/>
+                            <ModalReport openModalMake={openModalMake} closeModal={closeModalReview} driver={driver} isDriver={isDriver} trip={trip} passanger={passanger} car={car} reporting={false} openModalCar={openModalCar}/>
                         </Modal>
 
                         <Modal show={showModalMake} onHide={closeModalMake} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReportReview closeModal={closeModalMake} user={data} reportForm={<ReportForm/>}/>
+                            <ModalMakeUser closeModal={closeModalMake} user={userMake} reportForm={formMake}/>
                         </Modal>
 
                         <Modal show={showModalCar} onHide={closeModalCar} aria-labelledby="contained-modal-title-vcenter" centered>
-                            <ModalMakeReportReview closeModal={closeModalCar} user={data} reportForm={<ReviewForm/>}/>
+                            <ModalMakeCar closeModal={closeModalCar} car={car} reportForm={<ReviewCarForm/>}/>
                         </Modal>
 
                     </div> :
