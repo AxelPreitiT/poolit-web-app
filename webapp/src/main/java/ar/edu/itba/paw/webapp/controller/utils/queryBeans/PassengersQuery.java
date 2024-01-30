@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NotNullTogether(fields = {"startDateTime","endDateTime"})
 public class PassengersQuery extends PagedQuery{
@@ -19,6 +20,9 @@ public class PassengersQuery extends PagedQuery{
 
     @QueryParam("passengerState")
     private Passenger.PassengerState passengerState;
+
+    @QueryParam("excluding")
+    private List<Integer> excluding;
 
     public LocalDateTime getStartDateTime() {
         return startDateTime;
@@ -32,5 +36,23 @@ public class PassengersQuery extends PagedQuery{
         return passengerState;
     }
 
+    public List<Integer> getExcluding() {
+        return excluding;
+    }
 
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+
+    public void setPassengerState(Passenger.PassengerState passengerState) {
+        this.passengerState = passengerState;
+    }
+
+    public void setExcluding(List<Integer> excluding) {
+        this.excluding = excluding;
+    }
 }

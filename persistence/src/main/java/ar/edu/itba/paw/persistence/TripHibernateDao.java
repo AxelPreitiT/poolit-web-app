@@ -100,12 +100,15 @@ public class TripHibernateDao implements TripDao {
     }
 
     @Override
-    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,int page, int pageSize) {
+    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,List<Integer> excludedPassengers,int page, int pageSize) {
         LOGGER.debug("Looking for the passengers of the trip with id {}, between '{}' and '{}', in the database",trip.getTripId(),startDateTime,endDateTime);
         String queryString = "FROM passengers p " +
                 "WHERE p.trip_id = :tripId  AND ((p.start_date<=:startDate AND p.end_date>=:startDate) OR (p.start_date<= :endDate AND p.end_date>= :endDate) OR (p.start_date >= :startDate AND p.end_date <= :endDate)) "; //la ultima condicion es por si el pasajero esta adentro del intervalo buscado
         if(passengerState.isPresent()){
             queryString += "AND p.passenger_state = :passengerStateString ";
+        }
+        if(excludedPassengers!=null && !excludedPassengers.isEmpty()){
+            queryString += "AND p.user_id NOT IN :excludedList ";
         }
         Query countQuery = em.createNativeQuery( "SELECT count(distinct user_id) "+ queryString);
         Query idQuery = em.createNativeQuery("SELECT user_id " + queryString);
@@ -115,6 +118,11 @@ public class TripHibernateDao implements TripDao {
         countQuery.setParameter("endDate",endDateTime);
         idQuery.setParameter("startDate", startDateTime);
         idQuery.setParameter("endDate",endDateTime);
+        if(excludedPassengers!=null && !excludedPassengers.isEmpty()){
+            countQuery.setParameter("excludedList",excludedPassengers);
+            idQuery.setParameter("excludedList",excludedPassengers);
+        }
+
         passengerState.ifPresent(passengerState1 -> {
             countQuery.setParameter("passengerStateString", passengerState1.toString());
             idQuery.setParameter("passengerStateString", passengerState1.toString());

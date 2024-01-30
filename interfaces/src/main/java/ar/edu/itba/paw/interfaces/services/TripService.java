@@ -45,7 +45,7 @@ public interface TripService {
 
 //    List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);
 
-    PagedContent<Passenger> getPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final Passenger.PassengerState passengerState,final int page, final int pageSize) throws TripNotFoundException;
+    PagedContent<Passenger> getPassengers(final long tripId, final LocalDateTime startDateTime, final LocalDateTime endDateTime, final Passenger.PassengerState passengerState,final List<Integer> excludedList,final int page, final int pageSize) throws TripNotFoundException;
 
 //    List<Passenger> getPassengers(TripInstance tripInstance);
 

@@ -126,7 +126,7 @@ public class TripController {
     public Response getPassengers(@PathParam("id") final long id,
                                   @Valid @BeanParam final PassengersQuery passengersQuery) throws  TripNotFoundException {
         LOGGER.debug("GET request for passengers from trip {}",id);
-        PagedContent<Passenger> ans = tripService.getPassengers(id,passengersQuery.getStartDateTime(),passengersQuery.getEndDateTime(), passengersQuery.getPassengerState(),passengersQuery.getPage(),passengersQuery.getPageSize());
+        PagedContent<Passenger> ans = tripService.getPassengers(id,passengersQuery.getStartDateTime(),passengersQuery.getEndDateTime(), passengersQuery.getPassengerState(),passengersQuery.getExcluding(),passengersQuery.getPage(),passengersQuery.getPageSize());
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,passengersQuery.getPage(),PassengerDto::fromPassenger,PassengerDto.class);
     }
 

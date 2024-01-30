@@ -23,7 +23,7 @@ public interface TripDao {
     //
     List<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime);
     //
-    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,int page, int pageSize);
+    public PagedContent<Passenger> getPassengers(Trip trip, LocalDateTime startDateTime, LocalDateTime endDateTime, Optional<Passenger.PassengerState> passengerState,List<Integer> excludedPassengers,int page, int pageSize);
     //
     Optional<Passenger> getPassenger(final Trip trip, final User user);
     //
