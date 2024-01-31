@@ -377,7 +377,6 @@
     "text_title": "Leave an additional comment",
     "stars_car_title": "How would you rate the car?",
     "option_car_title": "What would you like to highlight about the car?",
-    "no_raiting": "Sin reseñas",
     "title": "Reviews",
     "VERY_BAD_STATE": "Very bad state",
     "VERY_DIRTY": "Very dirty",
@@ -644,13 +643,15 @@
       "user_reported": "Passanger reported"
     },
     "status": {
-      "not_started_review": "trip not started",
-      "started_review": "trip started",
-      "finished_review": "trip finished",
+      "not_started_review": "Trip not started",
+      "started_review": "Trip started",
+      "finished_review": "Trip finished",
       "title": "Estado:",
+      "all": "All",
       "cancelled": "Cancelled",
       "accepted": "Accepted",
       "rejected": "Rejected",
+      "pending": "Pending",
       "waiting": "Waiting",
       "finished": "Finished",
       "not_started": "Not started",
@@ -676,7 +677,7 @@
       "delete": "Delete",
       "cancel": "Cancel trip",
       "join": "Join",
-      "reviews": "Reviews"
+      "reviews": "Review"
     },
     "filter_by": "Filter by status: {{status}}",
     "error": {
@@ -876,15 +877,15 @@
     "driver": "Driver",
     "passangers": "Passangers",
     "car": "Car",
-    "close": "close",
-    "submit": "submit",
+    "close": "Close",
+    "submit": "Submit",
     "report": {
       "title": "Who do you want to report?",
-      "empty": "You don´t have users to report"
+      "empty": "You don't have users to report"
     },
     "review": {
-      "title": "Your Opinion Interes Ours.",
-      "empty": "You don´t have users to review"
+      "title": "Your opinion matters",
+      "empty": "You don't have users to review"
     }
   }
 }

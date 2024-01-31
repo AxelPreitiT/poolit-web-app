@@ -376,7 +376,6 @@
     "text_title": "Deja un comentario adicional",
     "stars_car_title": "¿Cómo calificarías a este pasajero?",
     "option_car_title": "¿Qué te gustaría destacar sobre este pasajero?",
-    "no_raiting": "No reviews",
     "title": "Opiniones",
     "VERY_BAD_STATE": "Estaba en muy mal estado",
     "VERY_DIRTY": "Estaba muy sucio",
@@ -643,14 +642,17 @@
       "user_reported": "Pasajero reportado"
     },
     "status": {
-      "not_started_review": "viaje no comenzado",
-      "started_review": "reserva comenzada",
-      "finished_review": "reserva terminada",
+      "not_started_review": "Viaje no comenzado",
+      "started_review": "Reserva comenzada",
+      "finished_review": "Reserva terminada",
       "title": "Status:",
+      "all": "Todos",
       "cancelled": "Cancelado",
       "accepted": "Aceptado",
+      "rejected": "Rechazado",
+      "pending": "Pendiente",
       "waiting": "Esperando",
-      "finished": "completado",
+      "finished": "Completado",
       "not_started": "No comenzado",
       "in_progress": "En progreso"
     },
@@ -665,7 +667,7 @@
       "empty": "Todavía no tenés pasajeros interesandos.",
       "passsanger_accepted": "Pasajero aceptado",
       "passsanger_rejected": "Pasajero rechazado",
-      "trip_started": "El viaje ah comenzado"
+      "trip_started": "El viaje ha comenzado"
     },
     "btn": {
       "accept": "Aceptar",
@@ -673,23 +675,23 @@
       "my_trips": "Mis viajes",
       "delete": "Eliminar",
       "cancel": "Cancelar viaje",
-      "join": "Join",
-      "reviews": "Reviews"
+      "join": "Unirme",
+      "reviews": "Opinar"
     },
-    "filter_by": "Filtrados por estado: {{priceInt}}",
+    "filter_by": "Filtrados por estado: {{status}}",
     "error": {
       "title": "No se pudo obtener el viaje",
       "default": "Ocurrió un error al obtener el viaje",
       "all_title": "No se pudieron obtener los viajes",
       "all_default": "Ocurrió un error al obtener los viajes"
     },
-    "recurrent_trip": " {{number}} viajes",
+    "recurrent_trip": "{{number}} viajes",
     "single_trip": "Viaje unico.",
     "price": "Precio: ",
     "income": "Total: ",
     "seats": "{{number}} asientos disponibles",
     "report": {
-      "pre_link_text": "¿Has tenido algun problema?",
+      "pre_link_text": "¿Tuviste algún problema?",
       "link_text": "Reportar"
     }
   },
@@ -876,13 +878,13 @@
     "passangers": "Pasajero",
     "car": "Coche",
     "close": "Cerrar",
-    "submit": "Subir",
+    "submit": "Enviar",
     "report": {
-      "title": "¿A quien quieres reportar?",
+      "title": "¿A quién quieres reportar?",
       "empty": "No tenés usuarios para reportar"
     },
     "review": {
-      "title": "Tu opinion nos interesa",
+      "title": "Tu opinión nos interesa",
       "empty": "No tenés usuarios para reseñar."
     }
   }

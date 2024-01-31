@@ -8,7 +8,6 @@
   font-size: x-large !important;
 }
 
-
 .btn_trips {
   background-color: colors.$primary-color !important;
   border: none !important;
@@ -26,8 +25,8 @@
   min-width: max-content !important;
   column-gap: 7px;
   font-size: x-large;
+  font-weight: 600;
 }
-
 
 .btn_cancel {
   background-color: colors.$danger-color !important;
@@ -39,7 +38,6 @@
   justify-content: center;
   flex-direction: column;
 }
-
 
 .info_container {
   display: flex;
@@ -96,8 +94,6 @@
   align-items: flex-end;
 }
 
-
-
 .btn_container {
   display: flex;
   justify-content: center;
@@ -112,7 +108,6 @@
   padding: 2%;
 }
 
-
 .trips_info {
   display: flex;
   justify-content: flex-end;
@@ -124,19 +119,19 @@
   font-size: x-large;
 }
 
-.review_btn{
+.review_btn {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.report_link{
+.report_link {
   display: flex;
   flex-direction: row;
   gap: 5px;
   justify-content: center;
 }
 
-.status_container{
+.status_container {
   min-width: max-content;
 }

@@ -13,7 +13,7 @@ const usePublicUserById = (id?: string) => {
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
 
   const query = useQuery({
-    queryKey: ["publicUser", id],
+    queryKey: ["publicUserId", id],
     queryFn: async () => {
       if (!id || !discovery?.usersUriTemplate) {
         return undefined;

@@ -5,28 +5,34 @@ import MainComponent from "@/components/utils/MainComponent.tsx";
 import MainHeader from "@/components/utils/MainHeader.tsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {useLocation, useSearchParams} from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
-import {INITIALPAGE, PASSANGERPAGESIZE} from "@/enums/PaginationConstants.ts";
-import {parseTemplate} from "url-template";
+import { INITIALPAGE, PASSANGERPAGESIZE } from "@/enums/PaginationConstants.ts";
+import { parseTemplate } from "url-template";
 import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
-import {useQueryClient} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { BiCaretDown } from "react-icons/bi";
+import { ButtonGroup } from "react-bootstrap";
 
 interface PassangersTripComponentProps {
   uri: string;
   fullSeats: boolean;
 }
 
-const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProps) => {
+const PassangersTripComponent = ({
+  uri,
+  fullSeats,
+}: PassangersTripComponentProps) => {
   const { t } = useTranslation();
 
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
-  const [selectedOption, setSelectedOption] = useState<string>(PassangerStatus.ALL);
-
+  const [selectedOption, setSelectedOption] = useState<string>(
+    PassangerStatus.ALL
+  );
 
   const [params] = useSearchParams();
   const startDateTime = params.get("startDateTime") || "";
@@ -35,35 +41,42 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
     userId: null,
     startDateTime: startDateTime,
     endDateTime: endDateTime,
-    passengerState: selectedOption == PassangerStatus.ALL? null : selectedOption,
+    passengerState:
+      selectedOption == PassangerStatus.ALL ? null : selectedOption,
   });
   const queryClient = useQueryClient();
-
 
   const options = Object.values(PassangerStatus);
 
   const handleSelect = (eventKey: string | null) => {
     if (eventKey !== null) {
       setSelectedOption(eventKey);
-      queryClient.invalidateQueries({ queryKey: ['passangersPagination'] });
+      queryClient.invalidateQueries({ queryKey: ["passangersPagination"] });
     }
   };
-
 
   return (
     <MainComponent>
       <MainHeader title={t("trip_detail.passengers.header")} />
       <div className={styles.dropdown_style}>
-        <Dropdown onSelect={handleSelect}>
+        <Dropdown onSelect={handleSelect} as={ButtonGroup}>
           <Dropdown.Toggle id="dropdown-basic" className={styles.btn_dropdown}>
-            {t("trip_detail.filter_by", {
-              status: selectedOption,
-            })}
+            <span>
+              {t("trip_detail.filter_by", {
+                status: t("trip_detail.status." + selectedOption.toLowerCase()),
+              })}
+            </span>
+            <BiCaretDown />
           </Dropdown.Toggle>
           <Dropdown.Menu className={styles.dropdown_menu_passanger}>
             {options.map((option, index) => (
-              <Dropdown.Item key={index} eventKey={option}>
-                {option}
+              <Dropdown.Item
+                as="button"
+                key={index}
+                eventKey={option}
+                className={option === selectedOption ? styles.active : ""}
+              >
+                {t("trip_detail.status." + option.toLowerCase())}
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
@@ -71,19 +84,19 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
       </div>
       <div className={styles.passangers_container}>
         <PaginationComponentExtraData
-            CardComponent={PassangerComponent}
-            extraData={fullSeats}
-            uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
-            current_page={currentPage}
-            useFuction={usePassangerByUri}
-            empty_component={
-              <div className={styles.review_empty_container}>
-                <h3 className="italic-text placeholder-text">
-                    {t("trip_detail.passengers.empty_modal")}
-                </h3>
-              </div>
-            }
-            itemsName={t("trip_detail.passengers.header")}
+          CardComponent={PassangerComponent}
+          extraData={fullSeats}
+          uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
+          current_page={currentPage}
+          useFuction={usePassangerByUri}
+          empty_component={
+            <div className={styles.review_empty_container}>
+              <h3 className="italic-text placeholder-text">
+                {t("trip_detail.passengers.empty_modal")}
+              </h3>
+            </div>
+          }
+          itemsName={t("trip_detail.passengers.header")}
         />
       </div>
     </MainComponent>

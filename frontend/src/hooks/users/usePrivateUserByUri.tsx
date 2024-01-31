@@ -6,38 +6,38 @@ import { useEffect } from "react";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
 
 const usePrivateUserByUri = (uri?: string) => {
-    const { t } = useTranslation();
-    const onQueryError = useQueryError();
+  const { t } = useTranslation();
+  const onQueryError = useQueryError();
 
-    const query = useQuery({
-        queryKey: ["publicUser", uri],
-        queryFn: async () => {
-            if (!uri) {
-                return undefined;
-            }
-            return await userService.getPrivateUserByUri(uri);
-        },
-        retry: false,
-        enabled: !!uri,
-    });
+  const query = useQuery({
+    queryKey: ["privateUserUri", uri],
+    queryFn: async () => {
+      if (!uri) {
+        return undefined;
+      }
+      return await userService.getPrivateUserByUri(uri);
+    },
+    retry: false,
+    enabled: !!uri,
+  });
 
-    const { isError, error, data, isLoading, isPending } = query;
+  const { isError, error, data, isLoading, isPending } = query;
 
-    useEffect(() => {
-        if (isError) {
-            onQueryError({
-                error,
-                title: t("profile.error.title"),
-                timeout: defaultToastTimeout,
-            });
-        }
-    }, [isError, error, onQueryError, t]);
+  useEffect(() => {
+    if (isError) {
+      onQueryError({
+        error,
+        title: t("profile.error.title"),
+        timeout: defaultToastTimeout,
+      });
+    }
+  }, [isError, error, onQueryError, t]);
 
-    return {
-        ...query,
-        isLoading: isLoading || isPending,
-        user: data,
-    };
+  return {
+    ...query,
+    isLoading: isLoading || isPending,
+    user: data,
+  };
 };
 
 export default usePrivateUserByUri;

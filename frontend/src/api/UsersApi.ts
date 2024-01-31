@@ -9,6 +9,7 @@ import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import RegisterModel from "@/models/RegisterModel";
 import { EditProfileFormSchemaType } from "@/forms/EditProfileForm";
+import UserDriverModel from "@/models/UserDriverModel";
 
 class UsersApi extends AxiosApi {
   private static readonly USERS_BASE_URI: string = "/users";
@@ -16,6 +17,8 @@ class UsersApi extends AxiosApi {
     "application/vnd.user.public.v1+json";
   private static readonly USERS_PRIVATE_ACCEPT_HEADER: string =
     "application/vnd.user.private.v1+json";
+  private static readonly USERS_DRIVER_ACCEPT_HEADER: string =
+    "application/vnd.user.driver.v1+json";
   private static readonly USERS_CONTENT_TYPE_HEADER: string =
     "application/vnd.user.v1+json";
 
@@ -102,14 +105,24 @@ class UsersApi extends AxiosApi {
       });
     };
 
-  public static getPrivateUser: (uri: string) => AxiosPromise<UserPrivateModel> =
-      (uri: string) => {
-        return this.get<UserPrivateModel>(uri, {
-          headers: {
-            Accept: UsersApi.USERS_PRIVATE_ACCEPT_HEADER,
-          },
-        });
-      };
+  public static getPrivateUser: (
+    uri: string
+  ) => AxiosPromise<UserPrivateModel> = (uri: string) => {
+    return this.get<UserPrivateModel>(uri, {
+      headers: {
+        Accept: UsersApi.USERS_PRIVATE_ACCEPT_HEADER,
+      },
+    });
+  };
+
+  public static getDriverUser: (uri: string) => AxiosPromise<UserDriverModel> =
+    (uri: string) => {
+      return this.get<UserDriverModel>(uri, {
+        headers: {
+          Accept: UsersApi.USERS_DRIVER_ACCEPT_HEADER,
+        },
+      });
+    };
 
   public static getCurrentUser: () => AxiosPromise<UserPrivateModel> = () => {
     const jwtClaims = Jwt.getJwtClaims();

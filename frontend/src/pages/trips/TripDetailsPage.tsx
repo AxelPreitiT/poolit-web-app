@@ -26,15 +26,12 @@ const TripDetailsPage = () => {
   );
   const isDriver = trip?.driverUri === currentUser?.selfUri;
 
-
-
   const {
     isLoading: isLoadingRole,
     currentPassanger: currentPassanger,
     isError: isError,
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
-
 
   if (
     isLoadingTrip ||
@@ -56,7 +53,7 @@ const TripDetailsPage = () => {
             !isDriver &&
             isPassanger &&
             !isLoadingRole &&
-              currentPassanger != undefined && (
+            currentPassanger && (
               <StatusTrip status={currentPassanger.passengerState} />
             )
           }
@@ -100,7 +97,12 @@ const TripDetailsPage = () => {
         </div>
       </MainComponent>
       {isDriver && (
-        <PassangersTripComponent uri={trip.passengersUriTemplate} fullSeats={0 == parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10)} />
+        <PassangersTripComponent
+          uri={trip.passengersUriTemplate}
+          fullSeats={
+            0 === parseInt(trip.maxSeats, 10) - parseInt(trip.occupiedSeats, 10)
+          }
+        />
       )}
     </div>
   );

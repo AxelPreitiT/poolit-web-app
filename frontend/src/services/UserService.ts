@@ -5,6 +5,7 @@ import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import { LoginFormSchemaType } from "@/forms/LoginForm";
 import UserPublicModel from "@/models/UserPublicModel.ts";
 import { EditProfileFormSchemaType } from "@/forms/EditProfileForm";
+import UserDriverModel from "@/models/UserDriverModel";
 
 class UserService extends Service {
   public static login = async (data: LoginFormSchemaType) => {
@@ -54,10 +55,15 @@ class UserService extends Service {
     await this.updateUserImage(user.imageUri, data.image);
   };
 
-  public static getPrivateUserByUri = async (uri: string): Promise<UserPrivateModel> =>
-      await this.resolveQuery(UsersApi.getPrivateUser(uri));
+  public static getPrivateUserByUri = async (
+    uri: string
+  ): Promise<UserPrivateModel> =>
+    await this.resolveQuery(UsersApi.getPrivateUser(uri));
 
-
+  public static getDriverUserByUri = async (
+    uri: string
+  ): Promise<UserDriverModel> =>
+    await this.resolveQuery(UsersApi.getDriverUser(uri));
 }
 
 export default UserService;
