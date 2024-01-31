@@ -2,10 +2,7 @@ package ar.edu.itba.paw.webapp.controller.utils.queryBeans;
 
 import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.models.trips.Trip;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.CityId;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.Exclusive;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.NotAllNull;
-import ar.edu.itba.paw.webapp.dto.validation.annotations.NotNullTogether;
+import ar.edu.itba.paw.webapp.dto.validation.annotations.*;
 
 import javax.validation.constraints.Min;
 import javax.ws.rs.QueryParam;
@@ -22,10 +19,9 @@ import java.util.List;
 //Cuando se usa el de creados, no se pueden usar el de reservados
 @Exclusive(group1 = {"createdBy"},group2 = {"reservedBy"})
 //No quiero que se use la intersección de los grupos, y no ponemos los casos análogos (g1=g2, g2=g1) porque con eso se repite el error
-//TODO: add validations
-//@SameWeekDay
-//@LastDateIsAfterDate
-//@MinPriceLessThanMaxPrice (@Price)
+@LessOrEqualThan(value1 = "startDateTime",value2 = "endDateTime")
+@LessOrEqualThan(value1 = "minPrice", value2 = "maxPrice")
+@SameWeekDay(value1 = "startDateTime", value2 = "endDateTime")
 public class TripsQuery extends PagedQuery{
     @QueryParam("originCityId")
     @CityId

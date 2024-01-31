@@ -12,11 +12,9 @@ import java.time.LocalTime;
 
 @MaxSeatsLessThanCarSeats
 @LastDateNotNullIfMultitrip
-@SameWeekDay
+@SameWeekDay(value1 = "date", value2 = "lastDate")
 @EndDateIsAfterStartDate(start = "date",end = "lastDate")
 @NowOrLater
-//TODO: add
-//@LastDateIsAfterDate
 public class CreateTripDto {
 
     @CityId
