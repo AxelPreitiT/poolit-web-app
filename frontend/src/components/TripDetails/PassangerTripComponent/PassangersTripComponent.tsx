@@ -12,7 +12,6 @@ import PassangerStatus from "@/enums/PassangerStatus.ts";
 import { INITIALPAGE, PASSANGERPAGESIZE } from "@/enums/PaginationConstants.ts";
 import { parseTemplate } from "url-template";
 import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
-import { useQueryClient } from "@tanstack/react-query";
 import { BiCaretDown } from "react-icons/bi";
 import { ButtonGroup } from "react-bootstrap";
 
@@ -26,7 +25,7 @@ const PassangersTripComponent = ({
   fullSeats,
 }: PassangersTripComponentProps) => {
   const { t } = useTranslation();
-
+  const { invalidatePassangersState } = usePassangerByUri();
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
@@ -44,14 +43,13 @@ const PassangersTripComponent = ({
     passengerState:
       selectedOption == PassangerStatus.ALL ? null : selectedOption,
   });
-  const queryClient = useQueryClient();
 
   const options = Object.values(PassangerStatus);
 
   const handleSelect = (eventKey: string | null) => {
     if (eventKey !== null) {
       setSelectedOption(eventKey);
-      queryClient.invalidateQueries({ queryKey: ["passangersPagination"] });
+      invalidatePassangersState();
     }
   };
 

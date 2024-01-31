@@ -646,7 +646,7 @@
       "not_started_review": "Trip not started",
       "started_review": "Trip started",
       "finished_review": "Trip finished",
-      "title": "Estado:",
+      "title": "Status:",
       "all": "All",
       "cancelled": "Cancelled",
       "accepted": "Accepted",
