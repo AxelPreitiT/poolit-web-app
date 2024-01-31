@@ -5,7 +5,6 @@ import ShortInfoReport from "@/components/admin/ShortInfoReport";
 import { useTranslation } from "react-i18next";
 import EmptyList from "@/components/emptyList/EmptyList.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
-//import ReportPaginationList from "@/components/reportPaginationList/reportPaginationList.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import {useLocation} from "react-router-dom";
@@ -16,7 +15,6 @@ import {parseTemplate} from "url-template";
 
 
 const AdminPage = () => {
-  //const { isLoading: isLoadingReports, reports } = useAllReports();
   const { t } = useTranslation();
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
   const { search } = useLocation();
@@ -49,19 +47,6 @@ const AdminPage = () => {
                 description={t("admin.loading")}
             />
             ) : (
-                /*
-            <ListReportsProps
-                uri={uriReports}
-                current_page={currentPage}
-                empty_component={
-                    <EmptyList
-                        text={t("admin.empty")}
-                        second_text={t("")}
-                        icon={"megaphone-fill"}
-                    />
-                }
-            />)}
-            */
             <PaginationComponent
                 uri={
                     createPaginationUri(
@@ -85,31 +70,6 @@ const AdminPage = () => {
                 itemsName={t("reviews.title")}
             />
             )}
-
-
-
-
-            {/* TODO: Fix Pagination
-          <ListReportsProps
-            uri={
-                createPaginationUri(
-                    parseTemplate(discovery.reportsUriTemplate).expand({}),
-                    currentPage,
-                    1,
-                    true
-                )
-            }
-            empty_component={
-              <EmptyList
-                text={t("admin.empty")}
-                second_text={t("")}
-                icon={"megaphone-fill"}
-              />
-            }
-            current_page={currentPage}
-          />
-
-          )}*/}
 
 
 
