@@ -31,32 +31,28 @@ class TripsApi extends AxiosApi {
     "application/vnd.trip.v1+json";
 
   private static readonly TRIPS_CONTENT_TYPE_JOIN: string =
-      "application/vnd.trip.passenger.v1+json";
+    "application/vnd.trip.passenger.v1+json";
 
-  //private static readonly TRIPS_EARNING_TYPE_HEADER: string ="trip.earnings.v1+json"
+  private static readonly TRIPS_EARNING_ACCEPT_HEADER: string =
+    "application/vnd.trip.earnings.v1+json";
 
-  public static postDeleteTrip: (
+  public static postDeleteTrip: (uri: string) => AxiosPromise<void> = (
     uri: string
-    ) => AxiosPromise<void> = (uri: string) => {
+  ) => {
     return this.delete<void>(uri, {
-      headers: {
-      },
+      headers: {},
     });
-  }
+  };
 
   public static postJoinTrip: (
-      uri: string,
-      data: JoinTripModel
-  ) => AxiosPromise<void> =
-    (uri: string, data:JoinTripModel) => {
-      return this.post<JoinTripModel, void>(
-        uri, data,
-        {
-          headers: {
-            "Content-Type": TripsApi.TRIPS_CONTENT_TYPE_JOIN,
-          },
-        }
-    );
+    uri: string,
+    data: JoinTripModel
+  ) => AxiosPromise<void> = (uri: string, data: JoinTripModel) => {
+    return this.post<JoinTripModel, void>(uri, data, {
+      headers: {
+        "Content-Type": TripsApi.TRIPS_CONTENT_TYPE_JOIN,
+      },
+    });
   };
 
   public static getTripById: (uri: string) => AxiosPromise<TripModel> = (
@@ -64,16 +60,18 @@ class TripsApi extends AxiosApi {
   ) => {
     return this.get<TripModel>(uri, {
       headers: {
-        "Accept": TripsApi.TRIPS_CONTENT_TYPE_HEADER,
+        Accept: TripsApi.TRIPS_CONTENT_TYPE_HEADER,
       },
     });
   };
 
-  public static getAmountByUri: (uri: string) => AxiosPromise<tripEarningModel> = (
-      uri: string
-  ) => {
+  public static getAmountByUri: (
+    uri: string
+  ) => AxiosPromise<tripEarningModel> = (uri: string) => {
     return this.get<tripEarningModel>(uri, {
-      headers: {},
+      headers: {
+        Accept: TripsApi.TRIPS_EARNING_ACCEPT_HEADER,
+      },
     });
   };
 
