@@ -61,14 +61,22 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     @Override
-    public Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
+    public Car modifyCar(long carId, String infoCar, Integer seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException {
         Car car=findById(carId).orElseThrow(CarNotFoundException::new);
 
         if(imgData== null || imgData.length<=0){
-            return carDao.modifyCar(carId, infoCar, seats, features, car.getImageId());
+            return carDao.modifyCar(carId,
+                    infoCar!=null?infoCar:car.getInfoCar(),
+                    seats!=null?seats:car.getSeats(),
+                    features!=null?features:car.getFeatures(),
+                    car.getImageId());
         }
         final long newImageId = imageService.createImage(imgData).getImageId();
-        return carDao.modifyCar(carId, infoCar, seats, features, newImageId);
+        return carDao.modifyCar(carId,
+                infoCar!=null?infoCar:car.getInfoCar(),
+                seats!=null?seats:car.getSeats(),
+                features!=null?features:car.getFeatures(),
+                newImageId);
 
 
     }
