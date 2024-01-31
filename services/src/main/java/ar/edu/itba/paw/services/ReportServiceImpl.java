@@ -126,7 +126,6 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
-    //TODO: make private
 //    @Transactional
 //    @Override
     private void rejectReport(long reportId, String reason) throws ReportNotFoundException {

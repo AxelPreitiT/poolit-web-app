@@ -40,7 +40,7 @@ public interface TripService {
     boolean userIsAcceptedPassengerOfDriver(final User user, final User driver);
     Optional<Passenger> getPassenger(final long tripId, final User user);
 
-    Optional<Passenger> getPassenger(final long tripId, final long userId) throws UserNotFoundException;
+    Optional<Passenger> getPassenger(final long tripId, final long userId) /*throws UserNotFoundException*/;
     Optional<Passenger> getPassenger(final Trip trip, final User user);
 
 //    List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);

@@ -14,6 +14,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SameWeekDay {
+
+    String value1();
+    String value2();
     String message() default "{dto.validation.sameWeekDay}";
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };

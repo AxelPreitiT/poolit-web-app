@@ -12,7 +12,7 @@ public interface CarService {
 
     Car createCar(String plate, String infoCar, final byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features) throws UserNotFoundException;
 
-    Car modifyCar(long carId, String infoCar, int seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException;
+    Car modifyCar(long carId, String infoCar, Integer seats, List<FeatureCar> features, byte[] imgData) throws CarNotFoundException;
 
     Optional<Car> findById(long carId);
 

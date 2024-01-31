@@ -81,7 +81,6 @@ public class ReportController {
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PrivateReportDto::fromReport,PrivateReportDto.class);
     }
 
-    //TODO: hacer que se pueda buscar por reportado también, para pasajeros
     @GET
     @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reporterUserId)")

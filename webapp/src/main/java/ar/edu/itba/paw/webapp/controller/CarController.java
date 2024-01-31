@@ -85,7 +85,7 @@ public class CarController {
         return Response.created(uri).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
     @Consumes(value = VndType.APPLICATION_CAR)

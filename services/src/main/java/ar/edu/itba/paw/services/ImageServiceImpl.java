@@ -92,7 +92,10 @@ public class ImageServiceImpl implements ImageService {
                     img.setData(resizeImage(img.getData(),size),size);
                 }catch (Exception e){
                     LOGGER.error("There was an error when trying to resize image with id {} for size {}",imageId,size,e);
-                    return img;
+                    final Image auxImage = new Image(img.getImageId(), img.getData());
+                    auxImage.setData(img.getData(),size);
+                    return auxImage;
+//                    return img;
                 }
             }
             return img;

@@ -394,9 +394,12 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
-    public Optional<Passenger> getPassenger(final long tripId, final long userId) throws UserNotFoundException{
-        final User user = userService.findById(userId).orElseThrow(UserNotFoundException::new);
-        return tripDao.getPassenger(tripId,user);
+    public Optional<Passenger> getPassenger(final long tripId, final long userId){
+        final Optional<User> user = userService.findById(userId);
+        if(!user.isPresent()){
+            return Optional.empty();
+        }
+        return tripDao.getPassenger(tripId,user.get());
     }
 
     @Transactional

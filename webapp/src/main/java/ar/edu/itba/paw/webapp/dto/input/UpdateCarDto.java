@@ -10,11 +10,10 @@ import java.util.List;
 public class UpdateCarDto {
 
     @Size(min = 5, max = 100)
-    @NotNull
     private String carInfo;
 
     @Min(value = 1)
-    private int seats;
+    private Integer seats;
 
     private List<FeatureCar> features;
 
@@ -23,11 +22,11 @@ public class UpdateCarDto {
 
     public void setFeatures(List<FeatureCar> features) { this.features = features; }
 
-    public void setSeats(int seats) {
+    public void setSeats(Integer seats) {
         this.seats = seats;
     }
 
-    public int getSeats() {
+    public Integer getSeats() {
         return seats;
     }
 
