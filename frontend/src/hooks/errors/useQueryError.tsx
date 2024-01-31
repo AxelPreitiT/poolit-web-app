@@ -9,6 +9,7 @@ import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
 import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { loginPath } from "@/AppRouter";
 import { useLocation, useNavigate } from "react-router-dom";
+import JoinTripUnauthenticatedError from "@/errors/JoinTripUnauthenticatedError";
 
 const childrenByErrorId: Record<
   string,
@@ -74,7 +75,8 @@ const useQueryError = () => {
 
     if (
       (error instanceof UnauthorizedResponseError ||
-        error instanceof CurrentUserUriMissingError) &&
+        error instanceof CurrentUserUriMissingError ||
+        error instanceof JoinTripUnauthenticatedError) &&
       location.pathname !== loginPath
     ) {
       navigate(loginPath, { state: { from: location }, replace: true });

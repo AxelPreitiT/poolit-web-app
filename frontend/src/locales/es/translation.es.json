@@ -620,11 +620,11 @@
       "explainReject": "Indique el motivo de rechazo de la denuncia",
       "notifyApprove": "Se notificará al usuario denunciado con el motivo de aprobación",
       "notifyReject": "Se notificará al denunciante con el motivo de rechazo",
-      "accept" : "Aprobar denuncia",
-      "reject" : "Rechazar denuncia",
-      "approveBtn" : "Aprobar",
-      "rejectBtn" : "Rechazar",
-      "laterBtn" : "Decidir luego",
+      "accept": "Aprobar denuncia",
+      "reject": "Rechazar denuncia",
+      "approveBtn": "Aprobar",
+      "rejectBtn": "Rechazar",
+      "laterBtn": "Decidir luego",
       "approveWarning": "Esta acción cancela los viajes donde es conductor y lo quita de donde es pasajero",
       "decision": "¿Qué decisión querés tomar?"
     },
@@ -636,9 +636,9 @@
     "title": "Viaje",
     "header": "Detalle de viaje",
     "review": {
-      "reviewed" : "Auto reseñado",
-      "driver_reviewed" : "Conductor reseñado",
-      "user_reviewed" : "Pasajero reseñado",
+      "reviewed": "Auto reseñado",
+      "driver_reviewed": "Conductor reseñado",
+      "user_reviewed": "Pasajero reseñado",
       "driver_reported": "Conductor reportado",
       "user_reported": "Pasajero reportado"
     },
@@ -738,7 +738,8 @@
         "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
         "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión",
         "current_user_uri_missing": "La sesión expiró, por favor volvé a iniciar sesión",
-        "discovery_missing": "No se pudo comunicar con el servidor, por favor volvé a intentarlo más tarde"
+        "discovery_missing": "No se pudo comunicar con el servidor, por favor volvé a intentarlo más tarde",
+        "join_trip_unauthenticated": "Tenés que iniciar sesión para unirte a un viaje"
       }
     },
     "response": {
@@ -797,8 +798,8 @@
     "title": "Viajes",
     "loading": "Cargando viajes",
     "loading_one": "Cargando viaje",
-    "error_title_delete": "Error al eliminar el viaje",
-    "error_title_join": "Error al unirse al viaje"
+    "error_title_delete": "No se pudo eliminar el viaje",
+    "error_title_join": "No se pudo unir al viaje"
   },
   "car": {
     "title": "Auto",

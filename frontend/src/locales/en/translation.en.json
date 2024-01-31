@@ -621,11 +621,11 @@
       "explainReject": "Specify the reason for rejecting the report",
       "notifyApprove": "The reported user will be notified with the reason for approval",
       "notifyReject": "The user who made the report will be notified with the reason for rejection",
-      "accept" : "Approve report",
-      "reject" : "Reject report",
-      "approveBtn" : "Approve",
-      "rejectBtn" : "Reject",
-      "laterBtn" : "Decide later",
+      "accept": "Approve report",
+      "reject": "Reject report",
+      "approveBtn": "Approve",
+      "rejectBtn": "Reject",
+      "laterBtn": "Decide later",
       "approveWarning": "This action cancels trips where they are drivers and removes them on trips where they are passengers",
       "decision": "What decision do you want to make?"
     },
@@ -637,9 +637,9 @@
     "title": "Trip",
     "header": "Trip details",
     "review": {
-      "reviewed" : "Car Reviewed",
-      "driver_reviewed" : "driver reviewed",
-      "user_reviewed" : "Passanger reviewed",
+      "reviewed": "Car Reviewed",
+      "driver_reviewed": "driver reviewed",
+      "user_reviewed": "Passanger reviewed",
       "driver_reported": "Driver reported",
       "user_reported": "Passanger reported"
     },
@@ -740,7 +740,8 @@
         "invalid_email": "The email cannot have colon (:) characters",
         "authorization_header_missing": "The session expired, please log in again",
         "current_user_uri_missing": "The session expired, please log in again",
-        "discovery_missing": "Cannot communicate with the server, please try again later"
+        "discovery_missing": "Cannot communicate with the server, please try again later",
+        "join_trip_unauthenticated": "You must be logged in to join a trip"
       }
     },
     "response": {
@@ -798,8 +799,8 @@
     "title": "Trips",
     "loading": "Loading trips",
     "loading_one": "Loading trip",
-    "error_title_delete": "Error in delete Trip",
-    "error_title_join": "Error in join Trip"
+    "error_title_delete": "Unable to delete the trip",
+    "error_title_join": "Unable to join the trip"
   },
   "car": {
     "title": "Car",
