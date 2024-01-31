@@ -22,7 +22,6 @@ public class ImageHibernateDao implements ImageDao {
 
     @Override
     public Image create(byte[] data) {
-        //TODO crear imagen default si data.length<=0
         LOGGER.debug("Adding new image to the database");
         final Image image = new Image(data);
         em.persist(image);

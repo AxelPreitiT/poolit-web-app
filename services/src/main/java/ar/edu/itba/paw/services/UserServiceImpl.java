@@ -322,7 +322,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //TODO: revisar cómo es el ban, cómo funciona
     @Transactional
     @Override
     public void banUser(User user) {
