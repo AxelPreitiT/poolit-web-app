@@ -18,6 +18,13 @@ describe("Login", () => {
   it("Should show form error when submitting empty form", async () => {
     const { user } = customRender(<LoginPage />);
 
+    const containers = await screen.queryAllByRole("generic");
+    containers.forEach((container) => {
+      expect(container).not.toContainElement(
+        screen.queryByText(/email is required/i)
+      );
+    });
+
     const loginButton = screen.getByRole("button", { name: /log in/i });
     await user.click(loginButton);
 
@@ -73,6 +80,8 @@ describe("Login", () => {
     server.use(LoginMock.mockLogin());
     const { user } = customRender(<LoginPage />, { route: "/login" });
 
+    expect(await screen.queryByText(/ready to ride/i)).not.toBeInTheDocument();
+
     const emailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
     const loginButton = screen.getByRole("button", { name: /log in/i });
@@ -89,6 +98,8 @@ describe("Login", () => {
   it("When credentials are invalid, should show error", async () => {
     server.use(LoginMock.mockInvalidLogin());
     const { user } = customRender(<LoginPage />);
+
+    expect(await screen.queryByText(/log in failed/i)).not.toBeInTheDocument();
 
     const emailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -107,6 +118,8 @@ describe("Login", () => {
   it("When user is not verified, should show error", async () => {
     server.use(LoginMock.mockNonVerifiedLogin());
     const { user } = customRender(<LoginPage />);
+
+    expect(await screen.queryByText(/log in failed/i)).not.toBeInTheDocument();
 
     const emailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);

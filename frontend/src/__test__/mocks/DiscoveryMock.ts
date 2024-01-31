@@ -1,7 +1,5 @@
 import DiscoveryModel from "@/models/DiscoveryModel";
 import BaseMock from "./BaseMock";
-import { HttpHandler } from "msw";
-import MockInjector from "./MockInjector";
 
 const discoveryList: DiscoveryModel = {
   carBrandsUriTemplate: "localhost:8080/carBrands{/brandId}",
@@ -25,12 +23,6 @@ class DiscoveryMock extends BaseMock {
       this.jsonResponse(discoveryList, { status: this.OK_STATUS })
     );
   }
-
-  public static injectMockHandlers(): HttpHandler[] {
-    return [this.mockDiscovery()];
-  }
 }
-
-MockInjector.registerMock(DiscoveryMock);
 
 export default DiscoveryMock;

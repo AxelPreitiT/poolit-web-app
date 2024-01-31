@@ -1,4 +1,4 @@
-import { HttpHandler, HttpResponse, HttpResponseInit, http } from "msw";
+import { HttpResponse, HttpResponseInit, http } from "msw";
 
 class BaseMock {
   protected static readonly OK_STATUS = 200;
@@ -11,10 +11,6 @@ class BaseMock {
   protected static jsonResponse = HttpResponse.json;
 
   protected static get = http.get;
-
-  static injectMockHandlers(): HttpHandler[] {
-    return [];
-  }
 }
 
 export default BaseMock;

@@ -1,13 +1,10 @@
 import "@testing-library/jest-dom";
 import { afterAll, afterEach, beforeAll } from "vitest";
 import { setupServer } from "msw/node";
-import MockInjector from "./mocks/MockInjector";
 import { cleanup } from "@testing-library/react";
 import { __setToastStackTimeout } from "@/stores/ToastStackStore/ToastStackStore";
 
-const restHandlers = MockInjector.injectMockHandlers();
-
-export const server = setupServer(...restHandlers);
+export const server = setupServer();
 
 // Start server before all tests
 // onUnhandledRequest: 'error' will throw an error if there is an unhandled request
