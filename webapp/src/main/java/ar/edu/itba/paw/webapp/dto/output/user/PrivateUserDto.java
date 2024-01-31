@@ -30,6 +30,14 @@ public class PrivateUserDto extends DriverUserDto{
 
     private URI carsUri;
 
+    private int reportsPublished;
+
+    private int reportsReceived;
+
+    private int reportsApproved;
+
+    private int reportsRejected;
+
     public PrivateUserDto(){}
 
     protected PrivateUserDto(final UriInfo uriInfo, final User user){
@@ -38,6 +46,10 @@ public class PrivateUserDto extends DriverUserDto{
         this.mailLocale = user.getMailLocale().getLanguage();
         this.role = user.getRole();
         this.carsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).queryParam("fromUser",user.getUserId()).build();
+        this.reportsApproved = user.getReportsApproved();
+        this.reportsPublished = user.getReportsPublished();
+        this.reportsReceived = user.getReportsReceived();
+        this.reportsRejected = user.getReportsRejected();
         //We use recommendedFor and not pass the filters here to maintain the recommendation logic in the service
         this.recommendedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("recommendedFor",user.getUserId()).build();
         this.pastCreatedTripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).queryParam("createdBy",user.getUserId()).queryParam("past",true).build();
@@ -116,5 +128,19 @@ public class PrivateUserDto extends DriverUserDto{
 
     public void setCarsUri(URI carsUri) { this.carsUri = carsUri; }
 
+    public int getReportsPublished() { return reportsPublished; }
 
+    public void setReportsPublished(int reportsPublished) { this.reportsPublished = reportsPublished; }
+
+    public int getReportsReceived() { return reportsReceived; }
+
+    public void setReportsReceived(int reportsReceived) { this.reportsReceived = reportsReceived; }
+
+    public int getReportsApproved() { return reportsApproved; }
+
+    public void setReportsApproved(int reportsApproved) { this.reportsApproved = reportsApproved; }
+
+    public int getReportsRejected() { return reportsRejected; }
+
+    public void setReportsRejected(int reportsRejected) { this.reportsRejected = reportsRejected; }
 }

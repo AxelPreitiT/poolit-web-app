@@ -102,6 +102,15 @@ class UsersApi extends AxiosApi {
       });
     };
 
+  public static getPrivateUser: (uri: string) => AxiosPromise<UserPrivateModel> =
+      (uri: string) => {
+        return this.get<UserPrivateModel>(uri, {
+          headers: {
+            Accept: UsersApi.USERS_PRIVATE_ACCEPT_HEADER,
+          },
+        });
+      };
+
   public static getCurrentUser: () => AxiosPromise<UserPrivateModel> = () => {
     const jwtClaims = Jwt.getJwtClaims();
     const userUrl = jwtClaims?.userUrl;

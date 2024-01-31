@@ -75,7 +75,7 @@ public class UserController {
     @GET
     @Path("/{id}")
     @Produces(VndType.APPLICATION_USER_PRIVATE)
-    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id)")
+    @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id) or hasRole('ADMIN')")
     public Response getByIdPrivate(@PathParam("id") final long id){
         LOGGER.debug("GET request for private userId {}",id);
         final User user = userService.findById(id).orElseThrow(ResourceNotFoundException::new);

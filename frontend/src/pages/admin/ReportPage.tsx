@@ -8,16 +8,18 @@ import CardTrip from "@/components/cardTrip/cardTrip/CardTrip.tsx";
 import ReportReason from "@/components/reportReason/ReportReason.tsx";
 import useTripByUri from "@/hooks/trips/useTripByUri.tsx";
 import useReportById from "@/hooks/admin/useReportById.tsx";
-import { useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import LoadingWheel from "@/components/loading/LoadingWheel";
-import usePublicUserByUri from "@/hooks/users/usePublicUserByUri";
 import {useState} from "react";
 import {Button, Modal} from "react-bootstrap";
 import ModalReportAccept from "@/components/admin/DecideReportModal/ModalReportAccept.tsx";
 import ReportApproveForm from "@/components/admin/DecideReportModal/ReportApproveForm.tsx";
 import ModalReportReject from "@/components/admin/DecideReportModal/ModalReportReject.tsx";
 import ReportRejectForm from "@/components/admin/DecideReportModal/ReportRejectForm.tsx";
+import {adminPath, publicProfilePath} from "@/AppRouter.tsx";
+import UsePrivateUserByUri from "@/hooks/users/usePrivateUserByUri.tsx";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 //TODO rating y cantidad de reportes en los usuarios. Como traducir reportOptions. Como obtener el Report.
 
@@ -33,12 +35,12 @@ const ReportPage = () => {
     isLoading: isUserReporterLoading,
     user: userReporter,
     isError: isUserReporterError,
-  } = usePublicUserByUri(report?.reportedUri);
+  } = UsePrivateUserByUri(report?.reporterUri);
   const {
     isLoading: isUserReportedLoading,
     user: userReported,
     isError: isUserReportedError,
-  } = usePublicUserByUri(report?.reportedUri);
+  } = UsePrivateUserByUri(report?.reportedUri);
   const {
     isLoading: isTripLoading,
     trip,
@@ -56,13 +58,11 @@ const ReportPage = () => {
     isReportLoading ||
     isUserReporterLoading ||
     isUserReportedLoading ||
-    isTripLoading ||
     isReportError ||
     isUserReportedError ||
     isUserReporterError ||
     isTripError ||
     !report ||
-    !trip ||
     !userReporter ||
     !userReported
   ) {
@@ -78,17 +78,17 @@ const ReportPage = () => {
             <div className={styles.report_users_content_container}>
               <div
                 id="users-image-container"
-                className={styles.users_container}
+                className={styles.users_content_container + " " + styles.users_container}
               >
                 <div className={styles.user_container}>
-                  <a href={userReporter.selfUri}>
+                  <Link to={publicProfilePath.replace(":id", String(userReporter.userId))}>
                     <CircleImg src={userReporter.imageUri} size={70} />
-                  </a>
+                  </Link>
                 </div>
                 <div className={styles.report_arrow_container}>
                   <div className={styles.report_arrow_content}>
                     <div className={styles.report_arrow_text}>
-                      <i className="bi bi-megaphone-fill secondary-color h3"></i>
+                      <i className="bi bi-megaphone-fill secondary-color h3 secondary-color"></i>
                       <h3 className={styles.secondary_color}>
                         <span>{t("admin.report.reported")}</span>
                       </h3>
@@ -109,22 +109,22 @@ const ReportPage = () => {
                   </div>
                 </div>
                 <div className={styles.user_container}>
-                  <a href={userReported.selfUri}>
+                  <Link to={publicProfilePath.replace(":id", String(userReported.userId))}>
                     <CircleImg src={userReported.imageUri} size={70} />
-                  </a>
+                  </Link>
                 </div>
               </div>
-              <div id="users-container" className={styles.users_container}>
-                <div className={styles.user_container}>
-                  <div className={styles.user_container_item}>
-                    <a href={userReporter.selfUri}>
+              <div id="users-container" className={styles.users_stats_container}>
+                <div className={styles.user_stats_container}>
+                  <div className={styles.item_container}>
+                    <Link to={publicProfilePath.replace(":id", String(userReporter.userId))}>
                       <h3 className={styles.secondary_color}>
                         {t("format.name", {
                           name: userReporter.username,
                           surname: userReporter.surname,
                         })}
                       </h3>
-                    </a>
+                    </Link>
                     <h6 className="italic-text">
                       {report.relation == "PASSENGER_2_DRIVER" ||
                       report.relation == "PASSENGER_2_PASSENGER" ? (
@@ -137,63 +137,73 @@ const ReportPage = () => {
 
                   {report.relation == "PASSENGER_2_DRIVER" ||
                   report.relation == "PASSENGER_2_PASSENGER" ? (
-                    <StarRating
-                      rating={userReporter.passengerRating}
-                      className="h3"
-                    />
+                      <div className={styles.item_container}>
+                        <strong>{t("admin.report.passengerRating")}</strong>
+                        <StarRating
+                          rating={userReporter.passengerRating}
+                          className="h3"
+                        />
+                      </div>
                   ) : (
-                    <StarRating
-                      rating={userReporter.driverRating}
-                      className="h3"
-                    />
+                      <div className={styles.item_container}>
+                        <strong>{t("admin.report.driverRating")}</strong>
+                        <StarRating
+                          rating={userReporter.driverRating}
+                          className="h3"
+                        />
+                      </div>
                   )}
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span> {t("admin.report.published")}</span>
+                      <span className={styles.secondary_color}>{userReporter.reportsPublished} </span>
                     </strong>
                   </div>
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span>{t("admin.report.received")}</span>
+                      <span className={styles.secondary_color}>{userReporter.reportsReceived} </span>
                     </strong>
                   </div>
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span>{t("admin.report.approved")}</span>
+                      <span className={styles.secondary_color}>{userReporter.reportsApproved} </span>
                     </strong>
                   </div>
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span>{t("admin.report.rejected")}</span>
+                      <span className={styles.secondary_color}> {userReporter.reportsRejected} </span>
                     </strong>
                   </div>
                 </div>
-                <div className={styles.user_container}>
-                  <div className={styles.user_container_item}>
-                    <a href={userReported.selfUri}>
+                <div className={styles.user_stats_container}>
+                  <div className={styles.item_container}>
+                    <Link to={publicProfilePath.replace(":id", String(userReported.userId))} className={styles.link_container }>
                       <h3 className={styles.secondary_color}>
                         {t("format.name", {
                           name: userReported.username,
                           surname: userReported.surname,
                         })}
                       </h3>
-                    </a>
+                    </Link>
                     <h6 className="italic-text">
                       {report.relation == "DRIVER_2_PASSENGER" ||
                       report.relation == "PASSENGER_2_PASSENGER" ? (
@@ -203,52 +213,62 @@ const ReportPage = () => {
                       )}
                     </h6>
                   </div>
-                  {report.relation == "DriverToPassanger" ||
-                  report.relation == "PassangerToPassanger" ? (
-                    <StarRating
-                      rating={userReported.passengerRating}
-                      className="h3"
-                    />
+                  {report.relation == "DRIVER_2_PASSENGER" ||
+                  report.relation == "PASSENGER_2_PASSENGER" ? (
+                      <div className={styles.item_container}>
+                        <strong>{t("admin.report.passengerRating")}</strong>
+                        <StarRating
+                          rating={userReported.passengerRating}
+                          className="h3"
+                        />
+                      </div>
                   ) : (
-                    <StarRating
-                      rating={userReported.driverRating}
-                      className="h3"
-                    />
+                      <div className={styles.item_container}>
+                        <strong>{t("admin.report.driverRating")}</strong>
+                        <StarRating
+                          rating={userReported.driverRating}
+                          className="h3"
+                        />
+                      </div>
                   )}
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                      styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span> {t("admin.report.published")}</span>
+                      <span className={styles.secondary_color}> {userReported.reportsPublished} </span>
                     </strong>
                   </div>
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span> {t("admin.report.received")}</span>
+                      <span className={styles.secondary_color}> {userReported.reportsReceived} </span>
                     </strong>
                   </div>
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span> {t("admin.report.approved")}</span>
+                      <span className={styles.secondary_color}> {userReported.reportsApproved} </span>
                     </strong>
                   </div>
                   <div
                     className={
-                      styles.user_container_item + styles.user_container_row
+                        styles.user_container_item + " " + styles.user_container_row
                     }
                   >
                     <strong>
                       <span> {t("admin.report.rejected")}</span>
+                      <span className={styles.secondary_color}>{userReported.reportsRejected} </span>
                     </strong>
                   </div>
                 </div>
@@ -290,9 +310,7 @@ const ReportPage = () => {
                     </div>
                     <div className={styles.report_date}>
                       <span className="italic-text">
-                        {t("format.date", {
-                          date: report.dateTime,
-                        })}
+                        {getFormattedDateTime(report.dateTime).date} {getFormattedDateTime(report.dateTime).time}
                       </span>
                     </div>
                   </div>
@@ -302,12 +320,11 @@ const ReportPage = () => {
                 <div className={styles.decision_content_container}>
                   <h6 className={styles.secondary_color}>{t('admin.report.decision')}</h6>
                   <div className={styles.button_container}>
-                    //TODO como hacer href
-                    <a href="/admin/">
+                    <Link to={adminPath}>
                       <Button variant="primary" className="later-btn">
                         <span className="light-text h5">{t('admin.report.laterBtn')}</span>
                       </Button>
-                    </a>
+                    </Link>
                     <div className={styles.reject_container}>
                       <Button variant="danger" className="danger-btn" onClick={openModalReportReject}>
                         <span className="light-text h5">{t('admin.report.rejectBtn')}</span>

@@ -17,6 +17,10 @@ interface UserPrivateModel extends UserPublicModel {
   reviewsDriverUri: string;
   reviewsPassengerUri: string;
   tripCount: number;
+  reportsPublished: number;
+  reportsReceived: number;
+  reportsApproved: number;
+  reportsRejected: number;
 }
 
 export default UserPrivateModel;

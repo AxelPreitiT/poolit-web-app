@@ -53,6 +53,11 @@ class UserService extends Service {
     await this.resolveQuery(UsersApi.updateUser(user.selfUri, data));
     await this.updateUserImage(user.imageUri, data.image);
   };
+
+  public static getPrivateUserByUri = async (uri: string): Promise<UserPrivateModel> =>
+      await this.resolveQuery(UsersApi.getPrivateUser(uri));
+
+
 }
 
 export default UserService;
