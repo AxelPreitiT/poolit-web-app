@@ -48,9 +48,9 @@ const TripDetailsPage = () => {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
   const tripTime = getFormattedDateTime(trip.startDateTime).time;
-  const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime || ((params.get("startDate")!=undefined)?`${params.get("startDate")}T${tripTime}`:trip.startDateTime));
-  const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || ((params.get("endDate")!=undefined)?`${params.get("endDate")}T${tripTime}`:((params.get("startDate")!=undefined)?`${params.get("startDate")}T${tripTime}`:trip.startDateTime)));
-
+  const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime || ((params.get("startDateTime")!=undefined)?`${params.get("startDateTime")}T${tripTime}`:trip.startDateTime));
+  const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || ((params.get("endDateTime")!=undefined)?`${params.get("endDateTime")}T${tripTime}`:((params.get("startDateTime")!=undefined)?`${params.get("startDateTime")}T${tripTime}`:trip.startDateTime)));
+  console.log(`In details, start is ${startDateTime} and end is ${endDateTime}`);
 // // Supongamos que tienes las cadenas de fecha y hora
 //   const fecha = '2024-02-01'; // Formato: 'YYYY-MM-DD'
 //   const hora = '12:30:00';    // Formato: 'HH:mm:ss'
@@ -117,6 +117,8 @@ const TripDetailsPage = () => {
               status={trip.tripStatus}
               driver={driver}
               car={car}
+              startDateTime = {startDateTime}
+              endDateTime = {endDateTime}
             />
           </div>
         </div>

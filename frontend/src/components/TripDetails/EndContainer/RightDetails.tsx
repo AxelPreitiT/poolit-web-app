@@ -29,11 +29,13 @@ interface RightDetailsProps {
     status: string;
     driver: userPublicModel;
     car: carModel;
+    startDateTime: string;
+    endDateTime: string
 }
 
-const BtnJoin = ( { trip }: { trip: tripModel }) => {
+const BtnJoin = ( { trip, startDateTime, endDateTime }: { trip: tripModel, startDateTime:string, endDateTime:string }) => {
     const { t } = useTranslation();
-    const {onSubmit:onSubmitAccept, invalidateTripState } = useJoinTrip(trip);
+    const {onSubmit:onSubmitAccept, invalidateTripState } = useJoinTrip(trip, startDateTime, endDateTime);
 
     return (
         <Button className={styles.btn_join} onClick={
@@ -88,7 +90,7 @@ const CancelBtn = ( { passanger }: { passanger?: passangerModel }) => {
     )
 }
 
-const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
+const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car, startDateTime, endDateTime}: RightDetailsProps) => {
     const { t } = useTranslation();
     const {isLoading:isLoadingDiscovery, discovery} = useDiscovery()
     const status_value = passanger!=undefined?getStatusPassanger(passanger) : status;
@@ -129,9 +131,9 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
     return (
         (! isLoadingDiscovery && discovery != undefined && (
         (!isPassanger && !isDriver) ?
-            (status_value === Status.FINISHED &&
+            (status_value != Status.FINISHED &&
                 <div className={styles.btn_container}>
-                    <BtnJoin trip={trip}/>
+                    <BtnJoin trip={trip} startDateTime={startDateTime} endDateTime={endDateTime}/>
                 </div>)
             :
             (status_value === Status.FINISHED ?

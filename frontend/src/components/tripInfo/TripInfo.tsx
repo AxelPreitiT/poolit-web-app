@@ -25,6 +25,9 @@ const TripInfo = ({trip, car, driver, isDriver, startDateTime, endDateTime} : Tr
     const availableSeats = parseInt(trip.maxSeats , 10) - 100000000;
     const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
+
+    console.log("tripInfo - start: " + startDateTime)
+    console.log("tripInfo - end: " + endDateTime)
   return (
     <div className={styles.info_trip}>
       <div className={styles.show_row}>

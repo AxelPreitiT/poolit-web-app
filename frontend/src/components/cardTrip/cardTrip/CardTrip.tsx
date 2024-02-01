@@ -8,6 +8,7 @@ import { getDayString } from "@/utils/date/dayString.ts";
 import useCityByUri from "@/hooks/cities/useCityByUri";
 import useCarByUri from "@/hooks/cars/useCarByUri";
 import tripModel from "@/models/TripModel.ts";
+import getTotalTrips from "@/functions/getTotalTrips.ts";
 
 const CardTrip = ({
   trip,
@@ -19,9 +20,9 @@ const CardTrip = ({
   extraData?: (trip: tripModel)=>{startDate: string, endDate: string, link:string};
 }) => {
   const { t } = useTranslation();
-  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: '', endDate: '' , link:''};
+  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: trip.startDateTime, endDate: trip.endDateTime , link:''};
   const date = new Date(trip.startDateTime);
-
+  const totalTrips = getTotalTrips(new Date(start), new Date(end));
 
   const {
     isLoading: isOriginCityLoading,
@@ -49,7 +50,7 @@ const CardTrip = ({
   ) {
     return <LoadingWheel description={t("trip.loading_one")} />;
   }
-
+  const totalPrice = totalTrips * trip.pricePerTrip;
   return (
     <Link
       to={linkTrip}
@@ -105,7 +106,7 @@ const CardTrip = ({
             </div>
             <h3>
               {t("format.price", {
-                priceInt: trip.pricePerTrip,
+                priceInt: totalPrice
               })}
             </h3>
           </div>

@@ -108,8 +108,8 @@ const SearchPage = () => {
     //TODO: agarrar del forms!
     const [params] = useSearchParams();
     const startDate = params.get("date") || "";
-    const endDate = params.get("endDateTime") || "";
-    const link = tripDetailsPath.replace(":id", trip.tripId.toString()) + `?startDateTime=${startDate}&endDateTime=${endDate}`;
+    const endDate = params.get("lastDate") || params.get("date") ||  "";
+    const link = tripDetailsPath.replace(":tripId", trip.tripId.toString()) + `?startDateTime=${startDate}&endDateTime=${endDate}`;
     return {startDate:startDate, endDate:endDate, link: link}
   }
 
