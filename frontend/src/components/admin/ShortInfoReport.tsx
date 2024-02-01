@@ -34,7 +34,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
   return (
     <Link
         to={extractPathAfterApi(report.selfUri)}
-        className={styles.link_container + " "}
+        className={styles.text_black}
     >
       <div>
         <div className={styles.row_report}>
@@ -102,9 +102,9 @@ const ShortInfoReport = (report: PrivateReportModel) => {
           <div className={styles.trip_short_info}>
             <h4>
               <span className="secondary-color italic-text">
-                <h4>
-                  <span> {t("admin.reason.title")}</span>
-                  <ReportReason reason={report.reportOption} />
+                <h4 className={styles.reason_container}>
+                  <span className={styles.reason_title}> {t("admin.reason.title")}</span>
+                  <span><ReportReason reason={report.reportOption} /></span>
                 </h4>
               </span>
             </h4>

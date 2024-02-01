@@ -15,7 +15,7 @@ const ModalReportAccept = ({ closeModal, reportProcessForm}: ModalReportAcceptPr
             <Modal.Header>
 
             <h4 className={styles.secondary_color_title}>{t('admin.report.accept')}</h4>
-            <button type="button" className={styles.close_btn} onClick={closeModal} aria-label="Close"></button>
+            <button type="button" className="btn-close" onClick={closeModal} aria-label="Close"></button>
 
             </Modal.Header>
             <Modal.Body>
@@ -24,7 +24,7 @@ const ModalReportAccept = ({ closeModal, reportProcessForm}: ModalReportAcceptPr
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={closeModal}>
+                <Button variant="primary" className="later-btn" onClick={closeModal}>
                     {t('modal.close')}
                 </Button>
                 <Button variant="secondary" className="secondary-btn" onClick={closeModal}>

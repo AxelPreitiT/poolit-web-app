@@ -12,6 +12,7 @@ import LoadingWheel from "@/components/loading/LoadingWheel.tsx";
 import PaginationComponent from "@/components/pagination/PaginationComponent/PaginationComponent.tsx";
 import UseAllReports from "@/hooks/admin/useAllReports.tsx";
 import {parseTemplate} from "url-template";
+import {INITIALPAGE, ADMINPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 
 const AdminPage = () => {
@@ -19,16 +20,7 @@ const AdminPage = () => {
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? 1 : parseInt(page, 10);
-  const uriReports =
-    isLoadingDiscovery || discovery === undefined
-        ? null
-        : createPaginationUri(
-            parseTemplate(discovery.reportsUriTemplate).expand({}),
-            currentPage,
-            1,
-        true
-        );
+  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
 
   if ( isLoadingDiscovery) {
     return <LoadingScreen description={t("admin.loading")} />;
@@ -39,7 +31,7 @@ const AdminPage = () => {
       <MainHeader title={t("admin.title")} />
       <div className={styles.container_tab}>
         <div>
-            {uriReports == null || discovery == undefined? (
+            { discovery == undefined? (
             <LoadingWheel
                 containerClassName={styles.loadingContainer}
                 iconClassName={styles.loadingIcon}
@@ -52,7 +44,7 @@ const AdminPage = () => {
                     createPaginationUri(
                         parseTemplate(discovery.reportsUriTemplate).expand({}),
                         currentPage,
-                        1,
+                        ADMINPAGESIZE,
                         true
                     )
                 }

@@ -12,6 +12,15 @@ a {
   color: black;
 }
 
+.reason_container {
+  display: flex;
+}
+
+.reason_title {
+  margin-right: 0.5em;
+}
+
+
 .secondary_color {
   color: colors.$secondary-color
 }
