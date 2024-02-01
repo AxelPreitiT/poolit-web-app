@@ -51,6 +51,12 @@ const TripDetailsPage = () => {
   const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime || ((params.get("startDateTime")!=undefined)?`${params.get("startDateTime")}T${tripTime}`:trip.startDateTime));
   const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || ((params.get("endDateTime")!=undefined)?`${params.get("endDateTime")}T${tripTime}`:((params.get("startDateTime")!=undefined)?`${params.get("startDateTime")}T${tripTime}`:trip.startDateTime)));
   console.log(`In details, start is ${startDateTime} and end is ${endDateTime}`);
+
+  console.log("trips passanger uri template is "+ trip.passengersUriTemplate);
+  console.log("ya sali")
+  //const {isLoading: isLoadingSeats, data:occupiedSeats} = {false, {occupiedSeats:1}:occupiedSeatsModel}
+  //const occupiedSeats:occupiedSeatsModel = {occupiedSeats:1};
+
 // // Supongamos que tienes las cadenas de fecha y hora
 //   const fecha = '2024-02-01'; // Formato: 'YYYY-MM-DD'
 //   const hora = '12:30:00';    // Formato: 'HH:mm:ss'
@@ -63,7 +69,6 @@ const TripDetailsPage = () => {
 
 // Puedes imprimir la fecha y hora resultante
 //   console.log(fechaYHora);
-
 
   return (
     <div>
@@ -125,7 +130,7 @@ const TripDetailsPage = () => {
         </div>
       </MainComponent>
       {isDriver && (
-        <PassangersTripComponent uri={trip.passengersUriTemplate} fullSeats={0 == parseInt(trip.maxSeats , 10) - 1000000} />
+        <PassangersTripComponent uri={trip.passengersUriTemplate} maxSeats={ parseInt(trip.maxSeats, 10)} startDateTime={startDateTime} endDateTime={endDateTime} />
       )}
     </div>
   );

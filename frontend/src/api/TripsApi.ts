@@ -11,6 +11,7 @@ import TripSortSearchModel from "@/models/TripSortSearchModel";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
 import tripEarningModel from "@/models/tripEarningModel.ts";
 import JoinTripModel from "@/models/JoinTripModel.ts";
+import occupiedSeatsModel from "@/models/occupiedSeatsModel.ts";
 
 type CreateTripRequestBody = {
   originCityId: number;
@@ -35,6 +36,7 @@ class TripsApi extends AxiosApi {
       "application/vnd.trip.passenger.v1+json";
 
   private static readonly TRIPS_EARNING_TYPE_HEADER: string ="application/vnd.trip.earnings.v1+json"
+  private static readonly TRIPS_SEATS_TYPE_HEADER: string ="application/vnd.trip.passenger.seat-count.v1+json"
 
   public static postDeleteTrip: (
     uri: string
@@ -66,6 +68,16 @@ class TripsApi extends AxiosApi {
     return this.get<TripModel>(uri, {
       headers: {
         "Accept": TripsApi.TRIPS_CONTENT_TYPE_HEADER,
+      },
+    });
+  };
+
+  public static getOccupiedSeats: (uri: string) => AxiosPromise<occupiedSeatsModel> = (
+      uri: string
+  ) => {
+    return this.get<occupiedSeatsModel>(uri, {
+      headers: {
+        "Accept": TripsApi.TRIPS_SEATS_TYPE_HEADER,
       },
     });
   };

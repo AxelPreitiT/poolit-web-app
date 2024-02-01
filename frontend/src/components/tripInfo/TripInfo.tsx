@@ -13,6 +13,8 @@ import userPublicModel from "@/models/UserPublicModel.ts";
 import useDriverByUri from "@/hooks/driver/useDriver.tsx";
 import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
+import LoadingScreen from "@/components/loading/LoadingScreen.tsx";
+import useOccupiedSeats from "@/hooks/trips/useOccupiedSeats.tsx";
 // import PassangerModel from "@/models/PassangerModel.ts";
 // import {useSearchParams} from "react-router-dom";
 
@@ -52,11 +54,21 @@ const DriverDataComponent = ({driver}: {driver: userPublicModel}) => {
 }
 
 const TripInfo = ({trip, car, driver, isDriver, startDateTime, endDateTime, currentPassanger} : TripInfoProps) => {
-    const availableSeats = parseInt(trip.maxSeats , 10) - 100000000;
     const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
+    const {isLoading: isLoadingSeats, data:occupiedSeats} = useOccupiedSeats(startDateTime, endDateTime, trip.passengersUriTemplate);
 
-  return (
+
+    if (
+        isLoadingSeats ||
+        occupiedSeats == undefined
+    ) {
+        return <LoadingScreen description={t("trip.loading_one")} />;
+    }
+
+    const availableSeats = parseInt(trip.maxSeats , 10) - occupiedSeats.occupiedSeats;
+
+    return (
     <div className={styles.info_trip}>
       <div className={styles.show_row}>
         <i className="bi bi-clock light-text"></i>

@@ -12,6 +12,7 @@ const useAcceptPassangerByUri = () => {
     const invalidatePassangersState = () => {
         queryClient.invalidateQueries({ queryKey: ['passangers'] });
         queryClient.invalidateQueries({ queryKey: ['tripDetails'] });
+        queryClient.invalidateQueries({ queryKey: ['OccupiedSeats'] });
     }
 
     const mutation = useMutation({
