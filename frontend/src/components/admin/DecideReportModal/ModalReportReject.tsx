@@ -24,10 +24,10 @@ const ModalReportReject = ({ closeModal, reportProcessForm}: ModalReportRejectPr
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={closeModal}>
+                <Button variant="primary"  className="later-btn" onClick={closeModal}>
                     {t('modal.close')}
                 </Button>
-                <Button variant="danger" onClick={closeModal}>
+                <Button variant="danger" className="danger-btn" onClick={closeModal}>
                     {t('modal.submit')}
                 </Button>
             </Modal.Footer>

@@ -16,7 +16,6 @@ public class ResourceNotFoundException extends RuntimeException {
     }
 
     public String getMessageCode(){
-        //TODO: ver cómo poner un mensaje custom
 //        return "controllerExceptions." + entity +".not_found";
         return "controllerExceptions.not_found";
     }

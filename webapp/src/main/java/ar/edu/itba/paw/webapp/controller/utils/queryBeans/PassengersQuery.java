@@ -1,11 +1,8 @@
 package ar.edu.itba.paw.webapp.controller.utils.queryBeans;
 
 import ar.edu.itba.paw.models.Passenger;
-import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.dto.validation.annotations.NotNullTogether;
 
-import javax.validation.constraints.Min;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.time.LocalDateTime;
 import java.util.List;

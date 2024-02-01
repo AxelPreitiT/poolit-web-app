@@ -131,7 +131,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //Accept or reject report
                 .antMatchers(HttpMethod.PATCH,UrlHolder.REPORT_BASE+"/{id}")
                     .hasRole(UserRole.ADMIN.getText())
-                .antMatchers(UrlHolder.REPORT_BASE+"/**")//TODO: chequear
+                .antMatchers(UrlHolder.REPORT_BASE+"/**")
                     .authenticated()
                 //--------Passenger reviews--------
                 .antMatchers(HttpMethod.POST,UrlHolder.PASSENGER_REVIEWS_BASE)
@@ -142,7 +142,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //--------Cars--------
                 .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE)
                     .hasRole(UserRole.DRIVER.getText())
-                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")//TODO: ver si matchea el de buscar varias con esto
+                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")
                     .authenticated()
                 //--------Cities, Car brands, Car features, Base, others--------
                 .antMatchers(UrlHolder.BASE+"/**")
@@ -194,8 +194,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //        configuration.setAllowCredentials(true);
         configuration.addAllowedHeader(CorsConfiguration.ALL);
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        // TODO: Update to JWT token headers
-        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER, "Accept", "X-Total-Pages", "Link", "Location"));
+        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER,"Accept", "X-Total-Pages", "Link", "Location"));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
