@@ -42,7 +42,7 @@ const BtnJoin = ( { trip, startDateTime, endDateTime }: { trip: tripModel, start
             () => {
                 onSubmitAccept();
                 invalidateTripState();}
-            }>
+        }>
             <div className={styles.create_trip_btn}>
                 <i className="bi bi-check-lg light-text"></i>
                 <span>{t("trip_detail.btn.join")}</span>
@@ -56,17 +56,45 @@ const BtnDelete = ( { uri, id }: { uri: string, id:number}) => {
     const {onSubmit:onSubmitDelete } = useDeleteTrip(uri, id);
     const navigate = useNavigate();
 
+    const [showModalDelete, setModalDelete] = useState(false);
+    const closeModalDelete = () => {setModalDelete(false);};
+    const openModalDelete = () => {setModalDelete(true);};
+
     return (
-        <Button className={styles.btn_cancel}
-                onClick={() => {
-                    onSubmitDelete();
-                    navigate(createdTripsPath);
-                }}>
-            <div className={styles.create_trip_btn}>
-                <i className="bi bi-x light-text"></i>
-                <span>{t("trip_detail.btn.delete")}</span>
-            </div>
-        </Button>
+        <div>
+            <Button className={styles.btn_cancel}
+                    onClick={() => openModalDelete()}>
+                <div className={styles.create_trip_btn}>
+                    <i className="bi bi-x light-text"></i>
+                    <span>{t("trip_detail.btn.delete")}</span>
+                </div>
+            </Button>
+
+            <Modal show={showModalDelete} onHide={closeModalDelete} aria-labelledby="contained-modal-title-vcenter" centered>
+                <div className={styles.propProfile}>
+                    <Modal.Header closeButton>
+                        <Modal.Title><h2 className={styles.titleModal}>{t('modal.delete_trip')}</h2></Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className={styles.review_empty_container}>
+                            <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
+                            <h3 className="italic-text placeholder-text">{t('trip_detail.btn.delete_warning')}</h3>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className={styles.backBtn} onClick={closeModalDelete}>
+                            {t('modal.Back')}
+                        </Button>
+                        <Button className={styles.cancelBtn} onClick={() => {
+                            onSubmitDelete();
+                            navigate(createdTripsPath);
+                            }}>
+                            {t("trip_detail.btn.delete")}
+                        </Button>
+                    </Modal.Footer>
+                </div>
+            </Modal>
+        </div>
     );
 }
 
@@ -75,18 +103,47 @@ const CancelBtn = ( { passanger }: { passanger?: passangerModel }) => {
     const {onSubmit:onSubmitCancel } = useCancelTrip(passanger?.selfUri as string);
     const navigate = useNavigate();
 
+    const [showModalCancel, setModalCancel] = useState(false);
+    const closeModalCancel = () => {setModalCancel(false);};
+    const openModalCancel = () => {setModalCancel(true);};
+
     return (
-        <Button className={styles.btn_cancel}
-                onClick={
-                    () => {
-                        onSubmitCancel()
-                        navigate(reservedTripsPath) ;}
-                    }>
-            <div className={styles.create_trip_btn}>
-                <i className="bi bi-x light-text"></i>
-                <span>{t("trip_detail.btn.cancel")}</span>
-            </div>
-        </Button>
+        <div>
+            <Button className={styles.btn_cancel}
+                    onClick={() => openModalCancel()}>
+                <div className={styles.create_trip_btn}>
+                    <i className="bi bi-x light-text"></i>
+                    <span>{t("trip_detail.btn.cancel")}</span>
+                </div>
+            </Button>
+
+            <Modal show={showModalCancel} onHide={closeModalCancel} aria-labelledby="contained-modal-title-vcenter" centered>
+                <div className={styles.propProfile}>
+                    <Modal.Header closeButton>
+                        <Modal.Title><h2 className={styles.titleModal}>{t('modal.cancel_trip')}</h2></Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className={styles.review_empty_container}>
+                            <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
+                            <h3 className="italic-text placeholder-text">{t('trip_detail.btn.cancel_warning')}</h3>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className={styles.backBtn} onClick={closeModalCancel}>
+                            {t('modal.Back')}
+                        </Button>
+                        <Button className={styles.cancelBtn} onClick={
+                            () => {
+                                onSubmitCancel()
+                                navigate(reservedTripsPath) ;}
+                        }>
+                            {t('modal.cancel')}
+                        </Button>
+                    </Modal.Footer>
+                </div>
+            </Modal>
+        </div>
+
     )
 }
 

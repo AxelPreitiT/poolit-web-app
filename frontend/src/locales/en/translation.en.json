@@ -670,6 +670,8 @@
       "trip_started": "The trip has started"
     },
     "btn": {
+      "cancel_warning": "Are you sure you want to cancel the trip?",
+      "delete_warning": "Are you sure you want to delete the trip?",
       "accept": "Accept",
       "reject": "Reject",
       "my_trips": "My trips",
@@ -872,6 +874,10 @@
     "loading": "Loading..."
   },
   "modal": {
+    "Back" : "volver",
+    "cancel": "Cancel",
+    "cancel_trip": "Cancel trip",
+    "delete_trip": "Delete trip",
     "driver": "Driver",
     "passangers": "Passangers",
     "car": "Car",

@@ -6,15 +6,12 @@ import { useTranslation } from "react-i18next";
 
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import reportService from "@/services/ReportService.ts";
-import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
-//import {parseTemplate} from "url-template";
 import PaginationModel from "@/models/PaginationModel.tsx";
 
 
 const useAllReports = (uri?: string) => {
     const { t } = useTranslation();
     const onQueryError = useQueryError();
-    const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
 
 
     const {
@@ -30,7 +27,6 @@ const useAllReports = (uri?: string) => {
             return await reportService.getReports(uri as string);
         },
         retry: false,
-        enabled: !isLoadingDiscovery && !!discovery?.reportsUriTemplate,
     });
 
     useEffect(() => {

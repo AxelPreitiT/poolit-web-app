@@ -21,7 +21,6 @@ import {adminPath, publicProfilePath} from "@/AppRouter.tsx";
 import UsePrivateUserByUri from "@/hooks/users/usePrivateUserByUri.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 
-//TODO rating y cantidad de reportes en los usuarios. Como traducir reportOptions. Como obtener el Report.
 
 const ReportPage = () => {
   const { t } = useTranslation();
@@ -88,7 +87,7 @@ const ReportPage = () => {
                 <div className={styles.report_arrow_container}>
                   <div className={styles.report_arrow_content}>
                     <div className={styles.report_arrow_text}>
-                      <i className="bi bi-megaphone-fill secondary-color h3 secondary-color"></i>
+                      <i className={styles.secondary_color + " bi bi-megaphone-fill h3 "}></i>
                       <h3 className={styles.secondary_color}>
                         <span>{t("admin.report.reported")}</span>
                       </h3>
@@ -310,8 +309,13 @@ const ReportPage = () => {
                     </div>
                     <div className={styles.report_date}>
                       <span className="italic-text">
-                        {getFormattedDateTime(report.dateTime).date} {getFormattedDateTime(report.dateTime).time}
+                        {getFormattedDateTime(report.dateTime).date}
                       </span>
+                      {/*
+                      <span>
+                         {getFormattedDateTime(report.dateTime).time}
+                      </span>
+                      */}
                     </div>
                   </div>
                 </div>
