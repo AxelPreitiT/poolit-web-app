@@ -2,16 +2,14 @@ import CarModel from "@/models/CarModel";
 import { useTranslation } from "react-i18next";
 import useSuccessToast from "../toasts/useSuccessToast";
 import useQueryError from "../errors/useQueryError";
-import useForm, { SubmitHandlerReturnModel } from "./useForm";
-import {
-  ReviewForm,
-  ReviewFormSchema,
-  ReviewFormSchemaType,
-} from "@/forms/ReviewForm";
+import { SubmitHandlerReturnModel } from "./useForm";
+import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 import CarService from "@/services/CarService";
 import TripModel from "@/models/TripModel";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import useReviewForm from "./useReviewForm";
+import useCarReviewOptions from "../cars/useCarReviewOptions";
 
 interface CarReviewFormHookProps {
   car: CarModel;
@@ -55,9 +53,8 @@ const useCarReviewForm = ({
     onErrorProp?.(error);
   };
 
-  return useForm({
-    form: ReviewForm,
-    formSchema: ReviewFormSchema,
+  return useReviewForm({
+    useReviewOptions: useCarReviewOptions,
     onSubmit,
     onSuccess,
     onError,

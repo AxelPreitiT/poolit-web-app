@@ -1,75 +1,82 @@
-import { useState } from "react";
 import styles from "./styles.module.scss";
-import { Form, FormSelect } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import PassengerReviewsOptions from "@/enums/PassengerReviewsOptions";
+import useReviewForm from "@/hooks/forms/useReviewForm";
+import { Controller } from "react-hook-form";
+import RatingSelector from "@/components/forms/RatingSelector/RatingSelector";
+import FormError from "@/components/forms/FormError/FormError";
 
-const ReviewForm = () => {
+interface ReviewFormProps {
+  createReviewForm: ReturnType<typeof useReviewForm>;
+  ratingTitle: string;
+  optionTitle: string;
+}
+
+const ReviewForm = ({
+  createReviewForm,
+  ratingTitle,
+  optionTitle,
+}: ReviewFormProps) => {
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState<PassengerReviewsOptions>(
-    PassengerReviewsOptions.ACCEPTABLE_ATTITUDE
-  );
-  const [selectedStarsOption, setSelectedStarsOption] = useState(1);
-
-  const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value as PassengerReviewsOptions);
-  };
-
-  const handleStarsOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedStarsOption(parseInt(e.target.value as string, 10));
-  };
+  const {
+    register,
+    control,
+    formState: { errors },
+    tFormError,
+    onRatingChange,
+    reviewOptions = [],
+  } = createReviewForm;
 
   return (
     <div className={styles.picker_style}>
       <div>
         <label className="report-option-label">
-          <strong className="text">{t("reviews.stars_title")}</strong>
+          <strong className="text">{ratingTitle}</strong>
         </label>
-        <FormSelect
-          id="passenger-38"
+        <Controller
           name="rating"
-          className={styles.stars_option}
-          value={selectedStarsOption}
-          onChange={handleStarsOptionChange}
-        >
-          <option value="1" className={styles.stars_option}>
-            ★
-          </option>
-          <option value="2" className={styles.stars_option}>
-            ★★
-          </option>
-          <option value="3" className={styles.stars_option}>
-            ★★★
-          </option>
-          <option value="4" className={styles.stars_option}>
-            ★★★★
-          </option>
-          <option value="5" className={styles.stars_option}>
-            ★★★★★
-          </option>
-        </FormSelect>
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <RatingSelector
+              rating={value}
+              onChange={(event) => {
+                const rating = parseInt(event.target.value, 10);
+                onChange(rating);
+                onRatingChange(rating);
+              }}
+              className={styles.stars_option}
+            />
+          )}
+        />
+        <FormError error={tFormError(errors.rating)} className={styles.error} />
       </div>
       <div>
         <label className="report-option-label">
-          <strong className="text">{t("reviews.option_title")}</strong>
+          <strong className="text">{optionTitle}</strong>
         </label>
-        <FormSelect
-          id="reviewPicker"
-          value={selectedOption}
-          onChange={handleOptionChange}
-        >
-          {Object.values(PassengerReviewsOptions).map((option) => (
-            <option key={option} value={option}>
-              {t(`reviews.${option}`)}
+        <Form.Select {...register("option")}>
+          {reviewOptions.map((option) => (
+            <option key={option.id} value={option.id}>
+              {t(`reviews.${option.id}`)}
             </option>
           ))}
-        </FormSelect>
+        </Form.Select>
+        <FormError error={tFormError(errors.option)} className={styles.error} />
       </div>
       <div>
-        <label className="report-option-label">
-          <strong className="text">{t("reviews.text_title")}</strong>
-        </label>
-        <Form.Control as="textarea" rows={3} />
+        <div className={styles.optionalContainer}>
+          <label className="report-option-label">
+            <strong className="text">{t("reviews.text_title")}</strong>
+          </label>
+          <label className={styles.optionalLabel}>
+            {t("reviews.optional")}
+          </label>
+        </div>
+        <Form.Control as="textarea" rows={3} {...register("comment")} />
+        <FormError
+          error={tFormError(errors.comment)}
+          className={styles.error}
+        />
       </div>
     </div>
   );

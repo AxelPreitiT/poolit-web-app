@@ -28,14 +28,14 @@ class ReportService extends Service {
   };
 
   public static createReport = async (
-    uri: string,
+    uriTemplate: string,
     tripId: number,
     reportedId: number,
     relation: ReportRelation,
     data: ReportFormSchemaType
   ): Promise<void> => {
     await this.resolveQuery(
-      ReportsApi.createReport(uri, tripId, reportedId, relation, data)
+      ReportsApi.createReport(uriTemplate, tripId, reportedId, relation, data)
     );
   };
 

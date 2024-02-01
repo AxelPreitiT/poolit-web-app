@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
 import { useTranslation } from "react-i18next";
@@ -10,19 +10,24 @@ import joinTripModel from "@/models/JoinTripModel.ts";
 import { parseTemplate } from "url-template";
 import useAuthentication from "../auth/useAuthentication";
 import JoinTripUnauthenticatedError from "@/errors/JoinTripUnauthenticatedError";
+import useTrip from "./useTrip";
+import useRolePassanger from "../passanger/useRolePassanger";
+import useSuccessToast from "../toasts/useSuccessToast";
 
 const useJoinTrip = (trip: tripModel) => {
   const onQueryError = useQueryError();
   const { t } = useTranslation();
+  const { invalidateTripDetails } = useTrip();
+  const { invalidatePassangerRole } = useRolePassanger();
+  const showSuccessToast = useSuccessToast();
   const [params] = useSearchParams();
   const isAuthenticated = useAuthentication();
   const startDateTime = params.get("startDateTime") || "";
   const endDateTime = params.get("endDateTime") || "";
-  const queryClient = useQueryClient();
 
   const invalidateTripState = () => {
-    queryClient.invalidateQueries({ queryKey: ["tripDetails"] });
-    queryClient.invalidateQueries({ queryKey: ["rolePassanger"] });
+    invalidateTripDetails();
+    invalidatePassangerRole();
   };
 
   const mutation = useMutation({
@@ -54,6 +59,11 @@ const useJoinTrip = (trip: tripModel) => {
       });
     },
     onSuccess: () => {
+      showSuccessToast({
+        timeout: defaultToastTimeout,
+        title: t("trip.success_title_join"),
+        message: t("trip.success_message_join"),
+      });
       invalidateTripState();
     },
   });

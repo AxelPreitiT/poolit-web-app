@@ -1,50 +1,84 @@
 import styles from "../ModalReportsReviews/styles.module.scss";
-import {Button, Modal} from "react-bootstrap";
-import userPublicModel from "@/models/UserPublicModel.ts";
-import {useTranslation} from "react-i18next";
-import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
+import { useTranslation } from "react-i18next";
+import IMake from "../IMake";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import ModalMakeHeader from "./ModalMakeHeader";
+import ReportForm from "./ReportForm";
+import DriverReviewForm from "./DriverReviewForm";
+import PassengerReviewForm from "./PassengerReviewForm";
+import TripModel from "@/models/TripModel";
+import UserPublicModel from "@/models/UserPublicModel";
+import { Modal } from "react-bootstrap";
+import { useState } from "react";
+import ModalMakeFooter from "./ModalMakeFooter";
 
-export interface ModalMakeReportProps {
-    closeModal: () => void;
-    user: userPublicModel | null;
-    reportForm: React.ReactNode;
+interface ModalMakeProps {
+  closeModal: () => void;
+  make: IMake | null;
+  isCurrentUserDriver: boolean;
+  trip: TripModel;
 }
 
-const ModalMake = ({ closeModal, user, reportForm}: ModalMakeReportProps) => {
-    const { t } = useTranslation();
+export interface ModalMakeFormProps {
+  onClose: () => void;
+  isCurrentUserDriver: boolean;
+  isUserDriver: boolean;
+  user: UserPublicModel;
+  trip: TripModel;
+  formId: string;
+  setIsFetching: (isFetching: boolean) => void;
+}
 
-    return (
-        (user != null &&
-        <div className={styles.propProfile}>
-            <div className={styles.reportFormHeader}>
-                <div className={styles.imgCointainer}>
-                    <CircleImg src={user.imageUri} size={70}/>
-                </div>
-                <div className={styles.reportFormTitle}>
-                    <h3>
-                    {t("format.name", {
-                        name: user.username,
-                        surname: user.surname})
-                    }</h3>
-                    <hr></hr>
-                </div>
-            </div>
-            <Modal.Body>
-                <div className={styles.categoryContainer}>
-                    {reportForm}
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button className={styles.backBtn} onClick={closeModal}>
-                    {t('modal.close')}
-                </Button>
-                <Button className={styles.submitBtn} onClick={closeModal}>
-                    {t('modal.submit')}
-                </Button>
-            </Modal.Footer>
+const ModalMake = ({
+  closeModal,
+  make,
+  trip,
+  isCurrentUserDriver,
+}: ModalMakeProps) => {
+  const { t } = useTranslation();
+  const [isFetching, setIsFetching] = useState(false);
+
+  if (!make) {
+    return <LoadingWheel description={t("car_review.loading")} />;
+  }
+
+  const { user, isReport, isDriver } = make;
+  const Form: React.FC<ModalMakeFormProps> = isReport
+    ? ReportForm
+    : isDriver
+    ? DriverReviewForm
+    : PassengerReviewForm;
+  const formId = `form-${isReport ? "report" : "review"}-${user.userId}`;
+
+  return (
+    <div className={styles.propProfile}>
+      <ModalMakeHeader
+        title={t("format.name", {
+          name: user.username,
+          surname: user.surname,
+        })}
+        imageSrc={user.imageUri}
+      />
+      <Modal.Body>
+        <div className={styles.categoryContainer}>
+          <Form
+            onClose={closeModal}
+            isCurrentUserDriver={isCurrentUserDriver}
+            isUserDriver={isDriver}
+            user={user}
+            trip={trip}
+            formId={formId}
+            setIsFetching={setIsFetching}
+          />
         </div>
-        )
-    );
+      </Modal.Body>
+      <ModalMakeFooter
+        onClose={closeModal}
+        isFetching={isFetching}
+        formId={formId}
+      />
+    </div>
+  );
 };
 
 export default ModalMake;

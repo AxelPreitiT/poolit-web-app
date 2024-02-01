@@ -1,46 +1,66 @@
 import styles from "../ModalReportsReviews/styles.module.scss";
-import {Button, Modal} from "react-bootstrap";
-import {useTranslation} from "react-i18next";
-import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
-import carModel from "@/models/CarModel.ts";
+import { Form, Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import TripModel from "@/models/TripModel";
+import CarModel from "@/models/CarModel";
+import useReviewsCar from "@/hooks/reportReview/useReviewsCar";
+import useCarReviewForm from "@/hooks/forms/useCarReviewForm";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import ModalMakeHeader from "./ModalMakeHeader";
+import ModalMakeFooter from "./ModalMakeFooter";
+import ReviewForm from "./ReviewForm";
 
 export interface ModalCarMakeReviewProps {
-    closeModal: () => void;
-    car: carModel | null;
-    reportForm: React.ReactNode;
+  closeModal: () => void;
+  car: CarModel;
+  trip: TripModel;
 }
 
-const ModalMakeCar = ({ closeModal, car, reportForm}: ModalCarMakeReviewProps) => {
-    const { t } = useTranslation();
+const ModalMakeCar = ({ closeModal, car, trip }: ModalCarMakeReviewProps) => {
+  const { t } = useTranslation();
+  const { invalidateCarReviewQuery } = useReviewsCar(trip);
 
-    return (
-        (car != null &&
-            <div className={styles.propProfile}>
-                <div className={styles.reportFormHeader}>
-                    <div className={styles.imgCointainer}>
-                        <CircleImg src={car.imageUri} size={70}/>
-                    </div>
-                    <div className={styles.reportFormTitle}>
-                        <h3>{car.infoCar}</h3>
-                        <hr></hr>
-                    </div>
-                </div>
-                <Modal.Body>
-                    <div className={styles.categoryContainer}>
-                        {reportForm}
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button className={styles.backBtn} onClick={closeModal}>
-                        {t('modal.close')}
-                    </Button>
-                    <Button className={styles.submitBtn} onClick={closeModal}>
-                        {t('modal.submit')}
-                    </Button>
-                </Modal.Footer>
-            </div>
-        )
-    );
+  const onSuccess = () => {
+    invalidateCarReviewQuery();
+    closeModal();
+  };
+
+  const carReviewForm = useCarReviewForm({
+    car,
+    trip,
+    onSuccess,
+  });
+  const {
+    handleSubmit,
+    isFetching,
+    isReviewOptionsLoading: isCarReviewOptionsLoading,
+    isReviewOptionsError: isCarReviewOptionsError,
+    reviewOptions: carReviewOptions,
+  } = carReviewForm;
+
+  if (
+    isCarReviewOptionsLoading ||
+    !carReviewOptions ||
+    isCarReviewOptionsError
+  ) {
+    return <LoadingWheel description={t("car_review.loading")} />;
+  }
+
+  return (
+    <Form className={styles.propProfile} onSubmit={handleSubmit}>
+      <ModalMakeHeader title={car.infoCar} imageSrc={car.imageUri} />
+      <Modal.Body>
+        <div className={styles.categoryContainer}>
+          <ReviewForm
+            createReviewForm={carReviewForm}
+            ratingTitle={t("reviews.stars_car_title")}
+            optionTitle={t("reviews.option_car_title")}
+          />
+        </div>
+      </Modal.Body>
+      <ModalMakeFooter onClose={closeModal} isFetching={isFetching} />
+    </Form>
+  );
 };
 
 export default ModalMakeCar;

@@ -1,7 +1,6 @@
 @use "@/colors.module" as colors;
 
-.userContainer {
-  background-color: colors.$secondary-color;
+%userContainer {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-color: transparent !important;
   border-radius: 5px;
@@ -13,6 +12,49 @@
   flex-direction: row;
   align-content: center;
   align-items: center;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+
+%userContainer:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.userContainerReview {
+  background-color: colors.$secondary-color !important;
+  @extend %userContainer;
+}
+
+.userContainerReview:hover,
+.userContainerReview:focus,
+.userContainerReview:active {
+  background-color: colors.$secondary-color-dark !important;
+  @extend %userContainer;
+}
+
+.userContainerReport {
+  background-color: colors.$primary-color !important;
+  @extend %userContainer;
+}
+
+.userContainerReport:hover,
+.userContainerReport:focus,
+.userContainerReport:active {
+  background-color: colors.$primary-color-dark !important;
+  @extend %userContainer;
+}
+
+.userContainerReady {
+  background-color: colors.$success-color !important;
+  @extend %userContainer;
+}
+
+.userContainerReady:hover,
+.userContainerReady:focus,
+.userContainerReady:active {
+  background-color: colors.$success-color !important;
+  @extend %userContainer;
 }
 
 .userInfo {
@@ -20,36 +62,36 @@
   flex-direction: column;
 }
 
-.titleContainer{
+.titleContainer {
   display: flex;
   flex-direction: row;
   gap: 5px;
 }
 
-.categoryContainer{
+.categoryContainer {
   display: flex;
   gap: 25px;
   flex-direction: column;
 }
 
-.passangerContainer{
+.passangerContainer {
   display: flex;
   gap: 15px;
   flex-direction: column;
 }
 
-.infoContainer{
+.infoContainer {
   color: white;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.marginCointainer{
+.marginCointainer {
   margin: 0 5%;
 }
 
-.spanStyle{
+.spanStyle {
   font-size: small;
 }
 
@@ -65,11 +107,11 @@
   border-color: transparent !important;
 }
 
-.titleModal{
+.titleModal {
   color: colors.$primary-color;
 }
 
-.reportFormHeader{
+.reportFormHeader {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -78,7 +120,7 @@
   padding: 2em 2em 0 2em;
 }
 
-.reportFormTitle{
+.reportFormTitle {
   color: colors.$secondary-color;
   width: 100%;
   position: absolute;
@@ -89,11 +131,11 @@
   opacity: 1;
 }
 
-.imgCointainer{
+.imgCointainer {
   z-index: 2;
 }
 
-.aclaration_text{
+.aclaration_text {
   display: flex;
   justify-content: flex-end;
   color: gray;

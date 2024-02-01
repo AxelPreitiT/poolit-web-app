@@ -105,7 +105,7 @@ class CarApi extends AxiosApi {
     carUri: string,
     { car_description, seats, car_features = [] }
   ) => {
-    return this.put(
+    return this.patch(
       carUri,
       {
         carInfo: car_description,

@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import PassangerService from "@/services/PassangerService.ts";
 import { parseTemplate } from "url-template";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 
-const useRolePassanger = (isDriver: boolean, uri?: string) => {
+const useRolePassanger = (isDriver?: boolean, uri?: string) => {
   const { data: user } = useCurrentUser();
+  const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: ["rolePassanger", uri],
@@ -21,11 +22,18 @@ const useRolePassanger = (isDriver: boolean, uri?: string) => {
 
   const { isError, data, isLoading, isPending } = query;
 
+  const invalidatePassangerRole = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["rolePassanger"],
+    });
+  };
+
   return {
     ...query,
     isError,
     isLoading: isLoading || isPending,
     currentPassanger: data,
+    invalidatePassangerRole,
   };
 };
 

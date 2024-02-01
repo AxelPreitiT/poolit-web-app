@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Button, Modal } from "react-bootstrap";
 import Status from "@/enums/Status.ts";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,12 +13,12 @@ import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
 import RRModal from "@/components/TripDetails/ModalsRR/RRModal";
 import ModalMake from "@/components/TripDetails/ModalsForms/ModalMake.tsx";
-import ReviewCarForm from "@/components/TripDetails/ModalsForms/ReviewCarForm.tsx";
 import ModalMakeCar from "@/components/TripDetails/ModalsForms/ModalMakeCar.tsx";
 import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
 import useDeleteTrip from "@/hooks/trips/useDeleteTrip.tsx";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import useCancelTrip from "@/hooks/trips/useCancelTrip.tsx";
+import IMake from "../IMake";
 
 interface RightDetailsProps {
   isPassanger: boolean;
@@ -128,6 +128,7 @@ const RightDetails = ({
   const [showModalCar, setModalCar] = useState(false);
   const closeModalCar = () => {
     setModalCar(false);
+    openModalReview();
   };
   const openModalCar = () => {
     closeModalReview();
@@ -135,26 +136,24 @@ const RightDetails = ({
   };
 
   // Modals User
-  const [formMake, setFormMake] = useState<ReactNode | null>(null);
-  const [userMake, setUserMake] = useState<userPublicModel | null>(null);
+  const [make, setMake] = useState<IMake | null>(null);
   const [showModalMake, setModalMake] = useState(false);
   const closeModalMake = () => {
     setModalMake(false);
+    if (make) {
+      make.isReport ? openModalReport() : openModalReview();
+      setMake(null);
+    }
   };
-  const openModalMake = (
-    user: userPublicModel,
-    reporting: boolean,
-    form: ReactNode
-  ) => {
-    reporting ? closeModalReport() : closeModalReview();
-    setFormMake(form);
-    setUserMake(user);
+  const openModalMake = (make: IMake) => {
+    setMake(make);
+    make.isReport ? closeModalReport() : closeModalReview();
     setModalMake(true);
   };
 
   return (
     !isLoadingDiscovery &&
-    discovery != undefined &&
+    discovery &&
     (!isPassanger && !isDriver ? (
       <div className={styles.btn_container}>
         <BtnJoin trip={trip} />
@@ -215,6 +214,7 @@ const RightDetails = ({
           >
             <RRModal
               title={t("modal.review.title")}
+              titleClassName="secondary-text"
               openModalMake={openModalMake}
               closeModal={closeModalReview}
               driver={driver}
@@ -235,8 +235,9 @@ const RightDetails = ({
           >
             <ModalMake
               closeModal={closeModalMake}
-              user={userMake}
-              reportForm={formMake}
+              make={make}
+              trip={trip}
+              isCurrentUserDriver={isDriver}
             />
           </Modal>
 
@@ -246,11 +247,7 @@ const RightDetails = ({
             aria-labelledby="contained-modal-title-vcenter"
             centered
           >
-            <ModalMakeCar
-              closeModal={closeModalCar}
-              car={car}
-              reportForm={<ReviewCarForm />}
-            />
+            <ModalMakeCar closeModal={closeModalCar} car={car} trip={trip} />
           </Modal>
         </div>
       ) : (

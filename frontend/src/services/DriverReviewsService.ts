@@ -12,13 +12,13 @@ class DriverReviewsService extends Service {
   };
 
   public static createReview = async (
-    uri: string,
+    uriTemplate: string,
     tripId: number,
     driverId: number,
     data: ReviewFormSchemaType
   ): Promise<void> => {
     await this.resolveQuery(
-      DriverReviewsApi.createReview(uri, tripId, driverId, data)
+      DriverReviewsApi.createReview(uriTemplate, tripId, driverId, data)
     );
   };
 }

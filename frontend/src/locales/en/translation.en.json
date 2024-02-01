@@ -371,6 +371,7 @@
     }
   },
   "reviews": {
+    "optional": "Optional",
     "none": "No reviews",
     "stars_title": "How would you rate this passenger?",
     "option_title": "What would you like to highlight about this passenger?",
@@ -433,6 +434,7 @@
     }
   },
   "car_review": {
+    "loading": "Loading form",
     "success": {
       "title": "Car review created!",
       "message": "The car review was created successfully!"
@@ -637,7 +639,7 @@
     "header": "Trip details",
     "review": {
       "reviewed": "Car Reviewed",
-      "driver_reviewed": "driver reviewed",
+      "driver_reviewed": "Driver reviewed",
       "user_reviewed": "Passanger reviewed",
       "driver_reported": "Driver reported",
       "user_reported": "Passanger reported"
@@ -674,7 +676,7 @@
       "accept": "Accept",
       "reject": "Reject",
       "my_trips": "My trips",
-      "delete": "Delete",
+      "delete": "Delete trip",
       "cancel": "Cancel trip",
       "join": "Join",
       "reviews": "Review"
@@ -801,7 +803,9 @@
     "loading": "Loading trips",
     "loading_one": "Loading trip",
     "error_title_delete": "Unable to delete the trip",
-    "error_title_join": "Unable to join the trip"
+    "error_title_join": "Unable to join the trip",
+    "success_title_join": "Success!",
+    "success_message_join": "We will notify you when the driver accepts your reservation"
   },
   "car": {
     "title": "Car",

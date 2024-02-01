@@ -20,36 +20,36 @@
   flex-direction: column;
 }
 
-.titleContainer{
+.titleContainer {
   display: flex;
   flex-direction: row;
   gap: 5px;
 }
 
-.categoryContainer{
+.categoryContainer {
   display: flex;
   gap: 25px;
   flex-direction: column;
 }
 
-.passangerContainer{
+.passangerContainer {
   display: flex;
   gap: 15px;
   flex-direction: column;
 }
 
-.infoContainer{
+.infoContainer {
   color: white;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.marginCointainer{
+.marginCointainer {
   margin: 0 5%;
 }
 
-.spanStyle{
+.spanStyle {
   font-size: small;
 }
 
@@ -65,11 +65,11 @@
   border-color: transparent !important;
 }
 
-.titleModal{
+.titleModal {
   color: colors.$primary-color;
 }
 
-.reportFormHeader{
+.reportFormHeader {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -78,7 +78,7 @@
   padding: 2em 2em 0 2em;
 }
 
-.reportFormTitle{
+.reportFormTitle {
   color: colors.$secondary-color;
   width: 100%;
   position: absolute;
@@ -89,11 +89,11 @@
   opacity: 1;
 }
 
-.imgCointainer{
+.imgCointainer {
   z-index: 2;
 }
 
-.aclaration_text{
+.aclaration_text {
   display: flex;
   justify-content: flex-end;
   color: gray;

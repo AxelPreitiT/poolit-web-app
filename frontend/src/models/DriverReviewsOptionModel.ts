@@ -1,5 +1,5 @@
-interface DriverReviewsOptionModel {
-  id: string;
-}
+import ReviewsOptionModel from "./ReviewsOptionModel";
+
+interface DriverReviewsOptionModel extends ReviewsOptionModel {}
 
 export default DriverReviewsOptionModel;

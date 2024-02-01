@@ -1,11 +1,12 @@
 import AxiosApi from "@/api/axios/AxiosApi.ts";
-import {AxiosPromise, AxiosResponse} from "axios";
+import { AxiosPromise, AxiosResponse } from "axios";
 import PrivateReportModel from "@/models/PrivateReportModel.ts";
 import ReportRelation from "@/enums/ReportRelation";
 import { ReportFormSchemaType } from "@/forms/ReportForm";
 import { DecideReportFormSchemaType } from "@/forms/DecideReportForm";
 import ReportState from "@/enums/ReportState";
 import PaginationModel from "@/models/PaginationModel.tsx";
+import { parseTemplate } from "url-template";
 
 class ReportsApi extends AxiosApi {
   private static readonly REPORTS_PRIVATE_ACCEPT_HEADER: string =
@@ -58,18 +59,19 @@ class ReportsApi extends AxiosApi {
   };
 
   public static createReport: (
-    uri: string,
+    uriTemplate: string,
     tripId: number,
     reportedId: number,
     relation: ReportRelation,
     data: ReportFormSchemaType
   ) => AxiosPromise<void> = (
-    uri: string,
+    uriTemplate: string,
     tripId: number,
     reportedId: number,
     relation: ReportRelation,
     { reason, option }
   ) => {
+    const uri = parseTemplate(uriTemplate).expand({});
     const body = {
       tripId,
       reportedId,

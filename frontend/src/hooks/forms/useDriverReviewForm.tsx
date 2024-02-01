@@ -3,17 +3,15 @@ import UserPublicModel from "@/models/UserPublicModel";
 import { useTranslation } from "react-i18next";
 import useSuccessToast from "../toasts/useSuccessToast";
 import useQueryError from "../errors/useQueryError";
-import useForm, { SubmitHandlerReturnModel } from "./useForm";
-import {
-  ReviewForm,
-  ReviewFormSchema,
-  ReviewFormSchemaType,
-} from "@/forms/ReviewForm";
+import { SubmitHandlerReturnModel } from "./useForm";
+import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 import DriverReviewsService from "@/services/DriverReviewsService";
 import useDiscovery from "../discovery/useDiscovery";
 import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import useReviewForm from "./useReviewForm";
+import useDriverReviewOptions from "../driver/useDriverReviewOptions";
 
 interface DriverReviewFormHookProps {
   driver: UserPublicModel;
@@ -66,9 +64,8 @@ const useDriverReviewForm = ({
     onErrorProp?.(error);
   };
 
-  return useForm({
-    form: ReviewForm,
-    formSchema: ReviewFormSchema,
+  return useReviewForm({
+    useReviewOptions: useDriverReviewOptions,
     onSubmit,
     onSuccess,
     onError,

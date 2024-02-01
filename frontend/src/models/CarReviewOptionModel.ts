@@ -1,5 +1,5 @@
-interface CarReviewOptionModel {
-  id: string;
-}
+import ReviewsOptionModel from "./ReviewsOptionModel";
+
+interface CarReviewOptionModel extends ReviewsOptionModel {}
 
 export default CarReviewOptionModel;

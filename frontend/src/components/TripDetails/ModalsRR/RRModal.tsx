@@ -4,7 +4,7 @@ import DriverReportReviewComponent from "@/components/TripDetails/ModalReportsRe
 import userPublicModel from "@/models/UserPublicModel.ts";
 import { useTranslation } from "react-i18next";
 import carModel from "@/models/CarModel.ts";
-import CarReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/CarReportReviewComponent.tsx";
+import CarReviewComponent from "@/components/TripDetails/ModalReportsReviews/CarReviewComponent";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import PassangerReportReviewComponent from "@/components/TripDetails/ModalReportsReviews/PassangerReportReviewComponent.tsx";
@@ -13,15 +13,12 @@ import PaginationComponentExtraData from "@/components/pagination/PaginationComp
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import { INITIALPAGE, PASSANGERPAGESIZE } from "@/enums/PaginationConstants.ts";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
-import { ReactNode } from "react";
+import IMake from "../IMake";
 
 export interface ModalReportProps {
   title: string;
-  openModalMake: (
-    user: userPublicModel,
-    reporting: boolean,
-    form: ReactNode
-  ) => void;
+  titleClassName?: string;
+  openModalMake: (make: IMake) => void;
   openModalCar?: () => void;
   closeModal: () => void;
   driver: userPublicModel;
@@ -34,6 +31,7 @@ export interface ModalReportProps {
 
 const RRModal = ({
   title,
+  titleClassName,
   closeModal,
   driver,
   car,
@@ -51,7 +49,7 @@ const RRModal = ({
     <div className={styles.propProfile}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <h2 className={styles.titleModal}>{title}</h2>
+          <h2 className={styles.titleModal + " " + titleClassName}>{title}</h2>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -70,13 +68,13 @@ const RRModal = ({
               />
             </div>
           )}
-          {!isDriver && car != null && openModalCar != undefined && (
+          {!isDriver && car && openModalCar && (
             <div className={styles.passangerContainer}>
               <div className={styles.titleContainer}>
                 <i className="bi bi-car-front-fill h3"></i>
                 <h3>{t("modal.car")}</h3>
               </div>
-              <CarReportReviewComponent
+              <CarReviewComponent
                 car={car}
                 trip={trip}
                 openModalCar={openModalCar}
@@ -107,7 +105,7 @@ const RRModal = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button className={styles.backBtn} onClick={closeModal}>
+        <Button className="primary-btn" onClick={closeModal}>
           {t("modal.close")}
         </Button>
       </Modal.Footer>

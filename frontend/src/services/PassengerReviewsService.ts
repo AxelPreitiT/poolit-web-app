@@ -12,13 +12,13 @@ class PassengerReviewsService extends Service {
   };
 
   public static createReview = async (
-    uri: string,
+    uriTemplate: string,
     tripId: number,
     passengerId: number,
     data: ReviewFormSchemaType
   ): Promise<void> => {
     await this.resolveQuery(
-      PassengerReviewsApi.createReview(uri, tripId, passengerId, data)
+      PassengerReviewsApi.createReview(uriTemplate, tripId, passengerId, data)
     );
   };
 }

@@ -4,16 +4,14 @@ import { useTranslation } from "react-i18next";
 import useSuccessToast from "../toasts/useSuccessToast";
 import useQueryError from "../errors/useQueryError";
 import useDiscovery from "../discovery/useDiscovery";
-import useForm, { SubmitHandlerReturnModel } from "./useForm";
-import {
-  ReviewForm,
-  ReviewFormSchema,
-  ReviewFormSchemaType,
-} from "@/forms/ReviewForm";
+import { SubmitHandlerReturnModel } from "./useForm";
+import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import PassengerReviewsService from "@/services/PassengerReviewsService";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import useReviewForm from "./useReviewForm";
+import usePassengerReviewOptions from "../passanger/usePassengerReviewOptions";
 
 interface PassengerReviewFormHookProps {
   passenger: UserPublicModel;
@@ -66,9 +64,8 @@ const usePassengerReviewForm = ({
     onErrorProp?.(error);
   };
 
-  return useForm({
-    form: ReviewForm,
-    formSchema: ReviewFormSchema,
+  return useReviewForm({
+    useReviewOptions: usePassengerReviewOptions,
     onSubmit,
     onSuccess,
     onError,

@@ -15,6 +15,8 @@ import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 import ReportService from "@/services/ReportService";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import useReportOptions from "../reports/useReportOptions";
+import { useEffect, useState } from "react";
 
 interface ReportFormHookProps {
   trip: TripModel;
@@ -34,6 +36,9 @@ const useReportForm = ({
   const { t } = useTranslation();
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
+  const [hasFetchedReportOptions, setHasFetchedReportOptions] =
+    useState<boolean>(false);
+  const { reportOptions } = useReportOptions(relation);
   const { discovery, isError: isDiscoveryError } = useDiscovery();
 
   const onSubmit: SubmitHandlerReturnModel<ReportFormSchemaType, void> = async (
@@ -70,13 +75,27 @@ const useReportForm = ({
     onErrorProp?.(error);
   };
 
-  return useForm({
+  const reportForm = useForm({
     form: ReportForm,
     formSchema: ReportFormSchema,
     onSubmit,
     onSuccess,
     onError,
   });
+
+  const { setValue } = reportForm;
+
+  useEffect(() => {
+    if (reportOptions && reportOptions.length > 0 && !hasFetchedReportOptions) {
+      setValue("option", reportOptions[0].id);
+      setHasFetchedReportOptions(true);
+    }
+  }, [reportOptions, setValue, hasFetchedReportOptions]);
+
+  return {
+    ...reportForm,
+    reportOptions,
+  };
 };
 
 export default useReportForm;

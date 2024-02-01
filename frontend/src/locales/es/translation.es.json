@@ -370,6 +370,7 @@
     }
   },
   "reviews": {
+    "optional": "Opcional",
     "none": "No hay reseñas",
     "stars_title": "¿Cómo calificarías a este pasajero?",
     "option_title": "¿Qué te gustaría destacar sobre este pasajero?",
@@ -432,6 +433,7 @@
     }
   },
   "car_review": {
+    "loading": "Cargando el formulario",
     "success": {
       "title": "¡Reseña de auto creada!",
       "message": "¡Tu reseña de auto fue creada correctamente!"
@@ -673,7 +675,7 @@
       "accept": "Aceptar",
       "reject": "Rechazar",
       "my_trips": "Mis viajes",
-      "delete": "Eliminar",
+      "delete": "Eliminar viaje",
       "cancel": "Cancelar viaje",
       "join": "Unirme",
       "reviews": "Opinar"
@@ -801,7 +803,9 @@
     "loading": "Cargando viajes",
     "loading_one": "Cargando viaje",
     "error_title_delete": "No se pudo eliminar el viaje",
-    "error_title_join": "No se pudo unir al viaje"
+    "error_title_join": "No se pudo unir al viaje",
+    "success_title_join": "¡Éxito!",
+    "success_message_join": "Te notificaremos cuando el conductor acepte tu solicitud"
   },
   "car": {
     "title": "Auto",
