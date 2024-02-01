@@ -15,15 +15,17 @@ public class VndType {
     public static final String APPLICATION_USER_DRIVER = BASE + "user.driver.v1+json";
     public static final String APPLICATION_USER_PRIVATE = BASE + "user.private.v1+json";
     public static final String APPLICATION_USER = BASE + "user.v1+json";
-    public static final String APPLICATION_USER_ROLE = BASE + "user.role.v1+json";
     //    --------Cities--------
+    public static final String APPLICATION_CITY_LIST = BASE + "city.list.v1+json";
     public static final String APPLICATION_CITY = BASE + "city.v1+json";
     //    --------Cars--------
     public static final String APPLICATION_CAR = BASE + "car.v1+json";
     //    --------Car brands--------
+    public static final String APPLICATION_CAR_BRAND_LIST = BASE + "car-brand.list.v1+json";
     public static final String APPLICATION_CAR_BRAND = BASE + "car-brand.v1+json";
 
     //    --------Car features--------
+    public static final String APPLICATION_CAR_FEATURE_LIST = BASE + "car-feature.list.v1+json";
     public static final String APPLICATION_CAR_FEATURE = BASE + "car-feature.v1+json";
     public static final String APPLICATION_CAR_REVIEW = BASE + "car.review.v1+json";
     //    --------Reviews--------
