@@ -32,6 +32,8 @@ const LeftDetails = ({trip, isPassanger, isDriver, status, startDateTime, endDat
   const { t } = useTranslation();
   const totalTrips = getTotalTrips(new Date(startDateTime), new Date(endDateTime))
   const totalPrice = totalTrips * trip.pricePerTrip;
+
+  console.log("Total trips:" + totalTrips)
   return (
       <div className={styles.status_trip}>
         {isDriver  ?

@@ -37,7 +37,7 @@ const ReservedPage = () => {
         if(isLoadingRole || currentPassanger === undefined){
             return {startDate:"", endDate:"", link:""}
         }
-        return {startDate:currentPassanger.startDateTime, endDate:currentPassanger.endDateTime, link: tripDetailsPath.replace(":id", trip.tripId.toString())}
+        return {startDate:currentPassanger.startDateTime, endDate:currentPassanger.endDateTime, link: tripDetailsPath.replace(":tripId", trip.tripId.toString())}
     }
 
   return (
