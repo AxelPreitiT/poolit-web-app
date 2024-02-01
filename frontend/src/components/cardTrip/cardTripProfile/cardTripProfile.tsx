@@ -18,6 +18,7 @@ const CardTripProfile = (trip: TripModel) => {
   const {
     isLoading: isLoadingRole,
     currentPassanger: currentPassanger,
+    isPending : isPending
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
 
   const {
@@ -42,7 +43,7 @@ const CardTripProfile = (trip: TripModel) => {
     isCarLoading ||
     isOriginCityError ||
     isDestinationCityError ||
-    isCarError || isLoadingRole) {
+    isCarError || (isLoadingRole && !isPending)) {
     return <LoadingWheel description={t("trip.loading_one")} />;
   }
 
@@ -52,7 +53,7 @@ const CardTripProfile = (trip: TripModel) => {
 
   return (
     <Link
-      to={tripDetailsPath.replace(":id", trip.tripId.toString())}
+      to={tripDetailsPath.replace(":tripId", trip.tripId.toString())}
       className={styles.link_container}
     >
       <div className={styles.card_info}>

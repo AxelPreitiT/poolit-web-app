@@ -33,7 +33,7 @@ const useTrip = () => {
         error,
         isPending,
     } = useQuery({
-        queryKey: ["tripDetails"],
+        queryKey: ["tripDetails",id],
         queryFn: async (): Promise<TripModel> => {
             retryPassangersTrips()
             const uri = parseTemplate(discovery?.tripsUriTemplate as string).expand({
