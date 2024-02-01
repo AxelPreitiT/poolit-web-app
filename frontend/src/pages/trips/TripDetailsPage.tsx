@@ -94,6 +94,7 @@ const TripDetailsPage = () => {
               isDriver={isDriver}
               startDateTime={startDateTime}
               endDateTime={endDateTime}
+              currentPassanger={currentPassanger}
             />
             <div className={styles.img_container}>
               <img src={car?.imageUri} className={styles.img_style} alt="" />

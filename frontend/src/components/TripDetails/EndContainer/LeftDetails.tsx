@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import StatusTrip from "@/components/statusTrip/StatusTrip.tsx";
 import {useTranslation} from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
-import useGetEarning from "@/hooks/trips/useGetAmount.tsx";
+import useGetEarning from "@/hooks/trips/useGetEarning.tsx";
 import getTotalTrips from "@/functions/getTotalTrips.ts";
 
 interface LeftDetailsProps {

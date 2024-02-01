@@ -9,8 +9,13 @@ import getFormattedDateTime from "@/functions/DateFormat.ts";
 import {Link} from "react-router-dom";
 import {carPath, publicProfilePath} from "@/AppRouter.tsx";
 import {getDayString} from "@/utils/date/dayString.ts";
+import userPublicModel from "@/models/UserPublicModel.ts";
+import useDriverByUri from "@/hooks/driver/useDriver.tsx";
+import passangerModel from "@/models/PassangerModel.ts";
+import passangerStatus from "@/enums/PassangerStatus.ts";
 // import PassangerModel from "@/models/PassangerModel.ts";
 // import {useSearchParams} from "react-router-dom";
+
 
 interface TripInfoProps {
   trip: TripModel;
@@ -19,15 +24,38 @@ interface TripInfoProps {
   startDateTime: string;
   endDateTime: string;
   isDriver: boolean;
+  currentPassanger: passangerModel | undefined;
 }
 
-const TripInfo = ({trip, car, driver, isDriver, startDateTime, endDateTime} : TripInfoProps) => {
+
+const DriverDataComponent = ({driver}: {driver: userPublicModel}) => {
+    const {isLoading, data: driverData} = useDriverByUri(driver.selfUri);
+
+    return (
+        (!isLoading && driverData && (
+            <div className={styles.driver_info}>
+                <div className={styles.show_row}>
+                    <i className="bi bi-envelope-fill light-text"></i>
+                    <div className={styles.info_details}>
+                        <span className="light-text detail">{driverData.email}</span>
+                    </div>
+                </div>
+                <div className={styles.show_row}>
+                    <i className="bi bi-telephone-fill light-text"></i>
+                    <div className={styles.info_details}>
+                        <span className="light-text detail">{driverData.phone}</span>
+                    </div>
+                </div>
+            </div>
+        ))
+    );
+}
+
+const TripInfo = ({trip, car, driver, isDriver, startDateTime, endDateTime, currentPassanger} : TripInfoProps) => {
     const availableSeats = parseInt(trip.maxSeats , 10) - 100000000;
     const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
 
-    console.log("tripInfo - start: " + startDateTime)
-    console.log("tripInfo - end: " + endDateTime)
   return (
     <div className={styles.info_trip}>
       <div className={styles.show_row}>
@@ -91,22 +119,7 @@ const TripInfo = ({trip, car, driver, isDriver, startDateTime, endDateTime} : Tr
             <StarRating rating={0} className="light-text h6" />
         </div>
       </div>
-      {isDriver && (
-        <div className={styles.show_row}>
-          <i className="bi bi-envelope-fill light-text"></i>
-          <div className={styles.info_details}>
-            <span className="light-text detail">PONER EMAIL</span>
-          </div>
-        </div>
-      )}
-      {isDriver && (
-        <div className={styles.show_row}>
-          <i className="bi bi-telephone-fill light-text"></i>
-          <div className={styles.info_details}>
-            <span className="light-text detail">PONER CELU</span>
-          </div>
-        </div>
-      )}
+        {(isDriver || currentPassanger?.passengerState === passangerStatus.ACCEPTED ) && <DriverDataComponent driver={driver}/> }
     </div>
   );
 };
