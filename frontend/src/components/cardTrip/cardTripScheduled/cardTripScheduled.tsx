@@ -7,11 +7,15 @@ import {getDayString} from "@/utils/date/dayString.ts";
 
 interface CardTripScheduledProps {
     data: TripModel;
+    extraData?:{
+        startDateTime: string;
+        endDateTime: string;
+    }
 }
 
-const CardTripScheduled = ({data: trip} : CardTripScheduledProps) => {
+const CardTripScheduled =  ({trip: TripModel, extraData: extraData}: CardTripScheduledProps) => {
   const { t } = useTranslation();
-    const date = new Date(trip.startDateTime)
+  const date = new Date(trip.startDateTime)
 
   return (
     <div>

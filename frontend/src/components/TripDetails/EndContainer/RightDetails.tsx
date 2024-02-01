@@ -19,6 +19,7 @@ import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
 import useDeleteTrip from "@/hooks/trips/useDeleteTrip.tsx";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import useCancelTrip from "@/hooks/trips/useCancelTrip.tsx";
+import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
 
 interface RightDetailsProps {
     isPassanger: boolean;
@@ -90,7 +91,7 @@ const CancelBtn = ( { passanger }: { passanger?: passangerModel }) => {
 const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver , car}: RightDetailsProps) => {
     const { t } = useTranslation();
     const {isLoading:isLoadingDiscovery, discovery} = useDiscovery()
-
+    const status_value = passanger!=undefined?getStatusPassanger(passanger) : status;
     // Modals Review
     const [showModalReport, setModalReport] = useState(false);
     const closeModalReport = () => {setModalReport(false);};
@@ -131,7 +132,7 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
             <div className={styles.btn_container}>
                 <BtnJoin trip={trip}/>
             </div> :
-            (status === Status.FINISHED ?
+            (status_value === Status.FINISHED ?
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
                     <div className={styles.review_btn}>
                         <div className={styles.btn_container}>

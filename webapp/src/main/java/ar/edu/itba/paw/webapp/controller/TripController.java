@@ -101,13 +101,14 @@ public class TripController {
     public Response getById(@PathParam("id") final long id,
                             @Valid @BeanParam final TripQuery query) {
         final Trip trip;
-        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
-            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
-            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
-        }else {
+        //TODO: no poder hacer mas filtrado por fechas
+//        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
+//            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
+//            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
+//        }else {
             LOGGER.debug("GET request for trip with id {}",id);
             trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
-        }
+//        }
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
@@ -135,7 +136,7 @@ public class TripController {
     @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("POST request to add passenger for trip {}",id);
-        Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getStartTime(),dto.getEndDate());
+        Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getEndDate());
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(ans.getUserId())).build();
         //Los pasajeros se acceden en /trips/{tripId}/passengers/{userId}
         return Response.created(uri).build();

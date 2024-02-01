@@ -179,11 +179,12 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     @Override
-    public Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException, NotAvailableSeatsException {
+    public Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException, NotAvailableSeatsException {
         final Trip trip = tripDao.findById(tripId).orElseThrow(TripNotFoundException::new);
         final User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-        final LocalDateTime startDateTime = startDate.atTime(startTime);
-        final LocalDateTime endDateTime = endDate==null?startDateTime:endDate.atTime(startTime);
+        final LocalTime tripTime = trip.getStartDateTime().toLocalTime();
+        final LocalDateTime startDateTime = startDate.atTime(tripTime);
+        final LocalDateTime endDateTime = endDate==null?startDateTime:endDate.atTime(tripTime);
         if(trip==null || user==null || startDateTime == null || endDateTime == null){
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Trip {} or User {} or startDateTime '{}' or endDateTime '{}' cannot be null", trip, user, startDateTime, endDateTime, e);

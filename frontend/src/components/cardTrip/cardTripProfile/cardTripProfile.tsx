@@ -2,14 +2,23 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import TripModel from "@/models/TripModel.ts";
-import extractPathAfterApi from "@/functions/extractPathAfterApi.ts";
 import { Link } from "react-router-dom";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import useCityByUri from "@/hooks/cities/useCityByUri";
 import useCarByUri from "@/hooks/cars/useCarByUri";
+import {tripDetailsPath} from "@/AppRouter.tsx";
+import getTotalTrips from "@/functions/getTotalTrips.ts";
+import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
+import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 
 const CardTripProfile = (trip: TripModel) => {
   const { t } = useTranslation();
+  const {currentUser} =  useCurrentUser();
+  const isDriver = trip.driverUri==currentUser?.selfUri
+  const {
+    isLoading: isLoadingRole,
+    currentPassanger: currentPassanger,
+  } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
 
   const {
     isLoading: isOriginCityLoading,
@@ -33,14 +42,17 @@ const CardTripProfile = (trip: TripModel) => {
     isCarLoading ||
     isOriginCityError ||
     isDestinationCityError ||
-    isCarError
-  ) {
+    isCarError || isLoadingRole) {
     return <LoadingWheel description={t("trip.loading_one")} />;
   }
 
+  const startDateTimeValue = isDriver ? trip.startDateTime : currentPassanger?.startDateTime || "";
+  const endDateTimeValue = isDriver? trip.endDateTime : currentPassanger?.endDateTime || "";
+  const totalTrips = getTotalTrips(new Date(startDateTimeValue), new Date(endDateTimeValue))
+
   return (
     <Link
-      to={extractPathAfterApi(trip.selfUri)}
+      to={tripDetailsPath.replace(":id", trip.tripId.toString())}
       className={styles.link_container}
     >
       <div className={styles.card_info}>
@@ -65,11 +77,11 @@ const CardTripProfile = (trip: TripModel) => {
           <div className={styles.extra_info_container}>
             <div className={styles.calendar_container}>
               <i className="bi bi-calendar text"></i>
-              {trip.totalTrips == 1 ? (
+              {totalTrips == 1 ? (
                 <div className={styles.format_date}>
                   <span className="text">PONER DIA</span>
                   <span className={styles.date_text}>
-                    {getFormattedDateTime(trip.startDateTime).date}
+                    {startDateTimeValue}
                   </span>
                 </div>
               ) : (
@@ -77,9 +89,8 @@ const CardTripProfile = (trip: TripModel) => {
                   <span className="text">PONER DIA</span>
                   <span className={styles.date_text}>
                     {t("format.recurrent_date", {
-                      initial_date: getFormattedDateTime(trip.startDateTime)
-                        .date,
-                      final_date: getFormattedDateTime(trip.endDateTime).date,
+                      initial_date: startDateTimeValue,
+                      final_date: endDateTimeValue,
                     })}
                   </span>
                 </div>
@@ -92,9 +103,7 @@ const CardTripProfile = (trip: TripModel) => {
             <div>
               <h2 className={styles.price_format}>
                 {t("format.price", {
-                  priceInt: trip.pricePerTrip,
-                  princeFloat: 0,
-                })}
+                  priceInt: trip.pricePerTrip})}
               </h2>
             </div>
           </div>

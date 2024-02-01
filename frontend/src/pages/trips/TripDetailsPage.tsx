@@ -14,6 +14,7 @@ import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import useTrip from "@/hooks/trips/useTrip.tsx";
+import {useSearchParams} from "react-router-dom";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const TripDetailsPage = () => {
     isError: isError,
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
-
+  const [params] = useSearchParams();
 
   if (
     isLoadingTrip ||
@@ -46,7 +47,8 @@ const TripDetailsPage = () => {
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
-
+  const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime || params.get("startDate") || "") ;
+  const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || params.get("endDate") || "");
   return (
     <div>
       <MainComponent>
@@ -74,6 +76,8 @@ const TripDetailsPage = () => {
               car={car}
               driver={driver}
               isDriver={isDriver}
+              startDateTime={startDateTime}
+              endDateTime={endDateTime}
             />
             <div className={styles.img_container}>
               <img src={car?.imageUri} className={styles.img_style} alt="" />
@@ -85,6 +89,8 @@ const TripDetailsPage = () => {
               trip={trip}
               isPassanger={isPassanger}
               isDriver={isDriver}
+              startDateTime={startDateTime}
+              endDateTime={endDateTime}
               status={trip.tripStatus}
             />
             <RightDetails
@@ -100,7 +106,7 @@ const TripDetailsPage = () => {
         </div>
       </MainComponent>
       {isDriver && (
-        <PassangersTripComponent uri={trip.passengersUriTemplate} fullSeats={0 == parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10)} />
+        <PassangersTripComponent uri={trip.passengersUriTemplate} fullSeats={0 == parseInt(trip.maxSeats , 10) - 1000000} />
       )}
     </div>
   );

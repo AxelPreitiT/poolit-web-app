@@ -9,19 +9,22 @@ import getFormattedDateTime from "@/functions/DateFormat.ts";
 import {Link} from "react-router-dom";
 import {carPath, publicProfilePath} from "@/AppRouter.tsx";
 import {getDayString} from "@/utils/date/dayString.ts";
+// import PassangerModel from "@/models/PassangerModel.ts";
+// import {useSearchParams} from "react-router-dom";
 
 interface TripInfoProps {
   trip: TripModel;
   car: CarModel;
   driver: UserPublicModel;
+  startDateTime: string;
+  endDateTime: string;
   isDriver: boolean;
 }
 
-const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
-    const availableSeats = parseInt(trip.maxSeats , 10) - parseInt(trip.occupiedSeats, 10);
+const TripInfo = ({trip, car, driver, isDriver, startDateTime, endDateTime} : TripInfoProps) => {
+    const availableSeats = parseInt(trip.maxSeats , 10) - 100000000;
     const { t } = useTranslation();
     const date = new Date(trip.startDateTime)
-
   return (
     <div className={styles.info_trip}>
       <div className={styles.show_row}>
@@ -39,7 +42,12 @@ const TripInfo = ({trip, car, driver, isDriver} : TripInfoProps) => {
               {t(`day.full.${getDayString(date).toLowerCase()}`, {
               plural: "s",})}
           </span>
-          <span className={styles.subtitle_info}>{getFormattedDateTime(trip.startDateTime).date}</span>
+          <span className={styles.subtitle_info}>{startDateTime == endDateTime
+              ? getFormattedDateTime(startDateTime).date
+              : t("format.recurrent_date", {
+                  initial_date: getFormattedDateTime(startDateTime).date,
+                  final_date: getFormattedDateTime(endDateTime).date,
+              })}</span>
         </div>
       </div>
       <div className={styles.show_row}>
