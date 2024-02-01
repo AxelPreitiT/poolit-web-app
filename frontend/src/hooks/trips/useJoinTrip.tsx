@@ -20,7 +20,6 @@ const useJoinTrip = (trip: tripModel, startDateTime: string, endDateTime: string
     const invalidateTripState = () => {
         queryClient.invalidateQueries({ queryKey: ['tripDetails'] });
         queryClient.invalidateQueries({ queryKey: ['rolePassanger'] });
-        queryClient.invalidateQueries({ queryKey: ['trips'] });
     }
 
     const mutation = useMutation({
