@@ -177,7 +177,7 @@ public class TripServiceImplTest {
         when(userService.getCurrentUser()).thenReturn(Optional.of(user));
         when(tripDao.getPassengers(any(),any(),any())).thenReturn(Collections.emptyList());
 
-        tripService.addCurrentUserAsPassenger(tripId, startDate, startTime, endDate);
+        tripService.addCurrentUserAsPassenger(tripId, startDate, endDate);
 
     }
 
@@ -187,7 +187,7 @@ public class TripServiceImplTest {
         when(userService.getCurrentUser()).thenReturn(Optional.of(user));
         when(tripDao.getPassengers(any(),any(),any())).thenReturn(Collections.singletonList(passenger));
 
-        tripService.addCurrentUserAsPassenger(tripId, startDate, startTime, endDate);
+        tripService.addCurrentUserAsPassenger(tripId, startDate, endDate);
 
     }
 

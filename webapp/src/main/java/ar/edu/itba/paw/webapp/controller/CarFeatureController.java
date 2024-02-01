@@ -48,7 +48,7 @@ public class CarFeatureController {
     }
 
     @GET
-    @Produces(value = VndType.APPLICATION_CAR_FEATURE)
+    @Produces(value = VndType.APPLICATION_CAR_FEATURE_LIST)
     public Response getCarFeatures(){
         LOGGER.debug("GET request for all car features");
         List<FeatureCar> ans = carFeatureService.getCarFeatures();

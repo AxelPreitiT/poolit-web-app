@@ -40,7 +40,7 @@ public class CarBrandController {
     }
 
     @GET
-    @Produces(VndType.APPLICATION_CAR_BRAND)
+    @Produces(VndType.APPLICATION_CAR_BRAND_LIST)
     public Response getCarBrands(){
         LOGGER.debug("GET request for all car brands");
         List<CarBrand> ans = carBrandService.getCarBrands();

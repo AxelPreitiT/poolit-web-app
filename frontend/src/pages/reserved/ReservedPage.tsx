@@ -9,27 +9,36 @@ import ListTripsScheduled from "@/components/cardTrip/ListTripsScheduled/ListTri
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
+import TripModel from "@/models/TripModel.ts";
+import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
+import {tripDetailsPath} from "@/AppRouter.tsx";
 
 const ReservedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
   const { t } = useTranslation();
   const { search } = useLocation();
   const time = new URLSearchParams(search).get("time");
-
   const page = new URLSearchParams(search).get("page");
+  // TODO: PONER CONSTANTES DE PAGINACION
   const currentPage = page == null ? 1 : parseInt(page, 10);
-  const uriFutureTrips =
-    isLoading || currentUser === undefined
-      ? null
-      : createPaginationUri(
-          currentUser?.futureReservedTripsUri,
-          currentPage,
-          2
-        );
-  const uriPastTrips =
-    isLoading || currentUser === undefined
-      ? null
-      : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
+
+  // TODO: REVISAR NO LO CAMBIO AHORA POR LSA DUDAS
+  const uriFutureTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.futureReservedTripsUri, currentPage, 2);
+  const uriPastTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
+
+
+    const extraData = (trip: TripModel):{startDate:string, endDate:string, link: string}=>{
+        //TODO: revisar! (seguro falla)
+        const {
+            isLoading: isLoadingRole,
+            currentPassanger: currentPassanger,
+        } = useRolePassanger(false, trip?.passengersUriTemplate);
+
+        if(isLoadingRole || currentPassanger === undefined){
+            return {startDate:"", endDate:"", link:""}
+        }
+        return {startDate:currentPassanger.startDateTime, endDate:currentPassanger.endDateTime, link: tripDetailsPath.replace(":tripId", trip.tripId.toString())}
+    }
 
   return (
     <MainComponent>
@@ -48,6 +57,7 @@ const ReservedPage = () => {
             ) : (
               <ListTripsScheduled
                 uri={uriFutureTrips}
+                extraData={extraData}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList
@@ -71,6 +81,7 @@ const ReservedPage = () => {
             ) : (
               <ListTripsScheduled
                 uri={uriPastTrips}
+                extraData={extraData}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList

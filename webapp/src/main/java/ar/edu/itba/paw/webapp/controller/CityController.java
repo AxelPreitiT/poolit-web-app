@@ -46,7 +46,7 @@ public class CityController {
 
     @GET
     @Path("/")
-    @Produces(VndType.APPLICATION_CITY)
+    @Produces(VndType.APPLICATION_CITY_LIST)
     public Response getAllCities(){
         LOGGER.debug("GET request for all cities");
         final List<CityDto> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID).stream().map(city -> CityDto.fromCity(uriInfo,city)).collect(Collectors.toList());

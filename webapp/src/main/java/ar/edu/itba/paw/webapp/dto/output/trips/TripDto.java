@@ -17,14 +17,16 @@ public class TripDto {
     private URI driverUri;
     private long maxSeats;
     private double pricePerTrip;
-    private double totalPrice;
-    private int totalTrips;
-    private int occupiedSeats;
+//    private double totalPrice;
+//    private int totalTrips;
+
+    //TODO: acceder por otro lado
+//    private int occupiedSeats;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String passengersUriTemplate;
-    private LocalDateTime queryStartDateTime;
-    private LocalDateTime queryEndDateTime;
+//    private LocalDateTime queryStartDateTime;
+//    private LocalDateTime queryEndDateTime;
     private URI selfUri;
     private long tripId;
     private Trip.TripStatus tripStatus;
@@ -42,14 +44,15 @@ public class TripDto {
         ans.destinationAddress = trip.getDestinationAddress();
         ans.maxSeats = trip.getMaxSeats();
         ans.pricePerTrip = trip.getPrice();
-        ans.totalPrice = trip.getQueryTotalPrice();
-        ans.totalTrips = trip.getQueryTotalTrips();
-        ans.occupiedSeats = trip.getOccupiedSeats();
+//        ans.totalPrice = trip.getQueryTotalPrice();
+//        ans.totalTrips = trip.getQueryTotalTrips();
+//        ans.occupiedSeats = trip.getOccupiedSeats();
         ans.startDateTime = trip.getStartDateTime();
         ans.endDateTime = trip.getEndDateTime();
-        ans.queryStartDateTime = trip.getQueryStartDateTime();
-        ans.queryEndDateTime = trip.getQueryEndDateTime();
-        ans.tripStatus = trip.getQueryTripStatus();
+//        ans.queryStartDateTime = trip.getQueryStartDateTime();
+//        ans.queryEndDateTime = trip.getQueryEndDateTime();
+//        ans.tripStatus = trip.getQueryTripStatus();
+        ans.tripStatus = trip.getTripStatus();
         ans.isDeleted = trip.isDeleted();
         ans.lastOccurrence = trip.getLastOccurrence();
         ans.driverReviewsUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.DRIVER_REVIEWS_BASE).queryParam("forTrip",trip.getTripId()).queryParam("madeBy","{userId}").toTemplate();
@@ -60,7 +63,9 @@ public class TripDto {
         ans.carUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CAR_BASE).path(String.valueOf(trip.getCar().getCarId())).build();
         ans.originCityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(trip.getOriginCity().getId())).build();
         ans.destinationCityUri = uriInfo.getBaseUriBuilder().path(UrlHolder.CITY_BASE).path(String.valueOf(trip.getDestinationCity().getId())).build();
-        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).queryParam("startDateTime",trip.getQueryStartDateTime()).queryParam("endDateTime",trip.getQueryEndDateTime()).build();
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).build();
+//        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(trip.getTripId())).queryParam("startDateTime",trip.getQueryStartDateTime()).queryParam("endDateTime",trip.getQueryEndDateTime()).build();
+
         return ans;
     }
 
@@ -144,24 +149,24 @@ public class TripDto {
         this.endDateTime = endDateTime;
     }
 
-    public LocalDateTime getQueryStartDateTime() {
-        return queryStartDateTime;
-    }
+    //public LocalDateTime getQueryStartDateTime() {
+//        return queryStartDateTime;
+//    }
 
-    public void setQueryStartDateTime(LocalDateTime queryStartDateTime) {
-        this.queryStartDateTime = queryStartDateTime;
-    }
+    //public void setQueryStartDateTime(LocalDateTime queryStartDateTime) {
+    //    this.queryStartDateTime = queryStartDateTime;
+    //}
 
-    public LocalDateTime getQueryEndDateTime() {
-        return queryEndDateTime;
-    }
+    //public LocalDateTime getQueryEndDateTime() {
+    //    return queryEndDateTime;
+    //}
 
-    public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {
-        this.queryEndDateTime = queryEndDateTime;
-    }
+    //public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {
+    //    this.queryEndDateTime = queryEndDateTime;
+    //}
 
     public URI getSelfUri() {
-        return selfUri;
+    return selfUri;
     }
 
     public void setSelfUri(URI selfUri) {
@@ -176,29 +181,29 @@ public class TripDto {
         this.passengersUriTemplate = passengersUriTemplate;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
+//    public double getTotalPrice() {
+//        return totalPrice;
+//    }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
+//    public void setTotalPrice(double totalPrice) {
+//        this.totalPrice = totalPrice;
+//    }
 
-    public int getTotalTrips() {
-        return totalTrips;
-    }
+//    public int getTotalTrips() {
+//        return totalTrips;
+//    }
 
-    public void setTotalTrips(int totalTrips) {
-        this.totalTrips = totalTrips;
-    }
+//    public void setTotalTrips(int totalTrips) {
+//        this.totalTrips = totalTrips;
+//    }
 
-    public int getOccupiedSeats() {
-        return occupiedSeats;
-    }
+//    public int getOccupiedSeats() {
+//        return occupiedSeats;
+//    }
 
-    public void setOccupiedSeats(int occupiedSeats) {
-        this.occupiedSeats = occupiedSeats;
-    }
+//    public void setOccupiedSeats(int occupiedSeats) {
+//        this.occupiedSeats = occupiedSeats;
+//    }
 
     public long getTripId() {
         return tripId;

@@ -63,12 +63,12 @@ public class Trip {
     @Column(name = "last_occurrence", nullable = true)
     private LocalDateTime lastOccurrence;
 
-    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
-    private double driverRating;
+//    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
+//    private double driverRating;
 
 
-    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
-    private double carRating;
+//    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
+//    private double carRating;
 
     @Formula("cast(start_date_time as time)")
     private LocalTime time;
@@ -298,23 +298,34 @@ public class Trip {
         this.occupiedSeats = occupiedSeats;
     }
 
-    public double getDriverRating() {
-        return driverRating;
-    }
+//    public double getDriverRating() {
+//        return driverRating;
+//    }
 
-    public double getCarRating() {
-        return carRating;
-    }
-    public TripStatus getQueryTripStatus(){
+//    public double getCarRating() {
+//        return carRating;
+//    }
+
+    public TripStatus getTripStatus(){
         final LocalDateTime now = LocalDateTime.now();
-        if(queryStartDateTime.compareTo(now)>=0){
+        if(startDateTime.compareTo(now)>=0){
             return TripStatus.NOT_STARTED;
         }
-        if(now.compareTo(queryEndDateTime)<=0){
+        if(now.compareTo(endDateTime)<=0){
             return TripStatus.IN_PROGRESS;
         }
         return TripStatus.FINISHED;
     }
+//    public TripStatus getQueryTripStatus(){
+//        final LocalDateTime now = LocalDateTime.now();
+//        if(queryStartDateTime.compareTo(now)>=0){
+//            return TripStatus.NOT_STARTED;
+//        }
+//        if(now.compareTo(queryEndDateTime)<=0){
+//            return TripStatus.IN_PROGRESS;
+//        }
+//        return TripStatus.FINISHED;
+//    }
 
     public enum TripStatus{
         NOT_STARTED,

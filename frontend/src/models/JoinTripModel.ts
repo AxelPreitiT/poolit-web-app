@@ -1,6 +1,5 @@
 interface JoinTripModel {
     startDate: string;
-    startTime: string;
     endDate?: string;
 }
 

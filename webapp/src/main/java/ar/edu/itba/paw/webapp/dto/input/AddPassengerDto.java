@@ -13,9 +13,9 @@ public class AddPassengerDto {
     @NotNull(message = "{dto.validation.dateFormat}")
     private LocalDate startDate;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
-    @NotNull(message = "{dto.validation.timeFormat}")
-    private LocalTime startTime;
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+//    @NotNull(message = "{dto.validation.timeFormat}")
+//    private LocalTime startTime;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endDate;
@@ -28,13 +28,13 @@ public class AddPassengerDto {
         this.startDate = startDate;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
+//    public LocalTime getStartTime() {
+//        return startTime;
+//    }
+//
+//    public void setStartTime(LocalTime startTime) {
+//        this.startTime = startTime;
+//    }
 
     public LocalDate getEndDate() {
         return endDate;

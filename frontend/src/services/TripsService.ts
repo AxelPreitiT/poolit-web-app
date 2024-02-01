@@ -9,10 +9,16 @@ import TripSortSearchModel from "@/models/TripSortSearchModel";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
 import tripEarningModel from "@/models/tripEarningModel.ts";
 import JoinTripModel from "@/models/JoinTripModel.ts";
+import occupiedSeatsModel from "@/models/occupiedSeatsModel.ts";
 
 class TripsService extends Service {
   public static getTripById = async (uri: string): Promise<TripModel> => {
     return await this.resolveQuery(TripsApi.getTripById(uri));
+  };
+
+
+  public static getOccupiedSeats = async (uri: string): Promise<occupiedSeatsModel> => {
+    return await this.resolveQuery(TripsApi.getOccupiedSeats(uri));
   };
 
   public static getAmountByUri = async (uri: string): Promise<tripEarningModel> => {

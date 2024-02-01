@@ -2,22 +2,31 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
-import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { getDayString } from "@/utils/date/dayString.ts";
 import useCityByUri from "@/hooks/cities/useCityByUri";
 import useCarByUri from "@/hooks/cars/useCarByUri";
+import tripModel from "@/models/TripModel.ts";
+import getTotalTrips from "@/functions/getTotalTrips.ts";
+import StarRating from "@/components/stars/StarsRanking.tsx";
+import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
+import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 
 const CardTrip = ({
   trip,
   className,
+  extraData,
 }: {
   trip: TripModel;
   className?: string;
+  extraData?: (trip: tripModel)=>{startDate: string, endDate: string, link:string};
 }) => {
   const { t } = useTranslation();
+  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: trip.startDateTime, endDate: trip.endDateTime , link:''};
   const date = new Date(trip.startDateTime);
+  const totalTrips = getTotalTrips(new Date(start), new Date(end));
+  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(trip?.driverUri);
 
   const {
     isLoading: isOriginCityLoading,
@@ -41,14 +50,16 @@ const CardTrip = ({
     isCarLoading ||
     isOriginCityError ||
     isDestinationCityError ||
-    isCarError
+    isCarError ||
+    isLoadingDriver ||
+    driver === undefined
   ) {
     return <LoadingWheel description={t("trip.loading_one")} />;
   }
-
+  const totalPrice = totalTrips * trip.pricePerTrip;
   return (
     <Link
-      to={extractPathAfterApi(trip.selfUri)}
+      to={linkTrip}
       className={styles.link_container + " " + className}
     >
       <div className={styles.card_container}>
@@ -61,6 +72,16 @@ const CardTrip = ({
           ) : (
             <div className={styles.img_container}>
               <img src={car.imageUri} />
+              <div className={styles.raiting_container}>
+                <div className={styles.one_raiting}>
+                  <StarRating rating={car.rating} className="light-text h6" />
+                  <CircleImg src={car.imageUri} size={20} />
+                </div>
+                <div className={styles.one_raiting}>
+                  <StarRating rating={driver.driverRating} className="light-text h6"  />
+                  <CircleImg src={driver.imageUri} size={20} />
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -85,14 +106,14 @@ const CardTrip = ({
           <div className={styles.footer_description}>
             <div className={styles.footer_details}>
               <i className="bi bi-calendar text"></i>
-              {trip.totalTrips > 1 ? (
+              {start != end ? (
                 <span>
                   {t(`day.full.${getDayString(date).toLowerCase()}`, {
                     plural: "s",
                   })}
                 </span>
               ) : (
-                <span>{getFormattedDateTime(trip.startDateTime).date}</span>
+                <span>{getFormattedDateTime(start).date}</span>
               )}
             </div>
             <div className={styles.footer_details}>
@@ -101,7 +122,7 @@ const CardTrip = ({
             </div>
             <h3>
               {t("format.price", {
-                priceInt: trip.pricePerTrip,
+                priceInt: totalPrice
               })}
             </h3>
           </div>

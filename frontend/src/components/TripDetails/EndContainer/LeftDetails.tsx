@@ -3,13 +3,16 @@ import styles from "./styles.module.scss";
 import StatusTrip from "@/components/statusTrip/StatusTrip.tsx";
 import {useTranslation} from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
-import useGetEarning from "@/hooks/trips/useGetAmount.tsx";
+import useGetEarning from "@/hooks/trips/useGetEarning.tsx";
+import getTotalTrips from "@/functions/getTotalTrips.ts";
 
 interface LeftDetailsProps {
   trip : TripModel;
   isPassanger:boolean;
   isDriver:boolean;
   status: string;
+  startDateTime: string;
+  endDateTime: string;
 }
 
 const EarningComponent = () => {
@@ -24,9 +27,13 @@ const EarningComponent = () => {
   );
 }
 
-const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) => {
-  const { t } = useTranslation();
 
+const LeftDetails = ({trip, isPassanger, isDriver, status, startDateTime, endDateTime}: LeftDetailsProps) => {
+  const { t } = useTranslation();
+  const totalTrips = getTotalTrips(new Date(startDateTime), new Date(endDateTime))
+  const totalPrice = totalTrips * trip.pricePerTrip;
+
+  console.log("Total trips:" + totalTrips)
   return (
       <div className={styles.status_trip}>
         {isDriver  ?
@@ -34,8 +41,8 @@ const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) =>
             <h3>{t("trip_detail.income")}</h3>
             <div className={styles.price_container}>
               <EarningComponent />
-              {trip.totalTrips > 1 ?
-                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.recurrent_trip", {number: trip.totalTrips})}</span>) :
+              {totalTrips > 1 ?
+                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.recurrent_trip", {number: totalTrips})}</span>) :
                   (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.single_trip")}</span>)}
             </div>
           </div>) :
@@ -44,11 +51,11 @@ const LeftDetails = ({trip, isPassanger, isDriver, status}: LeftDetailsProps) =>
             <div className={styles.price_container}>
               <h3>
                 {t("format.price", {
-                  priceInt: trip.pricePerTrip,
+                  priceInt: totalPrice
                 })}
               </h3>
-              {trip.totalTrips > 1 ?
-                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.recurrent_trip", {number: trip.totalTrips})}</span>) :
+              {totalTrips > 1 ?
+                  (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.recurrent_trip", {number: totalTrips})}</span>) :
                   (<span style={{ color: "gray", fontStyle: "italic" }}>{t("trip_detail.single_trip")}</span>)}
             </div>
           </div>)}
