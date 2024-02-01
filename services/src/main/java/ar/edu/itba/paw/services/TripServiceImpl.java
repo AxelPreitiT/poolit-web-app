@@ -283,6 +283,16 @@ public class TripServiceImpl implements TripService {
 //        return removePassenger(tripId, user.getUserId());
 //    }
 
+
+    @Transactional
+    @Override
+    public int getTripSeatCount(long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripNotFoundException {
+        final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
+        return tripDao.getTripSeatCount(tripId,
+                startDateTime!=null?startDateTime:trip.getStartDateTime(),
+                endDateTime!=null?endDateTime:trip.getEndDateTime());
+    }
+
     @Transactional
     @Override
     public boolean removePassenger(final long tripId, final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
