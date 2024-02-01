@@ -59,7 +59,7 @@ public class TripController {
 
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.createdBy) and @authValidator.checkIfWantedIsSelf(#query.reservedBy) and @authValidator.checkIfWantedIsSelf(#query.recommendedFor)")
-    @Produces(value = VndType.APPLICATION_TRIP)
+    @Produces(value = VndType.APPLICATION_TRIP_LIST)
     public Response getTrips(@Valid @BeanParam final TripsQuery query){
         PagedContent<Trip> ans = null;
         if(query.getCreatedBy()!=null){
@@ -136,7 +136,7 @@ public class TripController {
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
-    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
+    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER_LIST)
     public Response getPassengers(@PathParam("id") final long id,
                                   @Valid @BeanParam final PassengersQuery passengersQuery) throws  TripNotFoundException {
         LOGGER.debug("GET request for passengers from trip {}",id);

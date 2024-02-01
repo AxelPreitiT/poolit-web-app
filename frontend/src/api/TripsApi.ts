@@ -29,7 +29,8 @@ type CreateTripRequestBody = {
 class TripsApi extends AxiosApi {
   private static readonly TRIPS_CONTENT_TYPE_HEADER: string =
     "application/vnd.trip.v1+json";
-
+  private static readonly TRIPS_LIST_TYPE =
+      "application/vnd.trip.list.v1+json";
   private static readonly TRIPS_CONTENT_TYPE_JOIN: string =
       "application/vnd.trip.passenger.v1+json";
 
@@ -83,7 +84,9 @@ class TripsApi extends AxiosApi {
     uri: string
   ) => AxiosPromise<PaginationModel<TripModel>> = (uri: string) => {
     return this.get<TripModel[]>(uri, {
-      headers: {},
+      headers: {
+        Accept:TripsApi.TRIPS_LIST_TYPE,
+      },
     }).then((response: AxiosResponse<TripModel[]>) => {
       const trips = response.data;
 
@@ -147,7 +150,11 @@ class TripsApi extends AxiosApi {
   public static getRecommendedTrips: (
     uri: string
   ) => AxiosPromise<TripModel[]> = (uri: string) => {
-    return this.get<TripModel[]>(uri);
+    return this.get<TripModel[]>(uri,{
+      headers:{
+        Accept:TripsApi.TRIPS_LIST_TYPE,
+      }
+    });
   };
 
   public static searchTrips = (
@@ -209,7 +216,11 @@ class TripsApi extends AxiosApi {
       uri.searchParams.set("descending", sortOptions.descending.toString());
     }
     console.log("uri", uri.toString());
-    return this.get<TripModel[]>(uri.toString()).then(this.getPaginationModel);
+    return this.get<TripModel[]>(uri.toString(),{
+      headers:{
+        Accept:TripsApi.TRIPS_LIST_TYPE,
+      }
+    }).then(this.getPaginationModel);
   };
 }
 

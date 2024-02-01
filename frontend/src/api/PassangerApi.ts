@@ -11,19 +11,21 @@ type AcceptRejecPassangerBody = {
 };
 
 class PassangerApi extends AxiosApi{
+    private static readonly PASSENGER_LIST_TYPE = "application/vnd.trip.passenger.list.v1+json";
 
     private static readonly PASSANGER_CONTENT_TYPE_HEADER: string = "application/vnd.trip.passenger.state.v1+json";
+    private static readonly REPORT_LIST_TYPE = "application/vnd.report.public.list.v1+json";
+    //TODO: revisar, lo cambio porque ahora la lista es otro tipo
+    // private static readonly REPORT_HEADER: string = "application/vnd.report.public.v1+json";
 
-    private static readonly REPORT_HEADER: string = "application/vnd.report.public.v1+json";
-
-    private static readonly PASSENGER_HEADER: string = "application/vnd.trip.passenger.v1+json";
+    // private static readonly PASSENGER_HEADER: string = "application/vnd.trip.passenger.v1+json";
 
     public static getPassangerByUri: (uri: string) => AxiosPromise<PaginationModel<PassangerModel>> =
         (uri: string) => {
             const newUri = parseTemplate(uri).expand({});
             return this.get<PassangerModel[]>(newUri, {
                 headers: {
-                    Accept: PassangerApi.PASSENGER_HEADER
+                    Accept: PassangerApi.PASSENGER_LIST_TYPE
                 },
             }).then((response: AxiosResponse<PassangerModel[]>) => {
                 const passangers = response.data;
@@ -52,7 +54,7 @@ class PassangerApi extends AxiosApi{
         (uri: string) => {
             return this.get<ReportModel>(uri, {
                 headers: {
-                    "Accept": PassangerApi.REPORT_HEADER,
+                    "Accept": PassangerApi.REPORT_LIST_TYPE,
                 },
             }).then((response: AxiosResponse<ReportModel>) => {
                 return !(response.status === 204);
@@ -73,6 +75,7 @@ class PassangerApi extends AxiosApi{
         (uri: string) => {
             return this.get<PassangerModel[]>(uri, {
                 headers: {
+                    Accept:PassangerApi.PASSENGER_LIST_TYPE,
                 },
             });
         };

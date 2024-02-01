@@ -8,6 +8,8 @@ import ReportState from "@/enums/ReportState";
 import PaginationModel from "@/models/PaginationModel.tsx";
 
 class ReportsApi extends AxiosApi {
+  private static readonly REPORTS_PRIVATE_LIST_ACCEPT_HEADER: string =
+      "application/vnd.report.private.list.v1+json";
   private static readonly REPORTS_PRIVATE_ACCEPT_HEADER: string =
     "application/vnd.report.private.v1+json";
 
@@ -22,7 +24,7 @@ class ReportsApi extends AxiosApi {
   ) => AxiosPromise<PaginationModel<PrivateReportModel>> = (uri: string) => {
     return this.get<PrivateReportModel[]>(uri, {
       headers: {
-        Accept: ReportsApi.REPORTS_PRIVATE_ACCEPT_HEADER,
+        Accept: ReportsApi.REPORTS_PRIVATE_LIST_ACCEPT_HEADER,
       },
     }).then((response: AxiosResponse<PrivateReportModel[]>) => {
       const reports = response.data;
