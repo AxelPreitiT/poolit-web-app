@@ -73,7 +73,7 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
         <PaginationComponentExtraData
             CardComponent={PassangerComponent}
             extraData={fullSeats}
-            uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE,true)}
+            uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE, selectedOption == PassangerStatus.ALL)}
             current_page={currentPage}
             useFuction={usePassangerByUri}
             empty_component={

@@ -129,9 +129,11 @@ const RightDetails = ({ isPassanger, isDriver, trip, passanger, status,  driver 
     return (
         (! isLoadingDiscovery && discovery != undefined && (
         (!isPassanger && !isDriver) ?
-            <div className={styles.btn_container}>
-                <BtnJoin trip={trip}/>
-            </div> :
+            (status_value === Status.FINISHED &&
+                <div className={styles.btn_container}>
+                    <BtnJoin trip={trip}/>
+                </div>)
+            :
             (status_value === Status.FINISHED ?
                 ( isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ?
                     <div className={styles.review_btn}>

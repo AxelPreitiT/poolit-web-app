@@ -29,7 +29,7 @@ export interface ModalReportProps {
 
 const ModalReport = ({ closeModal, driver, car, isDriver, trip, passanger, reporting, openModalMake, openModalCar}: ModalReportProps) => {
     const { t } = useTranslation();
-    const uri = getUriPassangers(isDriver, passanger, trip);
+    const uri = getUriPassangers(isDriver, trip, passanger);
 
     return (
             <div className={styles.propProfile}>
