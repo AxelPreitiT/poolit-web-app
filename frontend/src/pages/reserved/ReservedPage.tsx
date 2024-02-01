@@ -11,6 +11,7 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import TripModel from "@/models/TripModel.ts";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
+import {tripDetailsPath} from "@/AppRouter.tsx";
 
 const ReservedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
@@ -26,16 +27,17 @@ const ReservedPage = () => {
   const uriPastTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
 
 
-    const extraData = (trip: TripModel):{startDate:string, endDate:string}=>{
+    const extraData = (trip: TripModel):{startDate:string, endDate:string, link: string}=>{
+        //TODO: revisar! (seguro falla)
         const {
             isLoading: isLoadingRole,
             currentPassanger: currentPassanger,
         } = useRolePassanger(false, trip?.passengersUriTemplate);
 
         if(isLoadingRole || currentPassanger === undefined){
-            return {startDate:"", endDate:""}
+            return {startDate:"", endDate:"", link:""}
         }
-        return {startDate:currentPassanger.startDateTime, endDate:currentPassanger.endDateTime}
+        return {startDate:currentPassanger.startDateTime, endDate:currentPassanger.endDateTime, link: tripDetailsPath.replace(":id", trip.tripId.toString())}
     }
 
   return (

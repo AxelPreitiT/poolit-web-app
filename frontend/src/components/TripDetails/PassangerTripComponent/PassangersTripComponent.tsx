@@ -5,7 +5,7 @@ import MainComponent from "@/components/utils/MainComponent.tsx";
 import MainHeader from "@/components/utils/MainHeader.tsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {useLocation, useSearchParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
@@ -28,13 +28,13 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
   const [selectedOption, setSelectedOption] = useState<string>(PassangerStatus.ALL);
 
 
-  const [params] = useSearchParams();
-  const startDateTime = params.get("startDateTime") || "";
-  const endDateTime = params.get("endDateTime") || "";
+  // const [params] = useSearchParams();
+  // const startDateTime = params.get("startDateTime") || "";
+  // const endDateTime = params.get("endDateTime") || "";
   const newUri = parseTemplate(uri as string).expand({
     userId: null,
-    startDateTime: startDateTime,
-    endDateTime: endDateTime,
+    startDateTime: null,
+    endDateTime: null,
     passengerState: selectedOption == PassangerStatus.ALL? null : selectedOption,
   });
   const queryClient = useQueryClient();
@@ -73,7 +73,7 @@ const PassangersTripComponent = ({ uri, fullSeats }: PassangersTripComponentProp
         <PaginationComponentExtraData
             CardComponent={PassangerComponent}
             extraData={fullSeats}
-            uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE)}
+            uri={createPaginationUri(newUri, currentPage, PASSANGERPAGESIZE,true)}
             current_page={currentPage}
             useFuction={usePassangerByUri}
             empty_component={

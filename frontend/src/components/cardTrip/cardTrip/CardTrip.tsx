@@ -2,22 +2,26 @@ import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
-import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { getDayString } from "@/utils/date/dayString.ts";
 import useCityByUri from "@/hooks/cities/useCityByUri";
 import useCarByUri from "@/hooks/cars/useCarByUri";
+import tripModel from "@/models/TripModel.ts";
 
 const CardTrip = ({
   trip,
   className,
+  extraData,
 }: {
   trip: TripModel;
   className?: string;
+  extraData?: (trip: tripModel)=>{startDate: string, endDate: string, link:string};
 }) => {
   const { t } = useTranslation();
+  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: '', endDate: '' , link:''};
   const date = new Date(trip.startDateTime);
+
 
   const {
     isLoading: isOriginCityLoading,
@@ -48,7 +52,7 @@ const CardTrip = ({
 
   return (
     <Link
-      to={extractPathAfterApi(trip.selfUri)}
+      to={linkTrip}
       className={styles.link_container + " " + className}
     >
       <div className={styles.card_container}>
@@ -85,14 +89,14 @@ const CardTrip = ({
           <div className={styles.footer_description}>
             <div className={styles.footer_details}>
               <i className="bi bi-calendar text"></i>
-              {trip.totalTrips > 1 ? (
+              {start != end ? (
                 <span>
                   {t(`day.full.${getDayString(date).toLowerCase()}`, {
                     plural: "s",
                   })}
                 </span>
               ) : (
-                <span>{getFormattedDateTime(trip.startDateTime).date}</span>
+                <span>{start}</span>
               )}
             </div>
             <div className={styles.footer_details}>

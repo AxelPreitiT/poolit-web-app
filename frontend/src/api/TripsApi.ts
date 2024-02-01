@@ -33,7 +33,7 @@ class TripsApi extends AxiosApi {
   private static readonly TRIPS_CONTENT_TYPE_JOIN: string =
       "application/vnd.trip.passenger.v1+json";
 
-  //private static readonly TRIPS_EARNING_TYPE_HEADER: string ="trip.earnings.v1+json"
+  private static readonly TRIPS_EARNING_TYPE_HEADER: string ="application/vnd.trip.earnings.v1+json"
 
   public static postDeleteTrip: (
     uri: string
@@ -73,7 +73,9 @@ class TripsApi extends AxiosApi {
       uri: string
   ) => {
     return this.get<tripEarningModel>(uri, {
-      headers: {},
+      headers: {
+        Accept: TripsApi.TRIPS_EARNING_TYPE_HEADER,
+      },
     });
   };
 

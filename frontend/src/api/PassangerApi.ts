@@ -16,11 +16,14 @@ class PassangerApi extends AxiosApi{
 
     private static readonly REPORT_HEADER: string = "application/vnd.report.public.v1+json";
 
+    private static readonly PASSENGER_HEADER: string = "application/vnd.trip.passenger.v1+json";
+
     public static getPassangerByUri: (uri: string) => AxiosPromise<PaginationModel<PassangerModel>> =
         (uri: string) => {
             const newUri = parseTemplate(uri).expand({});
             return this.get<PassangerModel[]>(newUri, {
                 headers: {
+                    Accept: PassangerApi.PASSENGER_HEADER
                 },
             }).then((response: AxiosResponse<PassangerModel[]>) => {
                 const passangers = response.data;

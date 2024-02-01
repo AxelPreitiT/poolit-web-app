@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import UnknownResponseError from "@/errors/UnknownResponseError.ts";
 import tripEarningModel from "@/models/tripEarningModel.ts";
-import {useParams, useSearchParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import {parseTemplate} from "url-template";
 
@@ -16,10 +16,10 @@ const useGetEarning = () => {
     const id = param.tripId;
     const onQueryError = useQueryError();
     const { isLoading: isLoadingDiscovery, discovery } = useDiscovery()
-    const [params] = useSearchParams();
+    // const [params] = useSearchParams();
 
-    const startDateTime = params.get("startDateTime") || "";
-    const endDateTime = params.get("endDateTime") || "";
+    // const startDateTime = params.get("startDateTime") || "";
+    // const endDateTime = params.get("endDateTime") || "";
 
     const {
         isLoading,
@@ -32,8 +32,8 @@ const useGetEarning = () => {
         queryFn: async (): Promise<tripEarningModel | undefined> => {
             const uri = parseTemplate(discovery?.tripsUriTemplate as string).expand({
                 tripId: id as string,
-                startDateTime : startDateTime,
-                endDateTime : endDateTime
+                startDateTime : null,
+                endDateTime : null
             });
 
             return await TripsService.getAmountByUri(uri as string);

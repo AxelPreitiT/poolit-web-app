@@ -4,19 +4,24 @@ import { useTranslation } from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
 import {getDayString} from "@/utils/date/dayString.ts";
 import tripModel from "@/models/TripModel.ts";
+import {tripDetailsPath} from "@/AppRouter.tsx";
 
 interface CardTripScheduledProps {
     data: TripModel;
-    extraData?:(trip: tripModel)=>{startDate: string, endDate: string};
+    extraData?:(trip: tripModel)=>{startDate: string, endDate: string, link: string};
 }
 
 const CardTripScheduled =  ({data: trip, extraData: extraData}: CardTripScheduledProps) => {
   const { t } = useTranslation();
-  const { startDate: start, endDate: end } = extraData ? extraData(trip) : { startDate: '', endDate: '' };
+  const { startDate: start, endDate: end} = extraData ? extraData(trip) : { startDate: '', endDate: ''};
   const date = new Date(start);
+  if(extraData == undefined){
+    extraData = (trip: TripModel)=>{
+      return {startDate:trip.startDateTime, endDate:trip.endDateTime, link:tripDetailsPath.replace(":tripId", trip.tripId.toString())}
+    }
+  }
 
-
-    return (
+  return (
     <div>
       <div className={styles.short_date}>
         <div className={styles.calendar_container}>
@@ -42,7 +47,7 @@ const CardTripScheduled =  ({data: trip, extraData: extraData}: CardTripSchedule
         </div>
       </div>
       <div className={styles.card_trip_container}>
-        <CardTrip trip={trip} />
+        <CardTrip extraData={extraData} trip={trip}/>
       </div>
     </div>
   );

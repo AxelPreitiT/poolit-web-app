@@ -14,7 +14,7 @@ import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen";
 import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
 import useTrip from "@/hooks/trips/useTrip.tsx";
-import {useSearchParams} from "react-router-dom";
+// import {useSearchParams} from "react-router-dom";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
@@ -45,9 +45,9 @@ const TripDetailsPage = () => {
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
-  const [params] = useSearchParams();
-  const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime || params.get("startDate") || "") ;
-  const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || params.get("endDate") || "");
+  // const [params] = useSearchParams();
+  const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime ||  "") ;
+  const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || "");
   return (
     <div>
       <MainComponent>

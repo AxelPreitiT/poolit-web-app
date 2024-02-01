@@ -8,7 +8,7 @@ export interface ListTripsScheduledProps {
   uri: string;
   empty_component: React.ReactNode;
   current_page: number;
-  extraData: (trip: tripModel)=>{startDate: string, endDate: string};
+  extraData: (trip: tripModel)=>{startDate: string, endDate: string, link: string};
 }
 
 const ListTripsScheduled = ({
