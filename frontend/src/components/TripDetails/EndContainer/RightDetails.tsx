@@ -18,7 +18,9 @@ import useJoinTrip from "@/hooks/trips/useJoinTrip.tsx";
 import useDeleteTrip from "@/hooks/trips/useDeleteTrip.tsx";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import useCancelTrip from "@/hooks/trips/useCancelTrip.tsx";
+import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
 import IMake from "../IMake";
+import ReserveStatus from "@/enums/ReserveStatus";
 
 interface RightDetailsProps {
   isPassanger: boolean;
@@ -28,11 +30,25 @@ interface RightDetailsProps {
   status: string;
   driver: userPublicModel;
   car: carModel;
+  startDateTime: string;
+  endDateTime: string;
 }
 
-const BtnJoin = ({ trip }: { trip: tripModel }) => {
+const BtnJoin = ({
+  trip,
+  startDateTime,
+  endDateTime,
+}: {
+  trip: tripModel;
+  startDateTime: string;
+  endDateTime: string;
+}) => {
   const { t } = useTranslation();
-  const { onSubmit: onSubmitAccept, invalidateTripState } = useJoinTrip(trip);
+  const { onSubmit: onSubmitAccept, invalidateTripState } = useJoinTrip(
+    trip,
+    startDateTime,
+    endDateTime
+  );
 
   return (
     <Button
@@ -55,19 +71,60 @@ const BtnDelete = ({ uri, id }: { uri: string; id: number }) => {
   const { onSubmit: onSubmitDelete } = useDeleteTrip(uri, id);
   const navigate = useNavigate();
 
+  const [showModalDelete, setModalDelete] = useState(false);
+  const closeModalDelete = () => {
+    setModalDelete(false);
+  };
+  const openModalDelete = () => {
+    setModalDelete(true);
+  };
+
   return (
-    <Button
-      className={styles.btn_cancel}
-      onClick={() => {
-        onSubmitDelete();
-        navigate(createdTripsPath);
-      }}
-    >
-      <div className={styles.create_trip_btn}>
-        <i className="bi bi-x light-text"></i>
-        <span>{t("trip_detail.btn.delete")}</span>
-      </div>
-    </Button>
+    <div>
+      <Button className={styles.btn_cancel} onClick={() => openModalDelete()}>
+        <div className={styles.create_trip_btn}>
+          <i className="bi bi-x light-text"></i>
+          <span>{t("trip_detail.btn.delete")}</span>
+        </div>
+      </Button>
+
+      <Modal
+        show={showModalDelete}
+        onHide={closeModalDelete}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <div className={styles.propProfile}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <h2 className={styles.titleModal}>{t("modal.delete_trip")}</h2>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className={styles.review_empty_container}>
+              <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
+              <h3 className="italic-text placeholder-text">
+                {t("trip_detail.btn.delete_warning")}
+              </h3>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className={styles.backBtn} onClick={closeModalDelete}>
+              {t("modal.Back")}
+            </Button>
+            <Button
+              className={styles.cancelBtn}
+              onClick={() => {
+                onSubmitDelete();
+                navigate(createdTripsPath);
+              }}
+            >
+              {t("trip_detail.btn.delete")}
+            </Button>
+          </Modal.Footer>
+        </div>
+      </Modal>
+    </div>
   );
 };
 
@@ -78,19 +135,60 @@ const CancelBtn = ({ passanger }: { passanger?: passangerModel }) => {
   );
   const navigate = useNavigate();
 
+  const [showModalCancel, setModalCancel] = useState(false);
+  const closeModalCancel = () => {
+    setModalCancel(false);
+  };
+  const openModalCancel = () => {
+    setModalCancel(true);
+  };
+
   return (
-    <Button
-      className={styles.btn_cancel}
-      onClick={() => {
-        onSubmitCancel();
-        navigate(reservedTripsPath);
-      }}
-    >
-      <div className={styles.create_trip_btn}>
-        <i className="bi bi-x light-text"></i>
-        <span>{t("trip_detail.btn.cancel")}</span>
-      </div>
-    </Button>
+    <div>
+      <Button className={styles.btn_cancel} onClick={() => openModalCancel()}>
+        <div className={styles.create_trip_btn}>
+          <i className="bi bi-x light-text"></i>
+          <span>{t("trip_detail.btn.cancel")}</span>
+        </div>
+      </Button>
+
+      <Modal
+        show={showModalCancel}
+        onHide={closeModalCancel}
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <div className={styles.propProfile}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <h2 className={styles.titleModal}>{t("modal.cancel_trip")}</h2>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className={styles.review_empty_container}>
+              <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
+              <h3 className="italic-text placeholder-text">
+                {t("trip_detail.btn.cancel_warning")}
+              </h3>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className={styles.backBtn} onClick={closeModalCancel}>
+              {t("modal.Back")}
+            </Button>
+            <Button
+              className={styles.cancelBtn}
+              onClick={() => {
+                onSubmitCancel();
+                navigate(reservedTripsPath);
+              }}
+            >
+              {t("modal.cancel")}
+            </Button>
+          </Modal.Footer>
+        </div>
+      </Modal>
+    </div>
   );
 };
 
@@ -102,10 +200,13 @@ const RightDetails = ({
   status,
   driver,
   car,
+  startDateTime,
+  endDateTime,
 }: RightDetailsProps) => {
   const { t } = useTranslation();
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
-
+  const status_value =
+    passanger != undefined ? getStatusPassanger(passanger) : status;
   // Modals Review
   const [showModalReport, setModalReport] = useState(false);
   const closeModalReport = () => {
@@ -155,10 +256,16 @@ const RightDetails = ({
     !isLoadingDiscovery &&
     discovery &&
     (!isPassanger && !isDriver ? (
-      <div className={styles.btn_container}>
-        <BtnJoin trip={trip} />
-      </div>
-    ) : status === Status.FINISHED ? (
+      status_value !== Status.FINISHED && (
+        <div className={styles.btn_container}>
+          <BtnJoin
+            trip={trip}
+            startDateTime={startDateTime}
+            endDateTime={endDateTime}
+          />
+        </div>
+      )
+    ) : status_value === Status.FINISHED ? (
       isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ? (
         <div className={styles.review_btn}>
           <div className={styles.btn_container}>
@@ -179,13 +286,13 @@ const RightDetails = ({
           </div>
           <div className={styles.report_link}>
             <span>{t("trip_detail.report.pre_link_text")}</span>
-            <strong
+            <span
               onClick={openModalReport}
               style={{ cursor: "pointer", color: "blue" }}
             >
-              <i className="bi bi-car-front-fill me-1"></i>
+              <i className="bi bi-car-front-fill"></i>
               {t("trip_detail.report.link_text")}
-            </strong>
+            </span>
           </div>
 
           <Modal
@@ -278,17 +385,21 @@ const RightDetails = ({
         />
       </div>
     ) : (
-      <div className={styles.btn_container}>
-        <Link to={reservedTripsPath}>
-          <Button className={styles.btn_trips}>
-            <div className={styles.create_trip_btn}>
-              <i className="bi bi-car-front-fill light-text"></i>
-              <span>{t("trip_detail.btn.my_trips")}</span>
-            </div>
-          </Button>
-        </Link>
-        <CancelBtn passanger={passanger} />
-      </div>
+      passanger &&
+      passanger?.passengerState !== passangerStatus.REJECTED &&
+      getStatusPassanger(passanger) === ReserveStatus.NOT_STARTED && (
+        <div className={styles.btn_container}>
+          <Link to={reservedTripsPath}>
+            <Button className={styles.btn_trips}>
+              <div className={styles.create_trip_btn}>
+                <i className="bi bi-car-front-fill light-text"></i>
+                <span>{t("trip_detail.btn.my_trips")}</span>
+              </div>
+            </Button>
+          </Link>
+          <CancelBtn passanger={passanger} />
+        </div>
+      )
     ))
   );
 };

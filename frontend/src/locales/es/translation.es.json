@@ -672,6 +672,8 @@
       "trip_started": "El viaje ha comenzado"
     },
     "btn": {
+      "cancel_warning": "¿Estás seguro que querés cancelar el viaje?",
+      "delete_warning": "¿Estás seguro que querés eliminar el viaje?",
       "accept": "Aceptar",
       "reject": "Rechazar",
       "my_trips": "Mis viajes",
@@ -878,6 +880,10 @@
     "loading": "Cargando..."
   },
   "modal": {
+    "Back" : "Back",
+    "cancel": "Cancelar",
+    "cancel_trip": "Cancelar viaje",
+    "delete_trip": "Eliminar viaje",
     "driver": "Conductor",
     "passangers": "Pasajero",
     "car": "Coche",

@@ -10,6 +10,8 @@ import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import {INITIALPAGE, TRIPSPAGESIZE} from "@/enums/PaginationConstants.ts";
+import TripModel from "@/models/TripModel.ts";
+import {tripDetailsPath} from "@/AppRouter.tsx";
 
 const CreatedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
@@ -19,8 +21,14 @@ const CreatedPage = () => {
 
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+    //extradata={(trip) => {trip.strar, trip.end}} //driver
+    //extradata={(trip) => {useCurrentPassanger(tripUri); pasanger}} //passenger
+    //extradata={(trip) => {useLocale();..; return{queryStart, queryEnd}} //buscador
+    const extraData = (trip: TripModel):{startDate:string, endDate:string, link: string}=>{
+        return {startDate:trip.startDateTime, endDate:trip.endDateTime, link: tripDetailsPath.replace(":tripId", trip.tripId.toString())}
+    }
 
-  return (
+    return (
     <MainComponent>
       <MainHeader title={t("created_trips.title")} />
       <div className={styles.container_tab}>
@@ -38,6 +46,7 @@ const CreatedPage = () => {
               <ListTripsScheduled
                 uri={createPaginationUri(currentUser.futureCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
                 current_page={currentPage}
+                extraData={extraData}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}
@@ -61,6 +70,7 @@ const CreatedPage = () => {
               <ListTripsScheduled
                 uri={createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
                 current_page={currentPage}
+                extraData={extraData}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}

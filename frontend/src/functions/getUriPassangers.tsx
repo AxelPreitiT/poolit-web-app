@@ -1,17 +1,17 @@
 import {parseTemplate} from "url-template";
 import passangerModel from "@/models/PassangerModel.ts";
 import tripModel from "@/models/TripModel.ts";
-import {useSearchParams} from "react-router-dom";
+// import {useSearchParams} from "react-router-dom";
 import passangerStatus from "@/enums/PassangerStatus.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 
-const getUriPassangers = ( isDriver:boolean, passanger?: passangerModel, trip?:tripModel,) => {
-    const [params] = useSearchParams();
+const getUriPassangers = ( isDriver:boolean, trip: tripModel, passanger?: passangerModel) => {
+    // const [params] = useSearchParams();
 
     if (isDriver) {
-        const startDateTime = params.get("startDateTime") || "";
-        const endDateTime = params.get("endDateTime") || "";
-        return parseTemplate(trip?.passengersUriTemplate as string).expand({
+        const startDateTime = trip.startDateTime;
+        const endDateTime = trip.endDateTime;
+        return parseTemplate(trip.passengersUriTemplate as string).expand({
             userId: null,
             startDateTime: startDateTime,
             endDateTime: endDateTime,

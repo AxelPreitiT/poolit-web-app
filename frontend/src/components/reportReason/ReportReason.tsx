@@ -14,63 +14,63 @@ const ReportReason: React.FC<ReportReasonProps> = ({reason }) => {
   switch (reason) {
     case Reason.CANNOT_DRIVE:
       componentToRender = (
-        <div className={styles.secondary}>
+        <span className={styles.secondary}>
           <h3>{t("admin.reason.cannot_drive")}</h3>
-        </div>
+        </span>
       );
       break;
     case Reason.DANGEROUS_DRIVING:
       componentToRender = (
-        <div className={styles.secondary}>
+        <span className={styles.secondary}>
             <h3>{t("admin.reason.dangerous_driving")}</h3>
-        </div>
+        </span>
       );
       break;
     case Reason.DID_NOT_PAY:
       componentToRender = (
-        <div className={styles.secondary}>
+        <span className={styles.secondary}>
             <h3>{t("admin.reason.did_not_pay")}</h3>
-        </div>
+        </span>
       );
       break;
     case Reason.HARASSMENT:
       componentToRender = (
-        <div className={styles.secondary}>
+        <span className={styles.secondary}>
             <h3>{t("admin.reason.harassment")}</h3>
-        </div>
+        </span>
       );
       break;
       case Reason.IDENTITY_FRAUD:
       componentToRender = (
-          <div className={styles.secondary}>
+          <span className={styles.secondary}>
               <h3>{t("admin.reason.identity_fraud")}</h3>
-          </div>
+          </span>
       );
       break;
       case Reason.MISCONDUCT:
       componentToRender = (
-          <div className={styles.secondary}>
+          <span className={styles.secondary}>
               <h3>{t("admin.reason.misconduct")}</h3>
-          </div>
+          </span>
       );
       break;
       case Reason.WRECK_CAR:
       componentToRender = (
-          <div className={styles.secondary}>
+          <span className={styles.secondary}>
               <h3>{t("admin.reason.wreck_car")}</h3>
-          </div>
+          </span>
       );
       break;
       case Reason.OTHER:
       componentToRender = (
-          <div className={styles.secondary}>
+          <span className={styles.secondary}>
               <h3>{t("admin.reason.other")}</h3>
-          </div>
+          </span>
       );
       break;
   }
 
-  return <div className={styles.status_container}>{componentToRender}</div>;
+  return <span className={styles.status_container}>{componentToRender}</span>;
 };
 
 export default ReportReason;

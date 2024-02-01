@@ -33,6 +33,7 @@ const useRolePassanger = (isDriver?: boolean, uri?: string) => {
     isError,
     isLoading: isLoading || isPending,
     currentPassanger: data,
+    isPending: isPending,
     invalidatePassangerRole,
   };
 };

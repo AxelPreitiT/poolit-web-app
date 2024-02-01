@@ -20,8 +20,7 @@ const useTripsByUri = (tripsUri?: string) => {
         isPending,
     } = useQuery({
         queryKey: ["trips", tripsUri],
-        queryFn: async ({ queryKey }): Promise<PaginationModel<TripModel>> => {
-            const [, tripsUri] = queryKey;
+        queryFn: async (): Promise<PaginationModel<TripModel>> => {
             return await TripsService.getTripsByUri(tripsUri as string);
         },
         retry: false,

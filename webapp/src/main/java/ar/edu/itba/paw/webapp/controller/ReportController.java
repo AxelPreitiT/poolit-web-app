@@ -73,7 +73,7 @@ public class ReportController {
     }
 
     @GET
-    @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
+    @Produces(value = VndType.APPLICATION_REPORT_PRIVATE_LIST)
     @PreAuthorize("hasRole('ADMIN')")
     public Response getReportsForAdmin(@Valid @BeanParam final PagedQuery query){
         LOGGER.debug("GET request for private reports");
@@ -81,9 +81,8 @@ public class ReportController {
         return ControllerUtils.getPaginatedResponse(uriInfo,ans,query.getPage(),PrivateReportDto::fromReport,PrivateReportDto.class);
     }
 
-    //TODO: hacer que se pueda buscar por reportado también, para pasajeros
     @GET
-    @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
+    @Produces(value = VndType.APPLICATION_REPORT_PUBLIC_LIST)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reporterUserId)")
     public Response getReports(@QueryParam("madeBy") final @Valid @NotNull Integer reporterUserId,
                                @QueryParam("forTrip") final @Valid @NotNull Integer tripId,

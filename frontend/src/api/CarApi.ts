@@ -12,9 +12,11 @@ import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 
 class CarApi extends AxiosApi {
   private static readonly CAR_ID_URI_KEY = "carId";
+  private static readonly CAR_LIST_TYPE = "application/vnd.car.list.v1+json";
   private static readonly CAR_CONTENT_TYPE = "application/vnd.car.v1+json";
   private static readonly CAR_REVIEW_CONTENT_TYPE =
     "application/vnd.car.review.v1+json";
+  private static readonly CAR_REVIEW_LIST_TYPE = "application/vnd.car.review.list.v1+json";
 
   public static getCarsByUser: (
     uriTemplate: string,
@@ -28,13 +30,21 @@ class CarApi extends AxiosApi {
       fromUser: user.userId.toString(),
     }).toString();
     // Todo: Concat url
-    return this.get<CarModel[]>(`${uri}?${searchParams}`);
+    return this.get<CarModel[]>(`${uri}?${searchParams}`,{
+      headers:{
+        Accept:CarApi.CAR_LIST_TYPE,
+      }
+    });
   };
 
   public static getCarByUri: (uri: string) => AxiosPromise<CarModel> = (
     uri: string
   ) => {
-    return this.get<CarModel>(uri);
+    return this.get<CarModel>(uri,{
+      headers:{
+        Accept:CarApi.CAR_CONTENT_TYPE
+      }
+    });
   };
 
   public static getCarById: (
@@ -50,7 +60,11 @@ class CarApi extends AxiosApi {
   public static getCarReviews: (
     uri: string
   ) => AxiosPromise<PaginationModel<CarReviewModel>> = (uri: string) => {
-    return this.get<CarReviewModel[]>(uri).then(this.getPaginationModel);
+    return this.get<CarReviewModel[]>(uri,{
+      headers:{
+        Accept:CarApi.CAR_REVIEW_LIST_TYPE,
+      }
+    }).then(this.getPaginationModel);
   };
 
   public static createCar: (

@@ -58,7 +58,7 @@ public class CarController {
 
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#userId)")
-    @Produces(value = VndType.APPLICATION_CAR)
+    @Produces(value = VndType.APPLICATION_CAR_LIST)
     public Response getCars(@QueryParam("fromUser")@Valid @NotNull(message = "{dto.validation.fromUser}") Integer userId) throws UserNotFoundException {
         LOGGER.debug("GET request for cars from user {}",userId);
         final List<CarDto> cars = carService.findUserCars(userId).stream().map(car -> CarDto.fromCar(uriInfo,car)).collect(Collectors.toList());
@@ -85,7 +85,7 @@ public class CarController {
         return Response.created(uri).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
     @Consumes(value = VndType.APPLICATION_CAR)
@@ -145,7 +145,7 @@ public class CarController {
     @GET
     @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
-    @Produces(value = VndType.APPLICATION_CAR_REVIEW)
+    @Produces(value = VndType.APPLICATION_CAR_REVIEW_LIST)
     public Response getAllReviews(@PathParam("id") final long id,
                                   @Valid @BeanParam final CarReviewsQuery query) throws CarNotFoundException, UserNotFoundException, TripNotFoundException {
         if(query.getForTrip()!=null || query.getMadeBy() !=null){

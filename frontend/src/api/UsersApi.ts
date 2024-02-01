@@ -9,7 +9,7 @@ import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import RegisterModel from "@/models/RegisterModel";
 import { EditProfileFormSchemaType } from "@/forms/EditProfileForm";
-import UserDriverModel from "@/models/UserDriverModel";
+import UserDriverModel from "@/models/UserDriverModel.ts";
 
 class UsersApi extends AxiosApi {
   private static readonly USERS_BASE_URI: string = "/users";
@@ -21,6 +21,8 @@ class UsersApi extends AxiosApi {
     "application/vnd.user.driver.v1+json";
   private static readonly USERS_CONTENT_TYPE_HEADER: string =
     "application/vnd.user.v1+json";
+  private static readonly DRIVER_CONTENT_TYPE_HEADER: string =
+    "application/vnd.user.driver.v1+json";
 
   public static login: (
     email: string,
@@ -101,6 +103,15 @@ class UsersApi extends AxiosApi {
       return this.get<UserPublicModel>(uri, {
         headers: {
           Accept: UsersApi.USERS_PUBLIC_ACCEPT_HEADER,
+        },
+      });
+    };
+
+  public static getDriverByUri: (uri: string) => AxiosPromise<UserDriverModel> =
+    (uri: string) => {
+      return this.get<UserDriverModel>(uri, {
+        headers: {
+          Accept: UsersApi.DRIVER_CONTENT_TYPE_HEADER,
         },
       });
     };

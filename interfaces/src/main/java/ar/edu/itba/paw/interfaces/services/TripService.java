@@ -15,7 +15,9 @@ public interface TripService {
     Trip createTrip(final long originCityId, final String originAddress, final long destinationCityId, final String destinationAddress, final long carId, final LocalDate startDate, final LocalTime startTime,final BigDecimal price, final int maxSeats, final LocalDate endDate, final LocalTime endTime)  throws UserNotFoundException, CityNotFoundException, CarNotFoundException;
 
     //TODO: test
-    Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate, LocalTime startTime, LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException, NotAvailableSeatsException;
+    Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate,LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException, NotAvailableSeatsException;
+
+    int getTripSeatCount(final long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripNotFoundException;
 
     //TODO: delete
 //    boolean addCurrentUser(final long trip, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, UserNotFoundException, TripNotFoundException;
@@ -40,7 +42,7 @@ public interface TripService {
     boolean userIsAcceptedPassengerOfDriver(final User user, final User driver);
     Optional<Passenger> getPassenger(final long tripId, final User user);
 
-    Optional<Passenger> getPassenger(final long tripId, final long userId) throws UserNotFoundException;
+    Optional<Passenger> getPassenger(final long tripId, final long userId) /*throws UserNotFoundException*/;
     Optional<Passenger> getPassenger(final Trip trip, final User user);
 
 //    List<Passenger> getPassengers(Trip trip, LocalDateTime dateTime);

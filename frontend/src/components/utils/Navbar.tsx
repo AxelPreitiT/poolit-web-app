@@ -24,11 +24,6 @@ import UsersRoles from "@/enums/UsersRoles";
 import LoadingWheel from "../loading/LoadingWheel";
 import ImageService from "@/services/ImageService.ts";
 
-interface Section {
-  path: string;
-  name: string;
-}
-
 const Navbar = () => {
   const { t } = useTranslation();
   const logout = useLogout();
@@ -40,11 +35,6 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-
-  const sections: Section[] = [
-    { path: createdTripsPath, name: t("navbar.created") },
-    { path: reservedTripsPath, name: t("navbar.reserved") },
-  ];
 
   return (
     <div className="nav-container">
@@ -59,34 +49,40 @@ const Navbar = () => {
               />
             </Link>
           </div>
-          {!isLoading && isLoged &&
-            sections.map((section) => (
-              <div
-                className={`nav-section-item ${
-                  pathname === section.path ? "active" : ""
-                }`}
-                key={section.path}
-              >
-                <Link to={section.path}>
-                  <h4>{section.name}</h4>
-                </Link>
-              </div>
-            ))}
-          {!isLoading && isLoged &&
-            !isLoading &&
-            !(currentUser === undefined) &&
-            currentUser.role == UsersRoles.ADMIN && (
-              <div
-                className={`nav-section-item ${
-                  pathname === adminPath ? "active" : ""
-                }`}
-                key={adminPath}
-              >
-                <Link to={adminPath}>
-                  <h4>{t("admin.title")}</h4>
-                </Link>
-              </div>
-            )}
+          {!isLoading && isLoged && (
+              <>
+                <div
+                    className={`nav-section-item ${pathname === reservedTripsPath ? "active" : ""}`}
+                    key={reservedTripsPath}
+                >
+                  <Link to={reservedTripsPath}>
+                    <h4>{t("navbar.reserved")}</h4>
+                  </Link>
+                </div>
+
+                {currentUser && (currentUser.role === UsersRoles.DRIVER || currentUser.role === UsersRoles.ADMIN) && (
+                    <div
+                        className={`nav-section-item ${pathname === createdTripsPath ? "active" : ""}`}
+                        key={createdTripsPath}
+                    >
+                      <Link to={createdTripsPath}>
+                        <h4>{t("navbar.created")}</h4>
+                      </Link>
+                    </div>
+                )}
+
+                {currentUser && currentUser.role === UsersRoles.ADMIN && (
+                    <div
+                        className={`nav-section-item ${pathname === adminPath ? "active" : ""}`}
+                        key={adminPath}
+                    >
+                      <Link to={adminPath}>
+                        <h4>{t("admin.title")}</h4>
+                      </Link>
+                    </div>
+                )}
+              </>
+          )}
         </div>
         {isLoged && !isLoading ? (
           <div className="right-container">

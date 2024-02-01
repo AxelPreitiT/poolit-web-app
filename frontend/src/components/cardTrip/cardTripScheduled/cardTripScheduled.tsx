@@ -1,17 +1,26 @@
 import styles from "./styles.module.scss";
 import CardTrip from "../cardTrip/CardTrip";
-import getFormattedDateTime from "@/functions/DateFormat.ts";
 import { useTranslation } from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
 import {getDayString} from "@/utils/date/dayString.ts";
+import tripModel from "@/models/TripModel.ts";
+import {tripDetailsPath} from "@/AppRouter.tsx";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 interface CardTripScheduledProps {
     data: TripModel;
+    extraData?:(trip: tripModel)=>{startDate: string, endDate: string, link: string};
 }
 
-const CardTripScheduled = ({data: trip} : CardTripScheduledProps) => {
+const CardTripScheduled =  ({data: trip, extraData: extraData}: CardTripScheduledProps) => {
   const { t } = useTranslation();
-    const date = new Date(trip.startDateTime)
+  const { startDate: start, endDate: end} = extraData ? extraData(trip) : { startDate: '', endDate: ''};
+  const date = new Date(start);
+  if(extraData == undefined){
+    extraData = (trip: TripModel)=>{
+      return {startDate:trip.startDateTime, endDate:trip.endDateTime, link:tripDetailsPath.replace(":tripId", trip.tripId.toString())}
+    }
+  }
 
   return (
     <div>
@@ -23,23 +32,23 @@ const CardTripScheduled = ({data: trip} : CardTripScheduledProps) => {
                 {t(`day.full.${getDayString(date).toLowerCase()}`, {
                     plural: "s",})}
             </h3>
-              {trip.totalTrips > 1 ? (
+              {start != end ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {
-                  initial_date: getFormattedDateTime(trip.startDateTime).date,
-                  final_date: getFormattedDateTime(trip.endDateTime).date,
+                  initial_date: getFormattedDateTime(start).date,
+                  final_date: getFormattedDateTime(end).date,
                 })}
               </span>
             ) : (
               <span className={styles.date_text}>
-                {getFormattedDateTime(trip.startDateTime).date}
+                {getFormattedDateTime(start).date}
               </span>
             )}
           </div>
         </div>
       </div>
       <div className={styles.card_trip_container}>
-        <CardTrip trip={trip} />
+        <CardTrip extraData={extraData} trip={trip}/>
       </div>
     </div>
   );

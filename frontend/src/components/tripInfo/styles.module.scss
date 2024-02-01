@@ -16,6 +16,14 @@
   color: white;
 }
 
+.driver_info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: bold;
+  color: white;
+}
+
 .show_row {
   display: flex;
   flex-direction: row;

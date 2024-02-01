@@ -18,6 +18,7 @@ import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.trips.TripDto;
 import ar.edu.itba.paw.webapp.dto.output.trips.TripEarningsDto;
+import ar.edu.itba.paw.webapp.dto.output.trips.TripSeatCountDto;
 import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.LocalDateTime;
 
 
 @Path(UrlHolder.TRIPS_BASE)
@@ -57,7 +59,7 @@ public class TripController {
 
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.createdBy) and @authValidator.checkIfWantedIsSelf(#query.reservedBy) and @authValidator.checkIfWantedIsSelf(#query.recommendedFor)")
-    @Produces(value = VndType.APPLICATION_TRIP)
+    @Produces(value = VndType.APPLICATION_TRIP_LIST)
     public Response getTrips(@Valid @BeanParam final TripsQuery query){
         PagedContent<Trip> ans = null;
         if(query.getCreatedBy()!=null){
@@ -101,13 +103,14 @@ public class TripController {
     public Response getById(@PathParam("id") final long id,
                             @Valid @BeanParam final TripQuery query) {
         final Trip trip;
-        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
-            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
-            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
-        }else {
+        //TODO: no poder hacer mas filtrado por fechas
+//        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
+//            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
+//            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
+//        }else {
             LOGGER.debug("GET request for trip with id {}",id);
             trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
-        }
+//        }
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
@@ -121,8 +124,19 @@ public class TripController {
 
     @GET
     @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER_SEAT_COUNT)
+    public Response getTripSeatCount(@PathParam("id") final long id,
+                                     @QueryParam("startDateTime") final LocalDateTime startDateTime,
+                                     @QueryParam("endDateTime") final LocalDateTime endDateTime) throws TripNotFoundException {
+        LOGGER.debug("GET request for seat count of passengers from trip {}",id);
+        final int ans = tripService.getTripSeatCount(id,startDateTime,endDateTime);
+        return Response.ok(TripSeatCountDto.fromSeatCount(ans)).build();
+    }
+
+    @GET
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
-    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
+    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER_LIST)
     public Response getPassengers(@PathParam("id") final long id,
                                   @Valid @BeanParam final PassengersQuery passengersQuery) throws  TripNotFoundException {
         LOGGER.debug("GET request for passengers from trip {}",id);
@@ -135,7 +149,7 @@ public class TripController {
     @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("POST request to add passenger for trip {}",id);
-        Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getStartTime(),dto.getEndDate());
+        Passenger ans = tripService.addCurrentUserAsPassenger(id,dto.getStartDate(),dto.getEndDate());
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(ans.getUserId())).build();
         //Los pasajeros se acceden en /trips/{tripId}/passengers/{userId}
         return Response.created(uri).build();

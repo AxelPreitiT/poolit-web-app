@@ -43,7 +43,7 @@ const RRModal = ({
   openModalCar,
 }: ModalReportProps) => {
   const { t } = useTranslation();
-  const uri = getUriPassangers(isDriver, passanger, trip);
+  const uri = getUriPassangers(isDriver, trip, passanger);
 
   return (
     <div className={styles.propProfile}>

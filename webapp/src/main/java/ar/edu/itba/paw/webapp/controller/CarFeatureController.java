@@ -6,6 +6,7 @@ import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.dto.output.CarFeatureDto;
+import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class CarFeatureController {
     }
 
     @GET
-    @Produces(value = VndType.APPLICATION_CAR_FEATURE)
+    @Produces(value = VndType.APPLICATION_CAR_FEATURE_LIST)
     public Response getCarFeatures(){
         LOGGER.debug("GET request for all car features");
         List<FeatureCar> ans = carFeatureService.getCarFeatures();
@@ -60,11 +61,11 @@ public class CarFeatureController {
     @Produces(value = VndType.APPLICATION_CAR_FEATURE)
     public Response getCarFeature(@PathParam("id") final String id){
         LOGGER.debug("GET request for car feature with id {}",id);
-        Optional<FeatureCar> ans = carFeatureService.findById(id);
-        if(!ans.isPresent()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        Response.ResponseBuilder res = Response.ok(CarFeatureDto.fromCarFeature(uriInfo,ans.get(),messageSource));
+        FeatureCar ans = carFeatureService.findById(id).orElseThrow(ResourceNotFoundException::new);
+//        if(!ans.isPresent()){
+//            return Response.status(Response.Status.NOT_FOUND).build();
+//        }
+        Response.ResponseBuilder res = Response.ok(CarFeatureDto.fromCarFeature(uriInfo,ans,messageSource));
         return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }
 }
