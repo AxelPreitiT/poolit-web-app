@@ -17,6 +17,8 @@ public interface TripService {
     //TODO: test
     Passenger addCurrentUserAsPassenger(final long tripId, LocalDate startDate,LocalDate endDate) throws TripAlreadyStartedException, TripNotFoundException, UserNotFoundException, NotAvailableSeatsException;
 
+    int getTripSeatCount(final long tripId, LocalDateTime startDateTime, LocalDateTime endDateTime) throws TripNotFoundException;
+
     //TODO: delete
 //    boolean addCurrentUser(final long trip, String startDate, String startTime, String endDate) throws TripAlreadyStartedException, UserNotFoundException, TripNotFoundException;
 

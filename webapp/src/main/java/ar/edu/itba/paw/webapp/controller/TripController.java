@@ -18,6 +18,7 @@ import ar.edu.itba.paw.webapp.dto.input.PatchPassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.PassengerDto;
 import ar.edu.itba.paw.webapp.dto.output.trips.TripDto;
 import ar.edu.itba.paw.webapp.dto.output.trips.TripEarningsDto;
+import ar.edu.itba.paw.webapp.dto.output.trips.TripSeatCountDto;
 import ar.edu.itba.paw.webapp.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.LocalDateTime;
 
 
 @Path(UrlHolder.TRIPS_BASE)
@@ -118,6 +120,17 @@ public class TripController {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @Produces(value = VndType.APPLICATION_TRIP_PASSENGER_SEAT_COUNT)
+    public Response getTripSeatCount(@PathParam("id") final long id,
+                                     @QueryParam("startDateTime") final LocalDateTime startDateTime,
+                                     @QueryParam("endDateTime") final LocalDateTime endDateTime) throws TripNotFoundException {
+        LOGGER.debug("GET request for seat count of passengers from trip {}",id);
+        final int ans = tripService.getTripSeatCount(id,startDateTime,endDateTime);
+        return Response.ok(TripSeatCountDto.fromSeatCount(ans)).build();
     }
 
     @GET

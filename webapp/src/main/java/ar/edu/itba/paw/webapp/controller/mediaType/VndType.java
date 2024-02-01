@@ -33,6 +33,7 @@ public class VndType {
     public static final String APPLICATION_TRIP = BASE + "trip.v1+json";
     public static final String APPLICATION_TRIP_EARNINGS = BASE + "trip.earnings.v1+json";
     public static final String APPLICATION_TRIP_PASSENGER = BASE + "trip.passenger.v1+json";
+    public static final String APPLICATION_TRIP_PASSENGER_SEAT_COUNT = BASE + "trip.passenger.seat-count.v1+json";
     public static final String APPLICATION_TRIP_PASSENGER_STATE = BASE + "trip.passenger.state.v1+json";
     //    --------Reports--------
     public static final String APPLICATION_REPORT = BASE + "report.v1+json";
