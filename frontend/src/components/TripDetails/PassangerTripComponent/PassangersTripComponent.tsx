@@ -5,7 +5,7 @@ import MainComponent from "@/components/utils/MainComponent.tsx";
 import MainHeader from "@/components/utils/MainHeader.tsx";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import PassangerStatus from "@/enums/PassangerStatus.ts";
@@ -14,7 +14,6 @@ import { parseTemplate } from "url-template";
 import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
 import { BiCaretDown } from "react-icons/bi";
 import { ButtonGroup } from "react-bootstrap";
-import { useQueryClient } from "@tanstack/react-query";
 import useOccupiedSeats from "@/hooks/trips/useOccupiedSeats.tsx";
 import LoadingScreen from "@/components/loading/LoadingScreen.tsx";
 

@@ -46,7 +46,7 @@ public class TripSortTypeController {
     }
 
     @GET
-    @Produces(value = VndType.APPLICATION_TRIP_SORT_TYPE)
+    @Produces(value = VndType.APPLICATION_TRIP_SORT_TYPE_LIST)
     public Response getTripSortTypes() {
         LOGGER.debug("GET request for all sort types");
         List<Trip.SortType> ans = tripSortTypeService.getSortTypes();

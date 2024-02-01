@@ -6,7 +6,6 @@ import tripModel from "@/models/TripModel.ts";
 // import {useSearchParams} from "react-router-dom";
 import tripsService from "@/services/TripsService.ts";
 import joinTripModel from "@/models/JoinTripModel.ts";
-import { parseTemplate } from "url-template";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import { parseTemplate } from "url-template";
 import useAuthentication from "../auth/useAuthentication";

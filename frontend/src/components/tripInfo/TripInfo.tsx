@@ -15,8 +15,6 @@ import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
 import LoadingScreen from "@/components/loading/LoadingScreen.tsx";
 import useOccupiedSeats from "@/hooks/trips/useOccupiedSeats.tsx";
-// import PassangerModel from "@/models/PassangerModel.ts";
-// import {useSearchParams} from "react-router-dom";
 
 interface TripInfoProps {
   trip: TripModel;
@@ -95,10 +93,7 @@ const TripInfo = ({
             })}
           </span>
           <span className={styles.subtitle_info}>
-            {getFormattedDateTime(trip.startDateTime).date}
-          </span>
-          <span className={styles.subtitle_info}>
-            {startDateTime == endDateTime
+            {startDateTime === endDateTime
               ? getFormattedDateTime(startDateTime).date
               : t("format.recurrent_date", {
                   initial_date: getFormattedDateTime(startDateTime).date,

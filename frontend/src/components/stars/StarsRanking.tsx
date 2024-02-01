@@ -9,13 +9,12 @@ interface StarRatingProps {
 
 const StarRating = ({ rating, className }: StarRatingProps) => {
   const renderStar = (index: number) => {
-    const quotient = rating / index;
-    const remainder = rating - Math.floor(rating);
+    const result = rating - (index - 1);
     const starClassName = styles.star + " " + className;
 
-    if (quotient >= 1) {
+    if (result >= 1) {
       return <BiSolidStar className={starClassName} key={index}></BiSolidStar>;
-    } else if (remainder >= 0.5) {
+    } else if (result >= 0.5) {
       return (
         <BiSolidStarHalf
           className={starClassName}
