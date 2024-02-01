@@ -20,11 +20,11 @@ const CreatedPage = () => {
 
   const page = new URLSearchParams(search).get("page");
   const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
-    extradata={(trip) => {trip.strar, trip.end}} //driver
-    extradata={(trip) => {useCurrentPassanger(tripUri); pasanger}} //passenger
-    extradata={(trip) => {useLocale();..; return{queryStart, queryEnd}} //buscador
+    //extradata={(trip) => {trip.strar, trip.end}} //driver
+    //extradata={(trip) => {useCurrentPassanger(tripUri); pasanger}} //passenger
+    //extradata={(trip) => {useLocale();..; return{queryStart, queryEnd}} //buscador
     const extraData = (trip: TripModel):{startDate:string, endDate:string}=>{
-        return {trip.startDateTime, trip.endDateTime}
+        return {startDate:trip.startDateTime, endDate:trip.endDateTime}
     }
 
     return (
@@ -45,7 +45,7 @@ const CreatedPage = () => {
               <ListTripsScheduled
                 uri={createPaginationUri(currentUser.futureCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
                 current_page={currentPage}
-                extraData={extr}
+                extraData={extraData}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}
@@ -69,6 +69,7 @@ const CreatedPage = () => {
               <ListTripsScheduled
                 uri={createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage , TRIPSPAGESIZE)}
                 current_page={currentPage}
+                extraData={extraData}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}

@@ -28,14 +28,12 @@ const TripDetailsPage = () => {
   const isDriver = trip?.driverUri === currentUser?.selfUri;
 
 
-
   const {
     isLoading: isLoadingRole,
     currentPassanger: currentPassanger,
     isError: isError,
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
   const isPassanger = !isError;
-  const [params] = useSearchParams();
 
   if (
     isLoadingTrip ||
@@ -47,6 +45,7 @@ const TripDetailsPage = () => {
   ) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
+  const [params] = useSearchParams();
   const startDateTime = isDriver?trip.startDateTime:(currentPassanger?.startDateTime || params.get("startDate") || "") ;
   const endDateTime = isDriver?trip.endDateTime:(currentPassanger?.endDateTime || params.get("endDate") || "");
   return (

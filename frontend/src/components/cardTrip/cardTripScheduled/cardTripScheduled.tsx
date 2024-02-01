@@ -1,23 +1,22 @@
 import styles from "./styles.module.scss";
 import CardTrip from "../cardTrip/CardTrip";
-import getFormattedDateTime from "@/functions/DateFormat.ts";
 import { useTranslation } from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
 import {getDayString} from "@/utils/date/dayString.ts";
+import tripModel from "@/models/TripModel.ts";
 
 interface CardTripScheduledProps {
     data: TripModel;
-    extraData?:{
-        startDateTime: string;
-        endDateTime: string;
-    }
+    extraData?:(trip: tripModel)=>{startDate: string, endDate: string};
 }
 
-const CardTripScheduled =  ({trip: TripModel, extraData: extraData}: CardTripScheduledProps) => {
+const CardTripScheduled =  ({data: trip, extraData: extraData}: CardTripScheduledProps) => {
   const { t } = useTranslation();
-  const date = new Date(trip.startDateTime)
+  const { startDate: start, endDate: end } = extraData ? extraData(trip) : { startDate: '', endDate: '' };
+  const date = new Date(start);
 
-  return (
+
+    return (
     <div>
       <div className={styles.short_date}>
         <div className={styles.calendar_container}>
@@ -27,16 +26,16 @@ const CardTripScheduled =  ({trip: TripModel, extraData: extraData}: CardTripSch
                 {t(`day.full.${getDayString(date).toLowerCase()}`, {
                     plural: "s",})}
             </h3>
-              {trip.totalTrips > 1 ? (
+              {start != end ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {
-                  initial_date: getFormattedDateTime(trip.startDateTime).date,
-                  final_date: getFormattedDateTime(trip.endDateTime).date,
+                  initial_date: start,
+                  final_date: end,
                 })}
               </span>
             ) : (
               <span className={styles.date_text}>
-                {getFormattedDateTime(trip.startDateTime).date}
+                {start}
               </span>
             )}
           </div>
