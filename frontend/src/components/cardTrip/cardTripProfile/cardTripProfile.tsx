@@ -10,6 +10,7 @@ import {tripDetailsPath} from "@/AppRouter.tsx";
 import getTotalTrips from "@/functions/getTotalTrips.ts";
 import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
+import {getDayString} from "@/utils/date/dayString.ts";
 
 const CardTripProfile = (trip: TripModel) => {
   const { t } = useTranslation();
@@ -80,18 +81,25 @@ const CardTripProfile = (trip: TripModel) => {
               <i className="bi bi-calendar text"></i>
               {totalTrips == 1 ? (
                 <div className={styles.format_date}>
-                  <span className="text">PONER DIA</span>
+                  <span className="text">
+                    {t(`day.full.${getDayString(new Date(startDateTimeValue)).toLowerCase()}`, {
+                      plural: "s",
+                    })}
+                  </span>
                   <span className={styles.date_text}>
-                    {startDateTimeValue}
+                    {getFormattedDateTime(startDateTimeValue).date}
                   </span>
                 </div>
               ) : (
                 <div className={styles.format_date}>
-                  <span className="text">PONER DIA</span>
+                  <span className="text">
+                    {t(`day.full.${getDayString(new Date(startDateTimeValue)).toLowerCase()}`, {
+                    plural: "s",
+                  })}</span>
                   <span className={styles.date_text}>
                     {t("format.recurrent_date", {
-                      initial_date: startDateTimeValue,
-                      final_date: endDateTimeValue,
+                      initial_date: getFormattedDateTime(startDateTimeValue).date,
+                      final_date: getFormattedDateTime(endDateTimeValue).date,
                     })}
                   </span>
                 </div>

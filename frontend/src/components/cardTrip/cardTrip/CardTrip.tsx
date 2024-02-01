@@ -97,7 +97,7 @@ const CardTrip = ({
                   })}
                 </span>
               ) : (
-                <span>{start}</span>
+                <span>{getFormattedDateTime(start).date}</span>
               )}
             </div>
             <div className={styles.footer_details}>

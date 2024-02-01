@@ -5,6 +5,7 @@ import TripModel from "@/models/TripModel.ts";
 import {getDayString} from "@/utils/date/dayString.ts";
 import tripModel from "@/models/TripModel.ts";
 import {tripDetailsPath} from "@/AppRouter.tsx";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
 
 interface CardTripScheduledProps {
     data: TripModel;
@@ -34,13 +35,13 @@ const CardTripScheduled =  ({data: trip, extraData: extraData}: CardTripSchedule
               {start != end ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {
-                  initial_date: start,
-                  final_date: end,
+                  initial_date: getFormattedDateTime(start).date,
+                  final_date: getFormattedDateTime(end).date,
                 })}
               </span>
             ) : (
               <span className={styles.date_text}>
-                {start}
+                {getFormattedDateTime(start).date}
               </span>
             )}
           </div>
