@@ -37,17 +37,17 @@ const PaginationComponent = <T,>({
 
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
     const items = [];
-    if(data) {
+    if (data) {
       for (let i = 0; i < data.length; i++) {
         const item = <Component key={i} {...data[i]} />;
         items.push(
-            <div className={styles.travel_info_list} key={i}>
-              {item}
-            </div>
+          <div className={styles.travel_info_list} key={i}>
+            {item}
+          </div>
         );
       }
       return items;
-    }else{
+    } else {
       return null;
     }
   };
@@ -56,7 +56,7 @@ const PaginationComponent = <T,>({
     setNewUri(uri);
     setcurrentPage(currentPage);
 
-    const finalRouterBasename = routerBasename == "/" ? "" : routerBasename;
+    const finalRouterBasename = routerBasename === "/" ? "" : routerBasename;
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", currentPage.toString());
     const newUrl = `${finalRouterBasename}${
@@ -66,7 +66,7 @@ const PaginationComponent = <T,>({
   };
 
   const props =
-    isLoadingTrips || pageTrips == undefined
+    isLoadingTrips || pageTrips === undefined
       ? generateItems([], component_name)
       : generateItems(pageTrips.data, component_name);
 

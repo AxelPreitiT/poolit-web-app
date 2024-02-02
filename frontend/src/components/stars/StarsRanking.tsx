@@ -5,10 +5,15 @@ import { useTranslation } from "react-i18next";
 
 interface StarRatingProps {
   rating: number;
+  containerClassName?: string;
   className?: string;
 }
 
-const StarRating = ({ rating, className }: StarRatingProps) => {
+const StarRating = ({
+  rating,
+  className,
+  containerClassName,
+}: StarRatingProps) => {
   const { t } = useTranslation();
 
   const renderStar = (index: number) => {
@@ -30,7 +35,7 @@ const StarRating = ({ rating, className }: StarRatingProps) => {
   };
 
   return (
-    <div className={styles.stars}>
+    <div className={styles.stars + " " + containerClassName}>
       {rating === 0 ? (
         <span className={className}>{t("reviews.none")}</span>
       ) : (

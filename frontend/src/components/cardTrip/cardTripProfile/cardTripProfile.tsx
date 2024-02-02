@@ -15,7 +15,7 @@ import { getDayString } from "@/utils/date/dayString.ts";
 const CardTripProfile = (trip: TripModel) => {
   const { t } = useTranslation();
   const { currentUser } = useCurrentUser();
-  const isDriver = trip.driverUri == currentUser?.selfUri;
+  const isDriver = trip.driverUri === currentUser?.selfUri;
   const {
     isLoading: isLoadingRole,
     currentPassanger: currentPassanger,
@@ -90,7 +90,7 @@ const CardTripProfile = (trip: TripModel) => {
           <div className={styles.extra_info_container}>
             <div className={styles.calendar_container}>
               <i className="bi bi-calendar text"></i>
-              {totalTrips == 1 ? (
+              {totalTrips === 1 ? (
                 <div className={styles.format_date}>
                   <span className="text">
                     {t(

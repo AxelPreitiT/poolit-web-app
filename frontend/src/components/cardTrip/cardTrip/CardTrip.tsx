@@ -89,20 +89,27 @@ const CardTrip = ({
               <img src={car.imageUri} />
               <div className={styles.raiting_container}>
                 <div className={styles.one_raiting}>
-                  <StarRating rating={car.rating} className="light-text h6" />
+                  <StarRating
+                    rating={car.rating}
+                    className={styles.rating}
+                    containerClassName={styles.rating_container}
+                  />
                   <CircleImg
                     src={ImageService.getSmallImageUrl(car.imageUri)}
                     size={20}
+                    className={styles.img}
                   />
                 </div>
                 <div className={styles.one_raiting}>
                   <StarRating
                     rating={driver.driverRating}
-                    className="light-text h6"
+                    className={styles.rating}
+                    containerClassName={styles.rating_container}
                   />
                   <CircleImg
                     src={ImageService.getSmallImageUrl(driver.imageUri)}
                     size={20}
+                    className={styles.img}
                   />
                 </div>
               </div>

@@ -56,8 +56,8 @@ const ShortInfoReport = (report: PrivateReportModel) => {
                     </h4>
                   </div>
                   <h6 className="italic-text">
-                    {report.relation == "PASSENGER_2_DRIVER" ||
-                    report.relation == "PASSENGER_2_PASSENGER" ? (
+                    {report.relation === "PASSENGER_2_DRIVER" ||
+                    report.relation === "PASSENGER_2_PASSENGER" ? (
                       <span> {t("admin.report.passenger")}</span>
                     ) : (
                       <span> {t("admin.report.driver")}</span>
@@ -83,8 +83,8 @@ const ShortInfoReport = (report: PrivateReportModel) => {
                     </h4>
                   </div>
                   <h6 className="italic-text">
-                    {report.relation == "DRIVER_2_PASSENGER" ||
-                    report.relation == "PASSENGER_2_PASSENGER" ? (
+                    {report.relation === "DRIVER_2_PASSENGER" ||
+                    report.relation === "PASSENGER_2_PASSENGER" ? (
                       <span> {t("admin.report.passenger")}</span>
                     ) : (
                       <span> {t("admin.report.driver")}</span>

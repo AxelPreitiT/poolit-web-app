@@ -45,7 +45,7 @@ const PaginationComponentExtraData = <T, U>({
   const handlePage = (uri: string, currentPage: number) => {
     setNewUri(uri);
     setcurrentPage(currentPage);
-    const finalRouterBasename = routerBasename == "/" ? "" : routerBasename;
+    const finalRouterBasename = routerBasename === "/" ? "" : routerBasename;
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", currentPage.toString());
     const newUrl = `${finalRouterBasename}${
