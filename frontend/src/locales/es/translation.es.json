@@ -897,5 +897,13 @@
       "title": "Tu opinión nos interesa",
       "empty": "No tenés usuarios para reseñar."
     }
+  },
+  "404": {
+    "oops": "OOPS!",
+    "not_found1": "Algo salió mal",
+    "not_found2": "No se encontró el recurso que estabas buscando.",
+    "not_found3": "Por favor, contacta al soporte si el error persiste.",
+    "404": "Not found (404)",
+    "btn": "Ir al inicio"
   }
 }
