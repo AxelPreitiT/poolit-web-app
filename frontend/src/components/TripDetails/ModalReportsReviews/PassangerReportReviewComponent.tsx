@@ -10,6 +10,7 @@ import useReviewsReportPassangers from "@/hooks/reportReview/useReviewsPassanger
 import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
 import ReserveStatus from "@/enums/ReserveStatus.ts";
 import IMake from "../IMake.ts";
+import ImageService from "@/services/ImageService.ts";
 
 export interface PassangerReportReviewComponent {
   data: PassangerModel;
@@ -55,7 +56,7 @@ const PassangerReportReviewComponent = ({
             }
             className={buttonClassName}
           >
-            <CircleImg src={data.imageUri} size={50} />
+            <CircleImg src={ImageService.getSmallImageUrl(data.imageUri)} size={50} />
             <div className={styles.infoContainer}>
               <h4>
                 {t("format.name", {

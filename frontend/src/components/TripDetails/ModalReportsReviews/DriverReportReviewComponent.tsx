@@ -6,6 +6,7 @@ import userPublicModel from "@/models/UserPublicModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import useReviewsReportsDriver from "@/hooks/reportReview/useReviewsReportsDriver.tsx";
 import IMake from "../IMake";
+import ImageService from "@/services/ImageService.ts";
 
 export interface DriverReportReviewComponentProps {
   driver: userPublicModel;
@@ -41,7 +42,7 @@ const DriverReportReviewComponent = ({
           disabled={isReviewed}
           className={buttonClassName}
         >
-          <CircleImg src={driver.imageUri} size={50} />
+          <CircleImg src={ImageService.getSmallImageUrl(driver.imageUri)} size={50} />
           <div className={styles.infoContainer}>
             <h4>
               {t("format.name", {
