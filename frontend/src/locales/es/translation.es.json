@@ -897,5 +897,12 @@
       "title": "Tu opinión nos interesa",
       "empty": "No tenés usuarios para reseñar."
     }
+  },
+  "change_role": {
+    "error": {
+      "title": "No se pudo cambiar el rol a conductor",
+      "default": "Ocurrió un error al cambiar el rol a conductor",
+      "conflict": "El usuario ya es conductor"
+    }
   }
 }

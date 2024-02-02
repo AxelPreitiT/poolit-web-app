@@ -897,5 +897,12 @@
       "title": "Your opinion matters",
       "empty": "You don't have users to review"
     }
+  },
+  "change_role": {
+    "error": {
+      "title": "Could not change the role to driver",
+      "default": "An error occurred while changing the role to driver",
+      "conflict": "The user is already a driver"
+    }
   }
 }

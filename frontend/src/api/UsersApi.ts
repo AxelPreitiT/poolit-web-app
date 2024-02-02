@@ -10,6 +10,8 @@ import { RegisterFormSchemaType } from "@/forms/RegisterForm";
 import RegisterModel from "@/models/RegisterModel";
 import { EditProfileFormSchemaType } from "@/forms/EditProfileForm";
 import UserDriverModel from "@/models/UserDriverModel.ts";
+import { parseTemplate } from "url-template";
+import UsersRoles from "@/enums/UsersRoles";
 
 class UsersApi extends AxiosApi {
   private static readonly USERS_BASE_URI: string = "/users";
@@ -23,6 +25,7 @@ class UsersApi extends AxiosApi {
     "application/vnd.user.v1+json";
   private static readonly DRIVER_CONTENT_TYPE_HEADER: string =
     "application/vnd.user.driver.v1+json";
+  private static readonly USER_ID_TEMPLATE_KEY: string = "userId";
 
   public static login: (
     email: string,
@@ -163,6 +166,26 @@ class UsersApi extends AxiosApi {
         phone: telephone,
         bornCityId: city,
         mailLocale: locale,
+      },
+      {
+        headers: {
+          "Content-Type": UsersApi.USERS_CONTENT_TYPE_HEADER,
+        },
+      }
+    );
+  };
+
+  public static updateUserRoleToDriver: (
+    uriTemplate: string,
+    user: UserPrivateModel
+  ) => AxiosPromise<void> = (uriTemplate: string, user: UserPrivateModel) => {
+    const uri = parseTemplate(uriTemplate).expand({
+      [UsersApi.USER_ID_TEMPLATE_KEY]: user.userId,
+    });
+    return this.patch(
+      uri,
+      {
+        role: UsersRoles.DRIVER,
       },
       {
         headers: {

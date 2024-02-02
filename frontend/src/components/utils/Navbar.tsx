@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./navbarStyles.css"; // Importa el archivo CSS auxiliar
 import PoolitLogo from "@/images/poolit.svg";
 import CircleImg from "../img/circleImg/CircleImg";
@@ -23,16 +23,33 @@ import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import UsersRoles from "@/enums/UsersRoles";
 import LoadingWheel from "../loading/LoadingWheel";
 import ImageService from "@/services/ImageService.ts";
+import useMaybeChangeUserRoleToDriver from "@/hooks/users/useMaybeChangeUserRoleToDriver";
+import LoadingButton from "../buttons/LoadingButton";
 
 const Navbar = () => {
   const { t } = useTranslation();
   const logout = useLogout();
   const isAuthenticated = useAuthentication();
   const location = useLocation();
+  const navigate = useNavigate();
   const pathname = location?.pathname;
   const { isLoading, currentUser } = useCurrentUser();
   const isLoged = isAuthenticated;
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const onSuccessOrIgnoreChangeRole = () => {
+    if (pathname !== createTripsPath) {
+      navigate(createTripsPath);
+    }
+  };
+
+  const {
+    maybeChangeUserRoleToDriver,
+    isLoading: isMaybeChangeUserRoleLoading,
+  } = useMaybeChangeUserRoleToDriver({
+    onSuccess: onSuccessOrIgnoreChangeRole,
+    onIgnore: onSuccessOrIgnoreChangeRole,
+  });
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
@@ -50,55 +67,63 @@ const Navbar = () => {
             </Link>
           </div>
           {!isLoading && isLoged && (
-              <>
+            <>
+              <div
+                className={`nav-section-item ${
+                  pathname === reservedTripsPath ? "active" : ""
+                }`}
+                key={reservedTripsPath}
+              >
+                <Link to={reservedTripsPath}>
+                  <h4>{t("navbar.reserved")}</h4>
+                </Link>
+              </div>
+
+              {currentUser &&
+                (currentUser.role === UsersRoles.DRIVER ||
+                  currentUser.role === UsersRoles.ADMIN) && (
+                  <div
+                    className={`nav-section-item ${
+                      pathname === createdTripsPath ? "active" : ""
+                    }`}
+                    key={createdTripsPath}
+                  >
+                    <Link to={createdTripsPath}>
+                      <h4>{t("navbar.created")}</h4>
+                    </Link>
+                  </div>
+                )}
+
+              {currentUser && currentUser.role === UsersRoles.ADMIN && (
                 <div
-                    className={`nav-section-item ${pathname === reservedTripsPath ? "active" : ""}`}
-                    key={reservedTripsPath}
+                  className={`nav-section-item ${
+                    pathname === adminPath ? "active" : ""
+                  }`}
+                  key={adminPath}
                 >
-                  <Link to={reservedTripsPath}>
-                    <h4>{t("navbar.reserved")}</h4>
+                  <Link to={adminPath}>
+                    <h4>{t("admin.title")}</h4>
                   </Link>
                 </div>
-
-                {currentUser && (currentUser.role === UsersRoles.DRIVER || currentUser.role === UsersRoles.ADMIN) && (
-                    <div
-                        className={`nav-section-item ${pathname === createdTripsPath ? "active" : ""}`}
-                        key={createdTripsPath}
-                    >
-                      <Link to={createdTripsPath}>
-                        <h4>{t("navbar.created")}</h4>
-                      </Link>
-                    </div>
-                )}
-
-                {currentUser && currentUser.role === UsersRoles.ADMIN && (
-                    <div
-                        className={`nav-section-item ${pathname === adminPath ? "active" : ""}`}
-                        key={adminPath}
-                    >
-                      <Link to={adminPath}>
-                        <h4>{t("admin.title")}</h4>
-                      </Link>
-                    </div>
-                )}
-              </>
+              )}
+            </>
           )}
         </div>
         {isLoged && !isLoading ? (
           <div className="right-container">
             <div className="create-trip-btn-container">
-              <Link to={createTripsPath}>
-                <Button
-                  size="lg"
-                  active
-                  className="secondary-btn create-trip-btn"
-                >
-                  <i className="bi bi-plus-lg light-text h4"></i>
-                  <span className="button-text-style light-text h4">
-                    {t("navbar.create")}
-                  </span>
-                </Button>
-              </Link>
+              <LoadingButton
+                type="button"
+                isLoading={isMaybeChangeUserRoleLoading}
+                onClick={maybeChangeUserRoleToDriver}
+                size="lg"
+                className="secondary-btn create-trip-btn"
+              >
+                <i className="bi bi-plus-lg light-text h4"></i>
+                <span className="button-text-style light-text h4">
+                  {t("navbar.create")}
+                </span>
+              </LoadingButton>
             </div>
 
             <Dropdown show={dropdownOpen} onToggle={toggleDropdown} drop="down">
@@ -110,7 +135,10 @@ const Navbar = () => {
                       iconClassName="h2 secondary-text"
                     />
                   ) : (
-                    <CircleImg src={ImageService.getSmallImageUrl(currentUser.imageUri)} size={50} />
+                    <CircleImg
+                      src={ImageService.getSmallImageUrl(currentUser.imageUri)}
+                      size={50}
+                    />
                   )}
                 </div>
               </Dropdown.Toggle>
@@ -128,7 +156,12 @@ const Navbar = () => {
                     </div>
                   ) : (
                     <div className={styles.item_dropdown}>
-                      <CircleImg src={ImageService.getSmallImageUrl(currentUser.imageUri)} size={28} />
+                      <CircleImg
+                        src={ImageService.getSmallImageUrl(
+                          currentUser.imageUri
+                        )}
+                        size={28}
+                      />
                       <h3 className={styles.dropdown_text}>
                         {t("format.name", {
                           name: currentUser.username,

@@ -7,6 +7,8 @@ interface LoadingButtonProps {
   children: React.ReactNode;
   className?: string;
   type: "button" | "submit" | "reset" | undefined;
+  onClick?: () => void;
+  size?: "sm" | "lg";
   formId?: string;
   showSpinner?: boolean;
   disabled?: boolean;
@@ -18,10 +20,14 @@ const LoadingButton = ({
   className,
   type,
   formId,
+  onClick,
+  size,
   showSpinner = true,
   disabled = false,
 }: LoadingButtonProps) => (
   <Button
+    onClick={onClick}
+    size={size}
     disabled={isLoading || disabled}
     className={className}
     type={type}

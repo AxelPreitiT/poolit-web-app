@@ -67,6 +67,13 @@ class UserService extends Service {
     uri: string
   ): Promise<UserDriverModel> =>
     await this.resolveQuery(UsersApi.getDriverUser(uri));
+
+  public static updateUserRoleToDriver = async (
+    uriTemplate: string,
+    user: UserPrivateModel
+  ) => {
+    await this.resolveQuery(UsersApi.updateUserRoleToDriver(uriTemplate, user));
+  };
 }
 
 export default UserService;

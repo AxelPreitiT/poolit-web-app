@@ -3,16 +3,15 @@ import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
 import { useTranslation } from "react-i18next";
 import tripModel from "@/models/TripModel.ts";
-// import {useSearchParams} from "react-router-dom";
 import tripsService from "@/services/TripsService.ts";
 import joinTripModel from "@/models/JoinTripModel.ts";
-import getFormattedDateTime from "@/functions/DateFormat.ts";
 import { parseTemplate } from "url-template";
 import useAuthentication from "../auth/useAuthentication";
 import JoinTripUnauthenticatedError from "@/errors/JoinTripUnauthenticatedError";
 import useTrip from "./useTrip";
 import useRolePassanger from "../passanger/useRolePassanger";
 import useSuccessToast from "../toasts/useSuccessToast";
+import { getIsoDate, parseIsoDate } from "@/utils/date/isoDate";
 
 const useJoinTrip = (
   trip: tripModel,
@@ -36,8 +35,8 @@ const useJoinTrip = (
       if (!isAuthenticated) {
         throw new JoinTripUnauthenticatedError();
       }
-      const startDate = getFormattedDateTime(startDateTime).date;
-      const endDate = getFormattedDateTime(endDateTime).date;
+      const startDate = getIsoDate(parseIsoDate(startDateTime));
+      const endDate = getIsoDate(parseIsoDate(endDateTime));
       const data: joinTripModel = {
         startDate,
         endDate: endDate == startDate ? undefined : endDate,
@@ -53,7 +52,7 @@ const useJoinTrip = (
     onError: (error: Error) => {
       onQueryError({
         error,
-        title: t("trips.error_title_join"),
+        title: t("trip.error_title_join"),
         timeout: defaultToastTimeout,
       });
     },
