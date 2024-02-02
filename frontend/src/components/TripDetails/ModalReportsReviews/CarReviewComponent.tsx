@@ -5,6 +5,7 @@ import carModel from "@/models/CarModel.ts";
 import tripModel from "@/models/TripModel.ts";
 import useReviewsCar from "@/hooks/reportReview/useReviewsCar.tsx";
 import { useTranslation } from "react-i18next";
+import ImageService from "@/services/ImageService.ts";
 
 export interface CarReviewComponentProps {
   car: carModel;
@@ -32,7 +33,7 @@ const CarReviewComponent = ({
           disabled={isReviewed}
           className={buttonClassName}
         >
-          <CircleImg src={car.imageUri} size={50} />
+          <CircleImg src={ImageService.getSmallImageUrl(car.imageUri)} size={50} />
           <div className={styles.infoContainer}>
             <h4>{car.infoCar}</h4>
           </div>

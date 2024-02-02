@@ -18,6 +18,7 @@ import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
 import ReportPage from "@/pages/admin/ReportPage.tsx";
 import CreateCarPage from "./pages/createCar/CreateCarPage.tsx";
 import CarPage from "./pages/car/CarPage.tsx";
+import NotFoundPage from "./pages/notFound/notFound.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
@@ -224,6 +225,15 @@ const router = createBrowserRouter(
           <Navbar />
           <CarPage />,
         </RouteWrapper>
+      ),
+    },
+    {
+      path: "*",
+      element: (
+          <RouteWrapper title="notFound.title" showWhenUserIsNotAuthenticated={false}>
+              <Navbar />
+              <NotFoundPage />,
+          </RouteWrapper>
       ),
     },
   ],

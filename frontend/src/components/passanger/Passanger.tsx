@@ -15,6 +15,7 @@ import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
 import reserveStatus from "@/enums/ReserveStatus.ts";
 import { useNavigate } from "react-router-dom";
 import { publicProfilePath } from "@/AppRouter";
+import ImageService from "@/services/ImageService.ts";
 
 interface PassangerComponentProps {
   data: PassangerModel;
@@ -43,7 +44,7 @@ const PassangerComponent = ({
       ) : (
         <div className={styles.left_container}>
           <div className={styles.passengerRedirect} onClick={onClickUser}>
-            <CircleImg src={UserTrip.imageUri} size={70} />
+            <CircleImg src={ImageService.getSmallImageUrl(UserTrip.imageUri)} size={70} />
           </div>
           <div className={styles.name_container}>
             <div className={styles.passengerRedirect} onClick={onClickUser}>
