@@ -12,6 +12,7 @@ import getTotalTrips from "@/functions/getTotalTrips.ts";
 import StarRating from "@/components/stars/StarsRanking.tsx";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
+import {tripDetailsPath} from "@/AppRouter.tsx";
 
 const CardTrip = ({
   trip,
@@ -23,7 +24,7 @@ const CardTrip = ({
   extraData?: (trip: tripModel)=>{startDate: string, endDate: string, link:string};
 }) => {
   const { t } = useTranslation();
-  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: trip.startDateTime, endDate: trip.endDateTime , link:''};
+  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: trip.startDateTime, endDate: trip.endDateTime , link:tripDetailsPath.replace(":tripId", trip.tripId.toString())};
   const date = new Date(trip.startDateTime);
   const totalTrips = getTotalTrips(new Date(start), new Date(end));
   const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(trip?.driverUri);
