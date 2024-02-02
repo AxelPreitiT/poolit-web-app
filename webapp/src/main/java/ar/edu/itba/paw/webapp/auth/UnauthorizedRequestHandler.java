@@ -32,9 +32,5 @@ public class UnauthorizedRequestHandler implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON);
         response.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",messageSource.getMessage(MESSAGE_CODE,null, request.getLocale())));
-        //https://datatracker.ietf.org/doc/html/rfc9110#name-401-unauthorized
-        //https://datatracker.ietf.org/doc/html/rfc9110#field.www-authenticate
-        //https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml
-        response.setHeader("WWW-Authenticate","Basic, Bearer");
     }
 }
