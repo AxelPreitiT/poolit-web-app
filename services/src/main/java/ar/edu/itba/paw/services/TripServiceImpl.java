@@ -544,7 +544,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public PagedContent<Trip> getTripsCreatedByUserFuture(final User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+        return tripDao.getTripsCreatedByUser(user,Optional.of(LocalDateTime.now()),Optional.empty(),true,page,pageSize);
     }
 
     @Transactional
@@ -556,7 +556,7 @@ public class TripServiceImpl implements TripService {
             return PagedContent.emptyPagedContent();
         }
         validatePageAndSize(page,pageSize);
-        return pastTrips?tripDao.getTripsCreatedByUser(user.get(),Optional.empty(),Optional.of(LocalDateTime.now()),page,pageSize):tripDao.getTripsCreatedByUser(user.get(),Optional.of(LocalDateTime.now()),Optional.empty(),page,pageSize);
+        return pastTrips?tripDao.getTripsCreatedByUser(user.get(),Optional.empty(),Optional.of(LocalDateTime.now()),false,page,pageSize):tripDao.getTripsCreatedByUser(user.get(),Optional.of(LocalDateTime.now()),Optional.empty(),true,page,pageSize);
     }
 
     @Transactional
@@ -568,7 +568,7 @@ public class TripServiceImpl implements TripService {
             return PagedContent.emptyPagedContent();
         }
         validatePageAndSize(page,pageSize);
-        return pastTrips?tripDao.getTripsWhereUserIsPassenger(user.get(),Optional.empty(), Optional.of(LocalDateTime.now()),null, page,pageSize):tripDao.getTripsWhereUserIsPassenger(user.get(), Optional.of(LocalDateTime.now()),Optional.empty(),null, page,pageSize);
+        return pastTrips?tripDao.getTripsWhereUserIsPassenger(user.get(),Optional.empty(), Optional.of(LocalDateTime.now()),null,false, page,pageSize):tripDao.getTripsWhereUserIsPassenger(user.get(), Optional.of(LocalDateTime.now()),Optional.empty(),null,true, page,pageSize);
     }
 
 //    @Transactional
@@ -614,7 +614,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public PagedContent<Trip> getTripsWhereUserIsPassengerFuture(User user, int page, int pageSize){
         validatePageAndSize(page,pageSize);
-        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null, page,pageSize);
+        return tripDao.getTripsWhereUserIsPassenger(user,Optional.of(LocalDateTime.now()),Optional.empty(), null,true, page,pageSize);
     }
 
 //    @Transactional

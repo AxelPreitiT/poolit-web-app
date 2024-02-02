@@ -13,6 +13,7 @@ import StarRating from "@/components/stars/StarsRanking.tsx";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
 import { tripDetailsPath } from "@/AppRouter.tsx";
+import ImageService from "@/services/ImageService.ts";
 
 const CardTrip = ({
   trip,
@@ -89,14 +90,20 @@ const CardTrip = ({
               <div className={styles.raiting_container}>
                 <div className={styles.one_raiting}>
                   <StarRating rating={car.rating} className="light-text h6" />
-                  <CircleImg src={car.imageUri} size={20} />
+                  <CircleImg
+                    src={ImageService.getSmallImageUrl(car.imageUri)}
+                    size={20}
+                  />
                 </div>
                 <div className={styles.one_raiting}>
                   <StarRating
                     rating={driver.driverRating}
                     className="light-text h6"
                   />
-                  <CircleImg src={driver.imageUri} size={20} />
+                  <CircleImg
+                    src={ImageService.getSmallImageUrl(driver.imageUri)}
+                    size={20}
+                  />
                 </div>
               </div>
             </div>

@@ -11,6 +11,7 @@ import UserPublicModel from "@/models/UserPublicModel";
 import { Modal } from "react-bootstrap";
 import { useState } from "react";
 import ModalMakeFooter from "./ModalMakeFooter";
+import ImageService from "@/services/ImageService.ts";
 
 interface ModalMakeProps {
   closeModal: () => void;
@@ -57,7 +58,7 @@ const ModalMake = ({
           name: user.username,
           surname: user.surname,
         })}
-        imageSrc={user.imageUri}
+        imageSrc={ImageService.getSmallImageUrl(user.imageUri)}
       />
       <Modal.Body>
         <div className={styles.categoryContainer}>

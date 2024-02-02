@@ -9,6 +9,7 @@ import LoadingWheel from "@/components/loading/LoadingWheel";
 import ModalMakeHeader from "./ModalMakeHeader";
 import ModalMakeFooter from "./ModalMakeFooter";
 import ReviewForm from "./ReviewForm";
+import ImageService from "@/services/ImageService.ts";
 
 export interface ModalCarMakeReviewProps {
   closeModal: () => void;
@@ -48,7 +49,7 @@ const ModalMakeCar = ({ closeModal, car, trip }: ModalCarMakeReviewProps) => {
 
   return (
     <Form className={styles.propProfile} onSubmit={handleSubmit}>
-      <ModalMakeHeader title={car.infoCar} imageSrc={car.imageUri} />
+      <ModalMakeHeader title={car.infoCar} imageSrc={ImageService.getSmallImageUrl(car.imageUri)} />
       <Modal.Body>
         <div className={styles.categoryContainer}>
           <ReviewForm

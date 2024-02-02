@@ -898,6 +898,14 @@
       "empty": "You don't have users to review"
     }
   },
+  "404": {
+    "oops": "OOPS!",
+    "not_found1": "Something went wrong",
+    "not_found2": "The resource you where looking for was not found.",
+    "not_found3": "Please contact support if the error persists.",
+    "404": "Not found (404)",
+    "btn": "Go home"
+  },
   "change_role": {
     "error": {
       "title": "Could not change the role to driver",

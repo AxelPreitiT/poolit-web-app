@@ -15,6 +15,7 @@ import passangerModel from "@/models/PassangerModel.ts";
 import passangerStatus from "@/enums/PassangerStatus.ts";
 import LoadingScreen from "@/components/loading/LoadingScreen.tsx";
 import useOccupiedSeats from "@/hooks/trips/useOccupiedSeats.tsx";
+import ImageService from "@/services/ImageService.ts";
 
 interface TripInfoProps {
   trip: TripModel;
@@ -104,7 +105,7 @@ const TripInfo = ({
       </div>
       <div className={styles.show_row}>
         <Link to={carPath.replace(":carId", String(car.carId))}>
-          <CircleImg src={car.imageUri} size={40} />
+          <CircleImg src={ImageService.getSmallImageUrl(car.imageUri)} size={40} />
         </Link>
         <div className={styles.info_details}>
           <Link to={carPath.replace(":carId", String(car.carId))}>
@@ -124,7 +125,7 @@ const TripInfo = ({
       <hr className="white" />
       <div className={styles.show_row}>
         <Link to={publicProfilePath.replace(":id", String(driver.userId))}>
-          <CircleImg src={driver.imageUri} size={40} />
+          <CircleImg src={ImageService.getSmallImageUrl(driver.imageUri)} size={40} />
         </Link>
         <div className={styles.info_details}>
           <Link

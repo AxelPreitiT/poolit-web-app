@@ -21,7 +21,7 @@ import java.time.Instant;
 @Component
 public class JwtUtils {
 
-    private static final Duration EXPIRY_TIME = Duration.ofHours(1);
+    private static final Duration EXPIRY_TIME = Duration.ofHours(4);
     private static final Duration REFRESH_EXPIRY_TIME = Duration.ofDays(7);
 
 //    https://www.rfc-editor.org/rfc/rfc7519.html#page-9
