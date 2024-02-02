@@ -27,11 +27,13 @@
   display: flex !important;
   flex-grow: 1 !important;
   background: linear-gradient(
-      to top,
-      rgba(255, 162, 22, 0.7),
-      rgba(249, 204, 58, 0.7)
-    ),
-    linear-gradient(to right, rgba(249, 204, 58, 0.7), rgba(255, 162, 22, 0.7));
+    to top,
+    rgb(243 193 117 / 70%),
+    rgb(245 217 126 / 70%)),
+  linear-gradient(
+    to right,
+    rgba(249,204,58,.7),
+    rgba(255,162,22,.7));
   color: black !important;
   height: 50px;
   margin-bottom: 2%;
