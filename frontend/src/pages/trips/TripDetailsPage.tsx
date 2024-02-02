@@ -16,6 +16,7 @@ import PassangersTripComponent from "@/components/TripDetails/PassangerTripCompo
 import useTrip from "@/hooks/trips/useTrip.tsx";
 import { useSearchParams } from "react-router-dom";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
 // import {useSearchParams} from "react-router-dom";
 
 const TripDetailsPage = () => {
@@ -61,12 +62,7 @@ const TripDetailsPage = () => {
         : params.get("startDateTime") != undefined
         ? `${params.get("startDateTime")}T${tripTime}`
         : trip.startDateTime);
-  console.log(
-    `In details, start is ${startDateTime} and end is ${endDateTime}`
-  );
-
-  console.log("trips passanger uri template is " + trip.passengersUriTemplate);
-  console.log("ya sali");
+  const status = currentPassanger? getStatusPassanger(currentPassanger) : trip.tripStatus
   //const {isLoading: isLoadingSeats, data:occupiedSeats} = {false, {occupiedSeats:1}:occupiedSeatsModel}
   //const occupiedSeats:occupiedSeatsModel = {occupiedSeats:1};
 
@@ -126,7 +122,7 @@ const TripDetailsPage = () => {
               isDriver={isDriver}
               startDateTime={startDateTime}
               endDateTime={endDateTime}
-              status={trip.tripStatus}
+              status={status}
             />
             <RightDetails
               isPassanger={isPassanger}

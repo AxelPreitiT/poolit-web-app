@@ -12,6 +12,7 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
   const { t } = useTranslation();
 
   switch (status) {
+      //TODO: falta status pending (debería usar el estado de passenger: Accepted, Rejected, Pending, Unconfirmed)
     case Status.WAITING:
       componentToRender = (
         <div className={styles.secondary}>
