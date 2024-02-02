@@ -3,7 +3,7 @@ import TripsSearch from "@/components/search/TripsSearch/TripsSearch";
 import useAllCities from "@/hooks/cities/useAllCities";
 import useCarFeatures from "@/hooks/cars/useCarFeatures";
 import { useTranslation } from "react-i18next";
-import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TripModel from "@/models/TripModel";
 import { useState } from "react";
 import {
@@ -15,7 +15,7 @@ import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
 import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import useDiscovery from "@/hooks/discovery/useDiscovery";
 import TripsService from "@/services/TripsService";
-import {searchPath, tripDetailsPath} from "@/AppRouter";
+import { searchPath, tripDetailsPath } from "@/AppRouter";
 import TripsSorter from "@/components/search/TripsSorter/TripsSorter";
 import useTripSortTypes from "@/hooks/trips/useTripSortTypes";
 import { isObjectEmpty } from "@/utils/object/isEmpty";
@@ -24,6 +24,7 @@ import LoadingScreen from "@/components/loading/LoadingScreen";
 import PaginationModel from "@/models/PaginationModel";
 import PageSelector from "./PageSelector";
 import NoResultsSearch from "./NoResultsSearch";
+import { getIsoDate } from "@/utils/date/isoDate";
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -104,14 +105,21 @@ const SearchPage = () => {
     return <LoadingScreen />;
   }
 
-  const extraData = (trip: TripModel):{startDate:string, endDate:string, link: string}=>{
+  const extraData = (
+    trip: TripModel
+  ): { startDate: string; endDate: string; link: string } => {
     //TODO: agarrar del forms!
-    const [params] = useSearchParams();
-    const startDate = params.get("date") || "";
-    const endDate = params.get("lastDate") || params.get("date") ||  "";
-    const link = tripDetailsPath.replace(":tripId", trip.tripId.toString()) + `?startDateTime=${startDate}&endDateTime=${endDate}`;
-    return {startDate:startDate, endDate:endDate, link: link}
-  }
+    const startDate = initialSearch.date ? getIsoDate(initialSearch.date) : "";
+    const endDate = initialSearch.last_date
+      ? getIsoDate(initialSearch.last_date)
+      : initialSearch.date
+      ? getIsoDate(initialSearch.date)
+      : "";
+    const link =
+      tripDetailsPath.replace(":tripId", trip.tripId.toString()) +
+      `?startDateTime=${startDate}&endDateTime=${endDate}`;
+    return { startDate: startDate, endDate: endDate, link: link };
+  };
 
   return (
     <div className={styles.mainContainer}>

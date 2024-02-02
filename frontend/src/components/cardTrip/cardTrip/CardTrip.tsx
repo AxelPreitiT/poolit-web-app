@@ -12,7 +12,7 @@ import getTotalTrips from "@/functions/getTotalTrips.ts";
 import StarRating from "@/components/stars/StarsRanking.tsx";
 import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
-import {tripDetailsPath} from "@/AppRouter.tsx";
+import { tripDetailsPath } from "@/AppRouter.tsx";
 
 const CardTrip = ({
   trip,
@@ -21,13 +21,29 @@ const CardTrip = ({
 }: {
   trip: TripModel;
   className?: string;
-  extraData?: (trip: tripModel)=>{startDate: string, endDate: string, link:string};
+  extraData?: (trip: tripModel) => {
+    startDate: string;
+    endDate: string;
+    link: string;
+  };
 }) => {
   const { t } = useTranslation();
-  const { startDate: start, endDate: end , link: linkTrip} = extraData ? extraData(trip) : { startDate: trip.startDateTime, endDate: trip.endDateTime , link:tripDetailsPath.replace(":tripId", trip.tripId.toString())};
+  const {
+    startDate: start,
+    endDate: end,
+    link: linkTrip,
+  } = extraData
+    ? extraData(trip)
+    : {
+        startDate: trip.startDateTime,
+        endDate: trip.endDateTime,
+        link: tripDetailsPath.replace(":tripId", trip.tripId.toString()),
+      };
   const date = new Date(trip.startDateTime);
   const totalTrips = getTotalTrips(new Date(start), new Date(end));
-  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(trip?.driverUri);
+  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
+    trip?.driverUri
+  );
 
   const {
     isLoading: isOriginCityLoading,
@@ -59,10 +75,7 @@ const CardTrip = ({
   }
   const totalPrice = totalTrips * trip.pricePerTrip;
   return (
-    <Link
-      to={linkTrip}
-      className={styles.link_container + " " + className}
-    >
+    <Link to={linkTrip} className={styles.link_container + " " + className}>
       <div className={styles.card_container}>
         <div className={styles.left_container}>
           {!car ? (
@@ -79,7 +92,10 @@ const CardTrip = ({
                   <CircleImg src={car.imageUri} size={20} />
                 </div>
                 <div className={styles.one_raiting}>
-                  <StarRating rating={driver.driverRating} className="light-text h6"  />
+                  <StarRating
+                    rating={driver.driverRating}
+                    className="light-text h6"
+                  />
                   <CircleImg src={driver.imageUri} size={20} />
                 </div>
               </div>
@@ -105,27 +121,29 @@ const CardTrip = ({
             </div>
           </div>
           <div className={styles.footer_description}>
-            <div className={styles.footer_details}>
-              <i className="bi bi-calendar text"></i>
-              {start != end ? (
-                <span>
-                  {t(`day.full.${getDayString(date).toLowerCase()}`, {
-                    plural: "s",
-                  })}
-                </span>
-              ) : (
-                <span>{getFormattedDateTime(start).date}</span>
-              )}
+            <div className={styles.footer_details_container}>
+              <div className={styles.footer_details}>
+                <i className="bi bi-calendar text"></i>
+                {start != end ? (
+                  <span>
+                    {t(`day.full.${getDayString(date).toLowerCase()}`, {
+                      plural: "s",
+                    })}
+                  </span>
+                ) : (
+                  <span>{getFormattedDateTime(start).date}</span>
+                )}
+              </div>
+              <div className={styles.footer_details}>
+                <i className="bi bi-clock text"></i>
+                <span>{getFormattedDateTime(trip.startDateTime).time}</span>
+              </div>
             </div>
-            <div className={styles.footer_details}>
-              <i className="bi bi-clock text"></i>
-              <span>{getFormattedDateTime(trip.startDateTime).time}</span>
-            </div>
-            <h3>
+            <span className={styles.price}>
               {t("format.price", {
-                priceInt: totalPrice
+                priceInt: totalPrice,
               })}
-            </h3>
+            </span>
           </div>
         </div>
       </div>

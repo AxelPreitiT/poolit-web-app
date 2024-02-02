@@ -68,21 +68,23 @@ const CardTripProfile = (trip: TripModel) => {
     >
       <div className={styles.card_info}>
         <div className={styles.data_container}>
-          <div className={styles.route_container}>
-            <i className="bi bi-geo-alt"></i>
-            <div className={styles.horizontal_dotted_line}></div>
-            <i className="bi bi-geo-alt-fill"></i>
-          </div>
-          <div className={styles.address_container}>
-            <div className={styles.route_info_text}>
-              <h3>{originCity?.name}</h3>
-              <span className="text">{trip.originAddress}</span>
+          <div>
+            <div className={styles.route_container}>
+              <i className="bi bi-geo-alt"></i>
+              <div className={styles.horizontal_dotted_line}></div>
+              <i className="bi bi-geo-alt-fill"></i>
             </div>
-            <div className={styles.route_info_text}>
-              <h3>{destinationCity?.name}</h3>
-              <span style={{ textAlign: "right" }}>
-                {trip.destinationAddress}
-              </span>
+            <div className={styles.address_container}>
+              <div className={styles.route_info_text}>
+                <h3>{originCity?.name}</h3>
+                <span className="text">{trip.originAddress}</span>
+              </div>
+              <div className={styles.route_info_text}>
+                <h3>{destinationCity?.name}</h3>
+                <span style={{ textAlign: "right" }}>
+                  {trip.destinationAddress}
+                </span>
+              </div>
             </div>
           </div>
           <div className={styles.extra_info_container}>

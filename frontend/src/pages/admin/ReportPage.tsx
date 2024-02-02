@@ -182,7 +182,7 @@ const ReportPage = () => {
                       <strong>{t("admin.report.passengerRating")}</strong>
                       <StarRating
                         rating={userReporter.passengerRating}
-                        className="h3"
+                        className="h3 secondary-text"
                       />
                     </div>
                   ) : (
@@ -190,7 +190,7 @@ const ReportPage = () => {
                       <strong>{t("admin.report.driverRating")}</strong>
                       <StarRating
                         rating={userReporter.driverRating}
-                        className="h3"
+                        className="h3 secondary-text"
                       />
                     </div>
                   )}

@@ -174,7 +174,7 @@ const CancelBtn = ({ passanger }: { passanger?: passangerModel }) => {
           </Modal.Body>
           <Modal.Footer>
             <Button className={styles.backBtn} onClick={closeModalCancel}>
-              {t("modal.Back")}
+              {t("modal.back")}
             </Button>
             <Button
               className={styles.cancelBtn}

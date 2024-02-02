@@ -3,7 +3,7 @@
     "price": "$ {{priceInt}}",
     "plate": "Patente:{{carPlate}}",
     "name": "{{name}} {{surname}}",
-    "date": "( {{date}} )"
+    "date": "({{- date}})"
   },
   "poolit": {
     "name": "POOLIT",
@@ -880,7 +880,7 @@
     "loading": "Cargando..."
   },
   "modal": {
-    "Back" : "Back",
+    "back": "Volver",
     "cancel": "Cancelar",
     "cancel_trip": "Cancelar viaje",
     "delete_trip": "Eliminar viaje",

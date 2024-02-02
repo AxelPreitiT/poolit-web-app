@@ -3,8 +3,8 @@
     "price": "$ {{priceInt}}",
     "plate": "Licence plate: {{carPlate}}",
     "name": "{{name}} {{surname}}",
-    "date": "({{date}})",
-    "recurrent_date": "({{initial_date}} - {{final_date}})"
+    "date": "({{- date}})",
+    "recurrent_date": "({{- initial_date}} - {{- final_date}})"
   },
   "poolit": {
     "name": "POOLIT",
@@ -880,7 +880,7 @@
     "loading": "Loading..."
   },
   "modal": {
-    "Back" : "volver",
+    "back": "Back",
     "cancel": "Cancel",
     "cancel_trip": "Cancel trip",
     "delete_trip": "Delete trip",

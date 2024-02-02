@@ -20,6 +20,9 @@
 .data_container {
   flex-grow: 4;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .route_container {
