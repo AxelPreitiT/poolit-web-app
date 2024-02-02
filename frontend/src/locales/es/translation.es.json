@@ -594,14 +594,14 @@
     },
     "reason": {
       "title": "Motivo: ",
-      "cannot_drive": "No sabe manejar",
-      "dangerous_driving": "Manejo riesgoso",
-      "did_not_pay": "No pago",
-      "harassment": "Acoso",
-      "identity_fraud": "Fraude de identidad",
-      "misconduct": "Mala conducta",
-      "wreck_car": "Auto en mal estado",
-      "other": "Otro"
+      "CANNOT_DRIVE": "No sabe manejar",
+      "DANGEROUS_DRIVING": "Manejo riesgoso",
+      "DID_NOT_PAY": "No pago",
+      "HARASSMENT": "Acoso",
+      "IDENTITY_FRAUD": "Fraude de identidad",
+      "MISCONDUCT": "Mala conducta",
+      "WRECK_CAR": "Auto en mal estado",
+      "OTHER": "Otro"
     },
     "report": {
       "detail": "Detalles de la denuncia",

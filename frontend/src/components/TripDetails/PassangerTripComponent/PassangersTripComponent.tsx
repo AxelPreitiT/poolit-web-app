@@ -34,7 +34,7 @@ const PassangersTripComponent = ({
   const { invalidatePassangersState } = usePassangerByUri();
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+  const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
   const [selectedOption, setSelectedOption] = useState<string>(
     PassangerStatus.ALL
   );
@@ -52,7 +52,7 @@ const PassangersTripComponent = ({
     startDateTime: null,
     endDateTime: null,
     passengerState:
-      selectedOption == PassangerStatus.ALL ? null : selectedOption,
+      selectedOption === PassangerStatus.ALL ? null : selectedOption,
   });
 
   const options = Object.values(PassangerStatus);
@@ -64,7 +64,7 @@ const PassangersTripComponent = ({
     }
   };
 
-  if (isLoadingSeats || occupiedSeats == undefined) {
+  if (isLoadingSeats || occupiedSeats === undefined) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
 

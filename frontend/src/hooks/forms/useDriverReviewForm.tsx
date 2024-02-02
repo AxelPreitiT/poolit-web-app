@@ -12,6 +12,7 @@ import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import useReviewForm from "./useReviewForm";
 import useDriverReviewOptions from "../driver/useDriverReviewOptions";
+import usePublicUserByUri from "../users/usePublicUserByUri";
 
 interface DriverReviewFormHookProps {
   driver: UserPublicModel;
@@ -29,6 +30,7 @@ const useDriverReviewForm = ({
   const { t } = useTranslation();
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
+  const { invalidateUserState } = usePublicUserByUri(driver.selfUri);
   const { discovery, isError: isDiscoveryError } = useDiscovery();
 
   const onSubmit: SubmitHandlerReturnModel<ReviewFormSchemaType, void> = async (
@@ -51,6 +53,7 @@ const useDriverReviewForm = ({
       message: t("driver_review.success.message"),
       timeout: defaultToastTimeout,
     });
+    invalidateUserState();
     onSuccessProp?.();
   };
 

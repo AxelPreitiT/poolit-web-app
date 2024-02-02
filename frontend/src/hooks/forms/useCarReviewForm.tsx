@@ -10,6 +10,7 @@ import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import useReviewForm from "./useReviewForm";
 import useCarReviewOptions from "../cars/useCarReviewOptions";
+import useCarByUri from "../cars/useCarByUri";
 
 interface CarReviewFormHookProps {
   car: CarModel;
@@ -25,6 +26,7 @@ const useCarReviewForm = ({
   onError: onErrorProp,
 }: CarReviewFormHookProps) => {
   const { t } = useTranslation();
+  const { invalidateCarState } = useCarByUri(car.selfUri);
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
 
@@ -40,6 +42,7 @@ const useCarReviewForm = ({
       message: t("car_review.success.message"),
       timeout: defaultToastTimeout,
     });
+    invalidateCarState();
     onSuccessProp?.();
   };
 

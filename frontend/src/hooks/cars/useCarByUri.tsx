@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CarService from "@/services/CarService.ts";
 import { useEffect } from "react";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
@@ -8,6 +8,7 @@ import UnknownResponseError from "@/errors/UnknownResponseError.ts";
 
 const useCarByUri = (uri?: string) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const onQueryError = useQueryError();
 
   const {
@@ -43,11 +44,18 @@ const useCarByUri = (uri?: string) => {
     }
   }, [isError, error, onQueryError, t]);
 
+  const invalidateCarState = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["carUri", uri],
+    });
+  };
+
   return {
     isLoading: isLoading || isPending,
     car,
     isError,
     error,
+    invalidateCarState,
   };
 };
 

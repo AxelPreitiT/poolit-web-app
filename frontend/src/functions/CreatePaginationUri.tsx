@@ -7,7 +7,7 @@ function createPaginationUri(
   const queryParams = new URLSearchParams();
   queryParams.append("page", (currentPage - 1).toString());
   queryParams.append("pageSize", pageSize.toString());
-  if (first == true) {
+  if (first === true) {
     return `${baseUri}?${queryParams.toString()}`;
   }
   return `${baseUri}&${queryParams.toString()}`;

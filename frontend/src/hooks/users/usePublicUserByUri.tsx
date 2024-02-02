@@ -1,12 +1,13 @@
 import { useTranslation } from "react-i18next";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import userService from "@/services/UserService.ts";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
 
 const usePublicUserByUri = (uri?: string) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const onQueryError = useQueryError();
 
   const query = useQuery({
@@ -33,10 +34,17 @@ const usePublicUserByUri = (uri?: string) => {
     }
   }, [isError, error, onQueryError, t]);
 
+  const invalidateUserState = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["publicUserUri", uri],
+    });
+  };
+
   return {
     ...query,
     isLoading: isLoading || isPending,
     user: data,
+    invalidateUserState,
   };
 };
 

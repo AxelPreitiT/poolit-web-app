@@ -20,11 +20,11 @@ const ReviewPageDriver = () => {
 
   const { search } = useLocation();
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+  const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
 
   return (
     <div className={styles.main_container}>
-      {isLoadingUser || user == undefined ? (
+      {isLoadingUser || user === undefined ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -55,7 +55,7 @@ const ReviewPageDriver = () => {
         </div>
       )}
 
-      {isLoadingUser || user == undefined ? (
+      {isLoadingUser || user === undefined ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -69,17 +69,18 @@ const ReviewPageDriver = () => {
               <h2>{t("profile.lists.review_as_driver")}</h2>
             </div>
             <PaginationComponentExtraData
-                CardComponent={ShortReview}
-                uri={createPaginationUri(
-                    user.reviewsDriverUri,
-                    currentPage,
-                    REVIEWPAGESIZE
-                )}
-                current_page={currentPage}
-                useFuction={useUserReviewsByUri}
-                empty_component={<EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
-                }
-                itemsName={t("reviews.title")}
+              CardComponent={ShortReview}
+              uri={createPaginationUri(
+                user.reviewsDriverUri,
+                currentPage,
+                REVIEWPAGESIZE
+              )}
+              current_page={currentPage}
+              useFuction={useUserReviewsByUri}
+              empty_component={
+                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
+              }
+              itemsName={t("reviews.title")}
             />
           </div>
         </div>

@@ -1,11 +1,9 @@
-
-function createStatusPaginationUri(baseUri: string , status:string): string {
-
-  if (status == "ALL"){
-    return `${baseUri}`
+function createStatusPaginationUri(baseUri: string, status: string): string {
+  if (status === "ALL") {
+    return `${baseUri}`;
   }
   const queryParams = new URLSearchParams();
-  queryParams.append('passengerState', status);
+  queryParams.append("passengerState", status);
   return `${baseUri}&${queryParams.toString()}`;
 }
 

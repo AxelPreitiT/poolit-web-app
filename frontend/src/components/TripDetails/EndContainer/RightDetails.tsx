@@ -266,7 +266,7 @@ const RightDetails = ({
         </div>
       )
     ) : status_value === Status.FINISHED ? (
-      isDriver || passanger?.passengerState == passangerStatus.ACCEPTED ? (
+      isDriver || passanger?.passengerState === passangerStatus.ACCEPTED ? (
         <div className={styles.review_btn}>
           <div className={styles.btn_container}>
             <Button className={styles.btn_join} onClick={openModalReview}>
@@ -290,7 +290,7 @@ const RightDetails = ({
               onClick={openModalReport}
               style={{ cursor: "pointer", color: "blue" }}
             >
-              <i className="bi bi-car-front-fill"></i>
+              <i className="bi bi-car-front-fill me-1"></i>
               {t("trip_detail.report.link_text")}
             </span>
           </div>

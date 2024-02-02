@@ -33,8 +33,8 @@ const ShortInfoReport = (report: PrivateReportModel) => {
 
   return (
     <Link
-        to={extractPathAfterApi(report.selfUri)}
-        className={styles.text_black}
+      to={extractPathAfterApi(report.selfUri)}
+      className={styles.text_black}
     >
       <div>
         <div className={styles.row_report}>
@@ -45,7 +45,6 @@ const ShortInfoReport = (report: PrivateReportModel) => {
               <div className={styles.info_profile_img}>
                 <div>
                   <CircleImg src={userReporter.imageUri} size={70} />
-
                 </div>
                 <div className={styles.short_info_profile}>
                   <div className={styles.inline_text}>
@@ -100,14 +99,12 @@ const ShortInfoReport = (report: PrivateReportModel) => {
             )}
           </div>
           <div className={styles.trip_short_info}>
-            <h4>
-              <span className="secondary-color italic-text">
-                <h4 className={styles.reason_container}>
-                  <span className={styles.reason_title}> {t("admin.reason.title")}</span>
-                  <span><ReportReason reason={report.reportOption} /></span>
-                </h4>
+            <div className={styles.reason_container}>
+              <span className={styles.reason_title}>
+                {t("admin.reason.title")}
               </span>
-            </h4>
+              <ReportReason reason={report.reportOption} />
+            </div>
             <h5>
               <span>{t("admin.date")}</span>
               <span>{getFormattedDateTime(report.dateTime).date}</span>

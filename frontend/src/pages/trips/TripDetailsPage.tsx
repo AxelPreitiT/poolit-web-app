@@ -39,7 +39,7 @@ const TripDetailsPage = () => {
 
   if (
     isLoadingTrip ||
-    trip == undefined ||
+    trip === undefined ||
     isLoadingCar ||
     car === undefined ||
     isLoadingDriver ||
@@ -62,7 +62,9 @@ const TripDetailsPage = () => {
         : params.get("startDateTime") != undefined
         ? `${params.get("startDateTime")}T${tripTime}`
         : trip.startDateTime);
-  const status = currentPassanger? getStatusPassanger(currentPassanger) : trip.tripStatus
+  const status = currentPassanger
+    ? getStatusPassanger(currentPassanger)
+    : trip.tripStatus;
   //const {isLoading: isLoadingSeats, data:occupiedSeats} = {false, {occupiedSeats:1}:occupiedSeatsModel}
   //const occupiedSeats:occupiedSeatsModel = {occupiedSeats:1};
 

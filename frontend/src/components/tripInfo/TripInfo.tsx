@@ -67,7 +67,7 @@ const TripInfo = ({
     trip.passengersUriTemplate
   );
 
-  if (isLoadingSeats || occupiedSeats == undefined) {
+  if (isLoadingSeats || occupiedSeats === undefined) {
     return <LoadingScreen description={t("trip.loading_one")} />;
   }
 

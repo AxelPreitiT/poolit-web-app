@@ -12,6 +12,7 @@ import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import useReviewForm from "./useReviewForm";
 import usePassengerReviewOptions from "../passanger/usePassengerReviewOptions";
+import usePassangerByUri from "../passanger/usePassangerByUri";
 
 interface PassengerReviewFormHookProps {
   passenger: UserPublicModel;
@@ -29,6 +30,7 @@ const usePassengerReviewForm = ({
   const { t } = useTranslation();
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
+  const { invalidatePassangersState } = usePassangerByUri(passenger.selfUri);
   const { discovery, isError: isDiscoveryError } = useDiscovery();
 
   const onSubmit: SubmitHandlerReturnModel<ReviewFormSchemaType, void> = async (
@@ -51,6 +53,7 @@ const usePassengerReviewForm = ({
       message: t("passenger_review.success.message"),
       timeout: defaultToastTimeout,
     });
+    invalidatePassangersState();
     onSuccessProp?.();
   };
 

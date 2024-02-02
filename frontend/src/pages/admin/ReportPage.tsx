@@ -167,8 +167,8 @@ const ReportPage = () => {
                       </h3>
                     </Link>
                     <h6 className="italic-text">
-                      {report.relation == "PASSENGER_2_DRIVER" ||
-                      report.relation == "PASSENGER_2_PASSENGER" ? (
+                      {report.relation === "PASSENGER_2_DRIVER" ||
+                      report.relation === "PASSENGER_2_PASSENGER" ? (
                         <span> {t("admin.report.passenger")}</span>
                       ) : (
                         <span> {t("admin.report.driver")}</span>
@@ -176,8 +176,8 @@ const ReportPage = () => {
                     </h6>
                   </div>
 
-                  {report.relation == "PASSENGER_2_DRIVER" ||
-                  report.relation == "PASSENGER_2_PASSENGER" ? (
+                  {report.relation === "PASSENGER_2_DRIVER" ||
+                  report.relation === "PASSENGER_2_PASSENGER" ? (
                     <div className={styles.item_container}>
                       <strong>{t("admin.report.passengerRating")}</strong>
                       <StarRating
@@ -269,21 +269,21 @@ const ReportPage = () => {
                       </h3>
                     </Link>
                     <h6 className="italic-text">
-                      {report.relation == "DRIVER_2_PASSENGER" ||
-                      report.relation == "PASSENGER_2_PASSENGER" ? (
+                      {report.relation === "DRIVER_2_PASSENGER" ||
+                      report.relation === "PASSENGER_2_PASSENGER" ? (
                         <span> {t("admin.report.passenger")}</span>
                       ) : (
                         <span> {t("admin.report.driver")}</span>
                       )}
                     </h6>
                   </div>
-                  {report.relation == "DRIVER_2_PASSENGER" ||
-                  report.relation == "PASSENGER_2_PASSENGER" ? (
+                  {report.relation === "DRIVER_2_PASSENGER" ||
+                  report.relation === "PASSENGER_2_PASSENGER" ? (
                     <div className={styles.item_container}>
                       <strong>{t("admin.report.passengerRating")}</strong>
                       <StarRating
                         rating={userReported.passengerRating}
-                        className="h3"
+                        className="h3 secondary-text"
                       />
                     </div>
                   ) : (
@@ -291,7 +291,7 @@ const ReportPage = () => {
                       <strong>{t("admin.report.driverRating")}</strong>
                       <StarRating
                         rating={userReported.driverRating}
-                        className="h3"
+                        className="h3 secondary-text"
                       />
                     </div>
                   )}
@@ -365,7 +365,7 @@ const ReportPage = () => {
                 <hr className={styles.secondary_color} />
               </div>
               <div className={styles.content_container_info}>
-                {trip == undefined || isTripLoading || isTripError ? (
+                {trip === undefined || isTripLoading || isTripError ? (
                   <LoadingWheel description={t("trip.loading")} />
                 ) : (
                   <CardTrip trip={trip} className="w-100" />

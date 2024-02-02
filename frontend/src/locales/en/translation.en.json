@@ -595,14 +595,14 @@
     },
     "reason": {
       "title": "Reason: ",
-      "cannot_drive": "Can't drive",
-      "dangerous_driving": "Dangerous driving",
-      "did_not_pay": "Did not pay",
-      "harassment": "Harassment",
-      "identity_fraud": "Identity fraud",
-      "misconduct": "Misconduct",
-      "wreck_car": "Car in poor state",
-      "other": "Other"
+      "CANNOT_DRIVE": "Can't drive",
+      "DANGEROUS_DRIVING": "Dangerous driving",
+      "DID_NOT_PAY": "Did not pay",
+      "HARASSMENT": "Harassment",
+      "IDENTITY_FRAUD": "Identity fraud",
+      "MISCONDUCT": "Misconduct",
+      "WRECK_CAR": "Car in poor state",
+      "OTHER": "Other"
     },
     "report": {
       "detail": "Report Details",

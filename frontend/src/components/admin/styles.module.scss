@@ -13,16 +13,13 @@ a {
 }
 
 .reason_container {
-  display: flex;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
-
-.reason_title {
-  margin-right: 0.5em;
-}
-
 
 .secondary_color {
-  color: colors.$secondary-color
+  color: colors.$secondary-color;
 }
 
 .row_report {
@@ -99,6 +96,7 @@ a {
 .trip_short_info {
   display: flex;
   flex-direction: column;
+  row-gap: 0.5rem;
   align-items: flex-start;
   justify-content: space-between;
   width: 30%;

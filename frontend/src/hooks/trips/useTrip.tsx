@@ -9,6 +9,7 @@ import TripModel from "@/models/TripModel";
 import useDiscovery from "@/hooks/discovery/useDiscovery.tsx";
 import { parseTemplate } from "url-template";
 import { useParams } from "react-router-dom";
+import usePassangerByUri from "../passanger/usePassangerByUri";
 
 const useTrip = () => {
   const { t } = useTranslation();
@@ -16,11 +17,8 @@ const useTrip = () => {
   const param = useParams();
   const id = param.tripId;
   const onQueryError = useQueryError();
+  const { invalidatePassangersState } = usePassangerByUri();
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
-
-  const retryPassangersTrips = () => {
-    queryClient.invalidateQueries({ queryKey: ["allPassangers"] });
-  };
 
   const {
     isLoading,
@@ -31,7 +29,7 @@ const useTrip = () => {
   } = useQuery({
     queryKey: ["tripDetails", id],
     queryFn: async (): Promise<TripModel> => {
-      retryPassangersTrips();
+      invalidatePassangersState();
       const uri = parseTemplate(discovery?.tripsUriTemplate as string).expand({
         tripId: id as string,
       });

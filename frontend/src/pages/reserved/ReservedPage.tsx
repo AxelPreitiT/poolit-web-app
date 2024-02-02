@@ -11,7 +11,7 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import TripModel from "@/models/TripModel.ts";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
-import {tripDetailsPath} from "@/AppRouter.tsx";
+import { tripDetailsPath } from "@/AppRouter.tsx";
 
 const ReservedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
@@ -20,25 +20,38 @@ const ReservedPage = () => {
   const time = new URLSearchParams(search).get("time");
   const page = new URLSearchParams(search).get("page");
   // TODO: PONER CONSTANTES DE PAGINACION
-  const currentPage = page == null ? 1 : parseInt(page, 10);
+  const currentPage = page === null ? 1 : parseInt(page, 10);
 
   // TODO: REVISAR NO LO CAMBIO AHORA POR LSA DUDAS
-  const uriFutureTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.futureReservedTripsUri, currentPage, 2);
-  const uriPastTrips = isLoading || currentUser === undefined ? null : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
+  const uriFutureTrips =
+    isLoading || currentUser === undefined
+      ? null
+      : createPaginationUri(
+          currentUser?.futureReservedTripsUri,
+          currentPage,
+          2
+        );
+  const uriPastTrips =
+    isLoading || currentUser === undefined
+      ? null
+      : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
 
+  const extraData = (
+    trip: TripModel
+  ): { startDate: string; endDate: string; link: string } => {
+    //TODO: revisar! (seguro falla)
+    const { isLoading: isLoadingRole, currentPassanger: currentPassanger } =
+      useRolePassanger(false, trip?.passengersUriTemplate);
 
-    const extraData = (trip: TripModel):{startDate:string, endDate:string, link: string}=>{
-        //TODO: revisar! (seguro falla)
-        const {
-            isLoading: isLoadingRole,
-            currentPassanger: currentPassanger,
-        } = useRolePassanger(false, trip?.passengersUriTemplate);
-
-        if(isLoadingRole || currentPassanger === undefined){
-            return {startDate:"", endDate:"", link:""}
-        }
-        return {startDate:currentPassanger.startDateTime, endDate:currentPassanger.endDateTime, link: tripDetailsPath.replace(":tripId", trip.tripId.toString())}
+    if (isLoadingRole || currentPassanger === undefined) {
+      return { startDate: "", endDate: "", link: "" };
     }
+    return {
+      startDate: currentPassanger.startDateTime,
+      endDate: currentPassanger.endDateTime,
+      link: tripDetailsPath.replace(":tripId", trip.tripId.toString()),
+    };
+  };
 
   return (
     <MainComponent>
@@ -47,7 +60,7 @@ const ReservedPage = () => {
         <TabComponent
           left_title={t("reserved_trips.future")}
           left_component={
-            uriFutureTrips == null ? (
+            uriFutureTrips === null ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
                 iconClassName={styles.loadingIcon}
@@ -71,7 +84,7 @@ const ReservedPage = () => {
           }
           right_title={t("reserved_trips.past")}
           right_component={
-            uriPastTrips == null ? (
+            uriPastTrips === null ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
                 iconClassName={styles.loadingIcon}
@@ -93,7 +106,7 @@ const ReservedPage = () => {
               />
             )
           }
-          active={time == "past" ? "left" : "right"}
+          active={time === "past" ? "left" : "right"}
         />
       </div>
     </MainComponent>

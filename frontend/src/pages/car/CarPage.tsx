@@ -15,7 +15,7 @@ import useCarFeaturesByUri from "@/hooks/cars/useCarFeaturesByUri";
 import { Button } from "react-bootstrap";
 import { BsPencilSquare } from "react-icons/bs";
 import CarFeaturesProp from "@/components/profile/carFeatures/CarFeaturesProp";
-import {INITIALPAGE, REVIEWPAGESIZE} from "@/enums/PaginationConstants";
+import { INITIALPAGE, REVIEWPAGESIZE } from "@/enums/PaginationConstants";
 import { useState } from "react";
 import EditCarForm from "./EditCarForm";
 import useCarFeatures from "@/hooks/cars/useCarFeatures";
@@ -55,7 +55,7 @@ const CarPage = () => {
   const [editMode, setEditMode] = useState(false);
 
   const page = new URLSearchParams(search).get("page");
-  const currentPage = page == null ? INITIALPAGE : parseInt(page, 10);
+  const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
 
   if (
     isUserCarsLoading ||
@@ -132,19 +132,19 @@ const CarPage = () => {
             <h2>{t("car.opinions")}</h2>
           </div>
           <PaginationComponentExtraData
-              CardComponent={ShortReview}
-              uri={createPaginationUri(
-                  car.reviewsUri,
-                  currentPage,
-                  REVIEWPAGESIZE,
-                  true
-              )}
-              current_page={currentPage}
-              useFuction={useCarReviewsByUri}
-              empty_component={
-                <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
-              }
-              itemsName={t("reviews.title")}
+            CardComponent={ShortReview}
+            uri={createPaginationUri(
+              car.reviewsUri,
+              currentPage,
+              REVIEWPAGESIZE,
+              true
+            )}
+            current_page={currentPage}
+            useFuction={useCarReviewsByUri}
+            empty_component={
+              <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />
+            }
+            itemsName={t("reviews.title")}
           />
         </div>
       </div>

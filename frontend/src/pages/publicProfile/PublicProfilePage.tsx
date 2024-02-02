@@ -25,7 +25,7 @@ const PublicProfilePage = () => {
 
   return (
     <div className={styles.main_container}>
-      {isLoadingUser || user == undefined ? (
+      {isLoadingUser || user === undefined ? (
         <LoadingWheel
           containerClassName={styles.loadingContainer}
           iconClassName={styles.loadingIcon}
@@ -57,7 +57,7 @@ const PublicProfilePage = () => {
       )}
 
       <div className={styles.list_block}>
-        {isLoadingReviewsDriver || reviewsDriver == undefined ? (
+        {isLoadingReviewsDriver || reviewsDriver === undefined ? (
           <LoadingWheel
             containerClassName={styles.loadingContainer}
             iconClassName={styles.loadingSmallIcon}
@@ -75,7 +75,7 @@ const PublicProfilePage = () => {
             link={publicsDriverReviewsPath.replace(":id", String(params.id))}
           />
         )}
-        {isLoadingReviewsPassanger || reviewsPassanger == undefined ? (
+        {isLoadingReviewsPassanger || reviewsPassanger === undefined ? (
           <LoadingWheel
             containerClassName={styles.loadingContainer}
             iconClassName={styles.loadingSmallIcon}

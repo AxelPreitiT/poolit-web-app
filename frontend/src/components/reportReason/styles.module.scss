@@ -1,11 +1,5 @@
 @use "@/colors.module.scss" as colors;
 
-
-
-.secondary {
+.status_container {
   color: colors.$secondary-color;
-  display: flex;
-  gap: 5%;
-  align-items: center;
 }
-

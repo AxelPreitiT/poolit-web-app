@@ -39,7 +39,7 @@ const useJoinTrip = (
       const endDate = getIsoDate(parseIsoDate(endDateTime));
       const data: joinTripModel = {
         startDate,
-        endDate: endDate == startDate ? undefined : endDate,
+        endDate: endDate === startDate ? undefined : endDate,
       };
       const uri = parseTemplate(trip?.passengersUriTemplate as string).expand({
         userId: null,

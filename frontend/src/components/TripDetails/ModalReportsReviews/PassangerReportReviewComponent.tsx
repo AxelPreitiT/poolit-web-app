@@ -51,7 +51,7 @@ const PassangerReportReviewComponent = ({
               })
             }
             disabled={
-              isReviewed || statusPassanger == ReserveStatus.NOT_STARTED
+              isReviewed || statusPassanger === ReserveStatus.NOT_STARTED
             }
             className={buttonClassName}
           >
@@ -87,7 +87,7 @@ const PassangerReportReviewComponent = ({
               <span>{t("trip_detail.review.user_reviewed")}</span>
             </div>
           )}
-          {statusPassanger == ReserveStatus.NOT_STARTED && (
+          {statusPassanger === ReserveStatus.NOT_STARTED && (
             <div className={styles.aclaration_text}>
               <span>{t("trip_detail.review.not_started_review")}</span>
             </div>
