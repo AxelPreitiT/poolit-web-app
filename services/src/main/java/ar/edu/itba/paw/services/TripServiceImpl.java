@@ -309,6 +309,16 @@ public class TripServiceImpl implements TripService {
             LOGGER.error("Passenger with id {} is not in trip with id {}", user.getUserId(), trip.getTripId(), e);
             throw e;
         }
+        if(passengerOptional.get().isTripStarted()){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Passenger with id {} tried to get out of trip {} after the period has started", user.getUserId(), trip.getTripId(), e);
+            throw e;
+        }
+        if(passengerOptional.get().getPassengerState().equals(Passenger.PassengerState.REJECTED)){
+            IllegalArgumentException e = new IllegalArgumentException();
+            LOGGER.error("Passenger with id {} tried to get out of trip {} after it has been rejected", user.getUserId(), trip.getTripId(), e);
+            throw e;
+        }
         if(passengerOptional.get().getEndDateTime().isBefore(LocalDateTime.now())){
             IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Passenger with id {} tried to get out of trip {} after the period has ended", user.getUserId(), trip.getTripId(), e);
