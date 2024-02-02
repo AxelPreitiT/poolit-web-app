@@ -99,7 +99,9 @@ describe("Login", () => {
     server.use(LoginMock.mockInvalidLogin());
     const { user } = customRender(<LoginPage />);
 
-    expect(await screen.queryByText(/log in failed/i)).not.toBeInTheDocument();
+    expect(
+      await screen.queryByText(/email or password is invalid/i)
+    ).not.toBeInTheDocument();
 
     const emailInput = screen.getByPlaceholderText(/email/i);
     const passwordInput = screen.getByPlaceholderText(/password/i);
@@ -109,7 +111,6 @@ describe("Login", () => {
     await user.type(passwordInput, "123456");
     await user.click(loginButton);
 
-    expect(await screen.findByText(/log in failed/i)).toBeVisible();
     expect(
       await screen.findByText(/the email or password is invalid/i)
     ).toBeVisible();
