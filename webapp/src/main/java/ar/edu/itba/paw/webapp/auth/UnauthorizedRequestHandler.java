@@ -32,5 +32,6 @@ public class UnauthorizedRequestHandler implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON);
         response.getWriter().write(String.format("{\n \"message:\" : \"%s\"\n}",messageSource.getMessage(MESSAGE_CODE,null, request.getLocale())));
+        response.setHeader("WWW-Authenticate","Bearer realm=\"Poolit\"");
     }
 }
