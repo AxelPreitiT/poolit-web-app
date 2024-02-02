@@ -13,7 +13,7 @@ a {
 }
 
 .secondary_color {
-  color: colors.$secondary-color
+  color: colors.$secondary-color;
 }
 
 .secondary_color_title {
@@ -131,15 +131,20 @@ a {
   color: colors.$danger-color;
   font-weight: 600;
   line-height: 1.2;
+  margin-top: 0.5em;
 }
 
 .shadow-btn {
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-color: transparent !important;
-  background-color: #1C4C96 !important;
+  background-color: #1c4c96 !important;
 }
 
 .shadow-btn:active {
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25) !important;
   border-color: transparent !important;
+}
+
+.error {
+  color: colors.$danger-color;
 }

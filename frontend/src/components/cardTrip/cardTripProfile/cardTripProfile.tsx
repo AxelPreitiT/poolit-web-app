@@ -6,20 +6,20 @@ import { Link } from "react-router-dom";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import useCityByUri from "@/hooks/cities/useCityByUri";
 import useCarByUri from "@/hooks/cars/useCarByUri";
-import {tripDetailsPath} from "@/AppRouter.tsx";
+import { tripDetailsPath } from "@/AppRouter.tsx";
 import getTotalTrips from "@/functions/getTotalTrips.ts";
-import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
+import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
-import {getDayString} from "@/utils/date/dayString.ts";
+import { getDayString } from "@/utils/date/dayString.ts";
 
 const CardTripProfile = (trip: TripModel) => {
   const { t } = useTranslation();
-  const {currentUser} =  useCurrentUser();
-  const isDriver = trip.driverUri==currentUser?.selfUri
+  const { currentUser } = useCurrentUser();
+  const isDriver = trip.driverUri == currentUser?.selfUri;
   const {
     isLoading: isLoadingRole,
     currentPassanger: currentPassanger,
-    isPending : isPending
+    isPending: isPending,
   } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
 
   const {
@@ -44,13 +44,22 @@ const CardTripProfile = (trip: TripModel) => {
     isCarLoading ||
     isOriginCityError ||
     isDestinationCityError ||
-    isCarError || (isLoadingRole && !isPending)) {
+    isCarError ||
+    (isLoadingRole && !isPending)
+  ) {
     return <LoadingWheel description={t("trip.loading_one")} />;
   }
 
-  const startDateTimeValue = isDriver ? trip.startDateTime : currentPassanger?.startDateTime || "";
-  const endDateTimeValue = isDriver? trip.endDateTime : currentPassanger?.endDateTime || "";
-  const totalTrips = getTotalTrips(new Date(startDateTimeValue), new Date(endDateTimeValue))
+  const startDateTimeValue = isDriver
+    ? trip.startDateTime
+    : currentPassanger?.startDateTime || "";
+  const endDateTimeValue = isDriver
+    ? trip.endDateTime
+    : currentPassanger?.endDateTime || "";
+  const totalTrips = getTotalTrips(
+    new Date(startDateTimeValue),
+    new Date(endDateTimeValue)
+  );
 
   return (
     <Link
@@ -82,9 +91,14 @@ const CardTripProfile = (trip: TripModel) => {
               {totalTrips == 1 ? (
                 <div className={styles.format_date}>
                   <span className="text">
-                    {t(`day.full.${getDayString(new Date(startDateTimeValue)).toLowerCase()}`, {
-                      plural: "s",
-                    })}
+                    {t(
+                      `day.full.${getDayString(
+                        new Date(startDateTimeValue)
+                      ).toLowerCase()}`,
+                      {
+                        plural: "s",
+                      }
+                    )}
                   </span>
                   <span className={styles.date_text}>
                     {getFormattedDateTime(startDateTimeValue).date}
@@ -93,12 +107,19 @@ const CardTripProfile = (trip: TripModel) => {
               ) : (
                 <div className={styles.format_date}>
                   <span className="text">
-                    {t(`day.full.${getDayString(new Date(startDateTimeValue)).toLowerCase()}`, {
-                    plural: "s",
-                  })}</span>
+                    {t(
+                      `day.full.${getDayString(
+                        new Date(startDateTimeValue)
+                      ).toLowerCase()}`,
+                      {
+                        plural: "s",
+                      }
+                    )}
+                  </span>
                   <span className={styles.date_text}>
                     {t("format.recurrent_date", {
-                      initial_date: getFormattedDateTime(startDateTimeValue).date,
+                      initial_date:
+                        getFormattedDateTime(startDateTimeValue).date,
                       final_date: getFormattedDateTime(endDateTimeValue).date,
                     })}
                   </span>
@@ -112,7 +133,8 @@ const CardTripProfile = (trip: TripModel) => {
             <div>
               <h2 className={styles.price_format}>
                 {t("format.price", {
-                  priceInt: trip.pricePerTrip})}
+                  priceInt: trip.pricePerTrip,
+                })}
               </h2>
             </div>
           </div>

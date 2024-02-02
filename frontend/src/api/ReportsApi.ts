@@ -10,7 +10,7 @@ import { parseTemplate } from "url-template";
 
 class ReportsApi extends AxiosApi {
   private static readonly REPORTS_PRIVATE_LIST_ACCEPT_HEADER: string =
-      "application/vnd.report.private.list.v1+json";
+    "application/vnd.report.private.list.v1+json";
   private static readonly REPORTS_PRIVATE_ACCEPT_HEADER: string =
     "application/vnd.report.private.v1+json";
 
@@ -101,7 +101,7 @@ class ReportsApi extends AxiosApi {
       reason,
       reportState,
     };
-    return this.put(uri, body, {
+    return this.patch(uri, body, {
       headers: {
         "Content-Type": ReportsApi.DECIDE_REPORT_CONTENT_TYPE,
       },

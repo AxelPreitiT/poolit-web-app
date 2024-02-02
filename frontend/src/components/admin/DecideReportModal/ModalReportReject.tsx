@@ -1,39 +1,39 @@
+import PrivateReportModel from "@/models/PrivateReportModel";
 import styles from "./styles.module.scss";
-import {Button, Modal} from "react-bootstrap";
-import {useTranslation} from "react-i18next";
+import { Form, Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import useRejectReportForm from "@/hooks/forms/useRejectReportForm";
+import ModalReportFooter from "./ModalReportFooter";
+import ReportRejectForm from "./ReportRejectForm";
 
 export interface ModalReportRejectProps {
-    closeModal: () => void;
-    reportProcessForm: React.ReactNode;
+  closeModal: () => void;
+  onSuccess: () => void;
+  report: PrivateReportModel;
 }
 
-const ModalReportReject = ({ closeModal, reportProcessForm}: ModalReportRejectProps) => {
-    const { t } = useTranslation();
+const ModalReportReject = ({
+  closeModal,
+  onSuccess,
+  report,
+}: ModalReportRejectProps) => {
+  const { t } = useTranslation();
 
-    return (
-        <div>
-            <Modal.Header>
+  const rejectReportForm = useRejectReportForm({ report, onSuccess });
 
-            <h4 className={styles.danger}>{t('admin.report.reject')}</h4>
-            <button type="button" className="btn-close" onClick={closeModal} aria-label="Close"></button>
+  const { handleSubmit, isFetching } = rejectReportForm;
 
-            </Modal.Header>
-            <Modal.Body>
-                <div>
-                    {reportProcessForm}
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary"  className="later-btn" onClick={closeModal}>
-                    {t('modal.close')}
-                </Button>
-                <Button variant="danger" className="danger-btn" onClick={closeModal}>
-                    {t('modal.submit')}
-                </Button>
-            </Modal.Footer>
-        </div>
-
-    );
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Modal.Header closeButton>
+        <h4 className={styles.danger}>{t("admin.report.reject")}</h4>
+      </Modal.Header>
+      <Modal.Body>
+        <ReportRejectForm rejectReportForm={rejectReportForm} />
+      </Modal.Body>
+      <ModalReportFooter onClose={closeModal} isFetching={isFetching} />
+    </Form>
+  );
 };
 
 export default ModalReportReject;

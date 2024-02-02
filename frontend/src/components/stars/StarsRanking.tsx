@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
 import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
+import { useTranslation } from "react-i18next";
 
 interface StarRatingProps {
   rating: number;
@@ -8,6 +9,8 @@ interface StarRatingProps {
 }
 
 const StarRating = ({ rating, className }: StarRatingProps) => {
+  const { t } = useTranslation();
+
   const renderStar = (index: number) => {
     const result = rating - (index - 1);
     const starClassName = styles.star + " " + className;
@@ -28,7 +31,11 @@ const StarRating = ({ rating, className }: StarRatingProps) => {
 
   return (
     <div className={styles.stars}>
-      {[1, 2, 3, 4, 5].map((index) => renderStar(index))}
+      {rating === 0 ? (
+        <span className={className}>{t("reviews.none")}</span>
+      ) : (
+        [1, 2, 3, 4, 5].map((index) => renderStar(index))
+      )}
     </div>
   );
 };

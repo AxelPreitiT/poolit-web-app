@@ -4,21 +4,15 @@ import StarRating from "@/components/stars/StarsRanking";
 import { useTranslation } from "react-i18next";
 import { capitalize } from "@/utils/string/capitalize";
 import reviewModel from "@/models/ReviewModel";
-
-const formatDateTime = (dateTime: string) => {
-  const [date, time] = dateTime.split("T");
-  const [year, month, day] = date.split("-");
-  const [hour, minutes] = time.split(":");
-
-  return `${day}/${month}/${year} ${hour}:${minutes}`;
-};
+import getFormattedDateTime from "@/functions/DateFormat";
 
 interface ShortReviewProps {
-    data: reviewModel;
+  data: reviewModel;
 }
 
-const ShortReview = ({data: review} : ShortReviewProps) => {
+const ShortReview = ({ data: review }: ShortReviewProps) => {
   const { t } = useTranslation();
+  const { date, time } = getFormattedDateTime(review.reviewDateTime);
 
   return (
     <div className={styles.short_review}>
@@ -32,7 +26,8 @@ const ShortReview = ({data: review} : ShortReviewProps) => {
         <StarRating rating={review.rating} className="h4" />
       </div>
       <div className={styles.date_review}>
-        <span>{formatDateTime(review.reviewDateTime)}</span>
+        <span>{date}</span>
+        <span>{time}</span>
       </div>
     </div>
   );

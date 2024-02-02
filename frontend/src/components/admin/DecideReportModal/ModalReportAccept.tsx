@@ -1,39 +1,40 @@
+import useApproveReportForm from "@/hooks/forms/useApproveReportForm";
 import styles from "./styles.module.scss";
-import {Button, Modal} from "react-bootstrap";
-import {useTranslation} from "react-i18next";
+import { Form, Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import PrivateReportModel from "@/models/PrivateReportModel";
+import ModalReportFooter from "./ModalReportFooter";
+import ReportApproveForm from "./ReportApproveForm";
 
 export interface ModalReportAcceptProps {
-    closeModal: () => void;
-    reportProcessForm: React.ReactNode;
+  onSuccess: () => void;
+  closeModal: () => void;
+  report: PrivateReportModel;
 }
 
-const ModalReportAccept = ({ closeModal, reportProcessForm}: ModalReportAcceptProps) => {
-    const { t } = useTranslation();
+const ModalReportAccept = ({
+  onSuccess,
+  closeModal,
+  report,
+}: ModalReportAcceptProps) => {
+  const { t } = useTranslation();
+  const approveReportForm = useApproveReportForm({ report, onSuccess });
 
-    return (
-        <div>
-            <Modal.Header>
+  const { handleSubmit, isFetching } = approveReportForm;
 
-            <h4 className={styles.secondary_color_title}>{t('admin.report.accept')}</h4>
-            <button type="button" className="btn-close" onClick={closeModal} aria-label="Close"></button>
-
-            </Modal.Header>
-            <Modal.Body>
-                <div>
-                    {reportProcessForm}
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" className="later-btn" onClick={closeModal}>
-                    {t('modal.close')}
-                </Button>
-                <Button variant="secondary" className="secondary-btn" onClick={closeModal}>
-                    {t('modal.submit')}
-                </Button>
-            </Modal.Footer>
-        </div>
-
-    );
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Modal.Header closeButton>
+        <h4 className={styles.secondary_color_title}>
+          {t("admin.report.accept")}
+        </h4>
+      </Modal.Header>
+      <Modal.Body>
+        <ReportApproveForm approveReportForm={approveReportForm} />
+      </Modal.Body>
+      <ModalReportFooter onClose={closeModal} isFetching={isFetching} />
+    </Form>
+  );
 };
 
 export default ModalReportAccept;

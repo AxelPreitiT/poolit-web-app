@@ -2,14 +2,11 @@ import PrivateReportModel from "@/models/PrivateReportModel";
 import { useTranslation } from "react-i18next";
 import useSuccessToast from "../toasts/useSuccessToast";
 import useQueryError from "../errors/useQueryError";
-import useForm, { SubmitHandlerReturnModel } from "./useForm";
-import {
-  DecideReportForm,
-  DecideReportFormSchema,
-  DecideReportFormSchemaType,
-} from "@/forms/DecideReportForm";
+import { SubmitHandlerReturnModel } from "./useForm";
+import { DecideReportFormSchemaType } from "@/forms/DecideReportForm";
 import ReportService from "@/services/ReportService";
 import UnknownResponseError from "@/errors/UnknownResponseError";
+import useDecideReportForm from "./useDecideReportForm";
 
 interface RejectReportFormHookProps {
   report: PrivateReportModel;
@@ -50,9 +47,8 @@ const useRejectReportForm = ({
     onErrorProp?.(error);
   };
 
-  return useForm({
-    form: DecideReportForm,
-    formSchema: DecideReportFormSchema,
+  return useDecideReportForm({
+    report,
     onSubmit,
     onSuccess,
     onError,
