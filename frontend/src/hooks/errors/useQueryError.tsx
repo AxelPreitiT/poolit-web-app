@@ -1,7 +1,6 @@
 import QueryError from "@/errors/QueryError";
 import useErrorToast from "../toasts/useErrorToast";
 import { useTranslation } from "react-i18next";
-import ResponseError from "@/errors/ResponseError";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import BadRequestResponseError from "@/errors/BadRequestResponseError";
 import BadRequestModal from "@/components/forms/BadRequestModal/BadRequestModal";
@@ -36,15 +35,9 @@ const useQueryError = () => {
     customMessages?: Record<string, string>
   ) => {
     const errorId = error.getErrorId();
-    return (
-      (customMessages?.[errorId]
-        ? t(customMessages[errorId])
-        : t(error.getI18nKey())) +
-      (error instanceof ResponseError &&
-      !(error instanceof UnknownResponseError)
-        ? ` (${error.getStatusCode()} - ${error.getStatusText()})`
-        : "")
-    );
+    return customMessages?.[errorId]
+      ? t(customMessages[errorId])
+      : t(error.getI18nKey());
   };
 
   const getChildren = (error: QueryError) => {
