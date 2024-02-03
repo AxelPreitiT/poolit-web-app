@@ -198,8 +198,7 @@ class TripsApi extends AxiosApi {
       parseObj.maxPrice = search.max_price;
     }
     if (search.multitrip && search.last_date) {
-      const lastDate = new Date(getIsoDate(search.last_date));
-      parseObj.endDateTime = formatDateTime(lastDate, search.time);
+      parseObj.endDateTime = formatDateTime(search.last_date, search.time);
     }
     if (search.car_features && search.car_features.length > 0) {
       parseObj.carFeatures = search.car_features;
