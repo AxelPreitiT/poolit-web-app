@@ -211,7 +211,6 @@ class TripsApi extends AxiosApi {
       parseObj.descending = sortOptions.descending;
     }
     const uri = parseTemplate(uriTemplate).expand(parseObj);
-    console.log("uri", uri.toString());
     return this.get<TripModel[]>(uri.toString(), {
       headers: {
         Accept: TripsApi.TRIPS_LIST_TYPE,
