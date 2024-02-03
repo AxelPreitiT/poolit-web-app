@@ -3,7 +3,7 @@ import BaseMock from "@/__test__/mocks/BaseMock.ts";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import userDriverModel from "@/models/UserDriverModel.ts";
 
-const privateUser: userPrivateModel = {
+const privateUserRoleUser: userPrivateModel = {
     "driverRating": 3.0,
     "imageUri": "http://localhost:8080/paw-2023a-07/api/users/50/image",
     "passengerRating": 0.0,
@@ -28,7 +28,61 @@ const privateUser: userPrivateModel = {
     "reportsPublished": 1,
     "reportsReceived": 0,
     "reportsRejected": 1,
-    "role": "DRIVER"
+    "role": "USER"
+}
+const privateUserRoleDriver: userPrivateModel = {
+    driverRating: 3.0,
+    imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
+    passengerRating: 0.0,
+    reviewsDriverUri: "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
+    reviewsPassengerUri: "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
+    selfUri: "http://localhost:8080/paw-2023a-07/api/users/50",
+    surname: "Mentasti",
+    tripCount: 4,
+    userId: 50,
+    username: "Jose Rodolfo",
+    email: "jmentasti+testapi@itba.edu.ar",
+    phone: "1139150686",
+    carsUri: "http://localhost:8080/paw-2023a-07/api/cars?fromUser=50",
+    cityUri: "http://localhost:8080/paw-2023a-07/api/cities/5",
+    futureCreatedTripsUri: "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=false",
+    futureReservedTripsUri: "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=false",
+    mailLocale: "en",
+    pastCreatedTripsUri: "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=true",
+    pastReservedTripsUri: "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=true",
+    recommendedTripsUri: "http://localhost:8080/paw-2023a-07/api/trips?recommendedFor=50",
+    reportsApproved: 0,
+    reportsPublished: 1,
+    reportsReceived: 0,
+    reportsRejected: 1,
+    role: "DRIVER"
+}
+const privateUserRoleAdmin: userPrivateModel = {
+    "driverRating": 3.0,
+    "imageUri": "http://localhost:8080/paw-2023a-07/api/users/50/image",
+    "passengerRating": 0.0,
+    "reviewsDriverUri": "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
+    "reviewsPassengerUri": "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
+    "selfUri": "http://localhost:8080/paw-2023a-07/api/users/50",
+    "surname": "Mentasti",
+    "tripCount": 4,
+    "userId": 50,
+    "username": "Jose Rodolfo",
+    "email": "jmentasti+testapi@itba.edu.ar",
+    "phone": "1139150686",
+    "carsUri": "http://localhost:8080/paw-2023a-07/api/cars?fromUser=50",
+    "cityUri": "http://localhost:8080/paw-2023a-07/api/cities/5",
+    "futureCreatedTripsUri": "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=false",
+    "futureReservedTripsUri": "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=false",
+    "mailLocale": "en",
+    "pastCreatedTripsUri": "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=true",
+    "pastReservedTripsUri": "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=true",
+    "recommendedTripsUri": "http://localhost:8080/paw-2023a-07/api/trips?recommendedFor=50",
+    "reportsApproved": 0,
+    "reportsPublished": 1,
+    "reportsReceived": 0,
+    "reportsRejected": 1,
+    "role": "ADMIN"
 }
 
 const publicUser: userPublicModel ={
@@ -60,25 +114,40 @@ const driverUser: userDriverModel = {
 }
 
 class UserMock extends BaseMock{
-    public static getByIdPrivate(){
-        return this.get("/users/:userId",()=>{
-            this.jsonResponse(privateUser,{status:this.OK_STATUS})
+    public static getByIdPrivateRoleAdmin(){
+        return this.get(this.getPath("/users/:userId"),()=>{
+            this.jsonResponse(privateUserRoleAdmin,{status:this.OK_STATUS})
         })
     }
+    public static getByIdPrivateRoleUser(){
+        return this.get(this.getPath("/users/:userId"),()=>{
+            this.jsonResponse(privateUserRoleUser,{status:this.OK_STATUS})
+        })
+    }
+    public static optionsMock(){
+        return this.options(this.getPath("/users/:userId"),() =>
+            this.plainResponse({status:this.OK_STATUS})
+        )
+    }
+    public static getByIdPrivateRoleDriver(){
+        return this.get(this.getPath("/users/:userId"),() =>
+            this.jsonResponse(privateUserRoleDriver,{status:this.OK_STATUS})
+        )
+    }
     public static getByIdPublic(){
-        return this.get("/users/:userId",()=>{
+        return this.get(this.getPath("/users/:userId"),()=>{
             this.jsonResponse(publicUser,{status:this.OK_STATUS})
         })
     }
 
     public static getByIdDriver(){
-        return this.get("/users/:userId",()=>{
+        return this.get(this.getPath("/users/:userId"),()=>{
             this.jsonResponse(driverUser,{status:this.OK_STATUS})
         })
     }
 
     public static getEmptyUserImage(){
-        return this.get("/users/:userId/image",()=>{
+        return this.get(this.getPath("/users/:userId/image"),()=>{
             this.plainResponse({status:this.NO_CONTENT_STATUS})
         })
     }

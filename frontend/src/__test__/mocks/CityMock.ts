@@ -252,12 +252,12 @@ const city: cityModel = {
 
 class CityMock extends BaseMock{
     public static getAllCities(){
-        return this.get('/cities',()=>{
+        return this.get(this.getPath('/cities'),()=>{
             this.jsonResponse(cityList,{status:this.OK_STATUS})
         })
     }
     public static getCity(){
-        return this.get("/cities/:cityId",()=>{
+        return this.get(this.getPath("/cities/:cityId"),()=>{
             this.jsonResponse(city,{status:this.OK_STATUS})
         })
     }
