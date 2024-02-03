@@ -1,11 +1,6 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Objects;
 
 @Entity
 @Table(name = "images")

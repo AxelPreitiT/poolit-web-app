@@ -11,8 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-//import java.util.Collections;
 
 @Component
 public class BasicAuthFilter extends OncePerRequestFilter {
@@ -48,14 +45,12 @@ public class BasicAuthFilter extends OncePerRequestFilter {
     public static final String VERIFICATION_HEADER = "Account-verification";
 
     private final AuthenticationEntryPoint authenticationEntryPoint;
-//    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public BasicAuthFilter(final JwtUtils jwtUtils, final UserService userService, final AuthenticationManager authenticationManager, final AuthenticationEntryPoint authenticationEntryPoint/*, final UserDetailsService userDetailsService*/){
+    public BasicAuthFilter(final JwtUtils jwtUtils, final UserService userService, final AuthenticationManager authenticationManager, final AuthenticationEntryPoint authenticationEntryPoint){
         this.jwtUtils = jwtUtils;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
-//        this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
     @Override
@@ -79,11 +74,6 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 //No está habilitado, intentamos confirmar el registro con el token
                 userService.confirmRegister(credentials[PASSWORD_INDEX],user);
                 //Logueamos al usuario
-//                final UserDetails userDetails = userDetailsService.loadUserByUsername(credentials[EMAIL_INDEX]);
-//                final Authentication authentication = new UsernamePasswordAuthenticationToken(
-//                                user.getEmail(),user.getPassword(),
-//                                userDetails == null ? Collections.emptyList() : userDetails.getAuthorities());
-//                final Authentication authentication = new EmailAuthenticationToken(credentials[EMAIL_INDEX]);
                 final Authentication authentication = authenticationManager.authenticate(new EmailAuthenticationToken(credentials[EMAIL_INDEX]));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

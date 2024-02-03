@@ -10,7 +10,6 @@ import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.PassengersQuery;
-import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripQuery;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripsQuery;
 import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
@@ -88,7 +87,7 @@ public class TripController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Produces(value = VndType.APPLICATION_TRIP_EARNINGS)
     @PreAuthorize("@authValidator.checkIfUserIsTripCreator(#id)")
     public Response getByIdEarnings(@PathParam("id") final long id) throws TripNotFoundException {
@@ -97,25 +96,16 @@ public class TripController {
         return Response.ok(TripEarningsDto.fromTripEarnings(ans)).build();
     }
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(value = VndType.APPLICATION_TRIP)
-    //Todos pueden buscar al viaje en cualquier intervalo (para anotarse por ejemplo), pero no pueden buscar a los pasajeros
-    public Response getById(@PathParam("id") final long id,
-                            @Valid @BeanParam final TripQuery query) {
-        final Trip trip;
-        //TODO: no poder hacer mas filtrado por fechas
-//        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
-//            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
-//            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
-//        }else {
-            LOGGER.debug("GET request for trip with id {}",id);
-            trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
-//        }
+    public Response getById(@PathParam("id") final long id) {
+        LOGGER.debug("GET request for trip with id {}",id);
+        final Trip trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     public Response deleteTrip(@PathParam("id") final long id) throws TripNotFoundException {
         LOGGER.debug("DELETE request for trip with id {}",id);
         tripService.deleteTrip(id);
@@ -123,7 +113,7 @@ public class TripController {
     }
 
     @GET
-    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @Path("/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS)
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER_SEAT_COUNT)
     public Response getTripSeatCount(@PathParam("id") final long id,
                                      @QueryParam("startDateTime") final LocalDateTime startDateTime,
@@ -134,7 +124,7 @@ public class TripController {
     }
 
     @GET
-    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @Path("/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS)
     @PreAuthorize("@authValidator.checkIfUserCanSearchPassengers(#id,#passengersQuery.startDateTime,#passengersQuery.endDateTime,#passengersQuery.passengerState)")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER_LIST)
     public Response getPassengers(@PathParam("id") final long id,
@@ -145,7 +135,7 @@ public class TripController {
     }
 
     @POST
-    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS)
+    @Path("/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS)
     @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER)
     public Response addPassenger(@PathParam("id") final long id, @Valid AddPassengerDto dto) throws UserNotFoundException, TripAlreadyStartedException, TripNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("POST request to add passenger for trip {}",id);
@@ -156,7 +146,7 @@ public class TripController {
     }
 
     @GET
-    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+    @Path("/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS+"/{userId:\\d+}")
     @Produces(value = VndType.APPLICATION_TRIP_PASSENGER)
     //si no ver como limitar el estado para los otros
     public Response getPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId) throws UserNotFoundException {
@@ -167,7 +157,7 @@ public class TripController {
 
 //    https://www.rfc-editor.org/rfc/rfc5789
     @PATCH
-    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+    @Path("/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS+"/{userId:\\d+}")
     @Consumes(value = VndType.APPLICATION_TRIP_PASSENGER_STATE)
     public Response acceptOrRejectPassenger(@PathParam("id") final long id, @PathParam("userId") final long userId, @Valid PatchPassengerDto dto) throws UserNotFoundException, PassengerAlreadyProcessedException, PassengerNotFoundException, NotAvailableSeatsException {
         LOGGER.debug("PATCH request to passenger {} from trip {}",userId,id);
@@ -176,7 +166,7 @@ public class TripController {
     }
 
     @DELETE
-    @Path("/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+    @Path("/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS+"/{userId:\\d+}")
     public Response cancelTrip(@PathParam("id") final long id,@PathParam("userId") final long userId) throws UserNotFoundException, TripNotFoundException, PassengerNotFoundException {
         LOGGER.debug("DELETE request to passenger {} from trip {}",userId,id);
         tripService.removePassenger(id,userId);

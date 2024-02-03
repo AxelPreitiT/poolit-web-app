@@ -54,7 +54,7 @@ public class ReportController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
     public Response getByIdPublic(@PathParam("id") final long id) {
         LOGGER.debug("GET request for public report with id {}",id);
@@ -63,7 +63,7 @@ public class ReportController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
     @PreAuthorize("hasRole('ADMIN')")
     public Response getByIdPrivate(@PathParam("id") final long id){
@@ -101,7 +101,7 @@ public class ReportController {
 
     @PATCH
     @Consumes(value = VndType.APPLICATION_REPORT_DECISION)
-    @Path("{id}")
+    @Path("{id:\\d+}")
     public Response acceptOrRejectReport(@PathParam("id") final long id,
                                          @Valid final DecideReportDto decideReportDto) throws UserNotFoundException, PassengerNotFoundException, ReportAlreadyProcessedException, TripNotFoundException, ReportNotFoundException {
         LOGGER.debug("PATCH request to accept or reject report {}",id);

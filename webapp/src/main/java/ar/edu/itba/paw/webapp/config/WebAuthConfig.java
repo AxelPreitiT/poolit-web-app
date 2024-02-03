@@ -103,33 +103,33 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 //--------Users--------
                 //Modify user
-                .antMatchers(HttpMethod.PATCH,UrlHolder.USER_BASE+"/{id}")
+                .antMatchers(HttpMethod.PATCH,UrlHolder.USER_BASE+"/{id:\\d+}")
                     .access("@authValidator.checkIfWantedIsSelf(#id)")
                 //Modify image
-                .antMatchers(HttpMethod.PUT,UrlHolder.USER_BASE+"/{id}/image")
+                .antMatchers(HttpMethod.PUT,UrlHolder.USER_BASE+"/{id:\\d+}/image")
                     .access("@authValidator.checkIfWantedIsSelf(#id)")
                 //--------Trips--------
                 //Create trip
                 .antMatchers(HttpMethod.POST,UrlHolder.TRIPS_BASE)
                     .hasRole(UserRole.DRIVER.getText())
                 //Delete trip
-                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}")
+                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id:\\d+}")
                     .access("@authValidator.checkIfUserIsTripCreator(#id)")//if it's not a driver, then it fails
                 //Add passenger
-                .antMatchers(HttpMethod.POST,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS)
+                .antMatchers(HttpMethod.POST,UrlHolder.TRIPS_BASE+"/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS)
                     .authenticated()
                 //Get single passenger
-                .antMatchers(HttpMethod.GET,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                .antMatchers(HttpMethod.GET,UrlHolder.TRIPS_BASE+"/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS+"/{userId:\\d+}")
                     .access("@authValidator.checkIfUserIsTripCreator(#id) or @authValidator.checkIfWantedIsSelf(#userId)")
                 //Accept or reject passenger
-                .antMatchers(HttpMethod.PATCH,UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                .antMatchers(HttpMethod.PATCH,UrlHolder.TRIPS_BASE+"/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS+"/{userId:\\d+}")
                     .access("@authValidator.checkIfUserIsTripCreator(#id)")
                 //Cancel trip as passenger
-                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id}"+UrlHolder.TRIPS_PASSENGERS+"/{userId}")
+                .antMatchers(HttpMethod.DELETE, UrlHolder.TRIPS_BASE+"/{id:\\d+}"+UrlHolder.TRIPS_PASSENGERS+"/{userId:\\d+}")
                     .access("@authValidator.checkIfWantedIsSelf(#userId)")
                 //--------Reports--------
                 //Accept or reject report
-                .antMatchers(HttpMethod.PATCH,UrlHolder.REPORT_BASE+"/{id}")
+                .antMatchers(HttpMethod.PATCH,UrlHolder.REPORT_BASE+"/{id:\\d+}")
                     .hasRole(UserRole.ADMIN.getText())
                 .antMatchers(UrlHolder.REPORT_BASE+"/**")
                     .authenticated()
@@ -142,7 +142,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 //--------Cars--------
                 .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE)
                     .hasRole(UserRole.DRIVER.getText())
-                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE+"/{id}"+UrlHolder.REVIEWS_ENTITY+"/**")
+                .antMatchers(HttpMethod.POST,UrlHolder.CAR_BASE+"/{id:\\d+}"+UrlHolder.REVIEWS_ENTITY+"/**")
                     .authenticated()
                 //--------Cities, Car brands, Car features, Base, others--------
                 .antMatchers(UrlHolder.BASE+"/**")
@@ -151,19 +151,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .accessDeniedHandler(forbiddenRequestHandler)
                     .authenticationEntryPoint(unauthorizedRequestHandler)
                 .and().authorizeRequests()
-//                    .antMatchers("/api/users/{id}").authenticated()
-//                .antMatchers("/api/users/{id}").access("@authValidator.checkIfWantedIsSelf(request,#id)")
-                    //.antMatchers("/admin", "/admin/*").hasRole(UserRole.ADMIN.getText())
-                    //.antMatchers("/users/login", "/users/create", "/users/sendToken").anonymous()
-                    //.antMatchers("/trips/{id:\\d+$}/delete").access("@authValidator.checkIfUserIsTripCreator(request)")
-                    //.antMatchers("/cars/{id:\\d+$}").permitAll()
-                    //.antMatchers("/changeRole").hasRole(UserRole.USER.getText())
-                    //.antMatchers("/trips/create", "/cars/**", "/users/created, /trips/created/**").hasRole(UserRole.DRIVER.getText())
-                    //.antMatchers("/trips/reserved/**").authenticated()
-                    //.antMatchers("/trips", "/trips/", "/trips/{id:\\d+$}").permitAll()
-                    //.antMatchers(  "/users/**", "/trips/{id:\\d+$}/join", "/trips/{id:\\d+$}/cancel", "/trips/{id:\\d+$}/review").authenticated()
                     .antMatchers("/**").permitAll()
-//                    .accessDeniedPage("/static/403")
                 .and().cors()
                 .and().csrf().disable()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

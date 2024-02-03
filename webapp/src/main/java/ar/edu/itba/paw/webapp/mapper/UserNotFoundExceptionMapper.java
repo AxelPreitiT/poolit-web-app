@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.mapper;
 
 import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.webapp.mapper.utils.AbstractExceptionMapper;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 
 import javax.ws.rs.ext.Provider;

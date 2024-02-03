@@ -19,7 +19,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Path(UrlHolder.CAR_BRAND_BASE)
@@ -54,9 +53,6 @@ public class CarBrandController {
     public Response getCarBrand(@PathParam("id") final String id){
         LOGGER.debug("GET request for car brand with id {}",id);
         CarBrand ans = carBrandService.findById(id).orElseThrow(ResourceNotFoundException::new);
-//        if(!ans.isPresent()){
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
         Response.ResponseBuilder res = Response.ok(CarBrandDto.fromCarBrand(uriInfo,ans));
         return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }

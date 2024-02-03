@@ -10,7 +10,6 @@ public class ValidationErrorDto {
     public static ValidationErrorDto fromValidationException(final ConstraintViolation<?> violation){
         final ValidationErrorDto dto = new ValidationErrorDto();
         dto.message = violation.getMessage();
-//        dto.message = violation.getMessageTemplate();
         final String path = violation.getPropertyPath().toString();
         if(path.lastIndexOf('.')!=path.indexOf('.')){
             //Not a class level validation (path is "class.arg0.field"), its a field validation

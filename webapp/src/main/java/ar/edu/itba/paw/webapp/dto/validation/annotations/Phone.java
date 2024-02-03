@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.dto.validation.annotations;
 
-import ar.edu.itba.paw.webapp.dto.validation.constraints.EmailValidator;
 import ar.edu.itba.paw.webapp.dto.validation.constraints.PhoneValidator;
 
 import javax.validation.Constraint;

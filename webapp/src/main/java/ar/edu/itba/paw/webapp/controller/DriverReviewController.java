@@ -50,7 +50,7 @@ public class DriverReviewController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
     public Response getReview(@PathParam("id") final long id){
         LOGGER.debug("GET request for passenger review with id {}",id);

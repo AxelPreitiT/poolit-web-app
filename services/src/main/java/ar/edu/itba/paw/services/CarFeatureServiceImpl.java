@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.services.CarFeatureService;
-import ar.edu.itba.paw.models.CarBrand;
 import ar.edu.itba.paw.models.FeatureCar;
 import org.springframework.stereotype.Service;
 

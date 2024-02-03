@@ -9,7 +9,6 @@ import ar.edu.itba.paw.models.reports.ReportState;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 public interface ReportDao {

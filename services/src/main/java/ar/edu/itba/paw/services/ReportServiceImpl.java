@@ -126,16 +126,12 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
-//    @Transactional
-//    @Override
     private void rejectReport(long reportId, String reason) throws ReportNotFoundException {
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
         reportDao.resolveReport(reportId, reason, ReportState.REJECTED);
         emailService.sendMailRejectReport(report);
     }
 
-//    @Transactional
-//    @Override
     private void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException {
         reportDao.resolveReport(reportId, reason, ReportState.APPROVED);
         Report report = reportDao.findById(reportId).orElseThrow(ReportNotFoundException::new);
@@ -172,46 +168,6 @@ public class ReportServiceImpl implements ReportService {
         return PagedContent.fromOptional(ans);
     }
 
-//    @Transactional
-//    @Override
-//    public TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException {
-//        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-//        User currentUser = userService.getCurrentUser().orElseThrow(UserNotLoggedInException::new);
-//        ItemReport<User> driverToReport;
-//        List<ItemReport<Passenger>> passengersToReport;
-//        if(tripService.userIsDriver(tripId, currentUser)) {
-//            driverToReport = null;
-//            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, trip.getStartDateTime(), trip.getEndDateTime());
-//            passengersToReport = passengers.stream().filter(
-//                    passenger -> !passenger.getUser().equals(currentUser)
-//            ).map(
-//                    passenger -> new ItemReport<>(passenger, ReportRelations.DRIVER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
-//            ).sorted(
-//                    Comparator.comparing(ItemReport::getState)
-//            ).collect(Collectors.toList());
-//        }
-//        else if(tripService.userIsPassenger(tripId, currentUser)) {
-//            Passenger currentPassenger = tripService.getPassenger(tripId, currentUser).orElseThrow(PassengerNotFoundException::new);
-//            if(!currentPassenger.getAccepted()) {
-//                return TripReportCollection.empty();
-//            }
-//            driverToReport = new ItemReport<>(trip.getDriver(), ReportRelations.PASSENGER_2_DRIVER, getDriverReportState(trip, currentPassenger));
-//            List<Passenger> passengers = tripService.getAcceptedPassengers(trip, currentPassenger.getStartDateTime(), currentPassenger.getEndDateTime());
-//            passengersToReport = passengers.stream().filter(
-//                    passenger -> !passenger.getUser().equals(currentUser)
-//            ).map(
-//                    passenger -> new ItemReport<>(passenger, ReportRelations.PASSENGER_2_PASSENGER, getPassengerReportState(trip, currentUser, passenger))
-//            ).sorted(
-//                    Comparator.comparing(ItemReport::getState)
-//            ).collect(Collectors.toList());
-//        }
-//        else {
-//            IllegalStateException e = new IllegalStateException();
-//            LOGGER.error("The user with id {} is not passenger neither the driver of the trip with id {}", currentUser.getUserId(), tripId);
-//            throw e;
-//        }
-//        return new TripReportCollection(driverToReport, passengersToReport);
-//    }
 
     @Transactional
     @Override
@@ -226,34 +182,5 @@ public class ReportServiceImpl implements ReportService {
         final Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
         return reportDao.getReportsMadeByUserOnTrip(reporter,trip,page,pageSize);
     }
-
-
-
-
-    //TODO: delete
-//    private ReportState getDriverReportState(Trip trip, Passenger reporter) {
-//        LocalDateTime now = LocalDateTime.now();
-//        if(reporter.getStartDateTime().isAfter(now)) {
-//            return ReportState.DISABLED;
-//        }
-//        Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), trip.getDriver().getUserId());
-//        if(!maybeReport.isPresent()) {
-//            return ReportState.AVAILABLE;
-//        }
-//        return maybeReport.get().getStatus();
-//    }
-
-//    private ReportState getPassengerReportState(Trip trip, User reporter, Passenger reported) {
-//        LocalDateTime now = LocalDateTime.now();
-//        if(reported.getStartDateTime().isAfter(now)) {
-//            return ReportState.DISABLED;
-//        }
-//        Optional<Report> maybeReport = getReportByTripAndUsers(trip.getTripId(), reporter.getUserId(), reported.getUserId());
-//        if (!maybeReport.isPresent()) {
-//            return ReportState.AVAILABLE;
-//        }
-//        return maybeReport.get().getStatus();
-//    }
-
 
 }
