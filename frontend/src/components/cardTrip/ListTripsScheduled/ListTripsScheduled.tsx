@@ -18,7 +18,6 @@ export interface ListTripsScheduledProps {
 const ListTripsScheduled = ({
   uri,
   empty_component,
-  current_page,
   useExtraData,
 }: ListTripsScheduledProps) => {
   const { t } = useTranslation();
@@ -29,7 +28,6 @@ const ListTripsScheduled = ({
         CardComponent={CardTripScheduled}
         useExtraData={useExtraData}
         uri={uri}
-        current_page={current_page}
         useFuction={useTripsByUri}
         empty_component={empty_component}
         itemsName={t("trip.title")}

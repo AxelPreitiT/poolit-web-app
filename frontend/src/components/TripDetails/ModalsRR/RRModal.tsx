@@ -90,7 +90,6 @@ const RRModal = ({
               CardComponent={PassangerReportReviewComponent}
               extraData={{ reporting, openModalMake }}
               uri={createPaginationUri(uri, INITIALPAGE, PASSANGERPAGESIZE)}
-              current_page={INITIALPAGE}
               useFuction={usePassangerByUri}
               empty_component={
                 <div className={styles.review_empty_container}>

@@ -22,7 +22,6 @@ const CardTripScheduled = ({
 }: CardTripScheduledProps) => {
   const { t } = useTranslation();
   const extraData = useExtraData(trip);
-  console.log("extraData", extraData);
   const { startDate: start, endDate: end } = extraData || {
     startDate: trip.startDateTime,
     endDate: trip.endDateTime,

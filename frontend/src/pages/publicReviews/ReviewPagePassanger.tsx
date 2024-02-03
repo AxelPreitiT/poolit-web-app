@@ -75,7 +75,6 @@ const ReviewPageDriver = () => {
                 currentPage,
                 REVIEWPAGESIZE
               )}
-              current_page={currentPage}
               useFuction={useUserReviewsByUri}
               empty_component={
                 <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />

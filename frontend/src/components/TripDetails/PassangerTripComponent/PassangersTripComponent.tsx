@@ -107,7 +107,6 @@ const PassangersTripComponent = ({
             PASSANGERPAGESIZE,
             selectedOption === PassangerStatus.ALL
           )}
-          current_page={currentPage}
           useFuction={usePassangerByUri}
           empty_component={
             <div className={styles.review_empty_container}>
