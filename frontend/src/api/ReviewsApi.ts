@@ -5,15 +5,19 @@ import ReviewModel from "@/models/ReviewModel";
 
 class ReviewsApi extends AxiosApi {
   private static readonly DRIVER_REVIEW_LIST_TYPE =
-      "application/vnd.driver-review.list.v1+json";
+    "application/vnd.driver-review.list.v1+json";
   private static readonly PASSENGER_REVIEW_LIST_TYPE =
-      "application/vnd.passenger-review.list.v1+json";
+    "application/vnd.passenger-review.list.v1+json";
+
   public static getReviewsByUser: (
     uri: string
   ) => AxiosPromise<PaginationModel<ReviewModel>> = (uri: string) => {
     return this.get<ReviewModel[]>(uri, {
       headers: {
-        Accept:[ReviewsApi.DRIVER_REVIEW_LIST_TYPE,ReviewsApi.PASSENGER_REVIEW_LIST_TYPE],
+        Accept: [
+          ReviewsApi.DRIVER_REVIEW_LIST_TYPE,
+          ReviewsApi.PASSENGER_REVIEW_LIST_TYPE,
+        ],
       },
     }).then((response: AxiosResponse<ReviewModel[]>) => {
       const reviews = response.data;

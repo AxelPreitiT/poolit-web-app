@@ -14,15 +14,25 @@ import ConflictResponseError from "@/errors/ConflictResponseError";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import useQueryError from "../errors/useQueryError";
 import QueryError from "@/errors/QueryError";
+import useDiscovery from "../discovery/useDiscovery";
+import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 
 const useRegisterForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { discovery, isError: isDiscoveryError } = useDiscovery();
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
 
-  const onSubmit: SubmitHandlerReturnModel<RegisterFormSchemaType, void> =
-    UserService.register;
+  const onSubmit: SubmitHandlerReturnModel<
+    RegisterFormSchemaType,
+    void
+  > = async (data: RegisterFormSchemaType) => {
+    if (!discovery || isDiscoveryError) {
+      throw new DiscoveryMissingError();
+    }
+    return await UserService.register(discovery.usersUriTemplate, data);
+  };
 
   const onSuccess = () => {
     showSuccessToast({

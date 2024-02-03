@@ -14,13 +14,10 @@ import { parseTemplate } from "url-template";
 import UsersRoles from "@/enums/UsersRoles";
 
 class UsersApi extends AxiosApi {
-  private static readonly USERS_BASE_URI: string = "/users";
   private static readonly USERS_PUBLIC_ACCEPT_HEADER: string =
     "application/vnd.user.public.v1+json";
   private static readonly USERS_PRIVATE_ACCEPT_HEADER: string =
     "application/vnd.user.private.v1+json";
-  private static readonly USERS_DRIVER_ACCEPT_HEADER: string =
-    "application/vnd.user.driver.v1+json";
   private static readonly USERS_CONTENT_TYPE_HEADER: string =
     "application/vnd.user.v1+json";
   private static readonly DRIVER_CONTENT_TYPE_HEADER: string =
@@ -54,19 +51,23 @@ class UsersApi extends AxiosApi {
   };
 
   public static createUser: (
+    uriTemplate: string,
     registerForm: RegisterFormSchemaType
-  ) => AxiosPromise<RegisterModel> = ({
-    email,
-    password,
-    name,
-    last_name,
-    locale,
-    telephone,
-    city,
-  }: RegisterFormSchemaType) => {
-    // Todo: Concat /users
+  ) => AxiosPromise<RegisterModel> = (
+    uriTemplate: string,
+    {
+      email,
+      password,
+      name,
+      last_name,
+      locale,
+      telephone,
+      city,
+    }: RegisterFormSchemaType
+  ) => {
+    const uri = parseTemplate(uriTemplate).expand({});
     return this.post(
-      UsersApi.USERS_BASE_URI,
+      uri,
       {
         email,
         password,
@@ -128,15 +129,6 @@ class UsersApi extends AxiosApi {
       },
     });
   };
-
-  public static getDriverUser: (uri: string) => AxiosPromise<UserDriverModel> =
-    (uri: string) => {
-      return this.get<UserDriverModel>(uri, {
-        headers: {
-          Accept: UsersApi.USERS_DRIVER_ACCEPT_HEADER,
-        },
-      });
-    };
 
   public static getCurrentUser: () => AxiosPromise<UserPrivateModel> = () => {
     const jwtClaims = Jwt.getJwtClaims();

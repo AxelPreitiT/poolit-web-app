@@ -21,8 +21,11 @@ class UserService extends Service {
     await this.resolveQuery(UsersApi.verifyAccount(email, token));
   };
 
-  public static register = async (registerForm: RegisterFormSchemaType) => {
-    await this.resolveQuery(UsersApi.createUser(registerForm));
+  public static register = async (
+    uriTemplate: string,
+    registerForm: RegisterFormSchemaType
+  ) => {
+    await this.resolveQuery(UsersApi.createUser(uriTemplate, registerForm));
   };
 
   public static getCurrentUser = async (): Promise<UserPrivateModel> =>
@@ -31,7 +34,7 @@ class UserService extends Service {
   public static getDriverUser = async (uri: string): Promise<UserDriverModel> =>
     await this.resolveQuery(UsersApi.getDriverByUri(uri));
 
-  public static getUserById = async (uri: string): Promise<UserPublicModel> =>
+  public static getUserByUri = async (uri: string): Promise<UserPublicModel> =>
     await this.resolveQuery(UsersApi.getPublicUser(uri));
 
   private static updateUserImage = async (uri: string, image: File) => {
@@ -53,11 +56,6 @@ class UserService extends Service {
     uri: string
   ): Promise<UserPrivateModel> =>
     await this.resolveQuery(UsersApi.getPrivateUser(uri));
-
-  public static getDriverUserByUri = async (
-    uri: string
-  ): Promise<UserDriverModel> =>
-    await this.resolveQuery(UsersApi.getDriverUser(uri));
 
   public static updateUserRoleToDriver = async (
     uriTemplate: string,

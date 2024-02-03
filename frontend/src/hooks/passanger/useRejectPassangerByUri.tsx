@@ -23,7 +23,6 @@ const useRejectPassangerByUri = () => {
     },
     onSuccess: () => {
       invalidatePassangersState();
-      console.log("passenger accepted");
     },
   });
 
