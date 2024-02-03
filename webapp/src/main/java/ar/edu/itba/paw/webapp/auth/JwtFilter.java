@@ -30,17 +30,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     final JwtUtils jwtUtils;
 
-//    final UserDetailsService userDetailsService;
-
     final UserService userService;
 
     final AuthenticationEntryPoint authenticationEntryPoint;
 
     final AuthenticationManager authenticationManager;
 
-    public JwtFilter(final JwtUtils jwtUtils, /*final UserDetailsService userDetailsService, */final UserService userService, final AuthenticationEntryPoint authenticationEntryPoint, final AuthenticationManager authenticationManager){
+    public JwtFilter(final JwtUtils jwtUtils, final UserService userService, final AuthenticationEntryPoint authenticationEntryPoint, final AuthenticationManager authenticationManager){
         this.jwtUtils = jwtUtils;
-//        this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.authenticationManager = authenticationManager;
@@ -88,36 +85,6 @@ public class JwtFilter extends OncePerRequestFilter {
             header = "Bearer " +  jwtUtils.createToken(user.get(),baseUrl);
             httpServletResponse.setHeader(BasicAuthFilter.JWT_HEADER,header);
         }
-//        UserDetails userDetails;
-//        try {
-//            userDetails = userDetailsService.loadUserByUsername(jwtUtils.getEmail(token));
-//        }catch (AuthenticationException e){
-//            authenticationEntryPoint.commence(httpServletRequest,httpServletResponse,e);
-//            return;
-//        }
-
-
-//        if(userDetails != null && jwtUtils.isRefreshToken(token)){
-////            The token is a refresh token
-//            final Optional<User> user = userService.findByEmail(userDetails.getUsername());
-//            if(!user.isPresent()){
-//                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//                return;
-//            }
-//            final String baseUrl = httpServletRequest.getScheme()+"://"+httpServletRequest.getServerName()+":"+httpServletRequest.getServerPort()+httpServletRequest.getContextPath();
-//            header = "Bearer " +  jwtUtils.createToken(user.get(),baseUrl);
-//            httpServletResponse.setHeader(BasicAuthFilter.JWT_HEADER,header);
-//        }
-
-//        Initialize principal with UserDetails
-//        final UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(
-//                userDetails,null,
-//                userDetails == null ? Collections.emptyList() : userDetails.getAuthorities()
-//        );
-//
-//        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-//        authenticationManager.authenticate(authenticationToken);
-//        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 }

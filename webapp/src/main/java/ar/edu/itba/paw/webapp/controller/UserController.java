@@ -110,7 +110,6 @@ public class UserController {
         LOGGER.debug("GET request for image of user with userId {}",id);
         final Image image = userService.getUserImage(id,query.getImageSize());
         return ControllerUtils.getConditionalCacheResponse(request,image.getData(query.getImageSize()), image.getImageId());
-//        return Response.ok(image).build();
     }
 
     @PUT

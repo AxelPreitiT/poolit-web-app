@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Arrays;
 import java.util.Optional;
 
 public class NotSamePlateValidator implements ConstraintValidator<NotSamePlate,String> {

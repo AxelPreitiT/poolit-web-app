@@ -10,7 +10,6 @@ import ar.edu.itba.paw.webapp.controller.mediaType.VndType;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.PassengersQuery;
-import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripQuery;
 import ar.edu.itba.paw.webapp.controller.utils.queryBeans.TripsQuery;
 import ar.edu.itba.paw.webapp.dto.input.AddPassengerDto;
 import ar.edu.itba.paw.webapp.dto.input.CreateTripDto;
@@ -99,18 +98,9 @@ public class TripController {
     @GET
     @Path("/{id:\\d+}")
     @Produces(value = VndType.APPLICATION_TRIP)
-    //Todos pueden buscar al viaje en cualquier intervalo (para anotarse por ejemplo), pero no pueden buscar a los pasajeros
-    public Response getById(@PathParam("id") final long id,
-                            @Valid @BeanParam final TripQuery query) {
-        final Trip trip;
-        //TODO: no poder hacer mas filtrado por fechas
-//        if(query.getStartDateTime()!=null || query.getEndDateTime()!=null){
-//            LOGGER.debug("GET request for trip with id {} from {} to {}",id,query.getStartDateTime(),query.getEndDateTime());
-//            trip = tripService.findById(id,query.getStartDateTime(),query.getEndDateTime()).orElseThrow(ResourceNotFoundException::new);
-//        }else {
-            LOGGER.debug("GET request for trip with id {}",id);
-            trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
-//        }
+    public Response getById(@PathParam("id") final long id) {
+        LOGGER.debug("GET request for trip with id {}",id);
+        final Trip trip = tripService.findById(id).orElseThrow(ResourceNotFoundException::new);
         return Response.ok(TripDto.fromTrip(uriInfo,trip)).build();
     }
 

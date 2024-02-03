@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.dto.output;
 
 import ar.edu.itba.paw.models.Car;
-import ar.edu.itba.paw.models.CarBrand;
-import ar.edu.itba.paw.models.FeatureCar;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
 import javax.ws.rs.core.UriInfo;

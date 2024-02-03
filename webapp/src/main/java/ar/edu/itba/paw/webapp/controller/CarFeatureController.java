@@ -23,7 +23,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -62,9 +61,6 @@ public class CarFeatureController {
     public Response getCarFeature(@PathParam("id") final String id){
         LOGGER.debug("GET request for car feature with id {}",id);
         FeatureCar ans = carFeatureService.findById(id).orElseThrow(ResourceNotFoundException::new);
-//        if(!ans.isPresent()){
-//            return Response.status(Response.Status.NOT_FOUND).build();
-//        }
         Response.ResponseBuilder res = Response.ok(CarFeatureDto.fromCarFeature(uriInfo,ans,messageSource));
         return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }

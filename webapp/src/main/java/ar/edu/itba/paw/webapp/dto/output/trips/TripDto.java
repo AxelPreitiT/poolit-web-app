@@ -17,16 +17,9 @@ public class TripDto {
     private URI driverUri;
     private long maxSeats;
     private double pricePerTrip;
-//    private double totalPrice;
-//    private int totalTrips;
-
-    //TODO: acceder por otro lado
-//    private int occupiedSeats;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String passengersUriTemplate;
-//    private LocalDateTime queryStartDateTime;
-//    private LocalDateTime queryEndDateTime;
     private URI selfUri;
     private long tripId;
     private Trip.TripStatus tripStatus;
@@ -44,14 +37,8 @@ public class TripDto {
         ans.destinationAddress = trip.getDestinationAddress();
         ans.maxSeats = trip.getMaxSeats();
         ans.pricePerTrip = trip.getPrice();
-//        ans.totalPrice = trip.getQueryTotalPrice();
-//        ans.totalTrips = trip.getQueryTotalTrips();
-//        ans.occupiedSeats = trip.getOccupiedSeats();
         ans.startDateTime = trip.getStartDateTime();
         ans.endDateTime = trip.getEndDateTime();
-//        ans.queryStartDateTime = trip.getQueryStartDateTime();
-//        ans.queryEndDateTime = trip.getQueryEndDateTime();
-//        ans.tripStatus = trip.getQueryTripStatus();
         ans.tripStatus = trip.getTripStatus();
         ans.isDeleted = trip.isDeleted();
         ans.lastOccurrence = trip.getLastOccurrence();
@@ -149,21 +136,6 @@ public class TripDto {
         this.endDateTime = endDateTime;
     }
 
-    //public LocalDateTime getQueryStartDateTime() {
-//        return queryStartDateTime;
-//    }
-
-    //public void setQueryStartDateTime(LocalDateTime queryStartDateTime) {
-    //    this.queryStartDateTime = queryStartDateTime;
-    //}
-
-    //public LocalDateTime getQueryEndDateTime() {
-    //    return queryEndDateTime;
-    //}
-
-    //public void setQueryEndDateTime(LocalDateTime queryEndDateTime) {
-    //    this.queryEndDateTime = queryEndDateTime;
-    //}
 
     public URI getSelfUri() {
     return selfUri;
@@ -181,29 +153,6 @@ public class TripDto {
         this.passengersUriTemplate = passengersUriTemplate;
     }
 
-//    public double getTotalPrice() {
-//        return totalPrice;
-//    }
-
-//    public void setTotalPrice(double totalPrice) {
-//        this.totalPrice = totalPrice;
-//    }
-
-//    public int getTotalTrips() {
-//        return totalTrips;
-//    }
-
-//    public void setTotalTrips(int totalTrips) {
-//        this.totalTrips = totalTrips;
-//    }
-
-//    public int getOccupiedSeats() {
-//        return occupiedSeats;
-//    }
-
-//    public void setOccupiedSeats(int occupiedSeats) {
-//        this.occupiedSeats = occupiedSeats;
-//    }
 
     public long getTripId() {
         return tripId;

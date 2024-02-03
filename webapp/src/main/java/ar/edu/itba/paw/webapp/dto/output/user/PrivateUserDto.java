@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.dto.output.user;
 
 
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.UserRole;
 import ar.edu.itba.paw.webapp.controller.utils.UrlHolder;
 
 import javax.ws.rs.core.UriInfo;
