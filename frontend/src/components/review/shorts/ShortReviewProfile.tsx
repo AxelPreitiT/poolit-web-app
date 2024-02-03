@@ -22,7 +22,7 @@ const ShortReviewProfile = (data: ReviewModel) => {
         <div>
           <h4 className={styles.type}>{t(`reviews.${data.option}`)}</h4>
           <span className={styles.review_info_comment}>
-            {data.comment && capitalize(data.comment)}
+            {capitalize(data.comment)}
           </span>
         </div>
         <StarRating rating={data.rating} className="h4" />
