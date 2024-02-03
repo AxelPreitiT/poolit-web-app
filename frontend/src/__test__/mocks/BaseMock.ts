@@ -2,6 +2,7 @@ import { HttpResponse, HttpResponseInit, http } from "msw";
 
 class BaseMock {
   protected static readonly OK_STATUS = 200;
+  protected static readonly NO_CONTENT_STATUS = 204;
   protected static readonly UNAUTHORIZED_STATUS = 401;
 
   protected static plainResponse(options?: HttpResponseInit) {
