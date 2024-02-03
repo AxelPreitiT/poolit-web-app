@@ -50,12 +50,6 @@ public class CarServiceImpl implements CarService {
     public Car createCar(String plate, String infoCar, byte[] imgData, int seats, CarBrand brand, List<FeatureCar> features) throws UserNotFoundException {
         User user = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
         final long imageId = imageService.createImage(imgData).getImageId();
-//        if (imgData== null || imgData.length==0){
-//            //TODO CAMBIAR EN PRODUCCION A LA DEFAULT
-//            imageId = 1;
-//        } else {
-//            imageId = imageService.createImage(imgData).getImageId();
-//        }
         return carDao.create(plate, infoCar, user, imageId, seats, brand, features);
     }
 
@@ -108,12 +102,6 @@ public class CarServiceImpl implements CarService {
         return carDao.findByPlateAndUser(plate,user);
     }
 
-//    @Transactional
-//    @Override
-//    public boolean currentUserIsCarOwner(Car car){
-//        Optional<User> user = userService.getCurrentUser();
-//        return user.isPresent() && car.getUser().getUserId() == user.get().getUserId();
-//    }
 
     @Transactional
     @Override
