@@ -16,7 +16,7 @@ const usePublicUserByUri = (uri?: string) => {
       if (!uri) {
         return undefined;
       }
-      return await userService.getUserById(uri);
+      return await userService.getUserByUri(uri);
     },
     retry: false,
     enabled: !!uri,

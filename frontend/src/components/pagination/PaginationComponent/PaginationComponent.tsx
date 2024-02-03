@@ -1,17 +1,16 @@
 import styles from "./styles.module.scss";
 import PaginationModel from "@/models/PaginationModel.tsx";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { routerBasename } from "@/AppRouter.tsx";
-import { createBrowserHistory } from "history";
 import { Pagination } from "react-bootstrap";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { useTranslation } from "react-i18next";
+import { INITIALPAGE } from "@/enums/PaginationConstants";
 
 interface PaginationComponentProps<T> {
   empty_component: React.ReactNode;
   uri: string;
-  current_page: number;
   component_name: React.FC<T>;
   useFuction: (uri?: string) => {
     isLoading: boolean;
@@ -24,15 +23,16 @@ const PaginationComponent = <T,>({
   empty_component,
   uri,
   component_name,
-  current_page,
   useFuction,
   itemsName,
 }: PaginationComponentProps<T>) => {
   const { t } = useTranslation();
   const [newUri, setNewUri] = useState(uri);
-  const [currentPage, setcurrentPage] = useState(current_page);
   const location = useLocation();
-  const history = createBrowserHistory();
+  const { search } = location;
+  const navigate = useNavigate();
+  const page = new URLSearchParams(search).get("page");
+  const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
   const { isLoading: isLoadingTrips, data: pageTrips } = useFuction(newUri);
 
   const generateItems = <T,>(data: T[], Component: React.FC<T>) => {
@@ -54,7 +54,6 @@ const PaginationComponent = <T,>({
 
   const handlePage = (uri: string, currentPage: number) => {
     setNewUri(uri);
-    setcurrentPage(currentPage);
 
     const finalRouterBasename = routerBasename === "/" ? "" : routerBasename;
     const searchParams = new URLSearchParams(location.search);
@@ -62,8 +61,12 @@ const PaginationComponent = <T,>({
     const newUrl = `${finalRouterBasename}${
       location.pathname
     }?${searchParams.toString()}`;
-    history.push(newUrl);
+    navigate(newUrl);
   };
+
+  useEffect(() => {
+    setNewUri(uri);
+  }, [uri]);
 
   const props =
     isLoadingTrips || pageTrips === undefined

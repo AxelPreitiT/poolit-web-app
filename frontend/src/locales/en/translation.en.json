@@ -899,6 +899,7 @@
     }
   },
   "404": {
+    "title": "Page not found",
     "oops": "OOPS!",
     "not_found1": "Something went wrong",
     "not_found2": "The resource you where looking for was not found.",

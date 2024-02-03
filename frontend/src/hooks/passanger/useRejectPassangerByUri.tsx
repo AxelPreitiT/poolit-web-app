@@ -17,13 +17,12 @@ const useRejectPassangerByUri = () => {
     onError: (error: Error) => {
       onQueryError({
         error,
-        title: t("passangers.error.title"),
+        title: t("passanger.error.title"),
         timeout: defaultToastTimeout,
       });
     },
     onSuccess: () => {
       invalidatePassangersState();
-      console.log("passenger accepted");
     },
   });
 

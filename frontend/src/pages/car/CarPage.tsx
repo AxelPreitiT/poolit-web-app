@@ -139,7 +139,6 @@ const CarPage = () => {
               REVIEWPAGESIZE,
               true
             )}
-            current_page={currentPage}
             useFuction={useCarReviewsByUri}
             empty_component={
               <EmptyList text={t("reviews.none")} icon="bi-solid bi-book" />

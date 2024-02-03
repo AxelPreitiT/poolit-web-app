@@ -1,17 +1,18 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
 import { useTranslation } from "react-i18next";
 import PassangerService from "@/services/PassangerService.ts";
 import usePassangerByUri from "./usePassangerByUri";
 import useTrip from "../trips/useTrip";
+import useOccupiedSeats from "../trips/useOccupiedSeats";
 
 const useAcceptPassangerByUri = () => {
   const onQueryError = useQueryError();
   const { t } = useTranslation();
   const { invalidatePassangersState } = usePassangerByUri();
   const { invalidateTripDetails } = useTrip();
-  const queryClient = useQueryClient();
+  const { invalidateOccupiedSeats } = useOccupiedSeats();
 
   const mutation = useMutation({
     mutationFn: async (uri: string) => {
@@ -20,14 +21,13 @@ const useAcceptPassangerByUri = () => {
     onError: (error: Error) => {
       onQueryError({
         error,
-        title: t("passangers.error.title"),
+        title: t("passanger.error.title"),
         timeout: defaultToastTimeout,
       });
     },
     onSuccess: () => {
       invalidatePassangersState();
-      // TODO: Add invalidateOccupiedSeats
-      queryClient.invalidateQueries({ queryKey: ["OccupiedSeats"] });
+      invalidateOccupiedSeats();
       invalidateTripDetails();
     },
   });

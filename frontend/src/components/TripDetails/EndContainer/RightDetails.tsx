@@ -6,7 +6,7 @@ import Status from "@/enums/Status.ts";
 import { useState } from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createdTripsPath, reservedTripsPath } from "@/AppRouter.tsx";
 import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
@@ -93,6 +93,7 @@ const BtnDelete = ({ uri, id }: { uri: string; id: number }) => {
         onHide={closeModalDelete}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        size="lg"
       >
         <div className={styles.propProfile}>
           <Modal.Header closeButton>
@@ -103,14 +104,14 @@ const BtnDelete = ({ uri, id }: { uri: string; id: number }) => {
           <Modal.Body>
             <div className={styles.review_empty_container}>
               <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
-              <h3 className="italic-text placeholder-text">
+              <span className="h3 italic-text placeholder-text">
                 {t("trip_detail.btn.delete_warning")}
-              </h3>
+              </span>
             </div>
           </Modal.Body>
           <Modal.Footer>
             <Button className={styles.backBtn} onClick={closeModalDelete}>
-              {t("modal.Back")}
+              {t("modal.back")}
             </Button>
             <Button
               className={styles.cancelBtn}
@@ -157,6 +158,7 @@ const CancelBtn = ({ passanger }: { passanger?: passangerModel }) => {
         onHide={closeModalCancel}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        size="lg"
       >
         <div className={styles.propProfile}>
           <Modal.Header closeButton>
@@ -167,9 +169,9 @@ const CancelBtn = ({ passanger }: { passanger?: passangerModel }) => {
           <Modal.Body>
             <div className={styles.review_empty_container}>
               <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
-              <h3 className="italic-text placeholder-text">
+              <span className="h3 italic-text placeholder-text">
                 {t("trip_detail.btn.cancel_warning")}
-              </h3>
+              </span>
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -204,15 +206,27 @@ const RightDetails = ({
   endDateTime,
 }: RightDetailsProps) => {
   const { t } = useTranslation();
+  const { search, pathname } = useLocation();
+  const navigate = useNavigate();
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
   const status_value =
-    passanger != undefined ? getStatusPassanger(passanger) : status;
+    passanger !== undefined ? getStatusPassanger(passanger) : status;
+
+  const removePageSearchParam = () => {
+    const searchParams = new URLSearchParams(search);
+    searchParams.delete("page");
+    const newUrl = `${pathname}?${searchParams.toString()}`;
+    navigate(newUrl, { replace: true });
+  };
+
   // Modals Review
   const [showModalReport, setModalReport] = useState(false);
   const closeModalReport = () => {
     setModalReport(false);
+    removePageSearchParam();
   };
   const openModalReport = () => {
+    removePageSearchParam();
     setModalReport(true);
   };
 
@@ -220,8 +234,10 @@ const RightDetails = ({
   const [showModalReview, setModalReview] = useState(false);
   const closeModalReview = () => {
     setModalReview(false);
+    removePageSearchParam();
   };
   const openModalReview = () => {
+    removePageSearchParam();
     setModalReview(true);
   };
 

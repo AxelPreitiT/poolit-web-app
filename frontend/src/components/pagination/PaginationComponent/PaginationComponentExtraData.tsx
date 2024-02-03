@@ -1,57 +1,62 @@
 import styles from "./styles.module.scss";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { routerBasename } from "@/AppRouter.tsx";
-import { createBrowserHistory } from "history";
 import { Pagination } from "react-bootstrap";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { useTranslation } from "react-i18next";
+import { INITIALPAGE } from "@/enums/PaginationConstants";
 
 interface PaginationComponentProps<T, U> {
   empty_component: React.ReactNode;
   uri: string;
-  current_page: number;
   useFuction: (uri?: string) => {
     isLoading: boolean;
     data: PaginationModel<T> | undefined;
   };
   itemsName: string;
-  CardComponent: React.ComponentType<{ key: number; extraData?: U; data: T }>; // Componente con argumentos genéricos
+  CardComponent: React.ComponentType<{
+    key: number;
+    extraData?: U;
+    data: T;
+    useExtraData: (data: T) => U | null;
+  }>; // Componente con argumentos genéricos
   extraData?: U;
+  useExtraData?: (data: T) => U | null;
 }
 
 const PaginationComponentExtraData = <T, U>({
   empty_component,
   uri,
-  current_page,
   useFuction,
   itemsName,
   extraData,
   CardComponent,
+  useExtraData = () => null,
 }: PaginationComponentProps<T, U>) => {
   const { t } = useTranslation();
   const [newUri, setNewUri] = useState(uri);
-  const [currentPage, setcurrentPage] = useState(current_page);
   const location = useLocation();
-  const history = createBrowserHistory();
+  const { search } = location;
+  const navigate = useNavigate();
+  const page = new URLSearchParams(search).get("page");
+  const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
   const { isLoading: isLoadingTrips, data: FullData } = useFuction(newUri);
 
   useEffect(() => {
-    // Este efecto se ejecutará cada vez que la prop 'uri' cambie
     setNewUri(uri);
   }, [uri]);
 
   const handlePage = (uri: string, currentPage: number) => {
     setNewUri(uri);
-    setcurrentPage(currentPage);
     const finalRouterBasename = routerBasename === "/" ? "" : routerBasename;
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", currentPage.toString());
     const newUrl = `${finalRouterBasename}${
       location.pathname
     }?${searchParams.toString()}`;
-    history.push(newUrl);
+    navigate(newUrl);
   };
 
   return isLoadingTrips || FullData === undefined ? (
@@ -69,7 +74,12 @@ const PaginationComponentExtraData = <T, U>({
         <div>
           <div>
             {FullData.data.map((data, index) => (
-              <CardComponent key={index} data={data} extraData={extraData} />
+              <CardComponent
+                key={index}
+                data={data}
+                extraData={extraData}
+                useExtraData={useExtraData}
+              />
             ))}
           </div>
           {FullData.totalPages > 1 && (

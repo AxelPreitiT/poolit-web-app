@@ -230,10 +230,10 @@ const router = createBrowserRouter(
     {
       path: "*",
       element: (
-          <RouteWrapper title="notFound.title" showWhenUserIsNotAuthenticated={false}>
-              <Navbar />
-              <NotFoundPage />,
-          </RouteWrapper>
+        <RouteWrapper title="404.title">
+          <Navbar />
+          <NotFoundPage />,
+        </RouteWrapper>
       ),
     },
   ],

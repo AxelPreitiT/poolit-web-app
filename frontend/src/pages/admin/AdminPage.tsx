@@ -45,7 +45,6 @@ const AdminPage = () => {
                 ADMINPAGESIZE,
                 true
               )}
-              current_page={currentPage}
               useFuction={UseAllReports}
               empty_component={
                 <EmptyList

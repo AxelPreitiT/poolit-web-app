@@ -8,6 +8,8 @@ interface TabComponentProps {
   right_title: string;
   left_title: string;
   active?: "left" | "right";
+  onLeftClick?: () => void;
+  onRightClick?: () => void;
 }
 
 const TabComponent = ({
@@ -16,6 +18,8 @@ const TabComponent = ({
   right_title,
   left_title,
   active,
+  onLeftClick,
+  onRightClick,
 }: TabComponentProps) => {
   const defaultActiveKey = active ? active : "left";
 
@@ -24,12 +28,20 @@ const TabComponent = ({
       <div>
         <Nav variant="pills" className={styles.nav_prop}>
           <Nav.Item className={styles.fulltab}>
-            <Nav.Link eventKey="left" className={styles.custom_tab}>
+            <Nav.Link
+              eventKey="left"
+              className={styles.custom_tab}
+              onClick={onLeftClick}
+            >
               <h3>{left_title}</h3>
             </Nav.Link>
           </Nav.Item>
           <Nav.Item className={styles.fulltab}>
-            <Nav.Link eventKey="right" className={styles.custom_tab}>
+            <Nav.Link
+              eventKey="right"
+              className={styles.custom_tab}
+              onClick={onRightClick}
+            >
               <h3>{right_title}</h3>
             </Nav.Link>
           </Nav.Item>

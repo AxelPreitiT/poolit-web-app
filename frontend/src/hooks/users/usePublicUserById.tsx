@@ -21,7 +21,7 @@ const usePublicUserById = (id?: string) => {
       const uri = parseTemplate(discovery.usersUriTemplate).expand({
         userId: id,
       });
-      return await userService.getUserById(uri);
+      return await userService.getUserByUri(uri);
     },
     retry: false,
     enabled: !isLoadingDiscovery && !!discovery?.usersUriTemplate && !!id,

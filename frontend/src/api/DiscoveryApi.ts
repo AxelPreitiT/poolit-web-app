@@ -43,15 +43,7 @@ class DiscoveryApi extends AxiosApi {
   public static getDiscovery: (
     config?: AxiosRequestConfig
   ) => AxiosPromise<DiscoveryModel> = async (config?: AxiosRequestConfig) => {
-    //TODO: revisar que salga con el header de authorization si se usa
-    const auxConfig: AxiosRequestConfig = {
-      headers:{
-        Accept:"application/json",
-        ...config?.headers
-      },
-      ...config
-    }
-    return this.get<DiscoveryResponse>("/", auxConfig).then(
+    return this.get<DiscoveryResponse>("/", config).then(
       this.mapResponseToModel
     );
   };

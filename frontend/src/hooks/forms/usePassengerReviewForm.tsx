@@ -30,7 +30,7 @@ const usePassengerReviewForm = ({
   const { t } = useTranslation();
   const showSuccessToast = useSuccessToast();
   const onQueryError = useQueryError();
-  const { invalidatePassangersState } = usePassangerByUri(passenger.selfUri);
+  const { invalidatePassangersState } = usePassangerByUri();
   const { discovery, isError: isDiscoveryError } = useDiscovery();
 
   const onSubmit: SubmitHandlerReturnModel<ReviewFormSchemaType, void> = async (

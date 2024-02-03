@@ -12,11 +12,13 @@ import { ReviewFormSchemaType } from "@/forms/ReviewForm";
 
 class CarApi extends AxiosApi {
   private static readonly CAR_ID_URI_KEY = "carId";
+  private static readonly FROM_USER_URI_KEY = "fromUser";
   private static readonly CAR_LIST_TYPE = "application/vnd.car.list.v1+json";
   private static readonly CAR_CONTENT_TYPE = "application/vnd.car.v1+json";
   private static readonly CAR_REVIEW_CONTENT_TYPE =
     "application/vnd.car.review.v1+json";
-  private static readonly CAR_REVIEW_LIST_TYPE = "application/vnd.car.review.list.v1+json";
+  private static readonly CAR_REVIEW_LIST_TYPE =
+    "application/vnd.car.review.list.v1+json";
 
   public static getCarsByUser: (
     uriTemplate: string,
@@ -25,25 +27,23 @@ class CarApi extends AxiosApi {
     uriTemplate: string,
     user: UserPrivateModel
   ) => {
-    const uri = parseTemplate(uriTemplate).expand({});
-    const searchParams = new URLSearchParams({
-      fromUser: user.userId.toString(),
-    }).toString();
-    // Todo: Concat url
-    return this.get<CarModel[]>(`${uri}?${searchParams}`,{
-      headers:{
-        Accept:CarApi.CAR_LIST_TYPE,
-      }
+    const uri = parseTemplate(uriTemplate).expand({
+      [this.FROM_USER_URI_KEY]: user.userId.toString(),
+    });
+    return this.get<CarModel[]>(uri, {
+      headers: {
+        Accept: CarApi.CAR_LIST_TYPE,
+      },
     });
   };
 
   public static getCarByUri: (uri: string) => AxiosPromise<CarModel> = (
     uri: string
   ) => {
-    return this.get<CarModel>(uri,{
-      headers:{
-        Accept:CarApi.CAR_CONTENT_TYPE
-      }
+    return this.get<CarModel>(uri, {
+      headers: {
+        Accept: CarApi.CAR_CONTENT_TYPE,
+      },
     });
   };
 
@@ -60,10 +60,10 @@ class CarApi extends AxiosApi {
   public static getCarReviews: (
     uri: string
   ) => AxiosPromise<PaginationModel<CarReviewModel>> = (uri: string) => {
-    return this.get<CarReviewModel[]>(uri,{
-      headers:{
-        Accept:CarApi.CAR_REVIEW_LIST_TYPE,
-      }
+    return this.get<CarReviewModel[]>(uri, {
+      headers: {
+        Accept: CarApi.CAR_REVIEW_LIST_TYPE,
+      },
     }).then(this.getPaginationModel);
   };
 

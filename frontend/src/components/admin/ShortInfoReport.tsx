@@ -4,10 +4,10 @@ import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
 import { useTranslation } from "react-i18next";
 import LoadingWheel from "../loading/LoadingWheel";
 import ReportReason from "@/components/reportReason/ReportReason.tsx";
-import extractPathAfterApi from "@/functions/extractPathAfterApi.ts";
 import { Link } from "react-router-dom";
 import UsePrivateUserByUri from "@/hooks/users/usePrivateUserByUri.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import { reportPath } from "@/AppRouter";
 
 const ShortInfoReport = (report: PrivateReportModel) => {
   const { t } = useTranslation();
@@ -33,7 +33,7 @@ const ShortInfoReport = (report: PrivateReportModel) => {
 
   return (
     <Link
-      to={extractPathAfterApi(report.selfUri)}
+      to={reportPath.replace(":id", report.reportId.toString())}
       className={styles.text_black}
     >
       <div>

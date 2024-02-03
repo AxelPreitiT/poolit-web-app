@@ -4,36 +4,38 @@ import { useTranslation } from "react-i18next";
 import TripModel from "@/models/TripModel.ts";
 import { getDayString } from "@/utils/date/dayString.ts";
 import tripModel from "@/models/TripModel.ts";
-import { tripDetailsPath } from "@/AppRouter.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
+import { tripDetailsPath } from "@/AppRouter";
 
 interface CardTripScheduledProps {
   data: TripModel;
-  extraData?: (trip: tripModel) => {
+  useExtraData: (trip: tripModel) => {
     startDate: string;
     endDate: string;
     link: string;
-  };
+  } | null;
 }
 
 const CardTripScheduled = ({
   data: trip,
-  extraData: extraData,
+  useExtraData,
 }: CardTripScheduledProps) => {
   const { t } = useTranslation();
-  const { startDate: start, endDate: end } = extraData
-    ? extraData(trip)
-    : { startDate: "", endDate: "" };
-  const date = new Date(start);
-  if (extraData === undefined) {
-    extraData = (trip: TripModel) => {
-      return {
+  const extraData = useExtraData(trip);
+  const { startDate: start, endDate: end } = extraData || {
+    startDate: trip.startDateTime,
+    endDate: trip.endDateTime,
+  };
+
+  const getExtraData = () => {
+    return (
+      extraData || {
         startDate: trip.startDateTime,
         endDate: trip.endDateTime,
         link: tripDetailsPath.replace(":tripId", trip.tripId.toString()),
-      };
-    };
-  }
+      }
+    );
+  };
 
   return (
     <div>
@@ -41,11 +43,13 @@ const CardTripScheduled = ({
         <div className={styles.calendar_container}>
           <i className="bi bi-calendar text h1"></i>
           <div className={styles.text_calendar}>
-            <h3 className={styles.day_week_style}>
-              {t(`day.full.${getDayString(date).toLowerCase()}`, {
-                plural: "s",
-              })}
-            </h3>
+            {start && (
+              <h3 className={styles.day_week_style}>
+                {t(`day.full.${getDayString(new Date(start)).toLowerCase()}`, {
+                  plural: "s",
+                })}
+              </h3>
+            )}
             {start != end ? (
               <span className={styles.date_text}>
                 {t("format.recurrent_date", {
@@ -62,7 +66,7 @@ const CardTripScheduled = ({
         </div>
       </div>
       <div className={styles.card_trip_container}>
-        <CardTrip extraData={extraData} trip={trip} className="w-100" />
+        <CardTrip extraData={getExtraData} trip={trip} className="w-100" />
       </div>
     </div>
   );
