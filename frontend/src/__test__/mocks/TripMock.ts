@@ -96,29 +96,29 @@ const passenger: passangerModel = {
 
 class TripMock extends BaseMock{
     public static mockEmptyTrips(){
-        return this.get("/trips",()=>
+        return this.get(this.getPath("/trips"),()=>
             this.plainResponse({status: this.NO_CONTENT_STATUS})
         )
     }
 
     public static mockTripList(){
-        return this.get("/trips",()=>{
+        return this.get(this.getPath("/trips"),()=>{
             this.jsonResponse(tripList,{status:this.OK_STATUS})
         })
     }
 
     public static mockSingleTrip(){
-        return this.get('/trips/:id', ()=>{
+        return this.get(this.getPath('/trips/:id'), ()=>{
             this.jsonResponse(trip,{status:this.OK_STATUS})
         })
     }
     public static mockPassengerList(){
-        return this.get("/trips/:tripId/passengers",()=>{
+        return this.get(this.getPath("/trips/:tripId/passengers"),()=>{
             this.jsonResponse(passengerList,{status:this.OK_STATUS})
         })
     }
     public static mockPassenger(){
-        return this.get("/trips/:tripId/passengers/:userId",()=>{
+        return this.get(this.getPath("/trips/:tripId/passengers/:userId"),()=>{
             this.jsonResponse(passenger,{status:this.OK_STATUS})
         })
     }

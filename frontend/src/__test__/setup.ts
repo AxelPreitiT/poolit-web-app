@@ -3,8 +3,9 @@ import { afterAll, afterEach, beforeAll } from "vitest";
 import { setupServer } from "msw/node";
 import { cleanup } from "@testing-library/react";
 import { __setToastStackTimeout } from "@/stores/ToastStackStore/ToastStackStore";
+import DiscoveryMock from "@/__test__/mocks/DiscoveryMock.ts";
 
-export const server = setupServer();
+export const server = setupServer(DiscoveryMock.mockDiscovery());
 
 // Start server before all tests
 // onUnhandledRequest: 'error' will throw an error if there is an unhandled request
