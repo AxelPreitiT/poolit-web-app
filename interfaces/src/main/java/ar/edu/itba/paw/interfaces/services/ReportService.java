@@ -16,12 +16,6 @@ public interface ReportService {
 
     void acceptOrRejectReport(final long reportId, final ReportState reportState, final String reason) throws ReportNotFoundException, ReportAlreadyProcessedException, UserNotFoundException, PassengerNotFoundException, TripNotFoundException;
 
-//    void acceptReport(long reportId, String reason) throws TripNotFoundException, ReportNotFoundException, UserNotFoundException, PassengerNotFoundException;
-
-//    void rejectReport(long reportId, String reason) throws ReportNotFoundException;
-
-//    TripReportCollection getTripReportCollection(long tripId) throws TripNotFoundException, UserNotLoggedInException, PassengerNotFoundException;
-
     PagedContent<Report> getReports(int page, int pageSize);
     PagedContent<Report> getReport(final long reporterUserId, final long reportedUserId, final long tripId);
 
