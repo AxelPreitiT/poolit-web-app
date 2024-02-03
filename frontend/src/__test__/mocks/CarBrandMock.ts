@@ -117,15 +117,15 @@ const carBrand: carBrandModel ={
 
 class CarBrandMock extends BaseMock{
     public static getAllBrands(){
-        return this.get(this.getPath('/car-brands'),()=>{
+        return this.get('/car-brands',()=>
             this.jsonResponse(carBrandList,{status:this.OK_STATUS})
-        })
+        )
     }
 
     public static getBrand(){
-        return this.get(this.getPath("/car-brands/:brandId"),()=>{
+        return this.get("/car-brands/:brandId",()=>
             this.jsonResponse(carBrand,{status:this.OK_STATUS})
-        })
+        )
     }
 }
 

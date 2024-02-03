@@ -8,7 +8,7 @@ import { RenderOptions, render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
-const queryClient = getQueryClient();
+export const queryClient = getQueryClient();
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AllProviders = ({ children }: { children: React.ReactNode }) => {

@@ -53,7 +53,7 @@ const trip: tripModel = {
         "destinationCityUri": "http://localhost:8080/paw-2023a-07/api/cities/1",
         "driverReportsUriTemplate": "http://localhost:8080/paw-2023a-07/api/reports?forTrip=144&forUser=1&madeBy={userId}",
         "driverReviewsUriTemplate": "http://localhost:8080/paw-2023a-07/api/driver-reviews?forTrip=144&madeBy={userId}",
-        "driverUri": "http://localhost:8080/paw-2023a-07/api/users/1",
+        "driverUri": "http://localhost:8080/paw-2023a-07/api/users/50",
         "endDateTime": "2024-02-03T18:00",
         "maxSeats": "4",
         "originAddress": "Av Callao 1348",
@@ -96,31 +96,31 @@ const passenger: passangerModel = {
 
 class TripMock extends BaseMock{
     public static mockEmptyTrips(){
-        return this.get(this.getPath("/trips"),()=>
+        return this.get("/trips",()=>
             this.plainResponse({status: this.NO_CONTENT_STATUS})
         )
     }
 
     public static mockTripList(){
-        return this.get(this.getPath("/trips"),()=>{
+        return this.get("/trips",()=>
             this.jsonResponse(tripList,{status:this.OK_STATUS})
-        })
+        )
     }
 
     public static mockSingleTrip(){
-        return this.get(this.getPath('/trips/:id'), ()=>{
+        return this.get('/trips/:id', ()=>
             this.jsonResponse(trip,{status:this.OK_STATUS})
-        })
+        )
     }
     public static mockPassengerList(){
-        return this.get(this.getPath("/trips/:tripId/passengers"),()=>{
+        return this.get("/trips/:tripId/passengers",()=>
             this.jsonResponse(passengerList,{status:this.OK_STATUS})
-        })
+        )
     }
     public static mockPassenger(){
-        return this.get(this.getPath("/trips/:tripId/passengers/:userId"),()=>{
+        return this.get("/trips/:tripId/passengers/:userId",()=>
             this.jsonResponse(passenger,{status:this.OK_STATUS})
-        })
+        )
     }
 }
 

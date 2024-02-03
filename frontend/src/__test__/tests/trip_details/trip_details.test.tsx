@@ -7,9 +7,11 @@ import DiscoveryMock from "@/__test__/mocks/DiscoveryMock";
 import CarMock from "@/__test__/mocks/CarMock";
 import UserMock from "@/__test__/mocks/UserMock";
 import TripMock from "@/__test__/mocks/TripMock";
+import setAuthToken from "@/__test__/tests/utils.ts";
 
 describe("trip_details", () => {
     it("Should show trip details", async () => {
+        setAuthToken();
         server.use(
             LoginMock.mockLogin(),
             UserMock.getByIdPrivateRoleDriver(),

@@ -67,30 +67,30 @@ const carReview: carReviewModel = {
 
 class CarMock extends BaseMock{
     public static getCars(){
-        return this.get(this.getPath("/cars"),()=>{
+        return this.get("/cars",()=>
             this.jsonResponse(carList,{status:this.OK_STATUS})
-        })
+        )
     }
     public static getCar(){
-        return this.get(this.getPath("/cars/:carId"),()=>{
+        return this.get("/cars/:carId", ()=>
             this.jsonResponse(car,{status:this.OK_STATUS})
-        })
+        )
     }
     public static getCarReviews(){
-        return this.get(this.getPath("/cars/:carId/reviews"),()=>{
+        return this.get("/cars/:carId/reviews",()=>
             this.jsonResponse(carReviewList,{status:this.OK_STATUS})
-        })
+        )
     }
 
     public static getCarReview(){
-        return this.get(this.getPath("/cars/:carId/reviews/:reviewId"),()=>{
+        return this.get("/cars/:carId/reviews/:reviewId",()=>
             this.jsonResponse(carReview,{status:this.OK_STATUS})
-        })
+        )
     }
     public static getEmptyCarImage(){
-        return this.get(this.getPath("/cars/:carId/image"),()=>{
+        return this.get("/cars/:carId/image",()=>
             this.plainResponse({status:this.NO_CONTENT_STATUS})
-        })
+        )
     }
 }
 

@@ -19,7 +19,7 @@ const discoveryList: DiscoveryModel = {
 
 class DiscoveryMock extends BaseMock {
   public static mockDiscovery() {
-    return this.get(this.getPath("/"), () =>
+    return this.getWithoutBase("/", () =>
       this.jsonResponse(discoveryList, { status: this.OK_STATUS })
     );
   }
