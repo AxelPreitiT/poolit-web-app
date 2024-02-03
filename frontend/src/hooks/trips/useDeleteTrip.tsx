@@ -1,14 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import useQueryError from "@/hooks/errors/useQueryError.tsx";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps.ts";
 import { useTranslation } from "react-i18next";
 import tripsService from "@/services/TripsService.ts";
 import { parseTemplate } from "url-template";
+import useTripsByUri from "./useTripsByUri";
 
 const useDeleteTrip = (uri: string, id: number) => {
   const onQueryError = useQueryError();
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
+  const { invalidateTripsState } = useTripsByUri();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -16,7 +17,7 @@ const useDeleteTrip = (uri: string, id: number) => {
         tripId: id,
       });
       const ans = await tripsService.postDeleteTrip(newUri as string);
-      await queryClient.invalidateQueries({ queryKey: ["trips"] });
+      await invalidateTripsState();
       return ans;
     },
     onError: (error: Error) => {

@@ -93,6 +93,7 @@ const BtnDelete = ({ uri, id }: { uri: string; id: number }) => {
         onHide={closeModalDelete}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        size="lg"
       >
         <div className={styles.propProfile}>
           <Modal.Header closeButton>
@@ -103,14 +104,14 @@ const BtnDelete = ({ uri, id }: { uri: string; id: number }) => {
           <Modal.Body>
             <div className={styles.review_empty_container}>
               <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
-              <h3 className="italic-text placeholder-text">
+              <span className="h3 italic-text placeholder-text">
                 {t("trip_detail.btn.delete_warning")}
-              </h3>
+              </span>
             </div>
           </Modal.Body>
           <Modal.Footer>
             <Button className={styles.backBtn} onClick={closeModalDelete}>
-              {t("modal.Back")}
+              {t("modal.back")}
             </Button>
             <Button
               className={styles.cancelBtn}
@@ -157,6 +158,7 @@ const CancelBtn = ({ passanger }: { passanger?: passangerModel }) => {
         onHide={closeModalCancel}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        size="lg"
       >
         <div className={styles.propProfile}>
           <Modal.Header closeButton>
@@ -167,9 +169,9 @@ const CancelBtn = ({ passanger }: { passanger?: passangerModel }) => {
           <Modal.Body>
             <div className={styles.review_empty_container}>
               <i className={`bi-solid bi-exclamation-triangle-fill h2`}></i>
-              <h3 className="italic-text placeholder-text">
+              <span className="h3 italic-text placeholder-text">
                 {t("trip_detail.btn.cancel_warning")}
-              </h3>
+              </span>
             </div>
           </Modal.Body>
           <Modal.Footer>
