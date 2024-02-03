@@ -63,13 +63,15 @@ public class Trip {
     @Column(name = "last_occurrence", nullable = true)
     private LocalDateTime lastOccurrence;
 
-//    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
-//    private double driverRating;
+    //leave for sorting in DAO
+    @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
+    private double driverRating;
 
+    //leave for sorting in DAO
+    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
+    private double carRating;
 
-//    @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
-//    private double carRating;
-
+    //leave for sorting in DAO
     @Formula("cast(start_date_time as time)")
     private LocalTime time;
 

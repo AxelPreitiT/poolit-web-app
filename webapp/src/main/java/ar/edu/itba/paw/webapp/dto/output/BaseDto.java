@@ -9,6 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 //https://datatracker.ietf.org/doc/html/rfc6570
@@ -48,7 +49,7 @@ public class BaseDto {
 //        ans.passengerReviewsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).toTemplate() + "{/reviewId}";
         ans.passengerReviewsUri = builder.cloneBuilder().path(UrlHolder.PASSENGER_REVIEWS_BASE).path("{/reviewId}").path("{?"+reviewsQueryParams+pageQueryParams+"}").build().toString();
 //        ans.tripsUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).toTemplate() + "{/tripId}";
-        final String tripsQueryParams = Arrays.stream(TripsQuery.class.getDeclaredFields()).map(Field::getName).collect(Collectors.joining(","));
+        final String tripsQueryParams = Arrays.stream(TripsQuery.class.getDeclaredFields()).map(e -> Collection.class.isAssignableFrom(e.getType())?e.getName()+"*":e.getName()).collect(Collectors.joining(","));
         ans.tripsUri = builder.cloneBuilder().path(UrlHolder.TRIPS_BASE).path("{/tripId}").path("{?"+tripsQueryParams+pageQueryParams+"}").build().toString();
         ans.tripSortTypesUri = builder.cloneBuilder().path(UrlHolder.TRIP_SORT_TYPE_BASE).path("{/sortTypeId}").build().toString();
         return ans;
