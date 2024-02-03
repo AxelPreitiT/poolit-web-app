@@ -49,7 +49,7 @@ public class PassengerReviewController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REVIEW_PASSENGER)
     public Response getReview(@PathParam("id") final long id){
         LOGGER.debug("GET request for passenger review with id {}",id);

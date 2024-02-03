@@ -53,7 +53,7 @@ public class UserController {
 
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(VndType.APPLICATION_USER_PUBLIC)
     public Response getByIdPublic(@PathParam("id") final long id){
         LOGGER.debug("GET request for public userId {}",id);
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(VndType.APPLICATION_USER_DRIVER)
     @PreAuthorize("@authValidator.checkIfUserIsPassengerOf(#id) or @authValidator.checkIfWantedIsSelf(#id)")
     public Response getByIdDriver(@PathParam("id") final long id){
@@ -73,7 +73,7 @@ public class UserController {
 
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(VndType.APPLICATION_USER_PRIVATE)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#id) or hasRole('ADMIN')")
     public Response getByIdPrivate(@PathParam("id") final long id){
@@ -93,7 +93,7 @@ public class UserController {
     }
 
     @PATCH
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Consumes(value = VndType.APPLICATION_USER)
     public Response modifyUser(@PathParam("id") final long id, @Valid final UpdateUserDto userForm) throws UserNotFoundException, CityNotFoundException, RoleAlreadyChangedException {
         LOGGER.debug("PUT request to update user with userId {}",id);
@@ -102,7 +102,7 @@ public class UserController {
     }
 
     @GET
-    @Path("/{id}/image")
+    @Path("/{id:\\d+}/image")
     @Produces({"image/*"})
     public Response getUserImage(@PathParam("id") final long id,
                                  @Valid @BeanParam final ImageQuery query,
@@ -114,7 +114,7 @@ public class UserController {
     }
 
     @PUT
-    @Path("/{id}/image")
+    @Path("/{id:\\d+}/image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateUserImage(@PathParam("id") final long id,
                                     @ImageType @FormDataParam("image") final FormDataBodyPart type,

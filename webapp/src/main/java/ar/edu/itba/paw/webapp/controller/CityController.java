@@ -54,7 +54,7 @@ public class CityController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(VndType.APPLICATION_CITY)
     public Response getById(@PathParam("id") final int id){
         LOGGER.debug("GET request for city with cityId {}",id);

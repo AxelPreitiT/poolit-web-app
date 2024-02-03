@@ -66,7 +66,7 @@ public class CarController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(VndType.APPLICATION_CAR)
     public Response getCarById(@PathParam("id") final long id){
         LOGGER.debug("GET request for car with carId {}",id);
@@ -86,7 +86,7 @@ public class CarController {
     }
 
     @PATCH
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
     @Consumes(value = VndType.APPLICATION_CAR)
     public Response modifyCar(@PathParam("id") final long id, @Valid final UpdateCarDto updateCarDto) throws CarNotFoundException {
@@ -96,7 +96,7 @@ public class CarController {
     }
 
     @GET
-    @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
+    @Path("/{id:\\d+}"+UrlHolder.IMAGE_ENTITY)
     @Produces({"image/*"})
     public Response getCarImage(@PathParam("id") final long id,
                                 @Valid @BeanParam final ImageQuery query,
@@ -107,7 +107,7 @@ public class CarController {
     }
 
     @PUT
-    @Path("/{id}"+UrlHolder.IMAGE_ENTITY)
+    @Path("/{id:\\d+}"+UrlHolder.IMAGE_ENTITY)
     @PreAuthorize("@authValidator.checkIfCarIsOwn(#id)")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateCarImage(@PathParam("id") final long id,
@@ -120,7 +120,7 @@ public class CarController {
 
     //Add a review
     @POST
-    @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
+    @Path("/{id:\\d+}"+UrlHolder.REVIEWS_ENTITY)
     @Consumes(value = VndType.APPLICATION_CAR_REVIEW)
     public Response addReview(@PathParam("id") final long id,
                               @Valid final CreateCarReviewDto createCarReviewDto) throws UserNotFoundException, PassengerNotFoundException, CarNotFoundException, TripNotFoundException {
@@ -132,7 +132,7 @@ public class CarController {
 
     //Get one review
     @GET
-    @Path("/{id}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId}")
+    @Path("/{id:\\d+}"+UrlHolder.REVIEWS_ENTITY+"/{reviewId:\\d+}")
     @Produces(value = VndType.APPLICATION_CAR_REVIEW)
     public Response getReview(@PathParam("id") final long id,
                               @PathParam("reviewId") final long reviewId){
@@ -143,7 +143,7 @@ public class CarController {
 
     //Get multiple reviews (made by a user or all of them)
     @GET
-    @Path("/{id}"+UrlHolder.REVIEWS_ENTITY)
+    @Path("/{id:\\d+}"+UrlHolder.REVIEWS_ENTITY)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
     @Produces(value = VndType.APPLICATION_CAR_REVIEW_LIST)
     public Response getAllReviews(@PathParam("id") final long id,
