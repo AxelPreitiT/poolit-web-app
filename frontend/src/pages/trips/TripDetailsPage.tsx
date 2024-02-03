@@ -78,9 +78,6 @@ const TripDetailsPage = () => {
   // Crea un objeto Date a partir de la cadena combinada
   //   const fechaYHora = new Date(fechaHoraString);
 
-  // Puedes imprimir la fecha y hora resultante
-  //   console.log(fechaYHora);
-
   return (
     <div>
       <MainComponent>
