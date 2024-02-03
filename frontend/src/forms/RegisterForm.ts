@@ -1,7 +1,6 @@
 import CityFormField from "./fields/CityFormField";
 import ConfirmPasswordField from "./fields/ConfirmPasswordFormField";
 import EmailFormField from "./fields/EmailFormField";
-import ImageFormField from "./fields/ImageFormField";
 import LastNameFormField from "./fields/LastNameFormField";
 import LocaleFormField from "./fields/LocaleFormField";
 import NameFormField from "./fields/NameFormField";
@@ -10,7 +9,6 @@ import TelephoneFormField from "./fields/TelephoneFormField";
 import Form, { InferedFormSchemaType } from "./Form";
 import equalRefine from "./refine/EqualRefine";
 
-const imageFieldName = "image";
 const nameFieldName = "name";
 const lastNameFieldName = "last_name";
 const emailFieldName = "email";
@@ -21,7 +19,6 @@ const cityFieldName = "city";
 const localeFieldName = "locale";
 
 const RegisterFormFields = {
-  [imageFieldName]: ImageFormField,
   [nameFieldName]: NameFormField,
   [lastNameFieldName]: LastNameFormField,
   [emailFieldName]: EmailFormField,

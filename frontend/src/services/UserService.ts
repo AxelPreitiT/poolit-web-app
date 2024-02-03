@@ -22,16 +22,7 @@ class UserService extends Service {
   };
 
   public static register = async (registerForm: RegisterFormSchemaType) => {
-    // TODO: Resolve upload image on register
     await this.resolveQuery(UsersApi.createUser(registerForm));
-    // const response = await this.resolveQuery(UsersApi.createUser(registerForm));
-    // const { userUri } = response;
-    // if (registerForm.image) {
-    // TODO: Concat /image
-    // await this.resolveQuery(
-    //   UsersApi.updateUserImage(`${userUri}/image`, registerForm.image)
-    // );
-    // }
   };
 
   public static getCurrentUser = async (): Promise<UserPrivateModel> =>
