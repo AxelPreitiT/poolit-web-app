@@ -3,7 +3,7 @@ import MainHeader from "@/components/utils/MainHeader";
 import MainComponent from "@/components/utils/MainComponent";
 import TabComponent from "@/components/tab/TabComponent";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import EmptyList from "@/components/emptyList/EmptyList";
 import ListTripsScheduled from "@/components/cardTrip/ListTripsScheduled/ListTripsScheduled";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
@@ -16,7 +16,8 @@ import { tripDetailsPath } from "@/AppRouter.tsx";
 const CreatedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
   const { t } = useTranslation();
-  const { search } = useLocation();
+  const navigate = useNavigate();
+  const { search, pathname } = useLocation();
   const time = new URLSearchParams(search).get("time");
 
   const page = new URLSearchParams(search).get("page");
@@ -96,7 +97,13 @@ const CreatedPage = () => {
               />
             )
           }
-          active={time === "past" ? "left" : "right"}
+          active={time === "past" ? "right" : "left"}
+          onLeftClick={() =>
+            navigate(`${pathname}?time=future&page=1`, { replace: true })
+          }
+          onRightClick={() =>
+            navigate(`${pathname}?time=past&page=1`, { replace: true })
+          }
         />
       </div>
     </MainComponent>
