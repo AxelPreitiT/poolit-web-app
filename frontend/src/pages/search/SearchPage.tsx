@@ -85,7 +85,7 @@ const SearchPage = () => {
         descending: currentDescending,
       },
     });
-    navigate(`${searchPath}?${searchParams}`);
+    navigate(`${searchPath}?${searchParams}`, { replace: true });
     setPaginatedTrips(paginatedTrips);
   };
   const onSearchError = () => {
