@@ -14,6 +14,7 @@ import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
 import { INITIALPAGE, PASSANGERPAGESIZE } from "@/enums/PaginationConstants.ts";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import IMake from "../IMake";
+import { useCurrentUser } from "@/hooks/users/useCurrentUser";
 
 export interface ModalReportProps {
   title: string;
@@ -43,7 +44,8 @@ const RRModal = ({
   openModalCar,
 }: ModalReportProps) => {
   const { t } = useTranslation();
-  const uri = getUriPassangers(isDriver, trip, passanger);
+  const { currentUser } = useCurrentUser();
+  const uri = getUriPassangers(isDriver, trip, passanger, currentUser);
 
   return (
     <div className={styles.propProfile}>

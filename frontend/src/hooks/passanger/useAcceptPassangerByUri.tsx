@@ -21,7 +21,7 @@ const useAcceptPassangerByUri = () => {
     onError: (error: Error) => {
       onQueryError({
         error,
-        title: t("passangers.error.title"),
+        title: t("passanger.error.title"),
         timeout: defaultToastTimeout,
       });
     },

@@ -6,7 +6,7 @@ import Status from "@/enums/Status.ts";
 import { useState } from "react";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import carModel from "@/models/CarModel.ts";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createdTripsPath, reservedTripsPath } from "@/AppRouter.tsx";
 import tripModel from "@/models/TripModel.ts";
 import passangerModel from "@/models/PassangerModel.ts";
@@ -204,15 +204,27 @@ const RightDetails = ({
   endDateTime,
 }: RightDetailsProps) => {
   const { t } = useTranslation();
+  const { search, pathname } = useLocation();
+  const navigate = useNavigate();
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
   const status_value =
-    passanger != undefined ? getStatusPassanger(passanger) : status;
+    passanger !== undefined ? getStatusPassanger(passanger) : status;
+
+  const removePageSearchParam = () => {
+    const searchParams = new URLSearchParams(search);
+    searchParams.delete("page");
+    const newUrl = `${pathname}?${searchParams.toString()}`;
+    navigate(newUrl, { replace: true });
+  };
+
   // Modals Review
   const [showModalReport, setModalReport] = useState(false);
   const closeModalReport = () => {
     setModalReport(false);
+    removePageSearchParam();
   };
   const openModalReport = () => {
+    removePageSearchParam();
     setModalReport(true);
   };
 
@@ -220,8 +232,10 @@ const RightDetails = ({
   const [showModalReview, setModalReview] = useState(false);
   const closeModalReview = () => {
     setModalReview(false);
+    removePageSearchParam();
   };
   const openModalReview = () => {
+    removePageSearchParam();
     setModalReview(true);
   };
 

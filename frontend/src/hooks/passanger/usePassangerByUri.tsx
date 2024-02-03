@@ -33,7 +33,7 @@ const usePassangerByUri = (uri?: string) => {
     if (isError) {
       onQueryError({
         error,
-        title: t("passangers.error.title"),
+        title: t("passanger.error.title"),
         timeout: defaultToastTimeout,
       });
     }
