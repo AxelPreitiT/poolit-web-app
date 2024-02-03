@@ -24,7 +24,8 @@ const CreatedPage = () => {
   //extradata={(trip) => {trip.strar, trip.end}} //driver
   //extradata={(trip) => {useCurrentPassanger(tripUri); pasanger}} //passenger
   //extradata={(trip) => {useLocale();..; return{queryStart, queryEnd}} //buscador
-  const extraData = (
+
+  const useExtraData = (
     trip: TripModel
   ): { startDate: string; endDate: string; link: string } => {
     return {
@@ -56,7 +57,7 @@ const CreatedPage = () => {
                   TRIPSPAGESIZE
                 )}
                 current_page={currentPage}
-                extraData={extraData}
+                useExtraData={useExtraData}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}
@@ -84,7 +85,7 @@ const CreatedPage = () => {
                   TRIPSPAGESIZE
                 )}
                 current_page={currentPage}
-                extraData={extraData}
+                useExtraData={useExtraData}
                 empty_component={
                   <EmptyList
                     text={t("created_trips.empty")}

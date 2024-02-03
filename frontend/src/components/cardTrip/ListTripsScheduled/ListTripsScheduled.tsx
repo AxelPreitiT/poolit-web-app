@@ -8,27 +8,31 @@ export interface ListTripsScheduledProps {
   uri: string;
   empty_component: React.ReactNode;
   current_page: number;
-  extraData: (trip: tripModel)=>{startDate: string, endDate: string, link: string};
+  useExtraData: (trip: tripModel) => {
+    startDate: string;
+    endDate: string;
+    link: string;
+  };
 }
 
 const ListTripsScheduled = ({
   uri,
   empty_component,
   current_page,
-  extraData
+  useExtraData,
 }: ListTripsScheduledProps) => {
   const { t } = useTranslation();
 
   return (
     <div>
       <PaginationComponentExtraData
-          CardComponent={CardTripScheduled}
-          extraData={extraData}
-          uri={uri}
-          current_page={current_page}
-          useFuction={useTripsByUri}
-          empty_component={empty_component}
-          itemsName={t("trip.title")}
+        CardComponent={CardTripScheduled}
+        useExtraData={useExtraData}
+        uri={uri}
+        current_page={current_page}
+        useFuction={useTripsByUri}
+        empty_component={empty_component}
+        itemsName={t("trip.title")}
       />
     </div>
   );

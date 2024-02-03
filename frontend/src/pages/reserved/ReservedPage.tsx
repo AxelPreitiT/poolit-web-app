@@ -36,10 +36,9 @@ const ReservedPage = () => {
       ? null
       : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
 
-  const extraData = (
+  const useExtraData = (
     trip: TripModel
   ): { startDate: string; endDate: string; link: string } => {
-    //TODO: revisar! (seguro falla)
     const { isLoading: isLoadingRole, currentPassanger: currentPassanger } =
       useRolePassanger(false, trip?.passengersUriTemplate);
 
@@ -70,7 +69,7 @@ const ReservedPage = () => {
             ) : (
               <ListTripsScheduled
                 uri={uriFutureTrips}
-                extraData={extraData}
+                useExtraData={useExtraData}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList
@@ -94,7 +93,7 @@ const ReservedPage = () => {
             ) : (
               <ListTripsScheduled
                 uri={uriPastTrips}
-                extraData={extraData}
+                useExtraData={useExtraData}
                 current_page={currentPage}
                 empty_component={
                   <EmptyList

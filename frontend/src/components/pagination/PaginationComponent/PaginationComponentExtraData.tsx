@@ -17,8 +17,14 @@ interface PaginationComponentProps<T, U> {
     data: PaginationModel<T> | undefined;
   };
   itemsName: string;
-  CardComponent: React.ComponentType<{ key: number; extraData?: U; data: T }>; // Componente con argumentos genéricos
+  CardComponent: React.ComponentType<{
+    key: number;
+    extraData?: U;
+    data: T;
+    useExtraData: (data: T) => U | null;
+  }>; // Componente con argumentos genéricos
   extraData?: U;
+  useExtraData?: (data: T) => U | null;
 }
 
 const PaginationComponentExtraData = <T, U>({
@@ -29,6 +35,7 @@ const PaginationComponentExtraData = <T, U>({
   itemsName,
   extraData,
   CardComponent,
+  useExtraData = () => null,
 }: PaginationComponentProps<T, U>) => {
   const { t } = useTranslation();
   const [newUri, setNewUri] = useState(uri);
@@ -69,7 +76,12 @@ const PaginationComponentExtraData = <T, U>({
         <div>
           <div>
             {FullData.data.map((data, index) => (
-              <CardComponent key={index} data={data} extraData={extraData} />
+              <CardComponent
+                key={index}
+                data={data}
+                extraData={extraData}
+                useExtraData={useExtraData}
+              />
             ))}
           </div>
           {FullData.totalPages > 1 && (
