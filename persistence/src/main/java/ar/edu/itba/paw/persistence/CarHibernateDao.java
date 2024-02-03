@@ -41,11 +41,6 @@ public class CarHibernateDao implements CarDao {
         return result;
     }
 
-//    @Override
-//    public Optional<Car> findByPlate(String plate) {
-//        final Optional<Car> result = Optional.ofNullable(em.find(Car.class,plate));
-//        return result;
-//    }
 
     @Override
     public Optional<Car> findByPlateAndUser(String plate, User user) {

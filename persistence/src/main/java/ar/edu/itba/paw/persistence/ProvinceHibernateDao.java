@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Image;
 import ar.edu.itba.paw.models.Province;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

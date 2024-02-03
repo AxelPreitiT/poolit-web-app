@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import antlr.Token;
 import ar.edu.itba.paw.models.City;
 import ar.edu.itba.paw.models.Province;
 import ar.edu.itba.paw.models.User;
@@ -19,7 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 

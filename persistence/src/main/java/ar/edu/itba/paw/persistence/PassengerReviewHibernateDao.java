@@ -45,15 +45,6 @@ public class PassengerReviewHibernateDao implements PassengerReviewDao {
         return result;
     }
 
-//    @Override
-//    public double getPassengerRating(User user) {
-//        LOGGER.debug("Looking for the average passenger rating of the user with id {}", user.getUserId());
-//        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(pr.rating), 0.0) FROM PassengerReview pr WHERE pr.reviewed = :user", Double.class);
-//        avgRatingQuery.setParameter("user", user);
-//        Double result = avgRatingQuery.getSingleResult();
-//        LOGGER.debug("Average passenger rating of the user with id {} is {}", user.getUserId(), result);
-//        return result;
-//    }
 
     @Override
     public PagedContent<PassengerReview> getPassengerReviews(User user, int page, int pageSize) {
