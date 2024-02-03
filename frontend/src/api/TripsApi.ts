@@ -176,53 +176,41 @@ class TripsApi extends AxiosApi {
       sortOptions?: TripSortSearchModel;
     } = {}
   ): AxiosPromise<PaginationModel<TripModel>> => {
-    const baseUri = parseTemplate(uriTemplate).expand({});
-    const uri = new URL(baseUri);
     const formatDateTime = (date: Date, time: string) => {
       return getIsoDate(date) + "T" + time;
     };
-    uri.searchParams.set("originCityId", search.origin_city.toString());
-    uri.searchParams.set(
-      "destinationCityId",
-      search.destination_city.toString()
-    );
-    uri.searchParams.set(
-      "startDateTime",
-      formatDateTime(search.date, search.time)
-    );
+    const parseObj: Record<string, string | number | boolean | string[]> = {
+      originCityId: search.origin_city,
+      destinationCityId: search.destination_city,
+      startDateTime: formatDateTime(search.date, search.time),
+    };
     if (pageOptions.page && pageOptions.page > 0) {
       const page = pageOptions.page - 1;
-      uri.searchParams.set("page", page.toString());
+      parseObj.page = page;
     }
     if (pageOptions.pageSize) {
-      uri.searchParams.set("pageSize", pageOptions.pageSize.toString());
+      parseObj.pageSize = pageOptions.pageSize;
     }
     if (search.min_price) {
-      uri.searchParams.set("minPrice", search.min_price.toString());
+      parseObj.minPrice = search.min_price;
     }
     if (search.max_price) {
-      uri.searchParams.set("maxPrice", search.max_price.toString());
+      parseObj.maxPrice = search.max_price;
     }
     if (search.multitrip && search.last_date) {
-      const lastDatetime = new Date(
-        getIsoDate(search.last_date) + "T" + search.time
-      );
-      uri.searchParams.set(
-        "endDateTime",
-        formatDateTime(lastDatetime, search.time)
-      );
+      const lastDate = new Date(getIsoDate(search.last_date));
+      parseObj.endDateTime = formatDateTime(lastDate, search.time);
     }
-    if (search.car_features) {
-      search.car_features.forEach((feature) => {
-        uri.searchParams.append("carFeatures", feature);
-      });
+    if (search.car_features && search.car_features.length > 0) {
+      parseObj.carFeatures = search.car_features;
     }
     if (sortOptions.sortTypeId) {
-      uri.searchParams.set("sortType", sortOptions.sortTypeId.toString());
+      parseObj.sortType = sortOptions.sortTypeId;
     }
     if (sortOptions.descending !== undefined) {
-      uri.searchParams.set("descending", sortOptions.descending.toString());
+      parseObj.descending = sortOptions.descending;
     }
+    const uri = parseTemplate(uriTemplate).expand(parseObj);
     console.log("uri", uri.toString());
     return this.get<TripModel[]>(uri.toString(), {
       headers: {
