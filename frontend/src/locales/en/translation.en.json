@@ -656,6 +656,8 @@
       "rejected": "Rejected",
       "pending": "Pending",
       "waiting": "Waiting",
+      "delete": "Deleted",
+      "unconfirmed": "Not accepted",
       "finished": "Finished",
       "not_started": "Not started",
       "in_progress": "In progress"

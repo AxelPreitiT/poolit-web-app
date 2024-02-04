@@ -231,10 +231,11 @@ public class TripHibernateDao implements TripDao {
         String queryString = "FROM trips " +
                 "WHERE driver_id = :driverId ";
         if(minDateTime.isPresent()){
-            queryString += "AND ((deleted = false AND end_date_time >= :min) OR (deleted = true AND last_occurrence >= :min)) ";
+            queryString += "AND ((deleted = false AND end_date_time >= :min))  ";
         }
         if(maxDateTime.isPresent()){
-            queryString += "AND ((deleted = false AND end_date_time <= :max ) OR (deleted = true AND last_occurrence < :max)) ";
+            //Para las pasadas, muestra las no eliminadas que terminaron o las eliminadas
+            queryString += "AND ((deleted = false AND end_date_time <= :max ) OR (deleted = true)) ";
         }
         queryString+= "ORDER BY end_date_time "+(endDateAscending?"ASC":"DESC")+" , cast(start_date_time as time) ASC ";
         Query countQuery = em.createNativeQuery( "SELECT count(distinct trip_id) FROM(SELECT trip_id "+ queryString + ")aux ");
@@ -260,10 +261,10 @@ public class TripHibernateDao implements TripDao {
         String queryString = " FROM passengers p NATURAL JOIN trips "+
                 "WHERE p.user_id = :passengerId ";
         if(minDateTime.isPresent()){
-            queryString += "AND p.end_date >= :min ";
+            queryString += "AND p.end_date >= :min AND NOT p.passenger_state = 'REJECTED' AND NOT p.passenger_state = 'UNCONFIRMED' ";
         }
         if(maxDateTime.isPresent()){
-            queryString += "AND p.end_date <= :max ";
+            queryString += "AND (p.end_date <= :max OR p.passenger_state = 'REJECTED' OR p.passenger_state = 'UNCONFIRMED') ";
         }
         if(passengerState != null) {
             queryString += "AND p.passenger_state = :state ";

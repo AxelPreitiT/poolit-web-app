@@ -17,6 +17,7 @@ import useTrip from "@/hooks/trips/useTrip.tsx";
 import { useSearchParams } from "react-router-dom";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
+import Status from "@/enums/Status.ts";
 // import {useSearchParams} from "react-router-dom";
 
 const TripDetailsPage = () => {
@@ -62,9 +63,7 @@ const TripDetailsPage = () => {
         : params.get("startDateTime") != undefined
         ? `${params.get("startDateTime")}T${tripTime}`
         : trip.startDateTime);
-  const status = currentPassanger
-    ? getStatusPassanger(currentPassanger)
-    : trip.tripStatus;
+  const status = trip.deleted? Status.DELETE : (currentPassanger ? getStatusPassanger(currentPassanger) : trip.tripStatus);
   //const {isLoading: isLoadingSeats, data:occupiedSeats} = {false, {occupiedSeats:1}:occupiedSeatsModel}
   //const occupiedSeats:occupiedSeatsModel = {occupiedSeats:1};
 

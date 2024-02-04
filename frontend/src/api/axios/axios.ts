@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const requestTimeout: number = 5000;
+const requestTimeout: number = 10000;
 const requestBaseUrl: string = import.meta.env.VITE_API_URL;
 
 const Axios: AxiosInstance = axios.create({

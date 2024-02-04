@@ -18,7 +18,6 @@ class PassangerApi extends AxiosApi {
     "application/vnd.trip.passenger.state.v1+json";
   private static readonly REPORT_LIST_TYPE =
     "application/vnd.report.public.list.v1+json";
-  //TODO: revisar, lo cambio porque ahora la lista es otro tipo
   // private static readonly REPORT_HEADER: string = "application/vnd.report.public.v1+json";
 
   // private static readonly PASSENGER_HEADER: string = "application/vnd.trip.passenger.v1+json";

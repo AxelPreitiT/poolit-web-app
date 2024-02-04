@@ -12,6 +12,7 @@ import LoadingWheel from "@/components/loading/LoadingWheel";
 import TripModel from "@/models/TripModel.ts";
 import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
 import { tripDetailsPath } from "@/AppRouter.tsx";
+import {INITIALPAGE, TRIPSPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 const ReservedPage = () => {
   const { isLoading, currentUser } = useCurrentUser();
@@ -20,22 +21,20 @@ const ReservedPage = () => {
   const { search, pathname } = useLocation();
   const time = new URLSearchParams(search).get("time");
   const page = new URLSearchParams(search).get("page");
-  // TODO: PONER CONSTANTES DE PAGINACION
-  const currentPage = page === null ? 1 : parseInt(page, 10);
+  const currentPage = page === null ? INITIALPAGE  : parseInt(page, 10);
 
-  // TODO: REVISAR NO LO CAMBIO AHORA POR LSA DUDAS
   const uriFutureTrips =
     isLoading || currentUser === undefined
       ? null
       : createPaginationUri(
           currentUser?.futureReservedTripsUri,
           currentPage,
-          2
+          TRIPSPAGESIZE
         );
   const uriPastTrips =
     isLoading || currentUser === undefined
       ? null
-      : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, 2);
+      : createPaginationUri(currentUser?.pastReservedTripsUri, currentPage, TRIPSPAGESIZE);
 
   const useExtraData = (
     trip: TripModel

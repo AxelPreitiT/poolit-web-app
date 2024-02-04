@@ -1,5 +1,7 @@
 const enum Status {
-    WAITING = "UNCONFIRMED",
+    DELETE = "DELETE",
+    UNCONFIRMED = "UNCONFIRMED",
+    PENDING = "PENDING",
     ACCEPTED = "ACCEPTED",
     CANCEL = "CANCEL",
     REJECTED = "REJECTED",

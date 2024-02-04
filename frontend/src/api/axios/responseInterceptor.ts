@@ -31,7 +31,6 @@ export const AxiosResponseErrorInterceptor = async (error: AxiosError) => {
     if (error.response.headers[accountVerificationHeader]) {
       throw new AccountNotVerifiedError();
     }
-    // TODO: check if refresh token is expired (run interceptor only once)
     const refreshToken = Jwt.getRefreshToken();
     if (refreshToken) {
       const prevRequest = {

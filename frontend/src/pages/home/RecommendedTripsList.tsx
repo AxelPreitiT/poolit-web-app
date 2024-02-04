@@ -17,7 +17,6 @@ const RecommendedTripsList = ({
     return null;
   }
     const extraData = (trip: TripModel):{startDate:string, endDate:string, link: string}=>{
-        //TODO: agarrar del forms!
         const now = new Date();
         const dateString = now.toISOString().split("T")[0]
         const startDate = dateString

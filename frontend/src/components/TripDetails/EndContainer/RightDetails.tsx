@@ -209,8 +209,7 @@ const RightDetails = ({
   const { search, pathname } = useLocation();
   const navigate = useNavigate();
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
-  const status_value =
-    passanger !== undefined ? getStatusPassanger(passanger) : status;
+  const status_value = passanger !== undefined ? getStatusPassanger(passanger) : status;
   const searchParams = new URLSearchParams(search);
   const showJoinBtn = searchParams.get("join") !== "false";
 
@@ -398,15 +397,14 @@ const RightDetails = ({
             </div>
           </Button>
         </Link>
+        {!trip.deleted &&
         <BtnDelete
-          uri={discovery?.tripsUriTemplate as string}
+          uri={discovery.tripsUriTemplate}
           id={trip.tripId}
-        />
+        />}
       </div>
     ) : (
-      passanger &&
-      passanger?.passengerState !== passangerStatus.REJECTED &&
-      getStatusPassanger(passanger) === ReserveStatus.NOT_STARTED && (
+      passanger && (
         <div className={styles.btn_container}>
           <Link to={reservedTripsPath}>
             <Button className={styles.btn_trips}>
@@ -416,7 +414,9 @@ const RightDetails = ({
               </div>
             </Button>
           </Link>
-          <CancelBtn passanger={passanger} />
+          {passanger.passengerState !== passangerStatus.REJECTED &&
+              getStatusPassanger(passanger) === ReserveStatus.NOT_STARTED &&
+          <CancelBtn passanger={passanger} />}
         </div>
       )
     ))

@@ -108,7 +108,6 @@ const SearchPage = () => {
   const extraData = (
     trip: TripModel
   ): { startDate: string; endDate: string; link: string } => {
-    //TODO: agarrar del forms!
     const startDate = initialSearch.date ? getIsoDate(initialSearch.date) : "";
     const endDate = initialSearch.last_date
       ? getIsoDate(initialSearch.last_date)

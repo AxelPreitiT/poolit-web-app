@@ -131,8 +131,8 @@ public class TripServiceImplTest {
 
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testDeleteTripAfterEnded() throws IllegalStateException, TripNotFoundException {
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteTripAfterEnded() throws IllegalArgumentException, TripNotFoundException {
         // precondiciones
         when(tripDao.findById(anyLong())).thenReturn(Optional.of(tripErrorDate));
 

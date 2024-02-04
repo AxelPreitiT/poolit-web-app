@@ -13,14 +13,30 @@ const StatusTrip: React.FC<StatusTripProps> = ({status }) => {
 
   switch (status) {
       //TODO: falta status pending (debería usar el estado de passenger: Accepted, Rejected, Pending, Unconfirmed)
-    case Status.WAITING:
+    case Status.UNCONFIRMED:
       componentToRender = (
-        <div className={styles.secondary}>
-          <i className={"bi bi-clock-history"}></i>
-          <h3>{t("trip_detail.status.waiting")}</h3>
+        <div className={styles.danger}>
+            <i className={"bi bi-x"}></i>
+          <h3>{t("trip_detail.status.unconfirmed")}</h3>
         </div>
       );
       break;
+      case Status.DELETE:
+          componentToRender = (
+              <div className={styles.danger}>
+                  <i className={"bi bi-x"}></i>
+                  <h3>{t("trip_detail.status.delete")}</h3>
+              </div>
+          );
+          break;
+      case Status.PENDING:
+          componentToRender = (
+              <div className={styles.secondary}>
+                  <i className={"bi bi-clock-history"}></i>
+                  <h3>{t("trip_detail.status.pending")}</h3>
+              </div>
+          );
+          break;
     case Status.ACCEPTED:
       componentToRender = (
         <div className={styles.success}>

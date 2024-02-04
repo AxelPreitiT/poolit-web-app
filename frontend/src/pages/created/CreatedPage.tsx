@@ -19,13 +19,26 @@ const CreatedPage = () => {
   const navigate = useNavigate();
   const { search, pathname } = useLocation();
   const time = new URLSearchParams(search).get("time");
-  console.log("time", time);
 
   const page = new URLSearchParams(search).get("page");
   const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
   //extradata={(trip) => {trip.strar, trip.end}} //driver
   //extradata={(trip) => {useCurrentPassanger(tripUri); pasanger}} //passenger
   //extradata={(trip) => {useLocale();..; return{queryStart, queryEnd}} //buscador
+
+     const uriFutureTrips =
+        isLoading || currentUser === undefined
+            ? null
+            : createPaginationUri(
+                currentUser?.futureCreatedTripsUri,
+                currentPage,
+                TRIPSPAGESIZE
+            );
+
+    const uriPastTrips =
+        isLoading || currentUser === undefined
+            ? null
+            : createPaginationUri(currentUser?.pastCreatedTripsUri, currentPage, TRIPSPAGESIZE);
 
   const useExtraData = (
     trip: TripModel
@@ -44,7 +57,7 @@ const CreatedPage = () => {
         <TabComponent
           left_title={t("created_trips.future")}
           left_component={
-            isLoading || currentUser === undefined ? (
+              uriFutureTrips === null ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
                 iconClassName={styles.loadingIcon}
@@ -53,11 +66,7 @@ const CreatedPage = () => {
               />
             ) : (
               <ListTripsScheduled
-                uri={createPaginationUri(
-                  currentUser.futureCreatedTripsUri,
-                  currentPage,
-                  TRIPSPAGESIZE
-                )}
+                uri={uriFutureTrips}
                 current_page={currentPage}
                 useExtraData={useExtraData}
                 empty_component={
@@ -72,7 +81,7 @@ const CreatedPage = () => {
           }
           right_title={t("created_trips.past")}
           right_component={
-            isLoading || currentUser === undefined ? (
+              uriPastTrips === null ? (
               <LoadingWheel
                 containerClassName={styles.loadingContainer}
                 iconClassName={styles.loadingIcon}
@@ -81,11 +90,7 @@ const CreatedPage = () => {
               />
             ) : (
               <ListTripsScheduled
-                uri={createPaginationUri(
-                  currentUser?.pastCreatedTripsUri,
-                  currentPage,
-                  TRIPSPAGESIZE
-                )}
+                uri={uriPastTrips}
                 current_page={currentPage}
                 useExtraData={useExtraData}
                 empty_component={

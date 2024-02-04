@@ -98,7 +98,7 @@ public class TripServiceImpl implements TripService {
         final Trip trip = findById(tripId).orElseThrow(TripNotFoundException::new);
         //Si el viaje ya termino o ya fue eliminado
         if(trip.getEndDateTime().isBefore(LocalDateTime.now()) || trip.isDeleted()){
-            RuntimeException e = new IllegalStateException();
+            RuntimeException e = new IllegalArgumentException();
             LOGGER.error("Driver {} tried deleting the trip with id {} after it ended or has been deleted", trip.getDriver().getUserId(), trip.getTripId(), e);
             throw e;
         }
@@ -254,7 +254,7 @@ public class TripServiceImpl implements TripService {
     public boolean userIsDriver(final long tripId, final User user){
         final Optional<Trip> trip = tripDao.findById(tripId);
         if(!trip.isPresent()){
-            IllegalStateException e = new IllegalStateException();
+            IllegalArgumentException e = new IllegalArgumentException();
             LOGGER.error("Trip with id {} not found", tripId, e);
             throw e;
         }
@@ -418,7 +418,7 @@ public class TripServiceImpl implements TripService {
         User user = userService.findById(userId).orElseThrow(()-> new IllegalArgumentException("User not found"));
         Passenger passenger = tripDao.getPassenger(tripId, user).orElseThrow(()-> new IllegalArgumentException("Passanger not found"));
         if(LocalDateTime.now().compareTo(passenger.getStartDateTime())>=0){
-            throw new IllegalStateException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
+            throw new IllegalArgumentException();//no debe poder aceptar o rechazar a pasajeros cuyo perdiodo ya empezo;
         }
         emailService.sendMailTripRejected(passenger.getTrip(), passenger);
         return tripDao.rejectPassenger(passenger);

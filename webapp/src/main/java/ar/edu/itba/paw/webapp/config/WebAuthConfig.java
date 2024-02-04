@@ -183,7 +183,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 //        configuration.setAllowCredentials(true);
         configuration.addAllowedHeader(CorsConfiguration.ALL);
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER,"Accept", "X-Total-Pages", "Link", "Location"));
+        configuration.setExposedHeaders(Arrays.asList(BasicAuthFilter.JWT_HEADER, BasicAuthFilter.JWT_REFRESH_HEADER, BasicAuthFilter.VERIFICATION_HEADER,"Accept","Accept-Language", "X-Total-Pages", "Link", "Location","Cache-Control","Vary","Content-type"));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
