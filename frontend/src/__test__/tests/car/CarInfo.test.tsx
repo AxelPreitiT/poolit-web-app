@@ -56,7 +56,7 @@ describe("CarInfo", () => {
     car.featuresUri.forEach(async (featureUri) => {
       expect(
         await screen.findByText(
-          CarFeatureMock.getCarFeatureByUriProp(featureUri).name
+          CarFeatureMock.getCarFeatureByUriProp(featureUri).id
         )
       ).toBeInTheDocument();
     });
@@ -225,7 +225,7 @@ describe("CarInfo", () => {
       ...props,
       car: newCar,
     });
-
+    await expectViewMode(newCar, props.carBrand);
     expect(window.URL.createObjectURL).not.toHaveBeenCalled();
   });
 });

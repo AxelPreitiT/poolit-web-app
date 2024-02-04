@@ -104,10 +104,7 @@ const router = createBrowserRouter(
     {
       path: publicsDriverReviewsPath,
       element: (
-        <RouteWrapper
-          title="reviews.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="reviews.title">
           <Navbar />
           <ReviewPageDriver />
         </RouteWrapper>
@@ -116,10 +113,7 @@ const router = createBrowserRouter(
     {
       path: publicsPassangerReviewsPath,
       element: (
-        <RouteWrapper
-          title="reviews.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="reviews.title">
           <Navbar />
           <ReviewPagePassanger />
         </RouteWrapper>
@@ -128,10 +122,7 @@ const router = createBrowserRouter(
     {
       path: publicProfilePath,
       element: (
-        <RouteWrapper
-          title="profile.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="profile.title">
           <Navbar />
           <PublicProfilePage />
         </RouteWrapper>
@@ -221,7 +212,7 @@ const router = createBrowserRouter(
     {
       path: carPath,
       element: (
-        <RouteWrapper title="car.title" showWhenUserIsNotAuthenticated={false}>
+        <RouteWrapper title="car.title">
           <Navbar />
           <CarPage />,
         </RouteWrapper>

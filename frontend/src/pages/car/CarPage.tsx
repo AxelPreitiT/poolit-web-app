@@ -19,11 +19,7 @@ const CarPage = () => {
   const { t } = useTranslation();
   const { search } = useLocation();
   const { carId } = useParams();
-  const {
-    isLoading: isUserCarsLoading,
-    cars: userCars,
-    isError: isUserCarsError,
-  } = useUserCars();
+  const { cars: userCars } = useUserCars();
   const {
     isLoading: isCarLoading,
     car,
@@ -49,13 +45,11 @@ const CarPage = () => {
   const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
 
   if (
-    isUserCarsLoading ||
     isCarLoading ||
     isCarBrandLoading ||
     isCarFeaturesLoading ||
     isAllCarFeaturesLoading ||
     isCarError ||
-    isUserCarsError ||
     isCarBrandError ||
     isCarFeaturesError ||
     isAllCarFeaturesError ||
