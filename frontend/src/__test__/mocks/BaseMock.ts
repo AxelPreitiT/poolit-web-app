@@ -1,4 +1,4 @@
-import { HttpResponse, HttpResponseInit, http } from "msw";
+import {HttpResponse, HttpResponseInit, http, HttpRequestHandler} from "msw";
 
 class BaseMock {
   protected static readonly OK_STATUS = 200;
@@ -16,9 +16,17 @@ class BaseMock {
 
   protected static jsonResponse = HttpResponse.json;
 
-  protected static get = http.get;
+  protected static getWithoutBase: HttpRequestHandler = (
+      path,
+      resolver,
+      options
+  ) => http.get(path as string, resolver, options);
 
-  protected static options = http.options;
+  protected static get: HttpRequestHandler = (path, resolver, options) =>
+      this.getWithoutBase(this.getPath(path as string), resolver, options);
+
+  protected static options: HttpRequestHandler = (path, resolver, options) =>
+      http.options(this.getPath(path as string), resolver, options);
 
 }
 

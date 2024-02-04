@@ -32,14 +32,14 @@ const carFeature: carFeatureModel = {
 
 class CarFeatureMock extends BaseMock{
     public static getAllFeatures(){
-        return this.get(this.getPath("/car-features"),()=>{
+        return this.get("/car-features",()=>
             this.jsonResponse(carFeatureList,{status:this.OK_STATUS})
-        })
+        )
     }
     public static getFeature(){
-        return this.get(this.getPath("/car-features/:featureId"),()=>{
+        return this.get("/car-features/:featureId",()=>
             this.jsonResponse(carFeature,{status:this.OK_STATUS})
-        })
+        )
     }
 }
 export default CarFeatureMock;
