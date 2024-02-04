@@ -44,6 +44,9 @@ const ReportPage = () => {
     isError: isTripError,
   } = useTripByUri(report?.tripUri);
 
+  const doNotShowJoinBtnSearchParams = new URLSearchParams();
+  doNotShowJoinBtnSearchParams.set("join", "false");
+
   const [showModalReportReject, setModalReportReject] = useState(false);
   const [showModalReportApprove, setModalReportApprove] = useState(false);
   const openModalReportApprove = () => {
@@ -368,7 +371,11 @@ const ReportPage = () => {
                 {trip === undefined || isTripLoading || isTripError ? (
                   <LoadingWheel description={t("trip.loading")} />
                 ) : (
-                  <CardTrip trip={trip} className="w-100" />
+                  <CardTrip
+                    trip={trip}
+                    className="w-100"
+                    searchParams={doNotShowJoinBtnSearchParams}
+                  />
                 )}
               </div>
               <div className={styles.report_content_container}>

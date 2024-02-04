@@ -110,7 +110,11 @@ const TripDetailsPage = () => {
               currentPassanger={currentPassanger}
             />
             <div className={styles.img_container}>
-              <img src={car?.imageUri} className={styles.img_style} alt="" />
+              <img
+                src={car?.imageUri}
+                className={styles.img_style}
+                alt={t("car.image", { car_info: car?.infoCar })}
+              />
             </div>
           </div>
 
