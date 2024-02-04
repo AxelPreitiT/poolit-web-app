@@ -50,7 +50,8 @@ public class CityController {
     public Response getAllCities(){
         LOGGER.debug("GET request for all cities");
         final List<CityDto> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID).stream().map(city -> CityDto.fromCity(uriInfo,city)).collect(Collectors.toList());
-        return Response.ok(new GenericEntity<List<CityDto>>(cities){}).build();
+        Response.ResponseBuilder res =  Response.ok(new GenericEntity<List<CityDto>>(cities){});
+        return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }
 
     @GET

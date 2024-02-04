@@ -54,6 +54,9 @@ public class ControllerUtils {
         final CacheControl cacheControl = new CacheControl();
         cacheControl.setMaxAge(MAX_AGE);
         responseBuilder.cacheControl(cacheControl);
+//        https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching#vary
+//        https://datatracker.ietf.org/doc/html/rfc9110#name-vary
+        responseBuilder.header("Vary",String.join(",",HttpHeaders.ACCEPT_LANGUAGE,HttpHeaders.ACCEPT));
         return responseBuilder;
     }
 

@@ -17,7 +17,6 @@ public class Province {
     private long id;
 
     //    Avoid bringing all cities for the province in the city of a user
-//    TODO: check
     @OneToMany(fetch=FetchType.LAZY,orphanRemoval=true,	mappedBy="province")
 
 //    @OneToMany(fetch=FetchType.EAGER,orphanRemoval=true,	mappedBy="province")
