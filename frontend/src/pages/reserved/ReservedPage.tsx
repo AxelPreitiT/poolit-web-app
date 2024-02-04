@@ -107,12 +107,8 @@ const ReservedPage = () => {
             )
           }
           active={time === "past" ? "right" : "left"}
-          onLeftClick={() =>
-            navigate(`${pathname}?time=future&page=1`, { replace: true })
-          }
-          onRightClick={() =>
-            navigate(`${pathname}?time=past&page=1`, { replace: true })
-          }
+          onLeftClick={() => navigate(`${pathname}?time=future`)}
+          onRightClick={() => navigate(`${pathname}?time=past`)}
         />
       </div>
     </MainComponent>

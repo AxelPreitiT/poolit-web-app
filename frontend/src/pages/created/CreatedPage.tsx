@@ -19,6 +19,7 @@ const CreatedPage = () => {
   const navigate = useNavigate();
   const { search, pathname } = useLocation();
   const time = new URLSearchParams(search).get("time");
+  console.log("time", time);
 
   const page = new URLSearchParams(search).get("page");
   const currentPage = page === null ? INITIALPAGE : parseInt(page, 10);
@@ -98,12 +99,8 @@ const CreatedPage = () => {
             )
           }
           active={time === "past" ? "right" : "left"}
-          onLeftClick={() =>
-            navigate(`${pathname}?time=future&page=1`, { replace: true })
-          }
-          onRightClick={() =>
-            navigate(`${pathname}?time=past&page=1`, { replace: true })
-          }
+          onLeftClick={() => navigate(`${pathname}?time=future`)}
+          onRightClick={() => navigate(`${pathname}?time=past`)}
         />
       </div>
     </MainComponent>
