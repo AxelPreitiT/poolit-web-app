@@ -139,7 +139,7 @@ class UserMock extends BaseMock{
         )
     }
     public static getByIdPublic(){
-        return this.get("/users/:userId",()=>
+        return this.get("/users/40",()=>
             this.jsonResponse(publicUser,{status:this.OK_STATUS})
         )
     }
