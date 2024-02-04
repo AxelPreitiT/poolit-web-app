@@ -20,14 +20,21 @@ describe("ProfileInfo", () => {
 
   let props: typeof readonlyProps;
 
+  window.URL.createObjectURL = vi.fn();
+
   beforeEach(() => {
     setAuthToken();
+    server.use(UserMock.getByIdPrivateRoleUser());
     props = {
       ...readonlyProps,
     };
     const render = customRender(<ProfileInfo {...props} />);
     user = render.user;
     rerender = render.rerender;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   const rerenderWithProps = (props: typeof readonlyProps) => {
@@ -112,15 +119,15 @@ describe("ProfileInfo", () => {
 
   it("If the user is updated, it should render the new info", async () => {
     const newCity = CityMock.getCityByIdProp(1);
+    const imageFile = new File(["image"], "image.jpg", { type: "image/jpeg" });
     const newUser: UserPrivateModel = {
       ...privateUserRoleUser,
       username: "newUsername",
       surname: "newSurname",
       phone: "newPhone",
-      cityUri: newCity.selfUri,
     };
 
-    server.use(UserMock.updateUserSuccess());
+    server.use(UserMock.updateUserSuccess(), UserMock.updateUserImage());
     user.click(screen.getByRole("button", { name: /edit/i }));
 
     await expectEditMode();
@@ -129,11 +136,13 @@ describe("ProfileInfo", () => {
     const surnameInput = screen.getByPlaceholderText(/^surname$/i);
     const phoneInput = screen.getByPlaceholderText(/phone/i);
     const neighborhoodInput = screen.getByPlaceholderText(/neighborhood/i);
+    const imageInput = screen.getByPlaceholderText(/image input/i);
 
     user.type(nameInput, newUser.username);
     user.type(surnameInput, newUser.surname);
     user.type(phoneInput, newUser.phone);
     user.selectOptions(neighborhoodInput, newCity.id.toString());
+    user.upload(imageInput, imageFile);
 
     user.click(screen.getByRole("button", { name: /save/i }));
 
@@ -144,5 +153,37 @@ describe("ProfileInfo", () => {
     });
 
     await expectViewMode(newUser, newCity);
+    expect(window.URL.createObjectURL).toHaveBeenCalledWith(imageFile);
+  });
+
+  it("If the user is updated, but not its image, it should not call createObjectURL", async () => {
+    const newUser: UserPrivateModel = {
+      ...privateUserRoleUser,
+      username: "newUsername",
+      surname: "newSurname",
+      phone: "newPhone",
+    };
+
+    server.use(UserMock.updateUserSuccess());
+    user.click(screen.getByRole("button", { name: /edit/i }));
+
+    await expectEditMode();
+
+    const nameInput = screen.getByPlaceholderText(/^name$/i);
+    const surnameInput = screen.getByPlaceholderText(/^surname$/i);
+    const phoneInput = screen.getByPlaceholderText(/phone/i);
+
+    user.type(nameInput, newUser.username);
+    user.type(surnameInput, newUser.surname);
+    user.type(phoneInput, newUser.phone);
+
+    user.click(screen.getByRole("button", { name: /save/i }));
+
+    rerenderWithProps({
+      ...props,
+      currentUser: newUser,
+    });
+
+    expect(window.URL.createObjectURL).not.toHaveBeenCalled();
   });
 });

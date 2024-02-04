@@ -216,6 +216,12 @@ class UserMock extends BaseMock {
       this.plainResponse({ status: this.INTERNAL_SERVER_ERROR_STATUS })
     );
   }
+
+  public static updateUserImage() {
+    return this.put("/users/:userId/image", () =>
+      this.plainResponse({ status: this.NO_CONTENT_STATUS })
+    );
+  }
 }
 
 export default UserMock;
