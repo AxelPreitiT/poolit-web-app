@@ -30,7 +30,7 @@ export const privateUserRoleUser: userPrivateModel = {
     reportsRejected: 1,
     role: "USER"
 }
-const privateUserRoleDriver: userPrivateModel = {
+export const privateUserRoleDriver: userPrivateModel = {
     driverRating: 3.0,
     imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
     passengerRating: 0.0,
@@ -57,7 +57,7 @@ const privateUserRoleDriver: userPrivateModel = {
     reportsRejected: 1,
     role: "DRIVER"
 }
-const privateUserRoleAdmin: userPrivateModel = {
+export const privateUserRoleAdmin: userPrivateModel = {
     driverRating: 3.0,
     imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
     passengerRating: 0.0,
@@ -98,7 +98,7 @@ export const publicUser: userPublicModel ={
     username: "Jose Rodolfo"
 }
 
-const driverUser: userDriverModel = {
+export const driverUser: userDriverModel = {
     driverRating: 3.0,
     imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
     passengerRating: 0.0,
@@ -121,7 +121,7 @@ export const profileListInfo = {
     id: 5,
 }
 
-class UserMock extends BaseMock{
+export default class UserMock extends BaseMock{
     public static getByIdPrivateRoleAdmin(){
         return this.get("/users/:userId",()=>
             this.jsonResponse(privateUserRoleAdmin,{status:this.OK_STATUS})
@@ -164,5 +164,3 @@ class UserMock extends BaseMock{
         )
     }
 }
-
-export default UserMock;

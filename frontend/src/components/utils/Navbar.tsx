@@ -53,9 +53,6 @@ const Navbar = () => {
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  console.log("currentUser", currentUser)
-  console.log("currentUserRole", currentUser?.role)
-
   return (
     <div className="nav-container">
       <div className="nav-sections-container">
