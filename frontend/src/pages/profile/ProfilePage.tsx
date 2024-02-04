@@ -31,6 +31,7 @@ const ProfilePage = () => {
   const { isLoading: isLoadingCity, city } = useCityByUri(currentUser?.cityUri);
   const { isLoading: isAllCitiesLoading, cities } = useAllCities();
   const [editMode, setEditMode] = useState(false);
+  const [active, setActive] = useState<"left" | "right">("right");
 
   if (isCurrentUserLoading || isAllCitiesLoading) {
     return <LoadingScreen description={t("profile.loading.profile")} />;
@@ -155,7 +156,9 @@ const ProfilePage = () => {
                 id={currentUser.userId}
               />
             }
-            active="right"
+            active={active}
+            onLeftClick={() => setActive("left")}
+            onRightClick={() => setActive("right")}
           />
         ) : (
           <PassengerList
