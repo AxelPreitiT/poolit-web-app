@@ -1,0 +1,101 @@
+@use "@/colors.module" as colors;
+
+.userContainer {
+  background-color: colors.$secondary-color;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-color: transparent !important;
+  border-radius: 5px;
+  width: 100%;
+  height: min-content;
+  gap: 20px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.categoryContainer {
+  display: flex;
+  gap: 25px;
+  flex-direction: column;
+}
+
+.passangerContainer {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.infoContainer {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.marginCointainer {
+  margin: 0 5%;
+}
+
+.spanStyle {
+  font-size: small;
+}
+
+.backBtn {
+  background-color: colors.$primary-color !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-color: transparent !important;
+}
+
+.submitBtn {
+  background-color: colors.$secondary-color !important;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-color: transparent !important;
+}
+
+.titleModal {
+  color: colors.$primary-color;
+}
+
+.reportFormHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  column-gap: 1em;
+  position: relative;
+  padding: 2em 2em 0 2em;
+}
+
+.reportFormTitle {
+  color: colors.$secondary-color;
+  width: 100%;
+  position: absolute;
+  margin: 0;
+  left: 0;
+  z-index: 1;
+  border-bottom: 4px solid;
+  opacity: 1;
+}
+
+.imgCointainer {
+  z-index: 2;
+}
+
+.aclaration_text {
+  display: flex;
+  justify-content: flex-end;
+  color: gray;
+  font-style: italic;
+}

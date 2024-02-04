@@ -1,0 +1,260 @@
+@use "@/colors.module.scss" as colors;
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2rem 1rem 1rem 1rem;
+  column-gap: 2rem;
+}
+
+.searchContainer {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  top: 2rem;
+  position: sticky;
+  position: -webkit-sticky;
+}
+
+.contentContainer {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  row-gap: 1rem;
+}
+
+@media (max-width: 1250px) {
+  .mainContainer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    row-gap: 3rem;
+  }
+
+  .searchContainer {
+    width: 60%;
+    position: relative;
+    top: 0;
+  }
+
+  .contentContainer {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .searchContainer {
+    width: 100%;
+  }
+}
+
+// --------------- No results found ----------------
+.noResultsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-wrap: nowrap;
+  font-weight: 600;
+  row-gap: 0.5rem;
+}
+
+.noResultsContainer .noResultsHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.25rem;
+  font-size: 2rem;
+}
+
+.noResultsContainer .noResultsHeader svg {
+  width: 4rem;
+  height: 4rem;
+}
+
+.noResultsContainer .moResultsBody {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1400px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1.5rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .noResultsContainer .moResultsBody {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1.5rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .noResultsContainer .moResultsBody {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1.25rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .noResultsContainer .moResultsBody {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .noResultsContainer .noResultsHeader {
+    font-size: 1rem;
+  }
+
+  .noResultsContainer .noResultsHeader svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .noResultsContainer .noResultsBody {
+    font-size: 0.75rem;
+  }
+}
+
+// --------------- Items ----------------
+.resultsContainer {
+  width: 100%;
+}
+
+.tripsList {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.tripItem {
+  width: 49%;
+}
+
+@media (max-width: 900px) {
+  .tripItem {
+    width: 100%;
+  }
+}
+
+// --------------- Sorter ----------------
+.sorter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+// --------------- Loading spinner ----------------
+.loadingContainer {
+  margin-top: 2rem;
+}
+
+.loadingIcon {
+  height: 6rem;
+  width: 6rem;
+}
+
+.loadingDescription {
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+
+// --------------- Pagination ----------------
+.pageSelectorContainer {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 0.5rem;
+  width: 100%;
+}
+
+.pageSelectorText {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: colors.$italic-text-color;
+  font-style: italic;
+}
+
+.paginationContainer {
+  margin-bottom: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+}
+
+%paginationItem {
+  font-weight: 500;
+  font-size: 1.25rem;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+}
+
+%paginationItem:hover {
+  opacity: 0.8;
+}
+
+.paginationItem > * {
+  @extend %paginationItem;
+  background-color: colors.$container-color;
+  color: colors.$secondary-color;
+}
+
+.paginationItem > *:hover,
+.paginationItem > *:focus,
+.paginationItem > *:active {
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+}
+
+.paginationActiveItem > * {
+  @extend %paginationItem;
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+}
+
+.paginationActiveItem > *:hover,
+.paginationActiveItem > *:focus,
+.paginationActiveItem > *:active {
+  background-color: colors.$secondary-color;
+  color: colors.$light-text-color;
+  box-shadow: none;
+}

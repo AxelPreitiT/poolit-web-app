@@ -4,8 +4,6 @@ import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;
@@ -52,6 +50,9 @@ public class Passenger{
     }
 
     public PassengerState getPassengerState() {
+        if(passengerState.equals(PassengerState.PENDING) && startDateTime.compareTo(LocalDateTime.now())<0){
+            return PassengerState.UNCONFIRMED;
+        }
         return passengerState;
     }
 
@@ -151,18 +152,18 @@ public class Passenger{
         return LocalDateTime.now().isAfter(endDateTime);
     }
 
-    public boolean getTripStarted(){
+    public boolean isTripStarted(){
         return !LocalDateTime.now().isBefore(startDateTime);
     }
 
-    public boolean getAccepted(){
+    public boolean isAccepted(){
         return passengerState.equals(PassengerState.ACCEPTED);
     }
 
-    public boolean getRejected(){
+    public boolean isRejected(){
         return passengerState.equals(PassengerState.REJECTED);
     }
-    public boolean getWaiting(){
+    public boolean isWaiting(){
         return passengerState.equals(PassengerState.PENDING);
     }
 
@@ -178,7 +179,8 @@ public class Passenger{
     public enum PassengerState{
         ACCEPTED("passengerState.accepted"),
         REJECTED("passengerState.rejected"),
-        PENDING("passengerState.pending");
+        PENDING("passengerState.pending"),
+        UNCONFIRMED("passengerState.unconfirmed");
 
         private final String messageCode;
         PassengerState(String messageCode){

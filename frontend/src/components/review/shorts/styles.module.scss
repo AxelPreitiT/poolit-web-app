@@ -1,0 +1,33 @@
+@use "@/colors.module.scss" as colors;
+
+.row_content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.short_review {
+  border-bottom: 2px solid #8b8b8b;
+  padding: 1.5% 1% 1% 1%;
+  width: 100%;
+}
+
+.type {
+  color: colors.$secondary-color !important;
+}
+
+.review_info_comment {
+  font-size: 1.2rem;
+  word-break: break-word;
+}
+
+.date_review {
+  font-style: italic;
+  display: flex;
+  justify-content: right;
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: colors.$italic-text-color;
+  font-style: italic;
+  column-gap: 0.25rem;
+}

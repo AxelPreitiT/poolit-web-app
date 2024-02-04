@@ -1,0 +1,30 @@
+@use "@/colors.module.scss" as colors;
+
+.car_card {
+  display: flex;
+  flex-direction: column;
+  margin: 2% 2% 2% 2%;
+}
+
+.carImage {
+  width: 100%;
+  height: 150px;
+  border-radius: 20px;
+  object-fit: cover;
+  object-position: center;
+  cursor: pointer;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  opacity: 1;
+  transition:
+    opacity 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.carImage:hover {
+  opacity: 0.8;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.model_car {
+  color: #6c757d;
+}

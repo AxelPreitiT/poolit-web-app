@@ -4,7 +4,6 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.VerificationToken;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 public interface TokenDao {
@@ -12,7 +11,7 @@ public interface TokenDao {
 
     Optional<VerificationToken> getToken(String token);
 
-    void deleteToken(VerificationToken token);
+//    void deleteToken(VerificationToken token);
 
     void updateToken(String token, User user, LocalDate date);
 }

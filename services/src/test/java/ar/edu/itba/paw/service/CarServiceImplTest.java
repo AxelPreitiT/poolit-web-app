@@ -35,7 +35,9 @@ public class CarServiceImplTest {
     private static final long CAR_ID = 2L;
     private static final List<FeatureCar> FEATURES = new ArrayList<>(AIR.ordinal());
     private static final CarBrand BRAND_ID = VOLKSWAGEN;
-    private static final Image IMAGEN = new Image(0L, null);
+    private static final Image IMAGE = new Image(0L, null);
+    private static final byte[] IMAGE_DATA = new byte[]{0};
+    private static final Image IMAGE_2 = new Image(1L,IMAGE_DATA);
 
     @Mock
     private CarDao carDao;
@@ -48,10 +50,10 @@ public class CarServiceImplTest {
 
 
     @Test
-    public void TestCreateCar() throws UserNotFoundException {
+    public void testCreateCar() throws UserNotFoundException {
         when(carDao.create(eq(PLATE), eq(INFO_CAR), eq(USER), anyLong(), anyInt(), eq(BRAND_ID), eq(FEATURES)))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
-//        when(imageService.createImage(any())).thenReturn(IMAGEN);
+        when(imageService.createImage(any())).thenReturn(IMAGE);
         when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
 
         Car newCar = carService.createCar(PLATE, INFO_CAR, null, SEATS, BRAND_ID, FEATURES);
@@ -65,19 +67,19 @@ public class CarServiceImplTest {
         Assert.assertEquals(FEATURES, newCar.getFeatures());
     }
 
+
     @Test(expected = UserNotFoundException.class)
-    public void TestNotUserCreateCar() throws UserNotFoundException {
+    public void testCreateCarWithoutUser() throws UserNotFoundException {
         when(userService.getCurrentUser()).thenReturn(Optional.empty());
         carService.createCar(PLATE, INFO_CAR, null, SEATS, BRAND_ID, FEATURES);
-        Assert.fail();
     }
 
     @Test
-    public void TestModifyCar() throws CarNotFoundException {
+    public void testModifyCar() throws CarNotFoundException {
         when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES),anyLong()))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
         //when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
-        when(carService.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
+        when(carDao.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
         //doNothing().when(imageService).replaceImage(anyLong(), any(byte[].class));
 
         Car newCar = carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
@@ -89,11 +91,27 @@ public class CarServiceImplTest {
         Assert.assertEquals(IMAGE_ID, newCar.getImageId());
     }
 
+    @Test
+    public void testModifyCarWithImage() throws CarNotFoundException {
+        when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES),anyLong()))
+                .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_2.getImageId(), SEATS, BRAND_ID, FEATURES));
+        when(imageService.createImage(eq(IMAGE_DATA))).thenReturn(IMAGE_2);
+        when(carDao.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
+
+        Car newCar = carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, IMAGE_DATA);
+
+        Assert.assertNotNull(newCar);
+        Assert.assertEquals(PLATE, newCar.getPlate());
+        Assert.assertEquals(INFO_CAR, newCar.getInfoCar());
+        Assert.assertEquals(USER, newCar.getUser());
+        Assert.assertEquals(IMAGE_2.getImageId().longValue(), newCar.getImageId());
+    }
+
     @Test(expected = CarNotFoundException.class)
-    public void TestNotHAveCarModifyCar() throws CarNotFoundException {
-        when(carService.findById(CAR_ID)).thenReturn(Optional.empty());
+    public void testModifyCarWithoutCar() throws CarNotFoundException {
+        when(carDao.findById(CAR_ID)).thenReturn(Optional.empty());
         carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
-        Assert.fail();
+
     }
 
 }

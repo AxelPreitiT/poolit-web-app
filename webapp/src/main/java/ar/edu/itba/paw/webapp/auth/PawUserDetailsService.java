@@ -41,9 +41,6 @@ public class PawUserDetailsService implements UserDetailsService {
             LOGGER.error("No user found for email {}", email, e);
             throw e;
         }
-
-
-
         final Collection<GrantedAuthority> authorities = new HashSet<>();
 
         final User user = userOptional.get();
@@ -57,7 +54,6 @@ public class PawUserDetailsService implements UserDetailsService {
                 authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
             }
         }
-
         return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, !user.isBanned(), authorities);
     }
 

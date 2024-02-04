@@ -1,0 +1,43 @@
+@use "@/colors.module" as colors;
+
+.dropdown_style {
+  display: flex;
+  padding: 1% 4%;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.btn_dropdown {
+  background-color: colors.$secondary-color !important;
+  border-color: white !important;
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 0.25rem;
+}
+
+.dropdown_menu_passanger {
+  margin-top: 0 !important;
+  background-color: colors.$primary-color !important;
+  width: 100%;
+}
+
+.dropdown_menu_passanger .active {
+  color: colors.$secondary-color !important;
+  font-weight: 600;
+}
+
+.review_empty_container {
+  display: flex;
+  min-height: 70px;
+  padding: 1.5% 1% 1% 1%;
+  flex-direction: row;
+  align-items: center;
+  gap: 3%;
+  justify-content: center;
+}
+
+.review_empty_container i {
+  color: colors.$secondary-color !important;
+}

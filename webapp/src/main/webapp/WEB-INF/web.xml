@@ -25,28 +25,8 @@
     </listener-class>
   </listener>
 
-  <servlet>
-    <servlet-name>dispatcher</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <init-param>
-      <param-name>contextClass</param-name>
-      <param-value>
-        org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-      </param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>dispatcher</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>/resources/*</url-pattern>
-  </servlet-mapping>
-<!--  Add a mapping to avoid the default tomcat error pages-->
-  <error-page>
+  <!--  Add a mapping to avoid the default tomcat error pages-->
+  <!--<error-page>
     <error-code>404</error-code>
     <location>/errors</location>
   </error-page>
@@ -61,7 +41,8 @@
   <error-page>
     <error-code>405</error-code>
     <location>/errors</location>
-  </error-page>
+  </error-page>-->
+
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -74,13 +55,14 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
+<!--  No se deberia necesitar-->
   <filter>
     <filter-name>openEntityManagerInView</filter-name>
     <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>openEntityManagerInView</filter-name>
-    <url-pattern>/*</url-pattern>
+    <url-pattern>/api/*</url-pattern>
   </filter-mapping>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
@@ -94,5 +76,63 @@
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <filter>
+    <filter-name>jersey</filter-name>
+    <filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
+    <init-param>
+      <param-name>jersey.config.server.provider.packages</param-name>
+      <param-value>
+        ar.edu.itba.paw.webapp.controller,
+        ar.edu.itba.paw.webapp.mapper,
+        ar.edu.itba.paw.webapp.config
+      </param-value>
+    </init-param>
+
+    <!-- pass to next filter if Jersey/App returns 404 -->
+    <init-param>
+      <param-name>jersey.config.servlet.filter.forwardOn404</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>jersey.config.server.provider.classnames</param-name>
+      <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+    </init-param>
+<!--    TODO: avoid tomact pages-->
+<!--    OJO: esto hace que a la primera que no funciona devuelva, y con esto no toma como "default" al usuario publico-->
+<!--    <init-param>-->
+<!--      <param-name>jersey.config.servlet.response.setStatusOverSendError</param-name>-->
+<!--      <param-value>true</param-value>-->
+<!--    </init-param>-->
+  </filter>
+  <filter-mapping>
+    <filter-name>jersey</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>UnconditionalCacheFilter</filter-name>
+    <filter-class>ar.edu.itba.paw.webapp.config.UnconditionalCacheFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>UnconditionalCacheFilter</filter-name>
+<!--    TODO: revisar la url a los contenidos del frontend-->
+    <url-pattern>/assets/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Redirect all requests to index.html so Router in React works -->
+  <!-- Exclude JS, CSS, and other non-HTML files stored in /assets from forwarding -->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/assets/*</url-pattern>
+  </servlet-mapping>
+  <!-- Forward all requests to index.html -->
+  <servlet>
+    <servlet-name>index</servlet-name>
+    <jsp-file>/index.html</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>index</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
 
 </web-app>

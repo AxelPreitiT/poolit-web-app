@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 @EnableAsync
 @EnableTransactionManagement
-@EnableWebMvc
+//@EnableWebMvc
 @PropertySource("classpath:application.properties")
 @ComponentScan({"ar.edu.itba.paw.webapp.controller","ar.edu.itba.paw.services","ar.edu.itba.paw.persistence"})
 @Configuration
@@ -52,17 +52,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private Resource schema;
 
 
-    @Bean
-    public ViewResolver viewResolver(){
-        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
+//    @Bean
+//    public ViewResolver viewResolver(){
+//        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//        viewResolver.setViewClass(JstlView.class);
+//        viewResolver.setPrefix("/WEB-INF/jsp/");
+//        viewResolver.setSuffix(".jsp");
+//        return viewResolver;
+//    }
 
+    /*
     @Bean
-    public DataSource dataSource() {
+        public DataSource dataSource() {
         LOGGER.info("Connecting to Postgres DB");
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
@@ -71,8 +72,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ds.setPassword(environment.getProperty("DB_PASSWORD"));
         return ds;
     }
+     */
 
-
+    @Bean
+    public DataSource dataSource() {
+        LOGGER.info("Connecting to Postgres DB");
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl(String.format("jdbc:postgresql://localhost:%s/%s",environment.getProperty("DB_PORT"),environment.getProperty("DB_NAME")));
+        ds.setUsername(environment.getProperty("DB_USER"));
+        ds.setPassword(environment.getProperty("DB_PASSWORD"));
+        return ds;
+    }
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
@@ -89,12 +100,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return populator;
     }
 
+    /*
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         super.addResourceHandlers(registry);
 
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
+    */
 
     //Hibernate ORM
     @Bean
@@ -109,8 +122,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
         //TODO: sacar
         // Si ponen esto en prod, hay tabla!!!
-//        properties.setProperty("hibernate.show_sql", "true");
-//        properties.setProperty("format_sql", "true");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }
@@ -131,12 +144,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ms;
     }
 
-    @Bean
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(10485760*4); // Tamaño máximo de archivo en bytes, 1024*1024*10
-        return multipartResolver;
-    }
-
+//    @Bean
+//    public MultipartResolver multipartResolver() {
+//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+//        multipartResolver.setMaxUploadSize(10485760*4); // Tamaño máximo de archivo en bytes, 1024*1024*10
+//        return multipartResolver;
+//    }
 
 }

@@ -49,6 +49,8 @@ public class User {
 
     @Formula("(SELECT coalesce(count(reports.report_id),0) FROM reports WHERE reports.reporter_id = user_id AND reports.status = 'REJECTED')")
     private int reportsRejected;
+    @Formula("(SELECT coalesce(count(trips.trip_id),0) FROM trips WHERE trips.driver_id = user_id)")
+    private int tripCount;
 
     @ManyToOne(fetch=FetchType.EAGER,optional=false)
     @JoinColumn( name = "city_id")
@@ -62,21 +64,6 @@ public class User {
 
     @Column(name="user_image_id")
     private Long userImageId;
-
-    //TODO: ver de eliminar
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="blocks",
-            joinColumns=@JoinColumn(name="blockedById"),
-            inverseJoinColumns=@JoinColumn(name="blockedId")
-    )
-    private Set<User> blocked;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="blocks",
-            joinColumns=@JoinColumn(name="blockedId"),
-            inverseJoinColumns=@JoinColumn(name="blockedById")
-    )
-    private Set<User> blockedBy;
 
     protected User(){
 
@@ -94,8 +81,6 @@ public class User {
         this.role = role;
         this.userImageId = userImageId;
         this.enabled = false;
-        this.blocked = new HashSet<>();
-        this.blockedBy = new HashSet<>();
     }
 
     public User(long userId, final String name, final String surname, final String email,
@@ -110,8 +95,6 @@ public class User {
         this.mailLocale = mailLocale;
         this.role = role;
         this.userImageId = userImageId;
-        this.blocked = new HashSet<>();
-        this.blockedBy = new HashSet<>();
         this.enabled = false;
         this.banned = false;
     }
@@ -211,26 +194,6 @@ public class User {
         this.mailLocale = mailLocale;
     }
 
-    public Set<User> getBlocked() {
-        return blocked;
-    }
-
-    public void insertBlocked(User blocked) {
-        this.blocked.add(blocked);
-    }
-
-    public void removeBlocked(User blocked) { this.blocked.remove(blocked); }
-
-    public Set<User> getBlockedBy() {
-        return blockedBy;
-    }
-
-    public void insertBlockedBy(User blockedBy) {
-        this.blockedBy.add(blockedBy);
-    }
-
-    public void removeBlockedBy(User blockedBy) { this.blockedBy.remove(blockedBy); }
-
     public double getPassengerRating() {
         return passengerRating;
     }
@@ -254,6 +217,8 @@ public class User {
     public int getReportsRejected() {
         return reportsRejected;
     }
+
+    public int getTripCount(){ return tripCount; }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistence.TokenDao;
-import ar.edu.itba.paw.models.City;
-import ar.edu.itba.paw.models.Province;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.VerificationToken;
 import org.springframework.context.annotation.Primary;
@@ -12,8 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,10 +37,10 @@ public class TokenHibernateDao implements TokenDao {
         return query.getResultList().stream().findFirst();
     }
 
-    @Override
-    public void deleteToken(VerificationToken token) {
-        em.remove(token);
-    }
+//    @Override
+//    public void deleteToken(VerificationToken token) {
+//        em.remove(token);
+//    }
 
     @Override
     public void updateToken(String token, User user, LocalDate date) {

@@ -16,8 +16,10 @@ public class Province {
     @Column(name = "province_id")
     private long id;
 
-    //@OneToMany(fetch=FetchType.LAZY,orphanRemoval=true,	mappedBy="province")
-    @OneToMany(fetch=FetchType.EAGER,orphanRemoval=true,	mappedBy="province")
+    //    Avoid bringing all cities for the province in the city of a user
+    @OneToMany(fetch=FetchType.LAZY,orphanRemoval=true,	mappedBy="province")
+
+//    @OneToMany(fetch=FetchType.EAGER,orphanRemoval=true,	mappedBy="province")
     private List<City> cities;
 
     protected Province() {

@@ -5,9 +5,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity

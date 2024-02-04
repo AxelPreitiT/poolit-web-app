@@ -1,0 +1,18 @@
+@use "@/colors.module.scss" as colors;
+
+.container_tab {
+  margin: 2% 0;
+}
+
+.loadingContainer {
+  margin-top: 1rem;
+}
+
+.loadingIcon {
+  height: 4rem;
+  width: 4rem;
+}
+
+.loadingDescription {
+  font-size: 2rem;
+}

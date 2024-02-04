@@ -22,7 +22,6 @@ public class ImageHibernateDao implements ImageDao {
 
     @Override
     public Image create(byte[] data) {
-        //TODO crear imagen default si data.length<=0
         LOGGER.debug("Adding new image to the database");
         final Image image = new Image(data);
         em.persist(image);
@@ -36,8 +35,26 @@ public class ImageHibernateDao implements ImageDao {
     public Optional<Image> findById(final long imageId){
         LOGGER.debug("Looking for image with id {} in the database", imageId);
         final Optional<Image> result = Optional.ofNullable(em.find(Image.class, imageId));
-        LOGGER.debug("Found {} in the database", result.isPresent() ? result.get() : "nothing");
+        LOGGER.debug("Found image with id {} in the database", result.isPresent() ? result.get().getImageId()  : "nothing");
         return result;
+    }
+
+    @Override
+    public Image update(final Image image, final byte[] content){
+        if (image == null){
+            LOGGER.error("Trying to update null image in database");
+            return null;
+        }
+        LOGGER.debug("Updating image {} in the database",image.getImageId());
+        image.setData(content);
+        return em.merge(image);
+    }
+
+    @Override
+    public void delete(final Image image){
+        LOGGER.debug("Deleting image with id {} in the database",image.getImageId());
+        Image imageMerge = em.merge(image);
+        em.remove(imageMerge);
     }
 
 }

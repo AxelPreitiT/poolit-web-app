@@ -9,7 +9,6 @@ import ar.edu.itba.paw.models.reports.ReportState;
 import ar.edu.itba.paw.models.trips.Trip;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 public interface ReportDao {
@@ -21,6 +20,8 @@ public interface ReportDao {
     void resolveReport(long reportId, String reason, ReportState state);
 
     PagedContent<Report> getReports(int page, int pageSize);
+
+    PagedContent<Report> getReportsMadeByUserOnTrip(final User reporter, final Trip trip, final int page, final int pageSize);
 
     Optional<Report>  getReportByTripAndUsers(long tripId, long reporterId, long reportedId);
 }

@@ -1,15 +1,22 @@
 package ar.edu.itba.paw.models;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class PagedContent<T>{
+
+    private static final long START_PAGE = 0;
     private final List<T> elements;
     private final int currentPage;
     private final int pageSize;
     private final int totalCount;
+
+    public static <E> PagedContent<E> fromOptional(final Optional<E> optional){
+        return optional.map(e -> new PagedContent<>(Collections.singletonList(e), 0, 1, 1)).orElseGet(PagedContent::emptyPagedContent);
+    }
     public static <E> PagedContent<E> emptyPagedContent(){
-        return new PagedContent<>(new ArrayList<>(),0,0,0);
+        return new PagedContent<>(Collections.emptyList(),0,0,0);
     }
     public PagedContent(List<T> elements, int currentPage, int pageSize, int totalCount) {
         if (pageSize < 0 || currentPage < 0 || totalCount < 0 || elements == null) {
@@ -57,4 +64,27 @@ public class PagedContent<T>{
     public boolean isMoreThanOnePage(){
         return getTotalPages()>1;
     }
+
+    public boolean isLast(){
+        //-1 porque currentPage inicia en 0
+        return currentPage==getTotalPages()-1;
+    }
+    public boolean isFirst(){
+        return currentPage==0;
+    }
+    public long getNextPage(){
+        return currentPage+1;
+    }
+    public long getPrevPage(){
+        return currentPage-1;
+    }
+    public long getLast(){
+        return getTotalPages()-1;
+    }
+
+    public long getFirst(){
+        return START_PAGE;
+    }
+
+
 }

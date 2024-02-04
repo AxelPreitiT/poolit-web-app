@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.exceptions.CityNotFoundException;
-import ar.edu.itba.paw.interfaces.exceptions.EmailAlreadyExistsException;
-import ar.edu.itba.paw.interfaces.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.interfaces.exceptions.*;
 import ar.edu.itba.paw.interfaces.persistence.UserDao;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -40,6 +41,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
+
+    @Value("classpath:images/profile.jpeg")
+    private Resource defaultImg;
+
+    private static final long DEFAULT_IMAGE_ID = 66;
 
 
     @Autowired
@@ -80,33 +86,46 @@ public class UserServiceImpl implements UserService {
         }
         User finalUser = userDao.create(username,surname,email, phone, passwordEncoder.encode(password), bornCity, new Locale(mailLocaleString), finalRole, userImageId);
         VerificationToken token = tokenService.createToken(finalUser);
-        try {
-            emailService.sendVerificationEmail(finalUser, token.getToken());
-        } catch (Exception e) {
-            LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.getUserId(), e);
-        }
+        emailService.sendVerificationEmail(finalUser, token.getToken());
         return finalUser;
     }
 
+
     @Transactional
     @Override
-    public boolean isDriver(User user){
-        return user.getIsDriver();
+    public Image getUserImage(final long userId, Image.Size size) throws UserNotFoundException, ImageNotFoundException {
+        final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        try {
+            return imageService.getImageOrDefault(user.getUserImageId(),size,defaultImg.getInputStream());
+//            return imageService.getImageByteaOrDefault(user.getUserImageId(),size,defaultImg.getInputStream());
+        }catch (IOException e){
+            throw new ImageNotFoundException();
+        }
     }
 
     @Transactional
     @Override
-    public boolean isUser(User user){
-        return user.getIsUser();
+    public void updateUserImage(final long userId, final byte[] content) throws UserNotFoundException, ImageNotFoundException{
+        final User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        final long oldImageId = user.getUserImageId();
+        final long imageId = imageService.createImage(content).getImageId();
+        if(oldImageId != DEFAULT_IMAGE_ID){
+            try {
+                imageService.deleteImage(oldImageId);
+            }catch (Exception e){
+                LOGGER.error("There was an error trying to delete image with id {} for user {}",oldImageId,userId,e);
+            }
+        }
+        userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
+//        if(user.getUserImageId() == DEFAULT_IMAGE_ID){ //fix migration in pawserver
+//            //creamos una imagen para no pisar la default
+//            final long imageId = imageService.createImage(content).getImageId();
+//            userDao.modifyUser(user.getUserId(), user.getName(),user.getSurname(),user.getPhone(),user.getBornCity(),user.getMailLocale(),imageId);
+//            return;
+//        }
+//        imageService.updateImage(content,user.getUserImageId());
     }
 
-    @Transactional
-    @Override
-    public void loginUser(final String email, final String password){
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
-        Authentication auth = authenticationManager.authenticate(authRequest);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-    }
 
     @Transactional
     @Override
@@ -134,44 +153,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changeToDriver() throws UserNotFoundException {
-        User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
-    }
-
-    @Transactional
-    @Override
-    public void blockUser( long blockedId) throws UserNotFoundException{
-        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.blockUser(blocker.getUserId(),blockedId);
-    }
-
-    @Transactional
-    @Override
-    public void unblockUser( long blockedId) throws UserNotFoundException{
-        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        userDao.unblockUser(blocker.getUserId(),blockedId);
-    }
-
-    @Transactional
-    @Override
-    public boolean isBlocked( long blockedId) throws UserNotFoundException {
-        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-        return userDao.isBlocked(blocker.getUserId(),blockedId);
-    }
-
-    @Transactional
-    @Override
-    public boolean isCurrentUser(long userId) throws UserNotFoundException {
-        Optional<User> user = getCurrentUser();
-        if(user.isPresent()){
-            return user.orElseThrow(UserNotFoundException::new).getUserId() == userId;
-        }
-        return false;
-    }
-
-    @Transactional
-    @Override
     public boolean sendVerificationEmail(String email){
         Optional<User> finalUser = findByEmail(email);
         if(finalUser.isPresent()){
@@ -179,72 +160,61 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
             String token = tokenService.updateToken(finalUser.get());
-            try {
-                emailService.sendVerificationEmail(finalUser.get(), token);
-            } catch (Exception e) {
-                LOGGER.error("There was an error sending verification email for new user with id {}", finalUser.get().getUserId(), e);
-            }
+            emailService.sendVerificationEmail(finalUser.get(), token);
         }
         return true;
     }
 
     @Transactional
     @Override
-    public boolean confirmRegister(String token) {
+    public void confirmRegister(String token, final User tokenUser) throws InvalidTokenException {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
         if(verificationToken == null){
-            return false;
+            throw new InvalidTokenException();
         }
-        boolean isValidToken = tokenService.isValidToken(verificationToken);
-        if (isValidToken) {
-            final User user = verificationToken.getUser();
-            user.setEnabled(true);
-            authWithoutPassword(user);
+        final User user = verificationToken.getUser();
+        if(user.getUserId() != tokenUser.getUserId()){
+            throw new InvalidTokenException();
         }
-        return isValidToken;
+        if (!tokenService.isValidToken(verificationToken)){
+            throw new InvalidTokenException();
+        }
+        //verificationToken != null and it is a valid token
+
+        tokenUser.setEnabled(true);
     }
 
-
-    void authWithoutPassword(User user) {
-        final Collection<GrantedAuthority> authorities = new HashSet<>();
-
-        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
-            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
-        }else{
-            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
-                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
-            } else {
-                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
-            }
-        }
-
-
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), authorities);
-        Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
-        SecurityContextHolder.getContext().setAuthentication(authRequest);
-    }
 
     @Transactional
     @Override
-    public void modifyUser(String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException {
-        Optional<User> user = getCurrentUser();
-        if(user.isPresent()){
-            if(imgData.length<=0){
-                userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.get().getUserImageId());
-                return;
+    public void modifyUser(final long userId, final String username, final String surname, final String phone, final Integer bornCityId, final String mailLocaleString, final String role) throws CityNotFoundException, UserNotFoundException, RoleAlreadyChangedException {
+        User user = findById(userId).orElseThrow(UserNotFoundException::new);
+        if(role!=null) {
+            if (!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())) {
+                throw new IllegalArgumentException();
             }
-            long imageId = imageService.createImage(imgData).getImageId();
-            userDao.modifyUser(user.get().getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
-
+            if (!user.getRole().equals(UserRole.USER.getText())) {
+                //role has already been changed
+                throw new RoleAlreadyChangedException();
+            }
+            userDao.changeRole(user.getUserId(), role);
         }
+        userDao.modifyUser(userId,
+                username!=null?username:user.getName(),
+                surname!=null?surname:user.getSurname(),
+                phone!=null?phone:user.getPhone(),
+                bornCityId!=null?cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new):user.getBornCity(),
+                mailLocaleString!=null?new Locale(mailLocaleString):user.getMailLocale(),
+                user.getUserImageId());
     }
+
 
     @Transactional
     @Override
     public List<User> getAdmins(){
         return userDao.getAdmins();
     }
+
 
     @Transactional
     @Override

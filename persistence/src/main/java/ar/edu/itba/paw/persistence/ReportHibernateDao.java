@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,6 +65,7 @@ public class ReportHibernateDao implements ReportDao {
 
     @Override
     public PagedContent<Report> getReports(int page, int pageSize) {
+        LOGGER.debug("Looking for all reports in page {} with page size {}",page,pageSize);
         Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(report_id) FROM reports WHERE status='IN_REVISION'");
         final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
         if (totalCount == 0) {
@@ -79,7 +80,38 @@ public class ReportHibernateDao implements ReportDao {
 
         final List<?> maybeReportIdList = nativeQuery.getResultList();
         if(maybeReportIdList.isEmpty()){
-            return new PagedContent<>(new ArrayList<>(),page,pageSize, totalCount);
+            return new PagedContent<>(Collections.emptyList(),page,pageSize, totalCount);
+        }
+        final List<Long> reportIdList = maybeReportIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
+        final TypedQuery<Report> reportQuery = em.createQuery("FROM Report rp WHERE rp.reportId IN :reportIdList ORDER BY date ASC", Report.class);
+        reportQuery.setParameter("reportIdList", reportIdList);
+        List<Report> result = reportQuery.getResultList();
+        LOGGER.debug("Found {} in the database", result);
+        return new PagedContent<>(result, page, pageSize, totalCount);
+    }
+
+    @Override
+    public PagedContent<Report> getReportsMadeByUserOnTrip(final User reporter, final Trip trip, final int page, final int pageSize){
+        LOGGER.debug("Looking for all reports made by user {} on trip {} in page {} with page size {}",reporter.getUserId(), trip.getTripId(),page,pageSize);
+        Query nativeCountQuery = em.createNativeQuery("SELECT COUNT(report_id) FROM reports r WHERE r.reporter_id = :reporter_id AND r.trip_id = :trip_id");
+        nativeCountQuery.setParameter("reporter_id",reporter.getUserId());
+        nativeCountQuery.setParameter("trip_id",trip.getTripId());
+        final int totalCount = ((Number) nativeCountQuery.getSingleResult()).intValue();
+        if (totalCount == 0) {
+            LOGGER.debug("No reports");
+            return PagedContent.emptyPagedContent();
+        }
+
+        // 1+1 query
+        Query nativeQuery = em.createNativeQuery("SELECT report_id FROM reports  r WHERE r.reporter_id = :reporter_id AND r.trip_id = :trip_id ORDER BY date ASC");
+        nativeQuery.setParameter("reporter_id",reporter.getUserId());
+        nativeQuery.setParameter("trip_id",trip.getTripId());
+        nativeQuery.setMaxResults(pageSize);
+        nativeQuery.setFirstResult(page * pageSize);
+
+        final List<?> maybeReportIdList = nativeQuery.getResultList();
+        if(maybeReportIdList.isEmpty()){
+            return new PagedContent<>(Collections.emptyList(),page,pageSize, totalCount);
         }
         final List<Long> reportIdList = maybeReportIdList.stream().map(id -> ((Number) id).longValue()).collect(Collectors.toList());
         final TypedQuery<Report> reportQuery = em.createQuery("FROM Report rp WHERE rp.reportId IN :reportIdList ORDER BY date ASC", Report.class);
@@ -92,7 +124,7 @@ public class ReportHibernateDao implements ReportDao {
     @Override
     public Optional<Report>  getReportByTripAndUsers(long tripId, long reporterId, long reportedId){
         LOGGER.debug("Getting report with tripId {}, reporterId {} and reportedId {}", tripId, reporterId, reportedId);
-        final Optional<Report> result = em.createQuery("from Report where trip_id = :tripId and reporter_id = :reporterId and reported_id = :reportedId", Report.class)
+        final Optional<Report> result = em.createQuery("from Report r where r.trip.id = :tripId and r.reporter.id = :reporterId and r.reported.id = :reportedId", Report.class)
                 .setParameter("tripId", tripId)
                 .setParameter("reporterId", reporterId)
                 .setParameter("reportedId", reportedId).getResultList().stream().findFirst();

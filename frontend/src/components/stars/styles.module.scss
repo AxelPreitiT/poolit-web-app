@@ -1,0 +1,10 @@
+@use "@/colors.module.scss" as colors;
+
+.stars {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.star {
+  color: colors.$secondary-color;
+}

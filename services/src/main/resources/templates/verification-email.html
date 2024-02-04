@@ -75,7 +75,7 @@
         <p th:text="#{emails.sendToken.message2}"></p>
 
         <div class="btn-container">
-            <a style="color: white !important;" th:href="@{{baseUrl}/register/confirm(token=${token}, baseUrl=${baseUrl})}" class="btn" th:text="#{emails.sendToken.button}"></a>
+            <a style="color: white !important;" th:href="@{{baseUrl}/verify(email=${email}, token=${token}, baseUrl=${baseUrl})}" class="btn" th:text="#{emails.sendToken.button}"></a>
         </div>
     </div>
 </div>

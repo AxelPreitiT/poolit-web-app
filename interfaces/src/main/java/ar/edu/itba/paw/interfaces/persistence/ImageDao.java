@@ -10,6 +10,9 @@ public interface ImageDao {
 
     Optional<Image> findById(long imageId);
 
+    Image update(Image image, byte[] data);
+
+    void delete(final Image image);
 
 }
 
