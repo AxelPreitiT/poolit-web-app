@@ -80,6 +80,7 @@ public class ReportServiceImplTest {
         when(userService.getAdmins()).thenReturn(Collections.emptyList());
 
         Report resp = reportService.createReport(0, 1, DESCRIPTION, DRIVER_2_PASSENGER, REASON);
+
         Assert.assertNotNull(resp);
         Assert.assertEquals(DRIVER, resp.getReporter());
         Assert.assertEquals(DESCRIPTION, resp.getDescription());
@@ -120,6 +121,7 @@ public class ReportServiceImplTest {
         when(userService.getAdmins()).thenReturn(Collections.emptyList());
 
         Report resp = reportService.createReport(0, 1, DESCRIPTION, PASSENGER_2_DRIVER, REASON);
+
         Assert.assertNotNull(resp);
         Assert.assertEquals(USER_1, resp.getReporter());
         Assert.assertEquals(DESCRIPTION, resp.getDescription());
@@ -175,6 +177,7 @@ public class ReportServiceImplTest {
         when(userService.getAdmins()).thenReturn(Collections.emptyList());
 
         Report resp = reportService.createReport(0, 1, DESCRIPTION, PASSENGER_2_PASSENGER, REASON);
+
         Assert.assertNotNull(resp);
         Assert.assertEquals(USER_1, resp.getReporter());
         Assert.assertEquals(DESCRIPTION, resp.getDescription());
