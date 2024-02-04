@@ -3,7 +3,8 @@
     "price": "$ {{priceInt}}",
     "plate": "Patente:{{carPlate}}",
     "name": "{{name}} {{surname}}",
-    "date": "({{- date}})"
+    "date": "({{- date}})",
+    "recurrent_date": "({{- initial_date}} - {{- final_date}})"
   },
   "poolit": {
     "name": "POOLIT",

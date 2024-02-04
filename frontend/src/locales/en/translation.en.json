@@ -792,12 +792,13 @@
   },
   "city": {
     "error": {
-      "title": "An error occurred while loading the neighborhoods"
+      "title": "Could not fetch the neighborhoods",
+      "unique": "An error occurred while loading the neighborhood"
     }
   },
   "passanger": {
     "error": {
-      "title": "An error occurred while loading the passangers",
+      "title": "Could not fetch the passangers",
       "role_title": "An error occurred while loading the RolePassanger"
     }
   },
