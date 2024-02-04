@@ -13,8 +13,8 @@ export const server = setupServer(DiscoveryMock.mockDiscovery());
 // onUnhandledRequest: 'error' will throw an error if there is an unhandled request
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 
-// Set toast timeout to 50ms for faster tests
-beforeAll(() => __setToastStackTimeout(50));
+// Set toast timeout to 25ms for faster tests
+beforeAll(() => __setToastStackTimeout(25));
 
 //  Close server after all tests
 afterAll(() => server.close());
