@@ -19,6 +19,7 @@ const CardTrip = ({
   trip,
   className,
   extraData,
+  searchParams,
 }: {
   trip: TripModel;
   className?: string;
@@ -27,12 +28,13 @@ const CardTrip = ({
     endDate: string;
     link: string;
   };
+  searchParams?: URLSearchParams;
 }) => {
   const { t } = useTranslation();
   const {
     startDate: start,
     endDate: end,
-    link: linkTrip,
+    link,
   } = extraData
     ? extraData(trip)
     : {
@@ -45,6 +47,7 @@ const CardTrip = ({
   const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
     trip?.driverUri
   );
+  const linkTrip = link + (searchParams ? `?${searchParams.toString()}` : "");
 
   const {
     isLoading: isOriginCityLoading,

@@ -211,6 +211,8 @@ const RightDetails = ({
   const { isLoading: isLoadingDiscovery, discovery } = useDiscovery();
   const status_value =
     passanger !== undefined ? getStatusPassanger(passanger) : status;
+  const searchParams = new URLSearchParams(search);
+  const showJoinBtn = searchParams.get("join") !== "false";
 
   const removePageSearchParam = () => {
     const searchParams = new URLSearchParams(search);
@@ -272,7 +274,8 @@ const RightDetails = ({
     !isLoadingDiscovery &&
     discovery &&
     (!isPassanger && !isDriver ? (
-      status_value !== Status.FINISHED && (
+      status_value !== Status.FINISHED &&
+      showJoinBtn && (
         <div className={styles.btn_container}>
           <BtnJoin
             trip={trip}
