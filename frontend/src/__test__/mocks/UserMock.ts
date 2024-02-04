@@ -1,142 +1,7 @@
-import userPrivateModel from "@/models/UserPrivateModel.ts";
 import BaseMock from "@/__test__/mocks/BaseMock.ts";
-import userPublicModel from "@/models/UserPublicModel.ts";
-import userDriverModel from "@/models/UserDriverModel.ts";
-
-export const privateUserRoleUser: userPrivateModel = {
-  driverRating: 3.0,
-  imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
-  passengerRating: 0.0,
-  reviewsDriverUri:
-    "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
-  reviewsPassengerUri:
-    "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
-  selfUri: "http://localhost:8080/paw-2023a-07/api/users/50",
-  surname: "Mentasti",
-  tripCount: 4,
-  userId: 50,
-  username: "Jose Rodolfo",
-  email: "jmentasti+testapi@itba.edu.ar",
-  phone: "1139150686",
-  carsUri: "http://localhost:8080/paw-2023a-07/api/cars?fromUser=50",
-  cityUri: "http://localhost:8080/paw-2023a-07/api/cities/5",
-  futureCreatedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=false",
-  futureReservedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=false",
-  mailLocale: "en",
-  pastCreatedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=true",
-  pastReservedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=true",
-  recommendedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?recommendedFor=50",
-  reportsApproved: 0,
-  reportsPublished: 1,
-  reportsReceived: 0,
-  reportsRejected: 1,
-  role: "USER",
-};
-export const privateUserRoleDriver: userPrivateModel = {
-  driverRating: 3.0,
-  imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
-  passengerRating: 0.0,
-  reviewsDriverUri:
-    "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
-  reviewsPassengerUri:
-    "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
-  selfUri: "http://localhost:8080/paw-2023a-07/api/users/50",
-  surname: "Mentasti",
-  tripCount: 4,
-  userId: 50,
-  username: "Jose Rodolfo",
-  email: "jmentasti+testapi@itba.edu.ar",
-  phone: "1139150686",
-  carsUri: "http://localhost:8080/paw-2023a-07/api/cars?fromUser=50",
-  cityUri: "http://localhost:8080/paw-2023a-07/api/cities/5",
-  futureCreatedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=false",
-  futureReservedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=false",
-  mailLocale: "en",
-  pastCreatedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=true",
-  pastReservedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=true",
-  recommendedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?recommendedFor=50",
-  reportsApproved: 0,
-  reportsPublished: 1,
-  reportsReceived: 0,
-  reportsRejected: 1,
-  role: "DRIVER",
-};
-export const privateUserRoleAdmin: userPrivateModel = {
-  driverRating: 3.0,
-  imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
-  passengerRating: 0.0,
-  reviewsDriverUri:
-    "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
-  reviewsPassengerUri:
-    "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
-  selfUri: "http://localhost:8080/paw-2023a-07/api/users/50",
-  surname: "Mentasti",
-  tripCount: 4,
-  userId: 50,
-  username: "Gaston",
-  email: "jmentasti+testapi@itba.edu.ar",
-  phone: "1139150686",
-  carsUri: "http://localhost:8080/paw-2023a-07/api/cars?fromUser=50",
-  cityUri: "http://localhost:8080/paw-2023a-07/api/cities/5",
-  futureCreatedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=false",
-  futureReservedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=false",
-  mailLocale: "en",
-  pastCreatedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?createdBy=50&past=true",
-  pastReservedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?reservedBy=50&past=true",
-  recommendedTripsUri:
-    "http://localhost:8080/paw-2023a-07/api/trips?recommendedFor=50",
-  reportsApproved: 0,
-  reportsPublished: 1,
-  reportsReceived: 0,
-  reportsRejected: 1,
-  role: "ADMIN",
-};
-
-export const publicUser: userPublicModel = {
-  driverRating: 3.0,
-  imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
-  passengerRating: 0.0,
-  reviewsDriverUri:
-    "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
-  reviewsPassengerUri:
-    "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
-  selfUri: "http://localhost:8080/paw-2023a-07/api/users/50",
-  surname: "Mentasti",
-  tripCount: 4,
-  userId: 50,
-  username: "Jose Rodolfo",
-};
-
-export const driverUser: userDriverModel = {
-  driverRating: 3.0,
-  imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
-  passengerRating: 0.0,
-  reviewsDriverUri:
-    "http://localhost:8080/paw-2023a-07/api/driver-reviews?forUser=50",
-  reviewsPassengerUri:
-    "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forUser=50",
-  selfUri: "http://localhost:8080/paw-2023a-07/api/users/50",
-  surname: "Mentasti",
-  tripCount: 4,
-  userId: 50,
-  username: "Jose Rodolfo",
-  email: "jmentasti+testapi@itba.edu.ar",
-  phone: "1139150686",
-};
+import UserPrivateModel from "@/models/UserPrivateModel.ts";
+import UserPublicModel from "@/models/UserPublicModel.ts";
+import UserDriverModel from "@/models/UserDriverModel.ts";
 
 export const profileListInfo = {
   title: "Title component",
@@ -147,14 +12,128 @@ export const profileListInfo = {
 };
 
 class UserMock extends BaseMock {
+  public static readonly PRIVATE_USER_ROLE_USER: UserPrivateModel = {
+    driverRating: 3.0,
+    imageUri: this.getPath("/users/50/image"),
+    passengerRating: 0.0,
+    reviewsDriverUri: this.getPath("/driver-reviews?forUser=50"),
+    reviewsPassengerUri: this.getPath("/passenger-reviews?forUser=50"),
+    selfUri: this.getPath("/users/50"),
+    surname: "Mentasti",
+    tripCount: 4,
+    userId: 50,
+    username: "Jose Rodolfo",
+    email: "jmentasti+testapi@itba.edu.ar",
+    phone: "1139150686",
+    carsUri: this.getPath("/cars?fromUser=50"),
+    cityUri: this.getPath("/cities/5"),
+    futureCreatedTripsUri: this.getPath("/trips?createdBy=50&past=false"),
+    futureReservedTripsUri: this.getPath("/trips?reservedBy=50&past=false"),
+    mailLocale: "en",
+    pastCreatedTripsUri: this.getPath("/trips?createdBy=50&past=true"),
+    pastReservedTripsUri: this.getPath("/trips?reservedBy=50&past=true"),
+    recommendedTripsUri: this.getPath("/trips?recommendedFor=50"),
+    reportsApproved: 0,
+    reportsPublished: 1,
+    reportsReceived: 0,
+    reportsRejected: 1,
+    role: "USER",
+  };
+
+  public static readonly PRIVATE_USER_ROLE_DRIVER: UserPrivateModel = {
+    driverRating: 3.0,
+    imageUri: this.getPath("/users/50/image"),
+    passengerRating: 0.0,
+    reviewsDriverUri: this.getPath("/driver-reviews?forUser=50"),
+    reviewsPassengerUri: this.getPath("/passenger-reviews?forUser=50"),
+    selfUri: this.getPath("/users/50"),
+    surname: "Mentasti",
+    tripCount: 4,
+    userId: 50,
+    username: "Jose Rodolfo",
+    email: "jmentasti+testapi@itba.edu.ar",
+    phone: "1139150686",
+    carsUri: this.getPath("/cars?fromUser=50"),
+    cityUri: this.getPath("/cities/5"),
+    futureCreatedTripsUri: this.getPath("/trips?createdBy=50&past=false"),
+    futureReservedTripsUri: this.getPath("/trips?reservedBy=50&past=false"),
+    mailLocale: "en",
+    pastCreatedTripsUri: this.getPath("/trips?createdBy=50&past=true"),
+    pastReservedTripsUri: this.getPath("/trips?reservedBy=50&past=true"),
+    recommendedTripsUri: this.getPath("/trips?recommendedFor=50"),
+    reportsApproved: 0,
+    reportsPublished: 1,
+    reportsReceived: 0,
+    reportsRejected: 1,
+    role: "DRIVER",
+  };
+
+  public static readonly PRIVATE_USER_ROLE_ADMIN: UserPrivateModel = {
+    driverRating: 3.0,
+    imageUri: this.getPath("/users/50/image"),
+    passengerRating: 0.0,
+    reviewsDriverUri: this.getPath("/driver-reviews?forUser=50"),
+    reviewsPassengerUri: this.getPath("/passenger-reviews?forUser=50"),
+    selfUri: this.getPath("/users/50"),
+    surname: "Mentasti",
+    tripCount: 4,
+    userId: 50,
+    username: "Gaston",
+    email: "jmentasti+testapi@itba.edu.ar",
+    phone: "1139150686",
+    carsUri: this.getPath("/cars?fromUser=50"),
+    cityUri: this.getPath("/cities/5"),
+    futureCreatedTripsUri: this.getPath("/trips?createdBy=50&past=false"),
+    futureReservedTripsUri: this.getPath("/trips?reservedBy=50&past=false"),
+    mailLocale: "en",
+    pastCreatedTripsUri: this.getPath("/trips?createdBy=50&past=true"),
+    pastReservedTripsUri: this.getPath("/trips?reservedBy=50&past=true"),
+    recommendedTripsUri: this.getPath("/trips?recommendedFor=50"),
+    reportsApproved: 0,
+    reportsPublished: 1,
+    reportsReceived: 0,
+    reportsRejected: 1,
+    role: "ADMIN",
+  };
+
+  public static readonly PUBLIC_USER: UserPublicModel = {
+    driverRating: 3.0,
+    imageUri: this.getPath("/users/50/image"),
+    passengerRating: 0.0,
+    reviewsDriverUri: this.getPath("/driver-reviews?forUser=50"),
+    reviewsPassengerUri: this.getPath("/passenger-reviews?forUser=50"),
+    selfUri: this.getPath("/users/50"),
+    surname: "Mentasti",
+    tripCount: 4,
+    userId: 50,
+    username: "Jose Rodolfo",
+  };
+
+  public static readonly PUBLIC_DRIVER: UserDriverModel = {
+    driverRating: 3.0,
+    imageUri: this.getPath("/users/50/image"),
+    passengerRating: 0.0,
+    reviewsDriverUri: this.getPath("/driver-reviews?forUser=50"),
+    reviewsPassengerUri: this.getPath("/passenger-reviews?forUser=50"),
+    selfUri: this.getPath("/users/50"),
+    surname: "Mentasti",
+    tripCount: 4,
+    userId: 50,
+    username: "Jose Rodolfo",
+    phone: "1139150686",
+    email: "jmentasti+testapi@itba.edu.ar",
+  };
+
   public static getByIdPrivateRoleAdmin() {
     return this.get("/users/:userId", () =>
-      this.jsonResponse(privateUserRoleAdmin, { status: this.OK_STATUS })
+      this.jsonResponse(this.PRIVATE_USER_ROLE_ADMIN, {
+        status: this.OK_STATUS,
+      })
     );
   }
   public static getByIdPrivateRoleUser() {
     return this.get("/users/:userId", () =>
-      this.jsonResponse(privateUserRoleUser, { status: this.OK_STATUS })
+      this.jsonResponse(this.PRIVATE_USER_ROLE_USER, { status: this.OK_STATUS })
     );
   }
   public static optionsMock() {
@@ -172,18 +151,20 @@ class UserMock extends BaseMock {
   }
   public static getByIdPrivateRoleDriver() {
     return this.get("/users/:userId", () =>
-      this.jsonResponse(privateUserRoleDriver, { status: this.OK_STATUS })
+      this.jsonResponse(this.PRIVATE_USER_ROLE_DRIVER, {
+        status: this.OK_STATUS,
+      })
     );
   }
   public static getByIdPublic() {
     return this.get("/users/:userId", () =>
-      this.jsonResponse(publicUser, { status: this.OK_STATUS })
+      this.jsonResponse(this.PUBLIC_USER, { status: this.OK_STATUS })
     );
   }
 
   public static getByIdDriver() {
     return this.get("/users/:userId", () =>
-      this.jsonResponse(driverUser, { status: this.OK_STATUS })
+      this.jsonResponse(this.PUBLIC_DRIVER, { status: this.OK_STATUS })
     );
   }
 
