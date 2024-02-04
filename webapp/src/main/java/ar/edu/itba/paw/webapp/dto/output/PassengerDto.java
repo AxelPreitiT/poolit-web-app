@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 
 public class PassengerDto {
 
+    private long userId;
+    private URI selfUri;
+
     private URI userUri;
 
     private URI tripUri;
@@ -25,6 +28,8 @@ public class PassengerDto {
 
     public static PassengerDto fromPassenger(final UriInfo uriInfo, final Passenger passenger){
         final PassengerDto ans = new PassengerDto();
+        ans.userId = passenger.getUserId();
+        ans.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).path(String.valueOf(passenger.getUserId())).build();
         ans.passengerState = passenger.getPassengerState();
         ans.startDateTime = passenger.getStartDateTime();
         ans.endDateTime = passenger.getEndDateTime();
@@ -36,6 +41,22 @@ public class PassengerDto {
             ans.otherPassengersUriTemplate = uriInfo.getBaseUriBuilder().path(UrlHolder.TRIPS_BASE).path(String.valueOf(passenger.getTrip().getTripId())).path(UrlHolder.TRIPS_PASSENGERS).queryParam("startDateTime",passenger.getStartDateTime()).queryParam("endDateTime",passenger.getEndDateTime()).queryParam("passengerState",Passenger.PassengerState.ACCEPTED).toTemplate() + "{&excluding*}";
         }
         return ans;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public URI getSelfUri() {
+        return selfUri;
+    }
+
+    public void setSelfUri(URI selfUri) {
+        this.selfUri = selfUri;
     }
 
     public URI getUserUri() {

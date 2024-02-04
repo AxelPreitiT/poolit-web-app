@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.dto.validation.annotations;
 
 import ar.edu.itba.paw.webapp.dto.validation.constraints.NotAllNullValidator;
-import ar.edu.itba.paw.webapp.dto.validation.constraints.NotNullTogetherValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -5,29 +5,39 @@ import LoginPage from "./pages/login/LoginPage";
 import TripDetailsPage from "./pages/trips/TripDetailsPage";
 import RegisterPage from "./pages/register/RegisterPage";
 import ProfilePage from "./pages/profile/ProfilePage";
-import ReviewPage from "./pages/public/reviews/ReviewPage";
-import PublicProfilePage from "./pages/profile/PublicProfilePage";
+import ReviewPageDriver from "./pages/publicReviews/ReviewPageDriver.tsx";
+import PublicProfilePage from "@/pages/publicProfile/PublicProfilePage.tsx";
 import Navbar from "./components/utils/Navbar";
 import ReservedPage from "./pages/reserved/ReservedPage";
 import CreatedPage from "./pages/created/CreatedPage";
 import CreateTripPage from "./pages/createTrip/CreateTripPage";
 import AdminPage from "./pages/admin/AdminPage";
 import VerifyAccountPage from "./pages/verifyAccount/VerifyAccountPage";
+import SearchPage from "./pages/search/SearchPage";
+import ReviewPagePassanger from "@/pages/publicReviews/ReviewPagePassanger.tsx";
+import ReportPage from "@/pages/admin/ReportPage.tsx";
+import CreateCarPage from "./pages/createCar/CreateCarPage.tsx";
+import CarPage from "./pages/car/CarPage.tsx";
+import NotFoundPage from "./pages/notFound/notFound.tsx";
 
 export const homePath = "/";
 export const loginPath = "/login";
 export const registerPath = "/register";
 export const verifyAccountPath = "/verify";
-export const tripsPath = "/trips";
 export const tripDetailsPath = "/trips/:tripId";
 export const profilePath = "/profile";
-export const publicsReviewsPath = "/reviews/drivers/:id";
+export const publicsDriverReviewsPath = "/reviews/driver/:id";
+export const publicsPassangerReviewsPath = "/reviews/passanger/:id";
 export const publicProfilePath = "/profile/:id";
 export const reservedTripsPath = "/trips/reserved";
 export const createdTripsPath = "/trips/created";
 export const createTripsPath = "/trips/create";
 export const adminPath = "/admin";
+export const reportPath = "/reports/:id";
 export const searchPath = "/search";
+export const createCarsPath = "/cars/create";
+export const carPath = "/cars/:carId";
+const routerBasename = import.meta.env.BASE_URL;
 
 const router = createBrowserRouter(
   [
@@ -73,10 +83,7 @@ const router = createBrowserRouter(
     {
       path: tripDetailsPath,
       element: (
-        <RouteWrapper
-          title="trip_detail.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="trip_detail.title">
           <Navbar />
           <TripDetailsPage />,
         </RouteWrapper>
@@ -95,24 +102,27 @@ const router = createBrowserRouter(
       ),
     },
     {
-      path: publicsReviewsPath,
+      path: publicsDriverReviewsPath,
       element: (
-        <RouteWrapper
-          title="reviews.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="reviews.title">
           <Navbar />
-          <ReviewPage />
+          <ReviewPageDriver />
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: publicsPassangerReviewsPath,
+      element: (
+        <RouteWrapper title="reviews.title">
+          <Navbar />
+          <ReviewPagePassanger />
         </RouteWrapper>
       ),
     },
     {
       path: publicProfilePath,
       element: (
-        <RouteWrapper
-          title="profile.title"
-          showWhenUserIsNotAuthenticated={false}
-        >
+        <RouteWrapper title="profile.title">
           <Navbar />
           <PublicProfilePage />
         </RouteWrapper>
@@ -166,9 +176,60 @@ const router = createBrowserRouter(
         </RouteWrapper>
       ),
     },
+    {
+      path: reportPath,
+      element: (
+        <RouteWrapper
+          title="admin.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
+          <Navbar />
+          <ReportPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: searchPath,
+      element: (
+        <RouteWrapper title="search.title">
+          <Navbar />
+          <SearchPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: createCarsPath,
+      element: (
+        <RouteWrapper
+          title="create_car.title"
+          showWhenUserIsNotAuthenticated={false}
+        >
+          <Navbar />
+          <CreateCarPage />
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: carPath,
+      element: (
+        <RouteWrapper title="car.title">
+          <Navbar />
+          <CarPage />,
+        </RouteWrapper>
+      ),
+    },
+    {
+      path: "*",
+      element: (
+        <RouteWrapper title="404.title">
+          <Navbar />
+          <NotFoundPage />,
+        </RouteWrapper>
+      ),
+    },
   ],
   {
-    basename: import.meta.env.BASE_URL,
+    basename: routerBasename,
   }
 );
 

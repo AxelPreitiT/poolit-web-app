@@ -28,6 +28,8 @@ const DatePicker = ({
   return (
     <ReactDatePicker
       {...props}
+      calendarPosition="bottom"
+      fixMainPosition={true}
       weekDays={tWeekDays}
       months={tMonths}
       disabled={disabled}

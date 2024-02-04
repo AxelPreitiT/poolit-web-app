@@ -1,0 +1,10 @@
+@use "@/colors.module.scss" as colors;
+
+
+.paginationContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  row-gap: 2rem;
+  justify-content: center;
+}

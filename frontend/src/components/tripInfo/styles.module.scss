@@ -13,6 +13,15 @@
   align-items: flex-start;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   font-weight: bold;
+  color: white;
+}
+
+.driver_info{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: bold;
+  color: white;
 }
 
 .show_row {
@@ -31,4 +40,9 @@
 .subtitle_info {
   font-size: 0.7rem;
   font-weight: normal;
+}
+
+.link_trip_details{
+  color: #fff!important;
+  text-decoration: underline !important;
 }

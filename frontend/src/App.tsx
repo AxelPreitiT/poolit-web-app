@@ -6,9 +6,10 @@ import router from "./AppRouter";
 import GlobalToastStack from "./components/toasts/GlobalToastStack";
 import useApiLocale from "@/hooks/auth/useApiLocale";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { getQueryClient } from "./utils/query/queryClient";
 
-const queryClient = new QueryClient();
+const queryClient = getQueryClient();
 
 const App = () => {
   const helmetContext = {};

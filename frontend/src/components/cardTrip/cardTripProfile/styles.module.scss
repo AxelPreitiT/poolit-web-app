@@ -20,6 +20,9 @@
 .data_container {
   flex-grow: 4;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .route_container {
@@ -105,4 +108,17 @@
   width: 100%;
   height: 100%;
   color: black;
+}
+
+.loadingContainer {
+  row-gap: 0;
+}
+
+.loadingIcon {
+  height: 3rem;
+  width: 3rem;
+}
+
+.loadingDescription {
+  font-size: 1.5rem;
 }

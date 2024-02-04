@@ -1,0 +1,153 @@
+@use "@/colors.module.scss" as colors;
+
+.mainContainer {
+  background-color: colors.$container-color;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  padding: 1rem 2rem 2rem 2rem;
+  margin: 2rem 20% 0 20%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+  width: 100%;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: row;
+  column-gap: 8rem;
+  align-items: stretch;
+  width: 80%;
+}
+
+.formRowFull {
+  @extend .formRow;
+  width: 100%;
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.75rem;
+  width: 100%;
+}
+
+.formColumn .formHeader > * {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-wrap: nowrap;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+}
+
+.formItem {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+  width: 100%;
+}
+
+.formError {
+  color: colors.$danger-color;
+}
+
+.formImage {
+  flex: 1;
+  position: relative;
+  height: 100%;
+}
+
+.imageInput {
+  background-color: colors.$secondary-color;
+  border-radius: 12px;
+  opacity: 1;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    box-shadow 0.3s ease,
+    opacity 0.3s ease;
+  object-fit: cover;
+  object-position: center;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  position: absolute;
+}
+
+.imageInput:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  opacity: 0.8;
+}
+
+.imageInput i,
+.imageInput svg {
+  font-size: 4rem;
+  color: colors.$light-text-color;
+}
+
+.submitContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.submit i,
+.submit svg {
+  font-size: 2rem;
+}
+
+%pill {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid;
+}
+
+%pill:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.pill {
+  @extend %pill;
+  color: colors.$placeholder-text-color;
+  border-color: colors.$placeholder-text-color;
+}
+
+.activePill {
+  @extend %pill;
+}
+
+@media (max-width: 1000px) {
+  .formRow {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 1rem;
+  }
+
+  .formRow {
+    width: 100%;
+  }
+
+  .formImage {
+    width: 100%;
+  }
+
+  .imageInput {
+    position: relative;
+    max-height: 10rem;
+  }
+
+  %pill {
+    font-size: 0.8rem;
+  }
+}

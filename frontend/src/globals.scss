@@ -12,6 +12,7 @@ h4,
 h5,
 h6 {
   margin-bottom: 0 !important;
+  margin-top: 0 !important;
 }
 
 .h1,
@@ -21,6 +22,7 @@ h6 {
 .h5,
 .h6 {
   margin-bottom: 0 !important;
+  margin-top: 0 !important;
 }
 
 a {
@@ -51,6 +53,10 @@ hr {
 
 .text {
   color: colors.$text-color !important;
+}
+
+.primary-text {
+  color: colors.$primary-color !important;
 }
 
 .secondary-text {
@@ -115,6 +121,36 @@ hr {
     background-color: colors.$secondary-color-dark !important;
     color: colors.$light-text-color !important;
     border-color: colors.$secondary-color-dark !important;
+  }
+}
+
+.danger-btn {
+  @extend %button-style;
+  @extend %shadow-btn;
+  background-color: colors.$danger-color !important;
+  color: colors.$light-text-color !important;
+  border-color: colors.$danger-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: colors.$danger-color-dark !important;
+    color: colors.$light-text-color !important;
+    border-color: colors.$danger-color-dark !important;
+  }
+}
+
+.later-btn {
+  @extend %button-style;
+  @extend %shadow-btn;
+  background-color: colors.$primary-color !important;
+  color: colors.$light-text-color !important;
+  border-color: colors.$primary-color !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: colors.$primary-color-dark !important;
+    color: colors.$light-text-color !important;
+    border-color: colors.$primary-color-dark !important;
   }
 }
 

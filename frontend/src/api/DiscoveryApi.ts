@@ -12,6 +12,7 @@ interface DiscoveryResponse {
   reportsUri: string; // [baseUrl]/reports{/reportId}
   tripsUri: string; // [baseUrl]/trips{/tripId}
   usersUri: string; // [baseUrl]/users/{userId}
+  tripSortTypesUri: string; // [baseUrl]/trip-sort-types{/sortTypeId}
 }
 
 class DiscoveryApi extends AxiosApi {
@@ -31,6 +32,7 @@ class DiscoveryApi extends AxiosApi {
       reportsUriTemplate: discovery.reportsUri,
       tripsUriTemplate: discovery.tripsUri,
       usersUriTemplate: discovery.usersUri,
+      tripSortTypesUriTemplate: discovery.tripSortTypesUri,
     };
     return {
       ...response,

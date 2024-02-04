@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Form } from "react-bootstrap";
 import styles from "./styles.module.scss";
-import ImageInput from "@/components/forms/ImageInput/ImageInput";
 import FormError from "@/components/forms/FormError/FormError";
 import LoadingButton from "@/components/buttons/LoadingButton";
 import useRegisterForm from "@/hooks/forms/useRegisterForm";
@@ -12,46 +10,20 @@ import CitySelector, {
   citySelectorDefaultValue,
 } from "@/components/forms/CitySelector/CitySelector";
 
-const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
+const RegisterForm = ({ cities }: { cities?: CityModel[] }) => {
   const { t, i18n } = useTranslation();
-  const [preview, setPreview] = useState<string | undefined>(undefined);
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     tFormError,
+    isFetching,
   } = useRegisterForm();
 
   return (
     <Form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.userPicContainer}>
-        <h4 className={styles.title + " light-text"}>
-          {t("register.profile_image")}
-        </h4>
-        <Controller
-          name="image"
-          control={control}
-          render={({ field: { onChange } }) => (
-            <ImageInput
-              id="image"
-              preview={preview}
-              previewAlt={t("register.profile_image")}
-              onImageUpload={(image: File) => {
-                onChange(image);
-                setPreview(image ? URL.createObjectURL(image) : undefined);
-              }}
-              placeholder={
-                <i className="bi bi-person-circle light-text h1"></i>
-              }
-              className={styles.imageInput}
-            />
-          )}
-        />
-        <FormError error={tFormError(errors.image)} />
-      </div>
-      <hr className="light-text" />
       <div className={styles.userInfoContainer}>
         <h4 className={styles.title + " light-text"}>
           {t("register.personal_info")}
@@ -81,7 +53,7 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
         <div className={styles.formRow}>
           <div className={styles.inputItem}>
             <Form.Control
-              type="email"
+              type="text"
               id="email"
               size="sm"
               placeholder={t("register.email")}
@@ -132,6 +104,7 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
                 <CitySelector
                   cities={cities}
                   defaultOption={t("register.residence_city")}
+                  placeholder={t("register.residence_city")}
                   size="sm"
                   onChange={(event) => onChange(parseInt(event.target.value))}
                   value={value}
@@ -157,6 +130,7 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
                 id="locale"
                 size="sm"
                 {...register("locale")}
+                placeholder={t("language.language")}
                 defaultValue={i18n.language}
               >
                 <option value="en">{t("language.english")}</option>
@@ -171,7 +145,7 @@ const RegisterForm = ({ cities }: { cities: CityModel[] }) => {
         <LoadingButton
           type="submit"
           className="btn secondary-btn"
-          isLoading={isSubmitting}
+          isLoading={isFetching}
         >
           <h5>{t("register.register")}</h5>
         </LoadingButton>

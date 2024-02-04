@@ -1,108 +1,115 @@
-import ProfileImg from "@/components/profile/img/ProfileImg";
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import ProfileProp from "@/components/profile/prop/ProfileProp";
-import ProfileStars from "@/components/profile/stars/ProfileStars";
 import DriverList from "@/components/profile/ProfileLists/DriverList";
 import PassengerList from "@/components/profile/ProfileLists/PassangerList";
 import TabComponent from "@/components/tab/TabComponent";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
-import UserPrivateModel from "@/models/UserPrivateModel.ts";
-import CityService from "@/services/CityService.ts";
-import { useEffect, useState } from "react";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
+import useCityByUri from "@/hooks/cities/useCityByUri";
+import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
+import LoadingScreen from "@/components/loading/LoadingScreen";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import UsersRoles from "@/enums/UsersRoles";
+import { INITIALPAGE, PROFILEPAGESIZE } from "@/enums/PaginationConstants.ts";
+import { useState } from "react";
+import useAllCities from "@/hooks/cities/useAllCities";
+import ProfileInfo from "./ProfileInfo";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
 
-  const { isLoading, currentUser } = useCurrentUser();
-  const [cityUser, setCityUser] = useState<string | null>(null);
+  const { isLoading: isCurrentUserLoading, currentUser } = useCurrentUser();
+  const { isLoading: isLoadingCity, city } = useCityByUri(currentUser?.cityUri);
+  const { isLoading: isAllCitiesLoading, cities } = useAllCities();
+  const [active, setActive] = useState<"left" | "right">("right");
 
-  useEffect(() => {
-    if (isLoading || currentUser === undefined) return;
-    CityService.getCityById(currentUser.cityUri).then((response) => {
-      // Extraer el cuerpo de la respuesta Axios
-      // Luego, llamar a setProfileInfo con el resultado
-      setCityUser(response.name);
-    });
-  });
-
-  const ProfileInfo = ({ currentUser }: { currentUser: UserPrivateModel }) => (
-    <div className={styles.profileCard}>
-      <ProfileImg src={currentUser.imageUri} />
-      <h3 className="text-center">
-        {t("format.name", {
-          name: currentUser.username,
-          surname: currentUser.surname,
-        })}
-      </h3>
-      <ProfileProp prop={t("profile.props.email")} text={currentUser.email} />
-      <ProfileProp prop={t("profile.props.phone")} text={currentUser.phone} />
-      {cityUser === null ? (
-        <ProfileProp
-          prop={t("profile.props.neighborhood")}
-          text={t("spinner.loading")}
-        />
-      ) : (
-        <ProfileProp prop={t("profile.props.neighborhood")} text={cityUser} />
-      )}
-      <ProfileProp
-        prop={t("profile.props.language")}
-        text={t(`profile.props.${currentUser.mailLocale}`)}
-      />
-      <ProfileProp
-        prop={t("profile.props.trips")}
-        text="PONER CANTIDAD DE VIAJES"
-      />
-      <ProfileStars
-        prop={t("profile.props.rating_driver")}
-        rating={currentUser.driverRating}
-      />
-      <ProfileStars
-        prop={t("profile.props.rating_passenger")}
-        rating={currentUser.passengerRating}
-      />
-    </div>
-  );
+  if (isCurrentUserLoading || isAllCitiesLoading || isLoadingCity) {
+    return <LoadingScreen description={t("profile.loading.profile")} />;
+  }
 
   return (
     <div className={styles.main_container}>
-      {isLoading || currentUser === undefined ? (
+      {!currentUser || !city || !cities ? (
         <div className={styles.profileCard}>
-          <SpinnerComponent />
+          <LoadingWheel
+            containerClassName={styles.loadingContainer}
+            iconClassName={styles.loadingIcon}
+            descriptionClassName={styles.loadingDescription}
+            description={t("profile.loading.profile")}
+          />
         </div>
       ) : (
-        <ProfileInfo currentUser={currentUser} />
+        <ProfileInfo currentUser={currentUser} cities={cities} city={city} />
       )}
 
       <div className={styles.list_block}>
-        {isLoading || currentUser === undefined ? (
+        {isCurrentUserLoading || currentUser === undefined ? (
+          <LoadingScreen description={t("profile.loading.profile")} />
+        ) : currentUser.role !== UsersRoles.USER ? (
           <TabComponent
-            right_title={t("roles.passenger")}
-            right_component={<SpinnerComponent />}
-            left_title={t("roles.driver")}
-            left_component={<SpinnerComponent />}
+            left_title={t("roles.passenger")}
+            left_component={
+              <PassengerList
+                futureReservedTripsUri={createPaginationUri(
+                  currentUser.futureReservedTripsUri,
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
+                )}
+                pastReservedTripsUri={createPaginationUri(
+                  currentUser.pastReservedTripsUri,
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
+                )}
+                reviewsPassengerUri={createPaginationUri(
+                  currentUser.reviewsPassengerUri,
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
+                )}
+                id={currentUser.userId}
+              />
+            }
+            right_title={t("roles.driver")}
+            right_component={
+              <DriverList
+                futureCreatedTripsUri={createPaginationUri(
+                  currentUser.futureCreatedTripsUri,
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
+                )}
+                pastCreatedTripsUri={createPaginationUri(
+                  currentUser.pastCreatedTripsUri,
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
+                )}
+                reviewsDriverUri={createPaginationUri(
+                  currentUser.reviewsDriverUri,
+                  INITIALPAGE,
+                  PROFILEPAGESIZE
+                )}
+                id={currentUser.userId}
+              />
+            }
+            active={active}
+            onLeftClick={() => setActive("left")}
+            onRightClick={() => setActive("right")}
           />
         ) : (
-          <TabComponent
-            right_title={t("roles.passenger")}
-            //right_component={<PassengerList futureReservedTrips={currentUser.futureReservedTripsUri} pastReservedTrips={currentUser.pastReservedTripsUri}/>}
-            right_component={
-              <PassengerList
-                futureReservedTripsUri={currentUser.futureReservedTripsUri}
-                pastReservedTripsUri={currentUser.pastReservedTripsUri}
-                selfUri={currentUser.selfUri}
-              />
-            }
-            left_title={t("roles.driver")}
-            //left_component={<DriverList futureCreatedTrips={currentUser.futureCreatedTripsUri} pastCreatedTrips={currentUser.pastCreatedTripsUri}/>}
-            left_component={
-              <DriverList
-                futureCreatedTripsUri={currentUser.futureCreatedTripsUri}
-                pastCreatedTripsUri={currentUser.pastCreatedTripsUri}
-                currentUser={currentUser}
-              />
-            }
+          <PassengerList
+            futureReservedTripsUri={createPaginationUri(
+              currentUser.futureReservedTripsUri,
+              INITIALPAGE,
+              PROFILEPAGESIZE
+            )}
+            pastReservedTripsUri={createPaginationUri(
+              currentUser.pastReservedTripsUri,
+              INITIALPAGE,
+              PROFILEPAGESIZE
+            )}
+            reviewsPassengerUri={createPaginationUri(
+              currentUser.reviewsPassengerUri,
+              INITIALPAGE,
+              PROFILEPAGESIZE
+            )}
+            id={currentUser.userId}
           />
         )}
       </div>

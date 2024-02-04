@@ -1,105 +1,159 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import CityService from "@/services/CityService.ts";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
 import TripModel from "@/models/TripModel.ts";
-import extractPathAfterApi from "@/functions/extractPathAfterApi.ts";
 import { Link } from "react-router-dom";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import useCityByUri from "@/hooks/cities/useCityByUri";
+import useCarByUri from "@/hooks/cars/useCarByUri";
+import { tripDetailsPath } from "@/AppRouter.tsx";
+import getTotalTrips from "@/functions/getTotalTrips.ts";
+import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
+import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
+import { getDayString } from "@/utils/date/dayString.ts";
 
-const CardTripProfile = (Trip: TripModel) => {
+const CardTripProfile = (trip: TripModel) => {
   const { t } = useTranslation();
+  const { currentUser } = useCurrentUser();
+  const isDriver = trip.driverUri === currentUser?.selfUri;
+  const {
+    isLoading: isLoadingRole,
+    currentPassanger: currentPassanger,
+    isPending: isPending,
+  } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
 
-  const [cityOrigin, setCityOrigin] = useState<string | null>(null);
-  const [cityDestination, setCityDestination] = useState<string | null>(null);
-  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
+  const {
+    isLoading: isOriginCityLoading,
+    city: originCity,
+    isError: isOriginCityError,
+  } = useCityByUri(trip.originCityUri);
+  const {
+    isLoading: isDestinationCityLoading,
+    city: destinationCity,
+    isError: isDestinationCityError,
+  } = useCityByUri(trip.destinationCityUri);
+  const {
+    isLoading: isCarLoading,
+    car,
+    isError: isCarError,
+  } = useCarByUri(trip.carUri);
 
-  useEffect(() => {
-    CityService.getCityById(Trip.originCityUri).then((response) => {
-      setCityOrigin(response.name);
-    });
-    CityService.getCityById(Trip.destinationCityUri).then((response) => {
-      setCityDestination(response.name);
-    });
-  });
+  if (
+    isOriginCityLoading ||
+    isDestinationCityLoading ||
+    isCarLoading ||
+    isOriginCityError ||
+    isDestinationCityError ||
+    isCarError ||
+    (isLoadingRole && !isPending)
+  ) {
+    return <LoadingWheel description={t("trip.loading_one")} />;
+  }
 
-  useEffect(() => {
-    CarService.getCarById(Trip.carUri).then((response) => {
-      setCarTrip(response);
-    });
-  });
+  const startDateTimeValue = isDriver
+    ? trip.startDateTime
+    : currentPassanger?.startDateTime || "";
+  const endDateTimeValue = isDriver
+    ? trip.endDateTime
+    : currentPassanger?.endDateTime || "";
+  const totalTrips = getTotalTrips(
+    new Date(startDateTimeValue),
+    new Date(endDateTimeValue)
+  );
 
   return (
     <Link
-        to={extractPathAfterApi(Trip.selfUri)}
-        className={styles.link_container}
+      to={tripDetailsPath.replace(":tripId", trip.tripId.toString())}
+      className={styles.link_container}
     >
-    <div className={styles.card_info}>
-      <div className={styles.data_container}>
-        <div className={styles.route_container}>
-          <i className="bi bi-geo-alt"></i>
-          <div className={styles.horizontal_dotted_line}></div>
-          <i className="bi bi-geo-alt-fill"></i>
-        </div>
-        <div className={styles.address_container}>
-          <div className={styles.route_info_text}>
-            <h3>{cityOrigin}</h3>
-            <span className="text">{Trip.originAddress}</span>
-          </div>
-          <div className={styles.route_info_text}>
-            <h3>{cityDestination}</h3>
-            <span style={{ textAlign: "right" }}>
-              {Trip.destinationAddress}
-            </span>
-          </div>
-        </div>
-        <div className={styles.extra_info_container}>
-          <div className={styles.calendar_container}>
-            <i className="bi bi-calendar text"></i>
-            {Trip.totalTrips == 1 ? (
-              <div className={styles.format_date}>
-                <span className="text">PONER DIA</span>
-                <span className={styles.date_text}>
-                  {getFormattedDateTime(Trip.startDateTime).date}
-                </span>
-              </div>
-            ) : (
-              <div className={styles.format_date}>
-                <span className="text">PONER DIA</span>
-                <span className={styles.date_text}>
-                  {t("format.recurrent_date", {
-                    initial_date: getFormattedDateTime(Trip.startDateTime).date,
-                    final_date: getFormattedDateTime(Trip.endDateTime).date,
-                  })}
-                </span>
-              </div>
-            )}
-          </div>
-          <div className={styles.calendar_container}>
-            <i className="bi bi-clock"></i>
-            <span>{getFormattedDateTime(Trip.startDateTime).time}</span>
-          </div>
+      <div className={styles.card_info}>
+        <div className={styles.data_container}>
           <div>
-            <h2 className={styles.price_format}>
-              {t("format.price", {
-                priceInt: Trip.pricePerTrip,
-                princeFloat: 0,
-              })}
-            </h2>
+            <div className={styles.route_container}>
+              <i className="bi bi-geo-alt"></i>
+              <div className={styles.horizontal_dotted_line}></div>
+              <i className="bi bi-geo-alt-fill"></i>
+            </div>
+            <div className={styles.address_container}>
+              <div className={styles.route_info_text}>
+                <h3>{originCity?.name}</h3>
+                <span className="text">{trip.originAddress}</span>
+              </div>
+              <div className={styles.route_info_text}>
+                <h3>{destinationCity?.name}</h3>
+                <span style={{ textAlign: "right" }}>
+                  {trip.destinationAddress}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className={styles.extra_info_container}>
+            <div className={styles.calendar_container}>
+              <i className="bi bi-calendar text"></i>
+              {totalTrips === 1 ? (
+                <div className={styles.format_date}>
+                  <span className="text">
+                    {t(
+                      `day.full.${getDayString(
+                        new Date(startDateTimeValue)
+                      ).toLowerCase()}`,
+                      {
+                        plural: "s",
+                      }
+                    )}
+                  </span>
+                  <span className={styles.date_text}>
+                    {getFormattedDateTime(startDateTimeValue).date}
+                  </span>
+                </div>
+              ) : (
+                <div className={styles.format_date}>
+                  <span className="text">
+                    {t(
+                      `day.full.${getDayString(
+                        new Date(startDateTimeValue)
+                      ).toLowerCase()}`,
+                      {
+                        plural: "s",
+                      }
+                    )}
+                  </span>
+                  <span className={styles.date_text}>
+                    {t("format.recurrent_date", {
+                      initial_date:
+                        getFormattedDateTime(startDateTimeValue).date,
+                      final_date: getFormattedDateTime(endDateTimeValue).date,
+                    })}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className={styles.calendar_container}>
+              <i className="bi bi-clock"></i>
+              <span>{getFormattedDateTime(trip.startDateTime).time}</span>
+            </div>
+            <div>
+              <h2 className={styles.price_format}>
+                {t("format.price", {
+                  priceInt: trip.pricePerTrip,
+                })}
+              </h2>
+            </div>
           </div>
         </div>
+        <div className={styles.img_container}>
+          {!car ? (
+            <LoadingWheel
+              description={t("car.loading")}
+              containerClassName={styles.loadingContainer}
+              iconClassName={styles.loadingIcon}
+              descriptionClassName={styles.loadingDescription}
+            />
+          ) : (
+            <img className={styles.car_container} src={car.imageUri} />
+          )}
+        </div>
       </div>
-      <div className={styles.img_container}>
-        {CarTrip === null ? (
-          <SpinnerComponent />
-        ) : (
-          <img className={styles.car_container} src={CarTrip.imageUri} />
-        )}
-      </div>
-    </div>
     </Link>
   );
 };

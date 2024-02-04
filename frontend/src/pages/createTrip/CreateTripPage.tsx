@@ -3,15 +3,15 @@ import styles from "./styles.module.scss";
 import CreateTripForm from "./CreateTripForm";
 import useAllCities from "@/hooks/cities/useAllCities";
 import useUserCars from "@/hooks/cars/useUserCars";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const CreateTripPage = () => {
   const { t } = useTranslation();
   const { isLoading: isLoadingCities, cities } = useAllCities();
   const { isLoading: isLoadingUserCars, cars } = useUserCars();
 
-  // Todo: Loading spinner
   if (isLoadingCities || isLoadingUserCars) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (

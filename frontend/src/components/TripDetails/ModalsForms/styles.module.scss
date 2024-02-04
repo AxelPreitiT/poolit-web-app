@@ -1,0 +1,70 @@
+@use "@/colors.module.scss" as colors;
+
+.reportFormHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  column-gap: 1em;
+  position: relative;
+  padding: 2em 2em 0 2em;
+}
+
+.imgCointainer {
+  z-index: 2;
+}
+
+.reportFormTitle {
+  color: colors.$secondary-color;
+  width: 100%;
+  position: absolute;
+  margin: 0;
+  left: 0;
+  z-index: 1;
+  border-bottom: 4px solid;
+  opacity: 1;
+}
+
+.picker_style {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.propValue {
+  color: colors.$text-color;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.rating {
+  @extend .propValue;
+  color: colors.$secondary-color;
+  font-size: 2rem;
+}
+
+.stars_option {
+  color: colors.$secondary-color;
+  font-size: x-large;
+}
+
+.error {
+  color: colors.$danger-color;
+}
+
+.optionalContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.optionalLabel {
+  background-color: colors.$placeholder-text-color;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 0.1rem 0.25rem;
+  color: colors.$light-text-color;
+}

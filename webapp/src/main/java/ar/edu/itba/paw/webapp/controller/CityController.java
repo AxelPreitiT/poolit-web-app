@@ -46,15 +46,16 @@ public class CityController {
 
     @GET
     @Path("/")
-    @Produces(VndType.APPLICATION_CITY)
+    @Produces(VndType.APPLICATION_CITY_LIST)
     public Response getAllCities(){
         LOGGER.debug("GET request for all cities");
         final List<CityDto> cities = cityService.getCitiesByProvinceId(DEFAULT_PROVINCE_ID).stream().map(city -> CityDto.fromCity(uriInfo,city)).collect(Collectors.toList());
-        return Response.ok(new GenericEntity<List<CityDto>>(cities){}).build();
+        Response.ResponseBuilder res =  Response.ok(new GenericEntity<List<CityDto>>(cities){});
+        return ControllerUtils.getUnconditionalCacheResponseBuilder(res).build();
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(VndType.APPLICATION_CITY)
     public Response getById(@PathParam("id") final int id){
         LOGGER.debug("GET request for city with cityId {}",id);

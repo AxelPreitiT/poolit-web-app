@@ -1,39 +1,37 @@
-import PaginationList from "@/components/paginationList/paginationList";
-import CardTripScheduled from "@/components/cardTrip/cardTripScheduled/cardTripScheduled";
-import { useEffect, useState } from "react";
-import tripsService from "@/services/TripsService.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner";
-import TripModel from "@/models/TripModel.ts";
+import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
+import { useTranslation } from "react-i18next";
+import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
+import CardTripScheduled from "@/components/cardTrip/cardTripScheduled/cardTripScheduled.tsx";
+import tripModel from "@/models/TripModel.ts";
 
 export interface ListTripsScheduledProps {
   uri: string;
   empty_component: React.ReactNode;
+  current_page: number;
+  useExtraData: (trip: tripModel) => {
+    startDate: string;
+    endDate: string;
+    link: string;
+  };
 }
 
 const ListTripsScheduled = ({
   uri,
   empty_component,
+  useExtraData,
 }: ListTripsScheduledProps) => {
-  const [Trips, setTrips] = useState<TripModel[] | null>(null);
-
-  useEffect(() => {
-    tripsService.getTripsByUri(uri).then((response) => {
-      setTrips(response);
-    });
-  });
+  const { t } = useTranslation();
 
   return (
     <div>
-      {Trips == null ? (
-        <SpinnerComponent />
-      ) : (
-        <PaginationList
-          pagination_component={<h3>Poner paginación</h3>}
-          empty_component={empty_component}
-          data={Trips}
-          component_name={CardTripScheduled}
-        />
-      )}
+      <PaginationComponentExtraData
+        CardComponent={CardTripScheduled}
+        useExtraData={useExtraData}
+        uri={uri}
+        useFuction={useTripsByUri}
+        empty_component={empty_component}
+        itemsName={t("trip.title")}
+      />
     </div>
   );
 };

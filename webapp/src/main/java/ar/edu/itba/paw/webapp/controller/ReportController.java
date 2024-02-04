@@ -54,7 +54,7 @@ public class ReportController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
     public Response getByIdPublic(@PathParam("id") final long id) {
         LOGGER.debug("GET request for public report with id {}",id);
@@ -63,7 +63,7 @@ public class ReportController {
     }
 
     @GET
-    @Path("{id}")
+    @Path("{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
     @PreAuthorize("hasRole('ADMIN')")
     public Response getByIdPrivate(@PathParam("id") final long id){
@@ -73,7 +73,7 @@ public class ReportController {
     }
 
     @GET
-    @Produces(value = VndType.APPLICATION_REPORT_PRIVATE)
+    @Produces(value = VndType.APPLICATION_REPORT_PRIVATE_LIST)
     @PreAuthorize("hasRole('ADMIN')")
     public Response getReportsForAdmin(@Valid @BeanParam final PagedQuery query){
         LOGGER.debug("GET request for private reports");
@@ -82,7 +82,7 @@ public class ReportController {
     }
 
     @GET
-    @Produces(value = VndType.APPLICATION_REPORT_PUBLIC)
+    @Produces(value = VndType.APPLICATION_REPORT_PUBLIC_LIST)
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#reporterUserId)")
     public Response getReports(@QueryParam("madeBy") final @Valid @NotNull Integer reporterUserId,
                                @QueryParam("forTrip") final @Valid @NotNull Integer tripId,
@@ -101,7 +101,7 @@ public class ReportController {
 
     @PATCH
     @Consumes(value = VndType.APPLICATION_REPORT_DECISION)
-    @Path("{id}")
+    @Path("{id:\\d+}")
     public Response acceptOrRejectReport(@PathParam("id") final long id,
                                          @Valid final DecideReportDto decideReportDto) throws UserNotFoundException, PassengerNotFoundException, ReportAlreadyProcessedException, TripNotFoundException, ReportNotFoundException {
         LOGGER.debug("PATCH request to accept or reject report {}",id);

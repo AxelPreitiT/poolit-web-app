@@ -1,0 +1,5 @@
+@use "@/colors.module.scss" as colors;
+
+.status_container {
+  color: colors.$secondary-color;
+}

@@ -63,13 +63,15 @@ public class Trip {
     @Column(name = "last_occurrence", nullable = true)
     private LocalDateTime lastOccurrence;
 
+    //leave for sorting in DAO
     @Formula("(SELECT coalesce(avg(user_reviews.rating),0) FROM user_reviews WHERE user_reviews.reviewed_id = driver_id AND user_reviews.review_id IN (SELECT driver_reviews.review_id FROM driver_reviews))")
     private double driverRating;
 
-
+    //leave for sorting in DAO
     @Formula("(SELECT coalesce(avg(car_reviews.rating),0) FROM car_reviews WHERE car_reviews.car_id = car_id)")
     private double carRating;
 
+    //leave for sorting in DAO
     @Formula("cast(start_date_time as time)")
     private LocalTime time;
 
@@ -298,23 +300,34 @@ public class Trip {
         this.occupiedSeats = occupiedSeats;
     }
 
-    public double getDriverRating() {
-        return driverRating;
-    }
+//    public double getDriverRating() {
+//        return driverRating;
+//    }
 
-    public double getCarRating() {
-        return carRating;
-    }
-    public TripStatus getQueryTripStatus(){
+//    public double getCarRating() {
+//        return carRating;
+//    }
+
+    public TripStatus getTripStatus(){
         final LocalDateTime now = LocalDateTime.now();
-        if(queryStartDateTime.compareTo(now)>=0){
+        if(startDateTime.compareTo(now)>=0){
             return TripStatus.NOT_STARTED;
         }
-        if(now.compareTo(queryEndDateTime)<=0){
+        if(now.compareTo(endDateTime)<=0){
             return TripStatus.IN_PROGRESS;
         }
         return TripStatus.FINISHED;
     }
+//    public TripStatus getQueryTripStatus(){
+//        final LocalDateTime now = LocalDateTime.now();
+//        if(queryStartDateTime.compareTo(now)>=0){
+//            return TripStatus.NOT_STARTED;
+//        }
+//        if(now.compareTo(queryEndDateTime)<=0){
+//            return TripStatus.IN_PROGRESS;
+//        }
+//        return TripStatus.FINISHED;
+//    }
 
     public enum TripStatus{
         NOT_STARTED,
@@ -322,9 +335,40 @@ public class Trip {
         FINISHED
     }
     public enum SortType{
-        PRICE(),
-        TIME(),
-        DRIVER_RATING(),
-        CAR_RATING(),
+        PRICE("price", true, true),
+        TIME("time", true, true),
+
+        DRIVER_RATING("driverRating", false, true),
+        CAR_RATING("carRating", false, true);
+
+        private final String code;
+        private final boolean hasAscendingSort;
+        private final boolean hasDescendingSort;
+
+        private SortType(String code, boolean hasAscendingSort, boolean hasDescendingSort){
+            this.code = code;
+            this.hasAscendingSort = hasAscendingSort;
+            this.hasDescendingSort = hasDescendingSort;
+        }
+
+        private String getCodePrefix() {
+            return "searchTrip.sortType.";
+        }
+
+        public boolean hasAscendingSort(){
+            return hasAscendingSort;
+        }
+
+        public boolean hasDescendingSort(){
+            return hasDescendingSort;
+        }
+
+        public String getAscendingCode(){
+            return hasAscendingSort ? getCodePrefix() + code + ".asc" : null;
+        }
+
+        public String getDescendingCode(){
+            return hasDescendingSort ? getCodePrefix() + code + ".desc" : null;
+        }
     }
 }

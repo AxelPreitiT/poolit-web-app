@@ -9,7 +9,6 @@ import { defaultToastTimeout } from "@/components/toasts/ToastProps";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import { useNavigate } from "react-router-dom";
 import { homePath, loginPath } from "@/AppRouter";
-import useAuthentication from "./useAuthentication";
 import EmailMissingError from "@/errors/EmailMissingError";
 import TokenMissingError from "@/errors/TokenMissingError";
 
@@ -18,7 +17,6 @@ const useVerifyAccount = (email: string | null, token: string | null) => {
   const onQueryError = useQueryError();
   const showSuccessToast = useSuccessToast();
   const navigate = useNavigate();
-  const { invalidateAuthentication } = useAuthentication();
 
   const query = useQuery({
     queryKey: ["verifyAccount", email, token],
@@ -45,8 +43,7 @@ const useVerifyAccount = (email: string | null, token: string | null) => {
       timeout: defaultToastTimeout,
     });
     navigate(homePath, { replace: true });
-    await invalidateAuthentication();
-  }, [showSuccessToast, t, navigate, invalidateAuthentication]);
+  }, [showSuccessToast, t, navigate]);
 
   const onError = useCallback(
     (error: Error) => {

@@ -7,14 +7,7 @@ import { useTranslation } from "react-i18next";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import TripModel from "@/models/TripModel";
 
-const useTripByUri = (
-  tripUri: string,
-  {
-    enabled = true,
-  }: {
-    enabled?: boolean;
-  } = {}
-) => {
+const useTripByUri = (tripUri?: string) => {
   const { t } = useTranslation();
   const onQueryError = useQueryError();
 
@@ -26,12 +19,11 @@ const useTripByUri = (
     isPending,
   } = useQuery({
     queryKey: ["trip", tripUri],
-    queryFn: async ({ queryKey }): Promise<TripModel> => {
-      const [, tripUri] = queryKey;
-      return await TripsService.getTripById(tripUri);
+    queryFn: async (): Promise<TripModel> => {
+      return await TripsService.getTripById(tripUri as string);
     },
     retry: false,
-    enabled,
+    enabled: !!tripUri,
   });
 
   useEffect(() => {

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
-import java.sql.CallableStatement;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "tokens")
@@ -22,7 +20,6 @@ public class VerificationToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "date")
     private LocalDate date;
 

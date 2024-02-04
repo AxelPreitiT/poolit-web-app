@@ -2,10 +2,11 @@ import QueryError from "@/errors/QueryError";
 import Form, { FormFieldsType } from "@/forms/Form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { FieldError, FieldValues } from "react-hook-form";
+import { DefaultValues, FieldError, FieldValues } from "react-hook-form";
 import { SubmitHandler, useForm as useReactHookForm } from "react-hook-form";
 import { ZodSchema } from "zod";
 import { ModelType } from "@/models/ModelType";
+import { useEffect } from "react";
 
 export type SubmitHandlerReturnModel<
   F extends FieldValues,
@@ -22,16 +23,23 @@ const useForm = <
   onSubmit,
   onSuccess,
   onError,
+  defaultValues,
+  executeOnMount = false,
 }: {
   form: Form<T>;
-  formSchema: ZodSchema;
+  formSchema: ZodSchema<F>;
   onSubmit: SubmitHandlerReturnModel<F, Model>;
   onSuccess?: (data: Model, form: F) => void;
   onError?: (error: QueryError) => void;
+  defaultValues?: DefaultValues<F>;
+  executeOnMount?: boolean;
 }) => {
   const { handleSubmit, ...formProps } = useReactHookForm<F>({
     resolver: zodResolver(formSchema),
+    defaultValues,
   });
+
+  const { trigger, getValues } = formProps;
 
   const mutation = useMutation({
     mutationFn: onSubmit,
@@ -47,6 +55,26 @@ const useForm = <
     },
   });
 
+  const executeSubmit = (onValid?: () => void) => {
+    trigger().then((isValid) => {
+      if (isValid) {
+        if (onValid) {
+          onValid();
+        }
+        mutation.mutate(getValues());
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (defaultValues && executeOnMount) {
+      executeSubmit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const isFetching = mutation.isPending;
+
   const handleFormSubmit = handleSubmit((data: F) => mutation.mutate(data));
 
   const tFormError = (errorField?: FieldError): string | undefined => {
@@ -56,7 +84,13 @@ const useForm = <
     }
   };
 
-  return { handleSubmit: handleFormSubmit, tFormError, ...formProps };
+  return {
+    handleSubmit: handleFormSubmit,
+    tFormError,
+    isFetching,
+    executeSubmit,
+    ...formProps,
+  };
 };
 
 export default useForm;

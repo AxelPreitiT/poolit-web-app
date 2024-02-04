@@ -62,14 +62,6 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.createCarReview(trip, reviewer, car, rating, comment, option);
     }
 
-
-//    @Transactional
-//    @Override
-//    public double getCarsRating(final long carId) throws CarNotFoundException {
-//        Car car = carService.findById(carId).orElseThrow(CarNotFoundException::new);
-//        return carReviewDao.getCarRating(car);
-//    }
-
     @Transactional
     @Override
     public PagedContent<CarReview> getCarReviews(final long carId, final int page, final int pageSize) throws CarNotFoundException {
@@ -77,8 +69,6 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.getCarReviews(car, page, pageSize);
     }
 
-//    @Transactional
-//    @Override
     private boolean canReviewCar(final Trip trip, final Passenger reviewer, final Car car) {
         if(trip.getCar().getCarId() != car.getCarId()) {
             IllegalArgumentException e = new IllegalArgumentException();
@@ -108,16 +98,6 @@ public class CarReviewServiceImpl implements CarReviewService {
         return carReviewDao.canReviewCar(trip, reviewer, car) ? ReviewState.PENDING : ReviewState.DONE;
     }
 
-
-//    @Transactional
-//    @Override
-//    public ItemReview<Car> getCarReviewState(final long tripId) throws TripNotFoundException, UserNotFoundException, CarNotFoundException {
-//        Trip trip = tripService.findById(tripId).orElseThrow(TripNotFoundException::new);
-//        User currentUser = userService.getCurrentUser().orElseThrow(UserNotFoundException::new);
-//        Passenger reviewer = tripService.getPassenger(trip, currentUser).get();
-//        Car car = carService.findById(trip.getCar().getCarId()).orElseThrow(CarNotFoundException::new);
-//        return new ItemReview<>(car, getReviewState(trip, reviewer, car));
-//    }
 
     @Transactional
     @Override

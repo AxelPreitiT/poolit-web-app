@@ -50,7 +50,7 @@ public class DriverReviewController {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{id:\\d+}")
     @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
     public Response getReview(@PathParam("id") final long id){
         LOGGER.debug("GET request for passenger review with id {}",id);
@@ -60,7 +60,7 @@ public class DriverReviewController {
 
     @GET
     @PreAuthorize("@authValidator.checkIfWantedIsSelf(#query.madeBy)")
-    @Produces(value = VndType.APPLICATION_REVIEW_DRIVER)
+    @Produces(value = VndType.APPLICATION_REVIEW_DRIVER_LIST)
     public Response getReviews(@Valid @BeanParam final ReviewsQuery query) throws UserNotFoundException, TripNotFoundException {
         if(query.getMadeBy()!=null || query.getForTrip()!=null){
             LOGGER.debug("GET request for driver reviews made by user {} for passengers on trip {}",query.getMadeBy(),query.getForTrip());

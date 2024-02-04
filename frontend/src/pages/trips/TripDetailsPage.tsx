@@ -5,96 +5,152 @@ import { useTranslation } from "react-i18next";
 import Location from "@/components/location/Location";
 import StatusTrip from "@/components/statusTrip/StatusTrip";
 import TripInfo from "@/components/tripInfo/TripInfo";
-import {useEffect, useState} from "react";
-import {useParams, useSearchParams} from "react-router-dom";
-import TripModel from "@/models/TripModel.ts";
-import tripsService from "@/services/TripsService.ts";
-import CreateUri from "@/functions/CreateUri.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
-import UserPublicModel from "@/models/UserPublicModel.ts";
-import UserService from "@/services/UserService.ts";
-import PassangerService from "@/services/PassangerService.ts";
-import PassangerModel from "@/models/PassangerModel.ts";
-import {useCurrentUser} from "@/hooks/users/useCurrentUser.tsx";
-import getTripRole from "@/functions/GetTripRole.ts";
-import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
+import { useCurrentUser } from "@/hooks/users/useCurrentUser.tsx";
 import LeftDetails from "@/components/TripDetails/EndContainer/LeftDetails.tsx";
 import RightDetails from "@/components/TripDetails/EndContainer/RightDetails.tsx";
-import Status from "@/enums/Status.ts";
+import useCarByUri from "@/hooks/cars/useCarByUri.tsx";
+import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
+import useRolePassanger from "@/hooks/passanger/useRolePassanger.tsx";
+import LoadingScreen from "@/components/loading/LoadingScreen";
+import PassangersTripComponent from "@/components/TripDetails/PassangerTripComponent/PassangersTripComponent.tsx";
+import useTrip from "@/hooks/trips/useTrip.tsx";
+import { useSearchParams } from "react-router-dom";
+import getFormattedDateTime from "@/functions/DateFormat.ts";
+import getStatusPassanger from "@/functions/getStatusPassanger.tsx";
+// import {useSearchParams} from "react-router-dom";
 
 const TripDetailsPage = () => {
   const { t } = useTranslation();
-  const id = useParams();
-  const [params,] = useSearchParams();
-  const { isLoading, currentUser } = useCurrentUser();
+  const [params] = useSearchParams();
+  const { currentUser } = useCurrentUser();
+  const { isLoading: isLoadingTrip, trip: trip } = useTrip();
+  const { isLoading: isLoadingCar, car: car } = useCarByUri(trip?.carUri);
+  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
+    trip?.driverUri
+  );
+  const isDriver = trip?.driverUri === currentUser?.selfUri;
 
-  const [Trip, setTrip] = useState<TripModel | null>(null);
-  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
-  const [DriverTrip, setDriverTrip] = useState<UserPublicModel | null>(null);
-  const [PassangersTrip, setPassangersTrip] = useState<PassangerModel[] | null>(null);
+  const {
+    isLoading: isLoadingRole,
+    currentPassanger: currentPassanger,
+    isError: isError,
+  } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
+  const isPassanger = !isError;
 
-  const link = CreateUri(id.tripId, params.toString(), '/trips')
+  if (
+    isLoadingTrip ||
+    trip === undefined ||
+    isLoadingCar ||
+    car === undefined ||
+    isLoadingDriver ||
+    driver === undefined
+  ) {
+    return <LoadingScreen description={t("trip.loading_one")} />;
+  }
+  const tripTime = getFormattedDateTime(trip.startDateTime).time;
+  const startDateTime = isDriver
+    ? trip.startDateTime
+    : currentPassanger?.startDateTime ||
+      (params.get("startDateTime") != undefined
+        ? `${params.get("startDateTime")}T${tripTime}`
+        : trip.startDateTime);
+  const endDateTime = isDriver
+    ? trip.endDateTime
+    : currentPassanger?.endDateTime ||
+      (params.get("endDateTime") != undefined
+        ? `${params.get("endDateTime")}T${tripTime}`
+        : params.get("startDateTime") != undefined
+        ? `${params.get("startDateTime")}T${tripTime}`
+        : trip.startDateTime);
+  const status = currentPassanger
+    ? getStatusPassanger(currentPassanger)
+    : trip.tripStatus;
+  //const {isLoading: isLoadingSeats, data:occupiedSeats} = {false, {occupiedSeats:1}:occupiedSeatsModel}
+  //const occupiedSeats:occupiedSeatsModel = {occupiedSeats:1};
 
-  useEffect(() => {
-    tripsService.getTripById(link).then((response) => {
-      setTrip(response);
-    });
-    if (Trip != null) {
-      CarService.getCarById(Trip.carUri).then((response) => {
-        setCarTrip(response);
-      });
-      UserService.getUserById(Trip.driverUri).then((response) => {
-        setDriverTrip(response);
-      });
-      PassangerService.getPassangersTrips(Trip.passengersUri).then((response) => {
-        setPassangersTrip(response);
-      });
-    }
-  });
+  // // Supongamos que tienes las cadenas de fecha y hora
+  //   const fecha = '2024-02-01'; // Formato: 'YYYY-MM-DD'
+  //   const hora = '12:30:00';    // Formato: 'HH:mm:ss'
+  //
+  // // Combina las cadenas de fecha y hora en un formato compatible con Date
+  //   const fechaHoraString = `${fecha}T${hora}`;
 
-  const {isPassanger, isDriver} = isLoading || currentUser == null  || DriverTrip == null || PassangersTrip == null ? {isPassanger:false, isDriver:false} : getTripRole(currentUser, DriverTrip, PassangersTrip);
+  // Crea un objeto Date a partir de la cadena combinada
+  //   const fechaYHora = new Date(fechaHoraString);
 
   return (
     <div>
       <MainComponent>
         <MainHeader
           title={t("trip_detail.header")}
-          left_component={ isPassanger && (<StatusTrip status={"ACCEPT"}/>)}
+          left_component={
+            !isDriver &&
+            isPassanger &&
+            !isLoadingRole &&
+            currentPassanger && (
+              <StatusTrip status={currentPassanger.passengerState} />
+            )
+          }
         />
-
-        {Trip == undefined || CarTrip === null || DriverTrip === null ?
-          (<SpinnerComponent /> ) :
-          (<div>
-              <Location
-                startAddress={Trip.originAddress}
-                startCityUri={Trip.originCityUri}
-                endAddress={Trip.destinationAddress}
-                endCityUri={Trip.destinationCityUri}
+        <div>
+          <Location
+            startAddress={trip.originAddress}
+            startCityUri={trip.originCityUri}
+            endAddress={trip.destinationAddress}
+            endCityUri={trip.destinationCityUri}
+          />
+          <div className={styles.middle_content}>
+            <TripInfo
+              trip={trip}
+              car={car}
+              driver={driver}
+              isDriver={isDriver}
+              startDateTime={startDateTime}
+              endDateTime={endDateTime}
+              currentPassanger={currentPassanger}
+            />
+            <div className={styles.img_container}>
+              <img
+                src={car?.imageUri}
+                className={styles.img_style}
+                alt={t("car.image", { car_info: car?.infoCar })}
               />
-              <div className={styles.middle_content}>
-                <TripInfo trip={Trip} car={CarTrip} driver={DriverTrip} isDriver={isDriver}/>
-                <div className={styles.img_container}>
-                  <img
-                      src={CarTrip?.imageUri}
-                      className={styles.img_style}
-                      alt=""
-                  />
-                </div>
-              </div>
+            </div>
+          </div>
 
-              <div className={styles.end_container}>
-                <LeftDetails trip={Trip} isPassanger={isPassanger} isDriver={isDriver} status={Status.FINISHED}/>
-                <RightDetails isPassanger={isPassanger} isDriver={isDriver} status={Status.FINISHED}/>
-              </div>
-            </div>)}
+          <div className={styles.end_container}>
+            <LeftDetails
+              trip={trip}
+              isPassanger={isPassanger}
+              isDriver={isDriver}
+              startDateTime={startDateTime}
+              endDateTime={endDateTime}
+              status={status}
+            />
+            <RightDetails
+              isPassanger={isPassanger}
+              isDriver={isDriver}
+              trip={trip}
+              passanger={currentPassanger}
+              status={trip.tripStatus}
+              driver={driver}
+              car={car}
+              startDateTime={startDateTime}
+              endDateTime={endDateTime}
+            />
+          </div>
+        </div>
       </MainComponent>
-      {isDriver && PassangersTrip != null  &&
-          <PassangersTripComponent passangers={PassangersTrip}/>
-      }
+      {isDriver && (
+        <PassangersTripComponent
+          uri={trip.passengersUriTemplate}
+          maxSeats={parseInt(trip.maxSeats, 10)}
+          startDateTime={startDateTime}
+          endDateTime={endDateTime}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default TripDetailsPage;

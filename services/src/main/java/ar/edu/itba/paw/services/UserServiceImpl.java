@@ -126,25 +126,6 @@ public class UserServiceImpl implements UserService {
 //        imageService.updateImage(content,user.getUserImageId());
     }
 
-//    @Transactional
-//    @Override
-//    public boolean isDriver(User user){
-//        return user.getIsDriver();
-//    }
-
-//    @Transactional
-//    @Override
-//    public boolean isUser(User user){
-//        return user.getIsUser();
-//    }
-
-//    @Transactional
-//    @Override
-//    public void loginUser(final String email, final String password){
-//        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
-//        Authentication auth = authenticationManager.authenticate(authRequest);
-//        SecurityContextHolder.getContext().setAuthentication(auth);
-//    }
 
     @Transactional
     @Override
@@ -170,46 +151,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//    @Transactional
-//    @Override
-//    public void changeToDriver() throws UserNotFoundException {
-//        User user = getCurrentUser().orElseThrow(UserNotFoundException::new);
-//        userDao.changeRole(user.getUserId(), UserRole.DRIVER.getText());
-//    }
-
-
-
-//    @Transactional
-//    @Override
-//    public void blockUser( long blockedId) throws UserNotFoundException{
-//        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-//        userDao.blockUser(blocker.getUserId(),blockedId);
-//    }
-
-//    @Transactional
-//    @Override
-//    public void unblockUser( long blockedId) throws UserNotFoundException{
-//        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-//        userDao.unblockUser(blocker.getUserId(),blockedId);
-//    }
-
-//    @Transactional
-//    @Override
-//    public boolean isBlocked( long blockedId) throws UserNotFoundException {
-//        User blocker = getCurrentUser().orElseThrow(UserNotFoundException::new);
-//        return userDao.isBlocked(blocker.getUserId(),blockedId);
-//    }
-
-//    @Transactional
-//    @Override
-//    public boolean isCurrentUser(long userId) throws UserNotFoundException {
-//        Optional<User> user = getCurrentUser();
-//        if(user.isPresent()){
-//            return user.orElseThrow(UserNotFoundException::new).getUserId() == userId;
-//        }
-//        return false;
-//    }
-
     @Transactional
     @Override
     public boolean sendVerificationEmail(String email){
@@ -229,11 +170,11 @@ public class UserServiceImpl implements UserService {
     public void confirmRegister(String token, final User tokenUser) throws InvalidTokenException {
         VerificationToken verificationToken = tokenService.getToken(token).orElse(null);
         if(verificationToken == null){
-            throw new IllegalArgumentException();
+            throw new InvalidTokenException();
         }
         final User user = verificationToken.getUser();
         if(user.getUserId() != tokenUser.getUserId()){
-            throw new IllegalArgumentException();
+            throw new InvalidTokenException();
         }
         if (!tokenService.isValidToken(verificationToken)){
             throw new InvalidTokenException();
@@ -241,42 +182,8 @@ public class UserServiceImpl implements UserService {
         //verificationToken != null and it is a valid token
 
         tokenUser.setEnabled(true);
-        //TODO: delete
-//        authWithoutPassword(user);
     }
 
-
-//    void authWithoutPassword(User user) {
-//        final Collection<GrantedAuthority> authorities = new HashSet<>();
-//
-//        if(Objects.equals(user.getRole(), UserRole.ADMIN.getText())){
-//            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN_ROLE.getText()));
-//        }else{
-//            if(Objects.equals(user.getRole(), UserRole.DRIVER.getText())){
-//                authorities.add(new SimpleGrantedAuthority(UserRole.DRIVER_ROLE.getText()));
-//            } else {
-//                authorities.add(new SimpleGrantedAuthority(UserRole.USER_ROLE.getText()));
-//            }
-//        }
-//
-//        //TODO: revisar usos, y ver si hay que poner lo de banned acá
-//        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-//                user.getEmail(), user.getPassword(), authorities);
-//        Authentication authRequest = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
-//        SecurityContextHolder.getContext().setAuthentication(authRequest);
-//    }
-
-//    @Transactional
-//    @Override
-//    public void modifyUser(final long userId,String username, String surname, String phone, long bornCityId, String mailLocaleString, byte[] imgData) throws CityNotFoundException, UserNotFoundException {
-//        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-//            if(imgData.length==0){
-//                userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),user.getUserImageId());
-//                return;
-//            }
-//            long imageId = imageService.createImage(imgData).getImageId();
-//            userDao.modifyUser(user.getUserId(), username,surname,phone,cityService.findCityById(bornCityId).orElseThrow(CityNotFoundException::new),new Locale(mailLocaleString),imageId);
-//    }
 
     @Transactional
     @Override
@@ -301,19 +208,6 @@ public class UserServiceImpl implements UserService {
                 user.getUserImageId());
     }
 
-//    @Transactional
-//    @Override
-//    public void changeRole(final long userId, final String role) throws UserNotFoundException,RoleAlreadyChangedException {
-//        User user = findById(userId).orElseThrow(UserNotFoundException::new);
-//        if(!role.equals(UserRole.USER.getText()) && !role.equals(UserRole.DRIVER.getText())){
-//            throw new IllegalArgumentException();
-//        }
-//        if(!user.getRole().equals(UserRole.USER.getText())){
-//            //role has already been changed
-//            throw new RoleAlreadyChangedException();
-//        }
-//        userDao.changeRole(user.getUserId(), role);
-//    }
 
     @Transactional
     @Override

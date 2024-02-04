@@ -130,6 +130,7 @@ public class DriverReviewServiceImplTest {
         when(tripService.userIsDriver(anyLong(),any())).thenReturn(true);
         when(tripService.userIsPassenger(anyLong(),any())).thenReturn(true);
         when(driverReviewDao.canReviewDriver(any(Trip.class),any(Passenger.class),any(User.class))).thenReturn(false);
+
         driverReviewService.createDriverReview(TRIP_ID,USER.getUserId(),RATING,COMMENT,OPTION);
     }
 

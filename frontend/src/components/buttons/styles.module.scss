@@ -1,0 +1,7 @@
+@use "@/colors.module.scss" as colors;
+
+.loadingIcon {
+  color: colors.$light-text-color;
+  height: 1.5rem;
+  width: 1.5rem;
+}

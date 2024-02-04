@@ -1,92 +1,89 @@
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer";
 import CardTripProfile from "@/components/cardTrip/cardTripProfile/cardTripProfile";
-import { reservedTripsPath } from "@/AppRouter";
+import { publicsPassangerReviewsPath, reservedTripsPath } from "@/AppRouter";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import tripsService from "@/services/TripsService.ts";
-import ShortReview from "@/components/review/shorts/ShortReview";
-import { publicsReviewsPath } from "@/AppRouter";
-import reviewsService from "@/services/ReviewsService.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
-import TripModel from "@/models/TripModel.ts";
-
+import useTripsByUri from "@/hooks/trips/useTripsByUri.tsx";
+import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import styles from "./styles.module.scss";
+import ShortReviewProfile from "@/components/review/shorts/ShortReviewProfile.tsx";
 
 export interface PassengerListProp {
   futureReservedTripsUri: string;
   pastReservedTripsUri: string;
-  selfUri : string;
+  reviewsPassengerUri: string;
+  id: number;
 }
 
 const PassengerList = ({
   futureReservedTripsUri,
   pastReservedTripsUri,
-   selfUri
+  reviewsPassengerUri,
+  id,
 }: PassengerListProp) => {
   const { t } = useTranslation();
 
-  const [FutureReservedTrips, setFutureReservedTrips] = useState<
-    TripModel[] | null
-  >(null);
-  const [PastReservedTrips, setPastReservedTrips] = useState<
-    TripModel[] | null
-  >(null);
-  const [Reviews, setReviews] = useState<ReviewModel[] | null>(null);
-
-  useEffect(() => {
-    tripsService.getTripsByUser(futureReservedTripsUri).then((response) => {
-      setFutureReservedTrips(response);
-    });
-  });
-
-  useEffect(() => {
-    tripsService.getTripsByUser(pastReservedTripsUri).then((response) => {
-      setPastReservedTrips(response);
-    });
-  });
-
-  useEffect(() => {
-    reviewsService.getReviewsAsPassangerByUserId(selfUri).then((response) => {
-      setReviews(response);
-    });
-  });
-
+  const { isLoading: isLoadingFutureReservedTrips, data: futureReservedTrips } =
+    useTripsByUri(futureReservedTripsUri);
+  const { isLoading: isLoadingPastReservedTrips, data: pastReservedTrips } =
+    useTripsByUri(pastReservedTripsUri);
+  const { isLoading: isLoadingReviewsPassenger, data: reviewsPassenger } =
+    useUserReviewsByUri(reviewsPassengerUri);
 
   return (
     <div>
-      {Reviews == null ? (
-          <SpinnerComponent />
-      ) : (
-      <ListProfileContainer
-        title={t("profile.lists.review_as_passanger")}
-        btn_footer_text={t("profile.lists.review_more")}
-        empty_text={t("profile.lists.review_empty")}
-        empty_icon={"book"}
-        data={Reviews}
-        component_name={ShortReview}
-        link={publicsReviewsPath.replace(":id", String(5))}
-      />)}
-      {FutureReservedTrips == null ? (
-          <SpinnerComponent />
+      {reviewsPassenger === undefined || isLoadingReviewsPassenger ? (
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.reviews")}
+        />
       ) : (
         <ListProfileContainer
-          title={t("profile.lists.reserved_next_title")}
-          btn_footer_text={t("profile.lists.reserved_next_more")}
-          empty_text={t("profile.lists.reserved_next_empty")}
-          empty_icon={"car-front-fill"}
-          data={FutureReservedTrips}
-          component_name={CardTripProfile}
-          link={reservedTripsPath}
+          title={t("profile.lists.review_as_passanger")}
+          btn_footer_text={t("profile.lists.review_more")}
+          empty_text={t("profile.lists.review_empty")}
+          empty_icon={"book"}
+          data={reviewsPassenger.data}
+          component_name={ShortReviewProfile}
+          link={publicsPassangerReviewsPath.replace(":id", id.toString())}
         />
       )}
-      {PastReservedTrips == null ? (
-          <SpinnerComponent />
+      {futureReservedTrips === undefined || isLoadingFutureReservedTrips ? (
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.trips")}
+        />
+      ) : (
+        <div>
+          <ListProfileContainer
+            title={t("profile.lists.reserved_next_title")}
+            btn_footer_text={t("profile.lists.reserved_next_more")}
+            empty_text={t("profile.lists.reserved_next_empty")}
+            empty_icon={"car-front-fill"}
+            data={futureReservedTrips.data}
+            component_name={CardTripProfile}
+            link={reservedTripsPath}
+          />
+        </div>
+      )}
+      {pastReservedTrips === undefined || isLoadingPastReservedTrips ? (
+        <LoadingWheel
+          containerClassName={styles.loadingContainer}
+          iconClassName={styles.loadingIcon}
+          descriptionClassName={styles.loadingDescription}
+          description={t("profile.loading.trips")}
+        />
       ) : (
         <ListProfileContainer
           title={t("profile.lists.reserved_prev_title")}
           btn_footer_text={t("profile.lists.reserved_prev_more")}
           empty_text={t("profile.lists.reserved_prev_empty")}
           empty_icon={"car-front-fill"}
-          data={PastReservedTrips}
+          data={pastReservedTrips.data}
           component_name={CardTripProfile}
           link={reservedTripsPath}
         />

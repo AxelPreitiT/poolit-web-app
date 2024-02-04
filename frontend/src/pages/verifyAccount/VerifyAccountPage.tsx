@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import useVerifyAccount from "@/hooks/auth/useVerifyAccount";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const VerifyAccountPage = () => {
   const [searchParams] = useSearchParams();
@@ -7,8 +8,7 @@ const VerifyAccountPage = () => {
   const token = searchParams.get("token") || "";
   useVerifyAccount(email, token);
 
-  // TODO: Add loading component
-  return <p>Loading...</p>;
+  return <LoadingScreen />;
 };
 
 export default VerifyAccountPage;

@@ -45,15 +45,6 @@ public class DriverReviewHibernateDao implements DriverReviewDao {
         return result;
     }
 
-//    @Override
-//    public double getDriverRating(User user) {
-//        LOGGER.debug("Looking for the average driver rating of the user with id {}", user.getUserId());
-//        final TypedQuery<Double> avgRatingQuery = em.createQuery("SELECT coalesce(AVG(dr.rating), 0.0) FROM DriverReview dr WHERE dr.reviewed = :user", Double.class);
-//        avgRatingQuery.setParameter("user", user);
-//        Double result = avgRatingQuery.getSingleResult();
-//        LOGGER.debug("Average driver rating of the user with id {} is {}", user.getUserId(), result);
-//        return result;
-//    }
 
     @Override
     public PagedContent<DriverReview> getDriverReviews(User user, int page, int pageSize) {

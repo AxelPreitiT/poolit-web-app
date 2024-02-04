@@ -79,7 +79,7 @@ public class CarServiceImplTest {
         when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES),anyLong()))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES));
         //when(userService.getCurrentUser()).thenReturn(Optional.of(USER));
-        when(carService.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
+        when(carDao.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
         //doNothing().when(imageService).replaceImage(anyLong(), any(byte[].class));
 
         Car newCar = carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
@@ -96,7 +96,7 @@ public class CarServiceImplTest {
         when(carDao.modifyCar(eq(CAR_ID), eq(INFO_CAR), anyInt(), eq(FEATURES),anyLong()))
                 .thenReturn(new Car(PLATE, INFO_CAR, USER, IMAGE_2.getImageId(), SEATS, BRAND_ID, FEATURES));
         when(imageService.createImage(eq(IMAGE_DATA))).thenReturn(IMAGE_2);
-        when(carService.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
+        when(carDao.findById(CAR_ID)).thenReturn(Optional.of(new Car(PLATE, INFO_CAR, USER, IMAGE_ID, SEATS, BRAND_ID, FEATURES)));
 
         Car newCar = carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, IMAGE_DATA);
 
@@ -109,7 +109,7 @@ public class CarServiceImplTest {
 
     @Test(expected = CarNotFoundException.class)
     public void testModifyCarWithoutCar() throws CarNotFoundException {
-        when(carService.findById(CAR_ID)).thenReturn(Optional.empty());
+        when(carDao.findById(CAR_ID)).thenReturn(Optional.empty());
         carService.modifyCar(CAR_ID, INFO_CAR, SEATS, FEATURES, null);
 
     }

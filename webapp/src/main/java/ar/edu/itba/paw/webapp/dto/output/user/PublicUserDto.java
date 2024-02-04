@@ -7,6 +7,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 public class PublicUserDto {
+    private long userId;
     private String username;
     private String surname;
     private double driverRating;
@@ -20,6 +21,7 @@ public class PublicUserDto {
     public PublicUserDto(){}
 
     protected PublicUserDto(final UriInfo uriInfo, final User user){
+        this.userId = user.getUserId();
         this.username = user.getName();
         this.surname= user.getSurname();
         this.driverRating = user.getDriverRating();
@@ -33,6 +35,14 @@ public class PublicUserDto {
 
     public static PublicUserDto fromUser(final UriInfo uriInfo, final User user){
         return new PublicUserDto(uriInfo,user);
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

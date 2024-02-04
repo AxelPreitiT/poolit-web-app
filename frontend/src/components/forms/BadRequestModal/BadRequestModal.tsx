@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import styles from "./styles.module.scss";
+import { capitalize } from "@/utils/string/capitalize";
 
 type BadRequestModalOutput = Record<string, string[]>;
 
@@ -10,6 +11,12 @@ const formatErrors = (
   errors: BadRequestModel,
   defaultKey: string
 ): BadRequestModalOutput => {
+  if (!Array.isArray(errors)) {
+    const { field = defaultKey, message } = errors;
+    return {
+      [field]: [message],
+    };
+  }
   const output: BadRequestModalOutput = {};
   for (const { field, message } of errors) {
     const key = field || defaultKey;
@@ -22,17 +29,14 @@ const formatErrors = (
 };
 
 const ModalBody = ({ errors }: { errors: BadRequestModalOutput }) => {
-  const capitalize = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
   return (
     <div>
-      {Object.entries(errors).map(([field, messages]) => (
-        <div>
+      {Object.entries(errors).map(([field, messages], index) => (
+        <div key={index}>
           <h4 className="mb-2">{capitalize(field)}</h4>
           <ul>
-            {messages.map((message) => (
-              <li>{capitalize(message)}</li>
+            {messages.map((message, index) => (
+              <li key={index}>{capitalize(message)}</li>
             ))}
           </ul>
         </div>

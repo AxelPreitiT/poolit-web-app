@@ -22,8 +22,6 @@ public interface CarService {
 
     Optional<Car> findByUserAndPlate(User user, String plate);
 
-//    boolean currentUserIsCarOwner(Car car);
-
     Image getCarImage(final long carId,final Image.Size size) throws CarNotFoundException, ImageNotFoundException;
 
     void updateCarImage(final long carId, final byte[] content) throws CarNotFoundException, ImageNotFoundException;

@@ -233,17 +233,6 @@ public class TripDaoImplTest {
         Assert.assertTrue(ans.isPresent());
         Assert.assertEquals(Passenger.PassengerState.REJECTED,ans.get().getPassengerState());
     }
-//    @Test
-//    public void testGetPassengersForDate(){
-//        //Setup
-//        Trip auxTrip = getTrip(TRIP_2);
-//        //Execute
-//        List<Passenger> ans = tripDao.getPassengers(auxTrip,START);
-//        //Assert
-//        Assert.assertEquals(2,ans.size());
-//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_1));
-//        Assert.assertTrue(ans.stream().anyMatch(p -> p.getUser().getUserId() == USER_ID_2));
-//    }
 
     @Test
     public void testGetPassengersForRange(){
@@ -302,7 +291,7 @@ public class TripDaoImplTest {
         //Setup
         User auxUser = getUser(USER_1);
         //Execute
-        PagedContent<Trip> ans = tripDao.getTripsCreatedByUser(auxUser,Optional.empty(),Optional.empty(),0,PAGE_SIZE);
+        PagedContent<Trip> ans = tripDao.getTripsCreatedByUser(auxUser,Optional.empty(),Optional.empty(),false,0,PAGE_SIZE);
         //Asssert
         Assert.assertEquals(2,ans.getTotalCount());
         Assert.assertTrue(ans.getElements().stream().anyMatch(t -> t.getTripId() == KNOWN_SINGLE_TRIP_ID));
@@ -314,7 +303,7 @@ public class TripDaoImplTest {
         //Setup
         User auxUser = getUser(USER_1);
         //Execute
-        PagedContent<Trip> ans = tripDao.getTripsWhereUserIsPassenger(auxUser,Optional.empty(),Optional.empty(),null,0,PAGE_SIZE);
+        PagedContent<Trip> ans = tripDao.getTripsWhereUserIsPassenger(auxUser,Optional.empty(),Optional.empty(),null,false,0,PAGE_SIZE);
         //Assert
         Assert.assertEquals(1,ans.getTotalCount());
         Assert.assertTrue(ans.getElements().stream().anyMatch(t -> t.getTripId() == KNOWN_RECURRENT_TRIP_ID));

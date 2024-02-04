@@ -1,28 +1,43 @@
-import { Button, Spinner } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import LoadingWheel from "../loading/LoadingWheel";
+import styles from "./styles.module.scss";
 
 interface LoadingButtonProps {
   isLoading: boolean;
   children: React.ReactNode;
   className?: string;
-  spinnerClassName?: string;
   type: "button" | "submit" | "reset" | undefined;
-  spinnerSize?: "sm" | undefined;
+  onClick?: () => void;
+  size?: "sm" | "lg";
+  formId?: string;
+  showSpinner?: boolean;
+  disabled?: boolean;
 }
 
 const LoadingButton = ({
   isLoading,
   children,
   className,
-  spinnerClassName,
   type,
-  spinnerSize,
+  formId,
+  onClick,
+  size,
+  showSpinner = true,
+  disabled = false,
 }: LoadingButtonProps) => (
-  <Button disabled={isLoading} className={className} type={type}>
-    {isLoading ? (
-      <Spinner
-        className={spinnerClassName}
-        animation="border"
-        size={spinnerSize}
+  <Button
+    onClick={onClick}
+    size={size}
+    disabled={isLoading || disabled}
+    className={className}
+    type={type}
+    form={formId}
+  >
+    {isLoading && showSpinner ? (
+      <LoadingWheel
+        iconClassName={styles.loadingIcon}
+        description={null}
+        descriptionClassName="visually-hidden"
       />
     ) : (
       children

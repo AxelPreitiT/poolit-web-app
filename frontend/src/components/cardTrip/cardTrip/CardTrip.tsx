@@ -1,52 +1,122 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import CityService from "@/services/CityService.ts";
-import CarService from "@/services/CarService.ts";
-import CarModel from "@/models/CarModel.ts";
-import SpinnerComponent from "@/components/Spinner/Spinner.tsx";
 import getFormattedDateTime from "@/functions/DateFormat.ts";
-import extractPathAfterApi from "@/functions/extractPathAfterApi";
 import TripModel from "@/models/TripModel.ts";
+import LoadingWheel from "@/components/loading/LoadingWheel";
+import { getDayString } from "@/utils/date/dayString.ts";
+import useCityByUri from "@/hooks/cities/useCityByUri";
+import useCarByUri from "@/hooks/cars/useCarByUri";
+import tripModel from "@/models/TripModel.ts";
+import getTotalTrips from "@/functions/getTotalTrips.ts";
+import StarRating from "@/components/stars/StarsRanking.tsx";
+import CircleImg from "@/components/img/circleImg/CircleImg.tsx";
+import usePublicUserByUri from "@/hooks/users/usePublicUserByUri.tsx";
+import { tripDetailsPath } from "@/AppRouter.tsx";
+import ImageService from "@/services/ImageService.ts";
 
-const CardTrip = ({ trip }: { trip: TripModel }) => {
+const CardTrip = ({
+  trip,
+  className,
+  extraData,
+  searchParams,
+}: {
+  trip: TripModel;
+  className?: string;
+  extraData?: (trip: tripModel) => {
+    startDate: string;
+    endDate: string;
+    link: string;
+  };
+  searchParams?: URLSearchParams;
+}) => {
   const { t } = useTranslation();
-  const date = new Date(trip.startDateTime)
-  const DayOfWeek = date.getDay()
+  const {
+    startDate: start,
+    endDate: end,
+    link,
+  } = extraData
+    ? extraData(trip)
+    : {
+        startDate: trip.startDateTime,
+        endDate: trip.endDateTime,
+        link: tripDetailsPath.replace(":tripId", trip.tripId.toString()),
+      };
+  const date = new Date(trip.startDateTime);
+  const totalTrips = getTotalTrips(new Date(start), new Date(end));
+  const { isLoading: isLoadingDriver, user: driver } = usePublicUserByUri(
+    trip?.driverUri
+  );
+  const linkTrip = link + (searchParams ? `?${searchParams.toString()}` : "");
 
-  const [cityOrigin, setCityOrigin] = useState<string | null>(null);
-  const [cityDestination, setCityDestination] = useState<string | null>(null);
-  const [CarTrip, setCarTrip] = useState<CarModel | null>(null);
+  const {
+    isLoading: isOriginCityLoading,
+    city: originCity,
+    isError: isOriginCityError,
+  } = useCityByUri(trip.originCityUri);
+  const {
+    isLoading: isDestinationCityLoading,
+    city: destinationCity,
+    isError: isDestinationCityError,
+  } = useCityByUri(trip.destinationCityUri);
+  const {
+    isLoading: isCarLoading,
+    car,
+    isError: isCarError,
+  } = useCarByUri(trip.carUri);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const originCity = await CityService.getCityById(trip.originCityUri);
-      setCityOrigin(originCity.name);
-
-      const destinationCity = await CityService.getCityById(
-        trip.destinationCityUri
-      );
-      setCityDestination(destinationCity.name);
-
-      const car = await CarService.getCarById(trip.carUri);
-      setCarTrip(car);
-    };
-
-    fetchData();
-  }, [trip]); // Add trip as a dependency to avoid unnecessary calls
-
+  if (
+    isOriginCityLoading ||
+    isDestinationCityLoading ||
+    isCarLoading ||
+    isOriginCityError ||
+    isDestinationCityError ||
+    isCarError ||
+    isLoadingDriver ||
+    driver === undefined
+  ) {
+    return <LoadingWheel description={t("trip.loading_one")} />;
+  }
+  const totalPrice = totalTrips * trip.pricePerTrip;
   return (
-    <Link
-      to={extractPathAfterApi(trip.selfUri)}
-      className={styles.link_container}
-    >
+    <Link to={linkTrip} className={styles.link_container + " " + className}>
       <div className={styles.card_container}>
         <div className={styles.left_container}>
-          {CarTrip === null ? (
-            <SpinnerComponent />
+          {!car ? (
+            <LoadingWheel
+              description={t("car.loading")}
+              containerClassName={styles.loadingContainer}
+            />
           ) : (
-            <img src={CarTrip.imageUri} className={styles.img_container} />
+            <div className={styles.img_container}>
+              <img src={car.imageUri} />
+              <div className={styles.raiting_container}>
+                <div className={styles.one_raiting}>
+                  <StarRating
+                    rating={car.rating}
+                    className={styles.rating}
+                    containerClassName={styles.rating_container}
+                  />
+                  <CircleImg
+                    src={ImageService.getSmallImageUrl(car.imageUri)}
+                    size={20}
+                    className={styles.img}
+                  />
+                </div>
+                <div className={styles.one_raiting}>
+                  <StarRating
+                    rating={driver.driverRating}
+                    className={styles.rating}
+                    containerClassName={styles.rating_container}
+                  />
+                  <CircleImg
+                    src={ImageService.getSmallImageUrl(driver.imageUri)}
+                    size={20}
+                    className={styles.img}
+                  />
+                </div>
+              </div>
+            </div>
           )}
         </div>
         <div className={styles.right_container}>
@@ -54,7 +124,7 @@ const CardTrip = ({ trip }: { trip: TripModel }) => {
             <div className={styles.route_info_row}>
               <i className="bi bi-geo-alt secondary-color route-info-icon h4"></i>
               <div className={styles.route_info_text}>
-                <h4>{cityOrigin}</h4>
+                <h4>{originCity?.name}</h4>
                 <h6>{trip.originAddress}</h6>
               </div>
             </div>
@@ -62,30 +132,35 @@ const CardTrip = ({ trip }: { trip: TripModel }) => {
             <div className={styles.route_info_row}>
               <i className="bi bi-geo-alt-fill secondary-color route-info-icon h4"></i>
               <div className={styles.route_info_text}>
-                <h4>{cityDestination}</h4>
+                <h4>{destinationCity?.name}</h4>
                 <h6>{trip.destinationAddress}</h6>
               </div>
             </div>
           </div>
           <div className={styles.footer_description}>
-            <div className={styles.footer_details}>
-              <i className="bi bi-calendar text"></i>
-              {trip.totalTrips > 1 ? (
-                <span>{t(`day_week.${DayOfWeek}`)}</span>
-              ) : (
-                <span>{getFormattedDateTime(trip.startDateTime).date}</span>
-              )}
+            <div className={styles.footer_details_container}>
+              <div className={styles.footer_details}>
+                <i className="bi bi-calendar text"></i>
+                {start != end ? (
+                  <span>
+                    {t(`day.full.${getDayString(date).toLowerCase()}`, {
+                      plural: "s",
+                    })}
+                  </span>
+                ) : (
+                  <span>{getFormattedDateTime(start).date}</span>
+                )}
+              </div>
+              <div className={styles.footer_details}>
+                <i className="bi bi-clock text"></i>
+                <span>{getFormattedDateTime(trip.startDateTime).time}</span>
+              </div>
             </div>
-            <div className={styles.footer_details}>
-              <i className="bi bi-clock text"></i>
-              <span>{getFormattedDateTime(trip.startDateTime).time}</span>
-            </div>
-            <h3>
+            <span className={styles.price}>
               {t("format.price", {
-                priceInt: trip.pricePerTrip,
-                princeFloat: 0,
+                priceInt: totalPrice,
               })}
-            </h3>
+            </span>
           </div>
         </div>
       </div>

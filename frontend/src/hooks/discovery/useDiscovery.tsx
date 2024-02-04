@@ -2,9 +2,10 @@ import { useTranslation } from "react-i18next";
 import useQueryError from "../errors/useQueryError";
 import { useQuery } from "@tanstack/react-query";
 import DiscoveryService from "@/services/DiscoveryService";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import { defaultToastTimeout } from "@/components/toasts/ToastProps";
+import DiscoveryMissingError from "@/errors/DiscoveryMissingError";
 
 const useDiscovery = () => {
   const { t } = useTranslation();
@@ -16,7 +17,21 @@ const useDiscovery = () => {
     retry: false,
   });
 
-  const { isError, error, data: discovery } = query;
+  const { isError, error, data: discovery, isLoading } = query;
+
+  const getDiscoveryOnMount = useCallback(async () => {
+    if (discovery) {
+      return discovery;
+    }
+    try {
+      if (isLoading) {
+        return await DiscoveryService.getDiscovery();
+      }
+      throw new DiscoveryMissingError();
+    } catch (error) {
+      throw new DiscoveryMissingError();
+    }
+  }, [discovery, isLoading]);
 
   useEffect(() => {
     if (isError) {
@@ -36,6 +51,7 @@ const useDiscovery = () => {
   return {
     ...query,
     discovery,
+    getDiscoveryOnMount,
   };
 };
 

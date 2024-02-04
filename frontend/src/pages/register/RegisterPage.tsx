@@ -6,16 +6,15 @@ import { loginPath } from "@/AppRouter";
 import RedirectHomeLogo from "@/components/links/RedirectHomeLogo/RedirectHomeLogo";
 import RegisterForm from "./RegisterForm";
 import useAllCities from "@/hooks/cities/useAllCities";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const RegisterPage = () => {
-  const { isLoading, data: cities, isError } = useAllCities();
+  const { isLoading, data: cities } = useAllCities();
   const { t } = useTranslation();
 
-  // Todo: Create loading component
-  if (isLoading) return <div>Loading...</div>;
-
-  // Todo: Create error component
-  if (isError || !cities) return <div>Error</div>;
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className={styles.mainContainer}>

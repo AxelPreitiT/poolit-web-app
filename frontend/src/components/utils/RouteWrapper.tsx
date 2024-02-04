@@ -1,6 +1,7 @@
+import useRouteAuthentication from "@/hooks/auth/useRouteAuthentication";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import useRouteAuthentication from "@/hooks/auth/useRouteAuthentication";
+import LoadingScreen from "../loading/LoadingScreen";
 
 interface RouterComponentProps {
   children: React.ReactNode;
@@ -21,14 +22,13 @@ const RouteWrapper = ({
   showWhenUserIsNotAuthenticated = true,
 }: RouterComponentProps) => {
   const { t } = useTranslation();
-  const { isLoadingAuth } = useRouteAuthentication({
+  const canRender = useRouteAuthentication({
     showWhenUserIsAuthenticated,
     showWhenUserIsNotAuthenticated,
   });
 
-  // Todo: Create a loading screen
-  if (isLoadingAuth) {
-    return null;
+  if (!canRender) {
+    return <LoadingScreen />;
   }
 
   return (

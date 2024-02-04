@@ -61,20 +61,6 @@
   align-items: center;
 }
 
-.userPicContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 0.3rem;
-}
-
-.userPicContainer .imageInput {
-  border-radius: 50%;
-  height: 5rem;
-  aspect-ratio: 1/1;
-  background-color: colors.$secondary-color;
-}
-
 .userInfoContainer {
   display: flex;
   flex-direction: column;

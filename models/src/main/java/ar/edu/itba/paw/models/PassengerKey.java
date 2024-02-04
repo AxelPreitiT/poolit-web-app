@@ -2,9 +2,6 @@ package ar.edu.itba.paw.models;
 
 import ar.edu.itba.paw.models.trips.Trip;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 

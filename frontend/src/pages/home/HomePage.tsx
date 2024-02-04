@@ -7,30 +7,41 @@ import { useCurrentUser } from "@/hooks/users/useCurrentUser";
 import useRecommendedTrips from "@/hooks/trips/useRecommendedTrips";
 import RecommendedTripsList from "./RecommendedTripsList";
 import { useTranslation } from "react-i18next";
-import TripsSearch from "@/components/search/TripsSearch";
+import TripsSearch from "@/components/search/TripsSearch/TripsSearch";
 import useAllCities from "@/hooks/cities/useAllCities";
 import useCarFeatures from "@/hooks/cars/useCarFeatures";
+import useSearchTripsForm from "@/hooks/forms/useSearchTripsForm";
+import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
+import { searchPath } from "@/AppRouter";
+import { createTripsSearchParams } from "@/functions/tripsSearchParams";
+import { useNavigate } from "react-router-dom";
+import LoadingScreen from "@/components/loading/LoadingScreen";
 
 const HomePage = () => {
   const { t } = useTranslation();
-  const { isLoading: isLoadingAuth, isAuthenticated } = useAuthentication();
-  const { isLoading: isLoadingCurrentUser, currentUser } = useCurrentUser({
-    enabled: isAuthenticated,
-  });
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthentication();
+  const { isLoading: isLoadingCurrentUser, currentUser } = useCurrentUser();
   const { isLoading: isLoadingRecommendedTrips, recommendedTrips } =
     useRecommendedTrips(currentUser);
   const { isLoading: isLoadingCities, cities } = useAllCities();
   const { isLoading: isLoadingCarFeatures, carFeatures } = useCarFeatures();
 
-  // Todo: Create loading screen
+  const onSearchSuccess = ({ data }: { data: SearchTripsFormSchemaType }) => {
+    const searchParams = createTripsSearchParams(data);
+    navigate(`${searchPath}?${searchParams}`);
+  };
+  const searchForm = useSearchTripsForm({
+    onSuccess: onSearchSuccess,
+  });
+
   if (
-    isLoadingAuth ||
     (isAuthenticated && isLoadingCurrentUser) ||
     (currentUser && isLoadingRecommendedTrips) ||
     isLoadingCities ||
     isLoadingCarFeatures
   ) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (
@@ -59,7 +70,11 @@ const HomePage = () => {
             </div>
           </div>
           <div className={styles.searchContainer}>
-            <TripsSearch cities={cities} carFeatures={carFeatures} />
+            <TripsSearch
+              cities={cities}
+              carFeatures={carFeatures}
+              searchForm={searchForm}
+            />
           </div>
         </div>
       </div>

@@ -4,15 +4,20 @@ import FormError from "@/components/forms/FormError/FormError";
 import LoadingButton from "@/components/buttons/LoadingButton";
 import { Form } from "react-bootstrap";
 import useLoginForm from "@/hooks/forms/useLoginForm";
+import { useState } from "react";
 
 const LoginForm = () => {
   const { t } = useTranslation();
+  const [unauthorizedError, setUnauthorizedError] = useState("");
   const {
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     handleSubmit,
     tFormError,
-  } = useLoginForm();
+    isFetching,
+  } = useLoginForm({
+    onUnauthorized: () => setUnauthorizedError(t("login.error.unauthorized")),
+  });
 
   return (
     <Form className={styles.formContainer} onSubmit={handleSubmit}>
@@ -38,6 +43,9 @@ const LoginForm = () => {
           />
           <FormError error={tFormError(errors.password)} />
         </div>
+        <div className={styles.errorContainer}>
+          <FormError error={unauthorizedError} />
+        </div>
         <div className={styles.rememberContainer}>
           <Form.Check type="checkbox" id="remember">
             <Form.Check.Input type="checkbox" {...register("remember_me")} />
@@ -48,10 +56,10 @@ const LoginForm = () => {
         </div>
       </div>
       <LoadingButton
-        isLoading={isSubmitting}
-        spinnerClassName="text-light"
+        isLoading={isFetching}
         type="submit"
         className="btn secondary-btn"
+        onClick={() => setUnauthorizedError("")}
       >
         <h5>{t("login.login")}</h5>
       </LoadingButton>

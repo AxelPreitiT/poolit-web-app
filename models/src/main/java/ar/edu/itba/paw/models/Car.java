@@ -20,7 +20,7 @@ public class Car {
 
 
     @Enumerated(EnumType.STRING)
-//    @Column(name = "features") //TODO: revisar
+//    @Column(name = "features")
     @ElementCollection(targetClass = FeatureCar.class)
     private List<FeatureCar> features;
 

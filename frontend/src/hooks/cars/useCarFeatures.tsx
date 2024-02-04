@@ -35,7 +35,7 @@ const useCarFeatures = () => {
         [UnknownResponseError.ERROR_ID]: "car_features.error.default",
       };
       onQueryError({
-        error: error,
+        error,
         title,
         customMessages,
         timeout: defaultToastTimeout,

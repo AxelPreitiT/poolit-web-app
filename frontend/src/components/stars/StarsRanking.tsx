@@ -1,36 +1,46 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./styles.module.scss";
+import { BiSolidStar, BiSolidStarHalf, BiStar } from "react-icons/bi";
+import { useTranslation } from "react-i18next";
 
 interface StarRatingProps {
   rating: number;
-  color?: string;
-  size?: string;
+  containerClassName?: string;
+  className?: string;
 }
 
 const StarRating = ({
   rating,
-  color = "#ffa216",
-  size = "h4",
+  className,
+  containerClassName,
 }: StarRatingProps) => {
-  const renderStar = (index: number) => {
-    const remainder = rating - index + 0.5;
-    const starStyle = {
-      color,
-      fontSize: size,
-    };
+  const { t } = useTranslation();
 
-    if (remainder >= 1) {
-      return <i className="bi bi-star-fill" style={starStyle} key={index}></i>;
-    } else if (remainder > 0) {
-      return <i className="bi bi-star-half" style={starStyle} key={index}></i>;
+  const renderStar = (index: number) => {
+    const result = rating - (index - 1);
+    const starClassName = styles.star + " " + className;
+
+    if (result >= 1) {
+      return <BiSolidStar className={starClassName} key={index}></BiSolidStar>;
+    } else if (result >= 0.5) {
+      return (
+        <BiSolidStarHalf
+          className={starClassName}
+          key={index}
+        ></BiSolidStarHalf>
+      );
     } else {
-      return <i className="bi bi-star" style={starStyle} key={index}></i>;
+      return <BiStar className={starClassName} key={index}></BiStar>;
     }
   };
 
   return (
-    <div className={styles.stars}>
-      {[1, 2, 3, 4, 5].map((index) => renderStar(index))}
+    <div className={styles.stars + " " + containerClassName}>
+      {rating === 0 ? (
+        <span className={className}>{t("reviews.none")}</span>
+      ) : (
+        [1, 2, 3, 4, 5].map((index) => renderStar(index))
+      )}
     </div>
   );
 };

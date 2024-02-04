@@ -8,6 +8,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 
 public class PublicReportDto {
+    private long reportId;
     private String description;
     private LocalDateTime dateTime;
 
@@ -17,6 +18,7 @@ public class PublicReportDto {
 
     public PublicReportDto(){}
     protected PublicReportDto(final UriInfo uriInfo, final Report report){
+        this.reportId = report.getReportId();
         this.description = report.getDescription();
         this.dateTime = report.getDate();
         this.selfUri = uriInfo.getBaseUriBuilder().path(UrlHolder.REPORT_BASE).path(String.valueOf(report.getReportId())).build();
@@ -26,6 +28,14 @@ public class PublicReportDto {
 
     public static PublicReportDto fromReport(final UriInfo uriInfo, final Report report){
         return new PublicReportDto(uriInfo,report);
+    }
+
+    public long getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(long reportId) {
+        this.reportId = reportId;
     }
 
     public String getDescription() {

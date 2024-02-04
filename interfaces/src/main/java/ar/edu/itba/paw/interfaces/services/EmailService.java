@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.reports.Report;
 import ar.edu.itba.paw.models.trips.Trip;
 import ar.edu.itba.paw.models.User;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 public interface EmailService {
@@ -35,9 +34,9 @@ public interface EmailService {
     //Se manda al pasajero indicando que fue rechazado en el viaje
     void sendMailTripRejected(Trip trip, Passenger passenger);
 
-    public void sendMailRejectReport(Report report);
-    public void sendMailAcceptReport(Report report);
-    public void sendMailBanReport(Report report);
-    public void sendMailNewReport(Report report, User admin);
+    void sendMailRejectReport(Report report);
+    void sendMailAcceptReport(Report report);
+    void sendMailBanReport(Report report);
+    void sendMailNewReport(Report report, User admin);
 
 }

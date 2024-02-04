@@ -12,17 +12,19 @@ import { useTranslation } from "react-i18next";
 import UserService from "@/services/UserService";
 import QueryError from "@/errors/QueryError";
 import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
-import useAuthentication from "../auth/useAuthentication";
 import AccountNotVerifiedError from "@/errors/AccountNotVerifiedError";
 import useQueryError from "../errors/useQueryError";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 
-const useLoginForm = () => {
+interface UseLoginFormProps {
+  onUnauthorized?: () => void;
+}
+
+const useLoginForm = ({ onUnauthorized }: UseLoginFormProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const showSuccessToast = useSuccessToast();
-  const { invalidateAuthentication } = useAuthentication();
   const onQueryError = useQueryError();
 
   const onSubmit: SubmitHandlerReturnModel<LoginFormSchemaType, void> =
@@ -38,18 +40,21 @@ const useLoginForm = () => {
     navigate(from || homePath, {
       replace: true,
     });
-    await invalidateAuthentication();
   };
 
   const onError = (error: QueryError) => {
-    const title = t("login.error.title");
-    const timeout = defaultToastTimeout;
-    const customMessages = {
-      [UnauthorizedResponseError.ERROR_ID]: "login.error.unauthorized",
-      [AccountNotVerifiedError.ERROR_ID]: "login.error.account_not_verified",
-      [UnknownResponseError.ERROR_ID]: "login.error.default",
-    };
-    onQueryError({ error, title, timeout, customMessages });
+    if (error instanceof UnauthorizedResponseError && onUnauthorized) {
+      onUnauthorized();
+    } else {
+      const title = t("login.error.title");
+      const timeout = defaultToastTimeout;
+      const customMessages = {
+        [UnauthorizedResponseError.ERROR_ID]: "login.error.unauthorized",
+        [AccountNotVerifiedError.ERROR_ID]: "login.error.account_not_verified",
+        [UnknownResponseError.ERROR_ID]: "login.error.default",
+      };
+      onQueryError({ error, title, timeout, customMessages });
+    }
   };
 
   return useForm({

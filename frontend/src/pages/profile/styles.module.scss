@@ -13,7 +13,7 @@
 .profileCard {
   padding: 1em 1.5em;
   height: fit-content;
-  width: 30%;
+  min-width: 30%;
   background-color: white;
   border: 2px solid gray;
   border-radius: 20px;
@@ -30,6 +30,22 @@
   gap: 2%;
 }
 
+.editButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .main_container {
+    flex-direction: column;
+    row-gap: 2rem;
+  }
+
+  .profileCard {
+    width: 100%;
+  }
+}
+
 .list_block {
   flex-grow: 2;
 }
@@ -40,3 +56,47 @@
   }
 }
 
+// --------------- Edit form ----------------
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+.headerContainer {
+  margin-bottom: 1rem;
+}
+
+.imageInput svg,
+.imageInput i {
+  height: 3rem;
+  width: 3rem;
+  font-size: 3rem;
+}
+
+.formError {
+  color: colors.$danger-color;
+}
+
+.editButtonContainer {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+// --------------- Loading spinner ----------------
+.loadingContainer {
+  margin-top: 2rem;
+}
+.loadingIcon {
+  height: 6rem;
+  width: 6rem;
+}
+
+.loadingDescription {
+  font-size: 2.5rem;
+  font-weight: 500;
+}

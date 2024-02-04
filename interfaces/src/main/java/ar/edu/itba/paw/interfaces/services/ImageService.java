@@ -12,15 +12,9 @@ public interface ImageService {
 
     Optional<Image> findById(long id);
 
-//    byte[] getImageBytea(long imageId) throws ImageNotFoundException;
-
     void deleteImage(final long imageId) throws ImageNotFoundException;
 
-//    Image updateImage(final byte[] content, final long imageId) throws ImageNotFoundException;
-
     Image getImageOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException;
-
-//    byte[] getImageByteaOrDefault(long imageId, final Image.Size size, InputStream defaultImageInputStream) throws ImageNotFoundException;
 
 }
 

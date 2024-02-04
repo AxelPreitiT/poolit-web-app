@@ -2,8 +2,7 @@ import { Form } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import { useRef } from "react";
 
-interface ImageInputProps {
-  id: string;
+export interface ImageInputProps {
   preview?: string;
   previewAlt: string;
   onImageUpload: (image: File) => void;
@@ -12,7 +11,6 @@ interface ImageInputProps {
 }
 
 const ImageInput = ({
-  id,
   preview,
   previewAlt,
   onImageUpload,
@@ -36,10 +34,10 @@ const ImageInput = ({
     >
       <Form.Control
         type="file"
-        id={id}
         className={styles.inputFile}
         onChange={onChange}
         ref={fileInputRef}
+        placeholder="Image input"
       />
       {preview ? (
         <div className={styles.previewContainer}>

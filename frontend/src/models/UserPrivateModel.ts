@@ -1,8 +1,6 @@
 import UserPublicModel from "./UserPublicModel";
 
 interface UserPrivateModel extends UserPublicModel {
-  type: string;
-  cityId: number;
   cityUri: string;
   email: string;
   futureCreatedTripsUri: string;
@@ -16,6 +14,13 @@ interface UserPrivateModel extends UserPublicModel {
   driverRating: number;
   passengerRating: number;
   carsUri: string;
+  reviewsDriverUri: string;
+  reviewsPassengerUri: string;
+  tripCount: number;
+  reportsPublished: number;
+  reportsReceived: number;
+  reportsApproved: number;
+  reportsRejected: number;
 }
 
 export default UserPrivateModel;

@@ -33,6 +33,11 @@ interface ToastStackState {
   removeToast: (id: number) => void; // Remove a toast from the stack
 }
 
+let __toastStackTimeout: number | undefined = undefined;
+export const __setToastStackTimeout = (timeout: number) => {
+  __toastStackTimeout = timeout;
+};
+
 const useToastStackStore = create<ToastStackState>((set) => ({
   toastStack: {},
 
@@ -46,7 +51,7 @@ const useToastStackStore = create<ToastStackState>((set) => ({
             title,
             message,
             type,
-            timeout,
+            timeout: __toastStackTimeout || timeout,
             show: true,
             children,
             id: now,

@@ -1,9 +1,9 @@
 {
   "format": {
-    "price": "$ {{priceInt}}.{{princeFloat}}",
+    "price": "$ {{priceInt}}",
     "plate": "Patente:{{carPlate}}",
     "name": "{{name}} {{surname}}",
-    "date": "( {{date}} )"
+    "date": "({{- date}})"
   },
   "poolit": {
     "name": "POOLIT",
@@ -11,6 +11,7 @@
     "text": "Poolit"
   },
   "language": {
+    "language": "Idioma",
     "language_selector": "¿En qué idioma preferís recibir las notificaciones?",
     "spanish": "Español",
     "english": "Inglés"
@@ -120,6 +121,15 @@
       "message": "¡Ya estás registrado! Te enviamos un correo electrónico para que verifiques tu cuenta"
     }
   },
+  "edit_profile": {
+    "name": "Nombre",
+    "surname": "Apellido",
+    "image": "Imagen de perfil",
+    "error": {
+      "title": "La actualización del perfil falló",
+      "default": "Ocurrió un error al actualizar tu perfil"
+    }
+  },
   "verify_account": {
     "title": "Verificar cuenta",
     "success": {
@@ -226,6 +236,35 @@
       "invalid": "El precio máximo debe ser un número",
       "min": "El precio máximo debe ser al menos {{min}}",
       "lower_than_min": "El precio máximo debe ser mayor o igual al precio mínimo"
+    },
+    "car_brand": {
+      "required": "La marca del auto es requerida"
+    },
+    "car_description": {
+      "required": "La descripción del auto es requerida",
+      "min": "La descripción del auto debe tener al menos {{min}} caracteres",
+      "max": "La descripción del auto debe tener como máximo {{max}} caracteres"
+    },
+    "car_plate": {
+      "required": "La patente del auto es requerida",
+      "invalid": "La patente es inválida, debe tener alguno de los siguientes formatos: {{- format}}"
+    },
+    "rating": {
+      "required": "La valoración es requerida",
+      "invalid": "La valoración debe ser un número",
+      "min": "La valoración debe ser al menos {{min}}",
+      "max": "La valoración debe ser como máximo {{max}}"
+    },
+    "option": {
+      "required": "Debe seleccionar una opción"
+    },
+    "comment": {
+      "max": "El comentario debe tener como máximo {{max}} caracteres"
+    },
+    "reason": {
+      "required": "La razón es requerida",
+      "min": "La razón debe tener al menos {{min}} caracteres",
+      "max": "La razón debe tener como máximo {{max}} caracteres"
     }
   },
   "profile": {
@@ -238,66 +277,221 @@
       "trips": "Viajes creados",
       "rating_driver": "Valoración como conductor",
       "rating_passenger": "Valoración como pasajero",
+      "no_rating": "No tiene opiniones aún",
       "es": "Español",
       "en": "Ingles"
     },
     "lists": {
       "review_as_driver": "Opiniones como conductor",
       "review_as_passanger": "Opiniones como pasajero",
-      "review_empty": "No tiene opiniones",
+      "review_empty": "No tenés reseñas",
       "review_more": "Mostrar mas opiniones",
       "created_next_title": "Creados - Próximos viajes",
       "created_next_more": "Ver todos los proximos viajes",
-      "created_next_empty": "No tienes proximos viajes",
+      "created_next_empty": "No tenés proximos viajes",
       "created_prev_title": "Creados - viajes realizados",
       "created_prev_more": "Ver todos los viajes realizados",
-      "created_prev_empty": "No tienes viajes realizados",
+      "created_prev_empty": "No tenés viajes realizados",
       "reserved_next_title": "Reservados - Próximos",
       "reserved_next_more": "Ver todos los proximos viajes",
-      "reserved_next_empty": "No tienes proximos viajes",
+      "reserved_next_empty": "No tenés proximos viajes",
       "reserved_prev_title": "Reservados - Historial",
       "reserved_prev_more": "Ver todos los viajes realizados",
-      "reserved_prev_empty": "No tienes viajes realizados",
+      "reserved_prev_empty": "No tenés viajes realizados",
       "cars": "Mis autos",
       "cars_create": "Crear nuevo auto",
-      "cars_empty": "No tienes autos creados"
+      "cars_empty": "No tenés autos creados"
+    },
+    "loading": {
+      "profile": "Cargando perfil",
+      "passenger": "Cargando información como pasajero",
+      "driver": "Cargando información como conductor",
+      "reviews": "Cargando opiniones",
+      "trips": "Cargando viajes",
+      "cars": "Cargando autos"
     },
     "error": {
       "title": "No se pudo obtener tu perfil",
       "default": "Ocurrió un error al obtener tu perfil"
-    }
+    },
+    "edit": "Editar",
+    "cancel": "Cancelar",
+    "save": "Guardar"
   },
   "roles": {
     "driver": "Conductor",
     "passenger": "Pasajero"
   },
+  "reports": {
+    "option_selector": "¿Porque quieres reportar este viaje?",
+    "control_label": "Agrega información para resolver el conflicto.",
+    "HARASSMENT": "Acoso o hecho violento",
+    "MISCONDUCT": "Conducta inapropiada",
+    "IDENTITY_FRAUD": "Suplantación de identidad",
+    "CANNOT_DRIVE": "No cuenta con los permisos o edad para manejar",
+    "DANGEROUS_DRIVING": "Maneja de manera peligrosa",
+    "DID_NOT_PAY": "No pagó por el viaje",
+    "WRECK_CAR": "Dañó el auto",
+    "OTHER": "Otro motivo"
+  },
+  "report_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones para reportar",
+      "default": "Ocurrió un error al obtener las opciones para reportar"
+    }
+  },
+  "report": {
+    "success": {
+      "title": "¡Reporte creado!",
+      "message": "¡Tu reporte fue creado correctamente! Te enviaremos un correo electrónico cuando se resuelva el reporte."
+    },
+    "error": {
+      "title": "Creación de reporte fallida",
+      "default": "Ocurrió un error al crear el reporte"
+    }
+  },
+  "approve_report": {
+    "success": {
+      "title": "¡Reporte aprobado!",
+      "message": "¡El reporte fue aprobado correctamente! Se envió un correo electrónico a ambos usuarios"
+    },
+    "error": {
+      "title": "Aprobación de reporte fallida",
+      "default": "Ocurrió un error al aprobar el reporte"
+    }
+  },
+  "reject_report": {
+    "success": {
+      "title": "¡Reporte rechazado!",
+      "message": "¡El reporte fue rechazado correctamente! Se envió un correo electrónico al denunciante"
+    },
+    "error": {
+      "title": "Rechazo de reporte fallido",
+      "default": "Ocurrió un error al rechazar el reporte"
+    }
+  },
   "reviews": {
-    "title": "opiniones",
-    "NOT_FRIENDLY": "No amigable",
-    "DANGEROUS_DRIVER": "Conductor peligroso",
-    "UNPUNCTUAL": "Impuntual",
-    "DISTRACTED_DRIVER": "Conductor distraído",
-    "NOT_RESPECTED_TRAFFIC_RULES": "No respeta las reglas de tránsito",
-    "UNCOMFORTABLE_EXPERIENCE": "Experiencia incómoda",
-    "NOT_GOOD_TREATMENT": "Mal trato",
-    "IMPRUDENT_DRIVER": "Conductor imprudente",
-    "RESPECTED_TRAFFIC_RULES": "Respeta las reglas de tránsito",
-    "ACCEPTABLE_DRIVER": "Conductor aceptable",
-    "ACCEPTABLE_EXPERIENCE": "Experiencia aceptable",
-    "FRIENDLY": "Amigable",
-    "PUNCTUAL": "Puntual",
-    "VERY_FRIENDLY": "Muy amigable",
-    "SAFE_DRIVER": "Conductor seguro",
-    "GOOD_EXPERIENCE": "Buena experiencia",
-    "PROFESSIONAL_DRIVER": "Conductor profesional",
-    "EXCELLENT_EXPERIENCE": "Excelente experiencia"
+    "optional": "Opcional",
+    "none": "No hay reseñas",
+    "stars_title": "¿Cómo calificarías a este pasajero?",
+    "option_title": "¿Qué te gustaría destacar sobre este pasajero?",
+    "text_title": "Deja un comentario adicional",
+    "stars_car_title": "¿Cómo calificarías a este pasajero?",
+    "option_car_title": "¿Qué te gustaría destacar sobre este pasajero?",
+    "title": "Opiniones",
+    "VERY_BAD_STATE": "Estaba en muy mal estado",
+    "VERY_DIRTY": "Estaba muy sucio",
+    "REDUCED_TRUNK_SPACE": "El baúl tiene poco espacio",
+    "NO_SEATBELTS": "No tenía todos los cinturones de seguridad o airbags",
+    "NO_AIR_CONDITIONING": "El aire acondicionado no funcionaba",
+    "UNCOMFORTABLE_SEATS": "Los asientos no eran cómodos",
+    "BAD_STATE": "Estaba en mal estado",
+    "DIRTY": "Sucio",
+    "AIR_CONDITIONING_WORKING_BADLY": "El aire acondicionado funcionaba mal",
+    "SEATBELTS_MISSING": "Faltaban cinturones de seguridad o airbags",
+    "GOOD_STATE": "Estaba en buen estado",
+    "CLEAN": "Limpio",
+    "GOOD_TRUNK_SPACE": "El baúl tiene buen espacio",
+    "COMFORTABLE_SEATS": "Los asientos eran cómodos",
+    "AIR_CONDITIONING_WORKING_WELL": "El aire acondicionado funcionaba bien",
+    "SEATBELTS": "Tenía todos los cinturones de seguridad y airbags",
+    "VERY_GOOD_STATE": "Estaba en muy buen estado",
+    "VERY_CLEAN": "Muy limpio",
+    "IMPECCABLE": "Estaba impecable",
+    "BIG_TRUNK_SPACE": "El baúl tiene mucho espacio",
+    "VERY_COMFORTABLE_SEATS": "Los asientos eran muy cómodos",
+    "AIR_CONDITIONING_WORKING_PERFECTLY": "El aire acondicionado funcionaba perfectamente",
+    "DISRESPECTFUL": "Fue irrespetuoso",
+    "INAPPROPRIATE_BEHAVIOUR": "Tuvo un comportamiento inapropiado",
+    "UNPUNCTUAL": "Fue impuntual",
+    "NOT_FRIENDLY": "Fue poco amigable",
+    "UNCOMMUNICATIVE": "Fue poco comunicativo",
+    "BAD_BEHAVIOUR": "Tuvo un mal comportamiento",
+    "BAD_ATTITUDE": "Tuvo una mala actitud",
+    "ACCEPTABLE_BEHAVIOUR": "Tuvo un comportamiento aceptable",
+    "FRIENDLY": "Fue amigable",
+    "PUNCTUAL": "Fue puntual",
+    "ACCEPTABLE_ATTITUDE": "Tuvo una actitud aceptable",
+    "VERY_FRIENDLY": "Fue muy amigable",
+    "CONSIDERATE": "Mostró consideración y respeto",
+    "RESPONSIBLE": "Tuvo un comportamiento responsable",
+    "GOOD_COMPANY": "Fue buena compañía",
+    "DANGEROUS_DRIVER": "Manejó de manera peligrosa",
+    "DISTRACTED_DRIVER": "Se distrajo mientras manejaba",
+    "NOT_RESPECTED_TRAFFIC_RULES": "No respetó las reglas de tránsito",
+    "UNCOMFORTABLE_EXPERIENCE": "No fue una experiencia cómoda",
+    "NOT_GOOD_TREATMENT": "No tuvo un buen trato",
+    "IMPRUDENT_DRIVER": "Manejó de manera imprudente",
+    "RESPECTED_TRAFFIC_RULES": "Respetó las reglas de tránsito",
+    "ACCEPTABLE_DRIVER": "Manejó de manera aceptable",
+    "ACCEPTABLE_EXPERIENCE": "Fue una experiencia aceptable",
+    "SAFE_DRIVER": "Manejó de manera segura",
+    "GOOD_EXPERIENCE": "Fue una experiencia buena",
+    "PROFESSIONAL_DRIVER": "Manejó de manera profesional",
+    "EXCELLENT_EXPERIENCE": "Fue una experiencia excelente",
+    "error": {
+      "title_all": "Un error ocurrió al traer las reseñas."
+    }
+  },
+  "car_review": {
+    "loading": "Cargando el formulario",
+    "success": {
+      "title": "¡Reseña de auto creada!",
+      "message": "¡Tu reseña de auto fue creada correctamente!"
+    },
+    "error": {
+      "title": "Creación de reseña de auto fallida",
+      "default": "Ocurrió un error al crear la reseña de auto"
+    }
+  },
+  "car_review_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones de reseña para autos",
+      "default": "Ocurrió un error al obtener las opciones de reseña para autos"
+    }
+  },
+  "passenger_review": {
+    "success": {
+      "title": "¡Reseña de pasajero creada!",
+      "message": "¡Tu reseña de pasajero fue creada correctamente!"
+    },
+    "error": {
+      "title": "Creación de reseña de pasajero fallida",
+      "default": "Ocurrió un error al crear la reseña de pasajero"
+    }
+  },
+  "passenger_review_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones de reseña para pasajeros",
+      "default": "Ocurrió un error al obtener las opciones de reseña para pasajeros"
+    }
+  },
+  "driver_review": {
+    "success": {
+      "title": "¡Reseña de conductor creada!",
+      "message": "¡Tu reseña de conductor fue creada correctamente!"
+    },
+    "error": {
+      "title": "Creación de reseña de conductor fallida",
+      "default": "Ocurrió un error al crear la reseña de conductor"
+    }
+  },
+  "driver_review_options": {
+    "error": {
+      "title": "No se pudo obtener las opciones de reseña para conductores",
+      "default": "Ocurrió un error al obtener las opciones de reseña para conductores"
+    }
   },
   "created_trips": {
     "title": "Viajes creados",
     "future": "Próximos",
     "past": "Historial",
     "empty": "Parece que no tenés viajes creados",
-    "more": "Hacé click en el botón 'Crear viaje' para crear tu primer viaje"
+    "more": "Hacé click en el botón 'Crear viaje' para crear tu primer viaje",
+    "error": {
+      "title": "No se pudieron obtener los viajes",
+      "default": "Ocurrió un error al obtener los viajes"
+    }
   },
   "reserved_trips": {
     "title": "Viajes reservados",
@@ -323,13 +517,49 @@
     "number_of_seats": "Cantidad de asientos",
     "price_per_trip": "Precio por viaje",
     "create": "Crear viaje",
+    "create_car": "Crear auto",
     "success": {
       "title": "¡Viaje creado!",
       "message": "¡Tu viaje fue creado correctamente!"
     },
     "error": {
-      "title": "Inicio de sesión fallido",
+      "title": "Creación de viaje fallida",
       "default": "Ocurrió un error al crear el viaje"
+    }
+  },
+  "create_car": {
+    "title": "Crear auto",
+    "car_info": "Información del auto",
+    "car_brand": "Marca del auto",
+    "car_description": "Descripción del auto",
+    "car_plate": "Patente del auto",
+    "available_seats": "Asientos disponibles",
+    "car_image": "Imagen del auto",
+    "car_features": "Características del auto",
+    "create": "Crear auto",
+    "success": {
+      "title": "¡Auto creado!",
+      "message": "¡Tu auto fue creado correctamente!"
+    },
+    "error": {
+      "title": "Creación de auto fallida",
+      "default": "Ocurrió un error al crear el auto"
+    }
+  },
+  "edit_car": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "image": "Imagen del auto",
+    "error": {
+      "title": "La actualización del auto falló",
+      "default": "Ocurrió un error al actualizar el auto"
+    }
+  },
+  "recommended_trips": {
+    "title": "Viajes recomendados",
+    "error": {
+      "title": "No se pudo obtener los viajes recomendados",
+      "default": "Ocurrió un error al obtener los viajes recomendados"
     }
   },
   "search_trips": {
@@ -354,55 +584,119 @@
       "default": "An error occurred while fetching the trips"
     }
   },
-  "recommended_trips": {
-    "title": "Viajes recomendados",
-    "error": {
-      "title": "No se pudo obtener los viajes recomendados",
-      "default": "Ocurrió un error al obtener los viajes recomendados"
-    }
-  },
   "admin": {
-    "title": "Administrador"
+    "title": "Administrador",
+    "loading": "Cargando reportes",
+    "empty": "No hay denuncias todavía",
+    "date": "Fecha: ",
+    "error": {
+      "title": "No se pudo obtener las denuncias",
+      "default": "Ocurrió un error al obtener las denuncias"
+    },
+    "reason": {
+      "title": "Motivo: ",
+      "CANNOT_DRIVE": "No sabe manejar",
+      "DANGEROUS_DRIVING": "Manejo riesgoso",
+      "DID_NOT_PAY": "No pago",
+      "HARASSMENT": "Acoso",
+      "IDENTITY_FRAUD": "Fraude de identidad",
+      "MISCONDUCT": "Mala conducta",
+      "WRECK_CAR": "Auto en mal estado",
+      "OTHER": "Otro"
+    },
+    "report": {
+      "detail": "Detalles de la denuncia",
+      "loading": "Cargando denuncia",
+      "reported": "Denunció a",
+      "published": "Denuncias publicadas: ",
+      "received": "Denuncias recibidas: ",
+      "approved": "Denuncias aprobadas: ",
+      "rejected": "Denuncias publicadas: ",
+      "driverRating": "Valoración como conductor",
+      "passengerRating": "Valoración como pasajero",
+      "trip": "El viaje en el que se produjo la denuncia",
+      "reason": "Motivo de la denuncia",
+      "passenger": "(Pasajero)",
+      "driver": "(Conductor)",
+      "explainApprove": "Indique el motivo de aprobación de la denuncia",
+      "explainReject": "Indique el motivo de rechazo de la denuncia",
+      "notifyApprove": "Se notificará al usuario denunciado con el motivo de aprobación",
+      "notifyReject": "Se notificará al denunciante con el motivo de rechazo",
+      "accept": "Aprobar denuncia",
+      "reject": "Rechazar denuncia",
+      "approveBtn": "Aprobar",
+      "rejectBtn": "Rechazar",
+      "laterBtn": "Decidir luego",
+      "approveWarning": "Esta acción cancela los viajes donde es conductor y lo quita de donde es pasajero",
+      "decision": "¿Qué decisión querés tomar?"
+    },
+    "user": {
+      "loading": "Cargando usuario"
+    }
   },
   "trip_detail": {
     "title": "Viaje",
     "header": "Detalle de viaje",
+    "review": {
+      "reviewed": "Auto reseñado",
+      "driver_reviewed": "Conductor reseñado",
+      "user_reviewed": "Pasajero reseñado",
+      "driver_reported": "Conductor reportado",
+      "user_reported": "Pasajero reportado"
+    },
     "status": {
+      "not_started_review": "Viaje no comenzado",
+      "started_review": "Reserva comenzada",
+      "finished_review": "Reserva terminada",
+      "title": "Status:",
+      "all": "Todos",
       "cancelled": "Cancelado",
       "accepted": "Aceptado",
+      "rejected": "Rechazado",
+      "pending": "Pendiente",
       "waiting": "Esperando",
-      "finished": "completado",
+      "finished": "Completado",
       "not_started": "No comenzado",
       "in_progress": "En progreso"
     },
     "passengers": {
+      "empty_modal": "Sin pasajeros",
+      "fullSeats": "Asientos llenos",
       "header": "Pasajeros",
+      "loading": "Cargando pasajeros",
       "btn_accept": "Aceptar",
       "btn_delete": "Rechazar",
       "reservation_started": "La reserva ya ha empezado.",
-      "empty": "Todavía no tienes pasajeros interesandos."
+      "empty": "Todavía no tenés pasajeros interesandos.",
+      "passsanger_accepted": "Pasajero aceptado",
+      "passsanger_rejected": "Pasajero rechazado",
+      "trip_started": "El viaje ha comenzado"
     },
     "btn": {
+      "cancel_warning": "¿Estás seguro que querés cancelar el viaje?",
+      "delete_warning": "¿Estás seguro que querés eliminar el viaje?",
       "accept": "Aceptar",
       "reject": "Rechazar",
       "my_trips": "Mis viajes",
-      "delete": "Eliminar",
+      "delete": "Eliminar viaje",
       "cancel": "Cancelar viaje",
-      "join": "Join",
-      "reviews": "Reviews"
+      "join": "Unirme",
+      "reviews": "Opinar"
     },
-    "filter_by": "Filtrados por estado: {{priceInt}}",
+    "filter_by": "Filtrados por estado: {{status}}",
     "error": {
       "title": "No se pudo obtener el viaje",
-      "default": "Ocurrió un error al obtener el viaje"
+      "default": "Ocurrió un error al obtener el viaje",
+      "all_title": "No se pudieron obtener los viajes",
+      "all_default": "Ocurrió un error al obtener los viajes"
     },
-    "recurrent_trip": " {{number}} viajes",
+    "recurrent_trip": "{{number}} viajes",
     "single_trip": "Viaje unico.",
     "price": "Precio: ",
     "income": "Total: ",
     "seats": "{{number}} asientos disponibles",
     "report": {
-      "pre_link_text": "¿Has tenido algun problema?",
+      "pre_link_text": "¿Tuviste algún problema?",
       "link_text": "Reportar"
     }
   },
@@ -435,6 +729,15 @@
       }
     }
   },
+  "search": {
+    "title": "Buscar viajes",
+    "loading": "Buscando viajes",
+    "page_selector": "Mostrando los resultados {{first_result}} - {{last_result}} de {{total_pages}} página{{plural}}",
+    "no_results": {
+      "title": "Parece que no hay viajes disponibles para tu búsqueda",
+      "body": "No te preocupes, seguro encontrás algo pronto"
+    }
+  },
   "query": {
     "request": {
       "error": {
@@ -442,7 +745,8 @@
         "invalid_email": "El correo electrónico no puede contener el caracter dos puntos (:)",
         "authorization_header_missing": "La sesión expiró, por favor volvé a iniciar sesión",
         "current_user_uri_missing": "La sesión expiró, por favor volvé a iniciar sesión",
-        "discovery_missing": "No se pudo comunicar con el servidor, por favor volvé a intentarlo más tarde"
+        "discovery_missing": "No se pudo comunicar con el servidor, por favor volvé a intentarlo más tarde",
+        "join_trip_unauthenticated": "Tenés que iniciar sesión para unirte a un viaje"
       }
     },
     "response": {
@@ -487,22 +791,73 @@
   },
   "city": {
     "error": {
-      "title": "Ocurrió un error al obtener los barrios"
+      "title": "Ocurrió un error al obtener los barrios",
+      "unique": "Ocurrió un error al obtener el barrio"
     }
   },
+  "passanger": {
+    "error": {
+      "title": "Ocurrió un error al obtener los pasajeros",
+      "role_title": "Ocurrió un error al obtener el rol del pasajero"
+    }
+  },
+  "trip": {
+    "title": "Viajes",
+    "loading": "Cargando viajes",
+    "loading_one": "Cargando viaje",
+    "error_title_delete": "No se pudo eliminar el viaje",
+    "error_title_join": "No se pudo unir al viaje",
+    "success_title_join": "¡Éxito!",
+    "success_message_join": "Te notificaremos cuando el conductor acepte tu solicitud"
+  },
   "car": {
+    "title": "Auto",
     "error": {
       "yours": "Ocurrió un error al obtener tus autos",
-      "image": "Ocurrió un error al obtener la imagen del auto"
+      "image": "Ocurrió un error al obtener la imagen del auto",
+      "your": "Ocurrió un error al obtener tu auto",
+      "default": "Ocurrió un error al obtener el auto",
+      "title": "No se pudo obtener el auto",
+      "none": "Crea un auto para poder empezar a ofrecer viajes"
     },
+    "loading": "Cargando auto",
     "image": "Imagen del auto {{car_info}}",
     "brand": "Marca: {{brand}}",
-    "license_plate": "Patente: {{license_plate}}"
+    "license_plate": "Patente: {{license_plate}}",
+    "prop": {
+      "description": "Descripción del auto",
+      "brand": "Marca del auto",
+      "plate": "Patente del auto",
+      "seats": "Asientos disponibles",
+      "features": "Características del auto",
+      "rating": "Valoración del auto"
+    },
+    "edit": "Editar",
+    "opinions": "Opiniones sobre el auto"
+  },
+  "location": {
+    "loading": "Cargando ruta"
   },
   "car_features": {
     "error": {
       "title": "No se pudo obtener las características del auto",
       "default": "Ocurrió un error al obtener las características del auto"
+    }
+  },
+  "car_brands": {
+    "unknown": "Desconocida",
+    "searching_one": "Buscando la marca del auto",
+    "error": {
+      "title": "No se pudo obtener las marcas de autos",
+      "default": "Ocurrió un error al obtener las marcas de autos",
+      "title_one": "No se pudo obtener la marca del auto",
+      "default_one": "Ocurrió un error al obtener la marca del auto"
+    }
+  },
+  "car_reviews": {
+    "error": {
+      "title": "No se pudo obtener las reseñas del auto",
+      "default": "Ocurrió un error al obtener las reseñas del auto"
     }
   },
   "discovery": {
@@ -511,16 +866,53 @@
       "default": "Ocurrió un error al obtener los endpoints del servidor"
     }
   },
+  "trip_sort_types": {
+    "sort_by": "Ordenar por: {{sort_by}}",
+    "error": {
+      "title": "No se pudo obtener los tipos de ordenamiento de viajes",
+      "default": "Ocurrió un error al obtener los tipos de ordenamiento de viajes"
+    }
+  },
+  "loading": {
+    "default": "Calentando motores",
+    "items": "Cargando {{items}}"
+  },
   "spinner": {
     "loading": "Cargando..."
   },
-  "day_week": {
-    "0": "Domingo",
-    "1": "Lunes",
-    "2": "Martes",
-    "3": "Miercoles",
-    "4": "Jueves",
-    "5": "Viernes",
-    "6": "Sabado"
+  "modal": {
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "cancel_trip": "Cancelar viaje",
+    "delete_trip": "Eliminar viaje",
+    "driver": "Conductor",
+    "passangers": "Pasajero",
+    "car": "Coche",
+    "close": "Cerrar",
+    "submit": "Enviar",
+    "report": {
+      "title": "¿A quién quieres reportar?",
+      "empty": "No tenés usuarios para reportar"
+    },
+    "review": {
+      "title": "Tu opinión nos interesa",
+      "empty": "No tenés usuarios para reseñar."
+    }
+  },
+  "404": {
+    "title": "Página no encontrada",
+    "oops": "OOPS!",
+    "not_found1": "Algo salió mal",
+    "not_found2": "No se encontró el recurso que estabas buscando.",
+    "not_found3": "Por favor, contacta a soporte si el error persiste.",
+    "404": "No encontrado (404)",
+    "btn": "Ir al inicio"
+  },
+  "change_role": {
+    "error": {
+      "title": "No se pudo cambiar el rol a conductor",
+      "default": "Ocurrió un error al cambiar el rol a conductor",
+      "conflict": "El usuario ya es conductor"
+    }
   }
 }

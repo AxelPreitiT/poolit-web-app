@@ -1,14 +1,14 @@
-import { loginPath } from "@/AppRouter";
 import QueryError from "@/errors/QueryError";
-import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
-import { useLocation, useNavigate } from "react-router-dom";
 import useErrorToast from "../toasts/useErrorToast";
-import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
 import { useTranslation } from "react-i18next";
-import ResponseError from "@/errors/ResponseError";
 import UnknownResponseError from "@/errors/UnknownResponseError";
 import BadRequestResponseError from "@/errors/BadRequestResponseError";
 import BadRequestModal from "@/components/forms/BadRequestModal/BadRequestModal";
+import UnauthorizedResponseError from "@/errors/UnauthorizedResponseError";
+import CurrentUserUriMissingError from "@/errors/CurrentUserUriMissingError";
+import { loginPath } from "@/AppRouter";
+import { useLocation, useNavigate } from "react-router-dom";
+import JoinTripUnauthenticatedError from "@/errors/JoinTripUnauthenticatedError";
 
 const childrenByErrorId: Record<
   string,
@@ -35,15 +35,9 @@ const useQueryError = () => {
     customMessages?: Record<string, string>
   ) => {
     const errorId = error.getErrorId();
-    return (
-      (customMessages?.[errorId]
-        ? t(customMessages[errorId])
-        : t(error.getI18nKey())) +
-      (error instanceof ResponseError &&
-      !(error instanceof UnknownResponseError)
-        ? ` (${error.getStatusCode()} - ${error.getStatusText()})`
-        : "")
-    );
+    return customMessages?.[errorId]
+      ? t(customMessages[errorId])
+      : t(error.getI18nKey());
   };
 
   const getChildren = (error: QueryError) => {
@@ -74,7 +68,8 @@ const useQueryError = () => {
 
     if (
       (error instanceof UnauthorizedResponseError ||
-        error instanceof CurrentUserUriMissingError) &&
+        error instanceof CurrentUserUriMissingError ||
+        error instanceof JoinTripUnauthenticatedError) &&
       location.pathname !== loginPath
     ) {
       navigate(loginPath, { state: { from: location }, replace: true });
