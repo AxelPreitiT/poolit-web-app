@@ -3,6 +3,7 @@ interface ReviewModel {
   id: number;
   option: string;
   rating: number;
+  reviewedUserUri: string;
   reviewDateTime: string;
   selfUri: string;
   tripUri: string;

@@ -1,5 +1,5 @@
 import BaseMock from "./BaseMock";
-
+/*
 const user = {
   driverRating:2.3333333333333335,
   imageUri:"http://localhost:8080/paw-2023a-07/api/users/11/image",
@@ -27,7 +27,7 @@ const user = {
   "reportsRejected":0,
   "role":"DRIVER"
 }
-
+*/
 class LoginMock extends BaseMock {
   public static mockLogin() {
     return this.getWithoutBase("/", () => this.plainResponse({ status: this.OK_STATUS }));
