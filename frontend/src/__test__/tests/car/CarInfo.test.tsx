@@ -9,6 +9,7 @@ import { server } from "@/__test__/setup";
 import UserMock from "@/__test__/mocks/UserMock";
 import CarModel from "@/models/CarModel";
 import CarBrandModel from "@/models/CarBrandModel";
+import {waitFor} from "@testing-library/react";
 
 describe("CarInfo", () => {
   let user: UserEvent;
@@ -53,13 +54,13 @@ describe("CarInfo", () => {
     expect(screen.getByText(carBrand.name)).toBeInTheDocument();
     expect(screen.getByText(car.seats.toString())).toBeInTheDocument();
     expect(screen.getByText(car.plate)).toBeInTheDocument();
-    car.featuresUri.forEach(async (featureUri) => {
-      expect(
+    for (const featureUri of car.featuresUri) {
+      waitFor(async ()=>expect(
         await screen.findByText(
-          CarFeatureMock.getCarFeatureByUriProp(featureUri).id
+          CarFeatureMock.getCarFeatureByUriProp(featureUri).name
         )
-      ).toBeInTheDocument();
-    });
+      ).toBeInTheDocument(),{timeout:5000});
+    }
     expect(screen.getByRole("img")).toHaveAttribute("src", car.imageUri);
 
     expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument();

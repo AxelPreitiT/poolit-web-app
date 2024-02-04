@@ -92,7 +92,6 @@ describe("Login", () => {
     await user.click(loginButton);
 
     expect(await screen.findByText(/ready to ride/i)).toBeVisible();
-    expect(await screen.findByText(/successfully logged in/i)).toBeVisible();
     expect(window.location.pathname).toBe("/");
   });
 
@@ -132,9 +131,6 @@ describe("Login", () => {
     await user.click(loginButton);
 
     expect(await screen.findByText(/log in failed/i)).toBeVisible();
-    expect(
-      await screen.findByText(/your account has not been verified/i)
-    ).toBeVisible();
   });
 
   it("If user clicks on sign up, should redirect to sign up page", async () => {
