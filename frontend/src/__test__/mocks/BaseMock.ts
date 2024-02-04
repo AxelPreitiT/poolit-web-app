@@ -6,6 +6,7 @@ class BaseMock {
   protected static readonly UNAUTHORIZED_STATUS = 401;
   protected static readonly CREATED_STATUS = 201;
   protected static readonly CONFLICT_STATUS = 409;
+  protected static readonly INTERNAL_SERVER_ERROR_STATUS = 500;
   private static readonly BASE_URL = "http://localhost:8080/paw-2023a-07/api";
 
   protected static getPath(path: string): string {
@@ -32,6 +33,15 @@ class BaseMock {
 
   protected static post: HttpRequestHandler = (path, resolver, options) =>
     http.post(this.getPath(path as string), resolver, options);
+
+  protected static put: HttpRequestHandler = (path, resolver, options) =>
+    http.put(this.getPath(path as string), resolver, options);
+
+  protected static delete: HttpRequestHandler = (path, resolver, options) =>
+    http.delete(this.getPath(path as string), resolver, options);
+
+  protected static patch: HttpRequestHandler = (path, resolver, options) =>
+    http.patch(this.getPath(path as string), resolver, options);
 }
 
 export default BaseMock;

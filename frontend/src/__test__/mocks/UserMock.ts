@@ -204,6 +204,18 @@ class UserMock extends BaseMock {
       this.plainResponse({ status: this.CONFLICT_STATUS })
     );
   }
+
+  public static updateUserSuccess() {
+    return this.patch("/users/:userId", () =>
+      this.plainResponse({ status: this.NO_CONTENT_STATUS })
+    );
+  }
+
+  public static updateUserFail() {
+    return this.patch("/users/:userId", () =>
+      this.plainResponse({ status: this.INTERNAL_SERVER_ERROR_STATUS })
+    );
+  }
 }
 
 export default UserMock;
