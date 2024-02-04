@@ -182,8 +182,6 @@ public class UserServiceImpl implements UserService {
         //verificationToken != null and it is a valid token
 
         tokenUser.setEnabled(true);
-        //TODO: delete
-//        authWithoutPassword(user);
     }
 
 
