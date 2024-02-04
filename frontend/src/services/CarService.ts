@@ -8,7 +8,7 @@ import PaginationModel from "@/models/PaginationModel";
 import { EditCarFormSchemaType } from "@/forms/EditCarForm";
 import CarReviewOptionModel from "@/models/CarReviewOptionModel";
 import { ReviewFormSchemaType } from "@/forms/ReviewForm";
-import { getCarReviewOptionsByRating } from "@/enums/CarReviewsOptions";
+import { getCarReviewOptionsByRating } from "@/enums/carReviewsOptions.ts";
 
 class CarService extends Service {
   public static getCarsByUser = async (

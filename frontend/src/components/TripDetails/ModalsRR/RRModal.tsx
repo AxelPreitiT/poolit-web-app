@@ -11,7 +11,7 @@ import PassangerReportReviewComponent from "@/components/TripDetails/ModalReport
 import getUriPassangers from "@/functions/getUriPassangers.tsx";
 import PaginationComponentExtraData from "@/components/pagination/PaginationComponent/PaginationComponentExtraData.tsx";
 import createPaginationUri from "@/functions/CreatePaginationUri.tsx";
-import { INITIALPAGE, PASSANGERPAGESIZE } from "@/enums/PaginationConstants.ts";
+import {INITIALPAGE, PASSANGERMODALSIZE} from "@/enums/PaginationConstants.ts";
 import usePassangerByUri from "@/hooks/passanger/usePassangerByUri.tsx";
 import IMake from "../IMake";
 import { useCurrentUser } from "@/hooks/users/useCurrentUser";
@@ -91,7 +91,7 @@ const RRModal = ({
             <PaginationComponentExtraData
               CardComponent={PassangerReportReviewComponent}
               extraData={{ reporting, openModalMake }}
-              uri={createPaginationUri(uri, INITIALPAGE, PASSANGERPAGESIZE)}
+              uri={createPaginationUri(uri, INITIALPAGE, PASSANGERMODALSIZE)}
               useFuction={usePassangerByUri}
               empty_component={
                 <div className={styles.review_empty_container}>

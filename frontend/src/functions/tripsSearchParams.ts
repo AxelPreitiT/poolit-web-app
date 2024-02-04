@@ -2,8 +2,7 @@ import { SearchTripsFormSchemaType } from "@/forms/SearchTripsForm";
 import TripPageSearchModel from "@/models/TripPageSearchModel";
 import TripSortSearchModel from "@/models/TripSortSearchModel";
 import { getIsoDate, parseIsoDate } from "@/utils/date/isoDate";
-
-const defaultPageSize = 10;
+import {TRIPSSEARCHPAGESIZE} from "@/enums/PaginationConstants.ts";
 
 const originCityKey = "originCity";
 const destinationCityKey = "destinationCity";
@@ -96,6 +95,6 @@ export const parseTripsSearchParams: (
     sortTypeId: sortTypeId || undefined,
     descending,
     page: page ? parseInt(page) : 1,
-    pageSize: pageSize ? parseInt(pageSize) : defaultPageSize,
+    pageSize: pageSize ? parseInt(pageSize) : TRIPSSEARCHPAGESIZE,
   };
 };
