@@ -1,7 +1,7 @@
 import BaseMock from "@/__test__/mocks/BaseMock.ts";
 import reviewModel from "@/models/ReviewModel.ts";
 
-const reviewList: reviewModel[] = [
+export const reviewList: reviewModel[] = [
   {
     "comment":"was really really disappointed",
     "id":31,

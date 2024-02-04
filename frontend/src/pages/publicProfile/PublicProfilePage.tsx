@@ -1,7 +1,5 @@
 import styles from "./styles.module.scss";
 import { useTranslation } from "react-i18next";
-import ProfileProp from "@/components/profile/prop/ProfileProp.tsx";
-import ProfileStars from "@/components/profile/stars/ProfileStars.tsx";
 import { useParams } from "react-router-dom";
 import usePublicUserById from "@/hooks/users/usePublicUserById.tsx";
 import useUserReviewsByUri from "@/hooks/reviews/useUserReviewsByUri.tsx";
@@ -11,8 +9,8 @@ import {
   publicsPassangerReviewsPath,
 } from "@/AppRouter.tsx";
 import LoadingWheel from "@/components/loading/LoadingWheel";
-import ViewableProfileImg from "@/components/profile/img/VieweableProfileImg";
 import ShortReviewProfile from "@/components/review/shorts/ShortReviewProfile.tsx";
+import PublicProfileInfo from "./PublicInfoProfile";
 
 const PublicProfilePage = () => {
   const { t } = useTranslation();
@@ -33,27 +31,7 @@ const PublicProfilePage = () => {
           description={t("profile.loading.profile")}
         />
       ) : (
-        <div className={styles.profileCard}>
-          <ViewableProfileImg src={user.imageUri} />
-          <h3 className="text-center">
-            {t("format.name", {
-              name: user.username,
-              surname: user.surname,
-            })}
-          </h3>
-          <ProfileProp
-            prop={t("profile.props.trips")}
-            text={user.tripCount.toString()}
-          />
-          <ProfileStars
-            prop={t("profile.props.rating_driver")}
-            rating={user.driverRating}
-          />
-          <ProfileStars
-            prop={t("profile.props.rating_passenger")}
-            rating={user.passengerRating}
-          />
-        </div>
+        <PublicProfileInfo user={user} />
       )}
 
       <div className={styles.list_block}>

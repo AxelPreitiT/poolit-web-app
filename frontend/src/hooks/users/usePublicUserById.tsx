@@ -18,9 +18,11 @@ const usePublicUserById = (id?: string) => {
       if (!id || !discovery?.usersUriTemplate) {
         return undefined;
       }
+      console.log(discovery)
       const uri = parseTemplate(discovery.usersUriTemplate).expand({
         userId: id,
       });
+      console.log(uri)
       return await userService.getUserByUri(uri);
     },
     retry: false,

@@ -3,7 +3,7 @@ import BaseMock from "@/__test__/mocks/BaseMock.ts";
 import userPublicModel from "@/models/UserPublicModel.ts";
 import userDriverModel from "@/models/UserDriverModel.ts";
 
-const privateUserRoleUser: userPrivateModel = {
+export const privateUserRoleUser: userPrivateModel = {
     driverRating: 3.0,
     imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
     passengerRating: 0.0,
@@ -85,7 +85,7 @@ const privateUserRoleAdmin: userPrivateModel = {
     role: "ADMIN"
 }
 
-const publicUser: userPublicModel ={
+export const publicUser: userPublicModel ={
     driverRating: 3.0,
     imageUri: "http://localhost:8080/paw-2023a-07/api/users/50/image",
     passengerRating: 0.0,
@@ -111,6 +111,14 @@ const driverUser: userDriverModel = {
     username: "Jose Rodolfo",
     email: "jmentasti+testapi@itba.edu.ar",
     phone: "1139150686"
+}
+
+export const profileListInfo = {
+    title: "Title component",
+    btn_footer_text: "btn footer text",
+    empty_text: "Empty text",
+    empty_icon: "book",
+    id: 5,
 }
 
 class UserMock extends BaseMock{
@@ -139,7 +147,7 @@ class UserMock extends BaseMock{
         )
     }
     public static getByIdPublic(){
-        return this.get("/users/40",()=>
+        return this.get("/users/:userId",()=>
             this.jsonResponse(publicUser,{status:this.OK_STATUS})
         )
     }
