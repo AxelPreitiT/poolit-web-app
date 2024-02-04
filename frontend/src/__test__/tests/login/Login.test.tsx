@@ -1,3 +1,4 @@
+import { registerPath } from "@/AppRouter";
 import LoginMock from "@/__test__/mocks/LoginMock";
 import { server } from "@/__test__/setup";
 import { customRender, screen } from "@/__test__/utils";
@@ -134,5 +135,14 @@ describe("Login", () => {
     expect(
       await screen.findByText(/your account has not been verified/i)
     ).toBeVisible();
+  });
+
+  it("If user clicks on sign up, should redirect to sign up page", async () => {
+    const { user } = customRender(<LoginPage />);
+
+    const signUpLink = screen.getByRole("link", { name: /sign up/i });
+    await user.click(signUpLink);
+
+    expect(window.location.pathname).toBe(registerPath);
   });
 });

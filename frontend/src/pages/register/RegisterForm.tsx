@@ -53,7 +53,7 @@ const RegisterForm = ({ cities }: { cities?: CityModel[] }) => {
         <div className={styles.formRow}>
           <div className={styles.inputItem}>
             <Form.Control
-              type="email"
+              type="text"
               id="email"
               size="sm"
               placeholder={t("register.email")}
@@ -104,6 +104,7 @@ const RegisterForm = ({ cities }: { cities?: CityModel[] }) => {
                 <CitySelector
                   cities={cities}
                   defaultOption={t("register.residence_city")}
+                  placeholder={t("register.residence_city")}
                   size="sm"
                   onChange={(event) => onChange(parseInt(event.target.value))}
                   value={value}
@@ -129,6 +130,7 @@ const RegisterForm = ({ cities }: { cities?: CityModel[] }) => {
                 id="locale"
                 size="sm"
                 {...register("locale")}
+                placeholder={t("language.language")}
                 defaultValue={i18n.language}
               >
                 <option value="en">{t("language.english")}</option>
