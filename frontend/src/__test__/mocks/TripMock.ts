@@ -1,137 +1,141 @@
 import BaseMock from "@/__test__/mocks/BaseMock.ts";
-import tripModel from "@/models/TripModel.ts";
-import passangerModel from "@/models/PassangerModel.ts";
-import occupiedSeatsModel from "@/models/occupiedSeatsModel.ts";
+import OccupiedSeatsModel from "@/models/occupiedSeatsModel.ts";
+import TripModel from "@/models/TripModel.ts";
+import PassangerModel from "@/models/PassangerModel.ts";
 
-const tripList:tripModel[] = [
-        {
-            "carReviewsUriTemplate": "http://localhost:8080/paw-2023a-07/api/cars/1/reviews?forTrip=144&madeBy={userId}",
-            "carUri": "http://localhost:8080/paw-2023a-07/api/cars/1",
-            "deleted": false,
-            "destinationAddress": "Agronomia",
-            "destinationCityUri": "http://localhost:8080/paw-2023a-07/api/cities/1",
-            "driverReportsUriTemplate": "http://localhost:8080/paw-2023a-07/api/reports?forTrip=144&forUser=1&madeBy={userId}",
-            "driverReviewsUriTemplate": "http://localhost:8080/paw-2023a-07/api/driver-reviews?forTrip=144&madeBy={userId}",
-            "driverUri": "http://localhost:8080/paw-2023a-07/api/users/1",
-            "endDateTime": "2024-02-03T18:00",
-            "maxSeats": "4",
-            "originAddress": "Av Callao 1348",
-            "originCityUri": "http://localhost:8080/paw-2023a-07/api/cities/28",
-            "passengersUriTemplate": "http://localhost:8080/paw-2023a-07/api/trips/144/passengers{/userId}{?startDateTime,endDateTime,passengerState}",
-            "pricePerTrip": 1000.0,
-            "selfUri": "http://localhost:8080/paw-2023a-07/api/trips/144",
-            "startDateTime": "2024-02-03T18:00",
-            "tripId": 144,
-            "tripStatus": "NOT_STARTED"
-        },
-        {
-            "carReviewsUriTemplate": "http://localhost:8080/paw-2023a-07/api/cars/15/reviews?forTrip=143&madeBy={userId}",
-            "carUri": "http://localhost:8080/paw-2023a-07/api/cars/15",
-            "deleted": false,
-            "destinationAddress": "Barracas",
-            "destinationCityUri": "http://localhost:8080/paw-2023a-07/api/cities/4",
-            "driverReportsUriTemplate": "http://localhost:8080/paw-2023a-07/api/reports?forTrip=143&forUser=1&madeBy={userId}",
-            "driverReviewsUriTemplate": "http://localhost:8080/paw-2023a-07/api/driver-reviews?forTrip=143&madeBy={userId}",
-            "driverUri": "http://localhost:8080/paw-2023a-07/api/users/1",
-            "endDateTime": "2024-02-03T18:00",
-            "maxSeats": "4",
-            "originAddress": "Av Callao 1348",
-            "originCityUri": "http://localhost:8080/paw-2023a-07/api/cities/28",
-            "passengersUriTemplate": "http://localhost:8080/paw-2023a-07/api/trips/143/passengers{/userId}{?startDateTime,endDateTime,passengerState}",
-            "pricePerTrip": 1300.0,
-            "selfUri": "http://localhost:8080/paw-2023a-07/api/trips/143",
-            "startDateTime": "2024-02-03T18:00",
-            "tripId": 143,
-            "tripStatus": "NOT_STARTED"
-        }
-    ];
+const occupiedSeats: OccupiedSeatsModel = {
+  occupiedSeats: 10,
+};
 
-const trip: tripModel = {
-        carReviewsUriTemplate: "http://localhost:8080/paw-2023a-07/api/cars/1/reviews?forTrip=144&madeBy={userId}",
-        carUri: "http://localhost:8080/paw-2023a-07/api/cars/1",
-        deleted: false,
-        destinationAddress: "Agronomia",
-        destinationCityUri: "http://localhost:8080/paw-2023a-07/api/cities/1",
-        driverReportsUriTemplate: "http://localhost:8080/paw-2023a-07/api/reports?forTrip=144&forUser=1&madeBy={userId}",
-        driverReviewsUriTemplate: "http://localhost:8080/paw-2023a-07/api/driver-reviews?forTrip=144&madeBy={userId}",
-        driverUri: "http://localhost:8080/paw-2023a-07/api/users/40",
-        endDateTime: "2024-02-03T18:00",
-        maxSeats: "4",
-        originAddress: "Av Callao 1348",
-        originCityUri: "http://localhost:8080/paw-2023a-07/api/cities/28",
-        passengersUriTemplate: "http://localhost:8080/paw-2023a-07/api/trips/144/passengers{/userId}{?startDateTime,endDateTime,passengerState}",
-        pricePerTrip: 1000.0,
-        selfUri: "http://localhost:8080/paw-2023a-07/api/trips/144",
-        startDateTime: "2024-02-03T18:00",
-        tripId: 144,
-        tripStatus: "NOT_STARTED"
-    };
-
-const passengerList: passangerModel[] = [
+class TripMock extends BaseMock {
+  public static readonly TRIPS: TripModel[] = [
     {
-        "endDateTime": "2023-12-28T22:00",
-        "otherPassengersUriTemplate": "http://localhost:8080/paw-2023a-07/api/trips/139/passengers?startDateTime=2023-12-28T22%3A00&endDateTime=2023-12-28T22%3A00&passengerState=ACCEPTED{&excluding*}",
-        "passengerReportsForTripUriTemplate": "http://localhost:8080/paw-2023a-07/api/reports?forTrip=139&forUser=1&madeBy={userId}",
-        "passengerReviewsForTripUriTemplate": "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forTrip=139&forUser=1&madeBy={userId}",
-        "passengerState": "ACCEPTED",
-        "selfUri": "http://localhost:8080/paw-2023a-07/api/trips/139/passengers/1",
-        "startDateTime": "2023-12-28T22:00",
-        "tripUri": "http://localhost:8080/paw-2023a-07/api/trips/139?startDateTime=2023-12-28T22%3A00&endDateTime=2023-12-28T22%3A00",
-        "userId": "1",
-        "userUri": "http://localhost:8080/paw-2023a-07/api/users/1"
-    }
-]
-const passenger: passangerModel = {
-    "endDateTime": "2023-12-28T22:00",
-    "otherPassengersUriTemplate": "http://localhost:8080/paw-2023a-07/api/trips/139/passengers?startDateTime=2023-12-28T22%3A00&endDateTime=2023-12-28T22%3A00&passengerState=ACCEPTED{&excluding*}",
-    "passengerReportsForTripUriTemplate": "http://localhost:8080/paw-2023a-07/api/reports?forTrip=139&forUser=1&madeBy={userId}",
-    "passengerReviewsForTripUriTemplate": "http://localhost:8080/paw-2023a-07/api/passenger-reviews?forTrip=139&forUser=1&madeBy={userId}",
-    "passengerState": "ACCEPTED",
-    "selfUri": "http://localhost:8080/paw-2023a-07/api/trips/139/passengers/1",
-    "startDateTime": "2023-12-28T22:00",
-    "tripUri": "http://localhost:8080/paw-2023a-07/api/trips/139?startDateTime=2023-12-28T22%3A00&endDateTime=2023-12-28T22%3A00",
-    "userId": "1",
-    "userUri": "http://localhost:8080/paw-2023a-07/api/users/1"
-}
+      carReviewsUriTemplate: this.getPath(
+        "/cars/1/reviews?forTrip=144&madeBy={userId}"
+      ),
+      carUri: this.getPath("/cars/1"),
+      deleted: false,
+      destinationAddress: "Agronomia",
+      destinationCityUri: this.getPath("/cities/1"),
+      driverReportsUriTemplate: this.getPath(
+        "/reports?forTrip=144&forUser=1&madeBy={userId}"
+      ),
+      driverReviewsUriTemplate: this.getPath(
+        "/driver-reviews?forTrip=144&madeBy={userId}"
+      ),
+      driverUri: this.getPath("/users/40"),
+      endDateTime: "2024-02-03T18:00",
+      maxSeats: "4",
+      originAddress: "Av Callao 1348",
+      originCityUri: this.getPath("/cities/28"),
+      passengersUriTemplate: this.getPath(
+        "/trips/144/passengers{/userId}{?startDateTime,endDateTime,passengerState}"
+      ),
+      pricePerTrip: 1000.0,
+      selfUri: this.getPath("/trips/144"),
+      startDateTime: "2024-02-03T18:00",
+      tripId: 144,
+      tripStatus: "NOT_STARTED",
+    },
+    {
+      carReviewsUriTemplate: this.getPath(
+        "/cars/15/reviews?forTrip=143&madeBy={userId}"
+      ),
+      carUri: this.getPath("/cars/15"),
+      deleted: false,
+      destinationAddress: "Barracas",
+      destinationCityUri: this.getPath("/cities/4"),
+      driverReportsUriTemplate: this.getPath(
+        "/reports?forTrip=143&forUser=1&madeBy={userId}"
+      ),
+      driverReviewsUriTemplate: this.getPath(
+        "/driver-reviews?forTrip=143&madeBy={userId}"
+      ),
+      driverUri: this.getPath("/users/1"),
+      endDateTime: "2024-02-03T18:00",
+      maxSeats: "4",
+      originAddress: "Av Callao 1348",
+      originCityUri: this.getPath("/cities/28"),
+      passengersUriTemplate: this.getPath(
+        "/trips/143/passengers{/userId}{?startDateTime,endDateTime,passengerState}"
+      ),
+      pricePerTrip: 1300.0,
+      selfUri: this.getPath("/trips/143"),
+      startDateTime: "2024-02-03T18:00",
+      tripId: 143,
+      tripStatus: "NOT_STARTED",
+    },
+  ];
 
-const occupiedSeats: occupiedSeatsModel = {
-    occupiedSeats: 10
-}
+  public static PASSENGER_LIST: PassangerModel[] = [
+    {
+      endDateTime: "2023-12-28T22:00",
+      otherPassengersUriTemplate: this.getPath(
+        "/trips/139/passengers?startDateTime=2023-12-28T22%3A00&endDateTime=2023-12-28T22%3A00&passengerState=ACCEPTED{&excluding*}"
+      ),
+      passengerReportsForTripUriTemplate: this.getPath(
+        "/reports?forTrip=139&forUser=1&madeBy={userId}"
+      ),
+      passengerReviewsForTripUriTemplate: this.getPath(
+        "/passenger-reviews?forTrip=139&forUser=1&madeBy={userId}"
+      ),
+      passengerState: "ACCEPTED",
+      selfUri: this.getPath("/trips/139/passengers/1"),
+      startDateTime: "2023-12-28T22:00",
+      tripUri: this.getPath(
+        "/trips/139?startDateTime=2023-12-28T22%3A00&endDateTime=2023-12-28T22%3A00"
+      ),
+      userId: "1",
+      userUri: this.getPath("/users/1"),
+    },
+  ];
 
-class TripMock extends BaseMock{
-    public static mockEmptyTrips(){
-        return this.get("/trips",()=>
-            this.plainResponse({status: this.NO_CONTENT_STATUS})
-        )
-    }
+  public static getTripByIdProp(tripId: number): TripModel {
+    return this.TRIPS.find((trip) => trip.tripId === tripId) || this.TRIPS[0];
+  }
 
-    public static mockOccupiedSeats(){
-        return this.get("/trips/:tripId/passengers",()=>
-            this.jsonResponse(occupiedSeats,{status:this.OK_STATUS})
-        )
-    }
+  public static getPassegerByIdProp(userId: string): PassangerModel {
+    return (
+      this.PASSENGER_LIST.find((passenger) => passenger.userId === userId) ||
+      this.PASSENGER_LIST[0]
+    );
+  }
 
-    public static mockTripList(){
-        return this.get("/trips",()=>
-            this.jsonResponse(tripList,{status:this.OK_STATUS})
-        )
-    }
+  public static mockEmptyTrips() {
+    return this.get("/trips", () =>
+      this.plainResponse({ status: this.NO_CONTENT_STATUS })
+    );
+  }
 
-    public static mockSingleTrip(){
-        return this.get('/trips/:id', ()=>
-            this.jsonResponse(trip,{status:this.OK_STATUS})
-        )
-    }
-    public static mockPassengerList(){
-        return this.get("/trips/:tripId/passengers",()=>
-            this.jsonResponse(passengerList,{status:this.OK_STATUS})
-        )
-    }
-    public static mockPassenger(){
-        return this.get("/trips/:tripId/passengers/:userId",()=>
-            this.jsonResponse(passenger,{status:this.OK_STATUS})
-        )
-    }
+  public static mockOccupiedSeats() {
+    return this.get("/trips/:tripId/passengers", () =>
+      this.jsonResponse(occupiedSeats, { status: this.OK_STATUS })
+    );
+  }
+
+  public static mockTripList() {
+    return this.get("/trips", () =>
+      this.jsonResponse(this.TRIPS, { status: this.OK_STATUS })
+    );
+  }
+
+  public static mockSingleTrip() {
+    return this.get("/trips/:id", () =>
+      this.jsonResponse(this.getTripByIdProp(144), { status: this.OK_STATUS })
+    );
+  }
+  public static mockPassengerList() {
+    return this.get("/trips/:tripId/passengers", () =>
+      this.jsonResponse(this.PASSENGER_LIST, { status: this.OK_STATUS })
+    );
+  }
+  public static mockPassenger() {
+    return this.get("/trips/:tripId/passengers/:userId", () =>
+      this.jsonResponse(this.getPassegerByIdProp("1"), {
+        status: this.OK_STATUS,
+      })
+    );
+  }
 }
 
 export default TripMock;

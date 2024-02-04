@@ -1,5 +1,5 @@
 import CityMock from "@/__test__/mocks/CityMock";
-import UserMock, { privateUserRoleUser } from "@/__test__/mocks/UserMock";
+import UserMock from "@/__test__/mocks/UserMock";
 import { setAuthToken } from "../utils";
 import { UserEvent } from "@testing-library/user-event";
 import { customRender, screen } from "@/__test__/utils";
@@ -13,9 +13,9 @@ describe("ProfileInfo", () => {
   let rerender: ReturnType<typeof customRender>["rerender"];
 
   const readonlyProps = {
-    currentUser: privateUserRoleUser,
+    currentUser: UserMock.PRIVATE_USER_ROLE_USER,
     cities: CityMock.CITIES,
-    city: CityMock.getCityByUriProp(privateUserRoleUser.cityUri),
+    city: CityMock.getCityByUriProp(UserMock.PRIVATE_USER_ROLE_USER.cityUri),
   };
 
   let props: typeof readonlyProps;
@@ -121,7 +121,7 @@ describe("ProfileInfo", () => {
     const newCity = CityMock.getCityByIdProp(1);
     const imageFile = new File(["image"], "image.jpg", { type: "image/jpeg" });
     const newUser: UserPrivateModel = {
-      ...privateUserRoleUser,
+      ...props.currentUser,
       username: "newUsername",
       surname: "newSurname",
       phone: "newPhone",
@@ -158,7 +158,7 @@ describe("ProfileInfo", () => {
 
   it("If the user is updated, but not its image, it should not call createObjectURL", async () => {
     const newUser: UserPrivateModel = {
-      ...privateUserRoleUser,
+      ...props.currentUser,
       username: "newUsername",
       surname: "newSurname",
       phone: "newPhone",

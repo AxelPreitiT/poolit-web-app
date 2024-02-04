@@ -1,16 +1,13 @@
 import { setAuthToken } from "@/__test__/tests/utils.ts";
 import { customRender, screen } from "@/__test__/utils.tsx";
 import { server } from "@/__test__/setup.ts";
-import UserMock, {
-  profileListInfo,
-  publicUser,
-} from "@/__test__/mocks/UserMock.ts";
+import UserMock, { profileListInfo } from "@/__test__/mocks/UserMock.ts";
 import { expect } from "vitest";
 import CityMock from "@/__test__/mocks/CityMock";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import CarMock from "@/__test__/mocks/CarMock";
 import TripMock from "@/__test__/mocks/TripMock";
-import ReviewsMock, { reviewList } from "@/__test__/mocks/ReviewsMock.ts";
+import ReviewsMock from "@/__test__/mocks/ReviewsMock.ts";
 import PublicProfileInfo from "@/pages/publicProfile/PublicInfoProfile.tsx";
 import ListProfileContainer from "@/components/profile/list/ListProfileContainer.tsx";
 import ShortReviewProfile from "@/components/review/shorts/ShortReviewProfile.tsx";
@@ -43,13 +40,17 @@ describe("Profile", () => {
   });
 
   it("Should show the public profile info", async () => {
-    customRender(<PublicProfileInfo user={publicUser} />, {
+    customRender(<PublicProfileInfo user={UserMock.PUBLIC_USER} />, {
       route: "/profile/5",
     });
     expect(
-      await screen.findByText(publicUser.username + " " + publicUser.surname)
+      await screen.findByText(
+        UserMock.PUBLIC_USER.username + " " + UserMock.PUBLIC_USER.surname
+      )
     ).toBeVisible();
-    expect(await screen.findByText(publicUser.tripCount)).toBeVisible();
+    expect(
+      await screen.findByText(UserMock.PUBLIC_USER.tripCount)
+    ).toBeVisible();
   });
 
   it("Should show the empty format", async () => {
@@ -80,7 +81,7 @@ describe("Profile", () => {
         btn_footer_text={profileListInfo.btn_footer_text}
         empty_text={profileListInfo.empty_text}
         empty_icon={profileListInfo.empty_icon}
-        data={reviewList}
+        data={ReviewsMock.REVIEWS}
         component_name={ShortReviewProfile}
         link={publicsPassangerReviewsPath.replace(
           ":id",
