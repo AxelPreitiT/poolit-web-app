@@ -820,7 +820,7 @@
       "none": "Create a car to start offering trips"
     },
     "loading": "Loading car",
-    "image": "Imagen del auto {{car_info}}",
+    "image": "Car image of {{car_info}}",
     "brand": "Brand: {{brand}}",
     "license_plate": "License plate: {{license_plate}}",
     "prop": {
