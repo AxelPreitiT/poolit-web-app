@@ -12,6 +12,7 @@
     "text": "Poolit"
   },
   "language": {
+    "language": "Language",
     "language_selector": "What language would you prefer to receive notifications in?",
     "spanish": "Spanish",
     "english": "English"
@@ -103,7 +104,7 @@
     "name": "Name",
     "last_name": "Last name",
     "email": "Email",
-    "telephone": "Phone number",
+    "telephone": "Telephone",
     "password": "Password",
     "confirm_password": "Confirm password",
     "residence_city": "Residence neighborhood",

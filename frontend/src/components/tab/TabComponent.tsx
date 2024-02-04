@@ -21,10 +21,11 @@ const TabComponent = ({
   onLeftClick,
   onRightClick,
 }: TabComponentProps) => {
-  const defaultActiveKey = active ? active : "left";
-
   return (
-    <Tab.Container id="center-tabs-example" defaultActiveKey={defaultActiveKey}>
+    <Tab.Container
+      id="center-tabs-example"
+      activeKey={active ? active : "left"}
+    >
       <div>
         <Nav variant="pills" className={styles.nav_prop}>
           <Nav.Item className={styles.fulltab}>

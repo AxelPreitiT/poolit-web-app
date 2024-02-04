@@ -7,20 +7,23 @@ import { ReactElement } from "react";
 import { RenderOptions, render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import { HelmetProvider } from "react-helmet-async";
 
 export const queryClient = getQueryClient();
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AllProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <I18nextProvider i18n={i18nTest}>
-        <BrowserRouter>
-          {children}
-          <GlobalToastStack />
-        </BrowserRouter>
-      </I18nextProvider>
-    </QueryClientProvider>
+    <HelmetProvider context={{}}>
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18nTest}>
+          <BrowserRouter>
+            {children}
+            <GlobalToastStack />
+          </BrowserRouter>
+        </I18nextProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

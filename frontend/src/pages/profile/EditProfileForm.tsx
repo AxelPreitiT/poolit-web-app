@@ -123,6 +123,7 @@ const EditProfileForm = ({
                 value={value}
                 defaultOption={null}
                 onChange={(event) => onChange(parseInt(event.target.value))}
+                placeholder={t("profile.props.neighborhood")}
               />
             )}
           />
@@ -133,7 +134,11 @@ const EditProfileForm = ({
         </div>
         <div className={styles.profileInfoItem}>
           <ProfilePropHeader prop={t("profile.props.language")} />
-          <Form.Select id="locale" {...register("locale")}>
+          <Form.Select
+            id="locale"
+            {...register("locale")}
+            placeholder={t("profile.props.language")}
+          >
             <option value="en">{t("language.english")}</option>
             <option value="es">{t("language.spanish")}</option>
           </Form.Select>

@@ -37,6 +37,7 @@ const ImageInput = ({
         className={styles.inputFile}
         onChange={onChange}
         ref={fileInputRef}
+        placeholder="Image input"
       />
       {preview ? (
         <div className={styles.previewContainer}>

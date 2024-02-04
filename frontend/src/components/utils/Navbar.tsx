@@ -74,7 +74,7 @@ const Navbar = () => {
                 }`}
                 key={reservedTripsPath}
               >
-                <Link to={`${reservedTripsPath}?time=future&page=1`}>
+                <Link to={reservedTripsPath}>
                   <h4>{t("navbar.reserved")}</h4>
                 </Link>
               </div>
@@ -88,7 +88,7 @@ const Navbar = () => {
                     }`}
                     key={createdTripsPath}
                   >
-                    <Link to={`${createdTripsPath}?time=future&page=1`}>
+                    <Link to={createdTripsPath}>
                       <h4>{t("navbar.created")}</h4>
                     </Link>
                   </div>
