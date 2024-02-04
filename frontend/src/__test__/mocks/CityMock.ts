@@ -2,248 +2,254 @@ import BaseMock from "@/__test__/mocks/BaseMock.ts";
 import CityModel from "@/models/CityModel.ts";
 
 class CityMock extends BaseMock {
+  public static readonly CITIES_PATH = "/cities";
+
   public static CITIES: CityModel[] = [
     {
       id: 1,
       name: "Agronomía",
-      selfUri: this.getPath("/cities/1"),
+      selfUri: this.getPath("/1"),
     },
     {
       id: 2,
       name: "Almagro",
-      selfUri: this.getPath("/cities/2"),
+      selfUri: this.getPath("/2"),
     },
     {
       id: 3,
       name: "Balvanera",
-      selfUri: this.getPath("/cities/3"),
+      selfUri: this.getPath("/3"),
     },
     {
       id: 4,
       name: "Barracas",
-      selfUri: this.getPath("/cities/4"),
+      selfUri: this.getPath("/4"),
     },
     {
       id: 5,
       name: "Belgrano",
-      selfUri: this.getPath("/cities/5"),
+      selfUri: this.getPath("/5"),
     },
     {
       id: 6,
       name: "Boedo",
-      selfUri: this.getPath("/cities/6"),
+      selfUri: this.getPath("/6"),
     },
     {
       id: 7,
       name: "Caballito",
-      selfUri: this.getPath("/cities/7"),
+      selfUri: this.getPath("/7"),
     },
     {
       id: 8,
       name: "Chacarita",
-      selfUri: this.getPath("/cities/8"),
+      selfUri: this.getPath("/8"),
     },
     {
       id: 9,
       name: "Coghlan",
-      selfUri: this.getPath("/cities/9"),
+      selfUri: this.getPath("/9"),
     },
     {
       id: 10,
       name: "Colegiales",
-      selfUri: this.getPath("/cities/10"),
+      selfUri: this.getPath("/10"),
     },
     {
       id: 11,
       name: "Constitución",
-      selfUri: this.getPath("/cities/11"),
+      selfUri: this.getPath("/11"),
     },
     {
       id: 12,
       name: "Flores",
-      selfUri: this.getPath("/cities/12"),
+      selfUri: this.getPath("/12"),
     },
     {
       id: 13,
       name: "Floresta",
-      selfUri: this.getPath("/cities/13"),
+      selfUri: this.getPath("/13"),
     },
     {
       id: 14,
       name: "La Boca",
-      selfUri: this.getPath("/cities/14"),
+      selfUri: this.getPath("/14"),
     },
     {
       id: 15,
       name: "La Paternal",
-      selfUri: this.getPath("/cities/15"),
+      selfUri: this.getPath("/15"),
     },
     {
       id: 16,
       name: "Liniers",
-      selfUri: this.getPath("/cities/16"),
+      selfUri: this.getPath("/16"),
     },
     {
       id: 17,
       name: "Mataderos",
-      selfUri: this.getPath("/cities/17"),
+      selfUri: this.getPath("/17"),
     },
     {
       id: 18,
       name: "Monte Castro",
-      selfUri: this.getPath("/cities/18"),
+      selfUri: this.getPath("/18"),
     },
     {
       id: 19,
       name: "Montserrat",
-      selfUri: this.getPath("/cities/19"),
+      selfUri: this.getPath("/19"),
     },
     {
       id: 20,
       name: "Nueva Pompeya",
-      selfUri: this.getPath("/cities/20"),
+      selfUri: this.getPath("/20"),
     },
     {
       id: 21,
       name: "Núñez",
-      selfUri: this.getPath("/cities/21"),
+      selfUri: this.getPath("/21"),
     },
     {
       id: 22,
       name: "Palermo",
-      selfUri: this.getPath("/cities/22"),
+      selfUri: this.getPath("/22"),
     },
     {
       id: 23,
       name: "Parque Avellaneda",
-      selfUri: this.getPath("/cities/23"),
+      selfUri: this.getPath("/23"),
     },
     {
       id: 24,
       name: "Parque Chacabuco",
-      selfUri: this.getPath("/cities/24"),
+      selfUri: this.getPath("/24"),
     },
     {
       id: 25,
       name: "Parque Chas",
-      selfUri: this.getPath("/cities/25"),
+      selfUri: this.getPath("/25"),
     },
     {
       id: 26,
       name: "Parque Patricios",
-      selfUri: this.getPath("/cities/26"),
+      selfUri: this.getPath("/26"),
     },
     {
       id: 27,
       name: "Puerto Madero",
-      selfUri: this.getPath("/cities/27"),
+      selfUri: this.getPath("/27"),
     },
     {
       id: 28,
       name: "Recoleta",
-      selfUri: this.getPath("/cities/28"),
+      selfUri: this.getPath("/28"),
     },
     {
       id: 29,
       name: "Retiro",
-      selfUri: this.getPath("/cities/29"),
+      selfUri: this.getPath("/29"),
     },
     {
       id: 30,
       name: "Saavedra",
-      selfUri: this.getPath("/cities/30"),
+      selfUri: this.getPath("/30"),
     },
     {
       id: 31,
       name: "San Cristóbal",
-      selfUri: this.getPath("/cities/31"),
+      selfUri: this.getPath("/31"),
     },
     {
       id: 32,
       name: "San Nicolás",
-      selfUri: this.getPath("/cities/32"),
+      selfUri: this.getPath("/32"),
     },
     {
       id: 33,
       name: "San Telmo",
-      selfUri: this.getPath("/cities/33"),
+      selfUri: this.getPath("/33"),
     },
     {
       id: 34,
       name: "Versalles",
-      selfUri: this.getPath("/cities/34"),
+      selfUri: this.getPath("/34"),
     },
     {
       id: 35,
       name: "Villa Crespo",
-      selfUri: this.getPath("/cities/35"),
+      selfUri: this.getPath("/35"),
     },
     {
       id: 36,
       name: "Villa Devoto",
-      selfUri: this.getPath("/cities/36"),
+      selfUri: this.getPath("/36"),
     },
     {
       id: 37,
       name: "Villa General Mitre",
-      selfUri: this.getPath("/cities/37"),
+      selfUri: this.getPath("/37"),
     },
     {
       id: 38,
       name: "Villa Lugano",
-      selfUri: this.getPath("/cities/38"),
+      selfUri: this.getPath("/38"),
     },
     {
       id: 39,
       name: "Villa Luro",
-      selfUri: this.getPath("/cities/39"),
+      selfUri: this.getPath("/39"),
     },
     {
       id: 40,
       name: "Villa Ortúzar",
-      selfUri: this.getPath("/cities/40"),
+      selfUri: this.getPath("/40"),
     },
     {
       id: 41,
       name: "Villa Pueyrredón",
-      selfUri: this.getPath("/cities/41"),
+      selfUri: this.getPath("/41"),
     },
     {
       id: 42,
       name: "Villa Real",
-      selfUri: this.getPath("/cities/42"),
+      selfUri: this.getPath("/42"),
     },
     {
       id: 43,
       name: "Villa Riachuelo",
-      selfUri: this.getPath("/cities/43"),
+      selfUri: this.getPath("/43"),
     },
     {
       id: 44,
       name: "Villa Santa Rita",
-      selfUri: this.getPath("/cities/44"),
+      selfUri: this.getPath("/44"),
     },
     {
       id: 45,
       name: "Villa Soldati",
-      selfUri: this.getPath("/cities/45"),
+      selfUri: this.getPath("/45"),
     },
     {
       id: 46,
       name: "Villa Urquiza",
-      selfUri: this.getPath("/cities/46"),
+      selfUri: this.getPath("/46"),
     },
     {
       id: 47,
       name: "Villa del Parque",
-      selfUri: this.getPath("/cities/47"),
+      selfUri: this.getPath("/47"),
     },
     {
       id: 48,
       name: "Vélez Sársfield",
-      selfUri: this.getPath("/cities/48"),
+      selfUri: this.getPath("/48"),
     },
   ];
+
+  protected static getPath(path: string): string {
+    return super.getPath(`${this.CITIES_PATH}${path}`);
+  }
 
   public static getCityByIdProp(id: number) {
     return this.CITIES.find((city) => city.id === id) || this.CITIES[0];
