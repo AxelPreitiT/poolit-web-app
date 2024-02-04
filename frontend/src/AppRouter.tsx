@@ -37,7 +37,7 @@ export const reportPath = "/reports/:id";
 export const searchPath = "/search";
 export const createCarsPath = "/cars/create";
 export const carPath = "/cars/:carId";
-export const routerBasename = import.meta.env.BASE_URL;
+const routerBasename = import.meta.env.BASE_URL;
 
 const router = createBrowserRouter(
   [

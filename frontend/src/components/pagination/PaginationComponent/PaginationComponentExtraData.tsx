@@ -2,7 +2,6 @@ import styles from "./styles.module.scss";
 import PaginationModel from "@/models/PaginationModel.tsx";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { routerBasename } from "@/AppRouter.tsx";
 import { Pagination } from "react-bootstrap";
 import LoadingWheel from "@/components/loading/LoadingWheel";
 import { useTranslation } from "react-i18next";
@@ -50,12 +49,9 @@ const PaginationComponentExtraData = <T, U>({
 
   const handlePage = (uri: string, currentPage: number) => {
     setNewUri(uri);
-    const finalRouterBasename = routerBasename === "/" ? "" : routerBasename;
     const searchParams = new URLSearchParams(location.search);
     searchParams.set("page", currentPage.toString());
-    const newUrl = `${finalRouterBasename}${
-      location.pathname
-    }?${searchParams.toString()}`;
+    const newUrl = `${location.pathname}?${searchParams.toString()}`;
     navigate(newUrl);
   };
 
