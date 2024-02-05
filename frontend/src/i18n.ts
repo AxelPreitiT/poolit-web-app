@@ -21,7 +21,9 @@ i18next
     fallbackLng: "en",
     debug: import.meta.env.DEV,
     detection: {
-      caches: [],
+        order:["querystring","navigator"],
+        lookupQuerystring:"lng",
+        caches: [],
     },
   });
 

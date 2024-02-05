@@ -199,9 +199,9 @@
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
 <!--          TODO: agregar para la entrega-->
-<!--          <configuration>-->
-<!--            <packagingExcludes>**/logback-test.xml</packagingExcludes>-->
-<!--          </configuration>-->
+          <configuration>
+            <packagingExcludes>**/logback-test.xml</packagingExcludes>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

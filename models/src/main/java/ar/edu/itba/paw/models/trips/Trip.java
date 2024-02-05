@@ -23,10 +23,10 @@ public class Trip {
     @SequenceGenerator(sequenceName = "trips_trip_id_seq" , name = "trips_trip_id_seq", allocationSize = 1)
     @Column(name = "trip_id")
     private Long tripId;
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "origin_city_id")
     private City originCity;
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "destination_city_id")
     private City destinationCity;
     @Column(name = "origin_address")

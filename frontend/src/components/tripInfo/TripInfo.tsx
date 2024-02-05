@@ -89,9 +89,7 @@ const TripInfo = ({
         <i className="bi bi-calendar light-text"></i>
         <div className={styles.info_details}>
           <span className="light-text detail">
-            {t(`day.full.${getDayString(date).toLowerCase()}`, {
-              plural: "s",
-            })}
+            {t(`day.full.${getDayString(date).toLowerCase()}`)}
           </span>
           <span className={styles.subtitle_info}>
             {startDateTime === endDateTime

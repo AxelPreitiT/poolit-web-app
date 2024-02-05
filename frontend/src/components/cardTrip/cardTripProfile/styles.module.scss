@@ -49,11 +49,16 @@
   margin-bottom: 1em;
 }
 
-.route_info_text {
+.route_info_text_right {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
-
+.route_info_text_left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .route_info_text h3 {
   color: colors.$secondary-color !important;
 }

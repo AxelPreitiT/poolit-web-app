@@ -56,6 +56,33 @@
   align-items: start;
 }
 
+.passwordContainer:has(.showButton) input:active,
+.passwordContainer:has(.showButton) input:focus {
+  z-index: 0;
+}
+
+.passwordContainer .showButton,
+.passwordContainer .showButton:hover,
+.passwordContainer .showButton:active,
+.passwordContainer .showButton:focus {
+  background-color: white;
+  color: colors.$text-color;
+  border: inherit;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showButton {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.showButton:hover {
+  opacity: 0.7;
+}
+
 .rememberContainer {
   display: flex;
   flex-direction: row;

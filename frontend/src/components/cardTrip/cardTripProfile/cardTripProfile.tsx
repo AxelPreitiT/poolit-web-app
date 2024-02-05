@@ -75,11 +75,11 @@ const CardTripProfile = (trip: TripModel) => {
               <i className="bi bi-geo-alt-fill"></i>
             </div>
             <div className={styles.address_container}>
-              <div className={styles.route_info_text}>
+              <div className={styles.route_info_text_left}>
                 <h3>{originCity?.name}</h3>
                 <span className="text">{trip.originAddress}</span>
               </div>
-              <div className={styles.route_info_text}>
+              <div className={styles.route_info_text_right}>
                 <h3>{destinationCity?.name}</h3>
                 <span style={{ textAlign: "right" }}>
                   {trip.destinationAddress}

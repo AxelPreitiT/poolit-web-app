@@ -34,9 +34,8 @@ const TripDetailsPage = () => {
   const {
     isLoading: isLoadingRole,
     currentPassanger: currentPassanger,
-    isError: isError,
-  } = useRolePassanger(isDriver, trip?.passengersUriTemplate);
-  const isPassanger = !isError;
+  } = useRolePassanger((isDriver || !currentUser), trip?.passengersUriTemplate);
+  const isPassanger = !!currentPassanger;
 
   if (
     isLoadingTrip ||

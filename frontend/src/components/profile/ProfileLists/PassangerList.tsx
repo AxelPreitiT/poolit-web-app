@@ -30,6 +30,7 @@ const PassengerList = ({
   const { isLoading: isLoadingReviewsPassenger, data: reviewsPassenger } =
     useUserReviewsByUri(reviewsPassengerUri);
 
+
   return (
     <div>
       {reviewsPassenger === undefined || isLoadingReviewsPassenger ? (
@@ -66,7 +67,7 @@ const PassengerList = ({
             empty_icon={"car-front-fill"}
             data={futureReservedTrips.data}
             component_name={CardTripProfile}
-            link={reservedTripsPath}
+            link={`${reservedTripsPath}?time=future`}
           />
         </div>
       )}
@@ -85,7 +86,7 @@ const PassengerList = ({
           empty_icon={"car-front-fill"}
           data={pastReservedTrips.data}
           component_name={CardTripProfile}
-          link={reservedTripsPath}
+          link={`${reservedTripsPath}?time=past`}
         />
       )}
     </div>

@@ -103,7 +103,7 @@
         </div>
     </div>
     <div class="btn-container">
-        <a style="color: white !important;" th:href="@{{baseUrl}/trips/created(baseUrl=${baseUrl})}" class="btn" th:text="#{emails.newPassenger.button}"></a>
+        <a style="color: white !important;" th:href="@{{baseUrl}/trips/{tripId}(baseUrl=${baseUrl},tripId=${trip.tripId})}" class="btn" th:text="#{emails.newPassenger.button}"></a>
     </div>
 </div>
 </body>

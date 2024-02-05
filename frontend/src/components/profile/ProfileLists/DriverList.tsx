@@ -72,7 +72,7 @@ const DriverList = ({
           empty_icon={"car-front-fill"}
           data={futureCreatedTrips.data}
           component_name={CardTripProfile}
-          link={createdTripsPath}
+          link={`${createdTripsPath}?time=future`}
         />
       )}
       {pastCreatedTrips === undefined || isLoadingPastCreatedTrips ? (
@@ -90,7 +90,7 @@ const DriverList = ({
           empty_icon={"car-front-fill"}
           data={pastCreatedTrips.data}
           component_name={CardTripProfile}
-          link={createdTripsPath}
+          link={`${createdTripsPath}?time=past`}
         />
       )}
       {cars === undefined || isLoadingUserCars ? (

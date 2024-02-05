@@ -683,7 +683,7 @@
       "my_trips": "My trips",
       "delete": "Delete trip",
       "cancel": "Cancel trip",
-      "join": "Join",
+      "join": "Apply",
       "reviews": "Review"
     },
     "filter_by": "Filter by status: {{status}}",

@@ -11,7 +11,7 @@ import JoinTripUnauthenticatedError from "@/errors/JoinTripUnauthenticatedError"
 import useTrip from "./useTrip";
 import useRolePassanger from "../passanger/useRolePassanger";
 import useSuccessToast from "../toasts/useSuccessToast";
-import { getIsoDate, parseIsoDate } from "@/utils/date/isoDate";
+// import { getIsoDate, parseIsoDate } from "@/utils/date/isoDate";
 
 const useJoinTrip = (
   trip: tripModel,
@@ -35,8 +35,8 @@ const useJoinTrip = (
       if (!isAuthenticated) {
         throw new JoinTripUnauthenticatedError();
       }
-      const startDate = getIsoDate(parseIsoDate(startDateTime));
-      const endDate = getIsoDate(parseIsoDate(endDateTime));
+      const startDate = startDateTime;
+      const endDate = endDateTime;
       const data: joinTripModel = {
         startDate,
         endDate: endDate === startDate ? undefined : endDate,

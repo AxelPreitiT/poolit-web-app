@@ -18,6 +18,10 @@ class PassangerApi extends AxiosApi {
     "application/vnd.trip.passenger.state.v1+json";
   private static readonly REPORT_LIST_TYPE =
     "application/vnd.report.public.list.v1+json";
+  private static readonly PASSENGER_TYPE: string =
+      "application/vnd.trip.passenger.v1+json";
+
+
   // private static readonly REPORT_HEADER: string = "application/vnd.report.public.v1+json";
 
   // private static readonly PASSENGER_HEADER: string = "application/vnd.trip.passenger.v1+json";
@@ -105,7 +109,9 @@ class PassangerApi extends AxiosApi {
     uri: string
   ) => AxiosPromise<PassangerModel> = (uri: string) => {
     return this.get<PassangerModel>(uri, {
-      headers: {},
+      headers: {
+          "Accept" : PassangerApi.PASSENGER_TYPE
+        },
     });
   };
 

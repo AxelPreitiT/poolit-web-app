@@ -13,7 +13,7 @@
 .profileCard {
   padding: 1em 1.5em;
   height: fit-content;
-  width: 30%;
+  min-width: 30%;
   background-color: white;
   border: 2px solid gray;
   border-radius: 20px;
@@ -22,7 +22,6 @@
   flex-direction: column;
   row-gap: 1em;
 }
-
 .main_container {
   display: flex;
   margin: 3% 2% 3% 2%;

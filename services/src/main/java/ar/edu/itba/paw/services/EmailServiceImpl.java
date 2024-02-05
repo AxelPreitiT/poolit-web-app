@@ -90,7 +90,7 @@ public class EmailServiceImpl implements EmailService {
 
         LOGGER.info("Sending email to '{}' with subject '{}' and Locale '{}'", to, subject, mailLocale);
 //        TODO: activar para deploy
-//        mailSender.send(message);
+        mailSender.send(message);
     }
 
     @Async
@@ -243,7 +243,7 @@ public class EmailServiceImpl implements EmailService {
         final Context ctx = new Context();
         ctx.setVariable("trip", trip);
         ctx.setVariable("passenger", passenger);
-        ctx.setLocale(passenger.getMailLocale());
+        ctx.setLocale(trip.getDriver().getMailLocale());
         try {
             sendEmail(trip.getDriver().getEmail(), subject, "request-passenger-mail", ctx, passenger.getMailLocale());
         }catch (Exception e){

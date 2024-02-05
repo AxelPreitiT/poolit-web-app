@@ -41,3 +41,9 @@
 .review_empty_container i {
   color: colors.$secondary-color !important;
 }
+
+.passangers_container{
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+}
