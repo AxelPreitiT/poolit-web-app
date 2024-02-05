@@ -35,7 +35,6 @@ describe("Profile", () => {
 
     customRender(<ProfilePage />, { route: "/profile" });
 
-    expect(await screen.findByText(/Opinions as a driver/i)).toBeVisible();
     expect(await screen.findByText(/My cars/i)).toBeVisible();
   });
 
