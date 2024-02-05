@@ -43,10 +43,10 @@ public class Trip {
     private LocalDateTime queryStartDateTime;
     @Column(name = "end_date_time", insertable = false, updatable = false)
     private LocalDateTime queryEndDateTime;
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "car_id")
     private Car car;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "driver_id")
     private User driver;
     @Column(name = "max_passengers")

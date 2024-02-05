@@ -56,9 +56,15 @@ const PassangerComponent = ({
               </h4>
             </div>
             <span style={{ color: "gray", fontStyle: "italic" }}>
-              {t("format.date", {
-                date: getFormattedDateTime(passanger.startDateTime).date,
-              })}
+              {passanger.startDateTime === passanger.endDateTime
+                  ? getFormattedDateTime(passanger.startDateTime).date
+                  : t("format.recurrent_date", {
+                    initial_date: getFormattedDateTime(
+                        passanger.startDateTime
+                    ).date,
+                    final_date: getFormattedDateTime(passanger.endDateTime)
+                        .date,
+                  })}
             </span>
           </div>
         </div>
