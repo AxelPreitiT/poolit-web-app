@@ -6,7 +6,7 @@ import PassangerService from "@/services/PassangerService.ts";
 import usePassangerByUri from "./usePassangerByUri";
 import useTrip from "../trips/useTrip";
 import useOccupiedSeats from "../trips/useOccupiedSeats";
-import {useQueryClient} from "@tanstack/react-query/build/modern/index";
+import {useQueryClient} from "@tanstack/react-query";
 
 const useAcceptPassangerByUri = () => {
   const onQueryError = useQueryError();
@@ -15,7 +15,7 @@ const useAcceptPassangerByUri = () => {
   const { invalidateTripDetails } = useTrip();
   const { invalidateOccupiedSeats } = useOccupiedSeats();
   //POSIBLE SOLUCION A LA ACTUALIZACION DE ACUMULADO
-  //const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
 
   const mutation = useMutation({
@@ -30,7 +30,7 @@ const useAcceptPassangerByUri = () => {
       });
     },
     onSuccess: () => {
-      //queryClient.invalidateQueries({queryKey: ["getEargning"],});
+      queryClient.invalidateQueries({queryKey: ["getEargning"],});
       invalidatePassangersState();
       invalidateOccupiedSeats();
       invalidateTripDetails();
