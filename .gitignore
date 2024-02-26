@@ -89,3 +89,5 @@ dist-ssr
 application.properties
 jwtsecret
 *.pem
+.vscode
+.vite
