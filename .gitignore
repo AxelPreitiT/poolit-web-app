@@ -86,8 +86,6 @@ dist-ssr
 # typescript
 *.tsbuildinfo
 
-bfg*.jar
 application.properties
 jwtsecret
 *.pem
-*bfg-report/
