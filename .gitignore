@@ -90,3 +90,4 @@ bfg*.jar
 application.properties
 jwtsecret
 *.pem
+*bfg-report/
