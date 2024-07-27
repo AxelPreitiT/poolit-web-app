@@ -7,36 +7,67 @@ Esto es un proyecto de la asignatura **Proyectos de Aplicaciones Web - 72.38** d
 
 ## Configuración del proyecto
 
-En caso de querer utilizar el sitio, puede probarlo directamente haciendo click en este [link](http://pawserver.it.itba.edu.ar/paw-2023a-07/).
-<br/>
-Alternativamente, en caso de querer replicar el sitio de forma local (http://localhost:8080/), se recomienda seguir el siguiente instructivo.
-
 ### Pre-requisitos
 - [Java 1.8](https://www.java.com/es/download/ie_manual.jsp)
-- [Tomcat 8.5.87](https://tomcat.apache.org/download-80.cgi)
+- [Tomcat 7.0.76](https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/bin/)
 - [Docker 23.0.3](https://docs.docker.com/get-docker/)
+- [Maven 3.9.7](https://maven.apache.org/download.cgi)
 
 
 ### Configuración de Tomcat
+#### Conexión a la base de datos
 
-1. Una vez instalado Tomcat, verificar que el servicio se esté ejecutando, preferiblemente en el puerto 8080.
-   
-      * En linux, esto se puede comprobar desde la terminal con el comando `sudo service tomcat8 status`.
-      * En Windows, esto se puede comprobar desde la ventana de Servicios.
-      * En Mac, esto se puede comprobar desde la terminal con el comando `sudo launchctl list | grep tomcat`.
-   
-2. Desde su IDE de preferencia, deberá descargar el plugin de Tomcat para poder ejecutar el proyecto.
+Crear el archivo `/webapp/src/main/resources/application.properties` con la siguiente configuración.
 
-3. Una vez descargado el plugin, deberá configurar el servidor Tomcat en el IDE. Los parámetros a configurar son los siguientes:
+   ```
+   DB_USER=postgres
+   DB_PASSWORD=test
+   DB_NAME=paw_2023a_07
+   DB_PORT=5433
+   ```
+
+#### JWT
+
+El servidor utiliza JWT para la autenticación de los usuarios con la API.
+
+1. Generar una clave secreta para el servidor. Para ello, ejecutar el siguiente comando en la terminal.
+
+         openssl rand -hex 1024
+
+2. Copiar la salida generada y guardarla en el archivo `/webapp/src/main/resources/jwtsecret`. 
+
+
+#### Deploy - Opción 1: IDE
+   
+1. Desde su IDE de preferencia, deberá descargar el plugin de Tomcat para poder ejecutar el proyecto.
+
+2. Una vez descargado el plugin, deberá configurar el servidor Tomcat en el IDE. Los parámetros a configurar son los siguientes:
 
       * La versión de Tomcat, apuntando a la carpeta donde se encuentra instalado.
       * El puerto en el que se ejecuta el servidor Tomcat (8080 por defecto).
-      * La versión de Java (JRE) que se utiliza para ejecutar el proyecto.
+      * La versión de Java (JDK) que se utiliza para ejecutar el proyecto.
       * La URL raíz del proyecto (http://localhost:8080/).
-      * El artefacto del proyecto (war, o war-exploded).
-      * El contexto de la aplicación (/ por defecto).
+      * El artefacto del proyecto 
+        * war
+        * war-exploded (recomendado)
+      * El contexto de la aplicación (/paw-2023a-07 por defecto).
 
-4. Una vez configurado el servidor Tomcat, deberá ejecutar el proyecto desde el IDE. Esto iniciará el servidor Tomcat y desplegará el proyecto en la URL configurada.
+3. Una vez configurado el servidor Tomcat, deberá ejecutar el proyecto desde el IDE. Esto iniciará el servidor Tomcat y desplegará el proyecto en la URL configurada.
+
+#### Deploy - Opción 2: WAR
+1. Generar el archivo webapp.war ejecutando el siguiente comando en el directorio raíz del proyecto.
+
+        mvn clean package
+
+2. Extraer el archivo webapp.war del directorio webapp/target y copiarlo en la carpeta webapps del servidor Tomcat con el nombre paw-2023a-07.war.
+
+         cp webapp/target/webapp.war /path/to/tomcat/webapps/paw-2023a-07.war
+
+3. Iniciar el servidor Tomcat.
+
+        /path/to/tomcat/bin/startup.sh
+
+4. Ingresar a la URL http://localhost:8080/paw-2023a-07 para acceder al proyecto.
 
 ### Configuración de la base de datos 
 #### Se utilizará un contenedor Docker, el cual ejecutará una instancia de base de datos PostgresSQL.
@@ -50,7 +81,7 @@ Alternativamente, en caso de querer replicar el sitio de forma local (http://loc
             docker pull postgres:alpine
 
 
-2. Crear un contenedor docker para la base de datos.
+2. Crear un contenedor docker para la base de datos, indicando el puerto de entrada (5433) y la contraseña del usuario postgres (test).
 
         docker run --name postgres-paw -e POSTGRES_PASSWORD=test -d -p 5433:5432 postgres
 
@@ -70,14 +101,14 @@ Alternativamente, en caso de querer replicar el sitio de forma local (http://loc
 
 5. Ubicar el CWD de la terminal en el directorio raíz del proyecto y copiar el archivo cities.sql al contenedor
 
-        docker cp persistence/src/main/resources/cities.sql [dockerContainerId]:/cities.sql
+        docker cp persistence/src/main/resources/cities.sql [dockerContainerId]:/tmp/cities.sql
 
     * Para obtener el id del contenedor, ejecutar el comando `docker ps` y copiar el id del contenedor postgres-paw.
 
 6. Finalmente, ingresar nuevamente al contenedor y ejecutar el archivo .sql para popular la base de datos
        
         docker exec -it postgres-paw bash
-        psql -U postgres -d "paw_2023a_07" -f cities.sql
+        psql -U postgres -d "paw_2023a_07" -f /tmp/cities.sql
 
 7. Reiniciar el servidor Tomcat. Ahora, el proyecto debería funcionar correctamente.
 
